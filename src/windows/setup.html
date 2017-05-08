@@ -25,6 +25,7 @@
         <br><br>
         <h4>Content</h4>
 
+        <div class="disabled">
         <div class="row">
           <div class="col s8">
             <p class="caption">
@@ -77,15 +78,15 @@
 
         <div class="row">
           <div class="col s3">
-            <input type="checkbox" id="hidecursor" />
+            <input type="checkbox" id="hidecursor" checked/>
             <label for="hidecursor" >Hide Cursor</label>
           </div>
           <div class="col s3">
-            <input type="checkbox" id="disablecontextmenu" />
+            <input type="checkbox" id="disablecontextmenu" checked/>
             <label for="disablecontextmenu">Disable Context Menu</label>
           </div>
           <div class="col s3">
-            <input type="checkbox" id="disabledrag" />
+            <input type="checkbox" id="disabledrag" checked/>
             <label for="disabledrag">Disable Image Drag</label>
           </div>
           <div class="col s3">
@@ -93,7 +94,7 @@
             <label for="disabletouchhighlight">Disable Touch Highlight</label>
           </div>
           <div class="col s3">
-            <input type="checkbox" id="disableselection" />
+            <input type="checkbox" id="disableselection" checked/>
             <label for="disableselection">Disable Text Selection</label>
           </div>
           <div class="col s3">
@@ -117,20 +118,21 @@
             <label for="url">Override Authorization Header</label>
           </div>
         </div>
+        </div>
 
 
         <div class="row">
           <div class="col s12">
             <h4>Administration</h4>
           </div>
+            <div class="col s12">Press <strong>CTRL + A</strong> to activate after setup.</div>
         </div>
 
-        <div class="row">
+        <div class="row disabled">
           <div class="col s3">
             <input type="checkbox" id="local" checked/>
             <label for="local" class="active">Local Administration</label>
             <div class="row local">
-              <div class="col s12"><p>Press <strong>CTRL + A</strong> to activate after setup.</p></div>
             </div>
           </div>
           <div class="col s3">
@@ -165,6 +167,7 @@
           </div>
         </div>
 
+        <div class="disabled">
         <div class="row">
           <div class="col s12">
             <h4>Scheduling</h4>
@@ -244,6 +247,7 @@
                <option value="none">Allow system sleep.</option>
             </select>
           </div>
+        </div>
         </div>
 
         <div class="row">
