@@ -253,7 +253,7 @@ $(function(){
   $('#save').click(function(e){
     e.preventDefault();
     var error = [];
-    var url = $('#url').material_chip('data');
+    var url = [{tag: $('#url').val()}];
     var multipleurlmode = $("#multiple-url-mode").val();
     var rotaterate = parseFloat($("#rotate-rate").val()) ? parseFloat($("#rotate-rate").val()) : 0;
     var host = $('#host').val();
@@ -439,4 +439,132 @@ $(function(){
     return url.indexOf("http://") >= 0 || url.indexOf("https://") >= 0 ? null : 'Invalid content URL';
   };
 
+
+    var screensConfig = getScreensConfig();
+    var selectedVenue;
+    var selectedGroup;
+
+    screensConfig.forEach(function (venue) {
+        $("#venue").append($('<option>', {
+            value: venue.title,
+            text: venue.title
+        }));
+    });
+
+    $("#venue").change(function () {
+        loadValues($(this), $('#screen-group'), 'screenGroups');
+    });
+
+    $("#screen-group").change(function () {
+        loadValues($(this), $('#screen-id'), 'screens');
+    });
+
+    $("#screen-id").change(function () {
+      var urlElement = $('#url');
+      var dropdownTitle = $('#screen-id').find(":selected").text();
+      var selectedUrl = selectedGroup.screens.find(function (element) {
+        return element.title === dropdownTitle;
+      });
+      urlElement.val(selectedUrl.url);
+    });
+
+    function loadValues(sourceDropdown, destinationDropdown, sourceTitle) {
+        var selectedDropdownValue = sourceDropdown.find(":selected").text();
+        var selectedItemValue;
+        switch (sourceDropdown.attr('id')) {
+            case ('venue'):
+                selectedItemValue = screensConfig.find(isSelectedElement);
+                selectedVenue = selectedItemValue;
+                break;
+            case ('screen-group'):
+                selectedItemValue = selectedVenue.screenGroups.find(isSelectedElement);
+                selectedGroup = selectedItemValue;
+                break;
+        }
+
+        destinationDropdown.empty();
+
+        setDefaultEmptyValue();
+        if (selectedItemValue) {
+            setData();
+        }
+
+        //we need it to make re-rendering, because material design should re-render this component
+        destinationDropdown.material_select();
+
+        function initDataInFirstDropdown() {
+            screensConfig.forEach(function (venue) {
+                $("#venue").append($('<option>', {
+                    value: venue.title,
+                    text: venue.title
+                }));
+            });
+        }
+
+        function isSelectedElement(element) {
+            return element.title === selectedDropdownValue;
+        }
+
+        function setData() {
+            selectedItemValue[sourceTitle].forEach(function (group) {
+                destinationDropdown.append($('<option>', {
+                    value: group.title,
+                    text: group.title
+                }));
+            });
+        }
+
+        function setDefaultEmptyValue() {
+            destinationDropdown.append($('<option>', {
+                value: 'none',
+                text: 'Not selected'
+            }));
+        }
+    }
+    
 });
+
+function getScreensConfig() {
+  return [
+    {
+      title: 'Citizens',
+      screenGroups: [
+        {
+          title: 'Touch',
+          screens: [
+              {
+                  title: 'A',
+                  url: 'http://touchscreen.citizenslasvegas.com/'
+              }
+          ]
+        },
+        {
+          title: 'Deli',
+          screens: []
+        }
+      ]
+    },
+    {
+      title: 'Hakkasan Las Vegas',
+      screenGroups: [
+        {
+          title: 'Touch',
+          screens: [
+              {
+                  title: 'A',
+                  url: 'http://touchscreen.hakkasan.com/'
+              },
+              {
+                  title: 'B',
+                  url: 'http://touchscreen.hakkasan.com/'
+              }
+          ]
+        },
+        {
+          title: 'Deli',
+          screens: []
+        }
+      ]
+    }
+  ]
+}
