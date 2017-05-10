@@ -1,4 +1,4 @@
-.disabled{
+.disabled:not(#save){
   display:none;
   visibility:hidden;
 }

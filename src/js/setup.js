@@ -436,7 +436,7 @@ $(function(){
   });
 
   function validateURL(url){
-    return url.indexOf("http://") >= 0 || url.indexOf("https://") >= 0 ? null : 'Invalid content URL';
+    return url.indexOf("http://") >= 0 || url.indexOf("https://") >= 0 ? null : 'Screen is not selected';
   };
 
 
