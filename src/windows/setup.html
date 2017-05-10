@@ -167,32 +167,32 @@
     </div>
 
     <div class="disabled">
-    <div class="row settings-detail">
-        <div class="input-field col s12">
-            <input id="username" type="text" value="admin">
-            <label for="username" class="active">Username</label>
+        <div class="row settings-detail">
+            <div class="input-field col s12">
+                <input id="username" type="text" value="admin">
+                <label for="username" class="active">Username</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="password" type="password" value="admin">
+                <label for="password">Password</label>
+            </div>
+            <div class="input-field col s6">
+                <input id="confirm_password" type="password" value="admin">
+                <label for="confirm_password">Confirm Password</label>
+            </div>
         </div>
-        <div class="input-field col s6">
-            <input id="password" type="password" value="admin">
-            <label for="password">Password</label>
+        <div class="row disabled remote">
+            <div class="col s11">
+                <label for="host">Host</label>
+                <select id="host" class="browser-default">
+                    <option value="127.0.0.1">lo - 127.0.0.1</option>
+                </select>
+            </div>
+            <div class="col s1">
+                <label for="port">Port</label>
+                <input id="port" type="text" value="8080">
+            </div>
         </div>
-        <div class="input-field col s6">
-            <input id="confirm_password" type="password" value="admin">
-            <label for="confirm_password">Confirm Password</label>
-        </div>
-    </div>
-    <div class="row disabled remote">
-        <div class="col s11">
-            <label for="host">Host</label>
-            <select id="host" class="browser-default">
-                <option value="127.0.0.1">lo - 127.0.0.1</option>
-            </select>
-        </div>
-        <div class="col s1">
-            <label for="port">Port</label>
-            <input id="port" type="text" value="8080">
-        </div>
-    </div>
     </div>
 
     <div class="disabled">
@@ -284,9 +284,9 @@
             <p>
                 <a href="#" class="btn-large waves-effect disabled" id="save">Save</a>
                 <span style="margin:1em 0 0 3em;" class="disabled">
-                <input id="reset-cache" type="checkbox">
-                <label for="reset-cache">Clear Cache on Save</label>
-              </span>
+                    <input id="reset-cache" type="checkbox">
+                    <label for="reset-cache">Clear Cache on Save</label>
+                </span>
             </p>
         </div>
     </div>
