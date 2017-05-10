@@ -38,5 +38,19 @@
         "screens": []
       }
     ]
+  },
+  {
+    "title": "Searsucker Las Vegas",
+    "screenGroups": [
+      {
+        "title": "Touch",
+        "screens": [
+          {
+            "title": "A",
+            "url": "http://touchscreen.searsucker.com/"
+          }
+        ]
+      }
+    ]
   }
 ]
