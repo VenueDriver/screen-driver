@@ -446,8 +446,19 @@ $(function(){
     var selectedVenue;
     var selectedGroup;
 
+    putPrevioslySelectedDataIntoDropdowns();
+
     $("#venue").change(function () {
-        loadValues($(this), $('#screen-group'), 'screenGroups');
+      loadValues($(this), $('#screen-group'), 'screenGroups');
+      clearLastDropdown();
+
+      function clearLastDropdown() {
+        // TODO: maybe we can do it in better way (e.g. trigger event select option)
+        var screenIdDropdown = $("#screen-id");
+        screenIdDropdown.empty();
+        setDefaultEmptyValue(screenIdDropdown);
+        screenIdDropdown.material_select();
+      }
     });
 
     $("#screen-group").change(function () {
@@ -457,19 +468,31 @@ $(function(){
     $("#screen-id").change(function () {
       var urlElement = $('#url');
       var dropdownTitle = $('#screen-id').find(":selected").text();
-      var selectedUrl;
+      var selectedScreen;
       if (selectedGroup) {
-        selectedUrl = selectedGroup.screens.find(function (element) {
+          selectedScreen = selectedGroup.screens.find(function (element) {
           return element.title === dropdownTitle;
         });
       }
-      if (!selectedUrl) {
+      if (!selectedScreen) {
         disableSaveButton();
-      } else if (selectedUrl.url) {
+      } else if (selectedScreen.url) {
         enableSaveButton();
-        urlElement.val(selectedUrl.url);
+        urlElement.val(selectedScreen.url);
+        chrome.storage.local.set({'selectedScreen':selectedScreen});
       }
     });
+
+    function putPrevioslySelectedDataIntoDropdowns() {
+      chrome.storage.local.get(null, function (data) {
+        if (data.url) {
+          //put previosly selected data into dropdowns
+          $('#venue option[value="' + data.selectedVenue.title + '"]').attr('selected', 'selected').trigger("change");
+          $('#screen-group option[value="' + data.selectedGroup.title + '"]').attr('selected', 'selected').trigger("change");
+          $('#screen-id option[value="' + data.selectedScreen.title + '"]').attr('selected', 'selected').trigger("change");
+        }
+      });
+    }
 
     function loadValues(sourceDropdown, destinationDropdown, sourceTitle) {
         var selectedDropdownValue = sourceDropdown.find(":selected").text();
@@ -478,18 +501,20 @@ $(function(){
             case ('venue'):
                 selectedItemValue = screensConfig.find(isSelectedElement);
                 selectedVenue = selectedItemValue;
+                chrome.storage.local.set({'selectedVenue':selectedItemValue});
                 break;
             case ('screen-group'):
                 if (selectedVenue) {
                     selectedItemValue = selectedVenue.screenGroups.find(isSelectedElement);
                     selectedGroup = selectedItemValue;
+                    chrome.storage.local.set({'selectedGroup':selectedItemValue});
                 }
                 break;
         }
 
         destinationDropdown.empty();
 
-        setDefaultEmptyValue();
+        setDefaultEmptyValue(destinationDropdown);
         if (selectedItemValue) {
             setData();
         }
@@ -510,15 +535,15 @@ $(function(){
             });
         }
 
-        function setDefaultEmptyValue() {
-            destinationDropdown.append($('<option>', {
-                value: 'none',
-                text: 'Not selected'
-            }));
-            destinationDropdown.trigger("change");
-        }
     }
-    
+
+    function setDefaultEmptyValue(dropdown) {
+      dropdown.append($('<option>', {
+        value: 'none',
+        text: 'Not selected'
+      }));
+      dropdown.trigger("change");
+  }
 });
 
 function enableSaveButton() {
