@@ -462,13 +462,16 @@ $(function(){
     $("#screen-id").change(function () {
       var urlElement = $('#url');
       var dropdownTitle = $('#screen-id').find(":selected").text();
-      var selectedUrl = selectedGroup.screens.find(function (element) {
-        return element.title === dropdownTitle;
-      });
+      var selectedUrl;
+      if (selectedGroup) {
+        selectedUrl = selectedGroup.screens.find(function (element) {
+          return element.title === dropdownTitle;
+        });
+      }
       if (!selectedUrl) {
-        $('#save').addClass('disabled');
+        disableSaveButton();
       } else if (selectedUrl.url) {
-        $('#save').removeClass('disabled');
+        enableSaveButton();
         urlElement.val(selectedUrl.url);
       }
     });
@@ -482,8 +485,10 @@ $(function(){
                 selectedVenue = selectedItemValue;
                 break;
             case ('screen-group'):
-                selectedItemValue = selectedVenue.screenGroups.find(isSelectedElement);
-                selectedGroup = selectedItemValue;
+                if (selectedVenue) {
+                    selectedItemValue = selectedVenue.screenGroups.find(isSelectedElement);
+                    selectedGroup = selectedItemValue;
+                }
                 break;
         }
 
@@ -496,15 +501,6 @@ $(function(){
 
         //we need it to make re-rendering, because material design should re-render this component
         destinationDropdown.material_select();
-
-        function initDataInFirstDropdown() {
-            screensConfig.forEach(function (venue) {
-                $("#venue").append($('<option>', {
-                    value: venue.title,
-                    text: venue.title
-                }));
-            });
-        }
 
         function isSelectedElement(element) {
             return element.title === selectedDropdownValue;
@@ -524,10 +520,19 @@ $(function(){
                 value: 'none',
                 text: 'Not selected'
             }));
+            destinationDropdown.trigger("change");
         }
     }
     
 });
+
+function enableSaveButton() {
+  $('#save').removeClass('disabled');
+}
+
+function disableSaveButton() {
+  $('#save').addClass('disabled');
+}
 
 function getScreensConfig() {
   return [
