@@ -137,11 +137,7 @@ $(function(){
      if(data.local){
        $(document).keydown(function(e) {
          if(e.which == 65 && e.ctrlKey){
-           chrome.runtime.getBackgroundPage(function(backgroundPage) {
-             backgroundPage.stopAutoRestart();
-             $('#login').modal('open');
-             $('#username').focus();
-          });
+           openWindow("windows/setup.html");
          }
        });
 
