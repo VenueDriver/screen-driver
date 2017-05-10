@@ -465,7 +465,12 @@ $(function(){
       var selectedUrl = selectedGroup.screens.find(function (element) {
         return element.title === dropdownTitle;
       });
-      urlElement.val(selectedUrl.url);
+      if (!selectedUrl) {
+        $('#save').addClass('disabled');
+      } else if (selectedUrl.url) {
+        $('#save').removeClass('disabled');
+        urlElement.val(selectedUrl.url);
+      }
     });
 
     function loadValues(sourceDropdown, destinationDropdown, sourceTitle) {
