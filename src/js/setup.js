@@ -537,15 +537,19 @@ function disableSaveButton() {
 function getScreensConfig() {
   return [
     {
-      title: 'Citizens',
+      title: 'Citizens Kitchen',
       screenGroups: [
         {
           title: 'Touch',
           screens: [
-              {
-                  title: 'A',
-                  url: 'http://touchscreen.citizenslasvegas.com/'
-              }
+            {
+              title: 'A',
+              url: 'http://touchscreen.citizenslasvegas.com/'
+            },
+            {
+              title: 'B',
+              url: 'http://touchscreen.citizenslasvegas.com/'
+            }
           ]
         },
         {
@@ -558,20 +562,16 @@ function getScreensConfig() {
       title: 'Hakkasan Las Vegas',
       screenGroups: [
         {
-          title: 'Touch',
+          title: 'Restaurant',
           screens: [
-              {
-                  title: 'A',
-                  url: 'http://touchscreen.hakkasan.com/'
-              },
-              {
-                  title: 'B',
-                  url: 'http://touchscreen.hakkasan.com/'
-              }
+            {
+              title: 'A',
+              url: 'http://touchscreen.hakkasan.com/'
+            }
           ]
         },
         {
-          title: 'Deli',
+          title: 'Nightclub',
           screens: []
         }
       ]
