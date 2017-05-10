@@ -7,6 +7,9 @@ $(function(){
   chrome.storage.local.get(null,function(data){
     chrome.system.network.getNetworkInterfaces(function(interfaces) {
 
+  if (!data.selectedScreen) {
+    hideCancelButton();
+  }
 
   for(var i in interfaces) {
     var interface = interfaces[i];
@@ -438,6 +441,10 @@ $(function(){
     });
   });
 
+  $('#cancel').click(function() {
+    chrome.runtime.sendMessage('reload');
+  });
+
   function validateURL(url){
     return url.indexOf("http://") >= 0 || url.indexOf("https://") >= 0 ? null : 'Screen is not selected';
   };
@@ -554,6 +561,10 @@ function enableSaveButton() {
 
 function disableSaveButton() {
   $('#save').addClass('disabled');
+}
+
+function hideCancelButton() {
+  $('#cancel').addClass('disabled');
 }
 
 function loadScreensConfig() {

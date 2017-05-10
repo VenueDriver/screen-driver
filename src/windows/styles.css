@@ -1,3 +1,11 @@
 .content {
     padding-left: 10px;
 }
+
+#cancel {
+    margin-left: 25px;
+    color: black;
+    font-size: 14px;
+    text-decoration: underline;
+    font-weight: 100;
+}
