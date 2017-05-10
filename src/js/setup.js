@@ -1,6 +1,9 @@
 var DEFAULT_SCHEDULE_POLL_INTERVAL = 15; //minutes
+var screensConfig;
 
 $(function(){
+  loadScreensConfig();
+
   chrome.storage.local.get(null,function(data){
     chrome.system.network.getNetworkInterfaces(function(interfaces) {
 
@@ -440,16 +443,8 @@ $(function(){
   };
 
 
-    var screensConfig = getScreensConfig();
     var selectedVenue;
     var selectedGroup;
-
-    screensConfig.forEach(function (venue) {
-        $("#venue").append($('<option>', {
-            value: venue.title,
-            text: venue.title
-        }));
-    });
 
     $("#venue").change(function () {
         loadValues($(this), $('#screen-group'), 'screenGroups');
@@ -534,47 +529,18 @@ function disableSaveButton() {
   $('#save').addClass('disabled');
 }
 
-function getScreensConfig() {
-  return [
-    {
-      title: 'Citizens Kitchen',
-      screenGroups: [
-        {
-          title: 'Touch',
-          screens: [
-            {
-              title: 'A',
-              url: 'http://touchscreen.citizenslasvegas.com/'
-            },
-            {
-              title: 'B',
-              url: 'http://touchscreen.citizenslasvegas.com/'
-            }
-          ]
-        },
-        {
-          title: 'Deli',
-          screens: []
-        }
-      ]
-    },
-    {
-      title: 'Hakkasan Las Vegas',
-      screenGroups: [
-        {
-          title: 'Restaurant',
-          screens: [
-            {
-              title: 'A',
-              url: 'http://touchscreen.hakkasan.com/'
-            }
-          ]
-        },
-        {
-          title: 'Nightclub',
-          screens: []
-        }
-      ]
-    }
-  ]
+function loadScreensConfig() {
+  $.getJSON("../config/screensConfig.json", function(json) {
+    screensConfig = json;
+    initVenuesSelector();
+  });
+}
+
+function initVenuesSelector() {
+  screensConfig.forEach(function (venue) {
+    $("#venue").append($('<option>', {
+      value: venue.title,
+      text: venue.title
+    }));
+  });
 }
