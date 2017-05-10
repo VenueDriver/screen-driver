@@ -443,106 +443,108 @@ $(function(){
   };
 
 
-    var selectedVenue;
-    var selectedGroup;
+  var selectedVenue;
+  var selectedGroup;
 
-    putPrevioslySelectedDataIntoDropdowns();
+  putPrevioslySelectedDataIntoDropdowns();
 
-    $("#venue").change(function () {
-      loadValues($(this), $('#screen-group'), 'screenGroups');
-      clearLastDropdown();
+  $("#venue").change(function () {
+    loadValues($(this), $('#screen-group'), 'screenGroups');
+    clearLastDropdown();
 
-      function clearLastDropdown() {
-        // TODO: maybe we can do it in better way (e.g. trigger event select option)
-        var screenIdDropdown = $("#screen-id");
-        screenIdDropdown.empty();
-        setDefaultEmptyValue(screenIdDropdown);
-        screenIdDropdown.material_select();
-      }
-    });
+    function clearLastDropdown() {
+      // TODO: maybe we can do it in better way (e.g. trigger event select option)
+      var screenIdDropdown = $("#screen-id");
+      screenIdDropdown.empty();
+      setDefaultEmptyValue(screenIdDropdown);
+      screenIdDropdown.material_select();
+    }
+  });
 
-    $("#screen-group").change(function () {
-        loadValues($(this), $('#screen-id'), 'screens');
-    });
+  $("#screen-group").change(function () {
+    loadValues($(this), $('#screen-id'), 'screens');
+  });
 
-    $("#screen-id").change(function () {
-      var urlElement = $('#url');
-      var dropdownTitle = $('#screen-id').find(":selected").text();
-      var selectedScreen;
-      if (selectedGroup) {
-          selectedScreen = selectedGroup.screens.find(function (element) {
-          return element.title === dropdownTitle;
-        });
-      }
-      if (!selectedScreen) {
-        disableSaveButton();
-      } else if (selectedScreen.url) {
-        enableSaveButton();
-        urlElement.val(selectedScreen.url);
-        chrome.storage.local.set({'selectedScreen':selectedScreen});
-      }
-    });
+  $("#screen-id").change(function () {
+    var urlElement = $('#url');
+    var dropdownTitle = $('#screen-id').find(":selected").text();
+    var selectedScreen;
 
-    function putPrevioslySelectedDataIntoDropdowns() {
-      chrome.storage.local.get(null, function (data) {
-        if (data.url) {
-          //put previosly selected data into dropdowns
-          $('#venue option[value="' + data.selectedVenue.title + '"]').attr('selected', 'selected').trigger("change");
-          $('#screen-group option[value="' + data.selectedGroup.title + '"]').attr('selected', 'selected').trigger("change");
-          $('#screen-id option[value="' + data.selectedScreen.title + '"]').attr('selected', 'selected').trigger("change");
-        }
+    if (selectedGroup) {
+      selectedScreen = selectedGroup.screens.find(function (element) {
+        return element.title === dropdownTitle;
       });
     }
 
-    function loadValues(sourceDropdown, destinationDropdown, sourceTitle) {
-        var selectedDropdownValue = sourceDropdown.find(":selected").text();
-        var selectedItemValue;
-        switch (sourceDropdown.attr('id')) {
-            case ('venue'):
-                selectedItemValue = screensConfig.find(isSelectedElement);
-                selectedVenue = selectedItemValue;
-                chrome.storage.local.set({'selectedVenue':selectedItemValue});
-                break;
-            case ('screen-group'):
-                if (selectedVenue) {
-                    selectedItemValue = selectedVenue.screenGroups.find(isSelectedElement);
-                    selectedGroup = selectedItemValue;
-                    chrome.storage.local.set({'selectedGroup':selectedItemValue});
-                }
-                break;
+    if (!selectedScreen) {
+      disableSaveButton();
+    } else if (selectedScreen.url) {
+      enableSaveButton();
+      urlElement.val(selectedScreen.url);
+      chrome.storage.local.set({'selectedScreen': selectedScreen});
+    }
+  });
+
+  function putPrevioslySelectedDataIntoDropdowns() {
+    chrome.storage.local.get(null, function (data) {
+      if (data.url) {
+        $('#venue option[value="' + data.selectedVenue.title + '"]').attr('selected', 'selected').trigger("change");
+        $('#screen-group option[value="' + data.selectedGroup.title + '"]').attr('selected', 'selected').trigger("change");
+        $('#screen-id option[value="' + data.selectedScreen.title + '"]').attr('selected', 'selected').trigger("change");
+      }
+    });
+  }
+
+  function loadValues(sourceDropdown, destinationDropdown, sourceTitle) {
+    var selectedDropdownValue = sourceDropdown.find(":selected").text();
+    var selectedItemValue;
+
+    switch (sourceDropdown.attr('id')) {
+      case ('venue'):
+        selectedItemValue = screensConfig.find(isSelectedElement);
+        selectedVenue = selectedItemValue;
+        chrome.storage.local.set({'selectedVenue': selectedItemValue});
+        break;
+      case ('screen-group'):
+        if (selectedVenue) {
+          selectedItemValue = selectedVenue.screenGroups.find(isSelectedElement);
+          selectedGroup = selectedItemValue;
+          chrome.storage.local.set({'selectedGroup': selectedItemValue});
         }
-
-        destinationDropdown.empty();
-
-        setDefaultEmptyValue(destinationDropdown);
-        if (selectedItemValue) {
-            setData();
-        }
-
-        //we need it to make re-rendering, because material design should re-render this component
-        destinationDropdown.material_select();
-
-        function isSelectedElement(element) {
-            return element.title === selectedDropdownValue;
-        }
-
-        function setData() {
-            selectedItemValue[sourceTitle].forEach(function (group) {
-                destinationDropdown.append($('<option>', {
-                    value: group.title,
-                    text: group.title
-                }));
-            });
-        }
-
+        break;
     }
 
-    function setDefaultEmptyValue(dropdown) {
-      dropdown.append($('<option>', {
-        value: 'none',
-        text: 'Not selected'
-      }));
-      dropdown.trigger("change");
+    destinationDropdown.empty();
+
+    setDefaultEmptyValue(destinationDropdown);
+    if (selectedItemValue) {
+      setData();
+    }
+
+    //we need it to make re-rendering, because material design should re-render this component
+    destinationDropdown.material_select();
+
+    function isSelectedElement(element) {
+      return element.title === selectedDropdownValue;
+    }
+
+    function setData() {
+      selectedItemValue[sourceTitle].forEach(function (group) {
+        destinationDropdown.append($('<option>', {
+          value: group.title,
+          text: group.title
+        }));
+      });
+    }
+
+  }
+
+  function setDefaultEmptyValue(dropdown) {
+    dropdown.append($('<option>', {
+      value: 'none',
+      text: 'Not selected'
+    }));
+    dropdown.trigger("change");
   }
 });
 
