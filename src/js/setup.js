@@ -436,6 +436,10 @@ $(function(){
       chrome.storage.local.set({'sleepmode':sleepmode});
       chrome.runtime.sendMessage('reload');
     }
+
+    chrome.storage.local.set({'selectedVenue': selectedVenueName});
+    chrome.storage.local.set({'selectedGroup': selectedScreenGroupName});
+    chrome.storage.local.set({'selectedScreen': selectedScreenId});
   });
 
     });
@@ -452,6 +456,10 @@ $(function(){
 
   var selectedVenue;
   var selectedGroup;
+
+  var selectedVenueName;
+  var selectedScreenGroupName;
+  var selectedScreenId;
 
   putPrevioslySelectedDataIntoDropdowns();
 
@@ -474,11 +482,11 @@ $(function(){
 
   $("#screen-id").change(function () {
     var urlElement = $('#url');
-    var dropdownTitle = $('#screen-id').find(":selected").text();
+    selectedScreenId = $('#screen-id').find(":selected").text();
     var selectedScreenUrl;
 
     if (selectedGroup) {
-      selectedScreenUrl = selectedGroup[dropdownTitle];
+      selectedScreenUrl = selectedGroup[selectedScreenId];
     }
 
     if (!selectedScreenUrl) {
@@ -486,7 +494,6 @@ $(function(){
     } else if (selectedScreenUrl) {
       enableSaveButton();
       urlElement.val(selectedScreenUrl);
-      chrome.storage.local.set({'selectedScreen': dropdownTitle});
     }
   });
 
@@ -508,13 +515,13 @@ $(function(){
       case ('venue'):
         selectedItemValue = screensConfig[selectedDropdownValue];
         selectedVenue = selectedItemValue;
-        chrome.storage.local.set({'selectedVenue': selectedDropdownValue});
+        selectedVenueName = selectedDropdownValue;
         break;
       case ('screen-group'):
         if (selectedVenue) {
           selectedItemValue = selectedVenue[selectedDropdownValue];
           selectedGroup = selectedItemValue;
-          chrome.storage.local.set({'selectedGroup': selectedDropdownValue});
+          selectedScreenGroupName = selectedDropdownValue;
         }
         break;
     }
