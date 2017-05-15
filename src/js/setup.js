@@ -475,20 +475,18 @@ $(function(){
   $("#screen-id").change(function () {
     var urlElement = $('#url');
     var dropdownTitle = $('#screen-id').find(":selected").text();
-    var selectedScreen;
+    var selectedScreenUrl;
 
     if (selectedGroup) {
-      selectedScreen = selectedGroup.screens.find(function (element) {
-        return element.title === dropdownTitle;
-      });
+      selectedScreenUrl = selectedGroup[dropdownTitle];
     }
 
-    if (!selectedScreen) {
+    if (!selectedScreenUrl) {
       disableSaveButton();
-    } else if (selectedScreen.url) {
+    } else if (selectedScreenUrl) {
       enableSaveButton();
-      urlElement.val(selectedScreen.url);
-      chrome.storage.local.set({'selectedScreen': selectedScreen});
+      urlElement.val(selectedScreenUrl);
+      chrome.storage.local.set({'selectedScreen': selectedScreenUrl});
     }
   });
 
@@ -508,13 +506,13 @@ $(function(){
 
     switch (sourceDropdown.attr('id')) {
       case ('venue'):
-        selectedItemValue = screensConfig.find(isSelectedElement);
+        selectedItemValue = screensConfig[selectedDropdownValue];
         selectedVenue = selectedItemValue;
         chrome.storage.local.set({'selectedVenue': selectedItemValue});
         break;
       case ('screen-group'):
         if (selectedVenue) {
-          selectedItemValue = selectedVenue.screenGroups.find(isSelectedElement);
+          selectedItemValue = selectedVenue[selectedDropdownValue];
           selectedGroup = selectedItemValue;
           chrome.storage.local.set({'selectedGroup': selectedItemValue});
         }
@@ -531,17 +529,16 @@ $(function(){
     //we need it to make re-rendering, because material design should re-render this component
     destinationDropdown.material_select();
 
-    function isSelectedElement(element) {
-      return element.title === selectedDropdownValue;
-    }
-
     function setData() {
-      selectedItemValue[sourceTitle].forEach(function (group) {
+      console.log(selectedItemValue);
+      for (var group in selectedItemValue) {
+        console.log('group');
+        console.log(group);
         destinationDropdown.append($('<option>', {
-          value: group.title,
-          text: group.title
+          value: group,
+          text: group
         }));
-      });
+      }
     }
 
   }
@@ -568,22 +565,28 @@ function hideCancelButton() {
 }
 
 function loadScreensConfig() {
-  $.getJSON("https://raw.githubusercontent.com/VenueDriver/screen-driver/customize-kiosk-app/src/config/screensConfig.json")
-  .success(function (json) {
-    screensConfig = json;
-    initVenuesSelector();
-  })
-  .error(function (error) {
+  $.ajax({
+    url: "https://raw.githubusercontent.com/VenueDriver/screen-driver/customize-kiosk-app/src/config/screenContent.yml",
+    success: function (yaml) {
+      console.log(yaml);
+      var json = jsyaml.load(yaml);
+      console.log(json);
+      screensConfig = json;
+      initVenuesSelector();
+    },
+    error: function (error) {
     console.log(error);
     $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
-  });
+  }}
+  )
 }
 
 function initVenuesSelector() {
-  screensConfig.forEach(function (venue) {
+  for (var venue in screensConfig) {
+    console.log(venue);
     $("#venue").append($('<option>', {
-      value: venue.title,
-      text: venue.title
+      value: venue,
+      text: venue
     }));
-  });
+  }
 }
