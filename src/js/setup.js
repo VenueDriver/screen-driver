@@ -570,7 +570,7 @@ function hideCancelButton() {
 
 function loadScreensConfig() {
   $.ajax({
-    url: "https://raw.githubusercontent.com/VenueDriver/screen-driver/master/src/config/screenContent.yml",
+    url: "https://raw.githubusercontent.com/VenueDriver/screen-driver/master/config/screenContent.yml",
     success: function (yaml) {
       screensConfig = jsyaml.load(yaml);
       initVenuesSelector();
