@@ -568,13 +568,15 @@ function hideCancelButton() {
 }
 
 function loadScreensConfig() {
-  $.getJSON("https://raw.githubusercontent.com/VenueDriver/screen-driver/customize-kiosk-app/src/config/screensConfig.json")
+  $.ajax({
+    dataType: "json",
+    "url": "https://raw.githubusercontent.com/VenueDriver/screen-driver/customize-kiosk-app/src/config/screensConfig.json"
+  })
   .success(function (json) {
     screensConfig = json;
     initVenuesSelector();
   })
   .error(function (error) {
-    console.log(error);
     $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
   });
 }
@@ -586,4 +588,5 @@ function initVenuesSelector() {
       text: venue.title
     }));
   });
+  $("#venue").material_select();
 }
