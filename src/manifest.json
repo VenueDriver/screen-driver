@@ -1,12 +1,8 @@
 {
-  "name": "Kiosk",
+  "name": "ScreenDriver",
   "description": "Launch any URL as a full-screen kiosk.",
   "manifest_version": 2,
-  "version": "5.11.0",
-  "author": {
-    "name": "Matt Cook",
-    "email": "matt@lookitscook.com"
-  },
+  "version": "0.1.0",
   "kiosk_enabled": true,
   "offline_enabled": true,
   "icons": {
