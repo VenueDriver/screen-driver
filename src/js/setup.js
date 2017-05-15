@@ -456,7 +456,7 @@ $(function(){
   putPrevioslySelectedDataIntoDropdowns();
 
   $("#venue").change(function () {
-    loadValues($(this), $('#screen-group'), 'screenGroups');
+    loadValues($(this), $('#screen-group'));
     clearLastDropdown();
 
     function clearLastDropdown() {
@@ -469,7 +469,7 @@ $(function(){
   });
 
   $("#screen-group").change(function () {
-    loadValues($(this), $('#screen-id'), 'screens');
+    loadValues($(this), $('#screen-id'));
   });
 
   $("#screen-id").change(function () {
@@ -486,21 +486,21 @@ $(function(){
     } else if (selectedScreenUrl) {
       enableSaveButton();
       urlElement.val(selectedScreenUrl);
-      chrome.storage.local.set({'selectedScreen': selectedScreenUrl});
+      chrome.storage.local.set({'selectedScreen': dropdownTitle});
     }
   });
 
   function putPrevioslySelectedDataIntoDropdowns() {
     chrome.storage.local.get(null, function (data) {
       if (data.url) {
-        $('#venue option[value="' + data.selectedVenue.title + '"]').attr('selected', 'selected').trigger("change");
-        $('#screen-group option[value="' + data.selectedGroup.title + '"]').attr('selected', 'selected').trigger("change");
-        $('#screen-id option[value="' + data.selectedScreen.title + '"]').attr('selected', 'selected').trigger("change");
+        $('#venue option[value="' + data.selectedVenue + '"]').attr('selected', 'selected').trigger("change");
+        $('#screen-group option[value="' + data.selectedGroup + '"]').attr('selected', 'selected').trigger("change");
+        $('#screen-id option[value="' + data.selectedScreen + '"]').attr('selected', 'selected').trigger("change");
       }
     });
   }
 
-  function loadValues(sourceDropdown, destinationDropdown, sourceTitle) {
+  function loadValues(sourceDropdown, destinationDropdown) {
     var selectedDropdownValue = sourceDropdown.find(":selected").text();
     var selectedItemValue;
 
@@ -508,13 +508,13 @@ $(function(){
       case ('venue'):
         selectedItemValue = screensConfig[selectedDropdownValue];
         selectedVenue = selectedItemValue;
-        chrome.storage.local.set({'selectedVenue': selectedItemValue});
+        chrome.storage.local.set({'selectedVenue': selectedDropdownValue});
         break;
       case ('screen-group'):
         if (selectedVenue) {
           selectedItemValue = selectedVenue[selectedDropdownValue];
           selectedGroup = selectedItemValue;
-          chrome.storage.local.set({'selectedGroup': selectedItemValue});
+          chrome.storage.local.set({'selectedGroup': selectedDropdownValue});
         }
         break;
     }
@@ -530,10 +530,7 @@ $(function(){
     destinationDropdown.material_select();
 
     function setData() {
-      console.log(selectedItemValue);
       for (var group in selectedItemValue) {
-        console.log('group');
-        console.log(group);
         destinationDropdown.append($('<option>', {
           value: group,
           text: group
@@ -568,14 +565,11 @@ function loadScreensConfig() {
   $.ajax({
     url: "https://raw.githubusercontent.com/VenueDriver/screen-driver/customize-kiosk-app/src/config/screenContent.yml",
     success: function (yaml) {
-      console.log(yaml);
       var json = jsyaml.load(yaml);
-      console.log(json);
       screensConfig = json;
       initVenuesSelector();
     },
     error: function (error) {
-    console.log(error);
     $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
   }}
   )
@@ -583,7 +577,6 @@ function loadScreensConfig() {
 
 function initVenuesSelector() {
   for (var venue in screensConfig) {
-    console.log(venue);
     $("#venue").append($('<option>', {
       value: venue,
       text: venue
