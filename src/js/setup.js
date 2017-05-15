@@ -565,14 +565,13 @@ function loadScreensConfig() {
   $.ajax({
     url: "https://raw.githubusercontent.com/VenueDriver/screen-driver/customize-kiosk-app/src/config/screenContent.yml",
     success: function (yaml) {
-      var json = jsyaml.load(yaml);
-      screensConfig = json;
+      screensConfig = jsyaml.load(yaml);
       initVenuesSelector();
     },
     error: function (error) {
-    $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
-  }}
-  )
+      $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
+    }
+  })
 }
 
 function initVenuesSelector() {
@@ -582,4 +581,5 @@ function initVenuesSelector() {
       text: venue
     }));
   }
+  $("#venue").material_select();
 }
