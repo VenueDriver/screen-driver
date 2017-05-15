@@ -1,0 +1,13 @@
+Venue: Citizens Kitchen
+  Screen Groups:
+    Touch:
+      A: http://touchscreen.citizenslasvegas.com/
+      B: http://touchscreen.citizenslasvegas.com/
+Venue: Hakkasan Las Vegas
+  Screen Groups:
+    Restaurant:
+      A: http://touchscreen.hakkasan.com/
+Venue: Searsucker Las Vegas
+  Screen Groups:
+    Touch:
+      A: http://touchscreen.searsucker.com/
