@@ -1,156 +1,60 @@
-chrome.app.runtime.onLaunched.addListener(init);
-chrome.app.runtime.onRestarted.addListener(init);
+const electron = require('electron')
+// Module to control application life.
+const app = electron.app
+// Module to create native browser window.
+const BrowserWindow = electron.BrowserWindow
 
-var directoryServer, adminServer, restartTimeout;
+const path = require('path')
+const url = require('url')
 
-function init() {
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let mainWindow
 
-  var win, basePath, socketInfo, data;
-  var filesMap = {};
+function createWindow () {
+  // Create the browser window.
+  mainWindow = new BrowserWindow({width: 800, height: 600})
 
-  /*
-  LOG PERMISSION WARNINGS
-  use to test manifest permissions changes
-  DO NOT publish if new warnings are triggered. Prompt on existing
-  installations would likely be a major issue.
+  // and load the index.html of the app.
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
 
-  Current permission warnings are:
-  -"Exchange data with any device on the local network or internet",
-  -"Read folders that you open in the application"
+  // Open the DevTools.
+  // mainWindow.webContents.openDevTools()
 
-  Should be commented out in production application.
-  */
-  /*chrome.management.getPermissionWarningsByManifest(
-    JSON.stringify(chrome.runtime.getManifest()),
-    function(warning){
-      console.log("PERMISSION WARNINGS",warning);
-    }
-  );*/
-
-  chrome.storage.local.get(null,function(data){
-    if(('url' in data)){
-      //setup has been completed
-
-      // Sleepmode may not have been selected by user in setup because it
-      // is a new config param, so assume the previous hard-coded value as
-      // default.
-      if (!data.sleepmode) {
-        chrome.storage.local.set({'sleepmode': 'display'});
-        data.sleepmode = 'display';
-      }
-      if (data.sleepmode == 'none') {
-        chrome.power.releaseKeepAwake();
-      } else {
-        chrome.power.requestKeepAwake(data.sleepmode);
-      }
-
-      if(data.servelocaldirectory && data.servelocalhost && data.servelocalport){
-        //serve files from local directory
-        chrome.fileSystem.restoreEntry(data.servelocaldirectory,function(entry){
-          //if we can't get the directory (removed drive possibly)
-          //wait 15 seconds and reload the app
-          if(!entry){
-            restartTimeout = setTimeout(function(){
-              chrome.runtime.sendMessage('reload');
-            }, 15*1000);
-            return
-          }
-
-          var host = data.servelocalhost;
-          var port = data.servelocalport;
-          startWebserverDirectoryEntry(host,port,entry);
-        });
-      }
-      if(data.host && data.port){
-        //make setup page available remotely via HTTP
-        startWebserver(data.host,data.port,'www',data);
-      }
-      openWindow("windows/browser.html");
-    }else{
-      //need to run setup
-      openWindow("windows/setup.html");
-    }
-  });
-
-  chrome.runtime.onMessage.addListener(function(request,sender,sendResponse){
-    if(request == "reload"){
-      chrome.runtime.getPlatformInfo(function(p){
-        if(p.os == "cros"){
-          //we're on ChromeOS, so `reload()` will always work
-          chrome.runtime.reload();
-        }else{
-          //we're OSX/Win/*nix so `reload()` may not work if Chrome is not
-          // running the background. Simply close all windows and reset.
-          if(directoryServer) directoryServer.stop();
-          if(adminServer) adminServer.stop();
-          var w = chrome.app.window.getAll();
-          for(var i = 0; i < w.length; i++){
-            w[i].close();
-          }
-          init();
-        }
-      });
-    }
-  });
-
-  function openWindow(path){
-    if(win) win.close();
-    chrome.system.display.getInfo(function(d){
-      chrome.app.window.create(path, {
-        'frame': 'none',
-        'id': 'browser',
-        'state': 'fullscreen',
-        'bounds':{
-           'left':0,
-           'top':0,
-           'width':d[0].bounds.width,
-           'height':d[0].bounds.height
-        }
-      },function(w){
-        win = w;
-        if(win){
-          win.fullscreen();
-          setTimeout(function(){
-            if(win) win.fullscreen();
-          },1000);
-        }
-      });
-    });
-  }
-
-  function startWebserverDirectoryEntry(host,port,entry) {
-    directoryServer = new WSC.WebApplication({host:host,
-                                              port:port,
-                                              renderIndex:true,
-                                              optRenderIndex:true,
-                                              entry:entry
-                                             })
-    directoryServer.start()
-  }
-
-  //directory must be a subdirectory of the package
-  function startWebserver(host,port,directory,settings){
-    chrome.runtime.getPackageDirectoryEntry(function(packageDirectory){
-      packageDirectory.getDirectory(directory,{create: false},function(webroot){
-        var fs = new WSC.FileSystem(webroot)
-        var handlers = [['/data.*', AdminDataHandler],
-                        ['.*', WSC.DirectoryEntryHandler.bind(null, fs)]]
-        adminServer = new WSC.WebApplication({host:host,
-                                              port:port,
-                                              handlers:handlers,
-                                              renderIndex:true,
-                                              optRenderIndex:true,
-                                              auth:{ username: settings.username,
-                                                     password: settings.password }
-                                             })
-        adminServer.start()
-      });
-    });
-  }
+  // Emitted when the window is closed.
+  mainWindow.on('closed', function () {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    mainWindow = null
+  })
 }
 
-function stopAutoRestart(){
-  if(restartTimeout) {
-    clearTimeout(restartTimeout);
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on('ready', createWindow)
+
+// Quit when all windows are closed.
+app.on('window-all-closed', function () {
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== 'darwin') {
+    app.quit()
   }
-}
+})
+
+app.on('activate', function () {
+  // On OS X it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) {
+    createWindow()
+  }
+})
+
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and require them here.

@@ -1,0 +1,17 @@
+{
+  "name": "ScreenDriver",
+  "version": "0.1.0",
+  "description": "ScreenDriver kiosk app",
+  "main": "src/js/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "1.6.2"
+  },
+  "dependencies": {
+    "electron-hotkey": "0.0.1-alpha.1",
+    "electron-json-storage": "3.0.5",
+    "jquery": "3.2.1"
+  }
+}
