@@ -1,5 +1,6 @@
 var screensConfig;
 var $ = require('jQuery');
+var jsyaml = require('js-yaml');
 
 $(function () {
     $.ajax({
@@ -11,6 +12,5 @@ $(function () {
         error: function (error) {
             $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
         }
-    })
-    console.log(screensConfig)
-})
+    });
+});
