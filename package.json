@@ -12,7 +12,7 @@
   "dependencies": {
     "electron-hotkey": "0.0.1-alpha.1",
     "electron-json-storage": "3.0.5",
-    "jquery": "^3.2.1",
-    "js-yaml": "^3.8.4"
+    "jquery": "3.2.1",
+    "js-yaml": "3.8.4",
   }
 }
