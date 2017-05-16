@@ -13,13 +13,15 @@ $(function () {
     var selectedVenueName;
     var selectedScreenGroupName;
     var selectedScreenId;
+    var contentUrl;
 
-    putPrevioslySelectedDataIntoDropdowns();
+    putPreviouslySelectedDataIntoDropdowns();
 
     $("#save").click(function () {
         putInStorage('selectedVenue', selectedVenueName);
         putInStorage('selectedGroup', selectedScreenGroupName);
         putInStorage('selectedScreen', selectedScreenId);
+        putInStorage('contentUrl', contentUrl);
     });
 
     $("#venue").change(function () {
@@ -40,23 +42,20 @@ $(function () {
     });
 
     $("#screen-id").change(function () {
-        var urlElement = $('#url');
         selectedScreenId = $('#screen-id').find(":selected").text();
-        var selectedScreenUrl;
 
         if (selectedGroup) {
-            selectedScreenUrl = selectedGroup[selectedScreenId];
+            contentUrl = selectedGroup[selectedScreenId];
         }
 
-        if (!selectedScreenUrl) {
+        if (!contentUrl) {
             disableSaveButton();
-        } else if (selectedScreenUrl) {
+        } else {
             enableSaveButton();
-            urlElement.val(selectedScreenUrl);
         }
     });
 
-    function putPrevioslySelectedDataIntoDropdowns() {
+    function putPreviouslySelectedDataIntoDropdowns() {
         getFromStorage(null, function (error, data) {
             if (data.url) {
                 $('#venue option[value="' + data.selectedVenue + '"]').attr('selected', 'selected').trigger("change");
