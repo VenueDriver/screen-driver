@@ -16,12 +16,15 @@ $(function () {
     var contentUrl;
 
     putPreviouslySelectedDataIntoDropdowns();
+    verifySaveButtonState();
 
     $("#save").click(function () {
-        putInStorage('selectedVenue', selectedVenueName);
-        putInStorage('selectedGroup', selectedScreenGroupName);
-        putInStorage('selectedScreen', selectedScreenId);
-        putInStorage('contentUrl', contentUrl);
+        if (verifySaveButtonState()) {
+            putInStorage('selectedVenue', selectedVenueName);
+            putInStorage('selectedGroup', selectedScreenGroupName);
+            putInStorage('selectedScreen', selectedScreenId);
+            putInStorage('contentUrl', contentUrl);
+        }
     });
 
     $("#venue").change(function () {
@@ -54,8 +57,10 @@ $(function () {
     function verifySaveButtonState() {
         if (!contentUrl) {
             disableSaveButton();
+            return false;
         } else {
             enableSaveButton();
+            return true;
         }
     }
 
