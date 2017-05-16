@@ -48,12 +48,16 @@ $(function () {
             contentUrl = selectedGroup[selectedScreenId];
         }
 
+        verifySaveButtonState();
+    });
+
+    function verifySaveButtonState() {
         if (!contentUrl) {
             disableSaveButton();
         } else {
             enableSaveButton();
         }
-    });
+    }
 
     function putPreviouslySelectedDataIntoDropdowns() {
         getFromStorage(null, function (error, data) {
