@@ -6,6 +6,7 @@ const BrowserWindow = electron.BrowserWindow
 
 const path = require('path')
 const url = require('url')
+const storage = require('electron-json-storage');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -13,14 +14,7 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
-
-  // and load the index.html of the app.
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
+  mainWindow = createWindow(getAdminPanelUrl());
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -32,6 +26,45 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
   })
+
+  const hotkey = require('electron-hotkey');
+  hotkey.register('global', 'Control+A', 'event-1');
+  hotkey.register('global', 'Control+B', 'event-2');
+
+
+  app.on('shortcut-pressed', (event) => {
+    if (event == 'event-1') {
+      var filePath = getAdminPanelUrl();
+      var newWindow = createWindow(filePath);
+      mainWindow.close();
+      mainWindow = newWindow
+    }
+
+    if (event == 'event-2') {
+      var newWindow = createWindow('http://touchscreen.hakkasan.com/', {webPreferences: {nodeIntegration: false}});
+      mainWindow.close();
+      mainWindow = newWindow
+    }
+  });
+
+  function getAdminPanelUrl() {
+    return url.format({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file:',
+      slashes: true
+    });
+  }
+
+  function createWindow(url, windowOptions = {}) {
+    if (windowOptions.kiosk == undefined) {
+      windowOptions.kiosk = true;
+    }
+
+    var newWindow = new BrowserWindow(windowOptions);
+    newWindow.loadURL(url);
+    newWindow.webContents.openDevTools();
+    return newWindow;
+  }
 }
 
 // This method will be called when Electron has finished
