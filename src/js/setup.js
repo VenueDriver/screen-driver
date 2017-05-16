@@ -1,5 +1,5 @@
 var screensConfig;
-var $ = require('jQuery');
+window.$ = window.jQuery = require('jquery');
 var jsyaml = require('js-yaml');
 
 $(function () {
