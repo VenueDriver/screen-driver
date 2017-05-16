@@ -16,6 +16,12 @@ $(function () {
 
     putPrevioslySelectedDataIntoDropdowns();
 
+    $("#save").click(function () {
+        putInStorage('selectedVenue', selectedVenueName);
+        putInStorage('selectedGroup', selectedScreenGroupName);
+        putInStorage('selectedScreen', selectedScreenId);
+    });
+
     $("#venue").change(function () {
         loadValues($(this), $('#screen-group'));
         clearLastDropdown();
@@ -53,7 +59,6 @@ $(function () {
     function putPrevioslySelectedDataIntoDropdowns() {
         getFromStorage(null, function (error, data) {
             if (data.url) {
-                debugger
                 $('#venue option[value="' + data.selectedVenue + '"]').attr('selected', 'selected').trigger("change");
                 $('#screen-group option[value="' + data.selectedGroup + '"]').attr('selected', 'selected').trigger("change");
                 $('#screen-id option[value="' + data.selectedScreen + '"]').attr('selected', 'selected').trigger("change");
@@ -63,7 +68,6 @@ $(function () {
 
 
     function loadValues(sourceDropdown, destinationDropdown) {
-        debugger
         var selectedDropdownValue = sourceDropdown.find(":selected").text();
         var selectedItemValue;
 
@@ -129,7 +133,7 @@ function disableSaveButton() {
 
 function hideCancelButton() {
     $('#cancel').addClass('disabled');
-};
+}
 
 function loadScreensConfig() {
     $.ajax({
@@ -172,7 +176,7 @@ function getFromStorage(key, callback) {
 
             result = data;
         });
-        return result
+        return result;
     }
 
     return storage.get(key, function(error, data) {
