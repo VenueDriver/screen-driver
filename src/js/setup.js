@@ -96,11 +96,6 @@ $(function () {
             setData();
         }
 
-        setDefaultEmptyValue(destinationDropdown);
-        if (selectedItemValue) {
-            setData();
-        }
-
         //we need it to make re-rendering, because material design should re-render this component
         destinationDropdown.selectpicker('refresh');
 
