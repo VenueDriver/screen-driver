@@ -65,15 +65,11 @@ $(function () {
     function putPreviouslySelectedDataIntoSelectors() {
         getFromStorage(null, function (error, data) {
             if (data.contentUrl) {
-                triggerChangeEventForSelectors(data);
+                $('#venue').val(data.selectedVenue).trigger("change");
+                $('#screen-group').val(data.selectedGroup).trigger("change");
+                $('#screen-id').val(data.selectedScreen).trigger("change");
             }
         });
-    }
-
-    function triggerChangeEventForSelectors(selectedValues) {
-        $('#venue option[value="' + selectedValues.selectedVenue + '"]').attr('selected', 'selected').trigger("change");
-        $('#screen-group option[value="' + selectedValues.selectedGroup + '"]').attr('selected', 'selected').trigger("change");
-        $('#screen-id option[value="' + selectedValues.selectedScreen + '"]').attr('selected', 'selected').trigger("change");
     }
 
     function loadValues(sourceDropdown, destinationDropdown) {
