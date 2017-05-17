@@ -10,3 +10,7 @@
     color: red;
     font-size: 15px;
 }
+
+#save:focus, #cancel:focus {
+    outline: none;
+}
