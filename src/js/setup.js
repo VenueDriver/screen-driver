@@ -17,8 +17,8 @@ $(function () {
     let selectedScreenId;
     let contentUrl;
 
-    putPreviouslySelectedDataIntoSelectors();
     verifySaveButtonState();
+    verifyCancelButtonState();
 
     $("#save").click(function () {
         if (verifySaveButtonState()) {
@@ -62,12 +62,12 @@ $(function () {
         }
     }
 
-    function putPreviouslySelectedDataIntoSelectors() {
-        getFromStorage(null, function (error, data) {
-            if (data.contentUrl) {
-                $('#venue').val(data.selectedVenue).trigger("change");
-                $('#screen-group').val(data.selectedGroup).trigger("change");
-                $('#screen-id').val(data.selectedScreen).trigger("change");
+    function verifyCancelButtonState() {
+        getFromStorage('contentUrl', function (err, contentUrl) {
+            if ($.isEmptyObject(contentUrl)) {
+                hideCancelButton();
+            } else {
+                showCancelButton();
             }
         });
     }
@@ -148,8 +148,12 @@ function disableSaveButton() {
     $('#save').addClass('disabled');
 }
 
+function showCancelButton() {
+    $('#cancel').show();
+}
+
 function hideCancelButton() {
-    $('#cancel').addClass('disabled');
+    $('#cancel').hide();
 }
 
 function loadScreensConfig() {
@@ -158,9 +162,20 @@ function loadScreensConfig() {
         success: function (yaml) {
             screensConfig = jsyaml.load(yaml);
             initVenuesSelector();
+            putPreviouslySelectedDataIntoSelectors();
         },
         error: function (error) {
             $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
+        }
+    });
+}
+
+function putPreviouslySelectedDataIntoSelectors() {
+    getFromStorage(null, function (error, data) {
+        if (data.contentUrl) {
+            $('#venue').val(data.selectedVenue).trigger("change");
+            $('#screen-group').val(data.selectedGroup).trigger("change");
+            $('#screen-id').val(data.selectedScreen).trigger("change");
         }
     });
 }
