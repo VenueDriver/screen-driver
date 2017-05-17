@@ -40,7 +40,7 @@ function addHotKeyListeners() {
 }
 
 function addEventListeners() {
-    ipcMain.on('close-admin-panel', (event, contentUrl) => {
+    ipcMain.on('open-content-window', (event, contentUrl) => {
         openContentWindow(contentUrl);
     });
 }

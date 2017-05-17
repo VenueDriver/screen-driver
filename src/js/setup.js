@@ -1,50 +1,41 @@
-var screensConfig;
-window.$ = window.jQuery = require('jquery');
-var jsyaml = require('js-yaml');
 const storage = require('electron-json-storage');
-const {ipcRenderer} = require('electron')
+const {ipcRenderer} = require('electron');
+
+window.$ = window.jQuery = require('jquery');
+
+let screensConfig;
+let jsyaml = require('js-yaml');
 
 $(function () {
     loadScreensConfig();
 
-    var selectedVenue;
-    var selectedGroup;
+    let selectedVenue;
+    let selectedGroup;
 
-    var selectedVenueName;
-    var selectedScreenGroupName;
-    var selectedScreenId;
-    var contentUrl;
+    let selectedVenueName;
+    let selectedScreenGroupName;
+    let selectedScreenId;
+    let contentUrl;
 
-    putPreviouslySelectedDataIntoDropdowns();
+    putPreviouslySelectedDataIntoSelectors();
     verifySaveButtonState();
 
     $("#save").click(function () {
         if (verifySaveButtonState()) {
-            putInStorage('selectedVenue', selectedVenueName);
-            putInStorage('selectedGroup', selectedScreenGroupName);
-            putInStorage('selectedScreen', selectedScreenId);
-            putInStorage('contentUrl', contentUrl);
-            ipcRenderer.send('close-admin-panel', contentUrl);
+            saveSelectionInStorage();
+            openContentWindow(contentUrl);
         }
     });
 
     $("#cancel").click(function () {
-        getFromStorage('contentUrl', function (error, data) {
-            ipcRenderer.send('close-admin-panel', data);
+        getFromStorage('contentUrl', function (error, contentUrl) {
+            openContentWindow(contentUrl);
         });
     });
 
     $("#venue").change(function () {
         loadValues($(this), $('#screen-group'));
-        clearLastDropdown();
-
-        function clearLastDropdown() {
-            // TODO: maybe we can do it in better way (e.g. trigger event select option)
-            var screenIdDropdown = $("#screen-id");
-            screenIdDropdown.empty();
-            setDefaultEmptyValue(screenIdDropdown);
-            screenIdDropdown.selectpicker('refresh');
-        }
+        clearLastSelector();
     });
 
     $("#screen-group").change(function () {
@@ -71,20 +62,19 @@ $(function () {
         }
     }
 
-    function putPreviouslySelectedDataIntoDropdowns() {
+    function putPreviouslySelectedDataIntoSelectors() {
         getFromStorage(null, function (error, data) {
             if (data.contentUrl) {
-                $('#venue option[value="' + data.selectedVenue + '"]').attr('selected', 'selected').trigger("change");
-                $('#screen-group option[value="' + data.selectedGroup + '"]').attr('selected', 'selected').trigger("change");
-                $('#screen-id option[value="' + data.selectedScreen + '"]').attr('selected', 'selected').trigger("change");
+                $('#venue').val(data.selectedVenue).trigger("change");
+                $('#screen-group').val(data.selectedGroup).trigger("change");
+                $('#screen-id').val(data.selectedScreen).trigger("change");
             }
         });
     }
 
-
     function loadValues(sourceDropdown, destinationDropdown) {
-        var selectedDropdownValue = sourceDropdown.find(":selected").text();
-        var selectedItemValue;
+        let selectedDropdownValue = sourceDropdown.find(":selected").text();
+        let selectedItemValue;
 
         switch (sourceDropdown.attr('id')) {
             case ('venue'):
@@ -112,7 +102,7 @@ $(function () {
         destinationDropdown.selectpicker('refresh');
 
         function setData() {
-            for (var group in selectedItemValue) {
+            for (let group in selectedItemValue) {
                 destinationDropdown.append($('<option>', {
                     value: group,
                     text: group
@@ -122,16 +112,33 @@ $(function () {
 
     }
 
-    function setDefaultEmptyValue(dropdown) {
-        dropdown.append($('<option>', {
-            value: 'none',
-            text: 'Not selected'
-        }));
-        dropdown.trigger("change");
+    function saveSelectionInStorage() {
+        putInStorage('selectedVenue', selectedVenueName);
+        putInStorage('selectedGroup', selectedScreenGroupName);
+        putInStorage('selectedScreen', selectedScreenId);
+        putInStorage('contentUrl', contentUrl);
     }
 });
 
+function openContentWindow(contentUrl) {
+    ipcRenderer.send('open-content-window', contentUrl);
+}
 
+function clearLastSelector() {
+    // TODO: maybe we can do it in better way (e.g. trigger event select option)
+    let screenIdDropdown = $("#screen-id");
+    screenIdDropdown.empty();
+    setDefaultEmptyValue(screenIdDropdown);
+    screenIdDropdown.selectpicker('refresh');
+}
+
+function setDefaultEmptyValue(dropdown) {
+    dropdown.append($('<option>', {
+        value: 'none',
+        text: 'Not selected'
+    }));
+    dropdown.trigger("change");
+}
 
 function enableSaveButton() {
     $('#save').removeClass('disabled');
@@ -159,7 +166,7 @@ function loadScreensConfig() {
 }
 
 function initVenuesSelector() {
-    for (var venue in screensConfig) {
+    for (let venue in screensConfig) {
         $("#venue").append($('<option>', {
             value: venue,
             text: venue
