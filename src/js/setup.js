@@ -147,7 +147,7 @@ function loadScreensConfig() {
             initVenuesSelector();
         },
         error: function (error) {
-
+            $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
         }
     });
 }
