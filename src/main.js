@@ -9,6 +9,8 @@ const storage = require('electron-json-storage');
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
 
+const isDev = require('electron-is-dev');
+
 let mainWindow;
 
 function openWindow() {
@@ -84,7 +86,9 @@ function createWindow(url, windowOptions = {}) {
 
     let newWindow = new BrowserWindow(windowOptions);
     newWindow.loadURL(url);
-    newWindow.webContents.openDevTools();
+    if (isDev) {
+        newWindow.webContents.openDevTools();
+    }
     return newWindow;
 }
 
