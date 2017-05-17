@@ -18,6 +18,7 @@ $(function () {
     let contentUrl;
 
     verifySaveButtonState();
+    verifyCancelButtonState();
 
     $("#save").click(function () {
         if (verifySaveButtonState()) {
@@ -61,14 +62,22 @@ $(function () {
         }
     }
 
+    function verifyCancelButtonState() {
+        getFromStorage('contentUrl', function (err, contentUrl) {
+            if ($.isEmptyObject(contentUrl)) {
+                hideCancelButton();
+            } else {
+                showCancelButton();
+            }
+        });
+    }
+
     function loadValues(sourceDropdown, destinationDropdown) {
         let selectedDropdownValue = sourceDropdown.find(":selected").text();
         let selectedItemValue;
 
         switch (sourceDropdown.attr('id')) {
             case ('venue'):
-                console.log(screensConfig);
-                console.log(selectedDropdownValue);
                 selectedItemValue = screensConfig[selectedDropdownValue];
                 selectedVenue = selectedItemValue;
                 selectedVenueName = selectedDropdownValue;
@@ -139,8 +148,12 @@ function disableSaveButton() {
     $('#save').addClass('disabled');
 }
 
+function showCancelButton() {
+    $('#cancel').show();
+}
+
 function hideCancelButton() {
-    $('#cancel').addClass('disabled');
+    $('#cancel').hide();
 }
 
 function loadScreensConfig() {
