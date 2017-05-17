@@ -1,4 +1,5 @@
 const electron = require('electron');
+const {powerSaveBlocker} = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
@@ -14,6 +15,8 @@ const isDev = require('electron-is-dev');
 let mainWindow;
 
 function openWindow() {
+    powerSaveBlocker.start('prevent-display-sleep');
+
     storage.getAll(function(error, data) {
         if (data.contentUrl) {
             openContentWindow(data.contentUrl);
