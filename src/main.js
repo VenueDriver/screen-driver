@@ -41,6 +41,13 @@ function createWindow() {
         let newWindow = createWindow(contentUrl, {webPreferences: {nodeIntegration: false}});
         mainWindow.close();
         mainWindow = newWindow;
+        hideCursor(mainWindow);
+    }
+
+    function hideCursor(window) {
+        window.webContents.on('did-finish-load', function() {
+            window.webContents.insertCSS('*{ cursor: none !important;}')
+        });
     }
 
     function getAdminPanelUrl() {
