@@ -5,3 +5,8 @@
 .settings {
     margin-bottom: 5%;
 }
+
+#config-load-error {
+    color: red;
+    font-size: 15px;
+}
