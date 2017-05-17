@@ -17,7 +17,6 @@ $(function () {
     let selectedScreenId;
     let contentUrl;
 
-    putPreviouslySelectedDataIntoSelectors();
     verifySaveButtonState();
 
     $("#save").click(function () {
@@ -62,22 +61,14 @@ $(function () {
         }
     }
 
-    function putPreviouslySelectedDataIntoSelectors() {
-        getFromStorage(null, function (error, data) {
-            if (data.contentUrl) {
-                $('#venue').val(data.selectedVenue).trigger("change");
-                $('#screen-group').val(data.selectedGroup).trigger("change");
-                $('#screen-id').val(data.selectedScreen).trigger("change");
-            }
-        });
-    }
-
     function loadValues(sourceDropdown, destinationDropdown) {
         let selectedDropdownValue = sourceDropdown.find(":selected").text();
         let selectedItemValue;
 
         switch (sourceDropdown.attr('id')) {
             case ('venue'):
+                console.log(screensConfig);
+                console.log(selectedDropdownValue);
                 selectedItemValue = screensConfig[selectedDropdownValue];
                 selectedVenue = selectedItemValue;
                 selectedVenueName = selectedDropdownValue;
@@ -158,9 +149,20 @@ function loadScreensConfig() {
         success: function (yaml) {
             screensConfig = jsyaml.load(yaml);
             initVenuesSelector();
+            putPreviouslySelectedDataIntoSelectors();
         },
         error: function (error) {
             $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
+        }
+    });
+}
+
+function putPreviouslySelectedDataIntoSelectors() {
+    getFromStorage(null, function (error, data) {
+        if (data.contentUrl) {
+            $('#venue').val(data.selectedVenue).trigger("change");
+            $('#screen-group').val(data.selectedGroup).trigger("change");
+            $('#screen-id').val(data.selectedScreen).trigger("change");
         }
     });
 }
