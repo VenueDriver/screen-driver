@@ -28,6 +28,12 @@ $(function () {
         }
     });
 
+    $("#cancel").click(function () {
+        getFromStorage('contentUrl', function (error, data) {
+            ipcRenderer.send('close-admin-panel', data);
+        });
+    });
+
     $("#venue").change(function () {
         loadValues($(this), $('#screen-group'));
         clearLastDropdown();
@@ -56,7 +62,7 @@ $(function () {
     });
 
     function verifySaveButtonState() {
-        if (!contentUrl) {
+        if (!contentUrl || selectedScreenId == 'Not selected') {
             disableSaveButton();
             return false;
         } else {
@@ -172,19 +178,5 @@ function getFromStorage(key, callback) {
     if (!key) {
         return storage.getAll(callback);
     }
-
-    if (!callback) {
-        var result;
-        storage.get(key, function(error, data) {
-            if (error) throw error;
-
-            result = data;
-        });
-        return result;
-    }
-
-    return storage.get(key, function(error, data) {
-        if (error) throw error;
-        return data;
-    });
+    return storage.get(key, callback);
 }
