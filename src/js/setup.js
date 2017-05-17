@@ -66,7 +66,7 @@ $(function () {
 
     function putPreviouslySelectedDataIntoDropdowns() {
         getFromStorage(null, function (error, data) {
-            if (data.url) {
+            if (data.contentUrl) {
                 $('#venue option[value="' + data.selectedVenue + '"]').attr('selected', 'selected').trigger("change");
                 $('#screen-group option[value="' + data.selectedGroup + '"]').attr('selected', 'selected').trigger("change");
                 $('#screen-id option[value="' + data.selectedScreen + '"]').attr('selected', 'selected').trigger("change");
