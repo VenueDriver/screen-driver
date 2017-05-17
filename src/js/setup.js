@@ -160,14 +160,23 @@ function loadScreensConfig() {
     $.ajax({
         url: "https://raw.githubusercontent.com/VenueDriver/screen-driver/master/config/screenContent.yml",
         success: function (yaml) {
-            screensConfig = jsyaml.load(yaml);
+            try {
+                screensConfig = jsyaml.load(yaml);
+            } catch (error) {
+                showError("Cannot read YAML: " + error.message);
+                throw error;
+            }
             initVenuesSelector();
             putPreviouslySelectedDataIntoSelectors();
         },
         error: function (error) {
-            $("#config-load-error").text("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
+            showError("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
         }
     });
+}
+
+function showError(errorMessage) {
+    $("#config-load-error").text(errorMessage);
 }
 
 function putPreviouslySelectedDataIntoSelectors() {
