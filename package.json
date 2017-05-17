@@ -9,7 +9,7 @@
     "win-build": "electron-packager . --overwrite --asar=true --platform=win --arch=x64 --icon=scr/img/icon_16.png --out=release-builds"
   },
   "devDependencies": {
-    "electron": "1.6.2",
+    "electron": "1.6.8",
     "electron-packager": "8.7.0"
   },
   "dependencies": {
