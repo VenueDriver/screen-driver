@@ -70,7 +70,7 @@ function closeCurrentWindow() {
 
 function hideCursor(window) {
     window.webContents.on('did-finish-load', function() {
-        window.webContents.insertCSS('*{ cursor: none !important;}')
+        window.webContents.insertCSS('*{ cursor: none !important; user-select: none;}')
     });
 }
 
@@ -89,6 +89,8 @@ function createWindow(url, windowOptions = {}) {
 
     let newWindow = new BrowserWindow(windowOptions);
     newWindow.loadURL(url);
+    //disable images drag & drop
+    newWindow.webContents.executeJavaScript('window.ondragstart = function(){return false};');
     if (isDev) {
         newWindow.webContents.openDevTools();
     }
