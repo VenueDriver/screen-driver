@@ -56,7 +56,7 @@ $(function () {
     });
 
     function verifySaveButtonState() {
-        if (!contentUrl) {
+        if (!contentUrl || selectedScreenId == 'Not selected') {
             disableSaveButton();
             return false;
         } else {
