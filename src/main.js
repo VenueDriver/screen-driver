@@ -12,10 +12,12 @@ const {ipcMain} = require('electron');
 let mainWindow;
 
 function createWindow() {
-    mainWindow = createWindow(getAdminPanelUrl());
-
-    mainWindow.on('closed', function () {
-
+    storage.getAll(function(error, data) {
+        if (data.contentUrl) {
+            openContentWindow(data.contentUrl);
+        } else {
+            openAdminPanel();
+        }
     });
 
     hotkey.register('global', 'Control+A', 'event-1');
@@ -33,15 +35,21 @@ function createWindow() {
     function openAdminPanel() {
         let filePath = getAdminPanelUrl();
         let newWindow = createWindow(filePath);
-        mainWindow.close();
+        closeCurrentWindow();
         mainWindow = newWindow;
     }
 
     function openContentWindow(contentUrl) {
         let newWindow = createWindow(contentUrl, {webPreferences: {nodeIntegration: false}});
-        mainWindow.close();
+        closeCurrentWindow();
         mainWindow = newWindow;
         hideCursor(mainWindow);
+    }
+
+    function closeCurrentWindow() {
+        if (mainWindow) {
+            mainWindow.close();
+        }
     }
 
     function hideCursor(window) {
