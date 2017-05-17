@@ -2,7 +2,7 @@ var screensConfig;
 window.$ = window.jQuery = require('jquery');
 var jsyaml = require('js-yaml');
 const storage = require('electron-json-storage');
-
+const {ipcRenderer} = require('electron')
 
 $(function () {
     loadScreensConfig();
@@ -24,6 +24,7 @@ $(function () {
             putInStorage('selectedGroup', selectedScreenGroupName);
             putInStorage('selectedScreen', selectedScreenId);
             putInStorage('contentUrl', contentUrl);
+            ipcRenderer.send('close-admin-panel', contentUrl);
         }
     });
 

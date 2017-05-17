@@ -6,6 +6,9 @@ const path = require('path');
 const url = require('url');
 const storage = require('electron-json-storage');
 
+const hotkey = require('electron-hotkey');
+const {ipcMain} = require('electron');
+
 let mainWindow;
 
 function createWindow() {
@@ -15,25 +18,30 @@ function createWindow() {
 
     });
 
-    const hotkey = require('electron-hotkey');
     hotkey.register('global', 'Control+A', 'event-1');
-    hotkey.register('global', 'Control+B', 'event-2');
-
 
     app.on('shortcut-pressed', (event) => {
         if (event == 'event-1') {
-            let filePath = getAdminPanelUrl();
-            let newWindow = createWindow(filePath);
-            mainWindow.close();
-            mainWindow = newWindow;
-        }
-
-        if (event == 'event-2') {
-            let newWindow = createWindow('http://touchscreen.hakkasan.com/', {webPreferences: {nodeIntegration: false}});
-            mainWindow.close();
-            mainWindow = newWindow;
+            openAdminPanel();
         }
     });
+
+    ipcMain.on('close-admin-panel', (event, contentUrl) => {
+        openContentWindow(contentUrl);
+    });
+
+    function openAdminPanel() {
+        let filePath = getAdminPanelUrl();
+        let newWindow = createWindow(filePath);
+        mainWindow.close();
+        mainWindow = newWindow;
+    }
+
+    function openContentWindow(contentUrl) {
+        let newWindow = createWindow(contentUrl, {webPreferences: {nodeIntegration: false}});
+        mainWindow.close();
+        mainWindow = newWindow;
+    }
 
     function getAdminPanelUrl() {
         return url.format({
