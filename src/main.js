@@ -101,6 +101,8 @@ function createWindow(url, windowOptions = {}) {
     return newWindow;
 }
 
+app.disableHardwareAcceleration();
+
 app.on('ready', openWindow);
 
 app.on('window-all-closed', function () {
