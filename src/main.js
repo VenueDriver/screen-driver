@@ -56,7 +56,12 @@ function openAdminPanel() {
 }
 
 function openContentWindow(contentUrl) {
-    let newWindow = createWindow(contentUrl, {webPreferences: {nodeIntegration: false}});
+    let newWindow = createWindow(contentUrl, {
+        webPreferences: {
+            nodeIntegration: false
+        },
+        preload: path.join(__dirname, 'js/browser_render.html')
+    });
     closeCurrentWindow();
     mainWindow = newWindow;
     hideCursor(mainWindow);
