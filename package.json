@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron .",
     "linux-build": "electron-packager . --overwrite --asar=true --icon=scr/img/icon_16.png --out=release-builds",
-    "win-build": "electron-packager . --overwrite --asar=true --platform=win --arch=x64 --icon=scr/img/icon_16.png --out=release-builds"
+    "win-build": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --icon=scr/img/icon_16.png --out=release-builds"
   },
   "devDependencies": {
     "electron": "1.6.8",
