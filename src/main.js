@@ -58,9 +58,8 @@ function openAdminPanel() {
 function openContentWindow(contentUrl) {
     let newWindow = createWindow(contentUrl, {
         webPreferences: {
-            nodeIntegration: false
-        },
-        preload: path.join(__dirname, 'js/browser_render.html')
+            preload: path.join(__dirname, 'js/remote_content_preload.js')
+        }
     });
     closeCurrentWindow();
     mainWindow = newWindow;
