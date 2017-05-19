@@ -1,0 +1,25 @@
+.header {
+    margin-top: 5%;
+}
+
+.settings {
+    margin-bottom: 5%;
+}
+
+#config-load-error {
+    color: red;
+    font-size: 15px;
+}
+
+#save:focus, #cancel:focus {
+    outline: none;
+}
+
+.selector-container {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+label {
+    display: block;
+}

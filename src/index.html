@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ScreenDriver</title>
+    <script src="js/setup.js"></script>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-select/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../node_modules/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+</head>
+<body>
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <div class="row header">
+            <h1>ScreenDriver</h1>
+        </div>
+        <div class="row settings">
+            <h3>Select screen ID:</h3>
+            <br>
+
+            <span class="selector-container">
+                <label for="venue">Venue</label>
+                <select id="venue" class="selectpicker">
+                    <option value="none">Not selected</option>
+                </select>
+            </span>
+
+            <span class="selector-container">
+                <label for="screen-group">Screen group</label>
+                <select id="screen-group" class="selectpicker">
+                    <option value="none">Not selected</option>
+                </select>
+            </span>
+
+            <span class="selector-container">
+                <label for="screen-id">Screen Id</label>
+                <select id="screen-id" class="selectpicker">
+                    <option value="none">Not selected</option>
+                </select>
+            </span>
+
+            <div>
+                <span id="config-load-error" class=""></span>
+            </div>
+        </div>
+        <div class="row">
+            <button id="save" type="button" class="btn btn-success">Show Presentation</button>
+            <button id="cancel" type="button" class="btn btn-link">Cancel</button>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+</div>
+
+</body>
+
+</html>
