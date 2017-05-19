@@ -22,17 +22,28 @@
         <div class="row settings">
             <h3>Select screen ID:</h3>
             <br>
-            <select id="venue" class="selectpicker">
-                <option value="none">Not selected</option>
-            </select>
 
-            <select id="screen-group" class="selectpicker">
-                <option value="none">Not selected</option>
-            </select>
+            <span class="selector-container">
+                <label for="venue">Venue</label>
+                <select id="venue" class="selectpicker">
+                    <option value="none">Not selected</option>
+                </select>
+            </span>
 
-            <select id="screen-id" class="selectpicker">
-                <option value="none">Not selected</option>
-            </select>
+            <span class="selector-container">
+                <label for="screen-group">Screen group</label>
+                <select id="screen-group" class="selectpicker">
+                    <option value="none">Not selected</option>
+                </select>
+            </span>
+
+            <span class="selector-container">
+                <label for="screen-id">Screen Id</label>
+                <select id="screen-id" class="selectpicker">
+                    <option value="none">Not selected</option>
+                </select>
+            </span>
+
             <div>
                 <span id="config-load-error" class=""></span>
             </div>

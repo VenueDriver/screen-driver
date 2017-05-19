@@ -14,3 +14,12 @@
 #save:focus, #cancel:focus {
     outline: none;
 }
+
+.selector-container {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+label {
+    display: block;
+}
