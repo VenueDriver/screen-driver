@@ -91,6 +91,8 @@ function createWindow(url, windowOptions = {}) {
         windowOptions.kiosk = true;
     }
 
+    windowOptions.icon = __dirname + '/img/icon_128.ico';
+
     let newWindow = new BrowserWindow(windowOptions);
     newWindow.loadURL(url);
     //disable images drag & drop
