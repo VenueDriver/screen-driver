@@ -36,11 +36,10 @@ function openWindow() {
 function setupLogger() {
     log.transports.file.level = 'error';
     log.transports.file.maxSize = 10 * 1024 * 1024;
-    log.transports.file.file = '/home/employee/log.txt';
 
     ipcMain.on('errorInWindow', function(event, data) {
-        let fileName = data.url.substr(data.url.indexOf('screen-driver'));
-        fileName = fileName.replace('screen-driver', '');
+        let fileName = data.url.substr(data.url.indexOf('app.asar'));
+        fileName = fileName.replace('app.asar', '');
         let errorMessage = data.error.trim();
         log.error(`${errorMessage}, ${fileName}:${data.line}`);
     });
