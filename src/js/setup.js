@@ -1,5 +1,6 @@
 const storage = require('electron-json-storage');
 const {ipcRenderer} = require('electron');
+const fs = require('fs');
 
 window.$ = window.jQuery = require('jquery');
 
@@ -7,6 +8,7 @@ let screensConfig;
 let jsyaml = require('js-yaml');
 
 $(function () {
+    readLog();
     turnOnLogging();
     loadScreensConfig();
 
@@ -218,4 +220,14 @@ function turnOnLogging() {
     window.onerror = function(error, url, line) {
         ipcRenderer.send('errorInWindow', {error: error, url: url, line: line});
     };
+}
+
+function readLog() {
+    fs.readFile('/home/employee/log.txt', 'utf8', (err, logs) => {
+        var logLines = logs.split('\n').reverse();
+        for (var i = 0; i < logLines.length; i++) {
+            $('#logs').append(logLines[i]);
+            $('#logs').append('<br>');
+        }
+    });
 }
