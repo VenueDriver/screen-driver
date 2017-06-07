@@ -7,12 +7,15 @@ const path = require('path');
 const url = require('url');
 const storage = require('electron-json-storage');
 
+const log = require('electron-log');
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
 
 const isDev = require('electron-is-dev');
 
 let mainWindow;
+
+setupLogger();
 
 function openWindow() {
     powerSaveBlocker.start('prevent-display-sleep');
@@ -28,6 +31,16 @@ function openWindow() {
     registerHotKeys();
     addHotKeyListeners();
     addEventListeners();
+}
+
+function setupLogger() {
+    log.transports.file.level = 'error';
+    log.transports.file.maxSize = 10 * 1024 * 1024;
+    log.transports.file.file = '/home/employee/log.txt';
+
+    ipcMain.on('errorInWindow', function(event, data) {
+        log.error(data.line + ': ' + data.error + ', ' + data.url);
+    });
 }
 
 function registerHotKeys() {
