@@ -110,13 +110,29 @@ function createWindow(url, windowOptions = {}) {
     windowOptions.icon = __dirname + '/img/icon_128.ico';
 
     let newWindow = new BrowserWindow(windowOptions);
-    newWindow.loadURL(url);
+    loadUrl(newWindow, url);
+
     //disable images drag & drop
     newWindow.webContents.executeJavaScript('window.ondragstart = function(){return false};');
     if (isDev) {
         newWindow.webContents.openDevTools();
     }
     return newWindow;
+}
+
+function loadUrl(browserWindow, url) {
+    browserWindow.loadURL(url);
+
+    browserWindow.webContents.on('did-fail-load', function (event, errorCode, errorDescription, validatedURL) {
+        console.log('Can not load url:', validatedURL, errorCode, errorDescription);
+        // 100-199 Connection related errors (Chromium net errors)
+        if (errorCode > -200 && errorCode <= -100) {
+            setTimeout(function () {
+                console.log("Trying to load url:", validatedURL);
+                browserWindow.loadURL(url);
+            }, 5000);
+        }
+    });
 }
 
 app.disableHardwareAcceleration();
