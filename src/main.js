@@ -39,7 +39,10 @@ function setupLogger() {
     log.transports.file.file = '/home/employee/log.txt';
 
     ipcMain.on('errorInWindow', function(event, data) {
-        log.error(data.line + ': ' + data.error + ', ' + data.url);
+        let fileName = data.url.substr(data.url.indexOf('screen-driver'));
+        fileName = fileName.replace('screen-driver', '');
+        let errorMessage = data.error.trim();
+        log.error(`${errorMessage}, ${fileName}:${data.line}`);
     });
 }
 
