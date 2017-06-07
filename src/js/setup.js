@@ -121,6 +121,18 @@ $(function () {
         putInStorage('selectedScreen', selectedScreenId);
         putInStorage('contentUrl', contentUrl);
     }
+
+    $("#show-logs").click(function () {
+        $(this).hide();
+        $("#hide-logs").show();
+        $("#logs").show();
+    });
+
+    $("#hide-logs").click(function () {
+        $(this).hide();
+        $("#show-logs").show();
+        $("#logs").hide();
+    })
 });
 
 function openContentWindow(contentUrl) {
@@ -161,7 +173,7 @@ function hideCancelButton() {
 
 function loadScreensConfig() {
     $.ajax({
-        url: "https://raw.githubusercontent.com/VenueDriver/screen-/master/config/screenContent.yml",
+        url: "https://raw.githubusercontent.com/VenueDriver/screen-driver/master/config/screenContent.yml",
         success: function (yaml) {
             try {
                 screensConfig = jsyaml.load(yaml);
