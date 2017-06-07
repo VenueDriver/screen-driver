@@ -1,6 +1,8 @@
 const storage = require('electron-json-storage');
 const {ipcRenderer} = require('electron');
 const fs = require('fs');
+const os = require('os');
+const isDev = require('electron-is-dev');
 
 window.$ = window.jQuery = require('jquery');
 
@@ -235,12 +237,30 @@ function turnOnLogging() {
 }
 
 function readLog() {
-    fs.readFile('/home/employee/log.txt', 'utf8', (err, logs) => {
-        let logsElement = $('#logs');
-        let logLines = logs.split('\n').reverse();
-        logLines.forEach((line) => {
-            logsElement.append(line);
-            logsElement.append('<br>');
-        });
+    fs.readFile(getLogFileLocation(), 'utf8', (err, logs) => {
+        if (logs) {
+            insertLogsOnPage(logs);
+        }
     });
+}
+
+function insertLogsOnPage(logs) {
+    let logsElement = $('#logs');
+    let logLines = logs.split('\n').reverse();
+    logLines.forEach((line) => {
+        logsElement.append(line);
+        logsElement.append('<br>');
+    });
+}
+
+function getLogFileLocation() {
+    if (isDev) {
+        return __dirname + '/log.log';
+    }
+    let platform = os.platform();
+    switch (platform) {
+        case 'linux': return '~/.config/ScreenDriver/log.log';
+        case 'darwin': return '~/Library/Logs/ScreenDriver/log.log';
+        case 'win32': return '%USERPROFILE%\\AppData\\Roaming\\ScreenDriver\\log.log';
+    }
 }
