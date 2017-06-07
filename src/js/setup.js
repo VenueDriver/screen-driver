@@ -236,10 +236,11 @@ function turnOnLogging() {
 
 function readLog() {
     fs.readFile('/home/employee/log.txt', 'utf8', (err, logs) => {
-        var logLines = logs.split('\n').reverse();
-        for (var i = 0; i < logLines.length; i++) {
-            $('#logs').append(logLines[i]);
-            $('#logs').append('<br>');
-        }
+        let logsElement = $('#logs');
+        let logLines = logs.split('\n').reverse();
+        logLines.forEach((line) => {
+            logsElement.append(line);
+            logsElement.append('<br>');
+        });
     });
 }
