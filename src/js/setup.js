@@ -7,6 +7,7 @@ let screensConfig;
 let jsyaml = require('js-yaml');
 
 $(function () {
+    turnOnLogging();
     loadScreensConfig();
 
     let selectedVenue;
@@ -158,19 +159,20 @@ function hideCancelButton() {
 
 function loadScreensConfig() {
     $.ajax({
-        url: "https://raw.githubusercontent.com/VenueDriver/screen-driver/master/config/screenContent.yml",
+        url: "https://raw.githubusercontent.com/VenueDriver/screen-/master/config/screenContent.yml",
         success: function (yaml) {
             try {
                 screensConfig = jsyaml.load(yaml);
             } catch (error) {
-                showError("Cannot read YAML: " + error.message);
+                showError("Cannot read YAML config: " + error.message);
                 throw error;
             }
             initVenuesSelector();
             putPreviouslySelectedDataIntoSelectors();
         },
         error: function (error) {
-            showError("Failed to load resource" + (error.responseText == "" ? '' : (':  ' + error.responseText)));
+            showError("Failed to load YAML config" + (!error.responseText ? '' : (':  ' + error.responseText)));
+            throw new Error(error.responseText);
         }
     });
 }
@@ -210,4 +212,10 @@ function getFromStorage(key, callback) {
         return storage.getAll(callback);
     }
     return storage.get(key, callback);
+}
+
+function turnOnLogging() {
+    window.onerror = function(error, url, line) {
+        ipcRenderer.send('errorInWindow', {error: error, url: url, line: line});
+    };
 }
