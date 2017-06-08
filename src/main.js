@@ -1,11 +1,15 @@
 const electron = require('electron');
-const {powerSaveBlocker} = require('electron');
+const {powerSaveBlocker, net} = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
 const url = require('url');
 const storage = require('electron-json-storage');
+const jsyaml = require('js-yaml');
+const PropertiesReader = require('properties-reader');
+const properties = PropertiesReader(__dirname + '/../config/app.properties');
+const Q = require('q');
 
 const log = require('electron-log');
 const hotkey = require('electron-hotkey');
@@ -22,7 +26,9 @@ function openWindow() {
 
     storage.getAll(function(error, data) {
         if (data.contentUrl) {
-            openContentWindow(data.contentUrl);
+            reloadCurrentScreenConfig(data)
+                .then(() => {openContentWindow(data.contentUrl)})
+                .done()
         } else {
             openAdminPanel();
         }
@@ -31,6 +37,58 @@ function openWindow() {
     registerHotKeys();
     addHotKeyListeners();
     addEventListeners();
+}
+
+function reloadCurrentScreenConfig(currentScreenConfig) {
+    var deferred = Q.defer();
+    let url = properties.get('ScreenDriver.content.url');
+    const request = net.request(url);
+    request.on('response', (response) => {
+        response.on('data', (chunk) => {
+            let remoteConfig = convertToYaml(chunk);
+            updateUrlForCurrentScreen(currentScreenConfig, remoteConfig);
+            deferred.resolve();
+
+            function convertToYaml() {
+                try {
+                    return jsyaml.load(chunk);
+                } catch (error) {
+                    log.error("Cannot read YAML config. Used old config. Message: " + error.message);
+                    deferred.resolve();
+                }
+            }
+        });
+
+        response.on('error', (error) => {
+            console.log(error);
+            deferred.reject(error)
+        })
+    });
+
+    request.on('error', (error) => {
+        log.error('Failed to load YAML config. Used old config. Message:', error);
+        deferred.resolve();
+    });
+    request.end();
+    return deferred.promise;
+}
+
+function updateUrlForCurrentScreen(localScreenConfig, remoteScreenConfig) {
+    let remoteUrl = getRemoteUrlForCurrentScreen();
+    let localUrl = localScreenConfig.contentUrl;
+    if (remoteUrl != localUrl) {
+        localScreenConfig.contentUrl = remoteUrl;
+        storage.set('contentUrl', remoteUrl, function (error) {
+            if (error) throw error;
+        });
+    }
+
+    function getRemoteUrlForCurrentScreen() {
+        let selectedVenue = localScreenConfig.selectedVenue;
+        let selectedGroup = localScreenConfig.selectedGroup;
+        let selectedScreen = localScreenConfig.selectedScreen;
+        return remoteScreenConfig[selectedVenue][selectedGroup][selectedScreen];
+    }
 }
 
 function setupLogger() {

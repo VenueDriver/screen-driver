@@ -3,6 +3,8 @@ const {ipcRenderer} = require('electron');
 const fs = require('fs');
 const os = require('os');
 const isDev = require('electron-is-dev');
+const PropertiesReader = require('properties-reader');
+const properties = PropertiesReader(__dirname + '/../../config/app.properties');
 
 window.$ = window.jQuery = require('jquery');
 
@@ -174,8 +176,9 @@ function hideCancelButton() {
 }
 
 function loadScreensConfig() {
+    let url = properties.get('ScreenDriver.content.url');
     $.ajax({
-        url: "https://raw.githubusercontent.com/VenueDriver/screen-driver/master/config/screenContent.yml",
+        url: url,
         success: function (yaml) {
             try {
                 screensConfig = jsyaml.load(yaml);
