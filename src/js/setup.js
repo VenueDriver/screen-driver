@@ -258,5 +258,9 @@ function getLogFileLocation() {
     if (isDev) {
         rootPath = __dirname;
     }
-    return rootPath + '/log.log';
+    let platform = os.platform();
+    switch (platform) {
+        case 'linux': return rootPath + '/log.log';
+        case 'win32': return rootPath + '\\log.log';
+    }
 }

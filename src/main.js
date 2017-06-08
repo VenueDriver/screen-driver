@@ -36,6 +36,7 @@ function openWindow() {
 function setupLogger() {
     log.transports.file.level = 'error';
     log.transports.file.maxSize = 10 * 1024 * 1024;
+    log.transports.file.file = process.cwd() + '/log.log';
     if (isDev) {
         log.transports.file.file = __dirname + '/log.log';
     }
