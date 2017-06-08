@@ -34,13 +34,20 @@ function openWindow() {
 }
 
 function setupLogger() {
+    setupLoggerProperties();
+    addListenerForErrors();
+}
+
+function setupLoggerProperties() {
     log.transports.file.level = 'error';
     log.transports.file.maxSize = 10 * 1024 * 1024;
     log.transports.file.file = process.cwd() + '/log.log';
     if (isDev) {
         log.transports.file.file = __dirname + '/log.log';
     }
+}
 
+function addListenerForErrors() {
     ipcMain.on('errorInWindow', function(event, data) {
         let fileName = data.url.substr(data.url.indexOf('app.asar'));
         fileName = fileName.replace('app.asar', '');

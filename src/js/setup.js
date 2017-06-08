@@ -258,6 +258,10 @@ function getLogFileLocation() {
     if (isDev) {
         rootPath = __dirname;
     }
+    return getLocationForPlatform(rootPath)
+}
+
+function getLocationForPlatform(rootPath) {
     let platform = os.platform();
     switch (platform) {
         case 'linux': return rootPath + '/log.log';
