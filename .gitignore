@@ -1,5 +1,5 @@
 .idea/*
 node_modules
 release-builds
-out
 dist
+log.log

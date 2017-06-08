@@ -184,7 +184,7 @@ function loadScreensConfig() {
                 screensConfig = jsyaml.load(yaml);
             } catch (error) {
                 showError("Cannot read YAML config: " + error.message);
-                throw error;
+                throw new Error(error.message);
             }
             initVenuesSelector();
             putPreviouslySelectedDataIntoSelectors();
@@ -240,11 +240,11 @@ function turnOnLogging() {
 }
 
 function readLog() {
-    fs.readFile(getLogFileLocation(), 'utf8', (err, logs) => {
-        if (logs) {
-            insertLogsOnPage(logs);
-        }
-    });
+    let logFilePath = getLogFileLocation();
+    if (fs.existsSync(logFilePath)) {
+        let logs = fs.readFileSync(logFilePath, 'utf8');
+        insertLogsOnPage(logs);
+    }
 }
 
 function insertLogsOnPage(logs) {
@@ -257,13 +257,17 @@ function insertLogsOnPage(logs) {
 }
 
 function getLogFileLocation() {
+    let rootPath = process.cwd();
     if (isDev) {
-        return __dirname + '/log.log';
+        rootPath = __dirname;
     }
+    return getLocationForPlatform(rootPath)
+}
+
+function getLocationForPlatform(rootPath) {
     let platform = os.platform();
     switch (platform) {
-        case 'linux': return '~/.config/ScreenDriver/log.log';
-        case 'darwin': return '~/Library/Logs/ScreenDriver/log.log';
-        case 'win32': return '%USERPROFILE%\\AppData\\Roaming\\ScreenDriver\\log.log';
+        case 'linux': return rootPath + '/log.log';
+        case 'win32': return rootPath + '\\log.log';
     }
 }

@@ -92,12 +92,20 @@ function updateUrlForCurrentScreen(localScreenConfig, remoteScreenConfig) {
 }
 
 function setupLogger() {
+    setupLoggerProperties();
+    addListenerForErrors();
+}
+
+function setupLoggerProperties() {
     log.transports.file.level = 'error';
     log.transports.file.maxSize = 10 * 1024 * 1024;
+    log.transports.file.file = process.cwd() + '/log.log';
     if (isDev) {
         log.transports.file.file = __dirname + '/log.log';
     }
+}
 
+function addListenerForErrors() {
     ipcMain.on('errorInWindow', function(event, data) {
         let fileName = data.url.substr(data.url.indexOf('app.asar'));
         fileName = fileName.replace('app.asar', '');
@@ -185,7 +193,6 @@ function loadUrl(browserWindow, url) {
 
     browserWindow.webContents.on('did-fail-load', function (event, errorCode, errorDescription, validatedURL) {
         log.error(`Can not load url: ${validatedURL} ${errorCode} ${errorDescription}`);
-        // console.log('Can not load url:', validatedURL, errorCode, errorDescription);
         // 100-199 Connection related errors (Chromium net errors)
         if (errorCode > -200 && errorCode <= -100) {
             setTimeout(function () {
