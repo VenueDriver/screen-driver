@@ -127,7 +127,6 @@ function loadUrl(browserWindow, url) {
 
     browserWindow.webContents.on('did-fail-load', function (event, errorCode, errorDescription, validatedURL) {
         log.error(`Can not load url: ${validatedURL} ${errorCode} ${errorDescription}`);
-        // console.log('Can not load url:', validatedURL, errorCode, errorDescription);
         // 100-199 Connection related errors (Chromium net errors)
         if (errorCode > -200 && errorCode <= -100) {
             setTimeout(function () {
