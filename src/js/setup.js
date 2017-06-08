@@ -4,7 +4,7 @@ const fs = require('fs');
 const os = require('os');
 const isDev = require('electron-is-dev');
 const PropertiesReader = require('properties-reader');
-const properties = PropertiesReader(__dirname + '/../../config/app.properties');
+const properties = PropertiesReader(__dirname + '/../config/app.properties');
 
 window.$ = window.jQuery = require('jquery');
 
