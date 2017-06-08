@@ -196,8 +196,12 @@ function loadUrl(browserWindow, url) {
         // 100-199 Connection related errors (Chromium net errors)
         if (errorCode > -200 && errorCode <= -100) {
             setTimeout(function () {
-                console.log("Trying to load url:", validatedURL);
-                browserWindow.loadURL(url);
+                try {
+                    log.info("Trying to load url:", validatedURL);
+                    browserWindow.loadURL(url);
+                } catch (error) {
+                    log.info('Content load attempts have been interrupted. Reason: window was closed ')
+                }
             }, 5000);
         }
     });
