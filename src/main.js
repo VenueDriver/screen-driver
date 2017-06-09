@@ -10,6 +10,7 @@ const jsyaml = require('js-yaml');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const Q = require('q');
+const CronJob = require('cron').CronJob;
 
 const log = require('electron-log');
 const hotkey = require('electron-hotkey');
@@ -18,6 +19,7 @@ const {ipcMain} = require('electron');
 const isDev = require('electron-is-dev');
 
 let mainWindow;
+let screenConfig;
 
 setupLogger();
 
@@ -25,9 +27,16 @@ function openWindow() {
     powerSaveBlocker.start('prevent-display-sleep');
 
     storage.getAll(function(error, data) {
-        if (data.contentUrl) {
-            reloadCurrentScreenConfig(data)
-                .then(() => {openContentWindow(data.contentUrl)})
+        if (!error) {
+            screenConfig = data;
+        } else {
+            log.error('Cannot read config from local storage.', error);
+            return;
+        }
+
+        if (screenConfig.contentUrl) {
+            reloadCurrentScreenConfig()
+                .then(() => {openContentWindow(screenConfig.contentUrl)})
                 .done()
         } else {
             openAdminPanel();
@@ -37,17 +46,21 @@ function openWindow() {
     registerHotKeys();
     addHotKeyListeners();
     addEventListeners();
+    initCronJobs();
 }
 
-function reloadCurrentScreenConfig(currentScreenConfig) {
+/**
+ *  @return {promise}. Promise can contain boolean value 'isUrlWasChanged', if config request was successful.
+ */
+function reloadCurrentScreenConfig() {
     var deferred = Q.defer();
     let url = properties.get('ScreenDriver.content.url');
     const request = net.request(url);
     request.on('response', (response) => {
         response.on('data', (chunk) => {
             let remoteConfig = convertToYaml(chunk);
-            updateUrlForCurrentScreen(currentScreenConfig, remoteConfig);
-            deferred.resolve();
+            let isUrlWasChanged = updateUrlForCurrentScreen(screenConfig, remoteConfig);
+            deferred.resolve(isUrlWasChanged);
 
             function convertToYaml() {
                 try {
@@ -73,6 +86,9 @@ function reloadCurrentScreenConfig(currentScreenConfig) {
     return deferred.promise;
 }
 
+/**
+ *  @return {boolean}. Return was config updated or not
+ */
 function updateUrlForCurrentScreen(localScreenConfig, remoteScreenConfig) {
     let remoteUrl = getRemoteUrlForCurrentScreen();
     let localUrl = localScreenConfig.contentUrl;
@@ -81,7 +97,9 @@ function updateUrlForCurrentScreen(localScreenConfig, remoteScreenConfig) {
         storage.set('contentUrl', remoteUrl, function (error) {
             if (error) throw error;
         });
+        return true;
     }
+    return false;
 
     function getRemoteUrlForCurrentScreen() {
         let selectedVenue = localScreenConfig.selectedVenue;
@@ -205,6 +223,22 @@ function loadUrl(browserWindow, url) {
             }, 5000);
         }
     });
+}
+
+function initCronJobs() {
+    new CronJob('*/1 * * * *', function() {
+        reloadCurrentScreenConfig(screenConfig)
+            .then((isUrlWasChanged) => {
+                reloadWindowContent(isUrlWasChanged);
+            })
+            .done();
+    }, null, true, 'UTC');
+
+    function reloadWindowContent(isUrlWasChanged) {
+        if (isUrlWasChanged) {
+            mainWindow.loadURL(screenConfig.contentUrl);
+        }
+    }
 }
 
 app.disableHardwareAcceleration();
