@@ -20,6 +20,7 @@ const isDev = require('electron-is-dev');
 
 let mainWindow;
 let screenConfig;
+let configLoadJob;
 
 setupLogger();
 
@@ -46,7 +47,6 @@ function openWindow() {
     registerHotKeys();
     addHotKeyListeners();
     addEventListeners();
-    initCronJobs();
 }
 
 /**
@@ -139,6 +139,7 @@ function registerHotKeys() {
 function addHotKeyListeners() {
     app.on('shortcut-pressed', (event) => {
         if (event === 'open-admin-panel') {
+            configLoadJob.stop();
             openAdminPanel();
         }
     });
@@ -166,6 +167,7 @@ function openContentWindow(contentUrl) {
     closeCurrentWindow();
     mainWindow = newWindow;
     hideCursor(mainWindow);
+    initCronJobs();
 }
 
 function closeCurrentWindow() {
@@ -226,13 +228,14 @@ function loadUrl(browserWindow, url) {
 }
 
 function initCronJobs() {
-    new CronJob('*/1 * * * *', function() {
-        reloadCurrentScreenConfig(screenConfig)
+    configLoadJob = new CronJob('*/5 * * * *', function() {
+        reloadCurrentScreenConfig()
             .then((isUrlWasChanged) => {
                 reloadWindowContent(isUrlWasChanged);
             })
             .done();
     }, null, true, 'UTC');
+    configLoadJob.start();
 
     function reloadWindowContent(isUrlWasChanged) {
         if (isUrlWasChanged) {

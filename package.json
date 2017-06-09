@@ -1,12 +1,12 @@
 {
   "name": "ScreenDriver",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "description": "ScreenDriver kiosk app",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "linux-build": "electron-packager . --overwrite --asar=true --ignore=config --ignore=.gitignore --ignore=.idea --ignore=.dist --ignore=README.md --icon=scr/img/icon_16.png --out=release-builds",
-    "win-build":   "electron-packager . --overwrite --asar=true --ignore=config --ignore=.gitignore --ignore=.idea --ignore=.dist --ignore=README.md --platform=win32 --arch=x64 --icon=scr/img/icon_16.png --out=release-builds",
+    "linux-build": "electron-packager . --overwrite --asar=true --ignore=config/screenContent.yml --ignore=.gitignore --ignore=.idea --ignore=.dist --ignore=README.md --icon=scr/img/icon_16.png --out=release-builds",
+    "win-build":   "electron-packager . --overwrite --asar=true --ignore=config/screenContent.yml --ignore=.gitignore --ignore=.idea --ignore=.dist --ignore=README.md --platform=win32 --arch=x64 --icon=scr/img/icon_16.png --out=release-builds",
     "win-installer": "build --win",
     "linux-installer": "build --linux"
   },
