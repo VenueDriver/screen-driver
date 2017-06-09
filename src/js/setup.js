@@ -267,7 +267,7 @@ function getLogFileLocation() {
 function getLocationForPlatform(rootPath) {
     let platform = os.platform();
     switch (platform) {
-        case 'linux': return rootPath + '/log.log';
-        case 'win32': return rootPath + '\\log.log';
+        case 'linux': return rootPath + '/error.log';
+        case 'win32': return rootPath + '\\error.log';
     }
 }

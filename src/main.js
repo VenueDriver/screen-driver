@@ -131,10 +131,16 @@ function setupLogger() {
 function setupLoggerProperties() {
     log.transports.file.level = 'error';
     log.transports.file.maxSize = 10 * 1024 * 1024;
-    log.transports.file.file = process.cwd() + '/log.log';
+
+    let logFilePath = getLogFilePath();
+    log.transports.file.file = logFilePath + '/error.log';
+}
+
+function getLogFilePath() {
     if (isDev) {
-        log.transports.file.file = __dirname + '/log.log';
+        return __dirname;
     }
+    return process.cwd();
 }
 
 function addListenerForErrors() {
