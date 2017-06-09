@@ -90,14 +90,18 @@ function reloadCurrentScreenConfig() {
  *  @return {boolean}. Return was config updated or not
  */
 function updateUrlForCurrentScreen(localScreenConfig, remoteScreenConfig) {
-    let remoteUrl = getRemoteUrlForCurrentScreen();
-    let localUrl = localScreenConfig.contentUrl;
-    if (remoteUrl != localUrl) {
-        localScreenConfig.contentUrl = remoteUrl;
-        storage.set('contentUrl', remoteUrl, function (error) {
-            if (error) throw error;
-        });
-        return true;
+    try {
+        let remoteUrl = getRemoteUrlForCurrentScreen();
+        let localUrl = localScreenConfig.contentUrl;
+        if (remoteUrl != localUrl) {
+            localScreenConfig.contentUrl = remoteUrl;
+            storage.set('contentUrl', remoteUrl, function (error) {
+                if (error) throw error;
+            });
+            return true;
+        }
+    } catch (error) {
+        log.error('Cannot update url for current screen.', error )
     }
     return false;
 
