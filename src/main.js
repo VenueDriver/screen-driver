@@ -19,30 +19,40 @@ const {ipcMain} = require('electron');
 const isDev = require('electron-is-dev');
 
 let mainWindow;
-let screenConfig;
+var screenConfig;
 let configLoadJob;
 
 setupLogger();
 
+function getAllDataFromStorage() {
+    let deferred = Q.defer();
+    storage.getAll(function (error, data) {
+        if (!error) {
+            screenConfig = data;
+            deferred.resolve(data);
+        } else {
+            log.error('Cannot read config from local storage.', error);
+            deferred.reject(error);
+        }
+
+    });
+    return deferred.promise;
+}
+
 function openWindow() {
     powerSaveBlocker.start('prevent-display-sleep');
 
-    storage.getAll(function(error, data) {
-        if (!error) {
-            screenConfig = data;
-        } else {
-            log.error('Cannot read config from local storage.', error);
-            return;
-        }
-
-        if (screenConfig.contentUrl) {
-            reloadCurrentScreenConfig()
-                .then(() => {openContentWindow(screenConfig.contentUrl)})
+    getAllDataFromStorage().then((data) => {
+        if (data.contentUrl) {
+            reloadCurrentScreenConfig(data)
+                .then(() => openContentWindow(data.contentUrl))
                 .done()
         } else {
             openAdminPanel();
         }
-    });
+    }).done();
+
+
 
     registerHotKeys();
     addHotKeyListeners();
@@ -52,8 +62,8 @@ function openWindow() {
 /**
  *  @return {promise}. Promise can contain boolean value 'isUrlWasChanged', if config request was successful.
  */
-function reloadCurrentScreenConfig() {
-    var deferred = Q.defer();
+function reloadCurrentScreenConfig(screenConfig) {
+    let deferred = Q.defer();
     let url = properties.get('ScreenDriver.content.url');
     const request = net.request(url);
     request.on('response', (response) => {
@@ -236,7 +246,8 @@ function loadUrl(browserWindow, url) {
 
 function initCronJobs() {
     configLoadJob = new CronJob('*/5 * * * *', function() {
-        reloadCurrentScreenConfig()
+        getAllDataFromStorage()
+            .then(reloadCurrentScreenConfig)
             .then((isUrlWasChanged) => {
                 reloadWindowContent(isUrlWasChanged);
             })
