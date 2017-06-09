@@ -139,7 +139,10 @@ function registerHotKeys() {
 function addHotKeyListeners() {
     app.on('shortcut-pressed', (event) => {
         if (event === 'open-admin-panel') {
-            configLoadJob.stop();
+            //configLoadJob can be undefined on first launch
+            if (configLoadJob) {
+                configLoadJob.stop();
+            }
             openAdminPanel();
         }
     });
