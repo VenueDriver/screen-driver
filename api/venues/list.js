@@ -1,6 +1,7 @@
 'use strict';
 
 const dbHelper = require('./../helpers/db_helper');
+const responseHelper = require('../helpers/http_response_helper');
 
 module.exports.list = (event, context, callback) => {
     let venues;
@@ -11,12 +12,8 @@ module.exports.list = (event, context, callback) => {
     }).then(result => {
         content = result;
         mergeVenuesWithContent(venues, content);
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify(venues),
-        };
-        callback(null, response);
-    });
+        callback(null, responseHelper.createSuccessfulResponse(venues));
+    }).fail(error => callback(null, responseHelper.createResponseWithError(500, error)));
 };
 
 function findAllVenues() {
