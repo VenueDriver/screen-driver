@@ -43,24 +43,35 @@ function getAllContent() {
 }
 
 function mergeVenuesWithContent(venues, content) {
-    findContent(venues, content);
+    mergeByContentId(venues, content);
 }
 
-function findContent(items, contentList) {
+function mergeByContentId(items, contentList) {
     items.forEach(item => {
         if (item.content_id) {
-            let content = contentList.find(c => c.id === item.content_id);
-            if (content) {
-                item.contentShortName = content.short_name;
-                item.contentUrl = content.url;
-            } else {
-                delete item.content_id;
-            }
+            let content = findContentById(item, contentList);
+            addContentValuesToItem(item, content);
         }
-        if (item.screen_groups) {
-            findContent(item.screen_groups, contentList);
-        } else if (item.screens) {
-            findContent(item.screens, contentList);
-        }
+        mergeContentWithChild(item, contentList);
     })
+}
+
+function findContentById(item, contentList) {
+    return contentList.find(c => c.id === item.content_id);
+}
+
+function addContentValuesToItem(item, content) {
+    if (content) {
+        item.contentShortName = content.short_name;
+        item.contentUrl = content.url;
+    }
+}
+
+function mergeContentWithChild(item, contentList) {
+    if (item['screen_groups']) {
+        mergeByContentId(item.screen_groups, contentList);
+    }
+    if (item['screens']) {
+        mergeByContentId(item.screens, contentList);
+    }
 }
