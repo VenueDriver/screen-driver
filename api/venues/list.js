@@ -1,14 +1,13 @@
 'use strict';
 
-const Q = require('q');
-const dynamoDb = require('./../dynamodb');
+const dbHelper = require('./../helpers/db_helper');
 
 module.exports.list = (event, context, callback) => {
     let venues;
     let content;
-    getAllVenues().then(result => {
+    findAllVenues().then(result => {
         venues = result;
-        return getAllContent();
+        return findAllContent();
     }).then(result => {
         content = result;
         mergeVenuesWithContent(venues, content);
@@ -20,26 +19,12 @@ module.exports.list = (event, context, callback) => {
     });
 };
 
-function getAllVenues() {
-    let deferred = Q.defer();
-    dynamoDb.scan({TableName: process.env.VENUES_TABLE}, (error, result) => {
-        if (error) {
-            deferred.reject('Couldn\'t fetch the venues.');
-        }
-        deferred.resolve(result.Items);
-    });
-    return deferred.promise;
+function findAllVenues() {
+    return dbHelper.findAll(process.env.VENUES_TABLE);
 }
 
-function getAllContent() {
-    let deferred = Q.defer();
-    dynamoDb.scan({TableName: process.env.CONTENT_TABLE}, (error, result) => {
-        if (error) {
-            deferred.reject('Couldn\'t fetch the content.');
-        }
-        deferred.resolve(result.Items);
-    });
-    return deferred.promise;
+function findAllContent() {
+    return dbHelper.findAll(process.env.CONTENT_TABLE);
 }
 
 function mergeVenuesWithContent(venues, content) {
