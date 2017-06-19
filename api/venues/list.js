@@ -43,9 +43,6 @@ function getAllContent() {
 }
 
 function mergeVenuesWithContent(venues, content) {
-    console.log(venues);
-    console.log(content);
-
     findContent(venues, content);
 }
 
@@ -55,6 +52,11 @@ function findContent(items, contentList) {
             let content = contentList.find(c => c.id = item.content_id);
             item.contentShortName = content.short_name;
             item.contentUrl = content.url;
+        }
+        if (item.screen_groups) {
+            findContent(item.screen_groups, contentList);
+        } else if (item.screens) {
+            findContent(item.screens, contentList);
         }
     })
 }
