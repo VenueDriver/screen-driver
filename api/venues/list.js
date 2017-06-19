@@ -1,23 +1,60 @@
 'use strict';
 
+const Q = require('q');
 const dynamoDb = require('./../dynamodb');
-const params = {
-    TableName: process.env.VENUES_TABLE,
-};
 
 module.exports.list = (event, context, callback) => {
-    dynamoDb.scan(params, (error, result) => {
-        if (error) {
-            console.error(error);
-            callback(new Error('Couldn\'t fetch the venues.'));
-            return;
-        }
-
-        // create a response
+    let venues;
+    let content;
+    getAllVenues().then(result => {
+        venues = result;
+        return getAllContent();
+    }).then(result => {
+        content = result;
+        mergeVenuesWithContent(venues, content);
         const response = {
             statusCode: 200,
-            body: JSON.stringify(result.Items),
+            body: JSON.stringify(venues),
         };
         callback(null, response);
     });
 };
+
+function getAllVenues() {
+    let deferred = Q.defer();
+    dynamoDb.scan({TableName: process.env.VENUES_TABLE}, (error, result) => {
+        if (error) {
+            deferred.reject('Couldn\'t fetch the venues.');
+        }
+        deferred.resolve(result.Items);
+    });
+    return deferred.promise;
+}
+
+function getAllContent() {
+    let deferred = Q.defer();
+    dynamoDb.scan({TableName: process.env.CONTENT_TABLE}, (error, result) => {
+        if (error) {
+            deferred.reject('Couldn\'t fetch the content.');
+        }
+        deferred.resolve(result.Items);
+    });
+    return deferred.promise;
+}
+
+function mergeVenuesWithContent(venues, content) {
+    console.log(venues);
+    console.log(content);
+
+    findContent(venues, content);
+}
+
+function findContent(items, contentList) {
+    items.forEach(item => {
+        if (item.content_id) {
+            let content = contentList.find(c => c.id = item.content_id);
+            item.contentShortName = content.short_name;
+            item.contentUrl = content.url;
+        }
+    })
+}
