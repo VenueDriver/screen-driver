@@ -49,9 +49,13 @@ function mergeVenuesWithContent(venues, content) {
 function findContent(items, contentList) {
     items.forEach(item => {
         if (item.content_id) {
-            let content = contentList.find(c => c.id = item.content_id);
-            item.contentShortName = content.short_name;
-            item.contentUrl = content.url;
+            let content = contentList.find(c => c.id === item.content_id);
+            if (content) {
+                item.contentShortName = content.short_name;
+                item.contentUrl = content.url;
+            } else {
+                delete item.content_id;
+            }
         }
         if (item.screen_groups) {
             findContent(item.screen_groups, contentList);
