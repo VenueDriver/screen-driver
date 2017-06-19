@@ -6,14 +6,17 @@ const responseHelper = require('../helpers/http_response_helper');
 module.exports.list = (event, context, callback) => {
     let venues;
     let content;
-    findAllVenues().then(result => {
-        venues = result;
-        return findAllContent();
-    }).then(result => {
-        content = result;
-        mergeVenuesWithContent(venues, content);
-        callback(null, responseHelper.createSuccessfulResponse(venues));
-    }).fail(error => callback(null, responseHelper.createResponseWithError(500, error)));
+    findAllVenues()
+        .then(result => {
+            venues = result;
+            return findAllContent();
+        })
+        .then(result => {
+            content = result;
+            mergeVenuesWithContent(venues, content);
+            callback(null, responseHelper.createSuccessfulResponse(venues));
+        })
+        .fail(error => callback(null, responseHelper.createResponseWithError(500, error)));
 };
 
 function findAllVenues() {
