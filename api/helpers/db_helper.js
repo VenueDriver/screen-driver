@@ -7,7 +7,7 @@ module.exports.findAll = (tableName) => {
     let deferred = Q.defer();
     dynamoDb.scan({TableName: tableName}, (error, result) => {
         if (error) {
-            deferred.reject(`Couldn\'t perform scan operation on ${tableName} table.`);
+            deferred.reject(`Couldn\'t perform scan operation on ${tableName} table: ${error.message}`);
         }
         deferred.resolve(result.Items);
     });
