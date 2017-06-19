@@ -57,13 +57,13 @@ function mergeByContentId(items, contentList) {
 }
 
 function findContentById(item, contentList) {
-    return contentList.find(c => c.id === item.content_id);
+    return contentList.filter(c => c.id === item.content_id);
 }
 
 function addContentValuesToItem(item, content) {
     if (content) {
-        item.contentShortName = content.short_name;
-        item.contentUrl = content.url;
+        item.content = content;
+        delete item.content_id;
     }
 }
 
