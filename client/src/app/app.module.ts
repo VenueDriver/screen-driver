@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 
 import {routing} from "./app.routing";
+import {AlertModule} from "ngx-bootstrap";
 
 import {ContentListModule} from "./content/content-list.module";
 import {VenuesModule} from "./venues/venues.module";
@@ -15,6 +16,7 @@ import {VenuesModule} from "./venues/venues.module";
     imports: [
         BrowserModule,
         routing,
+        AlertModule.forRoot(),
         ContentListModule,
         VenuesModule
     ],
