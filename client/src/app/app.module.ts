@@ -8,9 +8,11 @@ import {AlertModule} from "ngx-bootstrap";
 
 import {ContentListModule} from "./content/content-list.module";
 import {VenuesModule} from "./venues/venues.module";
+import {HeaderComponent} from "./header/header.component";
 
 @NgModule({
     declarations: [
+        HeaderComponent,
         AppComponent
     ],
     imports: [
