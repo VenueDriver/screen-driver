@@ -9,16 +9,16 @@ import {ContentListModule} from "./content/content-list.module";
 import {VenuesModule} from "./venues/venues.module";
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    routing,
-    ContentListModule,
-    VenuesModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        routing,
+        ContentListModule,
+        VenuesModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
