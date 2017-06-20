@@ -24,6 +24,7 @@ module.exports.update = (event, context, callback) => {
         callback(null, responseHelper.createResponseWithError(500, error.message));
         return;
     }
+    generateIdentificatorsForGroupsAndScreens(venue);
 
     var params = getRequestParameters(venue);
     checkUniquenessOfVenueName(venue)
@@ -80,6 +81,12 @@ function getAllExistingNamesBesidesCurrent(venue) {
     return deferred.promise;
 }
 
+function generateIdentificatorsForGroupsAndScreens(venue) {
+    venue.screen_groups.forEach(group => {
+        group.generateId();
+        group.generateIdForScreens();
+    })
+}
 
 function update(params, callback) {
     dynamodb.update(params, (error, result) => {

@@ -33,7 +33,14 @@ class ScreenGroup {
     };
 
     generateId() {
-        this.id = uuid.v1();
+        if (!this.id)
+            this.id = uuid.v1();
+    };
+
+    generateIdForScreens() {
+        this.screens.forEach(screen => {
+            if (!screen.id) screen.id = uuid.v1()
+        });
     };
 }
 
