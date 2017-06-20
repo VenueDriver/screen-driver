@@ -13,7 +13,7 @@ module.exports.list = (event, context, callback) => {
         })
         .then(result => {
             content = result;
-            mergeVenuesWithContent(venues, content);
+            mergeWithContent(venues, content);
             callback(null, responseHelper.createSuccessfulResponse(venues));
         })
         .fail(error => callback(null, responseHelper.createResponseWithError(500, error)));
@@ -27,11 +27,7 @@ function findAllContent() {
     return dbHelper.findAll(process.env.CONTENT_TABLE);
 }
 
-function mergeVenuesWithContent(venues, content) {
-    mergeByContentId(venues, content);
-}
-
-function mergeByContentId(items, contentList) {
+function mergeWithContent(items, contentList) {
     items.forEach(item => {
         if (item.content_id) {
             let content = findContentById(item, contentList);
@@ -54,9 +50,9 @@ function addContentValuesToItem(item, content) {
 
 function mergeContentWithChild(item, contentList) {
     if (item['screen_groups']) {
-        mergeByContentId(item.screen_groups, contentList);
+        mergeWithContent(item.screen_groups, contentList);
     }
     if (item['screens']) {
-        mergeByContentId(item.screens, contentList);
+        mergeWithContent(item.screens, contentList);
     }
 }
