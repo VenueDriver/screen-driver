@@ -1,0 +1,12 @@
+<div>
+    <tree-root [focused]="true" [nodes]="venues" [options]="options">
+        <tree-root [nodes]="nodes">
+            <ng-template class="node-template" #treeNodeTemplate let-node let-index="index">
+                <div class="single-node">
+                    <div class="node-name">{{ node.data.name }}</div>
+                    <div class="content-url-placeholder">{{ node.data.content_id }}</div>
+                </div>
+            </ng-template>
+        </tree-root>
+    </tree-root>
+</div>
