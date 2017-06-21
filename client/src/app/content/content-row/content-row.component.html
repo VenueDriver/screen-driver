@@ -13,7 +13,7 @@
             <input type="url"
                    class="form-control"
                    [(ngModel)]="content.url"
-                   placeholder="Url"
+                   placeholder="URL"
                    required>
         </div>
         <div class="url" *ngIf="!isAddModeEnabled">
@@ -24,7 +24,7 @@
         <div *ngIf="isAddModeEnabled">
             <button type="button"
                     class="btn btn-success"
-                    [ngClass]="{'disabled': !isReadyToSave()}"
+                    [disabled]="!isReadyToSave()"
                     (click)="save()">Add</button>
             <button type="button"
                     class="btn btn-link"
