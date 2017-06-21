@@ -4,5 +4,5 @@
     </div>
     <div *ngIf="!isShowAddVenueForm" class="plus-button" (click)="showAddVenueForm()"></div>
     <add-venue-form *ngIf="isShowAddVenueForm"></add-venue-form>
-    <venues-tree-view></venues-tree-view>
+    <venues-tree-view [venues]="venues"></venues-tree-view>
 </div>

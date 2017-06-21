@@ -9,12 +9,15 @@ import {VenuesService} from "./venues.service";
 })
 export class VenuesComponent implements OnInit {
 
+    venues;
     isShowAddVenueForm = false;
 
     constructor(private venuesService: VenuesService) { }
 
     ngOnInit() {
-        // this.venuesService.loadVenues();
+        this.venuesService.loadVenues().subscribe(response => {
+            this.venues = this.venuesService.getVenuesForTree(response.json());
+        });
     }
 
     showAddVenueForm() {

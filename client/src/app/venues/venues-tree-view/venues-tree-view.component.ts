@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
@@ -12,7 +12,8 @@ import {VenuesService} from "../venues.service";
 })
 export class VenuesTreeViewComponent implements OnInit {
 
-    venues;
+    @Input() venues;
+
     options;
     private actionMapping;
 
@@ -22,9 +23,6 @@ export class VenuesTreeViewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.venuesService.loadVenues().subscribe(response => {
-            this.venues = this.venuesService.getVenuesForTree(response.json());
-        });
         this.actionMapping = this.getActionMapping();
         this.options = this.getTreeViewOptions();
     }
