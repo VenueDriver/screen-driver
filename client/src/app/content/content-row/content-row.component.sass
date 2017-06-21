@@ -1,14 +1,25 @@
+$background-color: #f3f3f3
+
 .item-row
   padding: 10px 0  10px 10px
   font-size: 20px
 
   &:hover
-    background-color: #f3f3f3
+    background-color: $background-color
     cursor: pointer
 
-  .name
+  .form-control
+    margin: 10px 0 10px 0
 
 
   .url
     margin-top: 5px
     color: #999999
+    word-wrap: break-word
+
+  .control-buttons
+    text-align: right
+    display: inline-block
+
+.selected
+  background-color: $background-color

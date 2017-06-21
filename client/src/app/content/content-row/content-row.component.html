@@ -1,8 +1,34 @@
-<div class="item-row">
-  <div class="name">
-    {{content.short_name}}
-  </div>
-  <div class="url">
-    {{content.url}}
-  </div>
+<div class="row item-row" [ngClass]="{'selected': isAddModeEnabled}">
+    <div class="col-lg-8 col-sm-12">
+        <div class="name" *ngIf="!isAddModeEnabled">
+            {{content.short_name}}
+        </div>
+
+        <div *ngIf="isAddModeEnabled">
+            <input type="text"
+                   class="form-control"
+                   [(ngModel)]="content.short_name"
+                   placeholder="Short name"
+                   required>
+            <input type="url"
+                   class="form-control"
+                   [(ngModel)]="content.url"
+                   placeholder="URL"
+                   required>
+        </div>
+        <div class="url" *ngIf="!isAddModeEnabled">
+            {{content.url}}
+        </div>
+    </div>
+    <div class="col-lg-4 col-xs-12 control-buttons">
+        <div *ngIf="isAddModeEnabled">
+            <button type="button"
+                    class="btn btn-success"
+                    [disabled]="!isReadyToSave()"
+                    (click)="save()">Add</button>
+            <button type="button"
+                    class="btn btn-link"
+                    (click)="closeForm()">Cancel</button>
+        </div>
+    </div>
 </div>
