@@ -9,7 +9,7 @@ export class ContentService {
   constructor(private http: Http) { }
 
   getContent(): Observable<Content[]> {
-    return this.http.get("")
+    return this.http.get("api/content")
       .map(this.extractData);
   }
 

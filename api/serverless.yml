@@ -34,7 +34,7 @@ functions:
     handler: venues/list.list
     events:
       - http:
-          path: venues
+          path: api/venues
           method: get
           cors: true
 
@@ -42,7 +42,7 @@ functions:
     handler: venues/create.create
     events:
       - http:
-          path: venues
+          path: api/venues
           method: post
           cors: true
 
@@ -50,7 +50,7 @@ functions:
     handler: venues/update.update
     events:
       - http:
-          path: venues/{id}
+          path: api/venues/{id}
           method: put
           cors: true
 
@@ -58,7 +58,7 @@ functions:
     handler: venues/delete.delete
     events:
       - http:
-          path: venues/{id}
+          path: api/venues/{id}
           method: delete
           cors: true
 
@@ -66,7 +66,7 @@ functions:
     handler: content/list.list
     events:
       - http:
-          path: content
+          path: api/content
           method: get
           cors: true
 
@@ -74,7 +74,7 @@ functions:
     handler: content/create.create
     events:
       - http:
-          path: content
+          path: api/content
           method: post
           cors: true
 
@@ -82,7 +82,7 @@ functions:
     handler: content/update.update
     events:
       - http:
-          path: content/{id}
+          path: api/content/{id}
           method: put
           cors: true
 
@@ -90,7 +90,7 @@ functions:
     handler: content/delete.delete
     events:
       - http:
-          path: content/{id}
+          path: api/content/{id}
           method: delete
           cors: true
 

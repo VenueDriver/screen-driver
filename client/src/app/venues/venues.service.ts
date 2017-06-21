@@ -11,7 +11,7 @@ export class VenuesService {
     constructor(private http: Http) { }
 
     loadVenues(): Observable<Response> {
-        return this.http.get('/venues');
+        return this.http.get('api/venues');
     }
 
     getVenuesForTree(venues: Venue[]) {
