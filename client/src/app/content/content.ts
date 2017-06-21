@@ -7,6 +7,6 @@ export class Content {
     }
   }
   id: String = '';
-  short_name: String = '';
-  url: String = '';
+  short_name: string = '';
+  url: string = '';
 }
