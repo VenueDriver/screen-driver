@@ -9,7 +9,8 @@
         <img src="./../../assets/images/add-circular-outlined-button.png" (click)="showAddContentPanel()">
       </div>
         <content-row *ngIf="isAddModeEnabled"
-                     [isAddModeEnabled]="isAddModeEnabled"></content-row>
+                     [isAddModeEnabled]="isAddModeEnabled"
+                     (formClosed)="closeAddContentPanel()"></content-row>
     </div>
     <hr>
     <div *ngFor="let contentItem of content">

@@ -23,7 +23,10 @@ export class ContentListComponent implements OnInit {
 
     showAddContentPanel() {
         this.isAddModeEnabled = true;
-        console.log('enable add mode', this.isAddModeEnabled);
+    }
+
+    closeAddContentPanel() {
+        this.isAddModeEnabled = false;
     }
 
 }
