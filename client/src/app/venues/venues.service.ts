@@ -15,25 +15,27 @@ export class VenuesService {
     }
 
     getVenuesForTree(venues: Venue[]) {
-        let venuesTree: Array<any>;
-        venuesTree = _.clone(venues);
+        let venuesTree = _.clone(venues);
         this.convertToTree(venuesTree);
         return venuesTree;
     }
 
     private convertToTree(items: Array<any>) {
-        items.forEach(item => {
-            if (item.screen_groups) {
-                item.children = item.screen_groups;
-                delete item.screen_groups;
-            }
-            if (item.screens) {
-                item.children = item.screens;
-                delete item.screens;
-            }
-            if (item.children) {
-                this.convertToTree(item.children);
-            }
-        })
+        items.forEach(item => this.performConverting(item));
+    }
+
+    private performConverting(item) {
+        this.convertSubItemsToNodes(item, 'screen_groups');
+        this.convertSubItemsToNodes(item, 'screens');
+        if (item.children) {
+            this.convertToTree(item.children);
+        }
+    }
+
+    private convertSubItemsToNodes(venue, subItemsArrayName) {
+        if (venue[subItemsArrayName]) {
+            venue.children = venue[subItemsArrayName];
+            delete venue[subItemsArrayName];
+        }
     }
 }
