@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 
 @Component({
     selector: 'add-venue-form',
@@ -6,8 +6,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddVenueFormComponent implements OnInit {
 
+    @Output() cancel = new EventEmitter();
+
     constructor() { }
 
     ngOnInit() { }
 
+    onCancel() {
+        this.cancel.emit();
+    }
 }

@@ -24,4 +24,8 @@ export class VenuesComponent implements OnInit {
         this.isShowAddVenueForm = true;
     }
 
+    hideAddVenueForm() {
+        this.isShowAddVenueForm = false;
+    }
+
 }

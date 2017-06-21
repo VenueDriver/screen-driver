@@ -3,6 +3,10 @@
         Venues
     </div>
     <div *ngIf="!isShowAddVenueForm" class="plus-button" (click)="showAddVenueForm()"></div>
-    <add-venue-form *ngIf="isShowAddVenueForm"></add-venue-form>
+    <add-venue-form
+            *ngIf="isShowAddVenueForm"
+            (cancel)="hideAddVenueForm()"
+            (submit)="addVenue($event)">
+    </add-venue-form>
     <venues-tree-view [venues]="venues"></venues-tree-view>
 </div>
