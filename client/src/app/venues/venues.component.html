@@ -5,6 +5,7 @@
     <div *ngIf="!isShowAddVenueForm" class="plus-button" (click)="showAddVenueForm()"></div>
     <add-venue-form
             *ngIf="isShowAddVenueForm"
+            [venues]="venues"
             (cancel)="hideAddVenueForm()"
             (submit)="addVenue($event)">
     </add-venue-form>
