@@ -1,12 +1,17 @@
 <div>
     <tree-root [focused]="true" [nodes]="venues" [options]="options">
-        <tree-root [nodes]="nodes">
-            <ng-template class="node-template" #treeNodeTemplate let-node let-index="index">
-                <div class="single-node">
-                    <div class="node-name">{{ node.data.name }}</div>
-                    <div class="content-url-placeholder">{{ node.data.content_id }}</div>
+        <ng-template class="node-template" #treeNodeTemplate let-node let-index="index">
+            <div class="single-node">
+                <div class="node-name">{{ node.data.name }}</div>
+
+                <div *ngIf="hasContentInfo(node); else contentPlaceholder" class="content-info">
+                    <span class="content-short-name">{{ getContentShortName(node) }}</span>
+                    <span class="content-url">{{ getContentUrl(node) }}</span>
                 </div>
-            </ng-template>
-        </tree-root>
+                <ng-template #contentPlaceholder>
+                    <div class="content-url-placeholder">Specify content URL</div>
+                </ng-template>
+            </div>
+        </ng-template>
     </tree-root>
 </div>

@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --disable-host-check --proxy-config proxy-dev.conf.json",
+    "prod": "ng serve --prod --host 0.0.0.0 --disable-host-check --proxy-config proxy-dev.conf.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -24,6 +25,7 @@
     "angular-tree-component": "3.7.2",
     "bootstrap": "3.3.7",
     "core-js": "^2.4.1",
+    "lodash": "^4.17.4",
     "ngx-bootstrap": "1.7.1",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"

@@ -5,6 +5,6 @@ export class Venue {
     id: string;
     name: string;
     content: Content;
-    screenGroups: ScreenGroup[];
+    screen_groups: ScreenGroup[];
     _rev: number;
 }

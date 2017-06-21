@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import {VenuesService} from "./venues.service";
 
 @Component({
     selector: 'venues',
-    templateUrl: 'venues.component.html'
+    templateUrl: 'venues.component.html',
+    providers: [VenuesService]
 })
 export class VenuesComponent implements OnInit {
 
-    constructor() { }
+    constructor(private venuesService: VenuesService) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        // this.venuesService.loadVenues();
+    }
 
 }
