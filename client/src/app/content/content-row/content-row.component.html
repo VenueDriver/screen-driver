@@ -1,8 +1,14 @@
-<div class="item-row">
-  <div class="name">
-    {{content.short_name}}
-  </div>
-  <div class="url">
-    {{content.url}}
-  </div>
+<div class="item-row" [ngClass]="{'selected': isAddModeEnabled}">
+    <div class="name" *ngIf="!isAddModeEnabled">
+        {{content.short_name}}
+    </div>
+
+    <div *ngIf="isAddModeEnabled">
+        <input type="email" class="form-control" placeholder="Short name">
+        <input type="email" class="form-control" placeholder="Url">
+    </div>
+
+    <div class="url">
+        {{content.url}}
+    </div>
 </div>

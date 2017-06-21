@@ -9,6 +9,7 @@ import {ContentService} from "./content.service";
 })
 export class ContentListComponent implements OnInit {
     content: Array<Content> = [];
+    isAddModeEnabled: boolean = false;
 
     constructor(private contentService: ContentService) {}
 
@@ -18,6 +19,11 @@ export class ContentListComponent implements OnInit {
             .subscribe(content => {
                 content.forEach(item => this.content.push(new Content(item)));
             });
+    }
+
+    showAddContentPanel() {
+        this.isAddModeEnabled = true;
+        console.log('enable add mode', this.isAddModeEnabled);
     }
 
 }

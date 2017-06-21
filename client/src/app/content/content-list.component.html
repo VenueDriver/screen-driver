@@ -6,8 +6,10 @@
         Content list
       </div>
       <div class="add-content-button">
-        <img src="./../../assets/images/add-circular-outlined-button.png">
+        <img src="./../../assets/images/add-circular-outlined-button.png" (click)="showAddContentPanel()">
       </div>
+        <content-row *ngIf="isAddModeEnabled"
+                     [isAddModeEnabled]="isAddModeEnabled"></content-row>
     </div>
     <hr>
     <div *ngFor="let contentItem of content">

@@ -7,11 +7,15 @@ import {Content} from "../content";
   styleUrls: ['./content-row.component.sass']
 })
 export class ContentRowComponent implements OnInit {
-  @Input() content: Array<Content>;
+  @Input() content: Content;
+  @Input() isAddModeEnabled: boolean = false;
 
   constructor() { }
 
   ngOnInit() {
+    if (this.isAddModeEnabled) {
+      this.content = new Content();
+    }
   }
 
 }
