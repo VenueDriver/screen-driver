@@ -43,4 +43,16 @@ export class VenuesTreeViewComponent implements OnInit {
             }
         }
     }
+
+    getContentShortName(node: any): string {
+        if (node.data.content) {
+            return node.data.content.short_name;
+        }
+    }
+
+    getContentUrl(node: any): string {
+        if (node.data.content) {
+            return node.data.content.url;
+        }
+    }
 }
