@@ -3,6 +3,7 @@
 let Venue = require('./../entities/venue');
 
 const dynamodb = require('../dynamodb');
+const Q = require('q');
 const responseHelper = require('../helpers/http_response_helper');
 
 const venuesTableName = process.env.VENUES_TABLE;
@@ -17,8 +18,21 @@ module.exports.update = (event, context, callback) => {
         return;
     }
 
+    try {
+        venue.validate();
+    } catch (error) {
+        callback(null, responseHelper.createResponseWithError(500, error.message));
+        return;
+    }
+    generateIdentificatorsForGroupsAndScreens(venue);
+
     var params = getRequestParameters(venue);
-    update(params, callback);
+    checkUniquenessOfVenueName(venue)
+        .then(() => update(params, callback))
+        .fail(error => {
+            let message = error.message ? error.message : error;
+            callback(null, responseHelper.createResponseWithError(500, message));
+        });
 };
 
 function getRequestParameters(venue) {
@@ -42,6 +56,36 @@ function getRequestParameters(venue) {
         ConditionExpression: "#rev = :rev",
         ReturnValues: 'ALL_NEW',
     };
+}
+
+function checkUniquenessOfVenueName(venue) {
+    let deferred = Q.defer();
+    getAllExistingNamesBesidesCurrent(venue).then((names) => {
+        if (names.includes(venue.name)) {
+            deferred.reject('Venue with such name already exists');
+        }
+        deferred.resolve();
+    });
+    return deferred.promise;
+}
+
+function getAllExistingNamesBesidesCurrent(venue) {
+    let deferred = Q.defer();
+    let params = {TableName: venuesTableName};
+    dynamodb.scan(params, (error, data) => {
+        let names = data.Items
+            .filter(item => item.id !== venue.id)
+            .map((venue) => venue.name);
+        deferred.resolve(names);
+    });
+    return deferred.promise;
+}
+
+function generateIdentificatorsForGroupsAndScreens(venue) {
+    venue.screen_groups.forEach(group => {
+        group.generateId();
+        group.generateIdForScreens();
+    })
 }
 
 function update(params, callback) {
