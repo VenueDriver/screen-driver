@@ -9,6 +9,7 @@ import {ContentService} from "./content.service";
 })
 export class ContentListComponent implements OnInit {
     content: Array<Content> = [];
+    isAddModeEnabled: boolean = false;
 
     constructor(private contentService: ContentService) {}
 
@@ -20,4 +21,19 @@ export class ContentListComponent implements OnInit {
             });
     }
 
+    showAddContentPanel() {
+        this.isAddModeEnabled = true;
+    }
+
+    closeAddContentPanel() {
+        this.isAddModeEnabled = false;
+    }
+
+    createContent(content) {
+        this.contentService
+            .createContent(content)
+            .subscribe(newContent => {
+                this.content.push(new Content(newContent))
+            });
+    }
 }

@@ -2,7 +2,16 @@
   <div class="col-md-4 col-sm-3"></div>
   <div class="col-md-4 col-sm-6">
     <div class="header">
-      <h3>Content list</h3>
+      <div class="page-title">
+        Content list
+      </div>
+      <div class="add-content-button">
+        <img src="./../../assets/images/add-circular-outlined-button.png" (click)="showAddContentPanel()">
+      </div>
+        <content-row *ngIf="isAddModeEnabled"
+                     [isAddModeEnabled]="isAddModeEnabled"
+                     (formClosed)="closeAddContentPanel()"
+                     (contentCreated)="createContent($event)"></content-row>
     </div>
     <hr>
     <div *ngFor="let contentItem of content">

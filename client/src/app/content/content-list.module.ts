@@ -4,11 +4,13 @@ import { ContentRowComponent } from './content-row/content-row.component';
 import {BrowserModule} from "@angular/platform-browser";
 import {ContentService} from "./content.service";
 import {HttpModule} from "@angular/http";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
     imports: [
       BrowserModule,
-      HttpModule
+      HttpModule,
+      FormsModule
     ],
     exports: [
         ContentListComponent
