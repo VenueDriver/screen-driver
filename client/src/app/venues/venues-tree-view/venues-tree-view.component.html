@@ -4,11 +4,14 @@
             <ng-template class="node-template" #treeNodeTemplate let-node let-index="index">
                 <div class="single-node">
                     <div class="node-name">{{ node.data.name }}</div>
-                    <!--<div class="content-url-placeholder">{{ getContentShortName(node) }}</div>-->
-                    <div class="content-info">
+
+                    <div *ngIf="hasContentInfo(node); else contentPlaceholder" class="content-info">
                         <span class="content-short-name">{{ getContentShortName(node) }}</span>
                         <span class="content-url">{{ getContentUrl(node) }}</span>
                     </div>
+                    <ng-template #contentPlaceholder>
+                        <div class="content-url-placeholder">Specify content URL</div>
+                    </ng-template>
                 </div>
             </ng-template>
         </tree-root>

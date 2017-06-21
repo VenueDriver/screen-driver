@@ -24,7 +24,6 @@ export class VenuesTreeViewComponent implements OnInit {
     ngOnInit() {
         this.venuesService.loadVenues().subscribe(response => {
             this.venues = this.venuesService.getVenuesForTree(response.json());
-            console.log(this.venues);
         });
         this.actionMapping = this.getActionMapping();
         this.options = this.getTreeViewOptions();
@@ -42,6 +41,10 @@ export class VenuesTreeViewComponent implements OnInit {
                 click: TREE_ACTIONS.TOGGLE_EXPANDED
             }
         }
+    }
+
+    hasContentInfo(node: any): boolean {
+        return node.data.content;
     }
 
     getContentShortName(node: any): string {
