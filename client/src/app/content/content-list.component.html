@@ -10,7 +10,8 @@
       </div>
         <content-row *ngIf="isAddModeEnabled"
                      [isAddModeEnabled]="isAddModeEnabled"
-                     (formClosed)="closeAddContentPanel()"></content-row>
+                     (formClosed)="closeAddContentPanel()"
+                     (contentCreated)="createContent($event)"></content-row>
     </div>
     <hr>
     <div *ngFor="let contentItem of content">

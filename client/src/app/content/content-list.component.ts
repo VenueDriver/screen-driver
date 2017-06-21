@@ -29,4 +29,11 @@ export class ContentListComponent implements OnInit {
         this.isAddModeEnabled = false;
     }
 
+    createContent(content) {
+        this.contentService
+            .createContent(content)
+            .subscribe(newContent => {
+                this.content.push(new Content(newContent))
+            });
+    }
 }

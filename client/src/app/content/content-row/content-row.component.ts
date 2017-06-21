@@ -10,7 +10,7 @@ export class ContentRowComponent implements OnInit {
     @Input() content: Content;
     @Input() isAddModeEnabled: boolean = false;
     @Output() formClosed = new EventEmitter();
-    @Output() createdContent = new EventEmitter();
+    @Output() contentCreated = new EventEmitter();
 
     constructor() {
     }
@@ -29,7 +29,7 @@ export class ContentRowComponent implements OnInit {
 
     save() {
         if (this.isReadyToSave()) {
-            this.createdContent.emit(this.content);
+            this.contentCreated.emit(this.content);
             this.closeForm();
         }
     }

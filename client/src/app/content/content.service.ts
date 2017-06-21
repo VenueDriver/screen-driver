@@ -13,6 +13,11 @@ export class ContentService {
       .map(this.extractData);
   }
 
+  createContent(content: Content): Observable<Content> {
+    return this.http.post("api/content", content)
+        .map(this.extractData);
+  }
+
   private extractData(res: Response) {
     return res.json() || { };
   }
