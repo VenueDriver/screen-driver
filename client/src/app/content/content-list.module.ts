@@ -5,6 +5,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {ContentService} from "./content.service";
 import {HttpModule} from "@angular/http";
 import {FormsModule} from "@angular/forms";
+import { ContentCreateComponent } from './content-create/content-create.component';
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import {FormsModule} from "@angular/forms";
     ],
     declarations: [
         ContentListComponent,
-        ContentRowComponent
+        ContentRowComponent,
+        ContentCreateComponent
     ],
     providers: [ ContentService ]
 })
