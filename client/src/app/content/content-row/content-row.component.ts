@@ -7,10 +7,9 @@ import {Content} from "../content";
   styleUrls: ['./content-row.component.sass']
 })
 export class ContentRowComponent implements OnInit {
+  @Input() content: Array<Content>;
 
   constructor() { }
-
-  @Input() content: Array<Content>;
 
   ngOnInit() {
   }
