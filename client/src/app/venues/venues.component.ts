@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {VenuesService} from "./venues.service";
+import {Venue} from "./entities/venue";
 
 @Component({
     selector: 'venues',
@@ -15,6 +16,10 @@ export class VenuesComponent implements OnInit {
     constructor(private venuesService: VenuesService) { }
 
     ngOnInit() {
+        this.loadVenues();
+    }
+
+    loadVenues() {
         this.venuesService.loadVenues().subscribe(response => {
             this.venues = this.venuesService.getVenuesForTree(response.json());
         });
@@ -28,4 +33,15 @@ export class VenuesComponent implements OnInit {
         this.isShowAddVenueForm = false;
     }
 
+    addVenue(venue: Venue) {
+        this.venuesService.saveVenue(venue)
+            .subscribe(response => this.handleResponse(response));
+    }
+
+    handleResponse(response: any) {
+        if (response.ok) {
+            this.hideAddVenueForm();
+        }
+        this.loadVenues();
+    }
 }

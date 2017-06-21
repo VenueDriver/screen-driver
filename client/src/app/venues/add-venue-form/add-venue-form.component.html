@@ -1,9 +1,15 @@
 <div>
     <div>Add new venue</div>
-    <input type="text" class="form-control" placeholder="Venue name" required>
+    <input type="text"
+           [(ngModel)]="newVenue.name"
+           class="form-control"
+           placeholder="Venue name"
+           required>
+
     <div>
         <button type="button"
-                class="btn btn-success">
+                class="btn btn-success"
+                (click)="onSubmit()">
             Add
         </button>
 

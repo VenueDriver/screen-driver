@@ -1,4 +1,5 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Venue} from "../entities/venue";
 
 @Component({
     selector: 'add-venue-form',
@@ -7,6 +8,9 @@ import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 export class AddVenueFormComponent implements OnInit {
 
     @Output() cancel = new EventEmitter();
+    @Output() submit = new EventEmitter();
+
+    newVenue = new Venue();
 
     constructor() { }
 
@@ -14,5 +18,9 @@ export class AddVenueFormComponent implements OnInit {
 
     onCancel() {
         this.cancel.emit();
+    }
+
+    onSubmit() {
+        this.submit.emit(this.newVenue);
     }
 }

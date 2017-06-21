@@ -20,6 +20,10 @@ export class VenuesService {
         return venuesTree;
     }
 
+    saveVenue(venue: Venue): Observable<Response> {
+        return this.http.post('api/venues', venue);
+    }
+
     private convertToTree(items: Array<any>) {
         items.forEach(item => this.performConverting(item));
     }
