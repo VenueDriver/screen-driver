@@ -3,6 +3,8 @@ import {Http, Response} from "@angular/http";
 import {Venue} from "./entities/venue";
 import { Observable } from 'rxjs/Observable';
 
+import * as _ from 'lodash';
+
 @Injectable()
 export class VenuesService {
 
@@ -14,7 +16,7 @@ export class VenuesService {
 
     getVenuesForTree(venues: Venue[]) {
         let venuesTree: Array<any>;
-        venuesTree = venues;
+        venuesTree = _.clone(venues);
         this.convertToTree(venuesTree);
         return venuesTree;
     }
