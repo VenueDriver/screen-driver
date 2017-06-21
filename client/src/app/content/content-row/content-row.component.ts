@@ -10,6 +10,7 @@ export class ContentRowComponent implements OnInit {
     @Input() content: Content;
     @Input() isAddModeEnabled: boolean = false;
     @Output() formClosed = new EventEmitter();
+    @Output() createdContent = new EventEmitter();
 
     constructor() {
     }
@@ -24,5 +25,20 @@ export class ContentRowComponent implements OnInit {
         this.content = new Content();
         this.isAddModeEnabled = false;
         this.formClosed.emit();
+    }
+
+    save() {
+        if (this.isReadyToSave()) {
+            this.createdContent.emit(this.content);
+            this.closeForm();
+        }
+    }
+
+    //TODO implement url validation
+    isReadyToSave() {
+        return this.content.short_name
+            && this.content.short_name.length > 3
+            && this.content.url
+            && this.content.url.length > 3;
     }
 }
