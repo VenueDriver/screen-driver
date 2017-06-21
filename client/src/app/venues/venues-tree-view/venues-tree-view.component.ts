@@ -12,8 +12,8 @@ import {VenuesService} from "../venues.service";
 })
 export class VenuesTreeViewComponent implements OnInit {
 
-    private venues;
-    private options;
+    venues;
+    options;
     private actionMapping;
 
     constructor(
