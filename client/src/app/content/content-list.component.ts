@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Content} from "./content";
+import {ContentService} from "./content.service";
 
 @Component({
     selector: 'content-list',
@@ -9,19 +10,14 @@ import {Content} from "./content";
 export class ContentListComponent implements OnInit {
     content: Array<Content> = [];
 
-    constructor() {}
+    constructor(private contentService: ContentService) {}
 
     ngOnInit() {
-      this.content.push({
-          id: "id",
-          short_name: "citizenslasvegas.com",
-          url: "http://touchscreen.citizenslasvegas.com/"
-        },
-        {
-          id: "id2",
-          short_name: "searsucker.com",
-          url: "http://touchscreen.searsucker.com/"
-        })
+        this.contentService
+            .getContent()
+            .subscribe(content => {
+                content.forEach(item => this.content.push(new Content(item)));
+            });
     }
 
 }
