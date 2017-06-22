@@ -16,7 +16,6 @@ export class AddVenueFormComponent implements OnInit {
 
     newVenue = new Venue();
     isFormValid = false;
-    errorMessage: string;
 
     constructor(private renderer: Renderer2) { }
 
