@@ -47,8 +47,8 @@ export class VenuesComponent implements OnInit {
         this.loadVenues();
     }
 
-    updateVenues(dataToUpdate: any) {
-        this.venuesService.updateVenues(dataToUpdate)
+    updateVenue(venueNode: any) {
+        this.venuesService.updateVenue(venueNode)
             .subscribe(response => this.loadVenues());
     }
 }

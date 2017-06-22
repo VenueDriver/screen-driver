@@ -43,36 +43,22 @@ export class VenuesService {
         }
     }
 
-    updateVenues(dataToUpdate: any): Observable<Response> {
-        let venues = this.prepareVenuesToUpdate(dataToUpdate.venues);
-        let venueToUpdate = _.find(venues, venue => venue.id === dataToUpdate.id);
-        return this.http.put(`api/venues/${venueToUpdate.id}`, venueToUpdate);
+    updateVenue(venueNode: any): Observable<Response> {
+        let venue = this.prepareVenuesToUpdate(venueNode);
+        return this.http.put(`api/venues/${venueNode.id}`, venue);
     }
 
-    private prepareVenuesToUpdate(venuesTree: any) {
-        let venues = _.clone(venuesTree);
-        this.convertTreeToVenues(venues, 1);
-        return venues;
-    }
-
-    private convertTreeToVenues(venuesTree: any, level: number) {
-        venuesTree.forEach(item => this.performConvertingToVenues(item, level));
-    }
-
-    private performConvertingToVenues(node: any, level: number) {
-        this.convertNodeToVenue(node, level);
-    }
-
-    private convertNodeToVenue(node: any, level: number) {
-        if (level == 1 && node.children) {
-            node.screen_groups = node.children;
-            delete node.children;
-            if (node.screen_groups) {
-                this.convertTreeToVenues(node.screen_groups, level + 1);
-            }
+    private prepareVenuesToUpdate(venueNode: any): Venue {
+        this.convertChildrenToSubItem(venueNode, 'screen_groups');
+        if (venueNode.screen_groups) {
+            _.forEach(venueNode.screen_groups, group => this.convertChildrenToSubItem(group, 'screens'));
         }
-        if (level == 2 && node.children) {
-            node.screens = node.children;
+        return venueNode;
+    }
+
+    private convertChildrenToSubItem(node, subItemsArrayName) {
+        if (node.children) {
+            node[subItemsArrayName] = node.children;
             delete node.children;
         }
     }

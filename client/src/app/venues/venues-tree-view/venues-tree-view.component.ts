@@ -108,15 +108,17 @@ export class VenuesTreeViewComponent implements OnInit {
 
     performSubmit(node: any) {
         let venueId = this.getVenueId(node);
-        this.update.emit({venues: this.venues, id: venueId});
+        let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
+        this.update.emit(venueToUpdate);
         this.clearCurrentNode();
     }
 
     getVenueId(node: any) {
+        let parentNode = node.parent;
         if (node.level == 2) {
-            return node.parent.data.id;
+            return parentNode.data.id;
         }
-        return node.parent.parent.data.id;
+        return parentNode.parent.data.id;
     }
 
 }
