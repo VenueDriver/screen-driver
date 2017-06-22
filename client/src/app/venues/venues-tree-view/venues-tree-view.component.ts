@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 export class VenuesTreeViewComponent implements OnInit {
 
     @Input() venues;
+    @Output() update = new EventEmitter();
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
@@ -103,6 +104,18 @@ export class VenuesTreeViewComponent implements OnInit {
 
     validateForm() {
 
+    }
+
+    performSubmit(node: any) {
+        let venueId = this.getVenueId(node);
+        this.update.emit({venues: this.venues, id: venueId});
+    }
+
+    getVenueId(node: any) {
+        if (node.level == 2) {
+            return node.parent.data.id;
+        }
+        return node.parent.parent.data.id;
     }
 
 }

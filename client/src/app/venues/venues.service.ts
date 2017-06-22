@@ -25,10 +25,10 @@ export class VenuesService {
     }
 
     private convertToTree(items: Array<any>) {
-        items.forEach(item => this.performConverting(item));
+        items.forEach(item => this.performConvertingToTree(item));
     }
 
-    private performConverting(item) {
+    private performConvertingToTree(item) {
         this.convertSubItemsToNodes(item, 'screen_groups');
         this.convertSubItemsToNodes(item, 'screens');
         if (item.children) {
@@ -40,6 +40,40 @@ export class VenuesService {
         if (venue[subItemsArrayName]) {
             venue.children = venue[subItemsArrayName];
             delete venue[subItemsArrayName];
+        }
+    }
+
+    updateVenues(dataToUpdate: any): Observable<Response> {
+        let venues = this.prepareVenuesToUpdate(dataToUpdate.venues);
+        let venueToUpdate = _.find(venues, venue => venue.id === dataToUpdate.id);
+        return this.http.put(`api/venues/${venueToUpdate.id}`, venueToUpdate);
+    }
+
+    private prepareVenuesToUpdate(venuesTree: any) {
+        let venues = _.clone(venuesTree);
+        this.convertTreeToVenues(venues, 1);
+        return venues;
+    }
+
+    private convertTreeToVenues(venuesTree: any, level: number) {
+        venuesTree.forEach(item => this.performConvertingToVenues(item, level));
+    }
+
+    private performConvertingToVenues(node: any, level: number) {
+        this.convertNodeToVenue(node, level);
+    }
+
+    private convertNodeToVenue(node: any, level: number) {
+        if (level == 1 && node.children) {
+            node.screen_groups = node.children;
+            delete node.children;
+            if (node.screen_groups) {
+                this.convertTreeToVenues(node.screen_groups, level + 1);
+            }
+        }
+        if (level == 2 && node.children) {
+            node.screens = node.children;
+            delete node.children;
         }
     }
 }
