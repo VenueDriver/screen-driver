@@ -15,7 +15,26 @@
                 </div>
 
                 <div *ngIf="isCurrentNode(node)" class="edit-node-form">
-                    EDIT MODE
+                    <input id="venueName"
+                           type="text"
+                           [(ngModel)]="currentNode.name"
+                           (ngModelChange)="validateForm()"
+                           class="form-control node-name">
+
+                    <div class="buttons-container">
+                        <button type="button"
+                                class="btn btn-success"
+                                [disabled]="!isFormValid"
+                                (click)="performSubmit()">
+                            Save
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-link cancel-button"
+                                (click)="performCancel(node)">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
 
                 <div *ngIf="isAllowToAddChild(node)" class="plus-button" (click)="addNewNode($event, node)"></div>

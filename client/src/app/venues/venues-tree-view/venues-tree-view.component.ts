@@ -89,7 +89,14 @@ export class VenuesTreeViewComponent implements OnInit {
         return _.isEqual(this.currentNode, node.data);
     }
 
-    isAllowToAddChild(node) {
+    isAllowToAddChild(node: any) {
         return node.level < 3;
+    }
+
+    performCancel(node: any) {
+        let parentNodeData = node.parent.data;
+        _.pull(parentNodeData.children, this.currentNode);
+        this.tree.treeModel.update();
+        this.clearCurrentNode();
     }
 }
