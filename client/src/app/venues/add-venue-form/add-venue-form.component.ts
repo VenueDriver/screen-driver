@@ -5,7 +5,8 @@ import * as _ from 'lodash';
 
 @Component({
     selector: 'add-venue-form',
-    templateUrl: 'add-venue-form.component.html'
+    templateUrl: 'add-venue-form.component.html',
+    styleUrls: ['add-venue-form.component.sass']
 })
 export class AddVenueFormComponent implements OnInit {
 

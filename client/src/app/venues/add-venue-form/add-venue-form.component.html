@@ -1,11 +1,12 @@
-<div>
-    <div>Add new venue</div>
+<div class="add-new-venue-form-container">
+    <div class="form-title">Add new venue</div>
+
     <input id="venueName"
            type="text"
            [(ngModel)]="newVenue.name"
            (ngModelChange)="validateForm()"
            (keyup.enter)="onSubmit()"
-           class="form-control"
+           class="form-control venue-name"
            placeholder="Venue name"
            required>
 
@@ -18,7 +19,7 @@
         </button>
 
         <button type="button"
-                class="btn btn-link"
+                class="btn btn-link cancel-button"
                 (click)="onCancel()">
             Cancel
         </button>
