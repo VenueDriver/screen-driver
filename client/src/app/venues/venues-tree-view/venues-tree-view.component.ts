@@ -109,6 +109,7 @@ export class VenuesTreeViewComponent implements OnInit {
     performSubmit(node: any) {
         let venueId = this.getVenueId(node);
         this.update.emit({venues: this.venues, id: venueId});
+        this.clearCurrentNode();
     }
 
     getVenueId(node: any) {
