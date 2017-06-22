@@ -10,7 +10,8 @@ import {Venue} from "./entities/venue";
 })
 export class VenuesComponent implements OnInit {
 
-    venues;
+    venues: Venue[];
+    venuesTree: any;
     isShowAddVenueForm = false;
 
     constructor(private venuesService: VenuesService) { }
@@ -21,7 +22,8 @@ export class VenuesComponent implements OnInit {
 
     loadVenues() {
         this.venuesService.loadVenues().subscribe(response => {
-            this.venues = this.venuesService.getVenuesForTree(response.json());
+            this.venues = response.json();
+            this.venuesTree = this.venuesService.getVenuesForTree(this.venues);
         });
     }
 
