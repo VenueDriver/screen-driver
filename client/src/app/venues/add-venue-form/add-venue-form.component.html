@@ -2,6 +2,7 @@
     <div>Add new venue</div>
     <input type="text"
            [(ngModel)]="newVenue.name"
+           (ngModelChange)="validateForm()"
            (keyup.enter)="onSubmit()"
            class="form-control"
            placeholder="Venue name"
@@ -10,7 +11,7 @@
     <div>
         <button type="button"
                 class="btn btn-success"
-                [disabled]="!isValid()"
+                [disabled]="!isFormValid"
                 (click)="onSubmit()">
             Add
         </button>

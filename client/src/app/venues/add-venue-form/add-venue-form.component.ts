@@ -14,6 +14,7 @@ export class AddVenueFormComponent implements OnInit {
     @Output() submit = new EventEmitter();
 
     newVenue = new Venue();
+    isFormValid = false;
     errorMessage: string;
 
     constructor() { }
@@ -28,9 +29,8 @@ export class AddVenueFormComponent implements OnInit {
         this.submit.emit(this.newVenue);
     }
 
-    isValid() {
-        return !_.isEmpty(this.newVenue.name)
-            && this.hasUniqueName();
+    validateForm() {
+        this.isFormValid = !_.isEmpty(this.newVenue.name) && this.hasUniqueName();
     }
 
     hasUniqueName() {
