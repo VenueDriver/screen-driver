@@ -1,12 +1,15 @@
 import {NgModule} from "@angular/core";
 import {BrowserModule} from '@angular/platform-browser';
+import {FormsModule} from "@angular/forms";
 import {VenuesComponent} from "./venues.component";
 import {TreeModule} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesTreeViewComponent} from "./venues-tree-view/venues-tree-view.component";
+import {AddVenueFormComponent} from "./add-venue-form/add-venue-form.component";
 
 @NgModule({
     imports: [
         BrowserModule,
+        FormsModule,
         TreeModule
     ],
     exports: [
@@ -14,7 +17,8 @@ import {VenuesTreeViewComponent} from "./venues-tree-view/venues-tree-view.compo
     ],
     declarations: [
         VenuesComponent,
-        VenuesTreeViewComponent
+        VenuesTreeViewComponent,
+        AddVenueFormComponent
     ]
 })
 export class VenuesModule {
