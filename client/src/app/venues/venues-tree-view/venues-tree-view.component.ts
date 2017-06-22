@@ -99,4 +99,9 @@ export class VenuesTreeViewComponent implements OnInit {
         this.tree.treeModel.update();
         this.clearCurrentNode();
     }
+
+    validateForm() {
+
+    }
+
 }
