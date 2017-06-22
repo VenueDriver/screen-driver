@@ -9,8 +9,8 @@
         <img src="./../../assets/images/add-circular-outlined-button.png" (click)="showAddContentPanel()">
       </div>
         <content-create *ngIf="isAddModeEnabled"
-                        (formClosed)="closeAddContentPanel()"
-                        (contentCreated)="createContent($event)"></content-create>
+                        (cancel)="closeAddContentPanel()"
+                        (submit)="createContent($event)"></content-create>
     </div>
     <hr>
     <div *ngFor="let contentItem of content">

@@ -7,11 +7,12 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class VenuesService {
+    readonly venuesApiPath = 'api/venues';
 
     constructor(private http: Http) { }
 
     loadVenues(): Observable<Response> {
-        return this.http.get('api/venues');
+        return this.http.get(this.venuesApiPath);
     }
 
     getVenuesForTree(venues: Venue[]) {
