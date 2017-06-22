@@ -1,6 +1,7 @@
 <div>
     <div>Add new venue</div>
-    <input type="text"
+    <input id="venueName"
+           type="text"
            [(ngModel)]="newVenue.name"
            (ngModelChange)="validateForm()"
            (keyup.enter)="onSubmit()"

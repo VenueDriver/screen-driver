@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, Input, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, Input, EventEmitter, Renderer2} from '@angular/core';
 import {Venue} from "../entities/venue";
 
 import * as _ from 'lodash';
@@ -17,9 +17,11 @@ export class AddVenueFormComponent implements OnInit {
     isFormValid = false;
     errorMessage: string;
 
-    constructor() { }
+    constructor(private renderer: Renderer2) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.renderer.selectRootElement('#venueName').focus();
+    }
 
     onCancel() {
         this.cancel.emit();
