@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
 import {VenuesService} from "../venues.service";
+import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 
 @Component({
     selector: 'venues-tree-view',
@@ -13,6 +14,9 @@ import {VenuesService} from "../venues.service";
 export class VenuesTreeViewComponent implements OnInit {
 
     @Input() venues;
+
+    @ViewChild(TreeComponent)
+    private tree: TreeComponent;
 
     options;
     private actionMapping;
@@ -55,5 +59,14 @@ export class VenuesTreeViewComponent implements OnInit {
         if (node.data.content) {
             return node.data.content.url;
         }
+    }
+
+    addNewNode(event, node) {
+        event.stopPropagation();
+        if (!node.data.children) {
+            node.data.children = [];
+        }
+        node.data.children.push({name: 'name'});
+        this.tree.treeModel.update();
     }
 }
