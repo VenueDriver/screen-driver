@@ -71,6 +71,7 @@ export class VenuesTreeViewComponent implements OnInit {
         }
         node.data.children.push(this.createNode());
         this.tree.treeModel.update();
+        node.expand();
     }
 
     createNode(): any {
