@@ -18,6 +18,11 @@ export class ContentService {
         .map(this.extractData);
   }
 
+  updateContent(content: Content): Observable<Content> {
+    return this.http.put(`api/content/${content.id}`, content)
+        .map(this.extractData);
+  }
+
   private extractData(res: Response) {
     return res.json() || { };
   }

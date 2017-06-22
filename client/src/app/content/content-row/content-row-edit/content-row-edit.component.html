@@ -1,0 +1,25 @@
+<div class="row item-row">
+    <div class="col-lg-8 col-sm-12">
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="editedContent.short_name"
+               placeholder="Short name"
+               required>
+        <input type="url"
+               class="form-control"
+               [(ngModel)]="editedContent.url"
+               placeholder="URL"
+               required>
+    </div>
+    <div class="col-lg-4 col-xs-12 control-buttons">
+        <button type="button"
+                class="btn btn-success"
+                [disabled]="!editedContent.validate()"
+                (click)="save()">Save
+        </button>
+        <button type="button"
+                class="btn btn-link"
+                (click)="dismissChanges()">Cancel
+        </button>
+    </div>
+</div>

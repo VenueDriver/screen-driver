@@ -18,23 +18,16 @@ export class ContentCreateComponent implements OnInit {
         this.content = new Content();
     }
 
-    closeForm() {
+    dismiss() {
         this.content = new Content();
         this.formClosed.emit();
     }
 
     save() {
-        if (this.isReadyToSave()) {
+        if (this.content.validate()) {
             this.contentCreated.emit(this.content);
-            this.closeForm();
+            this.dismiss();
         }
     }
 
-    //TODO implement url validation
-    isReadyToSave() {
-        return this.content.short_name
-            && this.content.short_name.length > 3
-            && this.content.url
-            && this.content.url.length > 3;
-    }
 }

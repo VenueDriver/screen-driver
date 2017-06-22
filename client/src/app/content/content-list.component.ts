@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Content} from "./content";
 import {ContentService} from "./content.service";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'content-list',
@@ -11,13 +13,15 @@ export class ContentListComponent implements OnInit {
     content: Array<Content> = [];
     isAddModeEnabled: boolean = false;
 
-    constructor(private contentService: ContentService) {}
+    constructor(private contentService: ContentService) {
+    }
 
     ngOnInit() {
         this.contentService
             .getContent()
             .subscribe(content => {
                 content.forEach(item => this.content.push(new Content(item)));
+                this.sortContent();
             });
     }
 
@@ -32,8 +36,15 @@ export class ContentListComponent implements OnInit {
     createContent(content) {
         this.contentService
             .createContent(content)
-            .subscribe(newContent => {
-                this.content.push(new Content(newContent))
-            });
+            .subscribe(
+                newContent => {
+                    this.content.push(new Content(newContent));
+                    this.sortContent();
+                },
+                error => alert('Cannot create content. Message:' + JSON.parse(error._body).message));
+    }
+
+    sortContent() {
+        this.content = _.sortBy(this.content, "short_name");
     }
 }

@@ -6,6 +6,8 @@ import {ContentService} from "./content.service";
 import {HttpModule} from "@angular/http";
 import {FormsModule} from "@angular/forms";
 import { ContentCreateComponent } from './content-create/content-create.component';
+import { ContentRowEditComponent } from './content-row/content-row-edit/content-row-edit.component';
+import { ContentRowDisplayComponent } from './content-row/content-row-display/content-row-display.component';
 
 @NgModule({
     imports: [
@@ -19,7 +21,9 @@ import { ContentCreateComponent } from './content-create/content-create.componen
     declarations: [
         ContentListComponent,
         ContentRowComponent,
-        ContentCreateComponent
+        ContentCreateComponent,
+        ContentRowEditComponent,
+        ContentRowDisplayComponent
     ],
     providers: [ ContentService ]
 })
