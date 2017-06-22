@@ -5,6 +5,8 @@ import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/t
 import {VenuesService} from "../venues.service";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 
+import * as _ from 'lodash';
+
 @Component({
     selector: 'venues-tree-view',
     templateUrl: 'venues-tree-view.component.html',
@@ -19,7 +21,8 @@ export class VenuesTreeViewComponent implements OnInit {
     private tree: TreeComponent;
 
     options;
-    private actionMapping;
+    actionMapping;
+    currentNode;
 
     constructor(
         private venuesTreeViewService: VenuesTreeViewService,
@@ -66,8 +69,24 @@ export class VenuesTreeViewComponent implements OnInit {
         if (!node.data.children) {
             node.data.children = [];
         }
-        node.data.children.push({name: 'name'});
+        node.data.children.push(this.createNode());
         this.tree.treeModel.update();
+    }
+
+    createNode(): any {
+        this.currentNode = {
+            id: 'some-id',
+            name: ''
+        };
+        return this.currentNode;
+    }
+
+    clearCurrentNode() {
+        this.currentNode = {};
+    }
+
+    isCurrentNode(node: any) {
+        return _.isEqual(this.currentNode, node.data);
     }
 
     isAllowToAddChild(node) {
