@@ -23,11 +23,11 @@ export class AddVenueFormComponent implements OnInit {
         this.renderer.selectRootElement('#venueName').focus();
     }
 
-    onCancel() {
+    performCancel() {
         this.cancel.emit();
     }
 
-    onSubmit() {
+    performSubmit() {
         this.submit.emit(this.newVenue);
     }
 

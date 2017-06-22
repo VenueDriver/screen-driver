@@ -5,7 +5,7 @@
            type="text"
            [(ngModel)]="newVenue.name"
            (ngModelChange)="validateForm()"
-           (keyup.enter)="onSubmit()"
+           (keyup.enter)="performSubmit()"
            class="form-control venue-name"
            placeholder="Venue name"
            required>
@@ -14,13 +14,13 @@
         <button type="button"
                 class="btn btn-success"
                 [disabled]="!isFormValid"
-                (click)="onSubmit()">
+                (click)="performSubmit()">
             Add
         </button>
 
         <button type="button"
                 class="btn btn-link cancel-button"
-                (click)="onCancel()">
+                (click)="performCancel()">
             Cancel
         </button>
     </div>
