@@ -67,13 +67,18 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     addNewNode(event, node) {
-        event.stopPropagation();
+        this.expandIfCollapsed(event, node);
         if (!node.data.children) {
             node.data.children = [];
         }
         node.data.children.push(this.createBlankNode());
         this.tree.treeModel.update();
-        node.expand();
+    }
+
+    expandIfCollapsed(event, node) {
+        if (node.isExpanded) {
+            event.stopPropagation();
+        }
     }
 
     createBlankNode(): any {
