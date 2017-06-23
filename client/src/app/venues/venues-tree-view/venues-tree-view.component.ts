@@ -110,7 +110,15 @@ export class VenuesTreeViewComponent implements OnInit {
 
     validateForm(node: any) {
         let siblings = node.parent.data.children;
-        this.isFormValid = !_.isEmpty(this.currentNode.name) && !_.find(siblings, s => s.id !== node.data.id && s.name === node.data.name);
+        node.data.name = node.data.name.trim();
+        this.isFormValid = !_.isEmpty(this.currentNode.name) && !this.hasSiblingWithTheSameName(siblings, node);
+    }
+
+    hasSiblingWithTheSameName(siblings, node): boolean {
+        return !!_.find(siblings, s => {
+            return s.id !== node.data.id &&
+                   s.name === node.data.name;
+        });
     }
 
     performSubmit(node: any) {
