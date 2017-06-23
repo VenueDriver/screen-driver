@@ -2,12 +2,14 @@
     <div class="dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
             <span class="dropdown-value">{{defaultValue}}</span>
-            <span class="caret"></span>
+            <div class="caret-wrapper">
+                <span class="caret"></span>
+            </div>
         </button>
         <ul class="dropdown-menu">
             <li *ngFor="let item of getItems()">
-                <a (click)="selectItem(item)">
-                    {{item.name}}
+                <a (click)="selectItem(item)" title="{{item.description}}">
+                    <div class="item-value">{{item.name}}</div>
                 </a>
             </li>
         </ul>

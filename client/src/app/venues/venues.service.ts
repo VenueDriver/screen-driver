@@ -76,6 +76,7 @@ export class VenuesService {
     convertContentListForDropdown(content: Content[]): any {
         return _.map(content, c => {
             c.name = c.short_name;
+            c.description = c.url;
             return c;
         });
     }
