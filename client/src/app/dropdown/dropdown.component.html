@@ -1,0 +1,15 @@
+<div class="dropdown-container">
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+            {{buttonName}}
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li *ngFor="let item of getItems()">
+                <a>
+                    {{item.name}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
