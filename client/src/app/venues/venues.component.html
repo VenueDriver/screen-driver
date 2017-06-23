@@ -6,8 +6,13 @@
     <add-venue-form
             *ngIf="isShowAddVenueForm"
             [venues]="venues"
+            [content]="contentListForDropdown"
             (cancel)="hideAddVenueForm()"
             (submit)="addVenue($event)">
     </add-venue-form>
-    <venues-tree-view [venues]="venuesTree" (update)="updateVenue($event)"></venues-tree-view>
+    <venues-tree-view
+            [venues]="venuesTree"
+            [content]="contentListForDropdown"
+            (update)="updateVenue($event)">
+    </venues-tree-view>
 </div>

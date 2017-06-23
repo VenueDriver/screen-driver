@@ -44,7 +44,6 @@ function findContentById(item, contentList) {
 function addContentValuesToItem(item, content) {
     if (content) {
         item.content = content[0];
-        delete item.content_id;
     }
 }
 

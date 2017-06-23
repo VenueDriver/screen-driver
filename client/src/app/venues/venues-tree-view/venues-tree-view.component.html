@@ -10,15 +10,26 @@
                         <span class="content-url">{{ getContentUrl(node) }}</span>
                     </div>
                     <ng-template #contentPlaceholder>
-                        <div class="content-url-placeholder">Specify content URL</div>
+                        <div class="content-url-placeholder">{{contentUrlPlaceholder}}</div>
                     </ng-template>
                 </div>
 
                 <div *ngIf="isCurrentNode(node)" class="edit-node-form">
-                    <input type="text"
-                           [(ngModel)]="currentNode.name"
-                           (ngModelChange)="validateForm(node)"
-                           class="form-control node-name">
+
+                    <div class="inputs-container">
+                        <input type="text"
+                               [(ngModel)]="currentNode.name"
+                               (ngModelChange)="validateForm(node)"
+                               class="form-control node-name">
+
+                        <div class="dropdown-container">
+                            <dropdown
+                                    [defaultValue]="contentUrlPlaceholder"
+                                    [items]="content"
+                                    (select)="setNodeContent($event)">
+                            </dropdown>
+                        </div>
+                    </div>
 
                     <div class="buttons-container">
                         <button type="button"

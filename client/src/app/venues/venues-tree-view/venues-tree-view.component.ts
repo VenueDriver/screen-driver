@@ -11,16 +11,21 @@ import * as _ from 'lodash';
     selector: 'venues-tree-view',
     templateUrl: 'venues-tree-view.component.html',
     styleUrls: ['./venues-tree-view.component.sass'],
-    providers: [VenuesTreeViewService, VenuesService]
+    providers: [
+        VenuesTreeViewService,
+        VenuesService
+    ]
 })
 export class VenuesTreeViewComponent implements OnInit {
 
-    @Input() venues;
+    @Input() venues: any;
+    @Input() content: any;
     @Output() update = new EventEmitter();
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
+    contentUrlPlaceholder = 'Specify content URL';
     options;
     actionMapping;
     currentNode;
@@ -134,6 +139,11 @@ export class VenuesTreeViewComponent implements OnInit {
             return parentNode.data.id;
         }
         return parentNode.parent.data.id;
+    }
+
+    setNodeContent(content) {
+        this.currentNode.content = content;
+        this.currentNode.content_id = content.id;
     }
 
 }

@@ -5,5 +5,6 @@ export class ScreenGroup {
     id: string;
     name: string;
     content: Content;
+    content_id: string;
     screens: Screen[];
 }
