@@ -65,7 +65,7 @@ function initParamsForUpdating(contentForUpdate) {
             ":short_name": contentForUpdate.short_name,
             ":url": contentForUpdate.url
         },
-        ReturnValues: "UPDATED_NEW"
+        ReturnValues: "ALL_NEW"
     }
 }
 

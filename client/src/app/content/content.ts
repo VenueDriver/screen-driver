@@ -1,4 +1,10 @@
+import * as _ from 'lodash';
+
 export class Content {
+  id: String = '';
+  short_name: string = '';
+  url: string = '';
+
   constructor(content?: Content) {
     if (content) {
       this.id = content.id;
@@ -6,7 +12,12 @@ export class Content {
       this.url = content.url;
     }
   }
-  id: String = '';
-  short_name: string = '';
-  url: string = '';
+
+  //TODO implement url validation
+  validate() {
+    return !_.isEmpty(this.short_name)
+        && this.short_name.length > 3
+        && !_.isEmpty(this.url)
+        && this.url.length > 3;
+  }
 }
