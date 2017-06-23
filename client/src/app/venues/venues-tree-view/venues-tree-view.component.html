@@ -15,8 +15,7 @@
                 </div>
 
                 <div *ngIf="isCurrentNode(node)" class="edit-node-form">
-                    <input id="venueName"
-                           type="text"
+                    <input type="text"
                            [(ngModel)]="currentNode.name"
                            (ngModelChange)="validateForm(node)"
                            class="form-control node-name">
