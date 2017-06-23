@@ -1,24 +1,39 @@
+.node-content-wrapper
+  &:hover .plus-button
+    display: block
+
 .single-node
+  display: flex
+  align-items: center
   height: 65px
   min-width: 400px
 
-  .node-name
-    font-size: 18px
-    margin: 10px 0
+  &:hover .plus-button
+    display: block
 
-  .content-info
-    font-size: 16px
-
-    .content-short-name
-      margin-right: 15px
-
-    .content-url
-      color: gray
-
-  .content-url-placeholder
-    font-size: 16px
-    color: gray
-    font-style: italic
-
-  .add-node
+  .plus-button
+    margin-left: auto
     display: none
+    content: url('../../../assets/images/add-circular-outlined-button.png')
+    cursor: pointer
+
+  .node-info
+    justify-content: flex-start
+
+    .node-name
+      font-size: 18px
+      margin: 10px 0
+
+    .content-info
+      font-size: 16px
+
+      .content-short-name
+        margin-right: 15px
+
+      .content-url
+        color: gray
+
+    .content-url-placeholder
+      font-size: 16px
+      color: gray
+      font-style: italic

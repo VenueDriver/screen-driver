@@ -22,14 +22,14 @@ export class VenuesService {
     }
 
     saveVenue(venue: Venue): Observable<Response> {
-        return this.http.post('api/venues', venue);
+        return this.http.post(this.venuesApiPath, venue);
     }
 
     private convertToTree(items: Array<any>) {
-        items.forEach(item => this.performConverting(item));
+        items.forEach(item => this.performConvertingToTree(item));
     }
 
-    private performConverting(item) {
+    private performConvertingToTree(item) {
         this.convertSubItemsToNodes(item, 'screen_groups');
         this.convertSubItemsToNodes(item, 'screens');
         if (item.children) {
@@ -41,6 +41,26 @@ export class VenuesService {
         if (venue[subItemsArrayName]) {
             venue.children = venue[subItemsArrayName];
             delete venue[subItemsArrayName];
+        }
+    }
+
+    updateVenue(venueNode: any): Observable<Response> {
+        let venue = this.prepareVenuesToUpdate(venueNode);
+        return this.http.put(`${this.venuesApiPath}/${venueNode.id}`, venue);
+    }
+
+    private prepareVenuesToUpdate(venueNode: any): Venue {
+        this.convertChildrenToSubItem(venueNode, 'screen_groups');
+        if (venueNode.screen_groups) {
+            _.forEach(venueNode.screen_groups, group => this.convertChildrenToSubItem(group, 'screens'));
+        }
+        return venueNode;
+    }
+
+    private convertChildrenToSubItem(node, subItemsArrayName) {
+        if (node.children) {
+            node[subItemsArrayName] = node.children;
+            delete node.children;
         }
     }
 }
