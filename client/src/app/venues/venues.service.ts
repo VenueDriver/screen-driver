@@ -22,7 +22,7 @@ export class VenuesService {
     }
 
     saveVenue(venue: Venue): Observable<Response> {
-        return this.http.post('api/venues', venue);
+        return this.http.post(this.venuesApiPath, venue);
     }
 
     private convertToTree(items: Array<any>) {
@@ -46,7 +46,7 @@ export class VenuesService {
 
     updateVenue(venueNode: any): Observable<Response> {
         let venue = this.prepareVenuesToUpdate(venueNode);
-        return this.http.put(`api/venues/${venueNode.id}`, venue);
+        return this.http.put(`${this.venuesApiPath}/${venueNode.id}`, venue);
     }
 
     private prepareVenuesToUpdate(venueNode: any): Venue {
