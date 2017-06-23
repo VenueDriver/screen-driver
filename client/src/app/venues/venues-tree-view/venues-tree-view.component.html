@@ -24,7 +24,7 @@
 
                         <div class="dropdown-container">
                             <dropdown
-                                    [defaultValue]="contentUrlPlaceholder"
+                                    [defaultValue]="getDefaultValue()"
                                     [items]="content"
                                     (select)="setNodeContent($event)">
                             </dropdown>
@@ -48,8 +48,15 @@
                 </div>
 
                 <div class="buttons-container">
-                    <div *ngIf="isAllowToEditNode()" class="node-button edit-button"></div>
-                    <div *ngIf="isAllowToAddChild(node)" class="node-button plus-button" (click)="addNewNode($event, node)"></div>
+                    <div *ngIf="isAllowToEditNode()"
+                         class="node-button edit-button"
+                         (click)="editNode($event, node); validateForm(node)">
+                    </div>
+
+                    <div *ngIf="isAllowToAddChild(node)"
+                         class="node-button plus-button"
+                         (click)="addNewNode($event, node)">
+                    </div>
                 </div>
             </div>
         </ng-template>

@@ -111,10 +111,16 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     performCancel(node: any) {
+        if (!node.data.id) {
+            this.removeEmptyNode(node);
+        }
+        this.clearCurrentNode();
+    }
+
+    removeEmptyNode(node: any) {
         let parentNodeData = node.parent.data;
         _.pull(parentNodeData.children, this.currentNode);
         this.tree.treeModel.update();
-        this.clearCurrentNode();
     }
 
     validateForm(node: any) {
@@ -139,15 +145,25 @@ export class VenuesTreeViewComponent implements OnInit {
 
     getVenueId(node: any) {
         let parentNode = node.parent;
-        if (node.level == 2) {
-            return parentNode.data.id;
+        switch (node.level) {
+            case 1: return node.data.id;
+            case 2: return parentNode.data.id;
+            default: return parentNode.parent.data.id;
         }
-        return parentNode.parent.data.id;
     }
 
     setNodeContent(content) {
         this.currentNode.content = content;
         this.currentNode.content_id = content.id;
+    }
+
+    editNode(event: any, node: any) {
+        event.stopPropagation();
+        this.currentNode = node.data;
+    }
+
+    getDefaultValue(): string {
+        return this.currentNode.content ? this.currentNode.content.short_name : this.contentUrlPlaceholder;
     }
 
 }
