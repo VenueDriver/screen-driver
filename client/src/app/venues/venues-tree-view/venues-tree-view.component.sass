@@ -5,7 +5,7 @@
 .single-node
   display: flex
   align-items: center
-  height: 65px
+  height: 85px
   min-width: 400px
 
   &:hover .plus-button
@@ -18,11 +18,10 @@
     cursor: pointer
 
   .node-info
-    justify-content: flex-start
 
     .node-name
       font-size: 18px
-      margin: 10px 0
+      margin-bottom: 15px
 
     .content-info
       font-size: 16px
@@ -33,10 +32,21 @@
       .content-url
         color: gray
 
-    .dropdown-container
-      z-index: 1000
-
     .content-url-placeholder
       font-size: 16px
       color: gray
       font-style: italic
+
+  .edit-node-form
+    display: flex
+    align-items: center
+
+    .inputs-container
+      margin-top: -40px
+
+      .dropdown-container
+        position: absolute
+        margin-top: 10px
+
+    .buttons-container
+      margin-left: auto

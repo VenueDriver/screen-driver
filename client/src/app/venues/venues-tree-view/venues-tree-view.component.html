@@ -15,13 +15,16 @@
                 </div>
 
                 <div *ngIf="isCurrentNode(node)" class="edit-node-form">
-                    <input type="text"
-                           [(ngModel)]="currentNode.name"
-                           (ngModelChange)="validateForm(node)"
-                           class="form-control node-name">
 
-                    <div class="dropdown-container">
-                        <dropdown buttonName="URL" [items]="getItemsForDropdown()"></dropdown>
+                    <div class="inputs-container">
+                        <input type="text"
+                               [(ngModel)]="currentNode.name"
+                               (ngModelChange)="validateForm(node)"
+                               class="form-control node-name">
+
+                        <div class="dropdown-container">
+                            <dropdown buttonName="URL" [items]="getItemsForDropdown()"></dropdown>
+                        </div>
                     </div>
 
                     <div class="buttons-container">
