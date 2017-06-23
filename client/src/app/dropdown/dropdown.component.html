@@ -6,7 +6,7 @@
         </button>
         <ul class="dropdown-menu">
             <li *ngFor="let item of getItems()">
-                <a>
+                <a (click)="selectItem(item)">
                     {{item.name}}
                 </a>
             </li>

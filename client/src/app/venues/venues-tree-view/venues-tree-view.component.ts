@@ -154,4 +154,8 @@ export class VenuesTreeViewComponent implements OnInit {
         });
     }
 
+    setNodeContent(content) {
+        this.currentNode.content = content;
+    }
+
 }
