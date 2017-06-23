@@ -11,6 +11,8 @@ import * as _ from 'lodash';
 export class AddVenueFormComponent implements OnInit {
 
     @Input() venues: any;
+    @Input() content: any;
+
     @Output() cancel = new EventEmitter();
     @Output() submit = new EventEmitter();
 
@@ -38,5 +40,10 @@ export class AddVenueFormComponent implements OnInit {
 
     hasUniqueName() {
         return !_.includes(_.map(this.venues, venue => venue.name), this.newVenue.name);
+    }
+
+    setVenueContent(content) {
+        this.newVenue.content = content;
+        this.newVenue.content_id = content.id;
     }
 }

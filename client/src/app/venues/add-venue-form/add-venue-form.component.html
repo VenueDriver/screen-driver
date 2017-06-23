@@ -10,6 +10,14 @@
            placeholder="Venue name"
            required>
 
+    <div class="dropdown-container">
+        <dropdown
+                [defaultValue]="contentUrlPlaceholder"
+                [items]="content"
+                (select)="setVenueContent($event)">
+        </dropdown>
+    </div>
+
     <div>
         <button type="button"
                 class="btn btn-success"
