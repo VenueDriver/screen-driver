@@ -25,6 +25,7 @@ export class VenuesTreeViewComponent implements OnInit {
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
+    contentUrlPlaceholder = 'Specify content URL';
     content: Content[];
     options;
     actionMapping;

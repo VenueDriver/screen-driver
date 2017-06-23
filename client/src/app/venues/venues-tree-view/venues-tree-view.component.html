@@ -10,7 +10,7 @@
                         <span class="content-url">{{ getContentUrl(node) }}</span>
                     </div>
                     <ng-template #contentPlaceholder>
-                        <div class="content-url-placeholder">Specify content URL</div>
+                        <div class="content-url-placeholder">{{contentUrlPlaceholder}}</div>
                     </ng-template>
                 </div>
 
@@ -24,7 +24,7 @@
 
                         <div class="dropdown-container">
                             <dropdown
-                                    buttonName="URL"
+                                    [buttonName]="contentUrlPlaceholder"
                                     [items]="getItemsForDropdown()"
                                     (select)="setNodeContent($event)">
                             </dropdown>
