@@ -8,14 +8,24 @@
   height: 85px
   min-width: 400px
 
-  &:hover .plus-button
-    display: block
+  &:hover .buttons-container .node-button
+    display: inline-block
 
-  .plus-button
+  .buttons-container
     margin-left: auto
-    display: none
-    content: url('../../../assets/images/add-circular-outlined-button.png')
-    cursor: pointer
+
+    .node-button
+      display: none
+      width: 25px
+      height: 25px
+      cursor: pointer
+
+    .plus-button
+      content: url('../../../assets/images/add-circular-outlined-button.png')
+
+    .edit-button
+      content: url('../../../assets/images/edit.png')
+      margin-right: 8px
 
   .node-info
 

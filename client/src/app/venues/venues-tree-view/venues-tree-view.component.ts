@@ -103,7 +103,11 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isAllowToAddChild(node: any) {
-        return node.level < 3 && _.isEmpty(this.currentNode);
+        return node.level < 3 && this.isAllowToEditNode();
+    }
+
+    isAllowToEditNode() {
+        return _.isEmpty(this.currentNode);
     }
 
     performCancel(node: any) {
