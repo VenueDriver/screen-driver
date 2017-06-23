@@ -20,6 +20,10 @@
                            (ngModelChange)="validateForm(node)"
                            class="form-control node-name">
 
+                    <div class="dropdown-container">
+                        <dropdown buttonName="URL" [items]="getItemsForDropdown()"></dropdown>
+                    </div>
+
                     <div class="buttons-container">
                         <button type="button"
                                 class="btn btn-success"
