@@ -26,9 +26,10 @@ export class VenuesTreeViewComponent implements OnInit {
     private tree: TreeComponent;
 
     contentUrlPlaceholder = 'Specify content URL';
-    options;
-    actionMapping;
-    currentNode;
+    options: any;
+    actionMapping: any;
+    currentNode: any;
+    originalNode: any;
     isFormValid = false;
 
     constructor(
@@ -112,12 +113,14 @@ export class VenuesTreeViewComponent implements OnInit {
 
     performCancel(node: any) {
         if (!node.data.id) {
-            this.removeEmptyNode(node);
+            this.removeBlankNode(node);
+        } else {
+            node.data = this.originalNode;
         }
         this.clearCurrentNode();
     }
 
-    removeEmptyNode(node: any) {
+    removeBlankNode(node: any) {
         let parentNodeData = node.parent.data;
         _.pull(parentNodeData.children, this.currentNode);
         this.tree.treeModel.update();
@@ -160,6 +163,7 @@ export class VenuesTreeViewComponent implements OnInit {
     editNode(event: any, node: any) {
         event.stopPropagation();
         this.currentNode = node.data;
+        this.originalNode = _.clone(node.data);
     }
 
     getDefaultValue(): string {
