@@ -24,7 +24,7 @@
 
                         <div class="dropdown-container">
                             <dropdown
-                                    [buttonName]="contentUrlPlaceholder"
+                                    [defaultValue]="contentUrlPlaceholder"
                                     [items]="getItemsForDropdown()"
                                     (select)="setNodeContent($event)">
                             </dropdown>

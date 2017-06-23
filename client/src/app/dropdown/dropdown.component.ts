@@ -8,7 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class DropdownComponent implements OnInit {
 
     @Input() items: any;
-    @Input() buttonName: string;
+    @Input() defaultValue: string;
 
     @Output() select = new EventEmitter();
 
@@ -21,7 +21,7 @@ export class DropdownComponent implements OnInit {
     }
 
     selectItem(item: any) {
-        this.buttonName = item.name;
+        this.defaultValue = item.name;
         this.select.emit(item);
     }
 }
