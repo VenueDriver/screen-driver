@@ -24,6 +24,7 @@ export class VenuesTreeViewComponent implements OnInit {
     options;
     actionMapping;
     currentNode;
+    isFormValid = false;
 
     constructor(
         private venuesTreeViewService: VenuesTreeViewService,
@@ -102,8 +103,9 @@ export class VenuesTreeViewComponent implements OnInit {
         this.clearCurrentNode();
     }
 
-    validateForm() {
-
+    validateForm(node: any) {
+        let siblings = node.parent.data.children;
+        this.isFormValid = !_.isEmpty(this.currentNode.name) && !_.find(siblings, s => s.id !== node.data.id && s.name === node.data.name);
     }
 
     performSubmit(node: any) {

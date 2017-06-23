@@ -18,12 +18,13 @@
                     <input id="venueName"
                            type="text"
                            [(ngModel)]="currentNode.name"
-                           (ngModelChange)="validateForm()"
+                           (ngModelChange)="validateForm(node)"
                            class="form-control node-name">
 
                     <div class="buttons-container">
                         <button type="button"
                                 class="btn btn-success"
+                                [disabled]="!isFormValid"
                                 (click)="performSubmit(node)">
                             Save
                         </button>
