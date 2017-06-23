@@ -6,7 +6,6 @@ import {VenuesService} from "../venues.service";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 
 import * as _ from 'lodash';
-import {Content} from "../../content/content";
 
 @Component({
     selector: 'venues-tree-view',
@@ -19,14 +18,14 @@ import {Content} from "../../content/content";
 })
 export class VenuesTreeViewComponent implements OnInit {
 
-    @Input() venues;
+    @Input() venues: any;
+    @Input() content: any;
     @Output() update = new EventEmitter();
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
     contentUrlPlaceholder = 'Specify content URL';
-    content: Content[];
     options;
     actionMapping;
     currentNode;
@@ -38,14 +37,8 @@ export class VenuesTreeViewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.loadContent();
         this.actionMapping = this.getActionMapping();
         this.options = this.getTreeViewOptions();
-    }
-
-    loadContent() {
-        this.venuesTreeViewService.loadContent()
-            .subscribe(content => this.content = content);
     }
 
     getTreeViewOptions(): ITreeOptions {
@@ -146,13 +139,6 @@ export class VenuesTreeViewComponent implements OnInit {
             return parentNode.data.id;
         }
         return parentNode.parent.data.id;
-    }
-
-    getItemsForDropdown() {
-        return _.map(this.content, c => {
-            c.name = c.short_name;
-            return c;
-        });
     }
 
     setNodeContent(content) {

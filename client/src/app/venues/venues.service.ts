@@ -4,15 +4,24 @@ import {Venue} from "./entities/venue";
 import { Observable } from 'rxjs/Observable';
 
 import * as _ from 'lodash';
+import {Content} from "../content/content";
+import {ContentService} from "../content/content.service";
 
 @Injectable()
 export class VenuesService {
     readonly venuesApiPath = 'api/venues';
 
-    constructor(private http: Http) { }
+    constructor(
+        private http: Http,
+        private contentService: ContentService
+    ) { }
 
     loadVenues(): Observable<Response> {
         return this.http.get(this.venuesApiPath);
+    }
+
+    loadContent(): Observable<Content[]> {
+        return this.contentService.getContent();
     }
 
     getVenuesForTree(venues: Venue[]) {
@@ -62,5 +71,12 @@ export class VenuesService {
             node[subItemsArrayName] = node.children;
             delete node.children;
         }
+    }
+
+    convertContentListForDropdown(content: Content[]): any {
+        return _.map(content, c => {
+            c.name = c.short_name;
+            return c;
+        });
     }
 }

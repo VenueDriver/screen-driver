@@ -14,6 +14,7 @@ export class AddVenueFormComponent implements OnInit {
     @Output() cancel = new EventEmitter();
     @Output() submit = new EventEmitter();
 
+    contentUrlPlaceholder = 'Content URL';
     newVenue = new Venue();
     isFormValid = false;
 
