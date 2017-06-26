@@ -5,14 +5,14 @@
       <div class="page-title">
         Content list
       </div>
-      <div class="add-content-button">
+      <div class="add-content-button add-button">
         <img src="./../../assets/images/add-circular-outlined-button.png" (click)="showAddContentPanel()">
       </div>
         <content-create *ngIf="isAddModeEnabled"
                         (cancel)="closeAddContentPanel()"
                         (submit)="createContent($event)"></content-create>
     </div>
-    <hr>
+
     <div *ngFor="let contentItem of content">
       <content-row [content]="contentItem"></content-row>
     </div>
