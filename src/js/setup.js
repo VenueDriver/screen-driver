@@ -183,14 +183,14 @@ function loadScreensConfig() {
             try {
                 screensConfig = ConfigConverter.extractVenues(json);
             } catch (error) {
-                showError("Cannot read YAML config: " + error.message);
+                showError("Cannot read config: " + error.message);
                 throw new Error(error.message);
             }
             initVenuesSelector();
             putPreviouslySelectedDataIntoSelectors();
         },
         error: function (error) {
-            showError("Failed to load YAML config" + (!error.responseText ? '' : (':  ' + error.responseText)));
+            showError("Failed to load config" + (!error.responseText ? '' : (':  ' + error.responseText)));
             throw new Error(error.responseText);
         }
     });

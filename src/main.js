@@ -74,9 +74,10 @@ function reloadCurrentScreenConfig(screenConfig) {
 
             function convertConfig() {
                 try {
-                    return ConfigConverter.extractVenues(chunk);
+                    let venues = JSON.parse(chunk.toString());
+                    return ConfigConverter.extractVenues(venues);
                 } catch (error) {
-                    log.error("Cannot read YAML config. Used old config. Message: " + error.message);
+                    log.error("Cannot read config. Used old config. Message: " + error.message);
                     deferred.resolve();
                 }
             }
@@ -89,7 +90,7 @@ function reloadCurrentScreenConfig(screenConfig) {
     });
 
     request.on('error', (error) => {
-        log.error('Failed to load YAML config. Used old config. Message:', error);
+        log.error('Failed to load config. Used old config. Message:', error);
         deferred.resolve();
     });
     request.end();

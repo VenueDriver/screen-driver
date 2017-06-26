@@ -2,10 +2,10 @@ class ConfigConverter {
     constructor() {
     }
 
-    static extractVenues(json_config) {
-        json_config = JSON.parse(json_config);
+    static extractVenues(venues) {
         let convertedVenues = {};
-        json_config.forEach(venue => {
+        venues.forEach(venue => {
+            this.setParentUrlForEmptyChildren(venue);
             convertedVenues[venue.name] = this.extractGroups(venue);
         });
         return convertedVenues;
@@ -26,6 +26,24 @@ class ConfigConverter {
         });
         return convertedScreens;
     }
+
+    static setParentUrlForEmptyChildren(venue) {
+        venue.screen_groups.forEach(group => {
+            if (!group.content) group.content = {};
+            if (!venue.content) venue.content ={};
+            if (!group.content.url) {
+                group['content'].url = venue.content.url;
+            }
+
+            group.screens.forEach(screen => {
+                if (!screen.content) screen.content = {};
+                if (!screen.content.url) {
+                    screen['content'].url = group.content.url;
+                }
+            })
+        })
+    }
+
 }
 
 module.exports = ConfigConverter;
