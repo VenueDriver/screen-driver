@@ -125,7 +125,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     performCancel(event: any, node: any) {
-        event.stopPropagation();
+        this.stopClickPropagation(event);
         if (!node.data.id) {
             this.removeBlankNode(node);
         } else {
@@ -162,7 +162,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     performSubmit(event: any, node: any) {
-        event.stopPropagation();
+        this.stopClickPropagation(event);
         let venueId = this.getVenueId(node);
         let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
         this.update.emit(venueToUpdate);
@@ -190,7 +190,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     editNode(event: any, node: any) {
-        event.stopPropagation();
+        this.stopClickPropagation(event);
         this.currentNode = node.data;
         this.originalNode = _.clone(node.data);
         this.updateTreeViewOptions();
@@ -202,5 +202,9 @@ export class VenuesTreeViewComponent implements OnInit {
 
     hasChildren(node: any): boolean {
         return node.children && node.children.length > 0;
+    }
+
+    stopClickPropagation(event: any) {
+        event.stopPropagation();
     }
 }
