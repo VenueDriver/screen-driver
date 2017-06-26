@@ -175,4 +175,7 @@ export class VenuesTreeViewComponent implements OnInit {
         return this.currentNode.content ? this.currentNode.content.short_name : this.contentUrlPlaceholder;
     }
 
+    hasChildren(node: any): boolean {
+        return node.children.length > 0;
+    }
 }
