@@ -128,7 +128,7 @@ export class VenuesTreeViewComponent implements OnInit {
         if (!node.data.id) {
             this.removeBlankNode(node);
         } else {
-            node.data = this.originalNode;
+            this.undoEditing(node);
         }
         this.clearCurrentNode();
         this.updateTreeViewOptions();
@@ -137,6 +137,13 @@ export class VenuesTreeViewComponent implements OnInit {
     removeBlankNode(node: any) {
         let parentNodeData = node.parent.data;
         _.pull(parentNodeData.children, this.currentNode);
+        this.updateTreeModel();
+    }
+
+    undoEditing(node: any) {
+        let parentNodeData = node.parent.data;
+        _.pull(parentNodeData.children, this.currentNode);
+        parentNodeData.children.push(this.originalNode);
         this.updateTreeModel();
     }
 
