@@ -143,8 +143,9 @@ export class VenuesTreeViewComponent implements OnInit {
 
     undoEditing(node: any) {
         let parentNodeData = node.parent.data;
+        let nodeIndex = parentNodeData.children.indexOf(this.currentNode);
         _.pull(parentNodeData.children, this.currentNode);
-        parentNodeData.children.push(this.originalNode);
+        parentNodeData.children.splice(nodeIndex, 0, this.originalNode);
         this.updateTreeModel();
     }
 
