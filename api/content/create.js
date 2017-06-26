@@ -50,8 +50,8 @@ function initParamsForCreation(content) {
         TableName: process.env.CONTENT_TABLE,
         Item: {
             id: uuid.v1(),
-            short_name: content.short_name,
-            url: content.url
+            short_name: content.short_name.trim(),
+            url: content.url.trim()
         }
     }
 }

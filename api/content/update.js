@@ -62,8 +62,8 @@ function initParamsForUpdating(contentForUpdate) {
         },
         ExpressionAttributeValues: {
             ":id": contentForUpdate.id,
-            ":short_name": contentForUpdate.short_name,
-            ":url": contentForUpdate.url
+            ":short_name": contentForUpdate.short_name.trim(),
+            ":url": contentForUpdate.url.trim()
         },
         ReturnValues: "ALL_NEW"
     }

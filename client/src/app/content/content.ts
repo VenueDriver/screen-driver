@@ -16,8 +16,8 @@ export class Content {
   //TODO implement url validation
   validate() {
     return !_.isEmpty(this.short_name)
-        && this.short_name.length > 3
+        && this.short_name.trim().length > 3
         && !_.isEmpty(this.url)
-        && this.url.length > 3;
+        && this.url.trim().length > 3;
   }
 }
