@@ -35,13 +35,13 @@
                         <button type="button"
                                 class="btn btn-success"
                                 [disabled]="!isFormValid"
-                                (click)="performSubmit(node)">
+                                (click)="performSubmit($event, node)">
                             Save
                         </button>
 
                         <button type="button"
                                 class="btn btn-link cancel-button"
-                                (click)="performCancel(node)">
+                                (click)="performCancel($event, node)">
                             Cancel
                         </button>
                     </div>

@@ -124,7 +124,8 @@ export class VenuesTreeViewComponent implements OnInit {
         return _.isEmpty(this.currentNode);
     }
 
-    performCancel(node: any) {
+    performCancel(event: any, node: any) {
+        event.stopPropagation();
         if (!node.data.id) {
             this.removeBlankNode(node);
         } else {
@@ -160,7 +161,8 @@ export class VenuesTreeViewComponent implements OnInit {
         });
     }
 
-    performSubmit(node: any) {
+    performSubmit(event: any, node: any) {
+        event.stopPropagation();
         let venueId = this.getVenueId(node);
         let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
         this.update.emit(venueToUpdate);
