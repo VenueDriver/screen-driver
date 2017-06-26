@@ -18,17 +18,18 @@ import * as _ from 'lodash';
 })
 export class VenuesTreeViewComponent implements OnInit {
 
-    @Input() venues: any;
-    @Input() content: any;
+    @Input() venues: Array<any>;
+    @Input() content: Array<any>;
     @Output() update = new EventEmitter();
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
     contentUrlPlaceholder = 'Specify content URL';
-    options;
-    actionMapping;
-    currentNode;
+    options: any;
+    actionMapping: any;
+    currentNode: any;
+    originalNode: any;
     isFormValid = false;
 
     constructor(
@@ -37,8 +38,17 @@ export class VenuesTreeViewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.updateTreeViewOptions();
+    }
+
+    updateTreeViewOptions() {
         this.actionMapping = this.getActionMapping();
         this.options = this.getTreeViewOptions();
+        this.updateTreeModel();
+    }
+
+    updateTreeModel() {
+        this.tree.treeModel.update();
     }
 
     getTreeViewOptions(): ITreeOptions {
@@ -50,9 +60,13 @@ export class VenuesTreeViewComponent implements OnInit {
     getActionMapping(): IActionMapping {
         return {
             mouse: {
-                click: TREE_ACTIONS.TOGGLE_EXPANDED
+                click: this.getMouseClickAction()
             }
         }
+    }
+
+    getMouseClickAction() {
+        return _.isEmpty(this.currentNode) ? TREE_ACTIONS.TOGGLE_EXPANDED : TREE_ACTIONS.DESELECT;
     }
 
     hasContentInfo(node: any): boolean {
@@ -77,7 +91,7 @@ export class VenuesTreeViewComponent implements OnInit {
             node.data.children = [];
         }
         node.data.children.push(this.createBlankNode());
-        this.tree.treeModel.update();
+        this.updateTreeModel();
     }
 
     expandIfCollapsed(event, node) {
@@ -103,14 +117,36 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isAllowToAddChild(node: any) {
-        return node.level < 3 && _.isEmpty(this.currentNode);
+        return node.level < 3 && this.isAllowToEditNode();
     }
 
-    performCancel(node: any) {
+    isAllowToEditNode() {
+        return _.isEmpty(this.currentNode);
+    }
+
+    performCancel(event: any, node: any) {
+        this.stopClickPropagation(event);
+        if (!node.data.id) {
+            this.removeBlankNode(node);
+        } else {
+            this.undoEditing(node);
+        }
+        this.clearCurrentNode();
+        this.updateTreeViewOptions();
+    }
+
+    removeBlankNode(node: any) {
         let parentNodeData = node.parent.data;
         _.pull(parentNodeData.children, this.currentNode);
-        this.tree.treeModel.update();
-        this.clearCurrentNode();
+        this.updateTreeModel();
+    }
+
+    undoEditing(node: any) {
+        let parentNodeData = node.parent.data;
+        let nodeIndex = parentNodeData.children.indexOf(this.currentNode);
+        _.pull(parentNodeData.children, this.currentNode);
+        parentNodeData.children.splice(nodeIndex, 0, this.originalNode);
+        this.updateTreeModel();
     }
 
     validateForm(node: any) {
@@ -126,24 +162,50 @@ export class VenuesTreeViewComponent implements OnInit {
         });
     }
 
-    performSubmit(node: any) {
+    performSubmit(event: any, node: any) {
+        this.stopClickPropagation(event);
         let venueId = this.getVenueId(node);
         let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
         this.update.emit(venueToUpdate);
         this.clearCurrentNode();
+        this.updateTreeViewOptions();
     }
 
     getVenueId(node: any) {
         let parentNode = node.parent;
-        if (node.level == 2) {
-            return parentNode.data.id;
+        switch (node.level) {
+            case 1: return node.data.id;
+            case 2: return parentNode.data.id;
+            default: return parentNode.parent.data.id;
         }
-        return parentNode.parent.data.id;
     }
 
     setNodeContent(content) {
-        this.currentNode.content = content;
-        this.currentNode.content_id = content.id;
+        if (!_.isEmpty(content.id)) {
+            this.currentNode.content = content;
+            this.currentNode.content_id = content.id;
+        } else {
+            this.currentNode.content = null;
+            this.currentNode.content_id = null;
+        }
     }
 
+    editNode(event: any, node: any) {
+        this.stopClickPropagation(event);
+        this.currentNode = node.data;
+        this.originalNode = _.clone(node.data);
+        this.updateTreeViewOptions();
+    }
+
+    getDropdownValue(): string {
+        return this.currentNode.content ? this.currentNode.content.short_name : this.contentUrlPlaceholder;
+    }
+
+    hasChildren(node: any): boolean {
+        return node.children && node.children.length > 0;
+    }
+
+    stopClickPropagation(event: any) {
+        event.stopPropagation();
+    }
 }

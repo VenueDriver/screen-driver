@@ -35,7 +35,7 @@ export class VenuesComponent implements OnInit {
         this.venuesService.loadContent()
             .subscribe(content => {
                 this.content = content;
-                this.contentListForDropdown = this.venuesService.convertContentListForDropdown(this.content);
+                this.contentListForDropdown = this.venuesService.initContentListForDropdown(this.content);
             });
     }
 

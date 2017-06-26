@@ -1,4 +1,4 @@
-$dropdown-width: 270px
+$dropdown-width: 400px
 $dropdown-font-size: 16px
 
 .dropdown
@@ -20,6 +20,8 @@ $dropdown-font-size: 16px
 
   .dropdown-menu
     width: $dropdown-width
+    max-height: 260px
+    overflow-y: auto
 
     li a
       padding: 0 12px
@@ -27,6 +29,13 @@ $dropdown-font-size: 16px
       line-height: 40px
       font-size: $dropdown-font-size
       overflow: hidden
+
+      .item-with-desc
+        padding: 5px 0
+        line-height: 30px
+
+        .item-desc
+          color: gray
 
       .item-value
         overflow: hidden

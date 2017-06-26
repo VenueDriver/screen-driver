@@ -1,4 +1,6 @@
 .node-content-wrapper
+  padding-bottom: 300px
+
   &:hover .plus-button
     display: block
 
@@ -6,16 +8,34 @@
   display: flex
   align-items: center
   height: 85px
-  min-width: 400px
+  width: 100%
 
-  &:hover .plus-button
-    display: block
+  &.node-without-children
+    padding-left: 11px
 
-  .plus-button
+  &:hover .buttons-container .node-button
+    display: inline-block
+
+  .inputs-container
+
+    .node-name
+      font-size: 18px
+
+  .buttons-container
     margin-left: auto
-    display: none
-    content: url('../../../assets/images/add-circular-outlined-button.png')
-    cursor: pointer
+
+    .node-button
+      display: none
+      width: 25px
+      height: 25px
+      cursor: pointer
+
+    .plus-button
+      content: url('../../../assets/images/add-circular-outlined-button.png')
+
+    .edit-button
+      content: url('../../../assets/images/edit.png')
+      margin-right: 8px
 
   .node-info
 
@@ -40,10 +60,11 @@
   .edit-node-form
     display: flex
     align-items: center
+    width: 100%
 
     .inputs-container
       margin-top: -40px
-      width: 270px
+      width: 400px
 
       .dropdown-container
         position: absolute
@@ -51,3 +72,4 @@
 
     .buttons-container
       margin-left: auto
+      width: 23%

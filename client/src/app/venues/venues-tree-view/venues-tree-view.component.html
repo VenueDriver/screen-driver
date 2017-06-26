@@ -1,7 +1,7 @@
 <div>
     <tree-root [focused]="true" [nodes]="venues" [options]="options">
         <ng-template class="node-template" #treeNodeTemplate let-node let-index="index">
-            <div class="single-node">
+            <div class="single-node" [ngClass]="{'node-without-children': node.level < 3 && !hasChildren(node)}">
                 <div *ngIf="!isCurrentNode(node)" class="node-info">
                     <div class="node-name">{{ node.data.name }}</div>
 
@@ -24,7 +24,7 @@
 
                         <div class="dropdown-container">
                             <dropdown
-                                    [defaultValue]="contentUrlPlaceholder"
+                                    [dropdownValue]="getDropdownValue()"
                                     [items]="content"
                                     (select)="setNodeContent($event)">
                             </dropdown>
@@ -35,19 +35,29 @@
                         <button type="button"
                                 class="btn btn-success"
                                 [disabled]="!isFormValid"
-                                (click)="performSubmit(node)">
+                                (click)="performSubmit($event, node)">
                             Save
                         </button>
 
                         <button type="button"
                                 class="btn btn-link cancel-button"
-                                (click)="performCancel(node)">
+                                (click)="performCancel($event, node)">
                             Cancel
                         </button>
                     </div>
                 </div>
 
-                <div *ngIf="isAllowToAddChild(node)" class="plus-button" (click)="addNewNode($event, node)"></div>
+                <div class="buttons-container">
+                    <div *ngIf="isAllowToEditNode()"
+                         class="node-button edit-button"
+                         (click)="editNode($event, node); validateForm(node)">
+                    </div>
+
+                    <div *ngIf="isAllowToAddChild(node)"
+                         class="node-button plus-button"
+                         (click)="addNewNode($event, node)">
+                    </div>
+                </div>
             </div>
         </ng-template>
     </tree-root>

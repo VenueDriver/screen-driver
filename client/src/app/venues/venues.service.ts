@@ -73,11 +73,24 @@ export class VenuesService {
         }
     }
 
-    convertContentListForDropdown(content: Content[]): any {
+    initContentListForDropdown(content: Content[]): any {
+        let contentListForDropdown = this.convertContentListForDropdown(content);
+        contentListForDropdown = _.sortBy(contentListForDropdown, 'name');
+        return [this.getDefaultUrlValue(), ...contentListForDropdown];
+    }
+
+    private convertContentListForDropdown(content: Content[]): any {
         return _.map(content, c => {
             c.name = c.short_name;
             c.description = c.url;
             return c;
         });
+    }
+
+    private getDefaultUrlValue() {
+        return {
+            id: '',
+            name: 'Default'
+        }
     }
 }
