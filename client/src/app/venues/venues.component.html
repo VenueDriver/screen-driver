@@ -8,9 +8,8 @@
             <div *ngIf="!isShowAddVenueForm" class="plus-button add-button" (click)="showAddVenueForm()"></div>
         </div>
 
-        <div class="form-container">
+        <div class="form-container" *ngIf="isShowAddVenueForm">
             <add-venue-form
-                    *ngIf="isShowAddVenueForm"
                     [venues]="venues"
                     [content]="contentListForDropdown"
                     (cancel)="hideAddVenueForm()"
