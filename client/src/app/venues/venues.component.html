@@ -8,13 +8,16 @@
             <div *ngIf="!isShowAddVenueForm" class="plus-button add-button" (click)="showAddVenueForm()"></div>
         </div>
 
-        <add-venue-form
-                *ngIf="isShowAddVenueForm"
-                [venues]="venues"
-                [content]="contentListForDropdown"
-                (cancel)="hideAddVenueForm()"
-                (submit)="addVenue($event)">
-        </add-venue-form>
+        <div class="form-container">
+            <add-venue-form
+                    *ngIf="isShowAddVenueForm"
+                    [venues]="venues"
+                    [content]="contentListForDropdown"
+                    (cancel)="hideAddVenueForm()"
+                    (submit)="addVenue($event)">
+            </add-venue-form>
+        </div>
+
         <venues-tree-view
                 [venues]="venuesTree"
                 [content]="contentListForDropdown"
