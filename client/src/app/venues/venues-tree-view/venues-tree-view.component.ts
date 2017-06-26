@@ -38,8 +38,13 @@ export class VenuesTreeViewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        this.updateTreeViewOptions();
+    }
+
+    updateTreeViewOptions() {
         this.actionMapping = this.getActionMapping();
         this.options = this.getTreeViewOptions();
+        this.tree.treeModel.update();
     }
 
     getTreeViewOptions(): ITreeOptions {
@@ -51,9 +56,13 @@ export class VenuesTreeViewComponent implements OnInit {
     getActionMapping(): IActionMapping {
         return {
             mouse: {
-                click: TREE_ACTIONS.TOGGLE_EXPANDED
+                click: this.getMouseClickAction()
             }
         }
+    }
+
+    getMouseClickAction() {
+        return _.isEmpty(this.currentNode) ? TREE_ACTIONS.TOGGLE_EXPANDED : TREE_ACTIONS.DESELECT;
     }
 
     hasContentInfo(node: any): boolean {
@@ -118,6 +127,7 @@ export class VenuesTreeViewComponent implements OnInit {
             node.data = this.originalNode;
         }
         this.clearCurrentNode();
+        this.updateTreeViewOptions();
     }
 
     removeBlankNode(node: any) {
@@ -144,6 +154,7 @@ export class VenuesTreeViewComponent implements OnInit {
         let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
         this.update.emit(venueToUpdate);
         this.clearCurrentNode();
+        this.updateTreeViewOptions();
     }
 
     getVenueId(node: any) {
@@ -169,6 +180,7 @@ export class VenuesTreeViewComponent implements OnInit {
         event.stopPropagation();
         this.currentNode = node.data;
         this.originalNode = _.clone(node.data);
+        this.updateTreeViewOptions();
     }
 
     getDropdownValue(): string {
@@ -176,6 +188,6 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     hasChildren(node: any): boolean {
-        return node.children.length > 0;
+        return node.children && node.children.length > 0;
     }
 }
