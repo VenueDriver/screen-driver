@@ -156,8 +156,13 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     setNodeContent(content) {
-        this.currentNode.content = content;
-        this.currentNode.content_id = content.id;
+        if (!_.isEmpty(content.id)) {
+            this.currentNode.content = content;
+            this.currentNode.content_id = content.id;
+        } else {
+            this.currentNode.content = null;
+            this.currentNode.content_id = null;
+        }
     }
 
     editNode(event: any, node: any) {
