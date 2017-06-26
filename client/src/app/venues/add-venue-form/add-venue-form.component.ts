@@ -10,13 +10,12 @@ import * as _ from 'lodash';
 })
 export class AddVenueFormComponent implements OnInit {
 
-    @Input() venues: any;
-    @Input() content: any;
+    @Input() venues: Array<any>;
+    @Input() content: Array<any>;
 
     @Output() cancel = new EventEmitter();
     @Output() submit = new EventEmitter();
 
-    contentUrlPlaceholder = 'Content URL';
     newVenue = new Venue();
     isFormValid = false;
 

@@ -166,7 +166,7 @@ export class VenuesTreeViewComponent implements OnInit {
         this.originalNode = _.clone(node.data);
     }
 
-    getDefaultValue(): string {
+    getDropdownValue(): string {
         return this.currentNode.content ? this.currentNode.content.short_name : this.contentUrlPlaceholder;
     }
 
