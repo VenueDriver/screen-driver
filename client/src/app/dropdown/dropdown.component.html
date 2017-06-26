@@ -8,8 +8,14 @@
         </button>
         <ul class="dropdown-menu">
             <li *ngFor="let item of getItems()">
-                <a (click)="selectItem(item)" title="{{item.description}}">
-                    <div class="item-value">{{item.name}}</div>
+                <a (click)="selectItem(item)">
+                    <div *ngIf="item.description" class="item-with-desc">
+                        <div class="item-value">{{item.name}}</div>
+                        <div class="item-desc">{{item.description}}</div>
+                    </div>
+                    <div *ngIf="!item.description">
+                        <div class="item-value">{{item.name}}</div>
+                    </div>
                 </a>
             </li>
         </ul>
