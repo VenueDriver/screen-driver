@@ -6,11 +6,11 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 const storage = require('electron-json-storage');
-const jsyaml = require('js-yaml');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const Q = require('q');
 const CronJob = require('cron').CronJob;
+let ConfigConverter = require('./js/config_converter');
 
 const log = require('electron-log');
 const hotkey = require('electron-hotkey');
@@ -68,13 +68,13 @@ function reloadCurrentScreenConfig(screenConfig) {
     const request = net.request(url);
     request.on('response', (response) => {
         response.on('data', (chunk) => {
-            let remoteConfig = convertToYaml(chunk);
+            let remoteConfig = convertConfig(chunk);
             let isUrlWasChanged = updateUrlForCurrentScreen(screenConfig, remoteConfig);
             deferred.resolve(isUrlWasChanged);
 
-            function convertToYaml() {
+            function convertConfig() {
                 try {
-                    return jsyaml.load(chunk);
+                    return ConfigConverter.extractVenues(chunk);
                 } catch (error) {
                     log.error("Cannot read YAML config. Used old config. Message: " + error.message);
                     deferred.resolve();

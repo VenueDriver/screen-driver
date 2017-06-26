@@ -3,6 +3,7 @@ class ConfigConverter {
     }
 
     static extractVenues(json_config) {
+        json_config = JSON.parse(json_config);
         let convertedVenues = {};
         json_config.forEach(venue => {
             convertedVenues[venue.name] = this.extractGroups(venue);

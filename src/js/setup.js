@@ -181,7 +181,7 @@ function loadScreensConfig() {
         url: url,
         success: function (json) {
             try {
-                screensConfig = ConfigConverter.extractVenues(JSON.parse(json));
+                screensConfig = ConfigConverter.extractVenues(json);
             } catch (error) {
                 showError("Cannot read YAML config: " + error.message);
                 throw new Error(error.message);
