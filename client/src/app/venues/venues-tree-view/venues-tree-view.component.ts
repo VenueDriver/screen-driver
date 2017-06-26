@@ -44,6 +44,10 @@ export class VenuesTreeViewComponent implements OnInit {
     updateTreeViewOptions() {
         this.actionMapping = this.getActionMapping();
         this.options = this.getTreeViewOptions();
+        this.updateTreeModel();
+    }
+
+    updateTreeModel() {
         this.tree.treeModel.update();
     }
 
@@ -87,7 +91,7 @@ export class VenuesTreeViewComponent implements OnInit {
             node.data.children = [];
         }
         node.data.children.push(this.createBlankNode());
-        this.tree.treeModel.update();
+        this.updateTreeModel();
     }
 
     expandIfCollapsed(event, node) {
@@ -133,7 +137,7 @@ export class VenuesTreeViewComponent implements OnInit {
     removeBlankNode(node: any) {
         let parentNodeData = node.parent.data;
         _.pull(parentNodeData.children, this.currentNode);
-        this.tree.treeModel.update();
+        this.updateTreeModel();
     }
 
     validateForm(node: any) {
