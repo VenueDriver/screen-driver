@@ -18,8 +18,8 @@ import * as _ from 'lodash';
 })
 export class VenuesTreeViewComponent implements OnInit {
 
-    @Input() venues: any;
-    @Input() content: any;
+    @Input() venues: Array<any>;
+    @Input() content: Array<any>;
     @Output() update = new EventEmitter();
 
     @ViewChild(TreeComponent)
