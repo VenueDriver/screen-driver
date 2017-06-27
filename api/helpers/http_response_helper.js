@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports.createSuccessfulResponse = (params) => {
     return {
         statusCode: 200,

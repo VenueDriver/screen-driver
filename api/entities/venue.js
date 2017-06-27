@@ -1,4 +1,7 @@
+'use strict';
+
 const uuid = require('uuid');
+
 let ScreenGroup = require('./../entities/screen_group');
 
 class Venue {
