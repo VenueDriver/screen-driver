@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
-import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
-import {VenuesService} from "../venues.service";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 
 import * as _ from 'lodash';
@@ -10,11 +8,7 @@ import * as _ from 'lodash';
 @Component({
     selector: 'venues-tree-view',
     templateUrl: 'venues-tree-view.component.html',
-    styleUrls: ['./venues-tree-view.component.sass'],
-    providers: [
-        VenuesTreeViewService,
-        VenuesService
-    ]
+    styleUrls: ['./venues-tree-view.component.sass']
 })
 export class VenuesTreeViewComponent implements OnInit {
 
@@ -32,10 +26,7 @@ export class VenuesTreeViewComponent implements OnInit {
     originalNode: any;
     isFormValid = false;
 
-    constructor(
-        private venuesTreeViewService: VenuesTreeViewService,
-        private venuesService: VenuesService
-    ) { }
+    constructor() { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
