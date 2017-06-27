@@ -38,7 +38,7 @@ export class AddVenueFormComponent implements OnInit {
     }
 
     hasUniqueName() {
-        return !_.includes(_.map(this.venues, venue => venue.name), this.newVenue.name);
+        return !_.includes(_.map(this.venues, venue => venue.name), this.newVenue.name.trim());
     }
 
     setVenueContent(content) {
