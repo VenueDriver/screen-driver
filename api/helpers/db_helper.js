@@ -9,7 +9,7 @@ module.exports.findAll = (tableName) => {
         if (error) {
             deferred.reject(`Couldn\'t perform scan operation on ${tableName} table: ${error.message}`);
         }
-        deferred.resolve(result.Items);
+        deferred.resolve(result ? result.Items : result);
     });
     return deferred.promise;
 };
