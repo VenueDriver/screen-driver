@@ -1,0 +1,35 @@
+<div class="add-new-venue-form-container">
+    <div class="form-title">Add new venue</div>
+
+    <input id="venueName"
+           type="text"
+           [(ngModel)]="newVenue.name"
+           (ngModelChange)="validateForm()"
+           (keyup.enter)="performSubmit()"
+           class="form-control venue-name"
+           placeholder="Venue name"
+           required>
+
+    <div class="dropdown-container">
+        <dropdown
+                dropdownValue="Content URL"
+                [items]="content"
+                (select)="setVenueContent($event)">
+        </dropdown>
+    </div>
+
+    <div>
+        <button type="button"
+                class="btn btn-success"
+                [disabled]="!isFormValid"
+                (click)="performSubmit()">
+            Add
+        </button>
+
+        <button type="button"
+                class="btn btn-link cancel-button"
+                (click)="performCancel()">
+            Cancel
+        </button>
+    </div>
+</div>

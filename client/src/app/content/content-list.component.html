@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-md-4 col-sm-3"></div>
+  <div class="col-md-4 col-sm-6">
+    <div class="header">
+      <div class="page-title">
+        Content list
+      </div>
+      <div class="add-content-button add-button">
+        <img src="./../../assets/images/add-circular-outlined-button.png" (click)="showAddContentPanel()">
+      </div>
+        <content-create *ngIf="isAddModeEnabled"
+                        (cancel)="closeAddContentPanel()"
+                        (submit)="createContent($event)"></content-create>
+    </div>
+
+    <div *ngFor="let contentItem of content">
+      <content-row [content]="contentItem"></content-row>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-3"></div>
+</div>

@@ -1,0 +1,141 @@
+service: screen-driver-content-management-system
+
+frameworkVersion: ">=1.1.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs4.3
+  environment:
+    CONTENT_TABLE: content
+    VENUES_TABLE: venues
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.CONTENT_TABLE}"
+
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.VENUES_TABLE}"
+
+functions:
+  venues_list:
+    handler: venues/list.list
+    events:
+      - http:
+          path: api/venues
+          method: get
+          cors: true
+
+  create_venue:
+    handler: venues/create.create
+    events:
+      - http:
+          path: api/venues
+          method: post
+          cors: true
+
+  update_venue:
+    handler: venues/update.update
+    events:
+      - http:
+          path: api/venues/{id}
+          method: put
+          cors: true
+
+  delete_venue:
+    handler: venues/delete.delete
+    events:
+      - http:
+          path: api/venues/{id}
+          method: delete
+          cors: true
+
+  content_list:
+    handler: content/list.list
+    events:
+      - http:
+          path: api/content
+          method: get
+          cors: true
+
+  create_content:
+    handler: content/create.create
+    events:
+      - http:
+          path: api/content
+          method: post
+          cors: true
+
+  update_content:
+    handler: content/update.update
+    events:
+      - http:
+          path: api/content/{id}
+          method: put
+          cors: true
+
+  delete_content:
+    handler: content/delete.delete
+    events:
+      - http:
+          path: api/content/{id}
+          method: delete
+          cors: true
+
+custom:
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    migration:
+      dir: migrations
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
+resources:
+  Resources:
+    ContentTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.CONTENT_TABLE}
+    VenuesTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.VENUES_TABLE}

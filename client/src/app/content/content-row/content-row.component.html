@@ -1,0 +1,14 @@
+<div *ngIf="editMode; else display_mode">
+    <content-row-edit
+        [content]="content"
+        (cancel)="setEditModeState(false)"
+        (submit)="updateContent($event)">
+    </content-row-edit>
+</div>
+
+<ng-template #display_mode>
+    <content-row-display
+        [content]="content"
+        (click)="setEditModeState(true)">
+    </content-row-display>
+</ng-template>
