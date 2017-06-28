@@ -1,0 +1,48 @@
+.header {
+    margin-top: 5%;
+}
+
+.settings {
+    margin-bottom: 5%;
+}
+
+#config-load-error {
+    color: red;
+    font-size: 15px;
+}
+
+#save:focus, #cancel:focus, #show-logs:focus, #hide-logs:focus {
+    outline: none;
+}
+
+.logs-btn {
+    margin-left: -11px;
+}
+
+.selector-container {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+label {
+    display: block;
+}
+
+.logs-container {
+    margin-top: 25px;
+}
+
+#logs {
+    display: none;
+    border: 1px solid #9b9b9b;
+    padding: 8px;
+    overflow-y: auto;
+    height: 600px;
+    color: red;
+    font-weight: 300;
+}
+
+#hide-logs {
+    display: none;
+}
+

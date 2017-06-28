@@ -1,0 +1,38 @@
+{
+  "name": "ScreenDriver",
+  "version": "1.0.1",
+  "description": "ScreenDriver kiosk app",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "linux-build": "electron-packager . --overwrite --asar=true --ignore=config/screenContent.yml --ignore=.gitignore --ignore=.idea --ignore=.dist --ignore=README.md --icon=scr/img/icon_16.png --out=release-builds",
+    "win-build": "electron-packager . --overwrite --asar=true --ignore=config/screenContent.yml --ignore=.gitignore --ignore=.idea --ignore=.dist --ignore=README.md --platform=win32 --arch=x64 --icon=scr/img/icon_16.png --out=release-builds",
+    "win-installer": "build --win",
+    "linux-installer": "build --linux"
+  },
+  "devDependencies": {
+    "electron": "1.7.1",
+    "electron-builder": "18.6.2",
+    "electron-packager": "8.7.0"
+  },
+  "dependencies": {
+    "bootstrap": "3.3.7",
+    "bootstrap-select": "1.12.2",
+    "cron": "^1.2.1",
+    "electron-hotkey": "0.0.1-alpha.1",
+    "electron-is-dev": "0.1.2",
+    "electron-json-storage": "3.0.5",
+    "electron-log": "2.2.6",
+    "jquery": "3.2.1",
+    "properties-reader": "0.0.15",
+    "q": "^1.5.0"
+  },
+  "build": {
+    "win": {
+      "icon": "./src/img/icon.ico"
+    }
+  },
+  "postinstall": "install-app-deps",
+  "author": "HakkasanGroup",
+  "license": "MIT"
+}
