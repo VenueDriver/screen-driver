@@ -75,7 +75,7 @@ function reloadCurrentScreenConfig(screenConfig) {
             function convertConfig() {
                 try {
                     let venues = JSON.parse(chunk.toString());
-                    return ConfigConverter.extractVenues(venues);
+                    return ConfigConverter.convert(venues);
                 } catch (error) {
                     log.error("Cannot read config. Used old config. Message: " + error.message);
                     deferred.resolve();

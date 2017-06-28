@@ -2,7 +2,7 @@ class ConfigConverter {
     constructor() {
     }
 
-    static extractVenues(venues) {
+    static convert(venues) {
         let convertedVenues = {};
         venues.forEach(venue => {
             this.setParentUrlForEmptyChildren(venue);
@@ -32,13 +32,13 @@ class ConfigConverter {
             if (!group.content) group.content = {};
             if (!venue.content) venue.content ={};
             if (!group.content.url) {
-                group['content'].url = venue.content.url;
+                group.content.url = venue.content.url;
             }
 
             group.screens.forEach(screen => {
                 if (!screen.content) screen.content = {};
                 if (!screen.content.url) {
-                    screen['content'].url = group.content.url;
+                    screen.content.url = group.content.url;
                 }
             })
         })

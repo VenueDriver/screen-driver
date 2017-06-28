@@ -182,7 +182,7 @@ function loadScreensConfig() {
         success: function (json) {
             try {
                 json = JSON.parse(json);
-                screensConfig = ConfigConverter.extractVenues(json);
+                screensConfig = ConfigConverter.convert(json);
             } catch (error) {
                 showError("Cannot read config: " + error.message);
                 throw new Error(error.message);
