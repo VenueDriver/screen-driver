@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Http, Response} from "@angular/http";
+import { environment } from '../../environments/environment';
 import {Venue} from "./entities/venue";
 import { Observable } from 'rxjs/Observable';
 
@@ -9,7 +10,7 @@ import {ContentService} from "../content/content.service";
 
 @Injectable()
 export class VenuesService {
-    readonly venuesApiPath = 'api/venues';
+    readonly venuesApiPath = `${environment.apiUrl}/api/venues`;
 
     constructor(
         private http: Http,
