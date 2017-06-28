@@ -9,7 +9,7 @@ const properties = PropertiesReader(__dirname + '/../config/app.properties');
 window.$ = window.jQuery = require('jquery');
 
 let screensConfig;
-let jsyaml = require('js-yaml');
+let ConfigConverter = require('./js/config_converter');
 
 $(function () {
     readLog();
@@ -179,18 +179,19 @@ function loadScreensConfig() {
     let url = properties.get('ScreenDriver.content.url');
     $.ajax({
         url: url,
-        success: function (yaml) {
+        success: function (json) {
             try {
-                screensConfig = jsyaml.load(yaml);
+                json = JSON.parse(json);
+                screensConfig = ConfigConverter.convert(json);
             } catch (error) {
-                showError("Cannot read YAML config: " + error.message);
+                showError("Cannot read config: " + error.message);
                 throw new Error(error.message);
             }
             initVenuesSelector();
             putPreviouslySelectedDataIntoSelectors();
         },
         error: function (error) {
-            showError("Failed to load YAML config" + (!error.responseText ? '' : (':  ' + error.responseText)));
+            showError("Failed to load config" + (!error.responseText ? '' : (':  ' + error.responseText)));
             throw new Error(error.responseText);
         }
     });
