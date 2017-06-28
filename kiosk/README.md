@@ -1,5 +1,5 @@
 
-# ScreenDriver
+# ScreenDriver kiosk app
 
 To run app for development:
 
