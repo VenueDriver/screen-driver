@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angu
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
+import {VenuesService} from "../venues.service";
 
 import * as _ from 'lodash';
 
@@ -26,7 +27,7 @@ export class VenuesTreeViewComponent implements OnInit {
     originalNode: any;
     isFormValid = false;
 
-    constructor() { }
+    constructor(private venueService: VenuesService) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
@@ -198,5 +199,24 @@ export class VenuesTreeViewComponent implements OnInit {
 
     stopClickPropagation(event: any) {
         event.stopPropagation();
+    }
+
+    isInputInvalid(): boolean {
+        return !_.isEmpty(this.currentNode.name) && !this.isFormValid;
+    }
+
+    getValidationMessage(node: any): string {
+        let item: string;
+        switch (node.level) {
+            case 3:
+                item = 'Screen';
+                break;
+            case 2:
+                item = 'Screen group';
+                break;
+            default:
+                item = 'Venue';
+        }
+        return this.venueService.getValidationMessage(item);
     }
 }
