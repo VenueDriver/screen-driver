@@ -17,7 +17,9 @@
                 <div *ngIf="isCurrentNode(node)" class="edit-node-form">
 
                     <div class="inputs-container" [class.has-error]="isInputInvalid()">
-                        <div *ngIf="isInputInvalid()" class="message validation-error">{{getValidationMessage(node)}}</div>
+                        <div *ngIf="isInputInvalid()" class="message validation-error">
+                            {{getValidationMessage(node)}}
+                        </div>
                         <input type="text"
                                [(ngModel)]="currentNode.name"
                                (ngModelChange)="validateForm(node)"

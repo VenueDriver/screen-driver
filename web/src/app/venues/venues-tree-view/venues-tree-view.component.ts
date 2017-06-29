@@ -144,7 +144,7 @@ export class VenuesTreeViewComponent implements OnInit {
     validateForm(node: any) {
         let siblings = node.parent.data.children;
         node.data.name = node.data.name.trim();
-        this.isFormValid = !_.isEmpty(this.currentNode.name) && !this.hasSiblingWithTheSameName(siblings, node);
+        this.isFormValid = this.isCurrentNodeHasName() && !this.hasSiblingWithTheSameName(siblings, node);
     }
 
     hasSiblingWithTheSameName(siblings, node): boolean {
@@ -202,21 +202,23 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isInputInvalid(): boolean {
-        return !_.isEmpty(this.currentNode.name) && !this.isFormValid;
+        return this.isCurrentNodeHasName() && !this.isFormValid;
     }
 
     getValidationMessage(node: any): string {
-        let item: string;
-        switch (node.level) {
-            case 3:
-                item = 'Screen';
-                break;
-            case 2:
-                item = 'Screen group';
-                break;
-            default:
-                item = 'Venue';
-        }
+        let item = this.getNodeLevelName(node);
         return this.venueService.getValidationMessage(item);
+    }
+
+    private getNodeLevelName(node: any) {
+        switch (node.level) {
+            case 3: return 'Screen';
+            case 2: return 'Screen group';
+            default: return 'Venue';
+        }
+    }
+
+    isCurrentNodeHasName(): boolean {
+        return !_.isEmpty(this.currentNode.name)
     }
 }
