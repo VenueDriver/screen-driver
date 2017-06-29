@@ -1,0 +1,7 @@
+FROM deps-image
+
+ADD . /app-src
+WORKDIR /app-src
+
+CMD node_modules/.bin/ng build --prod --aot --no-sourcemap && \
+    cp -r dist/* /app-dist/
