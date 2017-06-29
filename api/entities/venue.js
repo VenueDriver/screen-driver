@@ -14,7 +14,7 @@ class Venue {
             this.name = venue.name;
             this.content_id = venue.content_id ? venue.content_id : null;
             this.screen_groups = this.getScreenGroups(venue);
-            this._rev = venue._rev ? venue._rev : 0;
+            this._rev = venue._rev;
             return;
         }
         this.content_id = null;
@@ -36,8 +36,10 @@ class Venue {
             Item: this,
         };
         let deferred = Q.defer();
+        this._rev = 0;
         this.generateId();
         this.validate()
+            .then(() => this.generateIdentificatorsForGroupsAndScreens())
             .then(_putInDatabase)
             .fail(errorMessage => deferred.reject(errorMessage));
 
@@ -54,14 +56,65 @@ class Venue {
         }
     }
 
+    update() {
+        let deferred = Q.defer();
+        let params = {
+            TableName: process.env.VENUES_TABLE,
+            Key: {
+                id: this.id,
+            },
+            ExpressionAttributeNames: {
+                '#venue_name': 'name',
+                '#rev': '_rev',
+            },
+            ExpressionAttributeValues: {
+                ':name': this.name,
+                ':content_id': this.content_id,
+                ':screen_groups': this.screen_groups,
+                ':rev': this._rev,
+                ':new_rev': ++this._rev,
+            },
+            UpdateExpression: 'SET #venue_name = :name, content_id = :content_id, screen_groups = :screen_groups, #rev = :new_rev',
+            ConditionExpression: "#rev = :rev",
+            ReturnValues: 'ALL_NEW',
+        };
+
+        if (!this._rev) deferred.reject('Missed revision number');
+
+        this.validate()
+            .then(this.generateIdentificatorsForGroupsAndScreens())
+            .then(Venue.hasUniqueName(this))
+            .then(_updateInDatabase(params))
+            .fail(errorMessage => deferred.reject(errorMessage));
+
+        return deferred.promise;
+
+        function _updateInDatabase(updateParameters) {
+            db.update(updateParameters, (error, result) => {
+                if (error) {
+                    deferred.reject(error.message);
+                } else {
+                    deferred.resolve(result.Attributes);
+                }
+            });
+        }
+    }
+
+    generateIdentificatorsForGroupsAndScreens() {
+        this.screen_groups.forEach(group => {
+            group.generateId();
+            group.generateIdForScreens();
+        })
+    }
+
     validate() {
         let deferred = Q.defer();
-        if (!this.name) deferred.reject('Venue can\'t be without name');
-        if (this.name == '') deferred.reject('Venue can\'t be without name');
-        if (!this._rev && this._rev !== 0) deferred.reject('Venue can\'t be without revision number');
+        if (!this.name) deferred.reject('Venue couldn\'t be without name');
+        if (this.name == '') deferred.reject('Venue couldn\'t be without name');
+        if (!this._rev && this._rev !== 0) deferred.reject('Venue couldn\'t be without revision number');
         if (!Number.isInteger(Number(this._rev)) && this._rev !== 0) deferred.reject('Venue\'s revision should be a number');
         if (this._rev < 0) deferred.reject('Venue\'s revision can\'t be < 0');
-        Venue.isUniqueName(this.name)
+        Venue.hasUniqueName(this)
             .then(() => this.validateScreenGroups())
             .then(() => deferred.resolve())
             .fail((errorMessage) => deferred.reject(errorMessage));
@@ -77,6 +130,7 @@ class Venue {
 
         this.screen_groups.forEach(group => {
             _validateScreenGroupsNamesUniqueness(this.screen_groups, group);
+            //todo fix it
             try {
                 group.validate();
             } catch (error) {
@@ -98,30 +152,44 @@ class Venue {
         }
     }
 
-    static isUniqueName(name) {
+    static hasUniqueName(venue) {
         let deferred = Q.defer();
-        this.getAllExistingNames().then(names => {
-            if (names.includes(name)) {
+        this.getExistingNames(_getExcludedVenue()).then(names => {
+            if (names.includes(venue.name)) {
                 deferred.reject('Venue with such name already exists')
             } else {
                 deferred.resolve();
             }
         });
         return deferred.promise;
+
+        function _getExcludedVenue() {
+            return venue._rev ? venue : null;
+        }
     }
 
-    static getAllExistingNames() {
+    /**
+     * @excludedVenue - function will return names of all venues, excluding this;
+     * @return {Promise} array with names;
+     */
+    static getExistingNames(excludedVenue) {
         let deferred = Q.defer();
         let params = {TableName: process.env.VENUES_TABLE};
         db.scan(params, (error, data) => {
             if (error) {
                 deferred.reject(error.message);
             } else {
-                let names = data.Items.map(venue => venue.name);
+                let names = _extractNames(data);
                 deferred.resolve(names);
             }
         });
         return deferred.promise;
+
+        function _extractNames(data) {
+            return data.Items
+                .filter(item => excludedVenue ? item.id !== excludedVenue.id : true)
+                .map((venue) => venue.name);
+        }
     }
 
     generateId() {
