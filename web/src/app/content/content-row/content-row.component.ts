@@ -1,6 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Content} from "../content";
 import {ContentService} from "../content.service";
+import {NotificationService} from "../../notifications/notification.service";
 
 @Component({
     selector: 'content-row',
@@ -11,7 +12,10 @@ export class ContentRowComponent implements OnInit {
     @Input() content: Content;
     editMode: boolean = false;
 
-    constructor(private contentService: ContentService) {
+    constructor(
+        private contentService: ContentService,
+        private notificationService: NotificationService
+    ) {
     }
 
     ngOnInit() {
@@ -28,7 +32,8 @@ export class ContentRowComponent implements OnInit {
             .updateContent(content)
             .subscribe(
                 updatedContent => this.content = updatedContent,
-                error => alert('Cannot update content. Message:' + JSON.parse(error._body).message));
+                error => this.notificationService
+                    .showErrorNotificationBar('Cannot update content. Message: ' + error.message));
     }
 
 }
