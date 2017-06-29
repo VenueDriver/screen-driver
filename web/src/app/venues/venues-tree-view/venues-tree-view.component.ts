@@ -221,4 +221,8 @@ export class VenuesTreeViewComponent implements OnInit {
     isCurrentNodeHasName(): boolean {
         return !_.isEmpty(this.currentNode.name)
     }
+
+    getNameInputPlaceholder(node: any): string {
+        return `${this.getNodeLevelName(node)} name`;
+    }
 }
