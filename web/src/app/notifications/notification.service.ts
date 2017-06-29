@@ -12,7 +12,8 @@ export class NotificationService {
         this.notificationBarService.create({
             message: message,
             type: NotificationType.Error,
-            hideDelay: NOTIFICATION_DURATION
+            hideDelay: NOTIFICATION_DURATION,
+            hideOnHover: false
         })
     }
 }
