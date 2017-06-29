@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {VenuesService} from "./venues.service";
 import {Venue} from "./entities/venue";
 import {Content} from "../content/content";
+import {NotificationService} from "../notifications/notification.service";
 
 @Component({
     selector: 'venues',
@@ -17,7 +18,10 @@ export class VenuesComponent implements OnInit {
     contentListForDropdown: any;
     isShowAddVenueForm = false;
 
-    constructor(private venuesService: VenuesService) { }
+    constructor(
+        private venuesService: VenuesService,
+        private notificationService: NotificationService
+    ) { }
 
     ngOnInit() {
         this.loadVenues();
@@ -49,7 +53,9 @@ export class VenuesComponent implements OnInit {
 
     addVenue(venue: Venue) {
         this.venuesService.saveVenue(venue)
-            .subscribe(response => this.handleResponse(response));
+            .subscribe(
+                response => this.handleResponse(response),
+                error => this.handleError('An error occurred while saving new venue'));
     }
 
     handleResponse(response: any) {
@@ -61,6 +67,12 @@ export class VenuesComponent implements OnInit {
 
     updateVenue(venueNode: any) {
         this.venuesService.updateVenue(venueNode)
-            .subscribe(response => this.loadVenues());
+            .subscribe(
+                response => this.loadVenues(),
+                error => this.handleError('An error occurred while updating configuration'));
+    }
+
+    private handleError(message: string) {
+        return this.notificationService.showErrorNotificationBar(message);
     }
 }

@@ -1,5 +1,9 @@
-<div class="add-new-venue-form-container">
+<div class="add-new-venue-form-container" [class.has-error]="isInputInvalid()">
     <div class="form-title">Add new venue</div>
+
+    <div *ngIf="isInputInvalid()" class="message validation-error">
+        {{getValidationMessage()}}
+    </div>
 
     <input id="venueName"
            type="text"

@@ -94,4 +94,8 @@ export class VenuesService {
             name: 'Default'
         }
     }
+
+    getValidationMessage(item: string) {
+        return `${item} with such name already exists`;
+    }
 }

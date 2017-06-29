@@ -1,5 +1,6 @@
 import {Component, OnInit, Output, Input, EventEmitter, Renderer2} from '@angular/core';
 import {Venue} from "../entities/venue";
+import {VenuesService} from "../venues.service";
 
 import * as _ from 'lodash';
 
@@ -19,7 +20,10 @@ export class AddVenueFormComponent implements OnInit {
     newVenue = new Venue();
     isFormValid = false;
 
-    constructor(private renderer: Renderer2) { }
+    constructor(
+        private renderer: Renderer2,
+        private venuesService: VenuesService
+    ) { }
 
     ngOnInit() {
         this.renderer.selectRootElement('#venueName').focus();
@@ -34,7 +38,7 @@ export class AddVenueFormComponent implements OnInit {
     }
 
     validateForm() {
-        this.isFormValid = !_.isEmpty(this.newVenue.name) && this.hasUniqueName();
+        this.isFormValid = this.isVenueHasName() && this.hasUniqueName();
     }
 
     hasUniqueName() {
@@ -44,5 +48,17 @@ export class AddVenueFormComponent implements OnInit {
     setVenueContent(content) {
         this.newVenue.content = content;
         this.newVenue.content_id = content.id;
+    }
+
+    isInputInvalid(): boolean {
+        return this.isVenueHasName() && !this.isFormValid;
+    }
+
+    getValidationMessage(): string {
+        return this.venuesService.getValidationMessage('Venue');
+    }
+
+    isVenueHasName() {
+        return !_.isEmpty(this.newVenue.name);
     }
 }

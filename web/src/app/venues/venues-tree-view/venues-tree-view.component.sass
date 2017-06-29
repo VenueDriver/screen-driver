@@ -7,7 +7,7 @@
 .single-node
   display: flex
   align-items: center
-  height: 85px
+  height: 95px
   width: 100%
 
   &.node-without-children
@@ -39,6 +39,9 @@
 
   .node-info
 
+    .node-level-name
+      font-weight: bold
+
     .node-name
       font-size: 18px
       margin-bottom: 15px
@@ -65,6 +68,9 @@
     .inputs-container
       margin-top: -40px
       width: 400px
+
+      .validation-error
+        margin-top: -16px
 
       .dropdown-container
         position: absolute
