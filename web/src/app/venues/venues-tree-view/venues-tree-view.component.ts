@@ -225,4 +225,9 @@ export class VenuesTreeViewComponent implements OnInit {
     getNameInputPlaceholder(node: any): string {
         return `${this.getNodeLevelName(node)} name`;
     }
+
+    getAddButtonTitle(node: any): string {
+        let title = 'Add new screen';
+        return node.level > 1 ? title : `${title} group`;
+    }
 }
