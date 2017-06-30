@@ -21,14 +21,16 @@ echo "Installing dependencies ..."
 echo
 
 docker build -f docker/Dockerfile.deps -t screendriver-web-app-deps-image .
-docker run --rm screendriver-web-app-deps-image
+docker run --name screendriver-web-app-deps-container screendriver-web-app-deps-image
+docker commit screendriver-web-app-deps-container screendriver-web-app-deps-image
+docker rm -v screendriver-web-app-deps-container
 
 echo
 echo "Building project with API_HOST=$host_api_url ..."
 echo
 
 docker build -f docker/Dockerfile.build -t screendriver-web-app-build-image .
-docker run --rm -v "$output_dir_name:/app-dist" -e API_HOST=$host_api_url screendriver-web-app-build-image
-
-echo
-echo "Project was built successfully. Dist located in $output_dir_name"
+if docker run --rm -v "$output_dir_name:/app-dist" -e API_HOST=$host_api_url screendriver-web-app-build-image; then
+  echo
+  echo "Project was built successfully. Dist located in $output_dir_name"
+fi
