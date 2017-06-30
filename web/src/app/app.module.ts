@@ -9,6 +9,8 @@ import {AlertModule} from "ngx-bootstrap";
 import {ContentListModule} from "./content/content-list.module";
 import {VenuesModule} from "./venues/venues.module";
 import {HeaderComponent} from "./header/header.component";
+import {NotificationBarModule, NotificationBarService} from "angular2-notification-bar";
+import {NotificationService} from "./notifications/notification.service";
 
 @NgModule({
     declarations: [
@@ -20,9 +22,13 @@ import {HeaderComponent} from "./header/header.component";
         routing,
         AlertModule.forRoot(),
         ContentListModule,
-        VenuesModule
+        VenuesModule,
+        NotificationBarModule
     ],
-    providers: [],
+    providers: [
+        NotificationBarService,
+        NotificationService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

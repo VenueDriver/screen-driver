@@ -3,7 +3,9 @@
         <ng-template class="node-template" #treeNodeTemplate let-node let-index="index">
             <div class="single-node" [ngClass]="{'node-without-children': node.level < 3 && !hasChildren(node)}">
                 <div *ngIf="!isCurrentNode(node)" class="node-info">
-                    <div class="node-name">{{ node.data.name }}</div>
+                    <div class="node-name">
+                        <span class="node-level-name">{{getNodeLevelName(node)}}</span>: {{node.data.name}}
+                    </div>
 
                     <div *ngIf="hasContentInfo(node); else contentPlaceholder" class="content-info">
                         <span class="content-short-name">{{ getContentShortName(node) }}</span>
@@ -16,8 +18,12 @@
 
                 <div *ngIf="isCurrentNode(node)" class="edit-node-form">
 
-                    <div class="inputs-container">
+                    <div class="inputs-container" [class.has-error]="isInputInvalid()">
+                        <div *ngIf="isInputInvalid()" class="message validation-error">
+                            {{getValidationMessage(node)}}
+                        </div>
                         <input type="text"
+                               [placeholder]="getNameInputPlaceholder(node)"
                                [(ngModel)]="currentNode.name"
                                (ngModelChange)="validateForm(node)"
                                class="form-control node-name">
@@ -55,7 +61,8 @@
 
                     <div *ngIf="isAllowToAddChild(node)"
                          class="node-button plus-button"
-                         (click)="addNewNode($event, node)">
+                         (click)="addNewNode($event, node)"
+                         [title]="getAddButtonTitle(node)">
                     </div>
                 </div>
             </div>

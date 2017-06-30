@@ -1,0 +1,7 @@
+FROM node:6.10
+
+CMD cd ..
+ADD package.json /app-src/
+WORKDIR /app-src
+
+CMD npm install
