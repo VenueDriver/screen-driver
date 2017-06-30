@@ -77,6 +77,22 @@ describe('create_venue', () => {
         });
     });
 
+    it('Create screen group with conent id', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{"name": "Touch", "content_id": "710b962e-041c-11e1-9234-0123456789ab"}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            expect(response.statusCode).to.equal(200);
+            expect(response.body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
+            expect(response.body.screen_groups[0]).to.have.property("content_id").that.is.equal('710b962e-041c-11e1-9234-0123456789ab');
+        });
+    });
+
 
     it('Create venue with existing name', () => {
         let venue = {name: "Hakkasan"};
