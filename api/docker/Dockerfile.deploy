@@ -3,4 +3,4 @@ FROM screendriver-serverless-deps-image
 ADD . /app-src
 WORKDIR /app-src
 
-CMD serverless deploy
+CMD serverless deploy --verbose --region $REGION --stage $STAGE
