@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Content} from "./content";
 import {ContentService} from "./content.service";
+import {NotificationService} from "../notifications/notification.service";
 
 import * as _ from 'lodash';
 
@@ -13,7 +14,9 @@ export class ContentListComponent implements OnInit {
     content: Array<Content> = [];
     isAddModeEnabled: boolean = false;
 
-    constructor(private contentService: ContentService) {
+    constructor(
+        private contentService: ContentService,
+        private notificationService: NotificationService) {
     }
 
     ngOnInit() {
@@ -41,7 +44,8 @@ export class ContentListComponent implements OnInit {
                     this.content.push(new Content(newContent));
                     this.sortContent();
                 },
-                error => alert('Cannot create content. Message:' + JSON.parse(error._body).message));
+                error => this.notificationService
+                    .showErrorNotificationBar('Cannot create content. Message: ' + error.message));
     }
 
     sortContent() {

@@ -1,28 +1,19 @@
 # ScreenDriver web app
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.1.2.
-
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Perform `npm start` to run app locally. Navigate to `http://localhost:4200/`.
+Perform `npm run prod` to run app in prod mode.
 
-## Code scaffolding
+## Build project
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
+##### Using Docker:
 
-## Build
+1. `docker build -f docker/Dockerfile.deps -t deps-image .`
+1. `docker run --rm dist-image`
+1. `docker build -f docker/Dockerfile.build -t build-image`
+1. `docker run --rm -v "<output directory>:/app-dist" -e API_HOST=<URL to API> build-image`
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+##### Using NPM
+Or run `npm run build`. If do it by this way do not forget to specify `API_HOST` in `src/environments/environment.prod.ts` file.  
+The build artifacts will be stored in the `dist/` directory.

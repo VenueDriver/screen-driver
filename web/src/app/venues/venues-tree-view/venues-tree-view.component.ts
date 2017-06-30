@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angu
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
+import {VenuesService} from "../venues.service";
 
 import * as _ from 'lodash';
 
@@ -26,7 +27,7 @@ export class VenuesTreeViewComponent implements OnInit {
     originalNode: any;
     isFormValid = false;
 
-    constructor() { }
+    constructor(private venueService: VenuesService) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
@@ -143,7 +144,7 @@ export class VenuesTreeViewComponent implements OnInit {
     validateForm(node: any) {
         let siblings = node.parent.data.children;
         node.data.name = node.data.name.trim();
-        this.isFormValid = !_.isEmpty(this.currentNode.name) && !this.hasSiblingWithTheSameName(siblings, node);
+        this.isFormValid = this.isCurrentNodeHasName() && !this.hasSiblingWithTheSameName(siblings, node);
     }
 
     hasSiblingWithTheSameName(siblings, node): boolean {
@@ -198,5 +199,35 @@ export class VenuesTreeViewComponent implements OnInit {
 
     stopClickPropagation(event: any) {
         event.stopPropagation();
+    }
+
+    isInputInvalid(): boolean {
+        return this.isCurrentNodeHasName() && !this.isFormValid;
+    }
+
+    getValidationMessage(node: any): string {
+        let item = this.getNodeLevelName(node);
+        return this.venueService.getValidationMessage(item);
+    }
+
+    private getNodeLevelName(node: any) {
+        switch (node.level) {
+            case 3: return 'Screen';
+            case 2: return 'Screen group';
+            default: return 'Venue';
+        }
+    }
+
+    isCurrentNodeHasName(): boolean {
+        return !_.isEmpty(this.currentNode.name)
+    }
+
+    getNameInputPlaceholder(node: any): string {
+        return `${this.getNodeLevelName(node)} name`;
+    }
+
+    getAddButtonTitle(node: any): string {
+        let title = 'Add new screen';
+        return node.level > 1 ? title : `${title} group`;
     }
 }
