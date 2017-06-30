@@ -54,6 +54,29 @@ describe('create_venue', () => {
         });
     });
 
+    it('Create venue with screen groups', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{"name": "Touch"}, {"name": "Deli"}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            expect(response.statusCode).to.equal(200);
+            expect(response.body).to.have.property("id").with.lengthOf(36);
+            expect(response.body).to.have.property("screen_groups").that.is.an('array');
+            expect(response.body).to.have.property("screen_groups").with.lengthOf(2);
+
+            expect(response.body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
+            expect(response.body.screen_groups[0]).to.have.property("id").with.lengthOf(36);
+
+            expect(response.body.screen_groups[1]).to.have.property("name").that.is.equal('Deli');
+            expect(response.body.screen_groups[1]).to.have.property("id").with.lengthOf(36);
+        });
+    });
+
 
     it('Create venue with existing name', () => {
         let venue = {name: "Hakkasan"};
