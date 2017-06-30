@@ -22,9 +22,7 @@ describe('create_venue', () => {
     });
 
     it('Create venue with name', () => {
-        let venue = {
-            name: "Hakkasan"
-        };
+        let venue = {name: "Hakkasan"};
         let params = {};
         params.body = JSON.stringify(venue);
 
@@ -58,19 +56,17 @@ describe('create_venue', () => {
 
 
     it('Create venue with existing name', () => {
-        let venue = {
-            name: "Hakkasan"
-        };
+        let venue = {name: "Hakkasan"};
         let params = {};
         params.body = JSON.stringify(venue);
 
-        wrapped.run(params).then(response => {
-            expect(response.statusCode).to.equal(200);
-    });
         return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
-            expect(response.statusCode).to.equal(500);
-            expect(response.body).to.have.property("message").that.equal("Venue with such name already exists");
+            expect(response.statusCode).to.equal(200);
+            wrapped.run(params).then(response => {
+                response.body = JSON.parse(response.body);
+                expect(response.statusCode).to.equal(500);
+                expect(response.body).to.have.property("message").that.equal("Venue with such name already exists");
+            });
         });
     });
 });
