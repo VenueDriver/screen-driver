@@ -123,7 +123,7 @@ class Venue {
 
     validateScreenGroups() {
         let deferred = Q.defer();
-        if (!this.screen_groups || this.screen_groups.size == 0) {
+        if (!this.screen_groups || this.screen_groups.length == 0) {
             deferred.resolve();
             return deferred.promise;
         }
