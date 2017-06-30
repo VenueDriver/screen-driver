@@ -1,0 +1,6 @@
+.idea
+.gitignore
+
+docker
+node_modules
+.serverless
