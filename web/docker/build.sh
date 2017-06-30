@@ -1,27 +1,34 @@
 #!/bin/sh -x
 
+output_dir_name="$1"
+host_api_url="$2"
+
 cd ..
 
-if test -z "$1"; then
+if test -z "$output_dir_name"; then
   echo "Specify path to dist"
   exit 1
 fi
 
-if echo "$2" | grep -q "http"; then
+if echo "$host_api_url" | grep -q "http"; then
   :
 else
   echo "Specify correct URL to API host"
   exit 1
 fi
 
-echo "Build project with API_HOST=$2"
+echo "Installing dependencies ..."
+echo
 
-#install dependencies
-docker build -f docker/Dockerfile.deps -t deps-image .
-docker run --rm deps-image
+docker build -f docker/Dockerfile.deps -t screendriver-web-app-deps-image .
+docker run --rm screendriver-web-app-deps-image
 
-#build dist
-docker build -f docker/Dockerfile.build -t build-image
-docker run --rm -v "$1:/app-dist" -e API_HOST=$2 build-image
+echo
+echo "Building project with API_HOST=$host_api_url ..."
+echo
 
-echo "Project dist located in $1"
+docker build -f docker/Dockerfile.build -t screendriver-web-app-build-image .
+docker run --rm -v "$output_dir_name:/app-dist" -e API_HOST=$host_api_url screendriver-web-app-build-image
+
+echo
+echo "Project was built successfully. Dist located in $output_dir_name"
