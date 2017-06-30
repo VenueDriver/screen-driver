@@ -5,4 +5,4 @@ ADD package.json /app-src/
 ADD package-lock.json /app-src/
 WORKDIR /app-src
 
-CMD npm install
+CMD npm install -g serverless && npm install
