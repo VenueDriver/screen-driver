@@ -20,7 +20,6 @@ export class VenuesTreeViewComponent implements OnInit {
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
-    contentUrlPlaceholder = 'Default URL';
     options: any;
     actionMapping: any;
     currentNodeData: any;
@@ -197,5 +196,14 @@ export class VenuesTreeViewComponent implements OnInit {
 
     getNodeLevelName(node: any): string {
         return this.treeViewService.getNodeLevelName(node.level);
+    }
+
+    getPlaceholderForDefaultUrl(node: any): string {
+        if (node.level == 1) {
+            return 'Content URL is not specified';
+        }
+        let parentNodeLevelName = this.treeViewService.getNodeLevelName(node.level - 1);
+        parentNodeLevelName = parentNodeLevelName.toLowerCase();
+        return `Content URL inherited from ${parentNodeLevelName}`;
     }
 }
