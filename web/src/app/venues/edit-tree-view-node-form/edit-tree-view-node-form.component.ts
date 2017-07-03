@@ -1,4 +1,4 @@
-import {Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
+import {Component, OnInit, EventEmitter, Input, Output, Renderer2} from '@angular/core';
 import {VenuesService} from "../venues.service";
 
 import * as _ from 'lodash';
@@ -25,11 +25,14 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     contentUrlPlaceholder = 'Default URL';
 
     constructor(
+        private renderer: Renderer2,
         private venueService: VenuesService,
         private treeViewService: VenuesTreeViewService
     ) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.renderer.selectRootElement('#nodeName').focus();
+    }
 
     setUpComponentModel(node: any) {
         if (node) {

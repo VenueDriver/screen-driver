@@ -4,7 +4,8 @@
         <div *ngIf="isInputInvalid()" class="message validation-error">
             {{getValidationMessage()}}
         </div>
-        <input type="text"
+        <input id="nodeName"
+               type="text"
                [placeholder]="getNameInputPlaceholder()"
                [(ngModel)]="nodeData.name"
                (ngModelChange)="validateForm()"
