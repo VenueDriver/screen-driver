@@ -199,33 +199,11 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     getPlaceholderForDefaultUrl(node: any): string {
-        if (node.level == 1) {
-            return 'Content URL is not specified';
-        }
-        let parentNodeLevelName = this.treeViewService.getNodeLevelName(node.level - 1);
-        parentNodeLevelName = parentNodeLevelName.toLowerCase();
-        return `Content URL inherited from ${parentNodeLevelName}`;
+        return this.treeViewService.getPlaceholderForDefaultUrl(node.level);
     }
 
     getContentListForDropdown(node: any): Array<any> {
-        let defaultValue = this.createDefaultValue(node);
+        let defaultValue = this.treeViewService.createDefaultValue(node.level);
         return [defaultValue, ...this.content];
-    }
-
-    createDefaultValue(node: any): any {
-        let defaultName = this.getDefaultValueForContentDropdown(node);
-        return {
-            id: '',
-            name: defaultName
-        }
-    }
-
-    getDefaultValueForContentDropdown(node: any) {
-        if (node.level == 1) {
-            return 'Is not specified';
-        }
-        let parentNodeLevelName = this.treeViewService.getNodeLevelName(node.level - 1);
-        parentNodeLevelName = parentNodeLevelName.toLowerCase();
-        return `Inherit from ${parentNodeLevelName}`;
     }
 }
