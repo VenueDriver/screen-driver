@@ -7,7 +7,7 @@ import {VenuesTreeViewComponent} from "./venues-tree-view/venues-tree-view.compo
 import {AddVenueFormComponent} from "./add-venue-form/add-venue-form.component";
 import {DropdownModule} from "../dropdown/dropdown.module";
 import {ContentService} from "../content/content.service";
-import {EditVenueFormComponent} from "./edit-venue-form/edit-venue-form.component";
+import {EditTreeViewNodeFormComponent} from "./edit-tree-view-node-form/edit-tree-view-node-form.component";
 
 @NgModule({
     imports: [
@@ -22,7 +22,7 @@ import {EditVenueFormComponent} from "./edit-venue-form/edit-venue-form.componen
     declarations: [
         VenuesComponent,
         VenuesTreeViewComponent,
-        EditVenueFormComponent,
+        EditTreeViewNodeFormComponent,
         AddVenueFormComponent,
     ],
     providers: [

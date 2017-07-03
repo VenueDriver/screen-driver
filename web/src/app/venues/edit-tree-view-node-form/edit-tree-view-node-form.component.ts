@@ -4,10 +4,10 @@ import {VenuesService} from "../venues.service";
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'edit-venue-form',
-    templateUrl: 'edit-venue-form.component.html'
+    selector: 'edit-tree-view-node-form',
+    templateUrl: 'edit-tree-view-node-form.component.html'
 })
-export class EditVenueFormComponent implements OnInit {
+export class EditTreeViewNodeFormComponent implements OnInit {
 
     @Input() venues: Array<any>;
     @Input() content: Array<any>;

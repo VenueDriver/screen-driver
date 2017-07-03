@@ -17,13 +17,13 @@
                 </div>
 
                 <div *ngIf="isCurrentNode(node)">
-                    <edit-venue-form
+                    <edit-tree-view-node-form
                             [venues]="venues"
                             [content]="content"
                             [currentNode]="node"
                             (submit)="performSubmit($event)"
                             (cancel)="performCancel($event)">
-                    </edit-venue-form>
+                    </edit-tree-view-node-form>
                 </div>
 
                 <div class="buttons-container">
