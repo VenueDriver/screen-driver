@@ -15,9 +15,13 @@ export class VenuesTreeViewService {
 
     createDefaultValue(node: any): any {
         let defaultName = this.getDefaultValueForContentDropdown(node);
+        return this.generateDefaultValueForDropdown(defaultName);
+    }
+
+    generateDefaultValueForDropdown(valueForName: string): any {
         return {
             id: '',
-            name: defaultName
+            name: valueForName
         }
     }
 
