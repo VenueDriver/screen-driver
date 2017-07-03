@@ -178,7 +178,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     hasChildren(node: any): boolean {
-        return node.children && node.children.length > 0;
+        return node.level < 3 && node.children && node.children.length > 0;
     }
 
     stopClickPropagation(event: any) {
