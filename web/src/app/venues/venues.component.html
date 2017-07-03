@@ -8,14 +8,17 @@
             <div *ngIf="!isShowAddVenueForm" class="plus-button add-button" (click)="showAddVenueForm()"></div>
         </div>
 
-        <div class="form-container" *ngIf="isShowAddVenueForm">
-            <edit-tree-view-node-form
-                    [venues]="venues"
-                    [content]="contentListForDropdown"
-                    [currentNode]="node"
-                    (submit)="addVenue($event)"
-                    (cancel)="hideAddVenueForm()">
-            </edit-tree-view-node-form>
+        <div *ngIf="isShowAddVenueForm" class="add-venue-form">
+            <div class="form-title">Add new venue</div>
+            <div class="form-container">
+                <edit-tree-view-node-form
+                        [venues]="venues"
+                        [content]="contentListForDropdown"
+                        [currentNode]="node"
+                        (submit)="addVenue($event)"
+                        (cancel)="hideAddVenueForm()">
+                </edit-tree-view-node-form>
+            </div>
         </div>
 
         <venues-tree-view

@@ -6,7 +6,8 @@ import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.servic
 
 @Component({
     selector: 'edit-tree-view-node-form',
-    templateUrl: 'edit-tree-view-node-form.component.html'
+    templateUrl: 'edit-tree-view-node-form.component.html',
+    styleUrls: ['edit-tree-view-node-form.component.sass']
 })
 export class EditTreeViewNodeFormComponent implements OnInit {
 

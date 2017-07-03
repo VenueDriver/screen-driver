@@ -16,7 +16,7 @@
                     </ng-template>
                 </div>
 
-                <div *ngIf="isCurrentNode(node)">
+                <div *ngIf="isCurrentNode(node)" class="edit-node-form">
                     <edit-tree-view-node-form
                             [venues]="venues"
                             [content]="content"
