@@ -3,6 +3,7 @@ import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesService} from "../venues.service";
+import {VenuesTreeViewService} from "./venues-tree-view.service";
 
 import * as _ from 'lodash';
 
@@ -27,7 +28,10 @@ export class VenuesTreeViewComponent implements OnInit {
     originalNodeData: any;
     isFormValid = false;
 
-    constructor(private venueService: VenuesService) { }
+    constructor(
+        private venueService: VenuesService,
+        private treeViewService: VenuesTreeViewService
+    ) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
@@ -209,14 +213,6 @@ export class VenuesTreeViewComponent implements OnInit {
         return this.venueService.getValidationMessage(item);
     }
 
-    private getNodeLevelName(node: any) {
-        switch (node.level) {
-            case 3: return 'Screen';
-            case 2: return 'Screen group';
-            default: return 'Venue';
-        }
-    }
-
     isCurrentNodeHasName(): boolean {
         return !_.isEmpty(this.currentNodeData.name)
     }
@@ -224,5 +220,9 @@ export class VenuesTreeViewComponent implements OnInit {
     getAddButtonTitle(node: any): string {
         let title = 'Add new screen';
         return node.level > 1 ? title : `${title} group`;
+    }
+
+    getNodeLevelName(node: any): string {
+        return this.treeViewService.getNodeLevelName(node.level);
     }
 }

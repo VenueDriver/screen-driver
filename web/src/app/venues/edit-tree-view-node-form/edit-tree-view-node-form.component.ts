@@ -2,6 +2,7 @@ import {Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
 import {VenuesService} from "../venues.service";
 
 import * as _ from 'lodash';
+import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 
 @Component({
     selector: 'edit-tree-view-node-form',
@@ -25,7 +26,10 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     isFormValid;
     contentUrlPlaceholder = 'Default URL';
 
-    constructor(private venueService: VenuesService) { }
+    constructor(
+        private venueService: VenuesService,
+        private treeViewService: VenuesTreeViewService
+    ) { }
 
     ngOnInit() { }
 
@@ -38,20 +42,13 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     }
 
     getValidationMessage(): string {
-        let item = this.getNodeLevelName(this.node);
+        let item = this.treeViewService.getNodeLevelName(this.node.level);
         return this.venueService.getValidationMessage(item);
     }
 
     getNameInputPlaceholder(): string {
-        return `${this.getNodeLevelName(this.node)} name`;
-    }
-
-    private getNodeLevelName(node: any) {
-        switch (node.level) {
-            case 3: return 'Screen';
-            case 2: return 'Screen group';
-            default: return 'Venue';
-        }
+        let nodeLevelName = this.treeViewService.getNodeLevelName(this.node.level);
+        return `${nodeLevelName} name`;
     }
 
     validateForm() {

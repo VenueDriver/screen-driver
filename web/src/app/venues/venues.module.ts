@@ -8,6 +8,7 @@ import {AddVenueFormComponent} from "./add-venue-form/add-venue-form.component";
 import {DropdownModule} from "../dropdown/dropdown.module";
 import {ContentService} from "../content/content.service";
 import {EditTreeViewNodeFormComponent} from "./edit-tree-view-node-form/edit-tree-view-node-form.component";
+import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
 
 @NgModule({
     imports: [
@@ -26,7 +27,8 @@ import {EditTreeViewNodeFormComponent} from "./edit-tree-view-node-form/edit-tre
         AddVenueFormComponent,
     ],
     providers: [
-        ContentService
+        ContentService,
+        VenuesTreeViewService
     ]
 })
 export class VenuesModule {
