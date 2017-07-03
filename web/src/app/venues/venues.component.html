@@ -5,7 +5,11 @@
             <div class="page-title">
                 Venues
             </div>
-            <div *ngIf="!isShowAddVenueForm" class="plus-button add-button" (click)="showAddVenueForm()"></div>
+            <div *ngIf="!isShowAddVenueForm"
+                 class="plus-button add-button"
+                 (click)="showAddVenueForm()"
+                 title="Add new venue">
+            </div>
         </div>
 
         <div *ngIf="isShowAddVenueForm" class="add-venue-form">
