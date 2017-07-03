@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angu
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
-import {VenuesService} from "../venues.service";
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 
 import * as _ from 'lodash';
@@ -28,10 +27,7 @@ export class VenuesTreeViewComponent implements OnInit {
     originalNodeData: any;
     isFormValid = false;
 
-    constructor(
-        private venueService: VenuesService,
-        private treeViewService: VenuesTreeViewService
-    ) { }
+    constructor(private treeViewService: VenuesTreeViewService) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
@@ -175,25 +171,11 @@ export class VenuesTreeViewComponent implements OnInit {
         }
     }
 
-    setNodeContent(content) {
-        if (!_.isEmpty(content.id)) {
-            this.currentNodeData.content = content;
-            this.currentNodeData.content_id = content.id;
-        } else {
-            this.currentNodeData.content = null;
-            this.currentNodeData.content_id = null;
-        }
-    }
-
     editNode(event: any, node: any) {
         this.stopClickPropagation(event);
         this.currentNodeData = node.data;
         this.originalNodeData = _.clone(node.data);
         this.updateTreeViewOptions();
-    }
-
-    getDropdownValue(): string {
-        return this.currentNodeData.content ? this.currentNodeData.content.short_name : this.contentUrlPlaceholder;
     }
 
     hasChildren(node: any): boolean {
@@ -202,15 +184,6 @@ export class VenuesTreeViewComponent implements OnInit {
 
     stopClickPropagation(event: any) {
         event.stopPropagation();
-    }
-
-    isInputInvalid(): boolean {
-        return this.isCurrentNodeHasName() && !this.isFormValid;
-    }
-
-    getValidationMessage(node: any): string {
-        let item = this.getNodeLevelName(node);
-        return this.venueService.getValidationMessage(item);
     }
 
     isCurrentNodeHasName(): boolean {
