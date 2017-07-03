@@ -13,7 +13,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     @Input() venues: Array<any>;
     @Input() content: Array<any>;
-    @Input('currentNode') set currentNode(currentNode: any) {
+    @Input('currentNode') set componentModel(currentNode: any) {
         this.setUpComponentModel(currentNode);
     };
 
@@ -24,7 +24,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     node: any;
     nodeData: any;
-    isFormValid;
+    isFormValid: boolean;
 
     constructor(
         private renderer: Renderer2,
@@ -37,15 +37,12 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     }
 
     setUpComponentModel(node: any) {
+        this.isFormValid = false;
+        this.nodeData = {name: ''};
         if (node) {
             this.node = node;
             this.nodeData = node.data;
             this.isFormValid = !!this.nodeData.name;
-        } else {
-            this.isFormValid = false;
-            this.nodeData = {
-                name: ''
-            }
         }
     }
 
@@ -73,19 +70,22 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     validateForm() {
         this.nodeData.name = this.nodeData.name.trim();
+        this.isFormValid = this.isNodeHasName() && this.isNodeNameUnique();
+    }
+
+    isNodeNameUnique(): boolean {
         if (this.hasParentNode()) {
             let siblings = this.node.parent.data.children;
-            this.isFormValid = this.isNodeHasName() && !this.hasSiblingWithTheSameName(siblings);
-        } else {
-            this.isFormValid = this.isNodeHasName() && this.isNodeNameUnique();
+            return !this.hasSiblingWithTheSameName(siblings);
         }
+        return this.isVenueNameUnique();
     }
 
     hasParentNode(): boolean {
         return this.node && this.node.parent;
     }
 
-    isNodeNameUnique() {
+    isVenueNameUnique() {
         return !_.includes(_.map(this.venues, venue => venue.name), this.nodeData.name);
     }
 
@@ -105,9 +105,13 @@ export class EditTreeViewNodeFormComponent implements OnInit {
             this.nodeData.content = content;
             this.nodeData.content_id = content.id;
         } else {
-            this.nodeData.content = null;
-            this.nodeData.content_id = null;
+            this.clearNodeContent();
         }
+    }
+
+    private clearNodeContent() {
+        this.nodeData.content = null;
+        this.nodeData.content_id = null;
     }
 
     performCancel(event: any) {
