@@ -13,9 +13,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     @Input() venues: Array<any>;
     @Input() content: Array<any>;
     @Input('currentNode') set currentNode(currentNode: any) {
-        this.node = currentNode;
-        this.nodeData = currentNode.data;
-        this.isFormValid = !!this.nodeData.name;
+        this.setUpComponentModel(currentNode);
     };
 
     @Output() submit = new EventEmitter();
@@ -33,28 +31,57 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     ngOnInit() { }
 
-    isInputInvalid(): boolean {
-        return this.isCurrentNodeHasName() && !this.isFormValid;
+    setUpComponentModel(node: any) {
+        if (node) {
+            this.node = node;
+            this.nodeData = node.data;
+            this.isFormValid = !!this.nodeData.name;
+        } else {
+            this.isFormValid = false;
+            this.nodeData = {
+                name: ''
+            }
+        }
     }
 
-    isCurrentNodeHasName(): boolean {
-        return !_.isEmpty(this.nodeData.name)
+    isInputInvalid(): boolean {
+        return this.isNodeHasName() && !this.isFormValid;
+    }
+
+    isNodeHasName(): boolean {
+        return !_.isEmpty(this.nodeData.name);
     }
 
     getValidationMessage(): string {
-        let item = this.treeViewService.getNodeLevelName(this.node.level);
-        return this.venueService.getValidationMessage(item);
+        let nodeLevelName = this.getNodeLevelName();
+        return this.venueService.getValidationMessage(nodeLevelName);
     }
 
     getNameInputPlaceholder(): string {
-        let nodeLevelName = this.treeViewService.getNodeLevelName(this.node.level);
+        let nodeLevelName = this.getNodeLevelName();
         return `${nodeLevelName} name`;
     }
 
+    getNodeLevelName(): string {
+        return this.node ? this.treeViewService.getNodeLevelName(this.node.level) : 'Venue';
+    }
+
     validateForm() {
-        let siblings = this.node.parent.data.children;
         this.nodeData.name = this.nodeData.name.trim();
-        this.isFormValid = this.isCurrentNodeHasName() && !this.hasSiblingWithTheSameName(siblings);
+        if (this.hasParentNode()) {
+            let siblings = this.node.parent.data.children;
+            this.isFormValid = this.isNodeHasName() && !this.hasSiblingWithTheSameName(siblings);
+        } else {
+            this.isFormValid = this.isNodeHasName() && this.isNodeNameUnique();
+        }
+    }
+
+    hasParentNode(): boolean {
+        return this.node && this.node.parent;
+    }
+
+    isNodeNameUnique() {
+        return !_.includes(_.map(this.venues, venue => venue.name), this.nodeData.name);
     }
 
     hasSiblingWithTheSameName(siblings): boolean {
@@ -85,7 +112,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     performSubmit(event: any) {
         this.stopClickPropagation(event);
-        this.submit.emit(this.node);
+        this.submit.emit(this.node ? this.node : this.nodeData);
     }
 
     stopClickPropagation(event: any) {

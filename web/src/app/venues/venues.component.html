@@ -9,12 +9,13 @@
         </div>
 
         <div class="form-container" *ngIf="isShowAddVenueForm">
-            <add-venue-form
+            <edit-tree-view-node-form
                     [venues]="venues"
                     [content]="contentListForDropdown"
-                    (cancel)="hideAddVenueForm()"
-                    (submit)="addVenue($event)">
-            </add-venue-form>
+                    [currentNode]="node"
+                    (submit)="addVenue($event)"
+                    (cancel)="hideAddVenueForm()">
+            </edit-tree-view-node-form>
         </div>
 
         <venues-tree-view
