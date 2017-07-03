@@ -194,6 +194,11 @@ export class VenuesTreeViewComponent implements OnInit {
         return node.level > 1 ? title : `${title} group`;
     }
 
+    getEditButtonTitle(node: any): string {
+        let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
+        return `Edit ${nodeLevelName.toLowerCase()}`;
+    }
+
     getNodeLevelName(node: any): string {
         return this.treeViewService.getNodeLevelName(node.level);
     }

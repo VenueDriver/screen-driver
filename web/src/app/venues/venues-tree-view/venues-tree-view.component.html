@@ -30,7 +30,8 @@
                 <div class="buttons-container">
                     <div *ngIf="isAllowToEditNode()"
                          class="node-button edit-button"
-                         (click)="editNode($event, node); validateForm(node)">
+                         (click)="editNode($event, node); validateForm(node)"
+                         [title]="getEditButtonTitle(node)">
                     </div>
 
                     <div *ngIf="isAllowToAddChild(node)"
