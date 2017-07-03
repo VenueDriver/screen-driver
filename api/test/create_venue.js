@@ -10,7 +10,10 @@ const mochaPlugin = require('serverless-mocha-plugin');
 
 const lambdaWrapper = mochaPlugin.lambdaWrapper;
 const expect = mochaPlugin.chai.expect;
+const assert = mochaPlugin.chai.assert;
 const wrapped = lambdaWrapper.wrap(lambda, {handler: 'create'});
+
+const idLength = 36;
 
 describe('create_venue', () => {
     before((done) => {
@@ -29,11 +32,25 @@ describe('create_venue', () => {
         return wrapped.run(params).then(response => {
             response.body = JSON.parse(response.body);
             expect(response.statusCode).to.equal(200);
-            expect(response.body).to.have.property("id").with.lengthOf(36);
             expect(response.body).to.have.property("name").that.equal("Hakkasan");
             expect(response.body).to.have.property("content_id").to.be.null;
             expect(response.body).to.have.property("screen_groups").to.be.an('array').that.is.empty;
             expect(response.body).to.have.property("_rev").that.equal(0);
+        });
+    });
+
+    it('Create venue and id will generate automatically and revision number equal to 0', () => {
+        let venue = {
+            name: "Hakkasan",
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            expect(response.statusCode).to.equal(200);
+            assert(response.body.id.length == idLength);
+            assert(response.body._rev == 0);
         });
     });
 
@@ -48,16 +65,31 @@ describe('create_venue', () => {
         return wrapped.run(params).then(response => {
             response.body = JSON.parse(response.body);
             expect(response.statusCode).to.equal(200);
-            expect(response.body).to.have.property("id").with.lengthOf(36);
-            expect(response.body).to.have.property("content_id").with.lengthOf(36);
+            expect(response.body).to.have.property("content_id").with.lengthOf(idLength);
             expect(response.body).to.have.property("content_id").that.equal("710b962e-041c-11e1-9234-0123456789ab");
         });
     });
 
-    it('Create venue with screen groups', () => {
+    it('Create screen group and id will generate automatically', () => {
         let venue = {
             name: "Hakkasan",
-            screen_groups: [{"name": "Touch"}, {"name": "Deli"}]
+            screen_groups: [{name: "Touch"}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 200 );
+            assert(typeof response.body.screen_groups[0].id === 'string');
+            assert(response.body.screen_groups[0].id.length == idLength);
+        });
+    });
+
+    it('Create venue with screen groups with names', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: "Touch"}, {name: "Deli"}]
         };
         let params = {};
         params.body = JSON.stringify(venue);
@@ -65,22 +97,21 @@ describe('create_venue', () => {
         return wrapped.run(params).then(response => {
             response.body = JSON.parse(response.body);
             expect(response.statusCode).to.equal(200);
-            expect(response.body).to.have.property("id").with.lengthOf(36);
             expect(response.body).to.have.property("screen_groups").that.is.an('array');
             expect(response.body).to.have.property("screen_groups").with.lengthOf(2);
 
             expect(response.body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
-            expect(response.body.screen_groups[0]).to.have.property("id").with.lengthOf(36);
+            expect(response.body.screen_groups[0]).to.have.property("id").with.lengthOf(idLength);
 
             expect(response.body.screen_groups[1]).to.have.property("name").that.is.equal('Deli');
-            expect(response.body.screen_groups[1]).to.have.property("id").with.lengthOf(36);
+            expect(response.body.screen_groups[1]).to.have.property("id").with.lengthOf(idLength);
         });
     });
 
     it('Create screen group with conent id', () => {
         let venue = {
             name: "Hakkasan",
-            screen_groups: [{"name": "Touch", "content_id": "710b962e-041c-11e1-9234-0123456789ab"}]
+            screen_groups: [{name: "Touch", content_id: "710b962e-041c-11e1-9234-0123456789ab"}]
         };
         let params = {};
         params.body = JSON.stringify(venue);
@@ -88,11 +119,88 @@ describe('create_venue', () => {
         return wrapped.run(params).then(response => {
             response.body = JSON.parse(response.body);
             expect(response.statusCode).to.equal(200);
+            expect(response.body).to.have.property("name").that.is.equal('Hakkasan');
             expect(response.body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
             expect(response.body.screen_groups[0]).to.have.property("content_id").that.is.equal('710b962e-041c-11e1-9234-0123456789ab');
         });
     });
 
+    it('Create screen group with screens', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: "Touch", screens: [{name: "A"}, {name: "B"}]}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 200);
+            assert(response.body.screen_groups[0].name === "Touch");
+            assert(response.body.screen_groups[0].screens.length == 2);
+            assert(response.body.screen_groups[0].screens[0].name === "A");
+            assert(response.body.screen_groups[0].screens[1].name === "B");
+        });
+    });
+
+    it('Create and id will generate automatically', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: "Touch", screens: [{name: "A"}]}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 200);
+            assert(response.body.screen_groups[0].screens[0].id.length == idLength);
+            assert(typeof response.body.screen_groups[0].screens[0].id === 'string');
+        });
+    });
+
+    it('Create screen with name', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: "Touch", screens: [{name: "A"}]}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 200);
+            assert(response.body.screen_groups[0].screens[0].name === "A");
+        });
+    });
+
+    it('Create screen with content id', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: "Touch", screens: [{name: "A", content_id: "710b962e-041c-11e1-9234-0123456789ab"}]}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 200);
+            assert(response.body.screen_groups[0].screens[0].name === "A");
+            assert(response.body.screen_groups[0].screens[0].content_id === "710b962e-041c-11e1-9234-0123456789ab");
+        });
+    });
+
+    it('Couldn\'t create venue without name', () => {
+        let venue = {};
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 500);
+            assert(response.body.message == 'Venue couldn\'t be without name');
+        });
+    });
 
     it('Create venue with existing name', () => {
         let venue = {name: "Hakkasan"};
@@ -108,4 +216,65 @@ describe('create_venue', () => {
             });
         });
     });
+
+    it('Couldn\'t create screen group without name', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 500);
+            assert(response.body.message == 'Screen group couldn\'t be without name');
+        });
+    });
+
+    it('Couldn\'t create screen groups with non unique names', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: "Touch"}, {name: "Touch"}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 500);
+            assert(response.body.message == 'Groups should have unique names');
+        });
+    });
+
+    it('Couldn\'t create screen without name', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: "Touch", screens: [{}]}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 500);
+            assert(response.body.message == 'Screen couldn\'t be without name');
+        });
+    });
+
+    it('Couldn\'t create screens with non unique name', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: "Touch", screens: [{name: "A"}, {name: "A"}]}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 500);
+            assert(response.body.message == 'Screens should have unique names');
+        });
+    });
+
 });

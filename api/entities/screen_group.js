@@ -17,10 +17,13 @@ class ScreenGroup {
     }
 
     validate() {
-        if (!this.name || this.name == '') throw new Error('Group can\'t be without name');
+        if (!this.name || this.name == '') throw new Error('Screen group couldn\'t be without name');
 
         this.screens.forEach(screen => {
             validateScreenNamesUniqueness(this.screens, screen);
+            if (!screen.name) {
+                throw Error("Screen couldn\'t be without name")
+            }
         });
 
         function validateScreenNamesUniqueness(allScreeens, screen) {
