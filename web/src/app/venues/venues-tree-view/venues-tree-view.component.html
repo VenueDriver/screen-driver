@@ -16,41 +16,14 @@
                     </ng-template>
                 </div>
 
-                <div *ngIf="isCurrentNode(node)" class="edit-node-form">
-
-                    <div class="inputs-container" [class.has-error]="isInputInvalid()">
-                        <div *ngIf="isInputInvalid()" class="message validation-error">
-                            {{getValidationMessage(node)}}
-                        </div>
-                        <input type="text"
-                               [placeholder]="getNameInputPlaceholder(node)"
-                               [(ngModel)]="currentNode.name"
-                               (ngModelChange)="validateForm(node)"
-                               class="form-control node-name">
-
-                        <div class="dropdown-container">
-                            <dropdown
-                                    [dropdownValue]="getDropdownValue()"
-                                    [items]="content"
-                                    (select)="setNodeContent($event)">
-                            </dropdown>
-                        </div>
-                    </div>
-
-                    <div class="buttons-container">
-                        <button type="button"
-                                class="btn btn-success"
-                                [disabled]="!isFormValid"
-                                (click)="performSubmit($event, node)">
-                            Save
-                        </button>
-
-                        <button type="button"
-                                class="btn btn-link cancel-button"
-                                (click)="performCancel($event, node)">
-                            Cancel
-                        </button>
-                    </div>
+                <div *ngIf="isCurrentNode(node)">
+                    <edit-venue-form
+                            [venues]="venues"
+                            [content]="content"
+                            [currentNode]="node"
+                            (submit)="performSubmit($event)"
+                            (cancel)="performCancel($event)">
+                    </edit-venue-form>
                 </div>
 
                 <div class="buttons-container">

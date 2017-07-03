@@ -23,8 +23,8 @@ export class VenuesTreeViewComponent implements OnInit {
     contentUrlPlaceholder = 'Default URL';
     options: any;
     actionMapping: any;
-    currentNode: any;
-    originalNode: any;
+    currentNodeData: any;
+    originalNodeData: any;
     isFormValid = false;
 
     constructor(private venueService: VenuesService) { }
@@ -58,7 +58,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     getMouseClickAction() {
-        return _.isEmpty(this.currentNode) ? TREE_ACTIONS.TOGGLE_EXPANDED : TREE_ACTIONS.DESELECT;
+        return _.isEmpty(this.currentNodeData) ? TREE_ACTIONS.TOGGLE_EXPANDED : TREE_ACTIONS.DESELECT;
     }
 
     hasContentInfo(node: any): boolean {
@@ -93,19 +93,19 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     createBlankNode(): any {
-        this.currentNode = {
+        this.currentNodeData = {
             id: '',
             name: ''
         };
-        return this.currentNode;
+        return this.currentNodeData;
     }
 
     clearCurrentNode() {
-        this.currentNode = {};
+        this.currentNodeData = {};
     }
 
     isCurrentNode(node: any) {
-        return _.isEqual(this.currentNode, node.data);
+        return _.isEqual(this.currentNodeData, node.data);
     }
 
     isAllowToAddChild(node: any) {
@@ -113,10 +113,10 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isAllowToEditNode() {
-        return _.isEmpty(this.currentNode);
+        return _.isEmpty(this.currentNodeData);
     }
 
-    performCancel(event: any, node: any) {
+    performCancel(node: any) {
         this.stopClickPropagation(event);
         if (!node.data.id) {
             this.removeBlankNode(node);
@@ -129,15 +129,15 @@ export class VenuesTreeViewComponent implements OnInit {
 
     removeBlankNode(node: any) {
         let parentNodeData = node.parent.data;
-        _.pull(parentNodeData.children, this.currentNode);
+        _.pull(parentNodeData.children, this.currentNodeData);
         this.updateTreeModel();
     }
 
     undoEditing(node: any) {
         let parentNodeData = node.parent.data;
-        let nodeIndex = parentNodeData.children.indexOf(this.currentNode);
-        _.pull(parentNodeData.children, this.currentNode);
-        parentNodeData.children.splice(nodeIndex, 0, this.originalNode);
+        let nodeIndex = parentNodeData.children.indexOf(this.currentNodeData);
+        _.pull(parentNodeData.children, this.currentNodeData);
+        parentNodeData.children.splice(nodeIndex, 0, this.originalNodeData);
         this.updateTreeModel();
     }
 
@@ -154,8 +154,7 @@ export class VenuesTreeViewComponent implements OnInit {
         });
     }
 
-    performSubmit(event: any, node: any) {
-        this.stopClickPropagation(event);
+    performSubmit(node: any) {
         let venueId = this.getVenueId(node);
         let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
         this.update.emit(venueToUpdate);
@@ -174,23 +173,23 @@ export class VenuesTreeViewComponent implements OnInit {
 
     setNodeContent(content) {
         if (!_.isEmpty(content.id)) {
-            this.currentNode.content = content;
-            this.currentNode.content_id = content.id;
+            this.currentNodeData.content = content;
+            this.currentNodeData.content_id = content.id;
         } else {
-            this.currentNode.content = null;
-            this.currentNode.content_id = null;
+            this.currentNodeData.content = null;
+            this.currentNodeData.content_id = null;
         }
     }
 
     editNode(event: any, node: any) {
         this.stopClickPropagation(event);
-        this.currentNode = node.data;
-        this.originalNode = _.clone(node.data);
+        this.currentNodeData = node.data;
+        this.originalNodeData = _.clone(node.data);
         this.updateTreeViewOptions();
     }
 
     getDropdownValue(): string {
-        return this.currentNode.content ? this.currentNode.content.short_name : this.contentUrlPlaceholder;
+        return this.currentNodeData.content ? this.currentNodeData.content.short_name : this.contentUrlPlaceholder;
     }
 
     hasChildren(node: any): boolean {
@@ -219,11 +218,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isCurrentNodeHasName(): boolean {
-        return !_.isEmpty(this.currentNode.name)
-    }
-
-    getNameInputPlaceholder(node: any): string {
-        return `${this.getNodeLevelName(node)} name`;
+        return !_.isEmpty(this.currentNodeData.name)
     }
 
     getAddButtonTitle(node: any): string {

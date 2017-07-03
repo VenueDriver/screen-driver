@@ -1,0 +1,36 @@
+<div class="edit-node-form">
+
+    <div class="inputs-container" [class.has-error]="isInputInvalid()">
+        <div *ngIf="isInputInvalid()" class="message validation-error">
+            {{getValidationMessage()}}
+        </div>
+        <input type="text"
+               [placeholder]="getNameInputPlaceholder()"
+               [(ngModel)]="nodeData.name"
+               (ngModelChange)="validateForm()"
+               class="form-control node-name">
+
+        <div class="dropdown-container">
+            <dropdown
+                    [dropdownValue]="getDropdownValue()"
+                    [items]="content"
+                    (select)="setNodeContent($event)">
+            </dropdown>
+        </div>
+    </div>
+
+    <div class="buttons-container">
+        <button type="button"
+                class="btn btn-success"
+                [disabled]="!isFormValid"
+                (click)="performSubmit($event)">
+            Save
+        </button>
+
+        <button type="button"
+                class="btn btn-link cancel-button"
+                (click)="performCancel($event)">
+            Cancel
+        </button>
+    </div>
+</div>
