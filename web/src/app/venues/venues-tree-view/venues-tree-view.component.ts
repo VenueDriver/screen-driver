@@ -186,7 +186,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isCurrentNodeHasName(): boolean {
-        return !_.isEmpty(this.currentNodeData.name)
+        return !_.isEmpty(this.currentNodeData.name);
     }
 
     getAddButtonTitle(node: any): string {
@@ -205,5 +205,27 @@ export class VenuesTreeViewComponent implements OnInit {
         let parentNodeLevelName = this.treeViewService.getNodeLevelName(node.level - 1);
         parentNodeLevelName = parentNodeLevelName.toLowerCase();
         return `Content URL inherited from ${parentNodeLevelName}`;
+    }
+
+    getContentListForDropdown(node: any): Array<any> {
+        let defaultValue = this.createDefaultValue(node);
+        return [defaultValue, ...this.content];
+    }
+
+    createDefaultValue(node: any): any {
+        let defaultName = this.getDefaultValueForContentDropdown(node);
+        return {
+            id: '',
+            name: defaultName
+        }
+    }
+
+    getDefaultValueForContentDropdown(node: any) {
+        if (node.level == 1) {
+            return 'Is not specified';
+        }
+        let parentNodeLevelName = this.treeViewService.getNodeLevelName(node.level - 1);
+        parentNodeLevelName = parentNodeLevelName.toLowerCase();
+        return `Inherit from ${parentNodeLevelName}`;
     }
 }

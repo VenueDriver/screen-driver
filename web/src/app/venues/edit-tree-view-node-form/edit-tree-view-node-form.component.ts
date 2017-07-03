@@ -17,13 +17,14 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         this.setUpComponentModel(currentNode);
     };
 
+    @Input() contentUrlPlaceholder = 'Default URL';
+
     @Output() submit = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
     node: any;
     nodeData: any;
     isFormValid;
-    contentUrlPlaceholder = 'Default URL';
 
     constructor(
         private renderer: Renderer2,

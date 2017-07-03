@@ -77,7 +77,7 @@ export class VenuesService {
     initContentListForDropdown(content: Content[]): any {
         let contentListForDropdown = this.convertContentListForDropdown(content);
         contentListForDropdown = _.sortBy(contentListForDropdown, 'name');
-        return [this.getDefaultUrlValue(), ...contentListForDropdown];
+        return contentListForDropdown;
     }
 
     private convertContentListForDropdown(content: Content[]): any {

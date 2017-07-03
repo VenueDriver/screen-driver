@@ -19,8 +19,9 @@
                 <div *ngIf="isCurrentNode(node)" class="edit-node-form">
                     <edit-tree-view-node-form
                             [venues]="venues"
-                            [content]="content"
+                            [content]="getContentListForDropdown(node)"
                             [currentNode]="node"
+                            [contentUrlPlaceholder]="getPlaceholderForDefaultUrl(node)"
                             (submit)="performSubmit($event)"
                             (cancel)="performCancel($event)">
                     </edit-tree-view-node-form>
