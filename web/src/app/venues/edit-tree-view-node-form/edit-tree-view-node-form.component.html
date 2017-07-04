@@ -12,11 +12,11 @@
                class="form-control node-name">
 
         <div class="dropdown-container">
-            <dropdown
+            <content-autocomplete
                     [dropdownValue]="getDropdownValue()"
-                    [items]="content"
+                    [content]="content"
                     (select)="setNodeContent($event)">
-            </dropdown>
+            </content-autocomplete>
         </div>
     </div>
 

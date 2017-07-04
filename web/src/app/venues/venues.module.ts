@@ -8,11 +8,13 @@ import {DropdownModule} from "../dropdown/dropdown.module";
 import {ContentService} from "../content/content.service";
 import {EditTreeViewNodeFormComponent} from "./edit-tree-view-node-form/edit-tree-view-node-form.component";
 import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
+import {ContentAutocompleteModule} from "../content-autocomplete/content-autocomplete.module";
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
+        ContentAutocompleteModule,
         DropdownModule,
         TreeModule
     ],

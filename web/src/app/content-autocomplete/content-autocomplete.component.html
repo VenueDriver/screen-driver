@@ -1,7 +1,11 @@
 <div>
     <kendo-autocomplete
-            [data]="listItems"
+            [data]="data"
+            valueField="name"
             [placeholder]="placeholder"
-            [popupSettings]="{animate: false}">
+            [popupSettings]="{animate: false}"
+            [filterable]="true"
+            (filterChange)="handleFilter($event)"
+            (valueChange)="onSelect($event)">
     </kendo-autocomplete>
 </div>

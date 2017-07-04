@@ -1,18 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Output, EventEmitter, Input} from '@angular/core';
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'content-autocomplete',
     templateUrl: 'content-autocomplete.component.html',
     styleUrls: ['content-autocomplete.component.sass']
 })
-export class ContentAutocompleteComponent implements OnInit {
+export class ContentAutocompleteComponent {
 
-    public placeholder: string = 'Type "it" for suggestions';
-    public listItems: Array<string> = ["Item 1", "Item 2", "Item 3", "Item 4"];
-    public popupSettings = {animate: false};
+    @Input() dropdownValue: any;
+    @Input() placeholder: string;
+    @Input() content: Array<any>;
 
-    constructor() { }
+    @Output() select = new EventEmitter();
 
-    ngOnInit() { }
+    data: Array<any>;
 
+    constructor() {
+    }
+
+    handleFilter(value) {
+        this.data = this.content.filter((s) => s.name.toLowerCase().indexOf(value.toLowerCase()) !== -1);
+    }
+
+    onSelect(value) {
+        let selectedValue = _.find(this.content, ['short_name', value]);
+        if (selectedValue) {
+            this.select.emit(selectedValue);
+        }
+    }
 }
