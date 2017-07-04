@@ -11,6 +11,7 @@ const mochaPlugin = require('serverless-mocha-plugin');
 
 const lambdaWrapper = mochaPlugin.lambdaWrapper;
 const expect = mochaPlugin.chai.expect;
+const assert = mochaPlugin.chai.assert;
 const wrappedUpdate = lambdaWrapper.wrap(mod, {handler: 'update'});
 const wrappedCreate = lambdaWrapper.wrap(createFunction, {handler: 'create'});
 const idLength = 36;
@@ -83,11 +84,105 @@ describe('update_venue', () => {
         let newVenue = {name: "Hakkasan"};
         let updatedVenue = {name: "Hakkasan LV", _rev: 0};
 
-        return createVenue(getParametersFor(existingVenue)).then((res) => {
-            return createUpdateAndTest(newVenue, updatedVenue, (body, response) => {
+        return createVenue(getParametersFor(existingVenue))
+            .then(() => createUpdateAndTest(newVenue, updatedVenue, (body, response) => {
                 expect(response).to.have.property("statusCode").that.equal(500);
-            })
-        });
+                expect(body).to.have.property("message").that.equal("Venue with such name already exists")
+            }))
+    });
+
+    it('Couldn\'t add new screen group with non-unique name', () => {
+        let newVenue = {name: "Hakkasan LV", screen_groups: [{name: "Touch"}]};
+        let updatedVenue = {name: "Hakkasan LV", screen_groups: [{name: "Touch"}, {name: "Touch"}], _rev: 0};
+
+        return createUpdateAndTest(newVenue, updatedVenue, (body, response) => {
+            expect(response).to.have.property("statusCode").that.equal(500);
+            expect(body).to.have.property("message").that.equal("Groups should have unique names");
+        })
+    });
+
+    it('Couldn\'t add new screen with non-unique name', () => {
+        let newVenue = {
+            name: "Hakkasan LV",
+            screen_groups: [
+                {
+                    name: "Touch",
+                    screens: [{name: "A"}]
+                }]
+        };
+        let updatedVenue = {
+            name: "Hakkasan LV",
+            screen_groups: [
+                {
+                    name: "Touch",
+                    screens: [{name: "A"}, {name: "A"}]
+                }],
+            _rev: 0
+        };
+
+        return createUpdateAndTest(newVenue, updatedVenue, (body, response) => {
+            expect(response).to.have.property("statusCode").that.equal(500);
+            expect(body).to.have.property("message").that.equal("Screens should have unique names");
+        })
+    });
+
+    it('Couldn\'t delete venue name', () => {
+        let newVenue = {name: "Hakkasan LV"};
+        let updatedVenue = {_rev: 0};
+
+        return createUpdateAndTest(newVenue, updatedVenue, (body, response) => {
+            expect(response).to.have.property("statusCode").that.equal(500);
+            expect(body).to.have.property("message").that.equal("Venue couldn\'t be without name");
+        })
+    });
+
+    it('Couldn\'t delete group name', () => {
+        let newVenue = {name: "Hakkasan LV", screen_groups: [{name: "Touch"}]};
+        let updatedVenue = {name: "Hakkasan LV", screen_groups: [{}], _rev: 0};
+
+        return createUpdateAndTest(newVenue, updatedVenue, (body, response) => {
+            expect(response).to.have.property("statusCode").that.equal(500);
+            expect(body).to.have.property("message").that.equal("Screen group couldn\'t be without name");
+        })
+    });
+
+    it('Couldn\'t delete screen name', () => {
+        let newVenue = {
+            name: "Hakkasan LV",
+            screen_groups: [
+                {name: "Touch", screens: [{name: "A"}]}]
+        };
+        let updatedVenue = {
+            name: "Hakkasan LV",
+            screen_groups: [
+                {name: "Touch", screens: [{}]}],
+            _rev: 0
+        };
+
+        return createUpdateAndTest(newVenue, updatedVenue, (body, response) => {
+            expect(response).to.have.property("statusCode").that.equal(500);
+            expect(body).to.have.property("message").that.equal("Screen couldn\'t be without name");
+        })
+    });
+
+    it('Couldn\'t update venue without revision number', () => {
+        let newVenue = {name: "Hakkasan"};
+        let updatedVenue = {name: "Hakkasan LV"};
+
+        return createUpdateAndTest(newVenue, updatedVenue, (body, response) => {
+            expect(response).to.have.property("statusCode").that.equal(500);
+            expect(body).to.have.property("message").that.equal("Missed revision number");
+        })
+    });
+
+    it('Couldn\'t update venue with uncorrect revision number', () => {
+        let newVenue = {name: "Hakkasan"};
+        let updatedVenue = {name: "Hakkasan LV", _rev: 1};
+
+        return createUpdateAndTest(newVenue, updatedVenue, (body, response) => {
+            expect(response).to.have.property("statusCode").that.equal(500);
+            expect(body).to.have.property("message").that.equal("The conditional request failed");
+        })
     });
 
 });
@@ -100,7 +195,8 @@ function createUpdateAndTest(newVenue, updatedVenue, expectations) {
     return createVenue(getParametersFor(newVenue))
         .then((response) => {
             return wrappedUpdate.run(getParametersFor(updatedVenue, response))
-        }).then(response => {
+        })
+        .then(response => {
             let body = JSON.parse(response.body);
             expectations(body, response);
         });

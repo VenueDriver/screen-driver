@@ -82,9 +82,11 @@ class Venue {
         if (!this._rev) deferred.reject('Missed revision number');
 
         this.validate()
-            .then(this.generateIdentificatorsForGroupsAndScreens())
-            .then(Venue.hasUniqueName(this))
-            .then(_updateInDatabase(params))
+            .then(() => {
+                this.generateIdentificatorsForGroupsAndScreens();
+                return Venue.hasUniqueName(this)
+            })
+            .then(() => _updateInDatabase(params))
             .fail(errorMessage => deferred.reject(errorMessage));
 
         return deferred.promise;
@@ -154,13 +156,14 @@ class Venue {
 
     static hasUniqueName(venue) {
         let deferred = Q.defer();
-        this.getExistingNames(_getExcludedVenue()).then(names => {
-            if (names.includes(venue.name)) {
-                deferred.reject('Venue with such name already exists')
-            } else {
-                deferred.resolve();
-            }
-        });
+        this.getExistingNames(_getExcludedVenue())
+            .then(names => {
+                if (names.includes(venue.name)) {
+                    deferred.reject('Venue with such name already exists')
+                } else {
+                    deferred.resolve();
+                }
+            });
         return deferred.promise;
 
         function _getExcludedVenue() {
