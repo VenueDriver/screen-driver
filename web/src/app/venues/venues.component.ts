@@ -3,6 +3,7 @@ import {VenuesService} from "./venues.service";
 import {Venue} from "./entities/venue";
 import {Content} from "../content/content";
 import {NotificationService} from "../notifications/notification.service";
+import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
 
 @Component({
     selector: 'venues',
@@ -15,11 +16,12 @@ export class VenuesComponent implements OnInit {
     venues: Venue[];
     venuesTree: any;
     content: Content[];
-    contentListForDropdown: any;
+    contentList: any;
     isShowAddVenueForm = false;
 
     constructor(
         private venuesService: VenuesService,
+        private treeViewService: VenuesTreeViewService,
         private notificationService: NotificationService
     ) { }
 
@@ -39,7 +41,7 @@ export class VenuesComponent implements OnInit {
         this.venuesService.loadContent()
             .subscribe(content => {
                 this.content = content;
-                this.contentListForDropdown = this.venuesService.initContentListForDropdown(this.content);
+                this.contentList = this.venuesService.initContentListForDropdown(this.content);
             });
     }
 
@@ -74,5 +76,10 @@ export class VenuesComponent implements OnInit {
 
     private handleError(message: string) {
         return this.notificationService.showErrorNotificationBar(message);
+    }
+
+    getContentListForDropdown(): Array<any> {
+        let defaultValue = this.treeViewService.generateDefaultValueForDropdown('Is not specified');
+        return [defaultValue, ...this.content];
     }
 }
