@@ -22,7 +22,8 @@ export class ContentAutocompleteComponent {
     }
 
     handleFilter(value) {
-        this.data = this.content.filter((s) => s.short_name.toLowerCase().indexOf(value.toLowerCase()) !== -1);
+        value = value.toLowerCase();
+        this.data = _.filter(this.content, c => c.short_name.toLowerCase().indexOf(value) !== -1);
     }
 
     onSelect(value) {
