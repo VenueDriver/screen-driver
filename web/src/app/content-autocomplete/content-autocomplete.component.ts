@@ -26,9 +26,6 @@ export class ContentAutocompleteComponent {
     content: Array<Content>;
     data: Array<Content>;
 
-    constructor() {
-    }
-
     handleFilter(value) {
         value = value.toLowerCase();
         this.data = _.filter(this.content, c => c.short_name.toLowerCase().indexOf(value) !== -1);
