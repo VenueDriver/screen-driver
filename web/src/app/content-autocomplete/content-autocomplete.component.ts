@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 })
 export class ContentAutocompleteComponent {
 
-    @Input() dropdownValue: any;
+    @Input() value: any;
     @Input() placeholder: string;
     @Input() content: Array<Content>;
 

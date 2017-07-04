@@ -1,8 +1,9 @@
 <div>
     <kendo-autocomplete
             [data]="data"
+            [value]="value"
             [valueField]="'short_name'"
-            [placeholder]="placeholder"
+            [placeholder]="'Content URL'"
             [popupSettings]="{animate: false}"
             [filterable]="true"
             (filterChange)="handleFilter($event)"
