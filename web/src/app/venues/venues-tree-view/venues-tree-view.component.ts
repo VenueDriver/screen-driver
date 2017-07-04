@@ -3,6 +3,7 @@ import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesTreeViewService} from "./venues-tree-view.service";
+import {Content} from "../../content/content";
 
 import * as _ from 'lodash';
 
@@ -14,7 +15,7 @@ import * as _ from 'lodash';
 export class VenuesTreeViewComponent implements OnInit {
 
     @Input() venues: Array<any>;
-    @Input() content: Array<any>;
+    @Input() content: Array<Content>;
     @Output() update = new EventEmitter();
 
     @ViewChild(TreeComponent)

@@ -1,8 +1,9 @@
 import {Component, OnInit, EventEmitter, Input, Output, Renderer2} from '@angular/core';
 import {VenuesService} from "../venues.service";
+import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
+import {Content} from "../../content/content";
 
 import * as _ from 'lodash';
-import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 
 @Component({
     selector: 'edit-tree-view-node-form',
@@ -12,7 +13,7 @@ import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.servic
 export class EditTreeViewNodeFormComponent implements OnInit {
 
     @Input() venues: Array<any>;
-    @Input() content: Array<any>;
+    @Input() content: Array<Content>;
     @Input('currentNode') set componentModel(currentNode: any) {
         this.setUpComponentModel(currentNode);
     };

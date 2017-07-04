@@ -5,6 +5,8 @@ import {Content} from "../content/content";
 import {NotificationService} from "../notifications/notification.service";
 import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
 
+import * as _ from 'lodash';
+
 @Component({
     selector: 'venues',
     templateUrl: 'venues.component.html',
@@ -16,7 +18,6 @@ export class VenuesComponent implements OnInit {
     venues: Venue[];
     venuesTree: any;
     content: Content[];
-    contentList: any;
     isShowAddVenueForm = false;
 
     constructor(
@@ -39,10 +40,7 @@ export class VenuesComponent implements OnInit {
 
     loadContent() {
         this.venuesService.loadContent()
-            .subscribe(content => {
-                this.content = content;
-                this.contentList = this.venuesService.initContentListForDropdown(this.content);
-            });
+            .subscribe(content => this.content = _.sortBy(content, 'short_name'));
     }
 
     showAddVenueForm() {

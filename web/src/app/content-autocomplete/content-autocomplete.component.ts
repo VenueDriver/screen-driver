@@ -1,4 +1,5 @@
 import {Component, Output, EventEmitter, Input} from '@angular/core';
+import {Content} from "../content/content";
 
 import * as _ from 'lodash';
 
@@ -11,7 +12,7 @@ export class ContentAutocompleteComponent {
 
     @Input() dropdownValue: any;
     @Input() placeholder: string;
-    @Input() content: Array<any>;
+    @Input() content: Array<Content>;
 
     @Output() select = new EventEmitter();
 
@@ -21,7 +22,7 @@ export class ContentAutocompleteComponent {
     }
 
     handleFilter(value) {
-        this.data = this.content.filter((s) => s.name.toLowerCase().indexOf(value.toLowerCase()) !== -1);
+        this.data = this.content.filter((s) => s.short_name.toLowerCase().indexOf(value.toLowerCase()) !== -1);
     }
 
     onSelect(value) {

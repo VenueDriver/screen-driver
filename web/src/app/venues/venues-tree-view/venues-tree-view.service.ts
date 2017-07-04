@@ -21,7 +21,7 @@ export class VenuesTreeViewService {
     generateDefaultValueForDropdown(valueForName: string): any {
         return {
             id: '',
-            name: valueForName
+            short_name: valueForName
         }
     }
 
