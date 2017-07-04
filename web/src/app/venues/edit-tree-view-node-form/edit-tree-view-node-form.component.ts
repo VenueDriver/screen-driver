@@ -98,7 +98,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     }
 
     getDropdownValue(): string {
-        return this.nodeData.content ? this.nodeData.content.short_name : this.contentUrlPlaceholder;
+        return this.nodeData.content ? this.nodeData.content.short_name : '';
     }
 
     setNodeContent(content) {

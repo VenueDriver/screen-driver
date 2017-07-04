@@ -207,9 +207,4 @@ export class VenuesTreeViewComponent implements OnInit {
     getPlaceholderForDefaultUrl(node: any): string {
         return this.treeViewService.getPlaceholderForDefaultUrl(node.level);
     }
-
-    getContentListForDropdown(node: any): Array<any> {
-        let defaultValue = this.treeViewService.createDefaultValue(node.level);
-        return [defaultValue, ...this.content];
-    }
 }

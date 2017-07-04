@@ -75,9 +75,4 @@ export class VenuesComponent implements OnInit {
     private handleError(message: string) {
         return this.notificationService.showErrorNotificationBar(message);
     }
-
-    getContentListForDropdown(): Array<any> {
-        let defaultValue = this.treeViewService.generateDefaultValueForDropdown('Is not specified');
-        return [defaultValue, ...this.content];
-    }
 }
