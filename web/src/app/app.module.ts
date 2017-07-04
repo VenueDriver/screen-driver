@@ -11,7 +11,6 @@ import {VenuesModule} from "./venues/venues.module";
 import {HeaderComponent} from "./header/header.component";
 import {NotificationBarModule, NotificationBarService} from "angular2-notification-bar";
 import {NotificationService} from "./notifications/notification.service";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
     declarations: [
@@ -20,7 +19,6 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     ],
     imports: [
         BrowserModule,
-        BrowserAnimationsModule,
         routing,
         AlertModule.forRoot(),
         ContentListModule,
