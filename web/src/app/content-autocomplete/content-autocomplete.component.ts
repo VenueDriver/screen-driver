@@ -16,7 +16,7 @@ export class ContentAutocompleteComponent {
 
     @Output() select = new EventEmitter();
 
-    data: Array<any>;
+    data: Array<Content>;
 
     constructor() {
     }
@@ -26,7 +26,7 @@ export class ContentAutocompleteComponent {
         this.data = _.filter(this.content, c => c.short_name.toLowerCase().indexOf(value) !== -1);
     }
 
-    onSelect(value) {
+    onSelect(value: string) {
         let selectedValue = _.find(this.content, ['short_name', value]);
         if (selectedValue) {
             this.select.emit(selectedValue);

@@ -1,11 +1,23 @@
 <div>
     <kendo-autocomplete
             [data]="data"
-            valueField="short_name"
+            [valueField]="'short_name'"
             [placeholder]="placeholder"
             [popupSettings]="{animate: false}"
             [filterable]="true"
             (filterChange)="handleFilter($event)"
             (valueChange)="onSelect($event)">
+
+        <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="autocomplete-item">
+                <div *ngIf="dataItem.url" class="item-with-desc">
+                    <div class="item-value">{{dataItem.short_name}}</div>
+                    <div class="item-desc">{{dataItem.url}}</div>
+                </div>
+                <div *ngIf="!dataItem.url">
+                    <div class="item-value">{{dataItem.short_name}}</div>
+                </div>
+            </div>
+        </ng-template>
     </kendo-autocomplete>
 </div>
