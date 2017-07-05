@@ -12,7 +12,6 @@ import * as _ from 'lodash';
 export class ContentAutocompleteComponent {
 
     @Input() value: any;
-    @Input() placeholder: string;
     @Input('content') set model(content: Array<Content>) {
         this.content = content;
         this.data = [...content];
@@ -34,13 +33,18 @@ export class ContentAutocompleteComponent {
             this.showAll();
             return;
         }
-        value = value.toLowerCase();
-        this.data = _.filter(this.content, c => c.short_name.toLowerCase().indexOf(value) !== -1);
+        this.performFiltering(value);
     }
 
     showAll() {
         this.data = [...this.content];
         this.openPopup();
+    }
+
+    performFiltering(value) {
+        value = value.toLowerCase();
+        this.data = _.filter(this.content, c => c.short_name.toLowerCase().indexOf(value) !== -1);
+        return value;
     }
 
     onSelect(value: string) {
