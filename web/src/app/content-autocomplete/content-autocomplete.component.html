@@ -19,7 +19,11 @@
 
         <ng-template kendoAutoCompleteFooterTemplate>
             <div class="autocomplete-footer">
-                <button class="btn btn-block btn-lg add-button">Add new content URL</button>
+                <button
+                        class="btn btn-block btn-lg add-button"
+                        (click)="emitAddNewEvent()">
+                    Add new content URL
+                </button>
             </div>
         </ng-template>
 

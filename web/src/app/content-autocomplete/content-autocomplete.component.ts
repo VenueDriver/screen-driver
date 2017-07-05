@@ -19,14 +19,17 @@ export class ContentAutocompleteComponent {
     }
 
     @Output() select = new EventEmitter();
+    @Output() add = new EventEmitter();
 
     @ViewChild(AutoCompleteComponent)
     private autocomplete: AutoCompleteComponent;
 
     content: Array<Content>;
     data: Array<Content>;
+    filter: string;
 
     handleFilter(value) {
+        this.filter = value;
         if (!value) {
             this.showAll();
             return;
@@ -49,5 +52,9 @@ export class ContentAutocompleteComponent {
 
     openPopup() {
         this.autocomplete.toggle(true);
+    }
+
+    emitAddNewEvent() {
+        this.add.emit({short_name: this.filter});
     }
 }
