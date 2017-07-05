@@ -57,9 +57,7 @@ export class VenuesTreeViewComponent implements OnInit {
 
     getActionMapping(): IActionMapping {
         return {
-            mouse: {
-                click: this.getMouseClickAction()
-            }
+            mouse: {click: this.getMouseClickAction()}
         }
     }
 
@@ -99,14 +97,11 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     createBlankNode(): any {
-        this.currentNodeData = {
-            id: '',
-            name: ''
-        };
+        this.currentNodeData = {id: '', name: ''};
         return this.currentNodeData;
     }
 
-    clearCurrentNode() {
+    clearCurrentNodeDataField() {
         this.currentNodeData = {};
     }
 
@@ -124,19 +119,22 @@ export class VenuesTreeViewComponent implements OnInit {
 
     performCancel(node: any) {
         this.stopClickPropagation(event);
+        this.dismissChanges(node);
+        this.clearCurrentNodeDataField();
+        this.updateTreeViewOptions();
+    }
+
+    dismissChanges(node: any) {
         if (!node.data.id) {
             this.removeBlankNode(node);
         } else {
             this.undoEditing(node);
         }
-        this.clearCurrentNode();
-        this.updateTreeViewOptions();
     }
 
     removeBlankNode(node: any) {
         let parentNodeData = node.parent.data;
         _.pull(parentNodeData.children, this.currentNodeData);
-        this.updateTreeModel();
     }
 
     undoEditing(node: any) {
@@ -144,7 +142,6 @@ export class VenuesTreeViewComponent implements OnInit {
         let nodeIndex = parentNodeData.children.indexOf(this.currentNodeData);
         _.pull(parentNodeData.children, this.currentNodeData);
         parentNodeData.children.splice(nodeIndex, 0, this.originalNodeData);
-        this.updateTreeModel();
     }
 
     validateForm(node: any) {
@@ -185,7 +182,7 @@ export class VenuesTreeViewComponent implements OnInit {
         let venueId = this.getVenueId(node);
         let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
         this.update.emit(venueToUpdate);
-        this.clearCurrentNode();
+        this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
     }
 
