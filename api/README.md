@@ -42,7 +42,7 @@ You should have running dynamodb on port 8000. Run local dynamodb with migration
 * ```sls dynamodb start```
 
 Use one of next commands to start testing:
-* ```npm run test```
+* ```npm test```
 * ```sls invoke test --stage test```
 
 
