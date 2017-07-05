@@ -4,9 +4,10 @@ import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/t
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {Content} from "../../content/content";
+import {Observable} from "rxjs";
+import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
-import {Observable} from "rxjs";
 
 @Component({
     selector: 'venues-tree-view',
@@ -29,7 +30,10 @@ export class VenuesTreeViewComponent implements OnInit {
     isFormValid = false;
     isCreateContentMode =false;
 
-    constructor(private treeViewService: VenuesTreeViewService) { }
+    constructor(
+        private treeViewService: VenuesTreeViewService,
+        private notificationService: NotificationService
+    ) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
@@ -158,14 +162,23 @@ export class VenuesTreeViewComponent implements OnInit {
 
     performSubmit(node: any) {
         if (this.isCreateContentMode) {
-            this.saveNewContent(node.data.content)
-                .subscribe(content => {
-                    node.data.content_id = content.id;
-                    this.updateVenue(node);
-                });
+            this.createContentBeforeUpdateVenue(node);
         } else {
             this.updateVenue(node);
         }
+    }
+
+    createContentBeforeUpdateVenue(node: any) {
+        this.saveNewContent(node.data.content)
+            .subscribe(
+                content => this.handleCreateContentResponse(node, content),
+                error => this.notificationService.showErrorNotificationBar('An error occurred while saving new content URL')
+            );
+    }
+
+    handleCreateContentResponse(node: any, content: Content) {
+        node.data.content_id = content.id;
+        this.updateVenue(node);
     }
 
     updateVenue(node: any) {
