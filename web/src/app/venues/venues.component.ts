@@ -6,6 +6,7 @@ import {NotificationService} from "../notifications/notification.service";
 import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
 
 import * as _ from 'lodash';
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'venues',
@@ -19,6 +20,7 @@ export class VenuesComponent implements OnInit {
     venuesTree: any;
     content: Content[];
     isShowAddVenueForm = false;
+    isCreateContentMode = false;
 
     constructor(
         private venuesService: VenuesService,
@@ -65,6 +67,31 @@ export class VenuesComponent implements OnInit {
         this.loadVenues();
     }
 
+    performSubmit(venue: Venue) {
+        if (this.isCreateContentMode) {
+            this.createContentBeforeCreateVenue(venue);
+        } else {
+            this.addVenue(venue);
+        }
+    }
+
+    createContentBeforeCreateVenue(venue: Venue) {
+        this.saveNewContent(venue.content)
+            .subscribe(
+                content => this.handleCreateContentResponse(venue, content),
+                error => this.notificationService.showErrorNotificationBar('An error occurred while saving new content URL')
+            );
+    }
+
+    handleCreateContentResponse(venue: Venue, content: Content) {
+        venue.content_id = content.id;
+        this.addVenue(venue);
+    }
+
+    saveNewContent(content: Content): Observable<Content> {
+        return this.treeViewService.saveNewContent(content);
+    }
+
     updateVenue(venueNode: any) {
         this.venuesService.updateVenue(venueNode)
             .subscribe(
@@ -74,5 +101,9 @@ export class VenuesComponent implements OnInit {
 
     private handleError(message: string) {
         return this.notificationService.showErrorNotificationBar(message);
+    }
+
+    toggleCreateContentMode(createContentMode: boolean) {
+        this.isCreateContentMode = createContentMode;
     }
 }

@@ -20,8 +20,9 @@
                         [content]="content"
                         [currentNode]="node"
                         contentUrlPlaceholder="Content URL is not specified"
-                        (submit)="addVenue($event)"
-                        (cancel)="hideAddVenueForm()">
+                        (submit)="performSubmit($event)"
+                        (cancel)="hideAddVenueForm()"
+                        (createContent)="toggleCreateContentMode($event)">
                 </edit-tree-view-node-form>
             </div>
         </div>

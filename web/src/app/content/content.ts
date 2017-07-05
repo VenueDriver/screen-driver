@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 export class Content {
-  id: String = '';
+  id: string = '';
   short_name: string = '';
   url: string = '';
 
