@@ -27,8 +27,17 @@ export class ContentAutocompleteComponent {
     data: Array<Content>;
 
     handleFilter(value) {
+        if (!value) {
+            this.showAll();
+            return;
+        }
         value = value.toLowerCase();
         this.data = _.filter(this.content, c => c.short_name.toLowerCase().indexOf(value) !== -1);
+    }
+
+    showAll() {
+        this.data = [...this.content];
+        this.openPopup();
     }
 
     onSelect(value: string) {
