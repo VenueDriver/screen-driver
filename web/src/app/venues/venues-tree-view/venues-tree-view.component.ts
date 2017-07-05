@@ -6,6 +6,7 @@ import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {Content} from "../../content/content";
 
 import * as _ from 'lodash';
+import {Observable} from "rxjs";
 
 @Component({
     selector: 'venues-tree-view',
@@ -156,11 +157,27 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     performSubmit(node: any) {
+        if (this.isCreateContentMode) {
+            this.saveNewContent(node.data.content)
+                .subscribe(content => {
+                    node.data.content_id = content.id;
+                    this.updateVenue(node);
+                });
+        } else {
+            this.updateVenue(node);
+        }
+    }
+
+    updateVenue(node: any) {
         let venueId = this.getVenueId(node);
         let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
         this.update.emit(venueToUpdate);
         this.clearCurrentNode();
         this.updateTreeViewOptions();
+    }
+
+    saveNewContent(content: Content): Observable<Content> {
+        return this.treeViewService.saveNewContent(content);
     }
 
     getVenueId(node: any) {
