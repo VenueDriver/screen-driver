@@ -99,7 +99,7 @@ export class VenuesComponent implements OnInit {
                 error => this.handleError('An error occurred while updating configuration'));
     }
 
-    private handleError(message: string) {
+    handleError(message: string) {
         return this.notificationService.showErrorNotificationBar(message);
     }
 
