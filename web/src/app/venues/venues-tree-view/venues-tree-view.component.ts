@@ -26,6 +26,7 @@ export class VenuesTreeViewComponent implements OnInit {
     currentNodeData: any;
     originalNodeData: any;
     isFormValid = false;
+    isCreateContentMode =false;
 
     constructor(private treeViewService: VenuesTreeViewService) { }
 
@@ -206,5 +207,9 @@ export class VenuesTreeViewComponent implements OnInit {
 
     getPlaceholderForDefaultUrl(node: any): string {
         return this.treeViewService.getPlaceholderForDefaultUrl(node.level);
+    }
+
+    toggleCreateContentMode(createContentMode: boolean) {
+        this.isCreateContentMode = createContentMode;
     }
 }

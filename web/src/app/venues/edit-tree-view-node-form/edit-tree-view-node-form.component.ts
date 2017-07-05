@@ -22,10 +22,12 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     @Output() submit = new EventEmitter();
     @Output() cancel = new EventEmitter();
+    @Output() createContent = new EventEmitter();
 
     node: any;
     nodeData: any;
     isFormValid: boolean;
+    createContentMode = false;
 
     constructor(
         private renderer: Renderer2,
@@ -127,6 +129,13 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     stopClickPropagation(event: any) {
         event.stopPropagation();
+    }
+
+    add(event) {
+        this.nodeData.content = {short_name: event.short_name};
+        this.createContentMode = true;
+        this.createContent.emit(this.createContentMode);
+        // this.renderer.selectRootElement('#contentShortName').focus();
     }
 
 }
