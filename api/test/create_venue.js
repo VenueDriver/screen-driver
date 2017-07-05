@@ -24,7 +24,7 @@ describe('create_venue', () => {
         DatabaseCleaner.cleanDatabase().then(() => done());
     });
 
-    it('Create venue with name', () => {
+    it('Should create venue with name', () => {
         let venue = {name: "Hakkasan"};
         let params = {};
         params.body = JSON.stringify(venue);
@@ -39,7 +39,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create venue and id will generate automatically and revision number equal to 0', () => {
+    it('Should create venue and id should be generated automatically and revision number should be equal to 0', () => {
         let venue = {
             name: "Hakkasan",
         };
@@ -54,7 +54,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create venue with content_id', () => {
+    it('Should create venue with content_id', () => {
         let venue = {
             name: "Hakkasan",
             content_id: "710b962e-041c-11e1-9234-0123456789ab"
@@ -70,7 +70,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create screen group and id will generate automatically', () => {
+    it('Should create screen group and id should be generated automatically', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch"}]
@@ -86,7 +86,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create venue with screen groups with names', () => {
+    it('Should create venue with screen groups with names', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch"}, {name: "Deli"}]
@@ -108,7 +108,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create screen group with conent id', () => {
+    it('Should create screen group with content id', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", content_id: "710b962e-041c-11e1-9234-0123456789ab"}]
@@ -125,7 +125,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create screen group with screens', () => {
+    it('Should create screen group with screens', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A"}, {name: "B"}]}]
@@ -143,7 +143,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create and id will generate automatically', () => {
+    it('Should create screen and id shold be generated automatically', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A"}]}]
@@ -159,7 +159,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create screen with name', () => {
+    it('Should create screen with name', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A"}]}]
@@ -174,7 +174,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create screen with content id', () => {
+    it('Should create screen with content id', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A", content_id: "710b962e-041c-11e1-9234-0123456789ab"}]}]
@@ -190,7 +190,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Couldn\'t create venue without name', () => {
+    it('Shouldn\'t create venue without name', () => {
         let venue = {};
         let params = {};
         params.body = JSON.stringify(venue);
@@ -202,7 +202,19 @@ describe('create_venue', () => {
         });
     });
 
-    it('Create venue with existing name', () => {
+    it('Shouldn\'t create venue with empty name', () => {
+        let venue = {name: ''};
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 500);
+            assert(response.body.message == 'Venue couldn\'t be without name');
+        });
+    });
+
+    it('Shouldn\'t create venue with existing name', () => {
         let venue = {name: "Hakkasan"};
         let params = {};
         params.body = JSON.stringify(venue);
@@ -217,7 +229,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Couldn\'t create screen group without name', () => {
+    it('Shouldn\'t create screen group without name', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{}]
@@ -232,7 +244,22 @@ describe('create_venue', () => {
         });
     });
 
-    it('Couldn\'t create screen groups with non unique names', () => {
+    it('Shouldn\'t create screen group with empty name', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: ''}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 500);
+            assert(response.body.message == 'Screen group couldn\'t be without name');
+        });
+    });
+
+    it('Shouldn\'t create screen groups with non unique names', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch"}, {name: "Touch"}]
@@ -247,7 +274,7 @@ describe('create_venue', () => {
         });
     });
 
-    it('Couldn\'t create screen without name', () => {
+    it('Shouldn\'t create screen without name', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{}]}]
@@ -262,7 +289,22 @@ describe('create_venue', () => {
         });
     });
 
-    it('Couldn\'t create screens with non unique name', () => {
+    it('Shouldn\'t create screen with empty name', () => {
+        let venue = {
+            name: "Hakkasan",
+            screen_groups: [{name: "Touch", screens: [{name: ''}]}]
+        };
+        let params = {};
+        params.body = JSON.stringify(venue);
+
+        return wrapped.run(params).then(response => {
+            response.body = JSON.parse(response.body);
+            assert(response.statusCode == 500);
+            assert(response.body.message == 'Screen couldn\'t be without name');
+        });
+    });
+
+    it('Shouldn\'t create screens with non unique name', () => {
         let venue = {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A"}, {name: "A"}]}]

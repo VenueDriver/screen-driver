@@ -25,7 +25,7 @@ describe('update_venue', () => {
         DatabaseCleaner.cleanDatabase().then(() => done());
     });
 
-    it('Can update venue name', () => {
+    it('Should update venue name', () => {
         let newVenue = {name: "Hakkasan"};
         let updatedVenue = {name: "Hakkasan LV", _rev: 0};
 
@@ -34,7 +34,7 @@ describe('update_venue', () => {
         });
     });
 
-    it('Can update venue content id', () => {
+    it('Should update venue content id', () => {
         let newVenue = {name: "Hakkasan"};
         let updatedVenue = {name: "Hakkasan", content_id: "710b962e-041c-11e1-9234-0123456789ab", _rev: 0};
 
@@ -43,7 +43,7 @@ describe('update_venue', () => {
         });
     });
 
-    it('Can update venue screen groups names', () => {
+    it('Should update venue screen groups names', () => {
         let newVenue = {name: "Hakkasan", screen_groups: [{name: "Touch"}, {name: "Deli"}]};
         let updatedVenue = {name: "Hakkasan", screen_groups: [{name: "Menu"}, {name: "Restaurant"}], _rev: 0};
 
@@ -53,7 +53,7 @@ describe('update_venue', () => {
         });
     });
 
-    it('Add screen group to existing venue, and id will be generated automatically', () => {
+    it('Should add screen group to existing venue, and id should be generated automatically', () => {
         let newVenue = {name: "Hakkasan", screen_groups: [{name: "Touch"}]};
         let updatedVenue = {name: "Hakkasan", screen_groups: [{name: "Touch"}, {name: "Deli"}], _rev: 0};
 
@@ -64,7 +64,7 @@ describe('update_venue', () => {
         });
     });
 
-    it('Add screen to existing screen group, and id will be generated automatically', () => {
+    it('Should add screen to existing screen group, and id should be generated automatically', () => {
         let newVenue = {name: "Hakkasan", screen_groups: [{name: "Touch", screens: [{name: "A"}]}]};
         let updatedVenue = {
             name: "Hakkasan",
@@ -79,7 +79,7 @@ describe('update_venue', () => {
         });
     });
 
-    it('Couldn\'t change venue name to existing name', () => {
+    it('Shouldn\'t change venue name to existing name', () => {
         let existingVenue = {name: "Hakkasan LV"};
         let newVenue = {name: "Hakkasan"};
         let updatedVenue = {name: "Hakkasan LV", _rev: 0};
@@ -91,7 +91,7 @@ describe('update_venue', () => {
             }))
     });
 
-    it('Couldn\'t add new screen group with non-unique name', () => {
+    it('Shouldn\'t add new screen group with non-unique name', () => {
         let newVenue = {name: "Hakkasan LV", screen_groups: [{name: "Touch"}]};
         let updatedVenue = {name: "Hakkasan LV", screen_groups: [{name: "Touch"}, {name: "Touch"}], _rev: 0};
 
@@ -101,7 +101,7 @@ describe('update_venue', () => {
         })
     });
 
-    it('Couldn\'t add new screen with non-unique name', () => {
+    it('Shouldn\'t add new screen with non-unique name', () => {
         let newVenue = {
             name: "Hakkasan LV",
             screen_groups: [
@@ -126,7 +126,7 @@ describe('update_venue', () => {
         })
     });
 
-    it('Couldn\'t delete venue name', () => {
+    it('Shouldn\'t delete venue name', () => {
         let newVenue = {name: "Hakkasan LV"};
         let updatedVenue = {_rev: 0};
 
@@ -136,7 +136,7 @@ describe('update_venue', () => {
         })
     });
 
-    it('Couldn\'t delete group name', () => {
+    it('Shouldn\'t delete group name', () => {
         let newVenue = {name: "Hakkasan LV", screen_groups: [{name: "Touch"}]};
         let updatedVenue = {name: "Hakkasan LV", screen_groups: [{}], _rev: 0};
 
@@ -146,7 +146,7 @@ describe('update_venue', () => {
         })
     });
 
-    it('Couldn\'t delete screen name', () => {
+    it('Shouldn\'t delete screen name', () => {
         let newVenue = {
             name: "Hakkasan LV",
             screen_groups: [
@@ -165,7 +165,7 @@ describe('update_venue', () => {
         })
     });
 
-    it('Couldn\'t update venue without revision number', () => {
+    it('Shouldn\'t update venue without revision number', () => {
         let newVenue = {name: "Hakkasan"};
         let updatedVenue = {name: "Hakkasan LV"};
 
@@ -175,7 +175,7 @@ describe('update_venue', () => {
         })
     });
 
-    it('Couldn\'t update venue with uncorrect revision number', () => {
+    it('Shouldn\'t update venue with uncorrect revision number', () => {
         let newVenue = {name: "Hakkasan"};
         let updatedVenue = {name: "Hakkasan LV", _rev: 1};
 
