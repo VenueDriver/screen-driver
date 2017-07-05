@@ -17,7 +17,7 @@
             <div class="form-container">
                 <edit-tree-view-node-form
                         [venues]="venues"
-                        [content]="getContentListForDropdown()"
+                        [content]="content"
                         [currentNode]="node"
                         contentUrlPlaceholder="Content URL is not specified"
                         (submit)="addVenue($event)"
@@ -28,7 +28,7 @@
 
         <venues-tree-view
                 [venues]="venuesTree"
-                [content]="contentList"
+                [content]="content"
                 (update)="updateVenue($event)">
         </venues-tree-view>
     </div>

@@ -3,10 +3,10 @@ import {Http, Response} from "@angular/http";
 import { environment } from '../../environments/environment';
 import {Venue} from "./entities/venue";
 import { Observable } from 'rxjs/Observable';
-
-import * as _ from 'lodash';
 import {Content} from "../content/content";
 import {ContentService} from "../content/content.service";
+
+import * as _ from 'lodash';
 
 @Injectable()
 export class VenuesService {
@@ -72,20 +72,6 @@ export class VenuesService {
             node[subItemsArrayName] = node.children;
             delete node.children;
         }
-    }
-
-    initContentListForDropdown(content: Content[]): any {
-        let contentListForDropdown = this.convertContentListForDropdown(content);
-        contentListForDropdown = _.sortBy(contentListForDropdown, 'name');
-        return contentListForDropdown;
-    }
-
-    private convertContentListForDropdown(content: Content[]): any {
-        return _.map(content, c => {
-            c.name = c.short_name;
-            c.description = c.url;
-            return c;
-        });
     }
 
     private getDefaultUrlValue() {

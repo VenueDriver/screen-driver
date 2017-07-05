@@ -1,0 +1,20 @@
+<div>
+    <kendo-autocomplete
+            [data]="data"
+            [value]="value"
+            [valueField]="'short_name'"
+            [placeholder]="'Content URL'"
+            [popupSettings]="{animate: false}"
+            [filterable]="true"
+            (filterChange)="handleFilter($event)"
+            (valueChange)="onSelect($event)"
+            (focus)="openPopup()">
+
+        <ng-template kendoAutoCompleteItemTemplate let-dataItem>
+            <div class="autocomplete-item">
+                <div class="item-value">{{dataItem.short_name}}</div>
+                <div class="item-desc">{{dataItem.url}}</div>
+            </div>
+        </ng-template>
+    </kendo-autocomplete>
+</div>

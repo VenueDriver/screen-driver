@@ -13,26 +13,6 @@ export class VenuesTreeViewService {
         }
     }
 
-    createDefaultValue(node: any): any {
-        let defaultName = this.getDefaultValueForContentDropdown(node);
-        return this.generateDefaultValueForDropdown(defaultName);
-    }
-
-    generateDefaultValueForDropdown(valueForName: string): any {
-        return {
-            id: '',
-            name: valueForName
-        }
-    }
-
-    private getDefaultValueForContentDropdown(level: number): string {
-        if (level == 1) {
-            return 'Is not specified';
-        }
-        let parentNodeLevelName = this.getParentNodeLevelName(level);
-        return `Inherit from ${parentNodeLevelName}`;
-    }
-
     getPlaceholderForDefaultUrl(level: number): string {
         if (level == 1) {
             return 'Content URL is not specified';
