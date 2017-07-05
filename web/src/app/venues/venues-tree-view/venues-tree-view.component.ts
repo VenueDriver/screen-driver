@@ -2,7 +2,8 @@ import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angu
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
-import {VenuesService} from "../venues.service";
+import {VenuesTreeViewService} from "./venues-tree-view.service";
+import {Content} from "../../content/content";
 
 import * as _ from 'lodash';
 
@@ -14,20 +15,19 @@ import * as _ from 'lodash';
 export class VenuesTreeViewComponent implements OnInit {
 
     @Input() venues: Array<any>;
-    @Input() content: Array<any>;
+    @Input() content: Array<Content>;
     @Output() update = new EventEmitter();
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
-    contentUrlPlaceholder = 'Default URL';
     options: any;
     actionMapping: any;
-    currentNode: any;
-    originalNode: any;
+    currentNodeData: any;
+    originalNodeData: any;
     isFormValid = false;
 
-    constructor(private venueService: VenuesService) { }
+    constructor(private treeViewService: VenuesTreeViewService) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
@@ -58,7 +58,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     getMouseClickAction() {
-        return _.isEmpty(this.currentNode) ? TREE_ACTIONS.TOGGLE_EXPANDED : TREE_ACTIONS.DESELECT;
+        return _.isEmpty(this.currentNodeData) ? TREE_ACTIONS.TOGGLE_EXPANDED : TREE_ACTIONS.DESELECT;
     }
 
     hasContentInfo(node: any): boolean {
@@ -93,19 +93,19 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     createBlankNode(): any {
-        this.currentNode = {
+        this.currentNodeData = {
             id: '',
             name: ''
         };
-        return this.currentNode;
+        return this.currentNodeData;
     }
 
     clearCurrentNode() {
-        this.currentNode = {};
+        this.currentNodeData = {};
     }
 
     isCurrentNode(node: any) {
-        return _.isEqual(this.currentNode, node.data);
+        return _.isEqual(this.currentNodeData, node.data);
     }
 
     isAllowToAddChild(node: any) {
@@ -113,10 +113,10 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isAllowToEditNode() {
-        return _.isEmpty(this.currentNode);
+        return _.isEmpty(this.currentNodeData);
     }
 
-    performCancel(event: any, node: any) {
+    performCancel(node: any) {
         this.stopClickPropagation(event);
         if (!node.data.id) {
             this.removeBlankNode(node);
@@ -129,15 +129,15 @@ export class VenuesTreeViewComponent implements OnInit {
 
     removeBlankNode(node: any) {
         let parentNodeData = node.parent.data;
-        _.pull(parentNodeData.children, this.currentNode);
+        _.pull(parentNodeData.children, this.currentNodeData);
         this.updateTreeModel();
     }
 
     undoEditing(node: any) {
         let parentNodeData = node.parent.data;
-        let nodeIndex = parentNodeData.children.indexOf(this.currentNode);
-        _.pull(parentNodeData.children, this.currentNode);
-        parentNodeData.children.splice(nodeIndex, 0, this.originalNode);
+        let nodeIndex = parentNodeData.children.indexOf(this.currentNodeData);
+        _.pull(parentNodeData.children, this.currentNodeData);
+        parentNodeData.children.splice(nodeIndex, 0, this.originalNodeData);
         this.updateTreeModel();
     }
 
@@ -154,8 +154,7 @@ export class VenuesTreeViewComponent implements OnInit {
         });
     }
 
-    performSubmit(event: any, node: any) {
-        this.stopClickPropagation(event);
+    performSubmit(node: any) {
         let venueId = this.getVenueId(node);
         let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
         this.update.emit(venueToUpdate);
@@ -172,62 +171,40 @@ export class VenuesTreeViewComponent implements OnInit {
         }
     }
 
-    setNodeContent(content) {
-        if (!_.isEmpty(content.id)) {
-            this.currentNode.content = content;
-            this.currentNode.content_id = content.id;
-        } else {
-            this.currentNode.content = null;
-            this.currentNode.content_id = null;
-        }
-    }
-
     editNode(event: any, node: any) {
         this.stopClickPropagation(event);
-        this.currentNode = node.data;
-        this.originalNode = _.clone(node.data);
+        this.currentNodeData = node.data;
+        this.originalNodeData = _.clone(node.data);
         this.updateTreeViewOptions();
     }
 
-    getDropdownValue(): string {
-        return this.currentNode.content ? this.currentNode.content.short_name : this.contentUrlPlaceholder;
-    }
-
     hasChildren(node: any): boolean {
-        return node.children && node.children.length > 0;
+        return node.level < 3 && node.children && node.children.length > 0;
     }
 
     stopClickPropagation(event: any) {
         event.stopPropagation();
     }
 
-    isInputInvalid(): boolean {
-        return this.isCurrentNodeHasName() && !this.isFormValid;
-    }
-
-    getValidationMessage(node: any): string {
-        let item = this.getNodeLevelName(node);
-        return this.venueService.getValidationMessage(item);
-    }
-
-    private getNodeLevelName(node: any) {
-        switch (node.level) {
-            case 3: return 'Screen';
-            case 2: return 'Screen group';
-            default: return 'Venue';
-        }
-    }
-
     isCurrentNodeHasName(): boolean {
-        return !_.isEmpty(this.currentNode.name)
-    }
-
-    getNameInputPlaceholder(node: any): string {
-        return `${this.getNodeLevelName(node)} name`;
+        return !_.isEmpty(this.currentNodeData.name);
     }
 
     getAddButtonTitle(node: any): string {
         let title = 'Add new screen';
         return node.level > 1 ? title : `${title} group`;
+    }
+
+    getEditButtonTitle(node: any): string {
+        let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
+        return `Edit ${nodeLevelName.toLowerCase()}`;
+    }
+
+    getNodeLevelName(node: any): string {
+        return this.treeViewService.getNodeLevelName(node.level);
+    }
+
+    getPlaceholderForDefaultUrl(node: any): string {
+        return this.treeViewService.getPlaceholderForDefaultUrl(node.level);
     }
 }

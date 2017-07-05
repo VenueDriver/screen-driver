@@ -5,21 +5,30 @@
             <div class="page-title">
                 Venues
             </div>
-            <div *ngIf="!isShowAddVenueForm" class="plus-button add-button" (click)="showAddVenueForm()"></div>
+            <div *ngIf="!isShowAddVenueForm"
+                 class="plus-button add-button"
+                 (click)="showAddVenueForm()"
+                 title="Add new venue">
+            </div>
         </div>
 
-        <div class="form-container" *ngIf="isShowAddVenueForm">
-            <add-venue-form
-                    [venues]="venues"
-                    [content]="contentListForDropdown"
-                    (cancel)="hideAddVenueForm()"
-                    (submit)="addVenue($event)">
-            </add-venue-form>
+        <div *ngIf="isShowAddVenueForm" class="add-venue-form">
+            <div class="form-title">Add new venue</div>
+            <div class="form-container">
+                <edit-tree-view-node-form
+                        [venues]="venues"
+                        [content]="content"
+                        [currentNode]="node"
+                        contentUrlPlaceholder="Content URL is not specified"
+                        (submit)="addVenue($event)"
+                        (cancel)="hideAddVenueForm()">
+                </edit-tree-view-node-form>
+            </div>
         </div>
 
         <venues-tree-view
                 [venues]="venuesTree"
-                [content]="contentListForDropdown"
+                [content]="content"
                 (update)="updateVenue($event)">
         </venues-tree-view>
     </div>

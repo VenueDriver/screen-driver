@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --dev --host 0.0.0.0 --disable-host-check",
+    "start": "ng serve --host 0.0.0.0 --disable-host-check --proxy-config proxy.conf.json",
     "prod": "ng serve --prod --aot --host 0.0.0.0 --disable-host-check",
     "build": "ng build --prod --aot",
     "test": "ng test",
@@ -22,6 +22,8 @@
     "@angular/platform-browser": "4.2.3",
     "@angular/platform-browser-dynamic": "4.2.3",
     "@angular/router": "4.2.3",
+    "@progress/kendo-angular-dropdowns": "1.1.1",
+    "@progress/kendo-angular-l10n": "1.0.2",
     "angular-tree-component": "3.7.2",
     "angular2-notification-bar": "1.2.4",
     "bootstrap": "3.3.7",

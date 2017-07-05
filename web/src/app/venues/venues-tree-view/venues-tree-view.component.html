@@ -1,7 +1,7 @@
 <div>
     <tree-root [focused]="true" [nodes]="venues" [options]="options">
         <ng-template class="node-template" #treeNodeTemplate let-node let-index="index">
-            <div class="single-node" [ngClass]="{'node-without-children': node.level < 3 && !hasChildren(node)}">
+            <div class="single-node" [ngClass]="{'node-without-children': !hasChildren(node)}">
                 <div *ngIf="!isCurrentNode(node)" class="node-info">
                     <div class="node-name">
                         <span class="node-level-name">{{getNodeLevelName(node)}}</span>: {{node.data.name}}
@@ -12,51 +12,26 @@
                         <span class="content-url">{{ getContentUrl(node) }}</span>
                     </div>
                     <ng-template #contentPlaceholder>
-                        <div class="content-url-placeholder">{{contentUrlPlaceholder}}</div>
+                        <div class="content-url-placeholder">{{getPlaceholderForDefaultUrl(node)}}</div>
                     </ng-template>
                 </div>
 
                 <div *ngIf="isCurrentNode(node)" class="edit-node-form">
-
-                    <div class="inputs-container" [class.has-error]="isInputInvalid()">
-                        <div *ngIf="isInputInvalid()" class="message validation-error">
-                            {{getValidationMessage(node)}}
-                        </div>
-                        <input type="text"
-                               [placeholder]="getNameInputPlaceholder(node)"
-                               [(ngModel)]="currentNode.name"
-                               (ngModelChange)="validateForm(node)"
-                               class="form-control node-name">
-
-                        <div class="dropdown-container">
-                            <dropdown
-                                    [dropdownValue]="getDropdownValue()"
-                                    [items]="content"
-                                    (select)="setNodeContent($event)">
-                            </dropdown>
-                        </div>
-                    </div>
-
-                    <div class="buttons-container">
-                        <button type="button"
-                                class="btn btn-success"
-                                [disabled]="!isFormValid"
-                                (click)="performSubmit($event, node)">
-                            Save
-                        </button>
-
-                        <button type="button"
-                                class="btn btn-link cancel-button"
-                                (click)="performCancel($event, node)">
-                            Cancel
-                        </button>
-                    </div>
+                    <edit-tree-view-node-form
+                            [venues]="venues"
+                            [content]="content"
+                            [currentNode]="node"
+                            [contentUrlPlaceholder]="getPlaceholderForDefaultUrl(node)"
+                            (submit)="performSubmit($event)"
+                            (cancel)="performCancel($event)">
+                    </edit-tree-view-node-form>
                 </div>
 
                 <div class="buttons-container">
                     <div *ngIf="isAllowToEditNode()"
                          class="node-button edit-button"
-                         (click)="editNode($event, node); validateForm(node)">
+                         (click)="editNode($event, node); validateForm(node)"
+                         [title]="getEditButtonTitle(node)">
                     </div>
 
                     <div *ngIf="isAllowToAddChild(node)"

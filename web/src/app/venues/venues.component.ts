@@ -3,6 +3,9 @@ import {VenuesService} from "./venues.service";
 import {Venue} from "./entities/venue";
 import {Content} from "../content/content";
 import {NotificationService} from "../notifications/notification.service";
+import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'venues',
@@ -15,11 +18,11 @@ export class VenuesComponent implements OnInit {
     venues: Venue[];
     venuesTree: any;
     content: Content[];
-    contentListForDropdown: any;
     isShowAddVenueForm = false;
 
     constructor(
         private venuesService: VenuesService,
+        private treeViewService: VenuesTreeViewService,
         private notificationService: NotificationService
     ) { }
 
@@ -37,10 +40,7 @@ export class VenuesComponent implements OnInit {
 
     loadContent() {
         this.venuesService.loadContent()
-            .subscribe(content => {
-                this.content = content;
-                this.contentListForDropdown = this.venuesService.initContentListForDropdown(this.content);
-            });
+            .subscribe(content => this.content = _.sortBy(content, 'short_name'));
     }
 
     showAddVenueForm() {

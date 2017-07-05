@@ -1,4 +1,4 @@
-FROM deps-image
+FROM screendriver-web-app-deps-image:latest
 
 ADD . /app-src
 WORKDIR /app-src
