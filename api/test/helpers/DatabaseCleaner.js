@@ -1,7 +1,7 @@
 const Q = require('q');
 
-const database = require('./../dynamodb');
-const dbHelper = require('./../helpers/db_helper');
+const database = require('./../../dynamodb');
+const dbHelper = require('./../../helpers/db_helper');
 
 const tables = [process.env.VENUES_TABLE, process.env.CONTENT_TABLE];
 
