@@ -30,13 +30,13 @@ export class ContentAutocompleteComponent {
         return this.selectedValue ? this.selectedValue : '';
     }
 
-    handleFilter() {
-        this.filter = this.selectedValue.short_name;
+    handleKeyUp(event: any) {
+        this.filter = event.target.value;
         if (!this.filter) {
             this.showAll();
             return;
         }
-        this.performFiltering(this.filter);
+        this.performFiltering();
     }
 
     showAll() {
@@ -44,10 +44,9 @@ export class ContentAutocompleteComponent {
         this.showDropdown();
     }
 
-    performFiltering(value) {
-        value = value.toLowerCase();
+    performFiltering() {
+        let value = this.filter.toLowerCase();
         this.data = _.filter(this.content, c => c.short_name.toLowerCase().indexOf(value) !== -1);
-        return value;
     }
 
     onSelect(content: Content) {

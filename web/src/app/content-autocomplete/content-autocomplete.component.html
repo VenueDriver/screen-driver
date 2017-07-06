@@ -6,7 +6,7 @@
                 [value]="getValue()"
                 (focus)="showDropdown()"
                 (clickOutside)="handleClickOutside($event)"
-                (keypress)="handleFilter()">
+                (keyup)="handleKeyUp($event)">
 
         <ul class="dropdown-menu" [class.shown]="isShowDropdown">
             <li *ngFor="let item of data">
