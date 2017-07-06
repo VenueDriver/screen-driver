@@ -84,6 +84,7 @@ export class VenuesComponent implements OnInit {
     }
 
     handleCreateContentResponse(venue: Venue, content: Content) {
+        this.loadContent();
         venue.content_id = content.id;
         this.addVenue(venue);
     }

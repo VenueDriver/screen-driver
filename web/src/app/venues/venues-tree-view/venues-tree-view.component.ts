@@ -19,6 +19,7 @@ export class VenuesTreeViewComponent implements OnInit {
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
     @Output() update = new EventEmitter();
+    @Output() contentChange = new EventEmitter();
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
@@ -160,6 +161,7 @@ export class VenuesTreeViewComponent implements OnInit {
     performSubmit(node: any) {
         if (this.isCreateContentMode) {
             this.createContentBeforeUpdateVenue(node);
+            this.isCreateContentMode = false;
         } else {
             this.updateVenue(node);
         }
@@ -174,6 +176,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     handleCreateContentResponse(node: any, content: Content) {
+        this.contentChange.emit();
         node.data.content_id = content.id;
         this.updateVenue(node);
     }
