@@ -73,7 +73,19 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     validateForm() {
         this.nodeData.name = this.nodeData.name.trim();
-        this.isFormValid = this.isNodeHasName() && this.isNodeNameUnique();
+        this.isFormValid = this.isVenueNameValid() && this.isContentShortNameValid() && this.isContentUrlValid();
+    }
+
+    isVenueNameValid(): boolean {
+        return this.isNodeHasName() && this.isNodeNameUnique();
+    }
+
+    isContentShortNameValid(): boolean {
+        return Content.isShortNameValid(this.nodeData.content);
+    }
+
+    isContentUrlValid() {
+        return Content.isUrlValid(this.nodeData.content);
     }
 
     isNodeNameUnique(): boolean {
@@ -134,6 +146,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     add(event) {
         this.nodeData.content = {short_name: event.short_name};
         this.createContentMode = true;
+        this.isFormValid = false;
         this.createContent.emit(this.createContentMode);
         // this.renderer.selectRootElement('#contentShortName').focus();
     }
