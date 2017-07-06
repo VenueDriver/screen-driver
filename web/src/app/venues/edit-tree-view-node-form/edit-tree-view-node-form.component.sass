@@ -1,3 +1,5 @@
+$small-resolution: 500px
+
 .edit-node-form
   display: flex
   flex-direction: row
@@ -6,6 +8,11 @@
   .inputs-container
     margin-top: -20px
     width: 400px
+    padding-right: 10px
+
+    @media screen and (max-width: $small-resolution)
+      width: 150%
+      float: right
 
     input
       font-size: 18px
