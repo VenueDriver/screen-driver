@@ -15,11 +15,6 @@
                     <div class="item-value">{{item.short_name}}</div>
                     <div class="item-desc">{{item.url}}</div>
                 </a>
-                <div *ngIf="last" class="dropdown-footer">
-                    <button class="btn btn-block btn-lg add-button" (click)="emitAddNewEvent()">
-                        Add new content URL
-                    </button>
-                </div>
             </li>
             <li *ngIf="data.length < 1">
                 <div class="nodata-block">
@@ -27,6 +22,8 @@
                         No suggestions
                     </div>
                 </div>
+            </li>
+            <li>
                 <div class="dropdown-footer">
                     <button class="btn btn-block btn-lg add-button" (click)="emitAddNewEvent()">
                         Add new content URL
