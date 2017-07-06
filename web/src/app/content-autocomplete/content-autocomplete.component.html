@@ -5,12 +5,12 @@
                 placeholder="Content URL"
                 [value]="getValue()"
                 (focus)="showDropdown()"
-                (blur)="hideDropdown()"
+                (clickOutside)="handleClickOutside($event)"
                 (keypress)="handleFilter()">
 
         <ul class="dropdown-menu" [class.shown]="isShowDropdown">
             <li *ngFor="let item of data">
-                <a (click)="onSelect(item)">
+                <a (click)="onSelect(item)" class="dropdown-item">
                     <div class="item-value">{{item.short_name}}</div>
                     <div class="item-desc">{{item.url}}</div>
                 </a>
