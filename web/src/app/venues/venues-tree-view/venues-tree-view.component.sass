@@ -1,3 +1,5 @@
+$tablet-resolution: 768px
+
 .node-content-wrapper
   padding-bottom: 300px
 
@@ -36,6 +38,9 @@
       width: 25px
       height: 25px
       cursor: pointer
+      @media screen and (max-width: $tablet-resolution)
+        display: inline-block
+        margin: 5px 0 5px 0
 
     .plus-button
       content: url('../../../assets/images/add-circular-outlined-button.png')
