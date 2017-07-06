@@ -18,7 +18,7 @@ export class ContentAutocompleteComponent {
         this.data = [...content];
     }
 
-    @Output() select = new EventEmitter();
+    @Output() select = new EventEmitter<Content>();
     @Output() add = new EventEmitter();
 
     content: Array<Content>;
@@ -33,6 +33,7 @@ export class ContentAutocompleteComponent {
     handleKeyUp(event: any) {
         this.filter = event.target.value;
         if (!this.filter) {
+            this.emitEmptySelection();
             this.showAll();
             return;
         }
@@ -50,7 +51,7 @@ export class ContentAutocompleteComponent {
     }
 
     onSelect(content: Content) {
-        this.select.emit(content);
+        this.emitSelection(content);
         this.hideDropdown();
         this.selectedValue = content.short_name;
     }
@@ -81,5 +82,17 @@ export class ContentAutocompleteComponent {
 
     hideDropdown() {
         this.isShowDropdown = false;
+    }
+
+    handleTextSelection(event) {
+        event.stopPropagation();
+    }
+
+    emitEmptySelection() {
+        this.emitSelection(new Content());
+    }
+
+    emitSelection(content: Content) {
+        this.select.emit(content);
     }
 }

@@ -6,6 +6,7 @@
                 [value]="getValue()"
                 (focus)="showDropdown()"
                 (clickOutside)="handleClickOutside($event)"
+                (select)="handleTextSelection($event)"
                 (keyup)="handleKeyUp($event)">
 
         <ul class="dropdown-menu" [class.shown]="isShowDropdown">
