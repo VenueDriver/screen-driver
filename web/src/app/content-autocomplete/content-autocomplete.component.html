@@ -1,37 +1,20 @@
 <div>
-    <kendo-autocomplete
-            [data]="data"
-            [value]="value"
-            [valueField]="'short_name'"
-            [placeholder]="'Content URL'"
-            [popupSettings]="{animate: false}"
-            [filterable]="true"
-            (filterChange)="handleFilter($event)"
-            (valueChange)="onSelect($event)"
-            (focus)="openPopup()">
+    <div class="dropdown">
+        <input type="text"
+                class="dropdown-toggle form-control"
+                placeholder="Content URL"
+                [value]="getValue()"
+                (focus)="showDropdown()"
+                (blur)="hideDropdown()"
+                (keypress)="handleFilter()">
 
-        <ng-template kendoAutoCompleteItemTemplate let-dataItem>
-            <div class="autocomplete-item">
-                <div class="item-value">{{dataItem.short_name}}</div>
-                <div class="item-desc">{{dataItem.url}}</div>
-            </div>
-        </ng-template>
-
-        <ng-template kendoAutoCompleteFooterTemplate>
-            <div class="autocomplete-footer">
-                <button
-                        class="btn btn-block btn-lg add-button"
-                        (click)="emitAddNewEvent()">
-                    Add new content URL
-                </button>
-            </div>
-        </ng-template>
-
-        <ng-template kendoDropDownListNoDataTemplate>
-            <div class="nodata-warning">
-                <span class="k-icon k-i-warning"></span>No suggestions
-            </div>
-        </ng-template>
-
-    </kendo-autocomplete>
+        <ul class="dropdown-menu" [class.shown]="isShowDropdown">
+            <li *ngFor="let item of data">
+                <a (click)="onSelect(item)">
+                    <div class="item-value">{{item.short_name}}</div>
+                    <div class="item-desc">{{item.url}}</div>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>

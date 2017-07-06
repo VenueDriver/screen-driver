@@ -1,6 +1,5 @@
 import {Component, Output, EventEmitter, Input, ViewChild} from '@angular/core';
 import {Content} from "../content/content";
-import {AutoCompleteComponent} from "@progress/kendo-angular-dropdowns";
 
 import * as _ from 'lodash';
 
@@ -20,25 +19,27 @@ export class ContentAutocompleteComponent {
     @Output() select = new EventEmitter();
     @Output() add = new EventEmitter();
 
-    @ViewChild(AutoCompleteComponent)
-    private autocomplete: AutoCompleteComponent;
-
     content: Array<Content>;
     data: Array<Content>;
     filter: string;
+    isShowDropdown = false;
 
-    handleFilter(value) {
-        this.filter = value;
-        if (!value) {
+    getValue(): string {
+        return this.value && this.value.short_name ? this.value.short_name : '';
+    }
+
+    handleFilter() {
+        this.filter = this.value.short_name;
+        if (!this.filter) {
             this.showAll();
             return;
         }
-        this.performFiltering(value);
+        this.performFiltering(this.filter);
     }
 
     showAll() {
         this.data = [...this.content];
-        this.openPopup();
+        this.showDropdown();
     }
 
     performFiltering(value) {
@@ -47,18 +48,21 @@ export class ContentAutocompleteComponent {
         return value;
     }
 
-    onSelect(value: string) {
-        let selectedValue = _.find(this.content, ['short_name', value]);
-        if (selectedValue) {
-            this.select.emit(selectedValue);
+    onSelect(content: Content) {
+        if (content) {
+            this.select.emit(content);
         }
-    }
-
-    openPopup() {
-        this.autocomplete.toggle(true);
     }
 
     emitAddNewEvent() {
         this.add.emit({short_name: this.filter});
+    }
+
+    showDropdown() {
+        this.isShowDropdown = true;
+    }
+
+    hideDropdown() {
+        this.isShowDropdown =false;
     }
 }
