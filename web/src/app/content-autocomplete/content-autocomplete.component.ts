@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, Input, ViewChild} from '@angular/core';
+import {Component, Output, EventEmitter, Input} from '@angular/core';
 import {Content} from "../content/content";
 
 import * as _ from 'lodash';
@@ -12,7 +12,7 @@ const DROPDOWN_ITEM_CLASS = 'dropdown-item';
 })
 export class ContentAutocompleteComponent {
 
-    @Input() value: any;
+    @Input('value') selectedValue: any;
     @Input('content') set model(content: Array<Content>) {
         this.content = content;
         this.data = [...content];
@@ -27,11 +27,11 @@ export class ContentAutocompleteComponent {
     isShowDropdown = false;
 
     getValue(): string {
-        return this.value && this.value.short_name ? this.value.short_name : '';
+        return this.selectedValue ? this.selectedValue : '';
     }
 
     handleFilter() {
-        this.filter = this.value.short_name;
+        this.filter = this.selectedValue.short_name;
         if (!this.filter) {
             this.showAll();
             return;
@@ -51,9 +51,9 @@ export class ContentAutocompleteComponent {
     }
 
     onSelect(content: Content) {
-        if (content) {
-            this.select.emit(content);
-        }
+        this.select.emit(content);
+        this.hideDropdown();
+        this.selectedValue = content.short_name;
     }
 
     emitAddNewEvent() {
