@@ -1,7 +1,7 @@
 <div class="edit-node-form">
 
     <div class="inputs-container">
-        <div *ngIf="isInputInvalid()" class="message validation-error">
+        <div *ngIf="!isVenueNameValid()" class="message validation-error">
             {{getValidationMessage()}}
         </div>
         <input id="nodeName"
@@ -12,19 +12,29 @@
                class="form-control node-name">
 
         <div *ngIf="createContentMode">
-            <input id="contentShortName"
-                   type="text"
-                   [placeholder]="'Short name'"
-                   [(ngModel)]="nodeData.content.short_name"
-                   (ngModelChange)="validateForm()"
-                   class="form-control node-name content-input">
+            <div class="input-block">
+                <div *ngIf="!isContentShortNameValid()" class="message validation-error">
+                    {{getValidationMessage()}}
+                </div>
+                <input id="contentShortName"
+                       type="text"
+                       [placeholder]="'Short name'"
+                       [(ngModel)]="nodeData.content.short_name"
+                       (ngModelChange)="validateForm()"
+                       class="form-control node-name content-input">
+            </div>
 
-            <input id="contentUrl"
-                   type="text"
-                   [placeholder]="'Content URL'"
-                   [(ngModel)]="nodeData.content.url"
-                   (ngModelChange)="validateForm()"
-                   class="form-control node-name content-input">
+            <div class="input-block">
+                <div *ngIf="!isContentUrlValid()" class="message validation-error">
+                    {{getValidationMessage()}}
+                </div>
+                <input id="contentUrl"
+                       type="text"
+                       [placeholder]="'Content URL'"
+                       [(ngModel)]="nodeData.content.url"
+                       (ngModelChange)="validateForm()"
+                       class="form-control node-name content-input">
+            </div>
 
         </div>
 

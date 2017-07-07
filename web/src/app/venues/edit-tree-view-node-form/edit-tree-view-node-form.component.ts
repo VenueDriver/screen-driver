@@ -81,11 +81,11 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     }
 
     isContentShortNameValid(): boolean {
-        return Content.isShortNameValid(this.nodeData.content);
+        return !this.createContentMode || Content.isShortNameValid(this.nodeData.content);
     }
 
     isContentUrlValid() {
-        return Content.isUrlValid(this.nodeData.content);
+        return !this.createContentMode || Content.isUrlValid(this.nodeData.content);
     }
 
     isNodeNameUnique(): boolean {
