@@ -9,6 +9,8 @@ import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
 
+const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 25;
+
 @Component({
     selector: 'venues-tree-view',
     templateUrl: 'venues-tree-view.component.html',
@@ -83,7 +85,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     getShortUrl(content: Content): string {
-        return Content.getShortUrl(content, 60);
+        return Content.getShortUrl(content, MAX_DISPLAYING_URL_LENGTH);
     }
 
     addNewNode(event, node) {
