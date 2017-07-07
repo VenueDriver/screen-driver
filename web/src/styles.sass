@@ -27,7 +27,10 @@ body
       cursor: pointer
 
   .navbar-default
-    margin: 0 -15px 20px -15px
+    margin: 0 -25px 20px -25px
+
+    @media screen and (max-width: $tablet-resolution)
+      margin: 0 -5px 20px -5px
 
   .tree-children
     overflow: initial
@@ -82,3 +85,7 @@ body
     .navbar-header
       width: 800px
       padding-left: 3px
+
+      @media screen and (max-width: $tablet-resolution)
+        width: auto
+        padding-left: 0

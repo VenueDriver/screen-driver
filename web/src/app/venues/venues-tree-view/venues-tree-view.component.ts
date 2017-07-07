@@ -9,7 +9,7 @@ import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
 
-const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 25;
+const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
 
 @Component({
     selector: 'venues-tree-view',
