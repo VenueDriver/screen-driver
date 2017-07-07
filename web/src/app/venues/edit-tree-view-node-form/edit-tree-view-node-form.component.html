@@ -1,6 +1,6 @@
 <div class="edit-node-form">
 
-    <div class="inputs-container" [class.has-error]="isInputInvalid()">
+    <div class="inputs-container">
         <div *ngIf="isInputInvalid()" class="message validation-error">
             {{getValidationMessage()}}
         </div>
@@ -16,14 +16,14 @@
                    type="text"
                    [placeholder]="'Short name'"
                    [(ngModel)]="nodeData.content.short_name"
-
+                   (ngModelChange)="validateForm()"
                    class="form-control node-name content-input">
 
             <input id="contentUrl"
                    type="text"
                    [placeholder]="'Content URL'"
                    [(ngModel)]="nodeData.content.url"
-
+                   (ngModelChange)="validateForm()"
                    class="form-control node-name content-input">
 
         </div>

@@ -1,23 +1,35 @@
 import * as _ from 'lodash';
 
 export class Content {
-  id: string = '';
-  short_name: string = '';
-  url: string = '';
+    id: string = '';
+    short_name: string = '';
+    url: string = '';
 
-  constructor(content?: Content) {
-    if (content) {
-      this.id = content.id;
-      this.short_name = content.short_name;
-      this.url = content.url;
+    constructor(content?: Content) {
+        if (content) {
+            this.id = content.id;
+            this.short_name = content.short_name;
+            this.url = content.url;
+        }
     }
-  }
 
-  //TODO implement url validation
-  validate() {
-    return !_.isEmpty(this.short_name)
-        && this.short_name.trim().length > 3
-        && !_.isEmpty(this.url)
-        && this.url.trim().length > 3;
-  }
+    //TODO implement url validation
+    static validate(content: Content): boolean {
+        return Content.isShortNameValid(content)
+            && Content.isUrlValid(content)
+    }
+
+    static isUrlValid(content: Content): boolean {
+        return !_.isEmpty(content.url)
+            && content.url.trim().length > 3;
+    }
+
+    static isShortNameValid(content: Content): boolean {
+        return !_.isEmpty(content.short_name)
+            && content.short_name.trim().length > 3
+    }
+
+    static hasOnlyOneField(content: Content): boolean {
+        return !_.isEmpty(content.url) && !_.isEmpty(content.short_name) || _.isEmpty(content.url) && _.isEmpty(content.short_name)
+    }
 }

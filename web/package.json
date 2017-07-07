@@ -13,7 +13,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "4.2.3",
     "@angular/common": "4.2.3",
     "@angular/compiler": "4.2.3",
     "@angular/core": "4.2.3",
@@ -22,8 +21,6 @@
     "@angular/platform-browser": "4.2.3",
     "@angular/platform-browser-dynamic": "4.2.3",
     "@angular/router": "4.2.3",
-    "@progress/kendo-angular-dropdowns": "1.1.1",
-    "@progress/kendo-angular-l10n": "1.0.2",
     "angular-tree-component": "3.7.2",
     "angular2-notification-bar": "1.2.4",
     "bootstrap": "3.3.7",
