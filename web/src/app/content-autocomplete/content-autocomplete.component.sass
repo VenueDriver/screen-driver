@@ -1,12 +1,13 @@
+@import "../../variables"
+
 $dropdown-width: inherit
-$dropdown-font-size: 18px
 
 .dropdown
   width: 100%
 
   input
     width: $dropdown-width
-    font-size: $dropdown-font-size
+    font-size: $input-font-size
 
   .dropdown-menu
     width: $dropdown-width
@@ -20,7 +21,7 @@ $dropdown-font-size: 18px
       padding: 5px 12px
       min-height: 40px
       line-height: 30px
-      font-size: $dropdown-font-size
+      font-size: $input-font-size
       overflow: hidden
 
       .item-desc
@@ -46,6 +47,7 @@ $dropdown-font-size: 18px
     cursor: default
 
     .nodata-warning
-      margin-top: auto
-      min-height: 45px
+      font-size: $input-font-size
+      height: 50px
+      padding-top: 11px
       text-align: center

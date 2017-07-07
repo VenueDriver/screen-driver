@@ -1,3 +1,5 @@
+@import "variables"
+
 body
   margin: 0 15px 45px
 
@@ -43,7 +45,7 @@ body
           box-shadow: none !important
 
   .toggle-children-wrapper
-    height: 95px
+    height: $tree-view-node-height
     display: flex
     align-items: center
     padding-top: 5px !important
@@ -54,7 +56,7 @@ body
       background-image: url('assets/images/expand-arrow.png') !important
 
   .validation-error
-    color: #a94442
+    color: $error-color
     font-size: 13px
 
   .btn
