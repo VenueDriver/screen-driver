@@ -112,6 +112,7 @@ export class EditTreeViewNodeFormComponent {
     }
 
     isContentShortNameUnique(content: Content): boolean {
+        content.short_name = content.short_name.trim();
         return !_.find(this.content, c => c.short_name === content.short_name);
     }
 
