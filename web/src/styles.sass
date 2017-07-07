@@ -1,7 +1,10 @@
 @import "variables"
 
 body
-  margin: 0 15px 45px
+  margin: 0 25px 45px
+
+  @media screen and (max-width: $tablet-resolution)
+    margin: 0 5px 45px
 
   .notifications-container
     line-height: 50px !important
@@ -45,6 +48,9 @@ body
       .node-content-wrapper
         width: 100%
         padding: 5px 8px !important
+
+        @media screen and (max-width: $tablet-resolution)
+          padding: 5px 0 5px 5px !important
 
         &:hover
           background: none !important
