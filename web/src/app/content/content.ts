@@ -18,7 +18,6 @@ export class Content {
         }
     }
 
-    //TODO implement url validation
     static validate(content: Content): boolean {
         return Content.isShortNameValid(content) &&
                Content.isUrlValid(content)
