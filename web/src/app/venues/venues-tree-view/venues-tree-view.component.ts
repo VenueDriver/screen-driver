@@ -123,6 +123,7 @@ export class VenuesTreeViewComponent implements OnInit {
         this.dismissChanges(node);
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
+        this.isCreateContentMode = false;
     }
 
     dismissChanges(node: any) {
@@ -241,5 +242,9 @@ export class VenuesTreeViewComponent implements OnInit {
 
     toggleCreateContentMode(createContentMode: boolean) {
         this.isCreateContentMode = createContentMode;
+    }
+
+    containsLargeForm(node: any): boolean {
+        return this.currentNodeData === node.data && this.isCreateContentMode;
     }
 }

@@ -53,13 +53,20 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         return this.isNodeHasName() && !this.isFormValid;
     }
 
-    isNodeHasName(): boolean {
-        return !_.isEmpty(this.nodeData.name);
-    }
-
-    getValidationMessage(): string {
+    getValidationMessageForNodeName(): string {
         let nodeLevelName = this.getNodeLevelName();
         return this.venueService.getValidationMessage(nodeLevelName);
+    }
+
+    getValidationMessageForContentShortName(): string {
+        if (!Content.isShortNameValid(this.nodeData.content)) {
+            return `Short name must contains at least ${Content.MIN_FIELD_LENGTH} characters`;
+        }
+        return `Short name must be unique`;
+    }
+
+    getValidationMessageForContentUrl(): string {
+        return `URL is invalid`;
     }
 
     getNameInputPlaceholder(): string {
@@ -73,19 +80,15 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     validateForm() {
         this.nodeData.name = this.nodeData.name.trim();
-        this.isFormValid = this.isVenueNameValid() && this.isContentShortNameValid() && this.isContentUrlValid();
+        this.isFormValid = this.isNodeNameValid() && this.isContentShortNameValid() && this.isContentUrlValid();
     }
 
-    isVenueNameValid(): boolean {
+    isNodeNameValid(): boolean {
         return this.isNodeHasName() && this.isNodeNameUnique();
     }
 
-    isContentShortNameValid(): boolean {
-        return Content.isShortNameValid(this.nodeData.content);
-    }
-
-    isContentUrlValid() {
-        return Content.isUrlValid(this.nodeData.content);
+    isNodeHasName(): boolean {
+        return !_.isEmpty(this.nodeData.name);
     }
 
     isNodeNameUnique(): boolean {
@@ -100,15 +103,25 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         return this.node && this.node.parent;
     }
 
-    isVenueNameUnique() {
+    hasSiblingWithTheSameName(siblings): boolean {
+        return !!_.find(siblings, s => s.id !== this.nodeData.id && s.name === this.nodeData.name);
+    }
+
+    isVenueNameUnique(): boolean {
         return !_.includes(_.map(this.venues, venue => venue.name), this.nodeData.name);
     }
 
-    hasSiblingWithTheSameName(siblings): boolean {
-        return !!_.find(siblings, s => {
-            return s.id !== this.nodeData.id &&
-                s.name === this.nodeData.name;
-        });
+    isContentShortNameValid(): boolean {
+        return !this.createContentMode ||
+               Content.isShortNameValid(this.nodeData.content) && this.isContentShortNameUnique(this.nodeData.content);
+    }
+
+    isContentShortNameUnique(content: Content): boolean {
+        return !_.find(this.content, c => c.short_name === content.short_name);
+    }
+
+    isContentUrlValid(): boolean {
+        return !this.createContentMode || Content.isUrlValid(this.nodeData.content);
     }
 
     getDropdownValue(): string {
@@ -124,7 +137,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         }
     }
 
-    private clearNodeContent() {
+    clearNodeContent() {
         this.nodeData.content = null;
         this.nodeData.content_id = null;
     }
@@ -137,6 +150,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     performSubmit(event: any) {
         this.stopClickPropagation(event);
         this.submit.emit(this.node ? this.node : this.nodeData);
+        this.createContentMode = false;
     }
 
     stopClickPropagation(event: any) {

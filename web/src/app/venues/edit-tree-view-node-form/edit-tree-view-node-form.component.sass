@@ -2,24 +2,24 @@ $small-resolution: 500px
 $inputs-width: 500px
 $error-color: #a94442
 
-.edit-node-form
+.form-container
   display: flex
   flex-direction: row
+  align-items: center
   width: 100%
 
   .inputs-container
-    margin-top: -20px
     width: $inputs-width
 
     @media screen and (max-width: $small-resolution)
       width: 150%
       float: right
 
+    .input-block
+      margin-top: 25px
+
     input
       font-size: 18px
-
-    .content-input
-      margin-top: 10px
 
     .validation-error
       margin-top: -16px

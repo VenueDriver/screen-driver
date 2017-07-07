@@ -1,8 +1,9 @@
-<div class="edit-node-form">
+<div class="form-container">
 
     <div class="inputs-container">
-        <div *ngIf="isInputInvalid()" class="message validation-error">
-            {{getValidationMessage()}}
+        <div *ngIf="nodeData.name && !isNodeNameValid()"
+             class="message validation-error">
+            {{getValidationMessageForNodeName()}}
         </div>
         <input id="nodeName"
                type="text"
@@ -12,20 +13,26 @@
                class="form-control node-name">
 
         <div *ngIf="createContentMode">
-            <input id="contentShortName"
-                   type="text"
-                   [placeholder]="'Short name'"
-                   [(ngModel)]="nodeData.content.short_name"
-                   (ngModelChange)="validateForm()"
-                   class="form-control node-name content-input"
-                   autofocus>
+            <div class="input-block">
+                <div *ngIf="nodeData.content.short_name && !isContentShortNameValid()"
+                     class="message validation-error">
+                    {{getValidationMessageForContentShortName()}}
+                </div>
+                <input id="contentShortName"
+                       type="text"
+                       [placeholder]="'Short name'"
+                       [(ngModel)]="nodeData.content.short_name"
+                       (ngModelChange)="validateForm()"
+                       class="form-control node-name content-input">
+            </div>
 
             <input id="contentUrl"
                    type="text"
                    [placeholder]="'Content URL'"
                    [(ngModel)]="nodeData.content.url"
                    (ngModelChange)="validateForm()"
-                   class="form-control node-name content-input">
+                   class="form-control node-name content-input"
+                   autofocus>
 
         </div>
 
