@@ -150,6 +150,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     performSubmit(event: any) {
         this.stopClickPropagation(event);
         this.submit.emit(this.node ? this.node : this.nodeData);
+        this.createContentMode = false;
     }
 
     stopClickPropagation(event: any) {
