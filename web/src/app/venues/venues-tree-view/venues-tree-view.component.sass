@@ -1,7 +1,6 @@
-$tablet-resolution: 768px
+@import "../../../variables"
 
 .node-content-wrapper
-  padding-bottom: 300px
 
   &:hover .plus-button
     display: block
@@ -9,7 +8,7 @@ $tablet-resolution: 768px
 .single-node
   display: flex
   align-items: center
-  height: 95px
+  height: $tree-view-node-height
   width: 100%
 
   &.node-without-children
@@ -27,7 +26,7 @@ $tablet-resolution: 768px
 
   .inputs-container
     .node-name
-      font-size: 18px
+      font-size: $input-font-size
 
   .buttons-container
     margin-left: auto
@@ -39,7 +38,7 @@ $tablet-resolution: 768px
       cursor: pointer
       @media screen and (max-width: $tablet-resolution)
         display: inline-block
-        margin: 5px 0 5px 0
+        margin: 5px 0
 
     .plus-button
       content: url('../../../assets/images/add-circular-outlined-button.png')

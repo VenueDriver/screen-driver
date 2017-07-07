@@ -1,9 +1,10 @@
 import {Directive, ElementRef, Input} from '@angular/core';
 
 @Directive({
-    selector: '[autofocus]'
+    selector: '[input-autofocus]'
 })
 export class AutofocusDirective {
+
     @Input() set autofocus(condition: boolean) {
         this._autofocus = condition;
     }
@@ -14,7 +15,8 @@ export class AutofocusDirective {
     }
 
     ngAfterViewInit() {
-        if (this._autofocus || typeof this._autofocus === "undefined")
-            this.el.nativeElement.focus()
+        if (this._autofocus || typeof this._autofocus === "undefined") {
+            this.el.nativeElement.focus();
+        }
     }
 }
