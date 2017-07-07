@@ -1,7 +1,7 @@
 <div class="edit-node-form">
 
     <div class="inputs-container">
-        <div *ngIf="!isVenueNameValid()" class="message validation-error">
+        <div *ngIf="!isNodeNameValid()" class="message validation-error">
             {{getValidationMessage()}}
         </div>
         <input id="nodeName"

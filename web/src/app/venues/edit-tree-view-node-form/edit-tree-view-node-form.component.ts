@@ -53,10 +53,6 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         return this.isNodeHasName() && !this.isFormValid;
     }
 
-    isNodeHasName(): boolean {
-        return !_.isEmpty(this.nodeData.name);
-    }
-
     getValidationMessage(): string {
         let nodeLevelName = this.getNodeLevelName();
         return this.venueService.getValidationMessage(nodeLevelName);
@@ -73,19 +69,15 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     validateForm() {
         this.nodeData.name = this.nodeData.name.trim();
-        this.isFormValid = this.isVenueNameValid() && this.isContentShortNameValid() && this.isContentUrlValid();
+        this.isFormValid = this.isNodeNameValid() && this.isContentShortNameValid() && this.isContentUrlValid();
     }
 
-    isVenueNameValid(): boolean {
+    isNodeNameValid(): boolean {
         return this.isNodeHasName() && this.isNodeNameUnique();
     }
 
-    isContentShortNameValid(): boolean {
-        return !this.createContentMode || Content.isShortNameValid(this.nodeData.content);
-    }
-
-    isContentUrlValid() {
-        return !this.createContentMode || Content.isUrlValid(this.nodeData.content);
+    isNodeHasName(): boolean {
+        return !_.isEmpty(this.nodeData.name);
     }
 
     isNodeNameUnique(): boolean {
@@ -100,15 +92,20 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         return this.node && this.node.parent;
     }
 
+    hasSiblingWithTheSameName(siblings): boolean {
+        return !!_.find(siblings, s => s.id !== this.nodeData.id && s.name === this.nodeData.name);
+    }
+
     isVenueNameUnique() {
         return !_.includes(_.map(this.venues, venue => venue.name), this.nodeData.name);
     }
 
-    hasSiblingWithTheSameName(siblings): boolean {
-        return !!_.find(siblings, s => {
-            return s.id !== this.nodeData.id &&
-                s.name === this.nodeData.name;
-        });
+    isContentShortNameValid(): boolean {
+        return !this.createContentMode || Content.isShortNameValid(this.nodeData.content);
+    }
+
+    isContentUrlValid() {
+        return !this.createContentMode || Content.isUrlValid(this.nodeData.content);
     }
 
     getDropdownValue(): string {
@@ -124,7 +121,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         }
     }
 
-    private clearNodeContent() {
+    clearNodeContent() {
         this.nodeData.content = null;
         this.nodeData.content_id = null;
     }
