@@ -78,8 +78,12 @@ export class VenuesTreeViewComponent implements OnInit {
 
     getContentUrl(node: any): string {
         if (node.data.content) {
-            return node.data.content.url;
+            return this.getShortUrl(node.data.content);
         }
+    }
+
+    getShortUrl(content: Content): string {
+        return Content.getShortUrl(content, 60);
     }
 
     addNewNode(event, node) {

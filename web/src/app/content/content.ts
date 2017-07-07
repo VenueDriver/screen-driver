@@ -33,4 +33,14 @@ export class Content {
         return !_.isEmpty(content.short_name) &&
                content.short_name.trim().length >= Content.MIN_FIELD_LENGTH;
     }
+
+    static getShortUrl(content: Content, maxLength: number): string {
+        let urlLength = content.url.length;
+        if (urlLength > maxLength + 5) {
+            let start = content.url.substring(0, maxLength - 5);
+            let end = content.url.substring(urlLength - 5, urlLength);
+            return `${start}...${end}`;
+        }
+        return content.url;
+    }
 }

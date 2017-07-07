@@ -95,4 +95,8 @@ export class ContentAutocompleteComponent {
     emitSelection(content: Content) {
         this.select.emit(content);
     }
+
+    getShortUrl(content: Content): string {
+        return Content.getShortUrl(content, 50);
+    }
 }

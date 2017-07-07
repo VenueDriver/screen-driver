@@ -12,7 +12,7 @@
             <li *ngFor="let item of data; let last = last">
                 <a (click)="onSelect(item)" class="dropdown-item">
                     <div class="item-value">{{item.short_name}}</div>
-                    <div class="item-desc">{{item.url}}</div>
+                    <div class="item-desc">{{getShortUrl(item)}}</div>
                 </a>
             </li>
             <li *ngIf="data.length < 1">
