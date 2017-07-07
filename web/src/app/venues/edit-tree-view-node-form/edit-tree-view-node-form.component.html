@@ -20,10 +20,11 @@
                 </div>
                 <input id="contentShortName"
                        type="text"
-                       [placeholder]="'Short name'"
+                       [placeholder]="'Content short name'"
                        [(ngModel)]="nodeData.content.short_name"
                        (ngModelChange)="validateForm()"
-                       class="form-control node-name content-input">
+                       class="form-control node-name content-input"
+                       autofocus>
             </div>
 
             <div class="input-block">
@@ -36,8 +37,7 @@
                        [placeholder]="'Content URL'"
                        [(ngModel)]="nodeData.content.url"
                        (ngModelChange)="validateForm()"
-                       class="form-control node-name content-input"
-                       autofocus>
+                       class="form-control node-name content-input">
             </div>
         </div>
 

@@ -162,7 +162,6 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         this.createContentMode = true;
         this.isFormValid = false;
         this.createContent.emit(this.createContentMode);
-        // this.renderer.selectRootElement('#contentShortName').focus();
     }
 
 }
