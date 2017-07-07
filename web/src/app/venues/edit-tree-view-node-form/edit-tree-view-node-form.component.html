@@ -26,14 +26,19 @@
                        class="form-control node-name content-input">
             </div>
 
-            <input id="contentUrl"
-                   type="text"
-                   [placeholder]="'Content URL'"
-                   [(ngModel)]="nodeData.content.url"
-                   (ngModelChange)="validateForm()"
-                   class="form-control node-name content-input"
-                   autofocus>
-
+            <div class="input-block">
+                <div *ngIf="nodeData.content.url && !isContentUrlValid()"
+                     class="message validation-error">
+                    {{getValidationMessageForContentUrl()}}
+                </div>
+                <input id="contentUrl"
+                       type="text"
+                       [placeholder]="'Content URL'"
+                       [(ngModel)]="nodeData.content.url"
+                       (ngModelChange)="validateForm()"
+                       class="form-control node-name content-input"
+                       autofocus>
+            </div>
         </div>
 
         <div *ngIf="!createContentMode" class="autocomplete-container">
