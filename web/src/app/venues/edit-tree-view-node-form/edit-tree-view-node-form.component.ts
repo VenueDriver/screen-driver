@@ -53,9 +53,20 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         return this.isNodeHasName() && !this.isFormValid;
     }
 
-    getValidationMessage(): string {
+    getValidationMessageForNodeName(): string {
         let nodeLevelName = this.getNodeLevelName();
         return this.venueService.getValidationMessage(nodeLevelName);
+    }
+
+    getValidationMessageForContentShortName(): string {
+        if (!Content.isShortNameValid(this.nodeData.content)) {
+            return `Short name must contains at least ${Content.MIN_FIELD_LENGTH} characters`;
+        }
+        return `Short name must be unique`;
+    }
+
+    getValidationMessageForContentUrl(): string {
+        return `URL is invalid`;
     }
 
     getNameInputPlaceholder(): string {

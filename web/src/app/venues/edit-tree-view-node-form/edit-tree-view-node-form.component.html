@@ -1,8 +1,9 @@
 <div class="edit-node-form">
 
     <div class="inputs-container">
-        <div *ngIf="!isNodeNameValid()" class="message validation-error">
-            {{getValidationMessage()}}
+        <div *ngIf="nodeData.name && !isNodeNameValid()"
+             class="message validation-error">
+            {{getValidationMessageForNodeName()}}
         </div>
         <input id="nodeName"
                type="text"
@@ -13,8 +14,9 @@
 
         <div *ngIf="createContentMode">
             <div class="input-block">
-                <div *ngIf="!isContentShortNameValid()" class="message validation-error">
-                    {{getValidationMessage()}}
+                <div *ngIf="nodeData.content.short_name && !isContentShortNameValid()"
+                     class="message validation-error">
+                    {{getValidationMessageForContentShortName()}}
                 </div>
                 <input id="contentShortName"
                        type="text"
@@ -25,8 +27,9 @@
             </div>
 
             <div class="input-block">
-                <div *ngIf="!isContentUrlValid()" class="message validation-error">
-                    {{getValidationMessage()}}
+                <div *ngIf="nodeData.content.url && !isContentUrlValid()"
+                     class="message validation-error">
+                    {{getValidationMessageForContentUrl()}}
                 </div>
                 <input id="contentUrl"
                        type="text"

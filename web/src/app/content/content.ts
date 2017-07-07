@@ -1,6 +1,9 @@
 import * as _ from 'lodash';
 
 export class Content {
+
+    static readonly MIN_FIELD_LENGTH = 4;
+
     id: string = '';
     short_name: string = '';
     url: string = '';
@@ -21,11 +24,11 @@ export class Content {
 
     static isUrlValid(content: Content): boolean {
         return !_.isEmpty(content.url) &&
-               content.url.trim().length > 3;
+               content.url.trim().length >= Content.MIN_FIELD_LENGTH;
     }
 
     static isShortNameValid(content: Content): boolean {
         return !_.isEmpty(content.short_name) &&
-               content.short_name.trim().length > 3
+               content.short_name.trim().length >= Content.MIN_FIELD_LENGTH;
     }
 }
