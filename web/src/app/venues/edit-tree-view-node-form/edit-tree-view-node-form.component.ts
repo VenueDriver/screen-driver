@@ -1,4 +1,4 @@
-import {Component, OnInit, EventEmitter, Input, Output, Renderer2} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {VenuesService} from "../venues.service";
 import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 import {Content} from "../../content/content";
@@ -10,7 +10,7 @@ import * as _ from 'lodash';
     templateUrl: 'edit-tree-view-node-form.component.html',
     styleUrls: ['edit-tree-view-node-form.component.sass']
 })
-export class EditTreeViewNodeFormComponent implements OnInit {
+export class EditTreeViewNodeFormComponent {
 
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
@@ -30,14 +30,9 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     createContentMode = false;
 
     constructor(
-        private renderer: Renderer2,
         private venueService: VenuesService,
         private treeViewService: VenuesTreeViewService
     ) { }
-
-    ngOnInit() {
-        this.renderer.selectRootElement('#nodeName').focus();
-    }
 
     setUpComponentModel(node: any) {
         this.isFormValid = false;

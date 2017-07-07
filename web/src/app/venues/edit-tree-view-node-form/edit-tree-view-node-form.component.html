@@ -10,7 +10,8 @@
                [placeholder]="getNameInputPlaceholder()"
                [(ngModel)]="nodeData.name"
                (ngModelChange)="validateForm()"
-               class="form-control node-name">
+               class="form-control node-name"
+               input-autofocus>
 
         <div *ngIf="createContentMode">
             <div class="input-block">
@@ -24,7 +25,7 @@
                        [(ngModel)]="nodeData.content.short_name"
                        (ngModelChange)="validateForm()"
                        class="form-control node-name content-input"
-                       autofocus>
+                       input-autofocus>
             </div>
 
             <div class="input-block">
