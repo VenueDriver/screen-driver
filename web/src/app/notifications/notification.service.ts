@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
-import {NotificationBarService, NotificationType} from "angular2-notification-bar";
+import {NotificationsService} from "angular2-notifications/dist";
 
-const NOTIFICATION_DURATION = 6000;
+export const NOTIFICATION_DURATION = 6000;
 
 @Injectable()
 export class NotificationService {
 
-    constructor(private notificationBarService: NotificationBarService) { }
+    constructor(private notificationsService: NotificationsService) { }
 
-    showErrorNotificationBar(message: string) {
-        this.notificationBarService.create({
-            message: message,
-            type: NotificationType.Error,
-            hideDelay: NOTIFICATION_DURATION,
-            hideOnHover: false
-        })
+    showErrorNotificationBar(notificationMessage: string, title?: string) {
+        let notificationTitle = title ? title : 'Unable to perform operation';
+        this.notificationsService.error(
+            notificationTitle,
+            notificationMessage
+        )
     }
 }
