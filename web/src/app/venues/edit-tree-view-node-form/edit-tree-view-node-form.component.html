@@ -1,21 +1,23 @@
 <div class="form-container">
 
     <div class="inputs-container">
-        <div *ngIf="nodeData.name && !isNodeNameValid()"
-             class="message validation-error">
-            {{getValidationMessageForNodeName()}}
+        <div [class.has-error]="showValidationMessageForNodeName()">
+            <div *ngIf="showValidationMessageForNodeName()"
+                 class="message validation-error">
+                {{getValidationMessageForNodeName()}}
+            </div>
+            <input id="nodeName"
+                   type="text"
+                   [placeholder]="getNameInputPlaceholder()"
+                   [(ngModel)]="nodeData.name"
+                   (ngModelChange)="validateForm()"
+                   class="form-control node-name"
+                   input-autofocus>
         </div>
-        <input id="nodeName"
-               type="text"
-               [placeholder]="getNameInputPlaceholder()"
-               [(ngModel)]="nodeData.name"
-               (ngModelChange)="validateForm()"
-               class="form-control node-name"
-               input-autofocus>
 
         <div *ngIf="createContentMode">
-            <div class="input-block">
-                <div *ngIf="nodeData.content.short_name && !isContentShortNameValid()"
+            <div class="input-block" [class.has-error]="showValidationMassageForShortName()">
+                <div *ngIf="showValidationMassageForShortName()"
                      class="message validation-error">
                     {{getValidationMessageForContentShortName()}}
                 </div>
@@ -28,8 +30,8 @@
                        input-autofocus>
             </div>
 
-            <div class="input-block">
-                <div *ngIf="nodeData.content.url && !isContentUrlValid()"
+            <div class="input-block" [class.has-error]="showValidationMessageForUrl()">
+                <div *ngIf="showValidationMessageForUrl()"
                      class="message validation-error">
                     {{getValidationMessageForContentUrl()}}
                 </div>

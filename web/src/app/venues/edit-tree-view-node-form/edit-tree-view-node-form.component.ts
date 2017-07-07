@@ -159,4 +159,15 @@ export class EditTreeViewNodeFormComponent {
         this.createContent.emit(this.createContentMode);
     }
 
+    showValidationMessageForNodeName(): boolean {
+        return this.nodeData.name && !this.isNodeNameValid();
+    }
+
+    showValidationMassageForShortName(): boolean {
+        return this.nodeData.content.short_name && !this.isContentShortNameValid();
+    }
+
+    showValidationMessageForUrl(): boolean {
+        return this.nodeData.content.url && !this.isContentUrlValid();
+    }
 }
