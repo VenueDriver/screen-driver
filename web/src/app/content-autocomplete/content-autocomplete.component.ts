@@ -16,7 +16,7 @@ export class ContentAutocompleteComponent {
     @Input('value') selectedValue: any;
     @Input('content') set model(content: Array<Content>) {
         this.content = content;
-        this.data = [...content];
+        this.data = content ? [...content] : [];
     }
 
     @Output() select = new EventEmitter<Content>();
@@ -42,7 +42,7 @@ export class ContentAutocompleteComponent {
     }
 
     showAll() {
-        this.data = [...this.content];
+        this.data = this.content ? [...this.content] : [];
         this.showDropdown();
     }
 
