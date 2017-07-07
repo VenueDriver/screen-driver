@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
 
+const URL_VALIDATION_PATTERN = /^https?:\/\/[\w\.-]*\.[a-z]{2,3}[\w.,@?^=%&amp;:/~+#\{\}\[\]-]*$/;
+
 export class Content {
 
     static readonly MIN_FIELD_LENGTH = 4;
@@ -24,7 +26,7 @@ export class Content {
 
     static isUrlValid(content: Content): boolean {
         return !_.isEmpty(content.url) &&
-               content.url.trim().length >= Content.MIN_FIELD_LENGTH;
+               URL_VALIDATION_PATTERN.test(content.url);
     }
 
     static isShortNameValid(content: Content): boolean {
