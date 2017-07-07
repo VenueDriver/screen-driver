@@ -1,22 +1,56 @@
-$dropdown-width: 400px
-$dropdown-font-size: 18px
+@import "../../variables"
 
-.k-autocomplete
-  width: $dropdown-width
-  font-size: $dropdown-font-size
-  border: 1px solid #ccc
-  border-radius: 4px
+$dropdown-width: inherit
 
-.autocomplete-item
-  font-size: $dropdown-font-size
-  padding: 0 12px
-  min-height: 35px
-  line-height: 30px
-  overflow: hidden
+.dropdown
+  width: 100%
 
-  .item-desc
-    color: gray
+  input
+    width: $dropdown-width
+    font-size: $input-font-size
 
-  .item-value
-    overflow: hidden
-    white-space: nowrap
+  .dropdown-menu
+    width: $dropdown-width
+    max-height: 280px
+    overflow-y: auto
+
+    @media screen and (max-width: $tablet-resolution)
+      width: auto
+
+    &.shown
+      display: block
+
+    li a
+      padding: 5px 12px
+      min-height: 40px
+      line-height: 30px
+      font-size: $input-font-size
+      overflow: hidden
+
+      .item-desc
+        color: gray
+
+      .item-value
+        overflow: hidden
+        max-width: $dropdown-width
+        white-space: nowrap
+
+  .dropdown-footer
+    border-top: 1px solid #dfdfdf
+    margin-bottom: -5px
+
+    .add-button
+      border-radius: 0
+      background-color: #f9f9f9
+
+      &:hover
+        background-color: #ededed
+
+  .nodata-block
+    cursor: default
+
+    .nodata-warning
+      font-size: $input-font-size
+      height: 50px
+      padding-top: 11px
+      text-align: center

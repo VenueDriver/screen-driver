@@ -1,21 +1,55 @@
-<div class="edit-node-form">
+<div class="form-container">
 
-    <div class="inputs-container" [class.has-error]="isInputInvalid()">
-        <div *ngIf="isInputInvalid()" class="message validation-error">
-            {{getValidationMessage()}}
+    <div class="inputs-container">
+        <div [class.has-error]="showValidationMessageForNodeName()">
+            <div *ngIf="showValidationMessageForNodeName()"
+                 class="message validation-error">
+                {{getValidationMessageForNodeName()}}
+            </div>
+            <input id="nodeName"
+                   type="text"
+                   [placeholder]="getNameInputPlaceholder()"
+                   [(ngModel)]="nodeData.name"
+                   (ngModelChange)="validateForm()"
+                   class="form-control node-name"
+                   input-autofocus>
         </div>
-        <input id="nodeName"
-               type="text"
-               [placeholder]="getNameInputPlaceholder()"
-               [(ngModel)]="nodeData.name"
-               (ngModelChange)="validateForm()"
-               class="form-control node-name">
 
-        <div class="dropdown-container">
+        <div *ngIf="createContentMode">
+            <div class="input-block" [class.has-error]="showValidationMassageForShortName()">
+                <div *ngIf="showValidationMassageForShortName()"
+                     class="message validation-error">
+                    {{getValidationMessageForContentShortName()}}
+                </div>
+                <input id="contentShortName"
+                       type="text"
+                       [placeholder]="'Content short name'"
+                       [(ngModel)]="nodeData.content.short_name"
+                       (ngModelChange)="validateForm()"
+                       class="form-control node-name content-input"
+                       input-autofocus>
+            </div>
+
+            <div class="input-block" [class.has-error]="showValidationMessageForUrl()">
+                <div *ngIf="showValidationMessageForUrl()"
+                     class="message validation-error">
+                    {{getValidationMessageForContentUrl()}}
+                </div>
+                <input id="contentUrl"
+                       type="text"
+                       [placeholder]="'Content URL'"
+                       [(ngModel)]="nodeData.content.url"
+                       (ngModelChange)="validateForm()"
+                       class="form-control node-name content-input">
+            </div>
+        </div>
+
+        <div *ngIf="!createContentMode" class="autocomplete-container">
             <content-autocomplete
                     [value]="getDropdownValue()"
                     [content]="content"
-                    (select)="setNodeContent($event)">
+                    (select)="setNodeContent($event)"
+                    (add)="add($event)">
             </content-autocomplete>
         </div>
     </div>

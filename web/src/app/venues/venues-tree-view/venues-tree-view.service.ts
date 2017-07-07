@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import {ContentService} from "../../content/content.service";
+import {Content} from "../../content/content";
+import {Observable} from "rxjs";
 
 @Injectable()
 export class VenuesTreeViewService {
 
-    constructor() { }
+    constructor(private contentService: ContentService) { }
 
     getNodeLevelName(level: number): string {
         switch (level) {
@@ -24,5 +27,9 @@ export class VenuesTreeViewService {
     private getParentNodeLevelName(level: number): string {
         let parentNodeLevelName = this.getNodeLevelName(level - 1);
         return parentNodeLevelName.toLowerCase();
+    }
+
+    saveNewContent(content: Content): Observable<Content> {
+        return this.contentService.createContent(content);
     }
 }

@@ -1,7 +1,7 @@
 <div>
     <tree-root [focused]="true" [nodes]="venues" [options]="options">
         <ng-template class="node-template" #treeNodeTemplate let-node let-index="index">
-            <div class="single-node" [ngClass]="{'node-without-children': !hasChildren(node)}">
+            <div class="single-node" [ngClass]="{'node-without-children': !hasChildren(node), 'large-form-container': containsLargeForm(node)}">
                 <div *ngIf="!isCurrentNode(node)" class="node-info">
                     <div class="node-name">
                         <span class="node-level-name">{{getNodeLevelName(node)}}</span>: {{node.data.name}}
@@ -23,7 +23,8 @@
                             [currentNode]="node"
                             [contentUrlPlaceholder]="getPlaceholderForDefaultUrl(node)"
                             (submit)="performSubmit($event)"
-                            (cancel)="performCancel($event)">
+                            (cancel)="performCancel($event)"
+                            (createContent)="toggleCreateContentMode($event)">
                     </edit-tree-view-node-form>
                 </div>
 
