@@ -107,15 +107,20 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         return !!_.find(siblings, s => s.id !== this.nodeData.id && s.name === this.nodeData.name);
     }
 
-    isVenueNameUnique() {
+    isVenueNameUnique(): boolean {
         return !_.includes(_.map(this.venues, venue => venue.name), this.nodeData.name);
     }
 
     isContentShortNameValid(): boolean {
-        return !this.createContentMode || Content.isShortNameValid(this.nodeData.content);
+        return !this.createContentMode ||
+               Content.isShortNameValid(this.nodeData.content) && this.isContentShortNameUnique(this.nodeData.content);
     }
 
-    isContentUrlValid() {
+    isContentShortNameUnique(content: Content): boolean {
+        return !_.find(this.content, c => c.short_name === content.short_name);
+    }
+
+    isContentUrlValid(): boolean {
         return !this.createContentMode || Content.isUrlValid(this.nodeData.content);
     }
 
