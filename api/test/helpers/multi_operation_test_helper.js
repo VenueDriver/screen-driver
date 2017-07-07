@@ -7,11 +7,12 @@ class MultiOperationHelper {
 
     }
 
-    configure() {
+    static configure() {
+        let helper = new this();
         this.wrappedGetAll = {};
         this.wrappedCreate = {};
         this.wrappedUpdate = {};
-        return this;
+        return helper;
     }
 
     setGetAllFunction(getAllFunction, handler) {
@@ -42,19 +43,51 @@ class MultiOperationHelper {
         return this.wrappedCreate.run(itemParams);
     }
 
+    update(response, updatedItem) {
+        return this.wrappedUpdate.run(this.getParametersForVenue(updatedItem, response));
+    }
+
     getAll() {
         return this.wrappedGetAll.run({});
     }
 
-    performListTest(item, expectation) {
+    test(response, expectations) {
+        let body = JSON.parse(response.body);
+        return expectations(body);
+    }
+
+    performListTest(item, expectations) {
         return this.create(item)
             .then(() => this.getAll())
-            .then(response => {
-                let body = JSON.parse(response.body);
-                return expectation(body);
-            })
+            .then(response => this.test(response, expectations))
     }
+
+    performUpdateTest(item, updatedItem, expectation) {
+        return this.create(item)
+            .then(response => this.update(response, updatedItem))
+            .then(response => this.test(response, expectation))
+    }
+
+    getParametersForVenue(venue, response) {
+    let params = {};
+    if (response) {
+        let responseBody = JSON.parse(response.body);
+        let id = responseBody.id;
+        responseBody.screen_groups.forEach(group => {
+            _addId(venue, 'screen_groups', group);
+            group.screens.forEach(screen => _addId(group, 'screens', screen))
+        });
+        params.pathParameters = {};
+        params.pathParameters.id = id;
+    }
+    params.body = JSON.stringify(venue);
+    return params;
+
+    function _addId(sourceElement, sourceField, destinationElement) {
+        destinationElement.id = sourceElement[sourceField].map(element => element.name == destinationElement.name)[0].id;
+    }
+}
 
 }
 
-module.exports = new MultiOperationHelper();
+module.exports = MultiOperationHelper;

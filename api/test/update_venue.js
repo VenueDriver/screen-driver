@@ -5,15 +5,20 @@
 require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 
-const mod = require('../venues/update.js');
+const updateFunction = require('../venues/update.js');
 const createFunction = require('../venues/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const lambdaWrapper = mochaPlugin.lambdaWrapper;
 const expect = mochaPlugin.chai.expect;
-const assert = mochaPlugin.chai.assert;
-const wrappedUpdate = lambdaWrapper.wrap(mod, {handler: 'update'});
+const wrappedUpdate = lambdaWrapper.wrap(updateFunction, {handler: 'update'});
 const wrappedCreate = lambdaWrapper.wrap(createFunction, {handler: 'create'});
+
+const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
+    .configure()
+    .setUpdateFunction(updateFunction, 'update')
+    .setCreateFunction(createFunction, 'create');
+
 const idLength = 36;
 
 describe('update_venue', () => {
@@ -28,10 +33,11 @@ describe('update_venue', () => {
     it('Should update venue name', () => {
         let newVenue = {name: "Hakkasan"};
         let updatedVenue = {name: "Hakkasan LV", _rev: 0};
-
-        return createUpdateAndTest(newVenue, updatedVenue, (body) => {
+        let expectation = (body) => {
             expect(body).to.have.property("name").that.equal("Hakkasan LV");
-        });
+        };
+
+        return MultiOperationHelper.performUpdateTest(newVenue, updatedVenue, expectation);
     });
 
     it('Should update venue content id', () => {
