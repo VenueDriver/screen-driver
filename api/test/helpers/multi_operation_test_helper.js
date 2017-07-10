@@ -53,7 +53,7 @@ class MultiOperationHelper {
 
     test(response, expectations) {
         let body = JSON.parse(response.body);
-        return expectations(body);
+        return expectations(body, response);
     }
 
     performListTest(item, expectations) {
