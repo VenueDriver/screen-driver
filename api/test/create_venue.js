@@ -5,13 +5,16 @@
 require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 
-const lambda = require('../venues/create.js');
+const createFunction = require('../venues/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const lambdaWrapper = mochaPlugin.lambdaWrapper;
 const expect = mochaPlugin.chai.expect;
 const assert = mochaPlugin.chai.assert;
-const wrapped = lambdaWrapper.wrap(lambda, {handler: 'create'});
+
+const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
+    .configure()
+    .setCreateFunction(createFunction, 'create');
 
 const idLength = 36;
 
@@ -29,14 +32,15 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
-            expect(response.body).to.have.property("name").that.equal("Hakkasan");
-            expect(response.body).to.have.property("content_id").to.be.null;
-            expect(response.body).to.have.property("screen_groups").to.be.an('array').that.is.empty;
-            expect(response.body).to.have.property("_rev").that.equal(0);
-        });
+            expect(body).to.have.property("name").that.equal("Hakkasan");
+            expect(body).to.have.property("content_id").to.be.null;
+            expect(body).to.have.property("screen_groups").to.be.an('array').that.is.empty;
+            expect(body).to.have.property("_rev").that.equal(0);
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Should create venue and id should be generated automatically and revision number should be equal to 0', () => {
@@ -46,12 +50,13 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
-            assert(response.body.id.length == idLength);
-            assert(response.body._rev == 0);
-        });
+            assert(body.id.length == idLength, 'Should have id');
+            assert(body._rev == 0, 'should have revision number == 0');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Should create venue with content_id', () => {
@@ -62,12 +67,13 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
-            expect(response.body).to.have.property("content_id").with.lengthOf(idLength);
-            expect(response.body).to.have.property("content_id").that.equal("710b962e-041c-11e1-9234-0123456789ab");
-        });
+            expect(body).to.have.property("content_id").with.lengthOf(idLength);
+            expect(body).to.have.property("content_id").that.equal("710b962e-041c-11e1-9234-0123456789ab");
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Should create screen group and id should be generated automatically', () => {
@@ -78,12 +84,13 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
-            assert(response.statusCode == 200 );
-            assert(typeof response.body.screen_groups[0].id === 'string');
-            assert(response.body.screen_groups[0].id.length == idLength);
-        });
+        let expectations = (body, response) => {
+            assert(response.statusCode == 200);
+            assert(typeof body.screen_groups[0].id === 'string');
+            assert(body.screen_groups[0].id.length == idLength);
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Should create venue with screen groups with names', () => {
@@ -94,18 +101,19 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
-            expect(response.body).to.have.property("screen_groups").that.is.an('array');
-            expect(response.body).to.have.property("screen_groups").with.lengthOf(2);
+            expect(body).to.have.property("screen_groups").that.is.an('array');
+            expect(body).to.have.property("screen_groups").with.lengthOf(2);
 
-            expect(response.body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
-            expect(response.body.screen_groups[0]).to.have.property("id").with.lengthOf(idLength);
+            expect(body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
+            expect(body.screen_groups[0]).to.have.property("id").with.lengthOf(idLength);
 
-            expect(response.body.screen_groups[1]).to.have.property("name").that.is.equal('Deli');
-            expect(response.body.screen_groups[1]).to.have.property("id").with.lengthOf(idLength);
-        });
+            expect(body.screen_groups[1]).to.have.property("name").that.is.equal('Deli');
+            expect(body.screen_groups[1]).to.have.property("id").with.lengthOf(idLength);
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Should create screen group with content id', () => {
@@ -116,13 +124,14 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
-            expect(response.body).to.have.property("name").that.is.equal('Hakkasan');
-            expect(response.body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
-            expect(response.body.screen_groups[0]).to.have.property("content_id").that.is.equal('710b962e-041c-11e1-9234-0123456789ab');
-        });
+            expect(body).to.have.property("name").that.is.equal('Hakkasan');
+            expect(body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
+            expect(body.screen_groups[0]).to.have.property("content_id").that.is.equal('710b962e-041c-11e1-9234-0123456789ab');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Should create screen group with screens', () => {
@@ -133,14 +142,15 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 200);
-            assert(response.body.screen_groups[0].name === "Touch");
-            assert(response.body.screen_groups[0].screens.length == 2);
-            assert(response.body.screen_groups[0].screens[0].name === "A");
-            assert(response.body.screen_groups[0].screens[1].name === "B");
-        });
+            assert(body.screen_groups[0].name === "Touch");
+            assert(body.screen_groups[0].screens.length == 2);
+            assert(body.screen_groups[0].screens[0].name === "A");
+            assert(body.screen_groups[0].screens[1].name === "B");
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Should create screen and id shold be generated automatically', () => {
@@ -151,12 +161,13 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 200);
-            assert(response.body.screen_groups[0].screens[0].id.length == idLength);
-            assert(typeof response.body.screen_groups[0].screens[0].id === 'string');
-        });
+            assert(body.screen_groups[0].screens[0].id.length == idLength);
+            assert(typeof body.screen_groups[0].screens[0].id === 'string');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Should create screen with name', () => {
@@ -167,11 +178,12 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 200);
-            assert(response.body.screen_groups[0].screens[0].name === "A");
-        });
+            assert(body.screen_groups[0].screens[0].name === "A");
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Should create screen with content id', () => {
@@ -182,12 +194,13 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 200);
-            assert(response.body.screen_groups[0].screens[0].name === "A");
-            assert(response.body.screen_groups[0].screens[0].content_id === "710b962e-041c-11e1-9234-0123456789ab");
-        });
+            assert(body.screen_groups[0].screens[0].name === "A");
+            assert(body.screen_groups[0].screens[0].content_id === "710b962e-041c-11e1-9234-0123456789ab");
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Shouldn\'t create venue without name', () => {
@@ -195,11 +208,12 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 500);
-            assert(response.body.message == 'Venue couldn\'t be without name');
-        });
+            assert(body.message == 'Venue couldn\'t be without name');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Shouldn\'t create venue with empty name', () => {
@@ -207,11 +221,12 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 500);
-            assert(response.body.message == 'Venue couldn\'t be without name');
-        });
+            assert(body.message == 'Venue couldn\'t be without name');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Shouldn\'t create venue with existing name', () => {
@@ -219,14 +234,13 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            expect(response.statusCode).to.equal(200);
-            wrapped.run(params).then(response => {
-                response.body = JSON.parse(response.body);
-                expect(response.statusCode).to.equal(500);
-                expect(response.body).to.have.property("message").that.equal("Venue with such name already exists");
-            });
-        });
+        let expectations = (body, response) => {
+            expect(response.statusCode).to.equal(500);
+            expect(body).to.have.property("message").that.equal("Venue with such name already exists");
+        };
+
+        return MultiOperationHelper.create(venue)
+            .then(() => MultiOperationHelper.performCreateTest(venue, expectations));
     });
 
     it('Shouldn\'t create screen group without name', () => {
@@ -237,11 +251,12 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 500);
-            assert(response.body.message == 'Screen group couldn\'t be without name');
-        });
+            assert(body.message == 'Screen group couldn\'t be without name', 'shouldn\'t create group without name');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Shouldn\'t create screen group with empty name', () => {
@@ -252,11 +267,12 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 500);
-            assert(response.body.message == 'Screen group couldn\'t be without name');
-        });
+            assert(body.message == 'Screen group couldn\'t be without name');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Shouldn\'t create screen groups with non unique names', () => {
@@ -267,11 +283,12 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 500);
-            assert(response.body.message == 'Groups should have unique names');
-        });
+            assert(body.message == 'Groups should have unique names');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Shouldn\'t create screen without name', () => {
@@ -282,11 +299,12 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 500);
-            assert(response.body.message == 'Screen couldn\'t be without name');
-        });
+            assert(body.message == 'Screen couldn\'t be without name');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Shouldn\'t create screen with empty name', () => {
@@ -297,11 +315,12 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 500);
-            assert(response.body.message == 'Screen couldn\'t be without name');
-        });
+            assert(body.message == 'Screen couldn\'t be without name');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
     it('Shouldn\'t create screens with non unique name', () => {
@@ -312,11 +331,12 @@ describe('create_venue', () => {
         let params = {};
         params.body = JSON.stringify(venue);
 
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
+        let expectations = (body, response) => {
             assert(response.statusCode == 500);
-            assert(response.body.message == 'Screens should have unique names');
-        });
+            assert(body.message == 'Screens should have unique names');
+        };
+
+        return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
 });

@@ -56,6 +56,11 @@ class MultiOperationHelper {
         return expectations(body, response);
     }
 
+    performCreateTest(item, expectation) {
+        return this.create(item)
+            .then(response => this.test(response, expectation))
+    }
+
     performListTest(item, expectations) {
         return this.create(item)
             .then(() => this.getAll())
