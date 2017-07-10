@@ -10,7 +10,7 @@ export class NotificationComponent {
     public options = {
         position: ["bottom", "right"],
         timeOut: NOTIFICATION_DURATION,
-        maxStack: 3,
+        maxStack: 1,
         lastOnBottom: true,
         showProgressBar: false,
         pauseOnHover: true,
