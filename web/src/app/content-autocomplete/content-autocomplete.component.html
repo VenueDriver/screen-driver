@@ -24,7 +24,9 @@
             </li>
             <li>
                 <div class="dropdown-footer">
-                    <button class="btn btn-block btn-lg add-button" (click)="emitAddNewEvent()">
+                    <button class="btn btn-block btn-lg add-button"
+                            (keyup.enter)="emitAddNewEvent()"
+                            (click)="emitAddNewEvent()">
                         Add new content URL
                     </button>
                 </div>

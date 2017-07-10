@@ -58,12 +58,14 @@
         <button type="button"
                 class="btn btn-success"
                 [disabled]="!isFormValid"
+                (keyup.enter)="performSubmit($event)"
                 (click)="performSubmit($event)">
             Save
         </button>
 
         <button type="button"
                 class="btn btn-link cancel-button"
+                (keyup.enter)="performCancel($event)"
                 (click)="performCancel($event)">
             Cancel
         </button>
