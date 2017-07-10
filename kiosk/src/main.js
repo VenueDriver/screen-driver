@@ -183,6 +183,7 @@ function openAdminPanel() {
 }
 
 function openContentWindow(contentUrl) {
+    console.log(contentUrl);
     let newWindow = createWindow(contentUrl, {
         webPreferences: {
             preload: path.join(__dirname, 'js/remote_content_preload.js')

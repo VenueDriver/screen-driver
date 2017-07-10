@@ -19,9 +19,10 @@ $(function () {
     let selectedVenue;
     let selectedGroup;
 
-    let selectedVenueName;
-    let selectedScreenGroupName;
-    let selectedScreenId;
+    let selectedVenueObject;
+    let selectedScreenGroupObject;
+    let selectedScreenObject;
+    let selectedScreenName;
     let contentUrl;
 
     verifySaveButtonState();
@@ -50,17 +51,23 @@ $(function () {
     });
 
     $("#screen-id").change(function () {
-        selectedScreenId = $('#screen-id').find(":selected").text();
+        selectedScreenName = $('#screen-id').find(":selected").text();
 
         if (selectedGroup) {
-            contentUrl = selectedGroup[selectedScreenId];
+            if (selectedGroup[selectedScreenName]) {
+                contentUrl = selectedGroup[selectedScreenName].url;
+                selectedScreenObject = {name: selectedScreenName, id: selectedGroup[selectedScreenName]._id};
+            } else {
+                contentUrl = selectedGroup[selectedScreenName];
+            }
+
         }
 
         verifySaveButtonState();
     });
 
     function verifySaveButtonState() {
-        if (!contentUrl || selectedScreenId == 'Not selected') {
+        if (!contentUrl || selectedScreenName == 'Not selected') {
             disableSaveButton();
             return false;
         } else {
@@ -87,13 +94,13 @@ $(function () {
             case ('venue'):
                 selectedItemValue = screensConfig[selectedDropdownValue];
                 selectedVenue = selectedItemValue;
-                selectedVenueName = selectedDropdownValue;
+                selectedVenueObject = selectedItemValue ? {name: selectedDropdownValue, id: selectedVenue._id} : selectedItemValue;
                 break;
             case ('screen-group'):
                 if (selectedVenue) {
                     selectedItemValue = selectedVenue[selectedDropdownValue];
                     selectedGroup = selectedItemValue;
-                    selectedScreenGroupName = selectedDropdownValue;
+                    selectedScreenGroupObject = selectedItemValue ? {name: selectedDropdownValue, id: selectedItemValue._id} : selectedItemValue;
                 }
                 break;
         }
@@ -110,19 +117,21 @@ $(function () {
 
         function setData() {
             for (let group in selectedItemValue) {
-                destinationDropdown.append($('<option>', {
-                    value: group,
-                    text: group
-                }));
+                if (group !== '_id') {
+                    destinationDropdown.append($('<option>', {
+                        value: group,
+                        text: group
+                    }));
+                }
             }
         }
 
     }
 
     function saveSelectionInStorage() {
-        putInStorage('selectedVenue', selectedVenueName);
-        putInStorage('selectedGroup', selectedScreenGroupName);
-        putInStorage('selectedScreen', selectedScreenId);
+        putInStorage('selectedVenue', selectedVenueObject);
+        putInStorage('selectedGroup', selectedScreenGroupObject);
+        putInStorage('selectedScreen', selectedScreenObject);
         putInStorage('contentUrl', contentUrl);
     }
 
@@ -182,6 +191,7 @@ function loadScreensConfig() {
         success: function (json) {
             try {
                 screensConfig = ConfigConverter.convert(json);
+                console.log(screensConfig);
             } catch (error) {
                 showError("Cannot read config: " + error.message);
                 throw new Error(error.message);
@@ -203,9 +213,9 @@ function showError(errorMessage) {
 function putPreviouslySelectedDataIntoSelectors() {
     getFromStorage(null, function (error, data) {
         if (data.contentUrl) {
-            $('#venue').val(data.selectedVenue).trigger("change");
-            $('#screen-group').val(data.selectedGroup).trigger("change");
-            $('#screen-id').val(data.selectedScreen).trigger("change");
+            $('#venue').val(data.selectedVenue.name).trigger("change");
+            $('#screen-group').val(data.selectedGroup.name).trigger("change");
+            $('#screen-id').val(data.selectedScreen.name).trigger("change");
         }
     });
 }
@@ -221,6 +231,7 @@ function initVenuesSelector() {
 }
 
 function putInStorage(key, value) {
+    console.log(key, value);
     storage.set(key, value, function(error) {
         if (error) throw error;
     });
