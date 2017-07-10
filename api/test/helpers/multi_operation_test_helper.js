@@ -44,7 +44,7 @@ class MultiOperationHelper {
     }
 
     update(response, updatedItem) {
-        return this.wrappedUpdate.run(this.getParametersForVenue(updatedItem, response));
+        return this.wrappedUpdate.run(this.getParameters(updatedItem, response));
     }
 
     getAll() {
@@ -73,7 +73,7 @@ class MultiOperationHelper {
             .then(response => this.test(response, expectation))
     }
 
-    getParametersForVenue(venue, response) {
+    getParameters(venue, response) {
         let params = {};
         if (response) {
             let responseBody = JSON.parse(response.body);
