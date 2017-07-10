@@ -122,17 +122,27 @@ function updateUrlForCurrentScreen(localScreenConfig, remoteScreenConfig) {
         let selectedScreenId = localScreenConfig.selectedScreen.id;
 
         let venue = findItemById(remoteScreenConfig, selectedVenueId);
-        let group = findItemById(venue, selectedGroupId);
-        let screen = findItemById(group, selectedScreenId);
+        let group = findItemById(venue.config, selectedGroupId);
+        let screen = findItemById(group.config, selectedScreenId);
 
-        return screen.url;
+        putInStorage('selectedVenue', {name: venue.name, id: venue.config._id});
+        putInStorage('selectedGroup', {name: group.name, id: group.config._id});
+        putInStorage('selectedScreen', {name: screen.name, id: screen.config._id});
+
+        return screen.config.url;
     }
+}
+
+function putInStorage(key, value) {
+    storage.set(key, value, function(error) {
+        if (error) throw error;
+    });
 }
 
 function findItemById(parentObject, itemIdToFind) {
     for (let key in parentObject) {
         if (parentObject[key]._id === itemIdToFind) {
-            return parentObject[key];
+            return {name: key, config: parentObject[key]};
         }
     }
 }
