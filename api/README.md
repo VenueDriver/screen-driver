@@ -37,9 +37,20 @@ To invoke remote function use:
 
 To invoke with logging use ``-l`` flag (i.e. ```npm run invoke <function_name> -l```)
 
+## Testing
+You should have running dynamodb on port 8000. Run local dynamodb with migrations using:
+* ```sls dynamodb start```
+
+Use one of next commands to start testing:
+* ```npm test```
+* ```sls invoke test --stage test```
+
+
+
 ## Resources
 Used plugins:
 
 * [serverless-offline](https://github.com/dherault/serverless-offline)
 * [serverless-dynamodb-local](https://github.com/99xt/serverless-dynamodb-local)
 * [serverless-dynamodb-client](https://github.com/99xt/serverless-dynamodb-client)
+* [serverless-mocha-plugin](https://github.com/SC5/serverless-mocha-plugin)
