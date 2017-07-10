@@ -79,7 +79,7 @@ export class VenuesComponent implements OnInit {
         this.saveNewContent(venue.content)
             .subscribe(
                 content => this.handleCreateContentResponse(venue, content),
-                error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
+                error => this.handleError('Unable to save new content')
             );
     }
 
