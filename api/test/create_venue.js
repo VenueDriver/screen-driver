@@ -8,7 +8,6 @@ const DatabaseCleaner = require('./helpers/database_cleaner');
 const createFunction = require('../venues/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
 
-const lambdaWrapper = mochaPlugin.lambdaWrapper;
 const expect = mochaPlugin.chai.expect;
 const assert = mochaPlugin.chai.assert;
 
@@ -30,7 +29,6 @@ describe('create_venue', () => {
     it('Should create venue with name', () => {
         let venue = {name: "Hakkasan"};
         let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
@@ -47,8 +45,6 @@ describe('create_venue', () => {
         let venue = {
             name: "Hakkasan",
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
@@ -64,8 +60,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             content_id: "710b962e-041c-11e1-9234-0123456789ab"
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
@@ -81,8 +75,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch"}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 200);
@@ -98,8 +90,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch"}, {name: "Deli"}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
@@ -121,8 +111,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", content_id: "710b962e-041c-11e1-9234-0123456789ab"}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
@@ -139,8 +127,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A"}, {name: "B"}]}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 200);
@@ -158,8 +144,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A"}]}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 200);
@@ -175,8 +159,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A"}]}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 200);
@@ -191,8 +173,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A", content_id: "710b962e-041c-11e1-9234-0123456789ab"}]}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 200);
@@ -205,8 +185,6 @@ describe('create_venue', () => {
 
     it('Shouldn\'t create venue without name', () => {
         let venue = {};
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 500);
@@ -218,8 +196,6 @@ describe('create_venue', () => {
 
     it('Shouldn\'t create venue with empty name', () => {
         let venue = {name: ''};
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 500);
@@ -231,8 +207,6 @@ describe('create_venue', () => {
 
     it('Shouldn\'t create venue with existing name', () => {
         let venue = {name: "Hakkasan"};
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             expect(response.statusCode).to.equal(500);
@@ -248,8 +222,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 500);
@@ -264,8 +236,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: ''}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 500);
@@ -280,8 +250,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch"}, {name: "Touch"}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 500);
@@ -296,8 +264,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{}]}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 500);
@@ -312,8 +278,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: ''}]}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 500);
@@ -328,8 +292,6 @@ describe('create_venue', () => {
             name: "Hakkasan",
             screen_groups: [{name: "Touch", screens: [{name: "A"}, {name: "A"}]}]
         };
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body, response) => {
             assert(response.statusCode == 500);

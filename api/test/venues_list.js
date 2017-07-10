@@ -35,8 +35,6 @@ describe('venues_list', () => {
 
     it('I can see 1 venue if we have 1 venue', () => {
         let venue = {name: "Hakkasan"};
-        let params = {};
-        params.body = JSON.stringify(venue);
 
         let expectations = (body) => {
             expect(body).to.be.an('array').to.have.lengthOf(1);
