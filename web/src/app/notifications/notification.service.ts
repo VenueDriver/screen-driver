@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {NotificationsService} from "angular2-notifications/dist";
+import {NotificationsService} from "angular2-notifications";
 
 export const NOTIFICATION_DURATION = 6000;
 
