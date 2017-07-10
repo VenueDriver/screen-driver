@@ -62,19 +62,18 @@ export class VenuesTreeViewComponent implements OnInit {
     getActionMapping(): IActionMapping {
         return {
             mouse: {click: this.getMouseClickAction()},
-            keys: {
-                [KEYS.RIGHT]: () => {},
-                [KEYS.LEFT]: () => {},
-                [KEYS.DOWN]: () => {},
-                [KEYS.UP]: () => {},
-                [KEYS.SPACE]: () => {},
-                [KEYS.ENTER]: () => {}
-            }
+            keys: this.createDefaultActionConfigForKeys()
         }
     }
 
     getMouseClickAction() {
         return _.isEmpty(this.currentNodeData) ? TREE_ACTIONS.TOGGLE_EXPANDED : TREE_ACTIONS.DESELECT;
+    }
+
+    createDefaultActionConfigForKeys() {
+        let keyConfig = {};
+        _.forEach(KEYS, key => keyConfig[key] = () => {});
+        return keyConfig;
     }
 
     hasContentInfo(node: any): boolean {
