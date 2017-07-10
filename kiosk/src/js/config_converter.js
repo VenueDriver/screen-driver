@@ -3,7 +3,6 @@ class ConfigConverter {
     }
 
     static convert(venues) {
-        console.log(venues);
         let convertedVenues = {};
         venues.forEach(venue => {
             this.setParentUrlForEmptyChildren(venue);

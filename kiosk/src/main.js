@@ -117,10 +117,23 @@ function updateUrlForCurrentScreen(localScreenConfig, remoteScreenConfig) {
     return false;
 
     function getRemoteUrlForCurrentScreen() {
-        let selectedVenue = localScreenConfig.selectedVenue;
-        let selectedGroup = localScreenConfig.selectedGroup;
-        let selectedScreen = localScreenConfig.selectedScreen;
-        return remoteScreenConfig[selectedVenue][selectedGroup][selectedScreen];
+        let selectedVenueId = localScreenConfig.selectedVenue.id;
+        let selectedGroupId = localScreenConfig.selectedGroup.id;
+        let selectedScreenId = localScreenConfig.selectedScreen.id;
+
+        let venue = findItemById(remoteScreenConfig, selectedVenueId);
+        let group = findItemById(venue, selectedGroupId);
+        let screen = findItemById(group, selectedScreenId);
+
+        return screen.url;
+    }
+}
+
+function findItemById(parentObject, itemIdToFind) {
+    for (let key in parentObject) {
+        if (parentObject[key]._id === itemIdToFind) {
+            return parentObject[key];
+        }
     }
 }
 
@@ -183,7 +196,6 @@ function openAdminPanel() {
 }
 
 function openContentWindow(contentUrl) {
-    console.log(contentUrl);
     let newWindow = createWindow(contentUrl, {
         webPreferences: {
             preload: path.join(__dirname, 'js/remote_content_preload.js')

@@ -191,7 +191,6 @@ function loadScreensConfig() {
         success: function (json) {
             try {
                 screensConfig = ConfigConverter.convert(json);
-                console.log(screensConfig);
             } catch (error) {
                 showError("Cannot read config: " + error.message);
                 throw new Error(error.message);
@@ -231,7 +230,6 @@ function initVenuesSelector() {
 }
 
 function putInStorage(key, value) {
-    console.log(key, value);
     storage.set(key, value, function(error) {
         if (error) throw error;
     });
