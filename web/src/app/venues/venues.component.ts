@@ -57,7 +57,7 @@ export class VenuesComponent implements OnInit {
         this.venuesService.saveVenue(venue)
             .subscribe(
                 response => this.handleResponse(response),
-                error => this.handleError('An error occurred while saving new venue'));
+                error => this.handleError('Unable to perform save operation'));
     }
 
     handleResponse(response: any) {
@@ -79,7 +79,7 @@ export class VenuesComponent implements OnInit {
         this.saveNewContent(venue.content)
             .subscribe(
                 content => this.handleCreateContentResponse(venue, content),
-                error => this.notificationService.showErrorNotificationBar('An error occurred while saving new content URL')
+                error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
             );
     }
 
@@ -97,11 +97,11 @@ export class VenuesComponent implements OnInit {
         this.venuesService.updateVenue(venueNode)
             .subscribe(
                 response => this.loadVenues(),
-                error => this.handleError('An error occurred while updating configuration'));
+                error => this.handleError('Unable to update configuration'));
     }
 
-    handleError(message: string) {
-        return this.notificationService.showErrorNotificationBar(message);
+    handleError(errorMessage: string) {
+        return this.notificationService.showErrorNotificationBar(errorMessage);
     }
 
     toggleCreateContentMode(createContentMode: boolean) {
