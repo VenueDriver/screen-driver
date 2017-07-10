@@ -1,4 +1,4 @@
-service: screen-driver-content-management-system
+service: screen-driver-api
 
 frameworkVersion: ">=1.1.0 <2.0.0"
 
@@ -6,6 +6,7 @@ provider:
   name: aws
   runtime: nodejs6.10
   environment:
+    STAGE: ${opt:stage}
     CONTENT_TABLE: content
     VENUES_TABLE: venues
   iamRoleStatements:
@@ -91,6 +92,7 @@ custom:
 plugins:
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-mocha-plugin
 
 resources:
   Resources:
