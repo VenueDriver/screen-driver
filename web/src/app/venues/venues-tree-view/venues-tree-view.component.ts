@@ -178,7 +178,7 @@ export class VenuesTreeViewComponent implements OnInit {
         this.saveNewContent(node.data.content)
             .subscribe(
                 content => this.handleCreateContentResponse(node, content),
-                error => this.notificationService.showErrorNotificationBar('An error occurred while saving new content URL')
+                error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
             );
     }
 

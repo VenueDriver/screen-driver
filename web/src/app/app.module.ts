@@ -8,7 +8,7 @@ import {AlertModule} from "ngx-bootstrap";
 
 import {VenuesModule} from "./venues/venues.module";
 import {HeaderComponent} from "./header/header.component";
-import {NotificationBarModule, NotificationBarService} from "angular2-notification-bar";
+import {NotificationModule} from "./notifications/notification.module";
 import {NotificationService} from "./notifications/notification.service";
 import {HttpModule} from "@angular/http";
 
@@ -22,11 +22,10 @@ import {HttpModule} from "@angular/http";
         routing,
         HttpModule,
         AlertModule.forRoot(),
+        NotificationModule,
         VenuesModule,
-        NotificationBarModule
     ],
     providers: [
-        NotificationBarService,
         NotificationService
     ],
     bootstrap: [AppComponent]
