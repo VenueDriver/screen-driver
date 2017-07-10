@@ -1,20 +1,35 @@
-<div>
-    <kendo-autocomplete
-            [data]="data"
-            [value]="value"
-            [valueField]="'short_name'"
-            [placeholder]="'Content URL'"
-            [popupSettings]="{animate: false}"
-            [filterable]="true"
-            (filterChange)="handleFilter($event)"
-            (valueChange)="onSelect($event)"
-            (focus)="openPopup()">
+    <div class="dropdown">
+        <input type="text"
+                class="form-control"
+                placeholder="Content short name"
+                [value]="getValue()"
+                (focus)="showDropdown()"
+                (clickOutside)="handleClickOutside($event)"
+                (select)="handleTextSelection($event)"
+                (keyup)="handleKeyUp($event)">
 
-        <ng-template kendoAutoCompleteItemTemplate let-dataItem>
-            <div class="autocomplete-item">
-                <div class="item-value">{{dataItem.short_name}}</div>
-                <div class="item-desc">{{dataItem.url}}</div>
-            </div>
-        </ng-template>
-    </kendo-autocomplete>
-</div>
+        <ul class="dropdown-menu" [class.shown]="isShowDropdown">
+            <li *ngFor="let item of data; let last = last">
+                <a (click)="onSelect(item)" class="dropdown-item">
+                    <div class="item-value">{{item.short_name}}</div>
+                    <div class="item-desc">{{getShortUrl(item)}}</div>
+                </a>
+            </li>
+            <li *ngIf="data.length < 1">
+                <div class="nodata-block">
+                    <div class="nodata-warning">
+                        No suggestions
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="dropdown-footer">
+                    <button class="btn btn-block btn-lg add-button"
+                            (keyup.enter)="emitAddNewEvent()"
+                            (click)="emitAddNewEvent()">
+                        Add new content URL
+                    </button>
+                </div>
+            </li>
+        </ul>
+    </div>

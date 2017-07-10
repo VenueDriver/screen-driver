@@ -2,7 +2,7 @@
 
 ##### [AWS Lambda](api/README.md)
 
-##### [Wep app](web/README.md)
+##### [Web app](web/README.md)
 
 ##### [Kiosk app](kiosk/README.md)
 

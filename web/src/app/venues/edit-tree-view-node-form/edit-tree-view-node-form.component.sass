@@ -1,21 +1,36 @@
-.edit-node-form
+@import "../../../variables"
+
+.form-container
   display: flex
   flex-direction: row
+  align-items: center
   width: 100%
 
   .inputs-container
-    margin-top: -20px
-    width: 400px
+    width: $inputs-width
+    margin-right: 10px
 
-    & input
-      font-size: 18px
+    @media screen and (max-width: $small-resolution)
+      width: 150%
+      float: right
+
+    .input-block
+      margin-top: 25px
+
+    input
+      font-size: $input-font-size
 
     .validation-error
       margin-top: -16px
 
-    .dropdown-container
-      position: absolute
+    .autocomplete-container
       margin-top: 10px
 
   .buttons-container
     margin-left: auto
+
+    .btn
+      width: 75px
+
+    .cancel-button
+      padding: 12px
