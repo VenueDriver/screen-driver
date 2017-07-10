@@ -69,24 +69,30 @@ class MultiOperationHelper {
     }
 
     getParametersForVenue(venue, response) {
-    let params = {};
-    if (response) {
-        let responseBody = JSON.parse(response.body);
-        let id = responseBody.id;
-        responseBody.screen_groups.forEach(group => {
-            _addId(venue, 'screen_groups', group);
-            group.screens.forEach(screen => _addId(group, 'screens', screen))
-        });
-        params.pathParameters = {};
-        params.pathParameters.id = id;
-    }
-    params.body = JSON.stringify(venue);
-    return params;
+        let params = {};
+        if (response) {
+            let responseBody = JSON.parse(response.body);
+            let id = responseBody.id;
+            if (responseBody.screen_groups) {
+                _setIdsForChildElements(responseBody);
+            }
+            params.pathParameters = {};
+            params.pathParameters.id = id;
+        }
+        params.body = JSON.stringify(venue);
+        return params;
 
-    function _addId(sourceElement, sourceField, destinationElement) {
-        destinationElement.id = sourceElement[sourceField].map(element => element.name == destinationElement.name)[0].id;
+        function _addId(sourceElement, sourceField, destinationElement) {
+            destinationElement.id = sourceElement[sourceField].map(element => element.name == destinationElement.name)[0].id;
+        }
+
+        function _setIdsForChildElements(responseBody) {
+            responseBody.screen_groups.forEach(group => {
+                _addId(venue, 'screen_groups', group);
+                group.screens.forEach(screen => _addId(group, 'screens', screen))
+            });
+        }
     }
-}
 
 }
 

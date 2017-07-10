@@ -11,8 +11,6 @@ const mochaPlugin = require('serverless-mocha-plugin');
 
 const lambdaWrapper = mochaPlugin.lambdaWrapper;
 const expect = mochaPlugin.chai.expect;
-const wrappedUpdate = lambdaWrapper.wrap(updateFunction, {handler: 'update'});
-const wrappedCreate = lambdaWrapper.wrap(createFunction, {handler: 'create'});
 
 const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
     .configure()
