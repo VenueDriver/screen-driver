@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
+import {KEYS} from "angular-tree-component/dist/constants/keys";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {Content} from "../../content/content";
@@ -60,7 +61,15 @@ export class VenuesTreeViewComponent implements OnInit {
 
     getActionMapping(): IActionMapping {
         return {
-            mouse: {click: this.getMouseClickAction()}
+            mouse: {click: this.getMouseClickAction()},
+            keys: {
+                [KEYS.RIGHT]: () => {},
+                [KEYS.LEFT]: () => {},
+                [KEYS.DOWN]: () => {},
+                [KEYS.UP]: () => {},
+                [KEYS.SPACE]: () => {},
+                [KEYS.ENTER]: () => {}
+            }
         }
     }
 
