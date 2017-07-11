@@ -117,10 +117,33 @@ function updateUrlForCurrentScreen(localScreenConfig, remoteScreenConfig) {
     return false;
 
     function getRemoteUrlForCurrentScreen() {
-        let selectedVenue = localScreenConfig.selectedVenue;
-        let selectedGroup = localScreenConfig.selectedGroup;
-        let selectedScreen = localScreenConfig.selectedScreen;
-        return remoteScreenConfig[selectedVenue][selectedGroup][selectedScreen];
+        let selectedVenueId = localScreenConfig.selectedVenue.id;
+        let selectedGroupId = localScreenConfig.selectedGroup.id;
+        let selectedScreenId = localScreenConfig.selectedScreen.id;
+
+        let venue = findItemById(remoteScreenConfig, selectedVenueId);
+        let group = findItemById(venue.config, selectedGroupId);
+        let screen = findItemById(group.config, selectedScreenId);
+
+        putInStorage('selectedVenue', {name: venue.name, id: venue.config._id});
+        putInStorage('selectedGroup', {name: group.name, id: group.config._id});
+        putInStorage('selectedScreen', {name: screen.name, id: screen.config._id});
+
+        return screen.config.url;
+    }
+}
+
+function putInStorage(key, value) {
+    storage.set(key, value, function(error) {
+        if (error) throw error;
+    });
+}
+
+function findItemById(parentObject, itemIdToFind) {
+    for (let key in parentObject) {
+        if (parentObject[key]._id === itemIdToFind) {
+            return {name: key, config: parentObject[key]};
+        }
     }
 }
 

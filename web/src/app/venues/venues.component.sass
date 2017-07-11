@@ -1,10 +1,28 @@
-.page-container
+@import "../../variables"
 
-  .form-container
-    padding-left: 34px
-    border-bottom: solid 1px #eee
-    padding-bottom: 20px
+.page-container
+  display: flex
+  align-items: center
+  justify-content: center
+
+  .venues-container
+    width: 800px
+
+  .add-venue-form
     margin-bottom: 20px
+    padding: 0 8px 0 34px
+    border-bottom: solid 1px #eee
+
+    @media screen and (max-width: $small-resolution)
+      padding: 8px 0
+
+    .form-container
+      padding-bottom: 20px
+      margin-top: 20px
+
+    .form-title
+      font-size: 16px
+      margin: 10px 0 17px
 
   .plus-button
     content: url('../../assets/images/add-circular-outlined-button.png')

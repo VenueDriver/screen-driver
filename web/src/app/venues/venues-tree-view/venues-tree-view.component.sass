@@ -1,5 +1,6 @@
+@import "../../../variables"
+
 .node-content-wrapper
-  padding-bottom: 300px
 
   &:hover .plus-button
     display: block
@@ -7,19 +8,25 @@
 .single-node
   display: flex
   align-items: center
-  height: 95px
+  height: $tree-view-node-height
   width: 100%
 
   &.node-without-children
     padding-left: 11px
+    cursor: auto
+
+    .node-info
+      cursor: default
+
+  &.large-form-container
+    height: 180px
 
   &:hover .buttons-container .node-button
     display: inline-block
 
   .inputs-container
-
     .node-name
-      font-size: 18px
+      font-size: $input-font-size
 
   .buttons-container
     margin-left: auto
@@ -29,6 +36,9 @@
       width: 25px
       height: 25px
       cursor: pointer
+      @media screen and (max-width: $tablet-resolution)
+        display: inline-block
+        margin: 5px 0
 
     .plus-button
       content: url('../../../assets/images/add-circular-outlined-button.png')
@@ -61,21 +71,4 @@
       font-style: italic
 
   .edit-node-form
-    display: flex
-    align-items: center
-    width: 100%
-
-    .inputs-container
-      margin-top: -40px
-      width: 400px
-
-      .validation-error
-        margin-top: -16px
-
-      .dropdown-container
-        position: absolute
-        margin-top: 10px
-
-    .buttons-container
-      margin-left: auto
-      width: 23%
+    flex: 1
