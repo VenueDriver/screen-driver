@@ -33,7 +33,6 @@ describe('create_venue', () => {
             response.body = JSON.parse(response.body);
             expect(response.statusCode).to.equal(200);
             expect(response.body).to.have.property("name").that.equal("Hakkasan");
-            expect(response.body).to.have.property("content_id").to.be.null;
             expect(response.body).to.have.property("screen_groups").to.be.an('array').that.is.empty;
             expect(response.body).to.have.property("_rev").that.equal(0);
         });
@@ -51,22 +50,6 @@ describe('create_venue', () => {
             expect(response.statusCode).to.equal(200);
             assert(response.body.id.length == idLength);
             assert(response.body._rev == 0);
-        });
-    });
-
-    it('Should create venue with content_id', () => {
-        let venue = {
-            name: "Hakkasan",
-            content_id: "710b962e-041c-11e1-9234-0123456789ab"
-        };
-        let params = {};
-        params.body = JSON.stringify(venue);
-
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
-            expect(response.statusCode).to.equal(200);
-            expect(response.body).to.have.property("content_id").with.lengthOf(idLength);
-            expect(response.body).to.have.property("content_id").that.equal("710b962e-041c-11e1-9234-0123456789ab");
         });
     });
 
@@ -105,23 +88,6 @@ describe('create_venue', () => {
 
             expect(response.body.screen_groups[1]).to.have.property("name").that.is.equal('Deli');
             expect(response.body.screen_groups[1]).to.have.property("id").with.lengthOf(idLength);
-        });
-    });
-
-    it('Should create screen group with content id', () => {
-        let venue = {
-            name: "Hakkasan",
-            screen_groups: [{name: "Touch", content_id: "710b962e-041c-11e1-9234-0123456789ab"}]
-        };
-        let params = {};
-        params.body = JSON.stringify(venue);
-
-        return wrapped.run(params).then(response => {
-            response.body = JSON.parse(response.body);
-            expect(response.statusCode).to.equal(200);
-            expect(response.body).to.have.property("name").that.is.equal('Hakkasan');
-            expect(response.body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
-            expect(response.body.screen_groups[0]).to.have.property("content_id").that.is.equal('710b962e-041c-11e1-9234-0123456789ab');
         });
     });
 

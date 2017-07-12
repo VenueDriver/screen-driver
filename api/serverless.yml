@@ -9,6 +9,7 @@ provider:
     STAGE: ${opt:stage}
     CONTENT_TABLE: content
     VENUES_TABLE: venues
+    CONFIGURATION_TABLE: configuration
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -111,6 +112,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.CONTENT_TABLE}
+
     VenuesTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -126,3 +128,19 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.VENUES_TABLE}
+
+    ConfigurationTable:
+          Type: 'AWS::DynamoDB::Table'
+          Properties:
+            AttributeDefinitions:
+              -
+                AttributeName: id
+                AttributeType: S
+            KeySchema:
+              -
+                AttributeName: id
+                KeyType: HASH
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+            TableName: ${self:provider.environment.CONFIGURATION_TABLE}
