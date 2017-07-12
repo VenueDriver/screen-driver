@@ -153,7 +153,7 @@ export class EditTreeViewNodeFormComponent {
         event.stopPropagation();
     }
 
-    add(event) {
+    enableCreateContentMode(event) {
         this.nodeData.content = {short_name: event.short_name};
         this.createContentMode = true;
         this.isFormValid = false;
