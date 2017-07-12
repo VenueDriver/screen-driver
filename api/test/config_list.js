@@ -29,11 +29,21 @@ describe('config_list', () => {
 
 
     it('Should display empty list', () => {
-        let expectations = (body) => {
-            expect(body).is.an('array').that.is.empty;
+        return MultiOperationHelper.getAll().then((response) => {
+            let body = JSON.parse(response.body);
+            expect(body).to.be.an('array').that.is.empty;
+        });
+    });
+
+    it('Should display list with 1 config', () => {
+        let config = {name: 'New year'};
+
+        let expectations = (body, response) => {
+            expect(response).to.have.property('statusCode').that.equal(200);
+            expect(body).is.an('array').that.lengthOf(1);
         };
 
-        return MultiOperationHelper.performListTest({}, expectations);
+        return MultiOperationHelper.performListTest(config, expectations);
     });
 
     it('Should display list with 2 configs', () => {
@@ -46,7 +56,7 @@ describe('config_list', () => {
         };
 
         return MultiOperationHelper.create(firstConfig)
-            .then(MultiOperationHelper.performListTest(secondConfig, expectations));
+            .then(() => MultiOperationHelper.performListTest(secondConfig, expectations));
     });
 
     it('Should display all properties', () => {
