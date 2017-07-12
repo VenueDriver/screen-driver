@@ -1,2 +1,13 @@
-<configurations-manager [configs]="configs"></configurations-manager>
-<configuration-creator (created)="handleConfigCreation()"></configuration-creator>
+<div>
+    <div>
+        <configurations-manager [configs]="configs"></configurations-manager>
+    </div>
+
+    <div *ngIf="!creationMode">
+        <button class="btn btn-success btn-large" (click)="enableCreationMode()">Create</button>
+    </div>
+
+    <div *ngIf="creationMode">
+        <configuration-creator (created)="handleConfigCreation()"></configuration-creator>
+    </div>
+</div>

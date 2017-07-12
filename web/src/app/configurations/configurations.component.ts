@@ -9,6 +9,7 @@ import {ConfigurationsService} from "./configurations.service";
 export class ConfigurationsComponent implements OnInit {
 
     configs: Configuration[];
+    creationMode = false;
 
     constructor(private configurationsService: ConfigurationsService) { }
 
@@ -23,5 +24,9 @@ export class ConfigurationsComponent implements OnInit {
 
     handleConfigCreation() {
         this.loadConfigs();
+    }
+
+    enableCreationMode() {
+        this.creationMode = true;
     }
 }
