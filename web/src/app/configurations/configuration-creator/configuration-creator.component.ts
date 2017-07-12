@@ -15,6 +15,6 @@ export class ConfigurationCreatorComponent implements OnInit {
     ngOnInit() { }
 
     performSubmit() {
-        this.configsService.createConfiguration(this.config);
+        this.configsService.createConfiguration(this.config).subscribe(() => {});
     }
 }
