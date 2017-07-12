@@ -10,6 +10,7 @@ import {NotificationService} from "../../notifications/notification.service";
 export class ConfigurationCreatorComponent implements OnInit {
 
     @Output() created = new EventEmitter();
+    @Output() cancel = new EventEmitter();
 
     private config = new Configuration();
 
@@ -32,5 +33,9 @@ export class ConfigurationCreatorComponent implements OnInit {
 
     handleError() {
         this.notificationService.showErrorNotificationBar(`Unable to create config`);
+    }
+
+    performCancel() {
+        this.cancel.emit();
     }
 }

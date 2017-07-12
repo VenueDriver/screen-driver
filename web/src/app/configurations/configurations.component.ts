@@ -30,4 +30,8 @@ export class ConfigurationsComponent implements OnInit {
     enableCreationMode() {
         this.creationMode = true;
     }
+
+    disableCreationMode() {
+        this.creationMode = false;
+    }
 }

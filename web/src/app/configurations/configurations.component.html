@@ -8,6 +8,9 @@
     </div>
 
     <div *ngIf="creationMode">
-        <configuration-creator (created)="handleConfigCreation()"></configuration-creator>
+        <configuration-creator
+                (created)="handleConfigCreation()"
+                (cancel)="disableCreationMode()">
+        </configuration-creator>
     </div>
 </div>
