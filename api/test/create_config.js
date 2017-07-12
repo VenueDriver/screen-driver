@@ -81,7 +81,7 @@ describe('create_config', () => {
         return MultiOperationHelper.performCreateTest(config, expectations);
     });
 
-    it('Shouldn\'t create config with length 3 or less name', () => {
+    it('Shouldn\'t create config with name length 3 or less', () => {
         let config = {name: 'NYP'};
 
         let expectations = (body, response) => {

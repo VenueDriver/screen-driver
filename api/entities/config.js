@@ -42,6 +42,51 @@ class Config {
         }
     }
 
+    update() {
+        let deferred = Q.defer();
+        let params = {
+            TableName: process.env.CONFIGS_TABLE,
+            Key: {
+                id: this.id,
+            },
+            ExpressionAttributeNames: {
+                '#config_name': 'name',
+                '#rev': '_rev',
+            },
+            ExpressionAttributeValues: {
+                ':name': this.name,
+                ':enabled': this.enabled,
+                ':config': this.config,
+                ':rev': this._rev,
+                ':new_rev': this.increaseRevision(),
+            },
+            UpdateExpression: 'SET #config_name = :name, enabled = :enabled, config = :config, #rev = :new_rev',
+            ConditionExpression: "#rev = :rev",
+            ReturnValues: 'ALL_NEW',
+        };
+
+        if (!this._rev) deferred.reject('Missed revision number');
+
+        this.validate()
+            .then(() => {
+                return Config.hasUniqueName(this)
+            })
+            .then(() => _updateInDatabase(params))
+            .fail(errorMessage => deferred.reject(errorMessage));
+
+        return deferred.promise;
+
+        function _updateInDatabase(updateParameters) {
+            db.update(updateParameters, (error, result) => {
+                if (error) {
+                    deferred.reject(error.message);
+                } else {
+                    deferred.resolve(result.Attributes);
+                }
+            });
+        }
+    }
+
     validate() {
         let deferred = Q.defer();
         if (!this.name) deferred.reject('Config couldn\'t be without name');
@@ -103,7 +148,7 @@ class Config {
     };
 
     increaseRevision() {
-        this._rev++;
+        return ++this._rev;
     };
 }
 
