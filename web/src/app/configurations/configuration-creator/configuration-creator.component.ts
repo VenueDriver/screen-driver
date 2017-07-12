@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {ConfigurationsService} from "../configurations.service";
 import {Configuration} from "../entities/configuration";
 
@@ -8,6 +8,8 @@ import {Configuration} from "../entities/configuration";
 })
 export class ConfigurationCreatorComponent implements OnInit {
 
+    @Output() created = new EventEmitter();
+
     private config = new Configuration();
 
     constructor(private configsService: ConfigurationsService) { }
@@ -15,6 +17,7 @@ export class ConfigurationCreatorComponent implements OnInit {
     ngOnInit() { }
 
     performSubmit() {
-        this.configsService.createConfiguration(this.config).subscribe(() => {});
+        this.configsService.createConfiguration(this.config)
+            .subscribe(response => this.created.emit());
     }
 }

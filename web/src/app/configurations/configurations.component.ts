@@ -17,6 +17,11 @@ export class ConfigurationsComponent implements OnInit {
     }
 
     loadConfigs() {
-        this.configurationsService.loadConfigs().subscribe(response => this.configs = response.json())
+        this.configurationsService.loadConfigs()
+            .subscribe(response => this.configs = response.json());
+    }
+
+    handleConfigCreation() {
+        this.loadConfigs();
     }
 }
