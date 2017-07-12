@@ -11,6 +11,10 @@ export class ConfigurationsService {
 
     constructor(private http: Http) { }
 
+    loadConfigs(): Observable<Response> {
+        return this.http.get(CONFIGS_API_URL)
+    }
+
     createConfiguration(config: Configuration): Observable<Response> {
         return this.http.post(CONFIGS_API_URL, config);
     }
