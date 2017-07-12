@@ -46,7 +46,7 @@ class Config {
         let deferred = Q.defer();
         if (!this.name) deferred.reject('Config couldn\'t be without name');
         if (this.name == '') deferred.reject('Config couldn\'t be without name');
-        if (this.name && this.name.length < 3) deferred.reject('Config\'s name should be longer then 3 symbols');
+        if (this.name && this.name.length <= 3) deferred.reject('Config\'s name should be longer then 3 symbols');
         if (typeof(this.enabled) !== 'boolean') deferred.reject('Enabled field should be boolean');
         if (!this.isConfigValid(this.config)) deferred.reject('Enabled field should be boolean');
         Config.hasUniqueName(this)
