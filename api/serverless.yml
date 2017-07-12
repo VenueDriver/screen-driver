@@ -97,6 +97,14 @@ functions:
           method: post
           cors: true
 
+  update_config:
+    handler: config/update.update
+    events:
+      - http:
+          path: api/configs/{id}
+          method: put
+          cors: true
+
 custom:
   dynamodb:
     start:
