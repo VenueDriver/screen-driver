@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'configuration',
+    selector: 'configurations',
     templateUrl: 'configurations.component.html'
 })
 export class ConfigurationsComponent implements OnInit {

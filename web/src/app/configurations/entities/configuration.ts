@@ -1,7 +1,7 @@
 export class Configuration {
     id: string;
     name: string;
-    enabled: boolean;
+    enabled = false;
     config: any;
     _rev: number;
 }
