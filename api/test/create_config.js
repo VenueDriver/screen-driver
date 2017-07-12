@@ -16,7 +16,6 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 
 const idLength = 36;
 
-
 describe('create_config', () => {
     before((done) => {
         DatabaseCleaner.cleanDatabase().then(() => done());
