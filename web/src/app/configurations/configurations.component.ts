@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Configuration} from "./entities/configuration";
+import {ConfigurationsService} from "./configurations.service";
 
 @Component({
     selector: 'configurations',
@@ -6,8 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConfigurationsComponent implements OnInit {
 
-    constructor() { }
+    configs: Configuration[];
 
-    ngOnInit() { }
+    constructor(private configurationsService: ConfigurationsService) { }
 
+    ngOnInit() {
+        this.loadConfigs();
+    }
+
+    loadConfigs() {
+        this.configurationsService.loadConfigs().subscribe(response => this.configs = response.json())
+    }
 }

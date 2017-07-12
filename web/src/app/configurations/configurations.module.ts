@@ -5,6 +5,7 @@ import {ConfigurationsService} from "./configurations.service";
 import {AutofocusModule} from "../directives/autofocus/autofocus.module";
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
+import {ConfigurationManagerComponent} from "./configurations-manager/configurations-manager.component";
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import {BrowserModule} from "@angular/platform-browser";
     ],
     declarations: [
         ConfigurationsComponent,
-        ConfigurationCreatorComponent
+        ConfigurationCreatorComponent,
+        ConfigurationManagerComponent
     ],
     providers: [
         ConfigurationsService
