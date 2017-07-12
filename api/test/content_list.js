@@ -30,7 +30,7 @@ describe('content_list', () => {
     it('Should display empty list', () => {
         let expectations = (body) => {
             expect(body).is.an('array').that.is.empty;
-        }
+        };
 
         return MultiOperationHelper.performListTest({}, expectations);
     });
@@ -45,7 +45,7 @@ describe('content_list', () => {
         };
 
         return MultiOperationHelper.create(firstContent)
-            .then(MultiOperationHelper.performListTest(secondContent, expectations));
+            .then(() => MultiOperationHelper.performListTest(secondContent, expectations));
     });
 
     it('Should display short name', () => {
