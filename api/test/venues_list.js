@@ -72,18 +72,6 @@ describe('venues_list', () => {
         return MultiOperationHelper.performListTest([firstVenue, secondVenue], expectations);
     });
 
-    it('I can see all venues with content id if it exists', () => {
-        let firstVenue = {name: "Hakkasan LV", content_id: "710b962e-041c-11e1-9234-0123456789aa"};
-        let secondVenue = {name: "Hakkasan CA"};
-
-        let expectations = (body) => {
-            expect(findByName(body, 'Hakkasan LV')).to.have.property('content_id').that.equal('710b962e-041c-11e1-9234-0123456789aa');
-            expect(findByName(body, 'Hakkasan CA')).to.have.property('content_id').that.equal(null);
-        };
-
-        return MultiOperationHelper.performListTest([firstVenue, secondVenue], expectations);
-    });
-
     it('I can see all venues with screen groups if they\'re exist', () => {
         let firstVenue = {name: "Hakkasan LV", screen_groups: [{name: 'Touch'}, {name: 'Deli'}]};
         let secondVenue = {name: "Hakkasan CA"};

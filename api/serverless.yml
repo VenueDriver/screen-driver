@@ -9,6 +9,7 @@ provider:
     STAGE: ${opt:stage}
     CONTENT_TABLE: content
     VENUES_TABLE: venues
+    CONFIGS_TABLE: configs
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -80,6 +81,30 @@ functions:
           method: delete
           cors: true
 
+  config_list:
+    handler: config/list.list
+    events:
+      - http:
+          path: api/configs
+          method: get
+          cors: true
+
+  create_config:
+    handler: config/create.create
+    events:
+      - http:
+          path: api/configs
+          method: post
+          cors: true
+
+  update_config:
+    handler: config/update.update
+    events:
+      - http:
+          path: api/configs/{id}
+          method: put
+          cors: true
+
 custom:
   dynamodb:
     start:
@@ -111,6 +136,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.CONTENT_TABLE}
+
     VenuesTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
@@ -126,3 +152,19 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.VENUES_TABLE}
+
+    ConfigsTable:
+          Type: 'AWS::DynamoDB::Table'
+          Properties:
+            AttributeDefinitions:
+              -
+                AttributeName: id
+                AttributeType: S
+            KeySchema:
+              -
+                AttributeName: id
+                KeyType: HASH
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+            TableName: ${self:provider.environment.CONFIGS_TABLE}

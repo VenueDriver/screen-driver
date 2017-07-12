@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
-import {routing} from "./app.routing";
 import {AlertModule} from "ngx-bootstrap";
 
 import {VenuesModule} from "./venues/venues.module";
@@ -11,6 +10,7 @@ import {HeaderComponent} from "./header/header.component";
 import {NotificationModule} from "./notifications/notification.module";
 import {NotificationService} from "./notifications/notification.service";
 import {HttpModule} from "@angular/http";
+import {ConfigurationsModule} from "./configurations/configurations.module";
 
 @NgModule({
     declarations: [
@@ -19,11 +19,11 @@ import {HttpModule} from "@angular/http";
     ],
     imports: [
         BrowserModule,
-        routing,
         HttpModule,
         AlertModule.forRoot(),
         NotificationModule,
         VenuesModule,
+        ConfigurationsModule
     ],
     providers: [
         NotificationService

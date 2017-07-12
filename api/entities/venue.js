@@ -12,12 +12,10 @@ class Venue {
         if (venue) {
             this.id = venue.id;
             this.name = venue.name;
-            this.content_id = venue.content_id ? venue.content_id : null;
             this.screen_groups = this.getScreenGroups(venue);
             this._rev = venue._rev;
             return;
         }
-        this.content_id = null;
         this.screen_groups = [];
         this._rev = 0;
     }
@@ -69,12 +67,11 @@ class Venue {
             },
             ExpressionAttributeValues: {
                 ':name': this.name,
-                ':content_id': this.content_id,
                 ':screen_groups': this.screen_groups,
                 ':rev': this._rev,
                 ':new_rev': ++this._rev,
             },
-            UpdateExpression: 'SET #venue_name = :name, content_id = :content_id, screen_groups = :screen_groups, #rev = :new_rev',
+            UpdateExpression: 'SET #venue_name = :name, screen_groups = :screen_groups, #rev = :new_rev',
             ConditionExpression: "#rev = :rev",
             ReturnValues: 'ALL_NEW',
         };

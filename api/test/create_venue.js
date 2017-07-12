@@ -33,7 +33,6 @@ describe('create_venue', () => {
         let expectations = (body, response) => {
             expect(response.statusCode).to.equal(200);
             expect(body).to.have.property("name").that.equal("Hakkasan");
-            expect(body).to.have.property("content_id").to.be.null;
             expect(body).to.have.property("screen_groups").to.be.an('array').that.is.empty;
             expect(body).to.have.property("_rev").that.equal(0);
         };
@@ -50,21 +49,6 @@ describe('create_venue', () => {
             expect(response.statusCode).to.equal(200);
             assert(body.id.length == idLength, 'Should have id');
             assert(body._rev == 0, 'should have revision number == 0');
-        };
-
-        return MultiOperationHelper.performCreateTest(venue, expectations);
-    });
-
-    it('Should create venue with content_id', () => {
-        let venue = {
-            name: "Hakkasan",
-            content_id: "710b962e-041c-11e1-9234-0123456789ab"
-        };
-
-        let expectations = (body, response) => {
-            expect(response.statusCode).to.equal(200);
-            expect(body).to.have.property("content_id").with.lengthOf(idLength);
-            expect(body).to.have.property("content_id").that.equal("710b962e-041c-11e1-9234-0123456789ab");
         };
 
         return MultiOperationHelper.performCreateTest(venue, expectations);
@@ -101,22 +85,6 @@ describe('create_venue', () => {
 
             expect(body.screen_groups[1]).to.have.property("name").that.is.equal('Deli');
             expect(body.screen_groups[1]).to.have.property("id").with.lengthOf(idLength);
-        };
-
-        return MultiOperationHelper.performCreateTest(venue, expectations);
-    });
-
-    it('Should create screen group with content id', () => {
-        let venue = {
-            name: "Hakkasan",
-            screen_groups: [{name: "Touch", content_id: "710b962e-041c-11e1-9234-0123456789ab"}]
-        };
-
-        let expectations = (body, response) => {
-            expect(response.statusCode).to.equal(200);
-            expect(body).to.have.property("name").that.is.equal('Hakkasan');
-            expect(body.screen_groups[0]).to.have.property("name").that.is.equal('Touch');
-            expect(body.screen_groups[0]).to.have.property("content_id").that.is.equal('710b962e-041c-11e1-9234-0123456789ab');
         };
 
         return MultiOperationHelper.performCreateTest(venue, expectations);

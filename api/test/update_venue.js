@@ -38,17 +38,6 @@ describe('update_venue', () => {
         return MultiOperationHelper.performUpdateTest(newVenue, updatedVenue, expectation);
     });
 
-    it('Should update venue content id', () => {
-        let newVenue = {name: "Hakkasan"};
-        let updatedVenue = {name: "Hakkasan", content_id: "710b962e-041c-11e1-9234-0123456789ab", _rev: 0};
-
-        let expectation = (body) => {
-            expect(body).to.have.property("content_id").that.equal("710b962e-041c-11e1-9234-0123456789ab");
-        };
-
-        return MultiOperationHelper.performUpdateTest(newVenue, updatedVenue, expectation);
-    });
-
     it('Should update venue screen groups names', () => {
         let newVenue = {name: "Hakkasan", screen_groups: [{name: "Touch"}, {name: "Deli"}]};
         let updatedVenue = {name: "Hakkasan", screen_groups: [{name: "Menu"}, {name: "Restaurant"}], _rev: 0};
