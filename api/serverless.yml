@@ -81,11 +81,19 @@ functions:
           method: delete
           cors: true
 
+  config_list:
+    handler: config/list.list
+    events:
+      - http:
+          path: api/configs
+          method: get
+          cors: true
+
   create_config:
     handler: config/create.create
     events:
       - http:
-          path: api/config
+          path: api/configs
           method: post
           cors: true
 
