@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
-import {routing} from "./app.routing";
 import {AlertModule} from "ngx-bootstrap";
 
 import {VenuesModule} from "./venues/venues.module";
@@ -19,7 +18,6 @@ import {HttpModule} from "@angular/http";
     ],
     imports: [
         BrowserModule,
-        routing,
         HttpModule,
         AlertModule.forRoot(),
         NotificationModule,
