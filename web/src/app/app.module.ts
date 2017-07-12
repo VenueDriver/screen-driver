@@ -10,6 +10,7 @@ import {HeaderComponent} from "./header/header.component";
 import {NotificationModule} from "./notifications/notification.module";
 import {NotificationService} from "./notifications/notification.service";
 import {HttpModule} from "@angular/http";
+import {ConfigurationsModule} from "./configurations/configurations.module";
 
 @NgModule({
     declarations: [
@@ -22,6 +23,7 @@ import {HttpModule} from "@angular/http";
         AlertModule.forRoot(),
         NotificationModule,
         VenuesModule,
+        ConfigurationsModule
     ],
     providers: [
         NotificationService
