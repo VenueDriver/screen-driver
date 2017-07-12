@@ -4,7 +4,8 @@ import {ConfigurationsService} from "./configurations.service";
 
 @Component({
     selector: 'configurations',
-    templateUrl: 'configurations.component.html'
+    templateUrl: 'configurations.component.html',
+    styleUrls: ['configurations.component.sass']
 })
 export class ConfigurationsComponent implements OnInit {
 
