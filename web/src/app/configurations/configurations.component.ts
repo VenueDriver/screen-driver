@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Configuration} from "./entities/configuration";
-import {ConfigurationsService} from "./configurations.service";
+import {ConfigStateHolderService} from "./configuration-state-manager/config-state-holder.service";
 
 @Component({
     selector: 'configurations',
@@ -10,21 +10,21 @@ import {ConfigurationsService} from "./configurations.service";
 export class ConfigurationsComponent implements OnInit {
 
     configs: Configuration[];
+    currentConfig: Configuration;
     creationMode = false;
 
-    constructor(private configurationsService: ConfigurationsService) { }
+    constructor(private configStateHolderService: ConfigStateHolderService) {
+    }
 
     ngOnInit() {
-        this.loadConfigs();
+        this.configStateHolderService.reloadConfigs();
+        this.configStateHolderService.getAllConfigs().subscribe(configs => this.configs = configs);
+        this.configStateHolderService.getCurrentConfig().subscribe(config => this.currentConfig = config);
     }
 
-    loadConfigs() {
-        this.configurationsService.loadConfigs()
-            .subscribe(response => this.configs = response.json());
-    }
 
     handleConfigCreation() {
-        this.loadConfigs();
+        this.configStateHolderService.reloadConfigs();
     }
 
     enableCreationMode() {
@@ -34,4 +34,9 @@ export class ConfigurationsComponent implements OnInit {
     disableCreationMode() {
         this.creationMode = false;
     }
+
+    configSelected(config: Configuration) {
+        this.configStateHolderService.changeCurrentConfig(config);
+    }
+
 }

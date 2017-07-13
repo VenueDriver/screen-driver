@@ -1,5 +1,5 @@
 <div>
     <div *ngFor="let config of configs">
-        <div>{{config.name}}</div>
+        <div (click)="onConfigSelected(config)">{{config.name}}</div>
     </div>
 </div>
