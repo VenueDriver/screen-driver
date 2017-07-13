@@ -6,6 +6,9 @@ import {Response} from "@angular/http";
 import {Content} from "../../content/content";
 import {ContentService} from "../../content/content.service";
 import {Venue} from "../entities/venue";
+import {ConfigurationsService} from "../../configurations/configurations.service";
+import {Configuration} from "../../configurations/entities/configuration";
+import {ConfigStateHolderService} from "../../configurations/configuration-state-manager/config-state-holder.service";
 
 import * as _ from 'lodash';
 
@@ -15,7 +18,9 @@ export class EditTreeViewNodeFormService {
     constructor(
         private treeViewService: VenuesTreeViewService,
         private venuesService: VenuesService,
-        private contentService: ContentService
+        private contentService: ContentService,
+        private configService: ConfigurationsService,
+        private configStateHolderService: ConfigStateHolderService
     ) { }
 
     getNodeLevelName(node: any): string {
@@ -70,5 +75,16 @@ export class EditTreeViewNodeFormService {
     findNodeIdByName(items: any, node: any): string {
         let item = _.find(items, item => item.name === node.data.name);
         return item.id;
+    }
+
+    getConfigToUpdate(currentConfig: Configuration, nodeData: any) {
+        let configToUpdate = _.clone(currentConfig);
+        configToUpdate.config[nodeData.id] = nodeData.content.id;
+        return configToUpdate;
+    }
+
+    updateConfig(config: Configuration) {
+        this.configService.updateConfiguration(config)
+            .subscribe(response => this.configStateHolderService.reloadConfigs());
     }
 }

@@ -5,6 +5,7 @@ import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
 import {Venue} from "../entities/venue";
+import {Configuration} from "../../configurations/entities/configuration";
 
 @Component({
     selector: 'edit-tree-view-node-form',
@@ -14,6 +15,7 @@ import {Venue} from "../entities/venue";
 })
 export class EditTreeViewNodeFormComponent {
 
+    @Input() currentConfig: Configuration;
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
     @Input('currentNode') set componentModel(currentNode: any) {
@@ -228,10 +230,15 @@ export class EditTreeViewNodeFormComponent {
     }
 
     updateConfig() {
+        this.defineNodeId();
+        let configToUpdate = this.editFormService.getConfigToUpdate(this.currentConfig, this.nodeData);
+        this.editFormService.updateConfig(configToUpdate);
+        this.contentChanged = false;
+    }
+
+    defineNodeId() {
         if (!this.nodeData.id) {
             this.nodeData.id = this.editFormService.findNewNodeId(this.updatedVenue, this.node);
         }
-        console.log(this.nodeData.id, this.nodeData.content.id);
-        this.contentChanged = false;
     }
 }

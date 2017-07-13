@@ -5,9 +5,10 @@ import {KEYS} from "angular-tree-component/dist/constants/keys";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {Content} from "../../content/content";
+import {VenuesService} from "../venues.service";
+import {Configuration} from "../../configurations/entities/configuration";
 
 import * as _ from 'lodash';
-import {VenuesService} from "../venues.service";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
 
@@ -25,6 +26,7 @@ export class VenuesTreeViewComponent implements OnInit {
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
+    currentConfig: Configuration;
     options: any;
     actionMapping: any;
     currentNodeData: any;
