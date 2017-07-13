@@ -34,7 +34,10 @@ export class VenuesComponent implements OnInit {
     ngOnInit() {
         this.loadVenues();
         this.loadContent();
-        this.configStateHolderService.getCurrentConfig().subscribe(config => this.config = config);
+        this.configStateHolderService.getCurrentConfig().subscribe(config => {
+            this.config = config;
+            this.mergeLocationsWithConfig(this.venues, this.config);
+        });
     }
 
     loadVenues() {
@@ -110,5 +113,24 @@ export class VenuesComponent implements OnInit {
 
     toggleCreateContentMode(createContentMode: boolean) {
         this.isCreateContentMode = createContentMode;
+    }
+
+    mergeLocationsWithConfig(locations, config: Configuration) {
+        locations.forEach(location => {
+            if (config.config.hasOwnProperty(location.id)) {
+                location.content = this.getContentForVenue(config, location.id);
+            } else {
+                location.content = null
+            }
+
+            if (location.hasOwnProperty('children')) {
+                this.mergeLocationsWithConfig(location.children, config)
+            }
+        });
+    }
+
+    getContentForVenue(config, venueId) {
+        let contentId = config.config[venueId];
+        return _.find(this.content, {id: contentId});
     }
 }
