@@ -25,6 +25,7 @@ export class ConfigurationsComponent implements OnInit {
 
     handleConfigCreation() {
         this.configStateHolderService.reloadConfigs();
+        this.disableCreationMode();
     }
 
     enableCreationMode() {
