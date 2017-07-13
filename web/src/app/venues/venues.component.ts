@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {VenuesService} from "./venues.service";
 import {Venue} from "./entities/venue";
 import {Content} from "../content/content";
@@ -7,6 +7,8 @@ import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service
 
 import * as _ from 'lodash';
 import {Observable} from "rxjs";
+import {ConfigStateHolderService} from "../configurations/configuration-state-manager/config-state-holder.service";
+import {Configuration} from "../configurations/entities/configuration";
 
 @Component({
     selector: 'venues',
@@ -19,18 +21,20 @@ export class VenuesComponent implements OnInit {
     venues: Venue[];
     venuesTree: any;
     content: Content[];
+    config: Configuration;
     isShowAddVenueForm = false;
     isCreateContentMode = false;
 
-    constructor(
-        private venuesService: VenuesService,
-        private treeViewService: VenuesTreeViewService,
-        private notificationService: NotificationService
-    ) { }
+    constructor(private venuesService: VenuesService,
+                private treeViewService: VenuesTreeViewService,
+                private notificationService: NotificationService,
+                private configStateHolderService: ConfigStateHolderService,) {
+    }
 
     ngOnInit() {
         this.loadVenues();
         this.loadContent();
+        this.configStateHolderService.getCurrentConfig().subscribe(config => this.config = config);
     }
 
     loadVenues() {
