@@ -32,7 +32,7 @@ export class VenuesTreeViewComponent implements OnInit {
     currentNodeData: any;
     originalNodeData: any;
     isFormValid = false;
-    isCreateContentMode =false;
+    isCreateContentMode = false;
 
     constructor(
         private treeViewService: VenuesTreeViewService,
@@ -173,39 +173,11 @@ export class VenuesTreeViewComponent implements OnInit {
         });
     }
 
-    performSubmit(node: any) {
-        if (this.isCreateContentMode) {
-            this.createContentBeforeUpdateVenue(node);
-            this.isCreateContentMode = false;
-        } else {
-            this.updateVenue(node);
-        }
-    }
-
-    createContentBeforeUpdateVenue(node: any) {
-        this.saveNewContent(node.data.content)
-            .subscribe(
-                content => this.handleCreateContentResponse(node, content),
-                error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
-            );
-    }
-
-    handleCreateContentResponse(node: any, content: Content) {
-        this.contentChange.emit();
-        node.data.content_id = content.id;
-        this.updateVenue(node);
-    }
-
-    updateVenue(node: any) {
-        let venueId = this.getVenueId(node);
-        let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
-        this.update.emit(venueToUpdate);
+    performSubmit() {
+        this.update.emit();
+        this.isCreateContentMode = false;
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
-    }
-
-    saveNewContent(content: Content): Observable<Content> {
-        return this.treeViewService.saveNewContent(content);
     }
 
     getVenueId(node: any) {

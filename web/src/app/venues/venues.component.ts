@@ -93,13 +93,6 @@ export class VenuesComponent implements OnInit {
         return this.treeViewService.saveNewContent(content);
     }
 
-    updateVenue(venueNode: any) {
-        this.venuesService.updateVenue(venueNode)
-            .subscribe(
-                response => this.loadVenues(),
-                error => this.handleError('Unable to update configuration'));
-    }
-
     handleError(errorMessage: string) {
         return this.notificationService.showErrorNotificationBar(errorMessage);
     }

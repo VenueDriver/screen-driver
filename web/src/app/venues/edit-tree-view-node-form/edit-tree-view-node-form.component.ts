@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {VenuesService} from "../venues.service";
 import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 import {Content} from "../../content/content";
+import {Observable} from "rxjs";
+import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
 
@@ -13,6 +15,7 @@ import * as _ from 'lodash';
 export class EditTreeViewNodeFormComponent {
 
     @Input() venues: Array<any>;
+    @Input() currentVenueId: string;
     @Input() content: Array<Content>;
     @Input('currentNode') set componentModel(currentNode: any) {
         this.setUpComponentModel(currentNode);
@@ -20,7 +23,7 @@ export class EditTreeViewNodeFormComponent {
 
     @Input() contentUrlPlaceholder = 'Default URL';
 
-    @Output() submit = new EventEmitter();
+    @Output() update = new EventEmitter();
     @Output() cancel = new EventEmitter();
     @Output() createContent = new EventEmitter();
 
@@ -30,8 +33,9 @@ export class EditTreeViewNodeFormComponent {
     createContentMode = false;
 
     constructor(
-        private venueService: VenuesService,
-        private treeViewService: VenuesTreeViewService
+        private venuesService: VenuesService,
+        private treeViewService: VenuesTreeViewService,
+        private notificationService: NotificationService
     ) { }
 
     setUpComponentModel(node: any) {
@@ -50,7 +54,7 @@ export class EditTreeViewNodeFormComponent {
 
     getValidationMessageForNodeName(): string {
         let nodeLevelName = this.getNodeLevelName();
-        return this.venueService.getValidationMessage(nodeLevelName);
+        return this.venuesService.getValidationMessage(nodeLevelName);
     }
 
     getValidationMessageForContentShortName(): string {
@@ -145,12 +149,37 @@ export class EditTreeViewNodeFormComponent {
 
     performSubmit(event: any) {
         this.stopClickPropagation(event);
-        this.submit.emit(this.node ? this.node : this.nodeData);
+        if (this.createContentMode) {
+            this.createContentBeforeUpdateVenue();
+        } else {
+            this.updateVenue();
+        }
         this.createContentMode = false;
     }
 
     stopClickPropagation(event: any) {
         event.stopPropagation();
+    }
+
+    createContentBeforeUpdateVenue() {
+        this.saveNewContent(this.nodeData.content)
+            .subscribe(
+                content => this.updateVenue(),
+                error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
+            );
+    }
+
+    updateVenue() {
+        let venueToUpdate = _.find(this.venues, venue => venue.id === this.currentVenueId);
+        this.venuesService.updateVenue(venueToUpdate)
+            .subscribe(
+                response => this.update.emit(),
+                error => this.handleError('Unable to update configuration')
+            );
+    }
+
+    saveNewContent(content: Content): Observable<Content> {
+        return this.treeViewService.saveNewContent(content);
     }
 
     enableCreateContentMode(event) {
@@ -170,5 +199,9 @@ export class EditTreeViewNodeFormComponent {
 
     showValidationMessageForUrl(): boolean {
         return this.nodeData.content.url && !this.isContentUrlValid();
+    }
+
+    handleError(errorMessage: string) {
+        return this.notificationService.showErrorNotificationBar(errorMessage);
     }
 }
