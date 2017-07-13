@@ -39,4 +39,8 @@ export class EditTreeViewNodeFormService {
     pushVenueUpdateEvent() {
         this.venuesService.pushVenueUpdateEvent();
     }
+
+    pushContentUpdateEvent() {
+        this.contentService.pushContentUpdateEvent();
+    }
 }

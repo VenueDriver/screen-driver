@@ -154,11 +154,16 @@ export class EditTreeViewNodeFormComponent {
     }
 
     createContentBeforeUpdateVenue() {
-        this.saveNewContent(this.nodeData.content)
+        this.editFormService.saveNewContent(this.nodeData.content)
             .subscribe(
-                content => this.updateVenueList(),
+                content => this.handleCreateContentResponse(),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
             );
+    }
+
+    handleCreateContentResponse() {
+        this.editFormService.pushContentUpdateEvent();
+        this.updateVenueList();
     }
 
     updateVenueList() {
@@ -189,10 +194,6 @@ export class EditTreeViewNodeFormComponent {
     handleVenueListUpdateResponse() {
         this.editFormService.pushVenueUpdateEvent();
         this.createContentMode = false;
-    }
-
-    saveNewContent(content: Content): Observable<Content> {
-        return this.editFormService.saveNewContent(content);
     }
 
     enableCreateContentMode(event) {

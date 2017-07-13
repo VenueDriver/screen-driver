@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {VenuesService} from "./venues.service";
 import {Venue} from "./entities/venue";
 import {Content} from "../content/content";
+import {ContentService} from "../content/content.service";
 
 import * as _ from 'lodash';
 
@@ -20,7 +21,8 @@ export class VenuesComponent implements OnInit {
     isCreateContentMode = false;
 
     constructor(
-        private venuesService: VenuesService
+        private venuesService: VenuesService,
+        private contentService: ContentService
     ) { }
 
     ngOnInit() {
@@ -31,6 +33,8 @@ export class VenuesComponent implements OnInit {
                 this.loadVenues();
                 this.hideAddVenueForm();
             });
+        this.contentService.getContentUpdateSubscription()
+            .subscribe(() => this.loadContent());
     }
 
     loadVenues() {
