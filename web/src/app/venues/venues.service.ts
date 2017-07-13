@@ -7,10 +7,13 @@ import {Content} from "../content/content";
 import {ContentService} from "../content/content.service";
 
 import * as _ from 'lodash';
+import {Subject, BehaviorSubject} from "rxjs";
 
 @Injectable()
 export class VenuesService {
     readonly venuesApiPath = `${environment.apiUrl}/api/venues`;
+
+    private venueUpdate: Subject<any> = new BehaviorSubject({});
 
     constructor(
         private http: Http,
@@ -74,14 +77,15 @@ export class VenuesService {
         }
     }
 
-    private getDefaultUrlValue() {
-        return {
-            id: '',
-            name: 'Default'
-        }
-    }
-
     getValidationMessage(item: string) {
         return `${item} with such name already exists`;
+    }
+
+    pushVenueUpdateEvent() {
+        this.venueUpdate.next();
+    }
+
+    getVenueUpdateSubscription(): Observable<any> {
+        return this.venueUpdate;
     }
 }

@@ -1,17 +1,21 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {VenuesService} from "../venues.service";
-import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
+import {EditTreeViewNodeFormService} from "./edit-tree-view-node-form.service";
 import {Content} from "../../content/content";
+import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
+import {Venue} from "../entities/venue";
+import {Configuration} from "../../configurations/entities/configuration";
 
 @Component({
     selector: 'edit-tree-view-node-form',
     templateUrl: 'edit-tree-view-node-form.component.html',
-    styleUrls: ['edit-tree-view-node-form.component.sass']
+    styleUrls: ['edit-tree-view-node-form.component.sass'],
+    providers: [EditTreeViewNodeFormService]
 })
 export class EditTreeViewNodeFormComponent {
 
+    @Input() currentConfig: Configuration;
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
     @Input('currentNode') set componentModel(currentNode: any) {
@@ -20,7 +24,6 @@ export class EditTreeViewNodeFormComponent {
 
     @Input() contentUrlPlaceholder = 'Default URL';
 
-    @Output() submit = new EventEmitter();
     @Output() cancel = new EventEmitter();
     @Output() createContent = new EventEmitter();
 
@@ -28,10 +31,13 @@ export class EditTreeViewNodeFormComponent {
     nodeData: any;
     isFormValid: boolean;
     createContentMode = false;
+    contentChanged = false;
+    currentVenueId: string;
+    updatedVenue: Venue;
 
     constructor(
-        private venueService: VenuesService,
-        private treeViewService: VenuesTreeViewService
+        private editFormService: EditTreeViewNodeFormService,
+        private notificationService: NotificationService
     ) { }
 
     setUpComponentModel(node: any) {
@@ -41,6 +47,7 @@ export class EditTreeViewNodeFormComponent {
             this.node = node;
             this.nodeData = node.data;
             this.isFormValid = !!this.nodeData.name;
+            this.currentVenueId = this.editFormService.getVenueId(node);
         }
     }
 
@@ -49,8 +56,7 @@ export class EditTreeViewNodeFormComponent {
     }
 
     getValidationMessageForNodeName(): string {
-        let nodeLevelName = this.getNodeLevelName();
-        return this.venueService.getValidationMessage(nodeLevelName);
+        return this.editFormService.getValidationMessageForNodeName(this.node);
     }
 
     getValidationMessageForContentShortName(): string {
@@ -65,12 +71,8 @@ export class EditTreeViewNodeFormComponent {
     }
 
     getNameInputPlaceholder(): string {
-        let nodeLevelName = this.getNodeLevelName();
+        let nodeLevelName = this.editFormService.getNodeLevelName(this.node);
         return `${nodeLevelName} name`;
-    }
-
-    getNodeLevelName(): string {
-        return this.node ? this.treeViewService.getNodeLevelName(this.node.level) : 'Venue';
     }
 
     validateForm() {
@@ -125,9 +127,9 @@ export class EditTreeViewNodeFormComponent {
     }
 
     setNodeContent(content) {
+        this.contentChanged = true;
         if (!_.isEmpty(content.id)) {
             this.nodeData.content = content;
-            this.nodeData.content_id = content.id;
         } else {
             this.clearNodeContent();
         }
@@ -135,7 +137,6 @@ export class EditTreeViewNodeFormComponent {
 
     clearNodeContent() {
         this.nodeData.content = null;
-        this.nodeData.content_id = null;
     }
 
     performCancel(event: any) {
@@ -145,17 +146,69 @@ export class EditTreeViewNodeFormComponent {
 
     performSubmit(event: any) {
         this.stopClickPropagation(event);
-        this.submit.emit(this.node ? this.node : this.nodeData);
-        this.createContentMode = false;
+        if (this.createContentMode) {
+            this.createContentBeforeUpdateVenue();
+        } else {
+            this.updateVenueList();
+        }
     }
 
     stopClickPropagation(event: any) {
         event.stopPropagation();
     }
 
+    createContentBeforeUpdateVenue() {
+        this.editFormService.saveNewContent(this.nodeData.content)
+            .subscribe(
+                content => this.handleCreateContentResponse(content),
+                error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
+            );
+    }
+
+    handleCreateContentResponse(content: any) {
+        this.editFormService.pushContentUpdateEvent();
+        this.nodeData.content = content;
+        this.updateVenueList();
+    }
+
+    updateVenueList() {
+        if (this.currentVenueId) {
+            this.updateSingleVenue();
+        } else {
+            this.addNewVenue();
+        }
+    }
+
+    addNewVenue() {
+        this.editFormService.saveVenue(this.nodeData)
+            .subscribe(
+                response => this.handleVenueListUpdateResponse(response),
+                error => this.handleError('Unable to perform save operation')
+            );
+    }
+
+    updateSingleVenue() {
+        let venueToUpdate = _.find(this.venues, venue => venue.id === this.currentVenueId);
+        this.editFormService.updateVenue(venueToUpdate)
+            .subscribe(
+                response => this.handleVenueListUpdateResponse(response),
+                error => this.handleError('Unable to update configuration')
+            );
+    }
+
+    handleVenueListUpdateResponse(response: any) {
+        this.updatedVenue = response.json();
+        this.editFormService.pushVenueUpdateEvent();
+        this.createContentMode = false;
+        if (this.contentChanged) {
+            this.updateConfig();
+        }
+    }
+
     enableCreateContentMode(event) {
         this.nodeData.content = {short_name: event.short_name};
         this.createContentMode = true;
+        this.contentChanged = true;
         this.isFormValid = false;
         this.createContent.emit(this.createContentMode);
     }
@@ -170,5 +223,22 @@ export class EditTreeViewNodeFormComponent {
 
     showValidationMessageForUrl(): boolean {
         return this.nodeData.content.url && !this.isContentUrlValid();
+    }
+
+    handleError(errorMessage: string) {
+        this.notificationService.showErrorNotificationBar(errorMessage);
+    }
+
+    updateConfig() {
+        this.defineNodeId();
+        let configToUpdate = this.editFormService.getConfigToUpdate(this.currentConfig, this.nodeData);
+        this.editFormService.updateConfig(configToUpdate);
+        this.contentChanged = false;
+    }
+
+    defineNodeId() {
+        if (!this.nodeData.id) {
+            this.nodeData.id = this.editFormService.findNewNodeId(this.updatedVenue, this.node);
+        }
     }
 }
