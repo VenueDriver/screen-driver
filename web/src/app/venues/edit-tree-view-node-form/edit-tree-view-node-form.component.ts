@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {EditTreeViewNodeFormService} from "./edit-tree-view-node-form.service";
 import {Content} from "../../content/content";
-import {Observable} from "rxjs";
 import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
+import {Venue} from "../entities/venue";
 
 @Component({
     selector: 'edit-tree-view-node-form',
@@ -15,7 +15,6 @@ import * as _ from 'lodash';
 export class EditTreeViewNodeFormComponent {
 
     @Input() venues: Array<any>;
-    @Input() currentVenueId: string;
     @Input() content: Array<Content>;
     @Input('currentNode') set componentModel(currentNode: any) {
         this.setUpComponentModel(currentNode);
@@ -30,6 +29,9 @@ export class EditTreeViewNodeFormComponent {
     nodeData: any;
     isFormValid: boolean;
     createContentMode = false;
+    contentChanged = false;
+    currentVenueId: string;
+    updatedVenue: Venue;
 
     constructor(
         private editFormService: EditTreeViewNodeFormService,
@@ -43,6 +45,7 @@ export class EditTreeViewNodeFormComponent {
             this.node = node;
             this.nodeData = node.data;
             this.isFormValid = !!this.nodeData.name;
+            this.currentVenueId = this.editFormService.getVenueId(node);
         }
     }
 
@@ -122,9 +125,9 @@ export class EditTreeViewNodeFormComponent {
     }
 
     setNodeContent(content) {
+        this.contentChanged = true;
         if (!_.isEmpty(content.id)) {
             this.nodeData.content = content;
-            this.nodeData.content_id = content.id;
         } else {
             this.clearNodeContent();
         }
@@ -132,7 +135,6 @@ export class EditTreeViewNodeFormComponent {
 
     clearNodeContent() {
         this.nodeData.content = null;
-        this.nodeData.content_id = null;
     }
 
     performCancel(event: any) {
@@ -156,13 +158,14 @@ export class EditTreeViewNodeFormComponent {
     createContentBeforeUpdateVenue() {
         this.editFormService.saveNewContent(this.nodeData.content)
             .subscribe(
-                content => this.handleCreateContentResponse(),
+                content => this.handleCreateContentResponse(content),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
             );
     }
 
-    handleCreateContentResponse() {
+    handleCreateContentResponse(content: any) {
         this.editFormService.pushContentUpdateEvent();
+        this.nodeData.content = content;
         this.updateVenueList();
     }
 
@@ -177,7 +180,7 @@ export class EditTreeViewNodeFormComponent {
     addNewVenue() {
         this.editFormService.saveVenue(this.nodeData)
             .subscribe(
-                response => this.handleVenueListUpdateResponse(),
+                response => this.handleVenueListUpdateResponse(response),
                 error => this.handleError('Unable to perform save operation')
             );
     }
@@ -186,19 +189,24 @@ export class EditTreeViewNodeFormComponent {
         let venueToUpdate = _.find(this.venues, venue => venue.id === this.currentVenueId);
         this.editFormService.updateVenue(venueToUpdate)
             .subscribe(
-                response => this.handleVenueListUpdateResponse(),
+                response => this.handleVenueListUpdateResponse(response),
                 error => this.handleError('Unable to update configuration')
             );
     }
 
-    handleVenueListUpdateResponse() {
+    handleVenueListUpdateResponse(response: any) {
+        this.updatedVenue = response.json();
         this.editFormService.pushVenueUpdateEvent();
         this.createContentMode = false;
+        if (this.contentChanged) {
+            this.updateConfig();
+        }
     }
 
     enableCreateContentMode(event) {
         this.nodeData.content = {short_name: event.short_name};
         this.createContentMode = true;
+        this.contentChanged = true;
         this.isFormValid = false;
         this.createContent.emit(this.createContentMode);
     }
@@ -216,6 +224,14 @@ export class EditTreeViewNodeFormComponent {
     }
 
     handleError(errorMessage: string) {
-        return this.notificationService.showErrorNotificationBar(errorMessage);
+        this.notificationService.showErrorNotificationBar(errorMessage);
+    }
+
+    updateConfig() {
+        if (!this.nodeData.id) {
+            this.nodeData.id = this.editFormService.findNewNodeId(this.updatedVenue, this.node);
+        }
+        console.log(this.nodeData.id, this.nodeData.content.id);
+        this.contentChanged = false;
     }
 }

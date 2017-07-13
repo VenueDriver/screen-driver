@@ -178,15 +178,6 @@ export class VenuesTreeViewComponent implements OnInit {
         this.updateTreeViewOptions();
     }
 
-    getVenueId(node: any) {
-        let parentNode = node.parent;
-        switch (node.level) {
-            case 1: return node.data.id;
-            case 2: return parentNode.data.id;
-            default: return parentNode.parent.data.id;
-        }
-    }
-
     editNode(event: any, node: any) {
         this.stopClickPropagation(event);
         this.currentNodeData = node.data;

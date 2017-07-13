@@ -5,6 +5,9 @@ import {Observable} from "rxjs";
 import {Response} from "@angular/http";
 import {Content} from "../../content/content";
 import {ContentService} from "../../content/content.service";
+import {Venue} from "../entities/venue";
+
+import * as _ from 'lodash';
 
 @Injectable()
 export class EditTreeViewNodeFormService {
@@ -42,5 +45,30 @@ export class EditTreeViewNodeFormService {
 
     pushContentUpdateEvent() {
         this.contentService.pushContentUpdateEvent();
+    }
+
+    getVenueId(node: any) {
+        let parentNode = node.parent;
+        switch (node.level) {
+            case 1: return node.data.id;
+            case 2: return parentNode.data.id;
+            default: return parentNode.parent.data.id;
+        }
+    }
+
+    findNewNodeId(updatedVenue: Venue, node: any): string {
+        if (!node) {
+            return updatedVenue.id;
+        }
+        if (node.level == 2) {
+            return this.findItemIdByName(updatedVenue.screen_groups, node);
+        }
+        let group = _.find(updatedVenue.screen_groups, group => group.id === node.parent.data.id);
+        return this.findItemIdByName(group.screens, node);
+    }
+
+    findItemIdByName(items: any, node: any): string {
+        let item = _.find(items, item => item.name === node.data.name);
+        return item.id;
     }
 }

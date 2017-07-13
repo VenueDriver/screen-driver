@@ -20,7 +20,6 @@
                 <div *ngIf="isCurrentNode(node)" class="edit-node-form">
                     <edit-tree-view-node-form
                             [venues]="venues"
-                            [currentVenueId]="getVenueId(node)"
                             [content]="content"
                             [currentNode]="node"
                             [contentUrlPlaceholder]="getPlaceholderForDefaultUrl(node)"
