@@ -61,13 +61,13 @@ export class EditTreeViewNodeFormService {
             return updatedVenue.id;
         }
         if (node.level == 2) {
-            return this.findItemIdByName(updatedVenue.screen_groups, node);
+            return this.findNodeIdByName(updatedVenue.screen_groups, node);
         }
         let group = _.find(updatedVenue.screen_groups, group => group.id === node.parent.data.id);
-        return this.findItemIdByName(group.screens, node);
+        return this.findNodeIdByName(group.screens, node);
     }
 
-    findItemIdByName(items: any, node: any): string {
+    findNodeIdByName(items: any, node: any): string {
         let item = _.find(items, item => item.name === node.data.name);
         return item.id;
     }
