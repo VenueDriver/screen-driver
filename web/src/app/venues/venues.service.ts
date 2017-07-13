@@ -74,13 +74,6 @@ export class VenuesService {
         }
     }
 
-    private getDefaultUrlValue() {
-        return {
-            id: '',
-            name: 'Default'
-        }
-    }
-
     getValidationMessage(item: string) {
         return `${item} with such name already exists`;
     }
