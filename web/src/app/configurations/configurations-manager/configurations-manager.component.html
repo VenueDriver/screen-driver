@@ -1,5 +1,21 @@
-<div>
-    <div *ngFor="let config of configs">
-        <div (click)="onConfigSelected(config)">{{config.name}}</div>
+<div class="sidebar sidebar-left sidebar-animate sidebar-md-show">
+    <ul class="nav navbar-stacked">
+        <li *ngFor="let config of configs" [class.active]="isActive(config)">
+            <a (click)="onConfigSelected(config)">{{config.name}}</a>
+        </li>
+    </ul>
+
+
+    <div class="form-container">
+        <div *ngIf="!creationMode">
+            <button class="btn btn-success btn-large" (click)="enableCreationMode()">Create</button>
+        </div>
+
+        <div *ngIf="creationMode">
+            <configuration-creator
+                    (created)="handleConfigCreation()"
+                    (cancel)="disableCreationMode()">
+            </configuration-creator>
+        </div>
     </div>
 </div>
