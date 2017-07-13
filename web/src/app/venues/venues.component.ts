@@ -28,11 +28,19 @@ export class VenuesComponent implements OnInit {
     ngOnInit() {
         this.loadVenues();
         this.loadContent();
+        this.subscribeToVenueUpdate();
+        this.subscribeToContentUpdate();
+    }
+
+    subscribeToVenueUpdate() {
         this.venuesService.getVenueUpdateSubscription()
             .subscribe(() => {
                 this.loadVenues();
                 this.hideAddVenueForm();
             });
+    }
+
+    subscribeToContentUpdate() {
         this.contentService.getContentUpdateSubscription()
             .subscribe(() => this.loadContent());
     }
