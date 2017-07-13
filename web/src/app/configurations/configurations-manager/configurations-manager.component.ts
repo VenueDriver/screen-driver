@@ -1,6 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Configuration} from "../entities/configuration";
 import {ConfigStateHolderService} from "../configuration-state-manager/config-state-holder.service";
+import {HeaderService} from "../../header/header.service";
 
 @Component({
     selector: 'configurations-manager',
@@ -14,13 +15,27 @@ export class ConfigurationManagerComponent implements OnInit {
 
     activeConfig: Configuration;
     creationMode = false;
+    showSidebar = true;
 
-    constructor(private configStateHolderService: ConfigStateHolderService) { }
+    constructor(
+        private headerService: HeaderService,
+        private configStateHolderService: ConfigStateHolderService
+    ) { }
 
     ngOnInit() {
         if (this.configs) {
             this.activeConfig = this.configs[0];
         }
+        this.subscribeOnSidebarToggle();
+    }
+
+    subscribeOnSidebarToggle() {
+        this.headerService.getSideBarToggleSubscription()
+            .subscribe(() => this.toggle());
+    }
+
+    toggle() {
+        this.showSidebar = !this.showSidebar;
     }
 
     onConfigSelected(config: Configuration) {
