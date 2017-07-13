@@ -35,4 +35,8 @@ export class EditTreeViewNodeFormService {
     saveNewContent(content: Content): Observable<Content> {
         return this.contentService.createContent(content);
     }
+
+    pushVenueUpdateEvent() {
+        this.venuesService.pushVenueUpdateEvent();
+    }
 }

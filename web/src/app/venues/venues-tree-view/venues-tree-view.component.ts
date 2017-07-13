@@ -7,6 +7,7 @@ import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {Content} from "../../content/content";
 
 import * as _ from 'lodash';
+import {VenuesService} from "../venues.service";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
 
@@ -19,7 +20,6 @@ export class VenuesTreeViewComponent implements OnInit {
 
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
-    @Output() update = new EventEmitter();
     @Output() contentChange = new EventEmitter();
 
     @ViewChild(TreeComponent)
@@ -33,11 +33,13 @@ export class VenuesTreeViewComponent implements OnInit {
     isCreateContentMode = false;
 
     constructor(
+        private venuesService: VenuesService,
         private treeViewService: VenuesTreeViewService
     ) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
+        this.venuesService.getVenueUpdateSubscription().subscribe(() => this.onVenueUpdate());
     }
 
     updateTreeViewOptions() {
@@ -170,8 +172,7 @@ export class VenuesTreeViewComponent implements OnInit {
         });
     }
 
-    performSubmit() {
-        this.update.emit();
+    onVenueUpdate() {
         this.isCreateContentMode = false;
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();

@@ -23,7 +23,6 @@ export class EditTreeViewNodeFormComponent {
 
     @Input() contentUrlPlaceholder = 'Default URL';
 
-    @Output() update = new EventEmitter();
     @Output() cancel = new EventEmitter();
     @Output() createContent = new EventEmitter();
 
@@ -173,7 +172,7 @@ export class EditTreeViewNodeFormComponent {
     addNewVenue() {
         this.editFormService.saveVenue(this.nodeData)
             .subscribe(
-                response => this.handleVenueLIstUpdateResponse(),
+                response => this.handleVenueListUpdateResponse(),
                 error => this.handleError('Unable to perform save operation')
             );
     }
@@ -182,13 +181,13 @@ export class EditTreeViewNodeFormComponent {
         let venueToUpdate = _.find(this.venues, venue => venue.id === this.currentVenueId);
         this.editFormService.updateVenue(venueToUpdate)
             .subscribe(
-                response => this.update.emit(),
+                response => this.handleVenueListUpdateResponse(),
                 error => this.handleError('Unable to update configuration')
             );
     }
 
-    handleVenueLIstUpdateResponse() {
-        this.update.emit();
+    handleVenueListUpdateResponse() {
+        this.editFormService.pushVenueUpdateEvent();
         this.createContentMode = false;
     }
 

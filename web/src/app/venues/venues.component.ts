@@ -26,6 +26,11 @@ export class VenuesComponent implements OnInit {
     ngOnInit() {
         this.loadVenues();
         this.loadContent();
+        this.venuesService.getVenueUpdateSubscription()
+            .subscribe(() => {
+                this.loadVenues();
+                this.hideAddVenueForm();
+            });
     }
 
     loadVenues() {
@@ -46,11 +51,6 @@ export class VenuesComponent implements OnInit {
 
     hideAddVenueForm() {
         this.isShowAddVenueForm = false;
-    }
-
-    update() {
-        this.hideAddVenueForm();
-        this.loadVenues();
     }
 
     toggleCreateContentMode(createContentMode: boolean) {

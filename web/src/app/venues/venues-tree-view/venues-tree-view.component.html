@@ -24,7 +24,6 @@
                             [content]="content"
                             [currentNode]="node"
                             [contentUrlPlaceholder]="getPlaceholderForDefaultUrl(node)"
-                            (update)="performSubmit($event)"
                             (cancel)="performCancel($event)"
                             (createContent)="toggleCreateContentMode($event)">
                     </edit-tree-view-node-form>
