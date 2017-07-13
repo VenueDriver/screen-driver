@@ -41,6 +41,7 @@ export class ConfigurationManagerComponent implements OnInit {
     onConfigSelected(config: Configuration) {
         this.configSelected.emit(config);
         this.activeConfig = config;
+        this.headerService.pushSidebarToggleEvent();
     }
 
     isActive(config: Configuration): boolean {
