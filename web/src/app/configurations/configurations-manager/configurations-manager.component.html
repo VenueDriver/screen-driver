@@ -7,8 +7,8 @@
 
 
     <div class="form-container">
-        <div *ngIf="!creationMode">
-            <button class="btn btn-success btn-large" (click)="enableCreationMode()">Create</button>
+        <div *ngIf="!creationMode" class="create-btn-container">
+            <button class="btn btn-link" (click)="enableCreationMode()">Create new config</button>
         </div>
 
         <div *ngIf="creationMode">
