@@ -152,7 +152,7 @@ export class EditTreeViewNodeFormComponent {
         if (this.createContentMode) {
             this.createContentBeforeUpdateVenue();
         } else {
-            this.updateVenue();
+            this.updateVenueList();
         }
         this.createContentMode = false;
     }
@@ -164,12 +164,28 @@ export class EditTreeViewNodeFormComponent {
     createContentBeforeUpdateVenue() {
         this.saveNewContent(this.nodeData.content)
             .subscribe(
-                content => this.updateVenue(),
+                content => this.updateVenueList(),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
             );
     }
 
-    updateVenue() {
+    updateVenueList() {
+        if (this.currentVenueId) {
+            this.updateSingleVenue();
+        } else {
+            this.addNewVenue();
+        }
+    }
+
+    addNewVenue() {
+        this.venuesService.saveVenue(this.nodeData)
+            .subscribe(
+                response => this.update.emit(),
+                error => this.handleError('Unable to perform save operation')
+            );
+    }
+
+    updateSingleVenue() {
         let venueToUpdate = _.find(this.venues, venue => venue.id === this.currentVenueId);
         this.venuesService.updateVenue(venueToUpdate)
             .subscribe(

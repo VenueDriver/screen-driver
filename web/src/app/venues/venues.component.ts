@@ -2,11 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {VenuesService} from "./venues.service";
 import {Venue} from "./entities/venue";
 import {Content} from "../content/content";
-import {NotificationService} from "../notifications/notification.service";
-import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
 
 import * as _ from 'lodash';
-import {Observable} from "rxjs";
 
 @Component({
     selector: 'venues',
@@ -23,9 +20,7 @@ export class VenuesComponent implements OnInit {
     isCreateContentMode = false;
 
     constructor(
-        private venuesService: VenuesService,
-        private treeViewService: VenuesTreeViewService,
-        private notificationService: NotificationService
+        private venuesService: VenuesService
     ) { }
 
     ngOnInit() {
@@ -53,48 +48,9 @@ export class VenuesComponent implements OnInit {
         this.isShowAddVenueForm = false;
     }
 
-    addVenue(venue: Venue) {
-        this.venuesService.saveVenue(venue)
-            .subscribe(
-                response => this.handleResponse(response),
-                error => this.handleError('Unable to perform save operation'));
-    }
-
-    handleResponse(response: any) {
-        if (response.ok) {
-            this.hideAddVenueForm();
-        }
+    update() {
+        this.hideAddVenueForm();
         this.loadVenues();
-    }
-
-    performSubmit(venue: Venue) {
-        if (this.isCreateContentMode) {
-            this.createContentBeforeCreateVenue(venue);
-        } else {
-            this.addVenue(venue);
-        }
-    }
-
-    createContentBeforeCreateVenue(venue: Venue) {
-        this.saveNewContent(venue.content)
-            .subscribe(
-                content => this.handleCreateContentResponse(venue, content),
-                error => this.handleError('Unable to save new content')
-            );
-    }
-
-    handleCreateContentResponse(venue: Venue, content: Content) {
-        this.loadContent();
-        venue.content_id = content.id;
-        this.addVenue(venue);
-    }
-
-    saveNewContent(content: Content): Observable<Content> {
-        return this.treeViewService.saveNewContent(content);
-    }
-
-    handleError(errorMessage: string) {
-        return this.notificationService.showErrorNotificationBar(errorMessage);
     }
 
     toggleCreateContentMode(createContentMode: boolean) {

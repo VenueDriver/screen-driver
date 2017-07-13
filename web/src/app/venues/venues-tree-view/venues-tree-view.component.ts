@@ -5,8 +5,6 @@ import {KEYS} from "angular-tree-component/dist/constants/keys";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {Content} from "../../content/content";
-import {Observable} from "rxjs";
-import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
 
@@ -35,8 +33,7 @@ export class VenuesTreeViewComponent implements OnInit {
     isCreateContentMode = false;
 
     constructor(
-        private treeViewService: VenuesTreeViewService,
-        private notificationService: NotificationService
+        private treeViewService: VenuesTreeViewService
     ) { }
 
     ngOnInit() {
