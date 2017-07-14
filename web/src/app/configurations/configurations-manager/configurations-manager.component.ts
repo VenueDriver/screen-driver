@@ -2,6 +2,7 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Configuration} from "../entities/configuration";
 import {ConfigStateHolderService} from "../configuration-state-manager/config-state-holder.service";
 import {HeaderService} from "../../header/header.service";
+import {ConfigurationsService} from "../configurations.service";
 
 @Component({
     selector: 'configurations-manager',
@@ -17,10 +18,10 @@ export class ConfigurationManagerComponent implements OnInit {
     creationMode = false;
     showSidebar = true;
 
-    constructor(
-        private headerService: HeaderService,
-        private configStateHolderService: ConfigStateHolderService
-    ) { }
+    constructor(private headerService: HeaderService,
+                private configStateHolderService: ConfigStateHolderService,
+                private configService: ConfigurationsService,) {
+    }
 
     ngOnInit() {
         if (this.configs) {
@@ -59,5 +60,15 @@ export class ConfigurationManagerComponent implements OnInit {
 
     disableCreationMode() {
         this.creationMode = false;
+    }
+
+    onToggleClick(event: any) {
+        event.stopPropagation();
+    }
+
+    changeConfigState(config: Configuration, state: boolean) {
+        config.enabled = state;
+        this.configService.updateConfiguration(config)
+            .subscribe(response => this.configStateHolderService.reloadConfigs());
     }
 }
