@@ -9,7 +9,7 @@ const storage = require('electron-json-storage');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const DataLoader = require('./js/data_loader');
-const {LocalStorageManager, VENUES_STORAGE} = require('./js/local_storage_manager');
+const {LocalStorageManager, VENUES_STORAGE, CONTENT_STORAGE, CONFIGS_STORAGE} = require('./js/local_storage_manager');
 
 
 const log = require('electron-log');
@@ -33,14 +33,38 @@ app.on('window-all-closed', function () {
 });
 
 function ready() {
-    loadVenues();
+    loadData();
     openWindow();
 }
 
+function loadData() {
+    loadVenues();
+    loadContent();
+    loadConfigs();
+}
+
 function loadVenues() {
-    DataLoader.loadVenues().then(data => {
-        LocalStorageManager.putInStorage(VENUES_STORAGE, data);
-    });
+    DataLoader.loadVenues()
+        .then(data => {
+            LocalStorageManager.putInStorage(VENUES_STORAGE, data);
+        })
+        .catch(error => console.log(error));
+}
+
+function loadContent() {
+    DataLoader.loadContent()
+        .then(data => {
+            LocalStorageManager.putInStorage(CONTENT_STORAGE, data);
+        })
+        .catch(error => console.log(error));
+}
+
+function loadConfigs() {
+    DataLoader.loadConfigs()
+        .then(data => {
+            LocalStorageManager.putInStorage(CONFIGS_STORAGE, data);
+        })
+        .catch(error => console.log(error));
 }
 
 function openWindow() {
