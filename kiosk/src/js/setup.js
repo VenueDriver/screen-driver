@@ -1,3 +1,4 @@
+const remote = require('electron').remote;
 const storage = require('electron-json-storage');
 const {ipcRenderer} = require('electron');
 const fs = require('fs');
@@ -5,6 +6,7 @@ const os = require('os');
 const isDev = require('electron-is-dev');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
+const {LocalStorageManager, VENUES_STORAGE} = remote.require(__dirname + '/js/local_storage_manager');
 
 window.$ = window.jQuery = require('jquery');
 
@@ -14,7 +16,9 @@ let ConfigConverter = require('./js/config_converter');
 $(function () {
     readLog();
     turnOnLogging();
-    loadScreensConfig();
+    loadVenues();
+
+    let venues;
 
     let selectedVenue;
     let selectedGroup;
@@ -27,6 +31,13 @@ $(function () {
 
     verifySaveButtonState();
     verifyCancelButtonState();
+
+    function loadVenues() {
+        LocalStorageManager.getFromStorage(VENUES_STORAGE, (error, data) => {
+            venues = JSON.parse(data);
+            initSelector($("#venue"), venues);
+        });
+    }
 
     $("#save").click(function () {
         if (verifySaveButtonState()) {
@@ -87,45 +98,32 @@ $(function () {
     }
 
     function loadValues(sourceDropdown, destinationDropdown) {
-        let selectedDropdownValue = sourceDropdown.find(":selected").text();
-        let selectedItemValue;
+        let selectedDropdownValue = sourceDropdown.find(":selected").val();
+        if (selectedDropdownValue !== 'none') {
+            let valuesForDropdown = getValuesForDropdown(sourceDropdown, selectedDropdownValue);
+            performValuesLoading(destinationDropdown, valuesForDropdown);
+        }
+    }
 
+    function getValuesForDropdown(sourceDropdown, selectedDropdownValue) {
         switch (sourceDropdown.attr('id')) {
             case ('venue'):
-                selectedItemValue = screensConfig[selectedDropdownValue];
-                selectedVenue = selectedItemValue;
-                selectedVenueObject = selectedItemValue ? {name: selectedDropdownValue, id: selectedVenue._id} : selectedItemValue;
-                break;
+                selectedVenue = venues.find(venue => venue.id === selectedDropdownValue);
+                return selectedVenue.screen_groups;
             case ('screen-group'):
                 if (selectedVenue) {
-                    selectedItemValue = selectedVenue[selectedDropdownValue];
-                    selectedGroup = selectedItemValue;
-                    selectedScreenGroupObject = selectedItemValue ? {name: selectedDropdownValue, id: selectedItemValue._id} : selectedItemValue;
+                    selectedGroup = selectedVenue.screen_groups.find(group => group.id === selectedDropdownValue);
+                    return selectedGroup.screens;
                 }
-                break;
         }
+    }
 
+    function performValuesLoading(destinationDropdown, valuesForDropdown) {
         destinationDropdown.empty();
-
         setDefaultEmptyValue(destinationDropdown);
-        if (selectedItemValue) {
-            setData();
+        if (valuesForDropdown) {
+            initSelector(destinationDropdown, valuesForDropdown);
         }
-
-        //we need it to make re-rendering, because material design should re-render this component
-        destinationDropdown.selectpicker('refresh');
-
-        function setData() {
-            for (let group in selectedItemValue) {
-                if (group !== '_id') {
-                    destinationDropdown.append($('<option>', {
-                        value: group,
-                        text: group
-                    }));
-                }
-            }
-        }
-
     }
 
     function saveSelectionInStorage() {
@@ -145,7 +143,17 @@ $(function () {
         $(this).hide();
         $("#show-logs").show();
         $("#logs").hide();
-    })
+    });
+
+    function initSelector(selector, values) {
+        values.forEach(value => {
+            selector.append($('<option>', {
+                value: value.id,
+                text: value.name
+            }));
+        });
+        selector.selectpicker('refresh');
+    }
 });
 
 function openContentWindow(contentUrl) {
@@ -217,16 +225,6 @@ function putPreviouslySelectedDataIntoSelectors() {
             $('#screen-id').val(data.selectedScreen.name).trigger("change");
         }
     });
-}
-
-function initVenuesSelector() {
-    for (let venue in screensConfig) {
-        $("#venue").append($('<option>', {
-            value: venue,
-            text: venue
-        }));
-    }
-    $("#venue").selectpicker('refresh');
 }
 
 function putInStorage(key, value) {
