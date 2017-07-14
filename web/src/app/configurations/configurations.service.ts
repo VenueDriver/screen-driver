@@ -18,4 +18,8 @@ export class ConfigurationsService {
     createConfiguration(config: Configuration): Observable<Response> {
         return this.http.post(CONFIGS_API_URL, config);
     }
+
+    updateConfiguration(config: Configuration): Observable<Response> {
+        return this.http.put(`${CONFIGS_API_URL}/${config.id}`, config);
+    }
 }

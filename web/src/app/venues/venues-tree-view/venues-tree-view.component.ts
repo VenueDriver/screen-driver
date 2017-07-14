@@ -5,8 +5,8 @@ import {KEYS} from "angular-tree-component/dist/constants/keys";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {Content} from "../../content/content";
-import {Observable} from "rxjs";
-import {NotificationService} from "../../notifications/notification.service";
+import {VenuesService} from "../venues.service";
+import {Configuration} from "../../configurations/entities/configuration";
 
 import * as _ from 'lodash';
 
@@ -21,26 +21,27 @@ export class VenuesTreeViewComponent implements OnInit {
 
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
-    @Output() update = new EventEmitter();
     @Output() contentChange = new EventEmitter();
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
+    currentConfig: Configuration;
     options: any;
     actionMapping: any;
     currentNodeData: any;
     originalNodeData: any;
     isFormValid = false;
-    isCreateContentMode =false;
+    isCreateContentMode = false;
 
     constructor(
-        private treeViewService: VenuesTreeViewService,
-        private notificationService: NotificationService
+        private venuesService: VenuesService,
+        private treeViewService: VenuesTreeViewService
     ) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
+        this.venuesService.getVenueUpdateSubscription().subscribe(() => this.onVenueUpdate());
     }
 
     updateTreeViewOptions() {
@@ -173,48 +174,10 @@ export class VenuesTreeViewComponent implements OnInit {
         });
     }
 
-    performSubmit(node: any) {
-        if (this.isCreateContentMode) {
-            this.createContentBeforeUpdateVenue(node);
-            this.isCreateContentMode = false;
-        } else {
-            this.updateVenue(node);
-        }
-    }
-
-    createContentBeforeUpdateVenue(node: any) {
-        this.saveNewContent(node.data.content)
-            .subscribe(
-                content => this.handleCreateContentResponse(node, content),
-                error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
-            );
-    }
-
-    handleCreateContentResponse(node: any, content: Content) {
-        this.contentChange.emit();
-        node.data.content_id = content.id;
-        this.updateVenue(node);
-    }
-
-    updateVenue(node: any) {
-        let venueId = this.getVenueId(node);
-        let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
-        this.update.emit(venueToUpdate);
+    onVenueUpdate() {
+        this.isCreateContentMode = false;
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
-    }
-
-    saveNewContent(content: Content): Observable<Content> {
-        return this.treeViewService.saveNewContent(content);
-    }
-
-    getVenueId(node: any) {
-        let parentNode = node.parent;
-        switch (node.level) {
-            case 1: return node.data.id;
-            case 2: return parentNode.data.id;
-            default: return parentNode.parent.data.id;
-        }
     }
 
     editNode(event: any, node: any) {
