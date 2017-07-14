@@ -9,6 +9,7 @@ import {VenuesService} from "../venues.service";
 import {Configuration} from "../../configurations/entities/configuration";
 
 import * as _ from 'lodash';
+import {ConfigStateHolderService} from "../../configurations/configuration-state-manager/config-state-holder.service";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
 
@@ -36,12 +37,16 @@ export class VenuesTreeViewComponent implements OnInit {
 
     constructor(
         private venuesService: VenuesService,
-        private treeViewService: VenuesTreeViewService
+        private treeViewService: VenuesTreeViewService,
+        private configStateHolderService: ConfigStateHolderService,
     ) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
         this.venuesService.getVenueUpdateSubscription().subscribe(() => this.onVenueUpdate());
+        this.configStateHolderService.getCurrentConfig().subscribe(config => {
+            this.currentConfig = config;
+        });
     }
 
     updateTreeViewOptions() {
