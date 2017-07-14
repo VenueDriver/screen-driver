@@ -50,6 +50,7 @@ export class ConfigurationManagerComponent implements OnInit {
 
     handleConfigCreation() {
         this.configStateHolderService.reloadConfigs();
+        this.disableCreationMode();
     }
 
     enableCreationMode() {
