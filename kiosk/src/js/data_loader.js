@@ -1,3 +1,5 @@
+'use strict';
+
 const {net} = require('electron');
 const PropertiesLoader = require('./properties_loader');
 
