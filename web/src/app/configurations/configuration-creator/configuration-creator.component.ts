@@ -5,7 +5,8 @@ import {NotificationService} from "../../notifications/notification.service";
 
 @Component({
     selector: 'configuration-creator',
-    templateUrl: 'configuration-creator.component.html'
+    templateUrl: 'configuration-creator.component.html',
+    styleUrls: ['configuration-creator.component.sass']
 })
 export class ConfigurationCreatorComponent implements OnInit {
 

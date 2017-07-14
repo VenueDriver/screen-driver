@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {HeaderService} from "./header.service";
 
 @Component({
     selector: 'screen-driver-header',
@@ -6,8 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   
-    constructor() { }
+    constructor(private headerService: HeaderService) { }
 
     ngOnInit() { }
+
+    toggleSideBar() {
+        this.headerService.pushSidebarToggleEvent();
+    }
     
 }

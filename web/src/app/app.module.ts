@@ -11,6 +11,7 @@ import {NotificationModule} from "./notifications/notification.module";
 import {NotificationService} from "./notifications/notification.service";
 import {HttpModule} from "@angular/http";
 import {ConfigurationsModule} from "./configurations/configurations.module";
+import {HeaderService} from "./header/header.service";
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import {ConfigurationsModule} from "./configurations/configurations.module";
         ConfigurationsModule
     ],
     providers: [
-        NotificationService
+        NotificationService,
+        HeaderService
     ],
     bootstrap: [AppComponent]
 })
