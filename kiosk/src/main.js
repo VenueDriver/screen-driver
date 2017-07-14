@@ -8,9 +8,9 @@ const url = require('url');
 const storage = require('electron-json-storage');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
-const Q = require('q');
-const CronJob = require('cron').CronJob;
-let ConfigConverter = require('./js/config_converter');
+const DataLoader = require('./js/data_loader');
+const {LocalStorageManager, VENUES_STORAGE} = require('./js/local_storage_manager');
+
 
 const log = require('electron-log');
 const hotkey = require('electron-hotkey');
@@ -19,132 +19,38 @@ const {ipcMain} = require('electron');
 const isDev = require('electron-is-dev');
 
 let mainWindow;
-var screenConfig;
-let configLoadJob;
 
 setupLogger();
 
-function getAllDataFromStorage() {
-    let deferred = Q.defer();
-    storage.getAll(function (error, data) {
-        if (!error) {
-            screenConfig = data;
-            deferred.resolve(data);
-        } else {
-            log.error('Cannot read config from local storage.', error);
-            deferred.reject(error);
-        }
+app.disableHardwareAcceleration();
 
+app.on('ready', ready);
+
+app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+function ready() {
+    loadVenues();
+    openWindow();
+}
+
+function loadVenues() {
+    DataLoader.loadVenues().then(data => {
+        LocalStorageManager.putInStorage(VENUES_STORAGE, data);
     });
-    return deferred.promise;
 }
 
 function openWindow() {
     powerSaveBlocker.start('prevent-display-sleep');
 
-    getAllDataFromStorage().then((data) => {
-        if (data.contentUrl) {
-            reloadCurrentScreenConfig(data)
-                .then(() => openContentWindow(data.contentUrl))
-                .done()
-        } else {
-            openAdminPanel();
-        }
-    }).done();
-
-
+    openAdminPanel();
 
     registerHotKeys();
     addHotKeyListeners();
     addEventListeners();
-}
-
-/**
- *  @return {promise}. Promise can contain boolean value 'isUrlWasChanged', if config request was successful.
- */
-function reloadCurrentScreenConfig(screenConfig) {
-    let deferred = Q.defer();
-    let url = properties.get('ScreenDriver.content.url');
-    const request = net.request(url);
-    request.on('response', (response) => {
-        response.on('data', (chunk) => {
-            let remoteConfig = convertConfig(chunk);
-            let isUrlWasChanged = updateUrlForCurrentScreen(screenConfig, remoteConfig);
-            deferred.resolve(isUrlWasChanged);
-
-            function convertConfig() {
-                try {
-                    let venues = JSON.parse(chunk.toString());
-                    return ConfigConverter.convert(venues);
-                } catch (error) {
-                    log.error("Cannot read config. Used old config. Message: " + error.message);
-                    deferred.resolve();
-                }
-            }
-        });
-
-        response.on('error', (error) => {
-            console.log(error);
-            deferred.reject(error)
-        })
-    });
-
-    request.on('error', (error) => {
-        log.error('Failed to load config. Used old config. Message:', error);
-        deferred.resolve();
-    });
-    request.end();
-    return deferred.promise;
-}
-
-/**
- *  @return {boolean}. Return was config updated or not
- */
-function updateUrlForCurrentScreen(localScreenConfig, remoteScreenConfig) {
-    try {
-        let remoteUrl = getRemoteUrlForCurrentScreen();
-        let localUrl = localScreenConfig.contentUrl;
-        if (remoteUrl != localUrl) {
-            localScreenConfig.contentUrl = remoteUrl;
-            storage.set('contentUrl', remoteUrl, function (error) {
-                if (error) throw error;
-            });
-            return true;
-        }
-    } catch (error) {
-        log.error('Cannot update url for current screen.', error )
-    }
-    return false;
-
-    function getRemoteUrlForCurrentScreen() {
-        let selectedVenueId = localScreenConfig.selectedVenue.id;
-        let selectedGroupId = localScreenConfig.selectedGroup.id;
-        let selectedScreenId = localScreenConfig.selectedScreen.id;
-
-        let venue = findItemById(remoteScreenConfig, selectedVenueId);
-        let group = findItemById(venue.config, selectedGroupId);
-        let screen = findItemById(group.config, selectedScreenId);
-
-        putInStorage('selectedVenue', {name: venue.name, id: venue.config._id});
-        putInStorage('selectedGroup', {name: group.name, id: group.config._id});
-        putInStorage('selectedScreen', {name: screen.name, id: screen.config._id});
-
-        return screen.config.url;
-    }
-}
-
-function putInStorage(key, value) {
-    storage.set(key, value, function(error) {
-        if (error) throw error;
-    });
-}
-
-function findItemById(parentObject, itemIdToFind) {
-    for (let key in parentObject) {
-        if (parentObject[key]._id === itemIdToFind) {
-            return {name: key, config: parentObject[key]};
-        }
-    }
 }
 
 function setupLogger() {
@@ -183,10 +89,6 @@ function registerHotKeys() {
 function addHotKeyListeners() {
     app.on('shortcut-pressed', (event) => {
         if (event === 'open-admin-panel') {
-            //configLoadJob can be undefined on first launch
-            if (configLoadJob) {
-                configLoadJob.stop();
-            }
             openAdminPanel();
         }
     });
@@ -214,7 +116,6 @@ function openContentWindow(contentUrl) {
     closeCurrentWindow();
     mainWindow = newWindow;
     hideCursor(mainWindow);
-    initCronJobs();
 }
 
 function closeCurrentWindow() {
@@ -273,31 +174,3 @@ function loadUrl(browserWindow, url) {
         }
     });
 }
-
-function initCronJobs() {
-    configLoadJob = new CronJob('*/5 * * * *', function() {
-        getAllDataFromStorage()
-            .then(reloadCurrentScreenConfig)
-            .then((isUrlWasChanged) => {
-                reloadWindowContent(isUrlWasChanged);
-            })
-            .done();
-    }, null, true, 'UTC');
-    configLoadJob.start();
-
-    function reloadWindowContent(isUrlWasChanged) {
-        if (isUrlWasChanged) {
-            mainWindow.loadURL(screenConfig.contentUrl);
-        }
-    }
-}
-
-app.disableHardwareAcceleration();
-
-app.on('ready', openWindow);
-
-app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
