@@ -49,7 +49,19 @@ export class VenuesComponent implements OnInit {
         this.venuesService.loadVenues().subscribe(response => {
             this.venues = response.json();
             this.venuesTree = this.venuesService.getVenuesForTree(this.venues);
+
+            //This is temporary solution until we create priority hierarchy
+            if (!this.config) {
+                _initEmptyConfig.call(this);
+            }
+            this.mergeLocationsWithConfig(this.venues, this.config);
         });
+
+        function _initEmptyConfig() {
+            this.config = new Configuration();
+            this.config.name = '';
+            this.config.config = {};
+        }
     }
 
     loadContent() {
