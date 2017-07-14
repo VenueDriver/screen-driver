@@ -1,3 +1,5 @@
+'use strict';
+
 const storage = require('electron-json-storage');
 
 const VENUES_STORAGE = 'venues';
@@ -8,6 +10,10 @@ class LocalStorageManager {
         storage.set(key, value, function(error) {
             if (error) throw error;
         });
+    }
+
+    static getFromStorage(key, callback) {
+        return storage.get(key, callback);
     }
 }
 
