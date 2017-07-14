@@ -3,28 +3,47 @@
 const {net} = require('electron');
 const PropertiesLoader = require('./properties_loader');
 const API = PropertiesLoader.getApiEndpoint();
+const {LocalStorageManager, StorageNames} = require('./local_storage_manager');
 
 class DataLoader {
+
+    static loadData() {
+        DataLoader.loadVenues();
+        DataLoader.loadContent();
+        DataLoader.loadConfigs();
+    }
 
     static loadVenues() {
         let venuesUrl = `${API}/api/venues`;
         let request = net.request(venuesUrl);
 
-        return DataLoader.generatePromise(request);
+        DataLoader.generatePromise(request)
+            .then(data => {
+                LocalStorageManager.putInStorage(StorageNames.VENUES_STORAGE, data);
+            })
+            .catch(error => console.log(error));
     }
 
     static loadContent() {
         let contentUrl = `${API}/api/content`;
         let request = net.request(contentUrl);
 
-        return DataLoader.generatePromise(request);
+        DataLoader.generatePromise(request)
+            .then(data => {
+                LocalStorageManager.putInStorage(StorageNames.CONTENT_STORAGE, data);
+            })
+            .catch(error => console.log(error));
     }
 
     static loadConfigs() {
         let contentUrl = `${API}/api/configs`;
         let request = net.request(contentUrl);
 
-        return DataLoader.generatePromise(request);
+        DataLoader.generatePromise(request)
+            .then(data => {
+                LocalStorageManager.putInStorage(StorageNames.SETTINGS_STORAGE, data);
+            })
+            .catch(error => console.log(error));
     }
 
     static generatePromise(request) {

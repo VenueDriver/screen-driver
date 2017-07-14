@@ -33,38 +33,8 @@ app.on('window-all-closed', function () {
 });
 
 function ready() {
-    loadData();
+    DataLoader.loadData();
     openWindow();
-}
-
-function loadData() {
-    loadVenues();
-    loadContent();
-    loadConfigs();
-}
-
-function loadVenues() {
-    DataLoader.loadVenues()
-        .then(data => {
-            LocalStorageManager.putInStorage(StorageNames.VENUES_STORAGE, data);
-        })
-        .catch(error => console.log(error));
-}
-
-function loadContent() {
-    DataLoader.loadContent()
-        .then(data => {
-            LocalStorageManager.putInStorage(StorageNames.CONTENT_STORAGE, data);
-        })
-        .catch(error => console.log(error));
-}
-
-function loadConfigs() {
-    DataLoader.loadConfigs()
-        .then(data => {
-            LocalStorageManager.putInStorage(StorageNames.SETTINGS_STORAGE, data);
-        })
-        .catch(error => console.log(error));
 }
 
 function openWindow() {
