@@ -8,45 +8,58 @@ const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const {LocalStorageManager, StorageNames} = remote.require(__dirname + '/js/local_storage_manager');
 const SettingsManager = remote.require(__dirname + '/js/settings_manager');
+const DataLoader = remote.require(__dirname + '/js/data_loader');
 
 window.$ = window.jQuery = require('jquery');
 
-let screensConfig;
-let screensSetting;
+let screenSetting;
 let content;
-let ConfigConverter = require('./js/config_converter');
+let venues;
+let settings;
 
 $(function () {
     readLog();
     turnOnLogging();
-    loadVenues();
-    loadSetting();
-    loadContent();
 
-    let venues;
+    loadData();
 
     let selectedVenue;
     let selectedGroup;
+    let selectedScreen;
 
-    let selectedScreenId;
     let contentUrl;
 
     verifySaveButtonState();
     verifyCancelButtonState();
 
-    function loadVenues() {
-        LocalStorageManager.getFromStorage(StorageNames.VENUES_STORAGE, (error, data) => {
-            venues = JSON.parse(data);
-            initSelector($("#venue"), venues);
+    function loadData() {
+        DataLoader.loadData().then(values => {
+            venues = JSON.parse(values[0]);
+            content = JSON.parse(values[1]);
+            settings = JSON.parse(values[2]);
+            loadCurrentSettings();
         });
     }
 
-    function loadSetting() {
-        SettingsManager.getCurrentSetting().then(setting => screensSetting = setting);
+    function loadCurrentSettings() {
+        LocalStorageManager.getFromStorage(StorageNames.SELECTED_SETTING_STORAGE, (error, data) => {
+            screenSetting = data;
+            initSelector($('#venue'), venues);
+            putPreviouslySelectedDataIntoSelectors();
+        });
     }
 
-    function loadContent() {
-        LocalStorageManager.getFromStorage(StorageNames.CONTENT_STORAGE, (error, data) => content = JSON.parse(data));
+    function putPreviouslySelectedDataIntoSelectors() {
+        if (screenSetting.contentUrl) {
+            selectedVenue = findById(venues, screenSetting.selectedVenueId);
+            $('#venue').val(selectedVenue.name).trigger("change");
+
+            selectedGroup = findById(selectedVenue.screen_groups, screenSetting.selectedGroupId);
+            $('#screen-group').val(selectedGroup.name).trigger("change");
+
+            selectedScreen = findById(selectedGroup.screens, screenSetting.selectedScreenId);
+            $('#screen-id').val(selectedScreen.name).trigger("change");
+        }
     }
 
     $("#save").click(function () {
@@ -72,25 +85,29 @@ $(function () {
     });
 
     $("#screen-id").change(function () {
-        selectedScreenId = $('#screen-id').find(":selected").val();
+        let screenId = $('#screen-id').find(":selected").val();
+        if (!screenId || screenId === 'none') {
+            return;
+        }
+        selectedScreen = findById(selectedGroup.screens, screenId);
         defineContentUrl();
         verifySaveButtonState();
     });
 
     function defineContentUrl() {
-        let contentId = screensSetting.config[selectedScreenId];
+        let contentId = settings[0].config[selectedScreen.id];
         if (!contentId && selectedGroup) {
-            contentId = screensSetting.config[selectedGroup.id];
+            contentId = settings[0].config[selectedGroup.id];
         }
         if (!contentId && selectedVenue) {
-            contentId = screensSetting.config[selectedVenue.id];
+            contentId = settings[0].config[selectedVenue.id];
         }
         let selectedContent = content.find(c => c.id === contentId);
         contentUrl = selectedContent ? selectedContent.url : '';
     }
 
     function verifySaveButtonState() {
-        if (!contentUrl || selectedScreenId === 'none') {
+        if (!contentUrl || selectedScreen.id === 'none') {
             disableSaveButton();
             return false;
         } else {
@@ -111,7 +128,7 @@ $(function () {
 
     function loadValues(sourceDropdown, destinationDropdown) {
         let selectedDropdownValue = sourceDropdown.find(":selected").val();
-        if (selectedDropdownValue !== 'none') {
+        if (selectedDropdownValue && selectedDropdownValue !== 'none') {
             let valuesForDropdown = getValuesForDropdown(sourceDropdown, selectedDropdownValue);
             performValuesLoading(destinationDropdown, valuesForDropdown);
         }
@@ -147,7 +164,7 @@ $(function () {
         selectedSetting.contentUrl = contentUrl;
         selectedSetting.selectedVenueId = selectedVenue.id;
         selectedSetting.selectedGroupId = selectedGroup.id;
-        selectedSetting.selectedScreenId = selectedScreenId;
+        selectedSetting.selectedScreenId = selectedScreen.id;
         LocalStorageManager.putInStorage(StorageNames.SELECTED_SETTING_STORAGE, selectedSetting);
     }
 
@@ -210,39 +227,8 @@ function hideCancelButton() {
     $('#cancel').hide();
 }
 
-function loadScreensConfig() {
-    let url = properties.get('ScreenDriver.content.url');
-    $.ajax({
-        url: url,
-        success: function (json) {
-            try {
-                screensConfig = ConfigConverter.convert(json);
-            } catch (error) {
-                showError("Cannot read config: " + error.message);
-                throw new Error(error.message);
-            }
-            initVenuesSelector();
-            putPreviouslySelectedDataIntoSelectors();
-        },
-        error: function (error) {
-            showError("Failed to load config" + (!error.responseText ? '' : (':  ' + error.responseText)));
-            throw new Error(error.responseText);
-        }
-    });
-}
-
 function showError(errorMessage) {
     $("#config-load-error").text(errorMessage);
-}
-
-function putPreviouslySelectedDataIntoSelectors() {
-    getFromStorage(null, function (error, data) {
-        if (data.contentUrl) {
-            $('#venue').val(data.selectedVenue.name).trigger("change");
-            $('#screen-group').val(data.selectedGroup.name).trigger("change");
-            $('#screen-id').val(data.selectedScreen.name).trigger("change");
-        }
-    });
 }
 
 function getFromStorage(key, callback) {

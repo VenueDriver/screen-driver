@@ -33,7 +33,6 @@ app.on('window-all-closed', function () {
 });
 
 function ready() {
-    DataLoader.loadData();
     openWindow();
 }
 

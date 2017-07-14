@@ -8,42 +8,32 @@ const {LocalStorageManager, StorageNames} = require('./local_storage_manager');
 class DataLoader {
 
     static loadData() {
-        DataLoader.loadVenues();
-        DataLoader.loadContent();
-        DataLoader.loadConfigs();
+        return Promise.all([
+            DataLoader.loadVenues(),
+            DataLoader.loadContent(),
+            DataLoader.loadConfigs()
+        ]);
     }
 
     static loadVenues() {
         let venuesUrl = `${API}/api/venues`;
         let request = net.request(venuesUrl);
 
-        DataLoader.generatePromise(request)
-            .then(data => {
-                LocalStorageManager.putInStorage(StorageNames.VENUES_STORAGE, data);
-            })
-            .catch(error => console.log(error));
+        return DataLoader.generatePromise(request);
     }
 
     static loadContent() {
         let contentUrl = `${API}/api/content`;
         let request = net.request(contentUrl);
 
-        DataLoader.generatePromise(request)
-            .then(data => {
-                LocalStorageManager.putInStorage(StorageNames.CONTENT_STORAGE, data);
-            })
-            .catch(error => console.log(error));
+        return DataLoader.generatePromise(request);
     }
 
     static loadConfigs() {
         let contentUrl = `${API}/api/configs`;
         let request = net.request(contentUrl);
 
-        DataLoader.generatePromise(request)
-            .then(data => {
-                LocalStorageManager.putInStorage(StorageNames.SETTINGS_STORAGE, data);
-            })
-            .catch(error => console.log(error));
+        return DataLoader.generatePromise(request);
     }
 
     static generatePromise(request) {
