@@ -19,7 +19,6 @@
                         [content]="content"
                         [currentNode]="node"
                         contentUrlPlaceholder="Content URL is not specified"
-                        (submit)="performSubmit($event)"
                         (cancel)="hideAddVenueForm()"
                         (createContent)="toggleCreateContentMode($event)">
                 </edit-tree-view-node-form>
@@ -29,7 +28,7 @@
         <venues-tree-view
                 [venues]="venuesTree"
                 [content]="content"
-                (update)="updateVenue($event)"
+                (update)="loadVenues()"
                 (contentChange)="loadContent()">
         </venues-tree-view>
     </div>

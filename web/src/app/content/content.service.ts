@@ -1,33 +1,44 @@
 import { Injectable } from '@angular/core';
 import {Http, Response} from "@angular/http";
 import { environment } from '../../environments/environment';
-import {Observable} from "rxjs";
+import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {Content} from "./content";
 
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ContentService {
-  readonly contentApiPath = `${environment.apiUrl}/api/content`;
 
-  constructor(private http: Http) { }
+    readonly contentApiPath = `${environment.apiUrl}/api/content`;
 
-  getContent(): Observable<Content[]> {
-    return this.http.get(this.contentApiPath)
-      .map(this.extractData);
-  }
+    private contentUpdate: Subject<any> = new BehaviorSubject({});
 
-  createContent(content: Content): Observable<Content> {
-    return this.http.post(this.contentApiPath, content)
-        .map(this.extractData);
-  }
+    constructor(private http: Http) { }
 
-  updateContent(content: Content): Observable<Content> {
-    return this.http.put(`${this.contentApiPath}/${content.id}`, content)
-        .map(this.extractData);
-  }
+    getContent(): Observable<Content[]> {
+        return this.http.get(this.contentApiPath)
+            .map(this.extractData);
+    }
 
-  private extractData(res: Response) {
-    return res.json() || { };
-  }
+    createContent(content: Content): Observable<Content> {
+        return this.http.post(this.contentApiPath, content)
+            .map(this.extractData);
+    }
+
+    updateContent(content: Content): Observable<Content> {
+        return this.http.put(`${this.contentApiPath}/${content.id}`, content)
+            .map(this.extractData);
+    }
+
+    private extractData(res: Response) {
+        return res.json() || { };
+    }
+
+    pushContentUpdateEvent() {
+        this.contentUpdate.next();
+    }
+
+    getContentUpdateSubscription(): Observable<any> {
+        return this.contentUpdate;
+    }
 }

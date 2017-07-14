@@ -12,7 +12,7 @@ export class ConfigurationCreatorComponent implements OnInit {
     @Output() created = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
-    private config = new Configuration();
+    config = new Configuration();
 
     constructor(
         private configsService: ConfigurationsService,
