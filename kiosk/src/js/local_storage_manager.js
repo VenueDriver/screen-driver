@@ -2,9 +2,12 @@
 
 const storage = require('electron-json-storage');
 
-const VENUES_STORAGE = 'venues';
-const CONTENT_STORAGE = 'content';
-const CONFIGS_STORAGE = 'config';
+const StorageNames = {
+    VENUES_STORAGE: 'venues',
+    CONTENT_STORAGE: 'content',
+    SETTINGS_STORAGE: 'settings',
+    SELECTED_SETTING_STORAGE: 'selected_setting'
+};
 
 class LocalStorageManager {
 
@@ -21,7 +24,5 @@ class LocalStorageManager {
 
 module.exports = {
     LocalStorageManager: LocalStorageManager,
-    VENUES_STORAGE: VENUES_STORAGE,
-    CONTENT_STORAGE: CONTENT_STORAGE,
-    CONFIGS_STORAGE: CONFIGS_STORAGE
+    StorageNames: StorageNames
 };
