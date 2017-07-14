@@ -8,6 +8,7 @@ import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {DropdownModule} from "../dropdown/dropdown.module";
 import {ConfigurationManagerComponent} from "./configurations-manager/configurations-manager.component";
+import {ToggleButtonComponent} from "../toggle-button/toggle-button/toggle-button.component";
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import {ConfigurationManagerComponent} from "./configurations-manager/configurat
     declarations: [
         ConfigurationsComponent,
         ConfigurationCreatorComponent,
-        ConfigurationManagerComponent
+        ConfigurationManagerComponent,
+        ToggleButtonComponent
     ],
     providers: [
         ConfigurationsService,

@@ -79,7 +79,6 @@ export class EditTreeViewNodeFormService {
 
     getConfigToUpdate(currentConfig: Configuration, nodeData: any) {
         let configToUpdate = _.clone(currentConfig);
-        console.log(currentConfig)
         configToUpdate.config[nodeData.id] = nodeData.content.id;
         return configToUpdate;
     }
