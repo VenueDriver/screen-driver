@@ -2,6 +2,7 @@ import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {ConfigurationsService} from "../configurations.service";
 import {Configuration} from "../entities/configuration";
 import {NotificationService} from "../../notifications/notification.service";
+import {ConfigStateHolderService} from "../configuration-state-manager/config-state-holder.service";
 
 @Component({
     selector: 'configuration-creator',
@@ -14,12 +15,16 @@ export class ConfigurationCreatorComponent implements OnInit {
     @Output() cancel = new EventEmitter();
 
     config = new Configuration();
+    priorityTypes = [];
 
     constructor(
         private configsService: ConfigurationsService,
-        private notificationService: NotificationService) { }
+        private notificationService: NotificationService,
+        private configStateHolderService: ConfigStateHolderService) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.priorityTypes = this.configStateHolderService.getPriorityTypes();
+    }
 
     performSubmit() {
         this.configsService.createConfiguration(this.config).subscribe(
@@ -38,5 +43,9 @@ export class ConfigurationCreatorComponent implements OnInit {
 
     performCancel() {
         this.cancel.emit();
+    }
+
+    prioritySelected(priorityType) {
+        this.config.priority = priorityType;
     }
 }

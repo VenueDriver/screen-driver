@@ -3,6 +3,9 @@
            class="form-control"
            [(ngModel)]="config.name"
            input-autofocus>
+    <dropdown [items]="priorityTypes"
+              (select)="prioritySelected($event)">
+    </dropdown>
 
     <div class="btn-container">
         <button class="btn btn-link" (click)="performCancel()">Cancel</button>

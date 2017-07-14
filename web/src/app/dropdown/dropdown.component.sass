@@ -1,0 +1,43 @@
+$dropdown-width: 100%
+$dropdown-font-size: 16px
+
+.dropdown
+  font-size: 16px
+
+  .dropdown-toggle
+    width: $dropdown-width
+    display: flex
+    align-items: center
+
+    .dropdown-value
+      align-items: flex-start
+      font-size: $dropdown-font-size
+      overflow: hidden
+
+    .caret-wrapper
+      margin-left: auto
+      padding-left: 5px
+
+  .dropdown-menu
+    width: $dropdown-width
+    max-height: 260px
+    overflow-y: auto
+
+    li a
+      padding: 0 12px
+      min-height: 40px
+      line-height: 40px
+      font-size: $dropdown-font-size
+      overflow: hidden
+
+      .item-with-desc
+        padding: 5px 0
+        line-height: 30px
+
+        .item-desc
+          color: gray
+
+      .item-value
+        overflow: hidden
+        max-width: $dropdown-width
+        white-space: nowrap

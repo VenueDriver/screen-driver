@@ -6,13 +6,15 @@ import {ConfigStateHolderService} from "./configuration-state-manager/config-sta
 import {AutofocusModule} from "../directives/autofocus/autofocus.module";
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
+import {DropdownModule} from "../dropdown/dropdown.module";
 import {ConfigurationManagerComponent} from "./configurations-manager/configurations-manager.component";
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
-        AutofocusModule
+        AutofocusModule,
+        DropdownModule
     ],
     exports: [
         ConfigurationsComponent
