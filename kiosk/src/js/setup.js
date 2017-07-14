@@ -90,7 +90,7 @@ $(function () {
     }
 
     function verifySaveButtonState() {
-        if (!contentUrl || selectedScreenId == 'Not selected') {
+        if (!contentUrl || selectedScreenId === 'none') {
             disableSaveButton();
             return false;
         } else {
