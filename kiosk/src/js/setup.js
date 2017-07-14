@@ -6,37 +6,47 @@ const os = require('os');
 const isDev = require('electron-is-dev');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
-const {LocalStorageManager, VENUES_STORAGE} = remote.require(__dirname + '/js/local_storage_manager');
+const {LocalStorageManager, StorageNames} = remote.require(__dirname + '/js/local_storage_manager');
+const SettingsManager = remote.require(__dirname + '/js/settings_manager');
 
 window.$ = window.jQuery = require('jquery');
 
 let screensConfig;
+let screensSetting;
+let content;
 let ConfigConverter = require('./js/config_converter');
 
 $(function () {
     readLog();
     turnOnLogging();
     loadVenues();
+    loadSetting();
+    loadContent();
 
     let venues;
 
     let selectedVenue;
     let selectedGroup;
 
-    let selectedVenueObject;
-    let selectedScreenGroupObject;
-    let selectedScreenObject;
-    let selectedScreenName;
+    let selectedScreenId;
     let contentUrl;
 
     verifySaveButtonState();
     verifyCancelButtonState();
 
     function loadVenues() {
-        LocalStorageManager.getFromStorage(VENUES_STORAGE, (error, data) => {
+        LocalStorageManager.getFromStorage(StorageNames.VENUES_STORAGE, (error, data) => {
             venues = JSON.parse(data);
             initSelector($("#venue"), venues);
         });
+    }
+
+    function loadSetting() {
+        SettingsManager.getCurrentSetting().then(setting => screensSetting = setting);
+    }
+
+    function loadContent() {
+        LocalStorageManager.getFromStorage(StorageNames.CONTENT_STORAGE, (error, data) => content = JSON.parse(data));
     }
 
     $("#save").click(function () {
@@ -62,23 +72,25 @@ $(function () {
     });
 
     $("#screen-id").change(function () {
-        selectedScreenName = $('#screen-id').find(":selected").text();
-
-        if (selectedGroup) {
-            if (selectedGroup[selectedScreenName]) {
-                contentUrl = selectedGroup[selectedScreenName].url;
-                selectedScreenObject = {name: selectedScreenName, id: selectedGroup[selectedScreenName]._id};
-            } else {
-                contentUrl = selectedGroup[selectedScreenName];
-            }
-
-        }
-
+        selectedScreenId = $('#screen-id').find(":selected").val();
+        defineContentUrl();
         verifySaveButtonState();
     });
 
+    function defineContentUrl() {
+        let contentId = screensSetting.config[selectedScreenId];
+        if (!contentId && selectedGroup) {
+            contentId = screensSetting.config[selectedGroup.id];
+        }
+        if (!contentId && selectedVenue) {
+            contentId = screensSetting.config[selectedVenue.id];
+        }
+        let selectedContent = content.find(c => c.id === contentId);
+        contentUrl = selectedContent ? selectedContent.url : '';
+    }
+
     function verifySaveButtonState() {
-        if (!contentUrl || selectedScreenName == 'Not selected') {
+        if (!contentUrl || selectedScreenId == 'Not selected') {
             disableSaveButton();
             return false;
         } else {
@@ -108,14 +120,18 @@ $(function () {
     function getValuesForDropdown(sourceDropdown, selectedDropdownValue) {
         switch (sourceDropdown.attr('id')) {
             case ('venue'):
-                selectedVenue = venues.find(venue => venue.id === selectedDropdownValue);
+                selectedVenue = findById(venues, selectedDropdownValue);
                 return selectedVenue.screen_groups;
             case ('screen-group'):
                 if (selectedVenue) {
-                    selectedGroup = selectedVenue.screen_groups.find(group => group.id === selectedDropdownValue);
+                    selectedGroup = findById(selectedVenue.screen_groups, selectedDropdownValue);
                     return selectedGroup.screens;
                 }
         }
+    }
+
+    function findById(items, itemId) {
+        return items.find(item => item.id === itemId);
     }
 
     function performValuesLoading(destinationDropdown, valuesForDropdown) {
@@ -127,10 +143,12 @@ $(function () {
     }
 
     function saveSelectionInStorage() {
-        putInStorage('selectedVenue', selectedVenueObject);
-        putInStorage('selectedGroup', selectedScreenGroupObject);
-        putInStorage('selectedScreen', selectedScreenObject);
-        putInStorage('contentUrl', contentUrl);
+        let selectedSetting = {};
+        selectedSetting.contentUrl = contentUrl;
+        selectedSetting.selectedVenueId = selectedVenue.id;
+        selectedSetting.selectedGroupId = selectedGroup.id;
+        selectedSetting.selectedScreenId = selectedScreenId;
+        LocalStorageManager.putInStorage(StorageNames.SELECTED_SETTING_STORAGE, selectedSetting);
     }
 
     $("#show-logs").click(function () {
@@ -224,12 +242,6 @@ function putPreviouslySelectedDataIntoSelectors() {
             $('#screen-group').val(data.selectedGroup.name).trigger("change");
             $('#screen-id').val(data.selectedScreen.name).trigger("change");
         }
-    });
-}
-
-function putInStorage(key, value) {
-    storage.set(key, value, function(error) {
-        if (error) throw error;
     });
 }
 
