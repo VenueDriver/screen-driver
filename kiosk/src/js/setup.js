@@ -1,5 +1,4 @@
 const remote = require('electron').remote;
-const storage = require('electron-json-storage');
 const {ipcRenderer} = require('electron');
 const fs = require('fs');
 const os = require('os');
@@ -42,9 +41,15 @@ $(function () {
         CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
             screenSetting = setting;
             initSelector($('#venue'), serverData.venues);
+            initSelectorValues();
+        });
+    }
+
+    function initSelectorValues() {
+        if (!$.isEmptyObject(screenSetting)) {
             findSelectedItems();
             putPreviouslySelectedDataIntoSelectors();
-        });
+        }
     }
 
     function findSelectedItems() {
@@ -69,8 +74,8 @@ $(function () {
     });
 
     $("#cancel").click(function () {
-        getFromStorage('contentUrl', function (error, contentUrl) {
-            openContentWindow(contentUrl);
+        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+            openContentWindow(setting.contentUrl);
         });
     });
 
@@ -115,8 +120,8 @@ $(function () {
     }
 
     function verifyCancelButtonState() {
-        getFromStorage('contentUrl', function (err, contentUrl) {
-            if ($.isEmptyObject(contentUrl)) {
+        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+            if ($.isEmptyObject(setting.contentUrl)) {
                 hideCancelButton();
             } else {
                 showCancelButton();
@@ -227,13 +232,6 @@ function hideCancelButton() {
 
 function showError(errorMessage) {
     $("#config-load-error").text(errorMessage);
-}
-
-function getFromStorage(key, callback) {
-    if (!key) {
-        return storage.getAll(callback);
-    }
-    return storage.get(key, callback);
 }
 
 function turnOnLogging() {
