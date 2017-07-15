@@ -11,6 +11,10 @@ class CurrentScreenSettingsManager {
             });
         });
     }
+
+    static saveCurrentSetting(selectedSetting) {
+        LocalStorageManager.putInStorage(StorageNames.SELECTED_SETTING_STORAGE, selectedSetting);
+    }
 }
 
 module.exports = CurrentScreenSettingsManager;

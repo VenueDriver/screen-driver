@@ -7,7 +7,7 @@ const isDev = require('electron-is-dev');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const {LocalStorageManager, StorageNames} = remote.require(__dirname + '/js/local_storage_manager');
-const SettingsManager = remote.require(__dirname + '/js/current_screen_settings_manager');
+const CurrentScreenSettingsManager = remote.require(__dirname + '/js/current_screen_settings_manager');
 const DataLoader = remote.require(__dirname + '/js/data_loader');
 const SettingsHelper = remote.require(__dirname + '/js/settings_helper');
 
@@ -39,7 +39,7 @@ $(function () {
     }
 
     function loadCurrentSettings() {
-        SettingsManager.getCurrentSetting().then(setting => {
+        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
             screenSetting = setting;
             initSelector($('#venue'), serverData.venues);
             findSelectedItems();
@@ -158,12 +158,12 @@ $(function () {
     }
 
     function saveSelectionInStorage() {
-        let selectedSetting = {};
-        selectedSetting.contentUrl = contentUrl;
-        selectedSetting.selectedVenueId = selectedVenue.id;
-        selectedSetting.selectedGroupId = selectedGroup.id;
-        selectedSetting.selectedScreenId = selectedScreen.id;
-        LocalStorageManager.putInStorage(StorageNames.SELECTED_SETTING_STORAGE, selectedSetting);
+        CurrentScreenSettingsManager.saveCurrentSetting({
+            contentUrl: contentUrl,
+            selectedScreenId: selectedScreen.id,
+            selectedGroupId: selectedGroup.id,
+            selectedVenueId: selectedVenue.id
+        });
     }
 
     $("#show-logs").click(function () {
