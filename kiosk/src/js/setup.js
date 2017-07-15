@@ -10,6 +10,8 @@ const CurrentScreenSettingsManager = remote.require(__dirname + '/js/current_scr
 const DataLoader = remote.require(__dirname + '/js/data_loader');
 const SettingsHelper = remote.require(__dirname + '/js/settings_helper');
 
+const _ = require('lodash');
+
 window.$ = window.jQuery = require('jquery');
 
 let screenSetting;
@@ -46,7 +48,7 @@ $(function () {
     }
 
     function initSelectorValues() {
-        if (!$.isEmptyObject(screenSetting)) {
+        if (!_.isEmpty(screenSetting)) {
             findSelectedItems();
             putPreviouslySelectedDataIntoSelectors();
         }
@@ -121,7 +123,7 @@ $(function () {
 
     function verifyCancelButtonState() {
         CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            if ($.isEmptyObject(setting.contentUrl)) {
+            if (_.isEmpty(setting.contentUrl)) {
                 hideCancelButton();
             } else {
                 showCancelButton();
@@ -151,7 +153,7 @@ $(function () {
     }
 
     function findById(items, itemId) {
-        return items.find(item => item.id === itemId);
+        return _.find(items, item => item.id === itemId);
     }
 
     function performValuesLoading(destinationDropdown, valuesForDropdown) {
@@ -184,7 +186,7 @@ $(function () {
     });
 
     function initSelector(selector, values) {
-        values.forEach(value => {
+        _.forEach(values, value => {
             selector.append($('<option>', {
                 value: value.id,
                 text: value.name
@@ -251,7 +253,7 @@ function readLog() {
 function insertLogsOnPage(logs) {
     let logsElement = $('#logs');
     let logLines = logs.split('\n').reverse();
-    logLines.forEach((line) => {
+    _.forEach(logLines, line => {
         logsElement.append(line);
         logsElement.append('<br>');
     });
