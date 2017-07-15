@@ -2,7 +2,7 @@
 
 const {LocalStorageManager, StorageNames} = require('./local_storage_manager');
 
-class SettingsManager {
+class CurrentScreenSettingsManager {
 
     static getCurrentSetting() {
         return new Promise((resolve, reject) => {
@@ -13,4 +13,4 @@ class SettingsManager {
     }
 }
 
-module.exports = SettingsManager;
+module.exports = CurrentScreenSettingsManager;

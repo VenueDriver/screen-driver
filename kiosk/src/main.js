@@ -10,7 +10,7 @@ const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const DataLoader = require('./js/data_loader');
 const {LocalStorageManager, StorageNames} = require('./js/local_storage_manager');
-const SettingsManager = require('./js/settings_manager');
+const SettingsManager = require('./js/current_screen_settings_manager');
 
 
 const log = require('electron-log');

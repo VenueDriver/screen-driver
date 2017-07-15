@@ -7,7 +7,7 @@ const isDev = require('electron-is-dev');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const {LocalStorageManager, StorageNames} = remote.require(__dirname + '/js/local_storage_manager');
-const SettingsManager = remote.require(__dirname + '/js/settings_manager');
+const SettingsManager = remote.require(__dirname + '/js/current_screen_settings_manager');
 const DataLoader = remote.require(__dirname + '/js/data_loader');
 
 window.$ = window.jQuery = require('jquery');
