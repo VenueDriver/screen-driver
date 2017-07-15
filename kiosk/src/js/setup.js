@@ -42,23 +42,25 @@ $(function () {
     }
 
     function loadCurrentSettings() {
-        LocalStorageManager.getFromStorage(StorageNames.SELECTED_SETTING_STORAGE, (error, data) => {
-            screenSetting = data;
+        SettingsManager.getCurrentSetting().then(setting => {
+            screenSetting = setting;
             initSelector($('#venue'), venues);
+            findSelectedItems();
             putPreviouslySelectedDataIntoSelectors();
         });
     }
 
+    function findSelectedItems() {
+        selectedVenue = findById(venues, screenSetting.selectedVenueId);
+        selectedGroup = findById(selectedVenue.screen_groups, screenSetting.selectedGroupId);
+        selectedScreen = findById(selectedGroup.screens, screenSetting.selectedScreenId);
+    }
+
     function putPreviouslySelectedDataIntoSelectors() {
         if (screenSetting.contentUrl) {
-            selectedVenue = findById(venues, screenSetting.selectedVenueId);
-            $('#venue').val(selectedVenue.name).trigger("change");
-
-            selectedGroup = findById(selectedVenue.screen_groups, screenSetting.selectedGroupId);
-            $('#screen-group').val(selectedGroup.name).trigger("change");
-
-            selectedScreen = findById(selectedGroup.screens, screenSetting.selectedScreenId);
-            $('#screen-id').val(selectedScreen.name).trigger("change");
+            $('#venue').val(screenSetting.selectedVenueId).trigger("change");
+            $('#screen-group').val(screenSetting.selectedGroupId).trigger("change");
+            $('#screen-id').val(screenSetting.selectedScreenId).trigger("change");
         }
     }
 
@@ -110,10 +112,9 @@ $(function () {
         if (!contentUrl || selectedScreen.id === 'none') {
             disableSaveButton();
             return false;
-        } else {
-            enableSaveButton();
-            return true;
         }
+        enableSaveButton();
+        return true;
     }
 
     function verifyCancelButtonState() {

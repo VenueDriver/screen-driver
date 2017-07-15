@@ -6,9 +6,8 @@ class SettingsManager {
 
     static getCurrentSetting() {
         return new Promise((resolve, reject) => {
-            LocalStorageManager.getFromStorage(StorageNames.SETTINGS_STORAGE, (error, data) => {
-                let settings = JSON.parse(data);
-                resolve(settings[0]);
+            LocalStorageManager.getFromStorage(StorageNames.SELECTED_SETTING_STORAGE, (error, data) => {
+                return resolve(data);
             });
         });
     }
