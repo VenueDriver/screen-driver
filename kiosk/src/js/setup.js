@@ -9,6 +9,7 @@ const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const {LocalStorageManager, StorageNames} = remote.require(__dirname + '/js/local_storage_manager');
 const SettingsManager = remote.require(__dirname + '/js/current_screen_settings_manager');
 const DataLoader = remote.require(__dirname + '/js/data_loader');
+const SettingsHelper = remote.require(__dirname + '/js/settings_helper');
 
 window.$ = window.jQuery = require('jquery');
 
@@ -93,12 +94,12 @@ $(function () {
     });
 
     function defineContentUrl() {
-        let contentId = serverData.settings[0].config[selectedScreen.id];
+        let contentId = SettingsHelper.getContentId(serverData.settings, selectedScreen.id);
         if (!contentId && selectedGroup) {
-            contentId = serverData.settings[0].config[selectedGroup.id];
+            contentId = SettingsHelper.getContentId(serverData.settings, selectedGroup.id);
         }
         if (!contentId && selectedVenue) {
-            contentId = serverData.settings[0].config[selectedVenue.id];
+            contentId = SettingsHelper.getContentId(serverData.settings, selectedVenue.id);
         }
         let selectedContent = serverData.content.find(c => c.id === contentId);
         contentUrl = selectedContent ? selectedContent.url : '';
