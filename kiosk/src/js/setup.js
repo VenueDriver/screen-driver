@@ -101,15 +101,7 @@ $(function () {
     });
 
     function defineContentUrl() {
-        let contentId = SettingsHelper.getContentId(serverData.settings, selectedScreen.id);
-        if (!contentId && selectedGroup) {
-            contentId = SettingsHelper.getContentId(serverData.settings, selectedGroup.id);
-        }
-        if (!contentId && selectedVenue) {
-            contentId = SettingsHelper.getContentId(serverData.settings, selectedVenue.id);
-        }
-        let selectedContent = serverData.content.find(c => c.id === contentId);
-        contentUrl = selectedContent ? selectedContent.url : '';
+        contentUrl = SettingsHelper.defineContentUrl(serverData, createObjectFromSelectedValues());
     }
 
     function verifySaveButtonState() {
@@ -165,12 +157,16 @@ $(function () {
     }
 
     function saveSelectionInStorage() {
-        CurrentScreenSettingsManager.saveCurrentSetting({
+        CurrentScreenSettingsManager.saveCurrentSetting(createObjectFromSelectedValues());
+    }
+
+    function createObjectFromSelectedValues() {
+        return {
             contentUrl: contentUrl,
-            selectedScreenId: selectedScreen.id,
-            selectedGroupId: selectedGroup.id,
-            selectedVenueId: selectedVenue.id
-        });
+            selectedScreenId: selectedScreen ? selectedScreen.id : '',
+            selectedGroupId: selectedGroup ? selectedGroup.id : '',
+            selectedVenueId: selectedVenue ? selectedVenue.id : ''
+        }
     }
 
     $("#show-logs").click(function () {
