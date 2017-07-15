@@ -3,16 +3,26 @@
 const {net} = require('electron');
 const PropertiesLoader = require('./properties_loader');
 const API = PropertiesLoader.getApiEndpoint();
-const {LocalStorageManager, StorageNames} = require('./local_storage_manager');
 
 class DataLoader {
 
     static loadData() {
-        return Promise.all([
+        let promises = [
             DataLoader.loadVenues(),
             DataLoader.loadContent(),
             DataLoader.loadConfigs()
-        ]);
+        ];
+
+        return Promise.all(promises)
+            .then(values => DataLoader.composeServerData(values));
+    }
+
+    static composeServerData(values) {
+        let serverData = {};
+        serverData.venues = JSON.parse(values[0]);
+        serverData.content = JSON.parse(values[1]);
+        serverData.settings = JSON.parse(values[2]);
+        return serverData;
     }
 
     static loadVenues() {

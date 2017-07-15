@@ -13,9 +13,7 @@ const DataLoader = remote.require(__dirname + '/js/data_loader');
 window.$ = window.jQuery = require('jquery');
 
 let screenSetting;
-let content;
-let venues;
-let settings;
+let serverData;
 
 $(function () {
     readLog();
@@ -33,10 +31,8 @@ $(function () {
     verifyCancelButtonState();
 
     function loadData() {
-        DataLoader.loadData().then(values => {
-            venues = JSON.parse(values[0]);
-            content = JSON.parse(values[1]);
-            settings = JSON.parse(values[2]);
+        DataLoader.loadData().then(data => {
+            serverData = data;
             loadCurrentSettings();
         });
     }
@@ -44,14 +40,14 @@ $(function () {
     function loadCurrentSettings() {
         SettingsManager.getCurrentSetting().then(setting => {
             screenSetting = setting;
-            initSelector($('#venue'), venues);
+            initSelector($('#venue'), serverData.venues);
             findSelectedItems();
             putPreviouslySelectedDataIntoSelectors();
         });
     }
 
     function findSelectedItems() {
-        selectedVenue = findById(venues, screenSetting.selectedVenueId);
+        selectedVenue = findById(serverData.venues, screenSetting.selectedVenueId);
         selectedGroup = findById(selectedVenue.screen_groups, screenSetting.selectedGroupId);
         selectedScreen = findById(selectedGroup.screens, screenSetting.selectedScreenId);
     }
@@ -97,14 +93,14 @@ $(function () {
     });
 
     function defineContentUrl() {
-        let contentId = settings[0].config[selectedScreen.id];
+        let contentId = serverData.settings[0].config[selectedScreen.id];
         if (!contentId && selectedGroup) {
-            contentId = settings[0].config[selectedGroup.id];
+            contentId = serverData.settings[0].config[selectedGroup.id];
         }
         if (!contentId && selectedVenue) {
-            contentId = settings[0].config[selectedVenue.id];
+            contentId = serverData.settings[0].config[selectedVenue.id];
         }
-        let selectedContent = content.find(c => c.id === contentId);
+        let selectedContent = serverData.content.find(c => c.id === contentId);
         contentUrl = selectedContent ? selectedContent.url : '';
     }
 
@@ -138,7 +134,7 @@ $(function () {
     function getValuesForDropdown(sourceDropdown, selectedDropdownValue) {
         switch (sourceDropdown.attr('id')) {
             case ('venue'):
-                selectedVenue = findById(venues, selectedDropdownValue);
+                selectedVenue = findById(serverData.venues, selectedDropdownValue);
                 return selectedVenue.screen_groups;
             case ('screen-group'):
                 if (selectedVenue) {
