@@ -2,7 +2,7 @@
 
 const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
 const CronJob = require('cron').CronJob;
-const log = require('electron-log');
+const Logger = require('./logger');
 
 class CronJobsManager {
 
@@ -11,7 +11,7 @@ class CronJobsManager {
             CurrentScreenSettingsManager.getCurrentSetting()
                 .then(setting => CurrentScreenSettingsManager.reloadCurrentScreenConfig(setting))
                 .then(contentUrl => CronJobsManager.reloadWindowContent(contentWindow, contentUrl))
-                .catch(error => log.error(`Error occurred while performing CRON task: ${error}`));
+                .catch(error => Logger.error('Error occurred while performing CRON task:', error));
         }, null, true, 'UTC');
         settingsLoadJob.start();
         return settingsLoadJob;

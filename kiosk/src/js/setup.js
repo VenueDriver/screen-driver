@@ -1,14 +1,12 @@
 const remote = require('electron').remote;
 const {ipcRenderer} = require('electron');
-const fs = require('fs');
-const os = require('os');
-const isDev = require('electron-is-dev');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
-const {LocalStorageManager, StorageNames} = remote.require(__dirname + '/js/local_storage_manager');
 const CurrentScreenSettingsManager = remote.require(__dirname + '/js/current_screen_settings_manager');
 const DataLoader = remote.require(__dirname + '/js/data_loader');
 const SettingsHelper = remote.require(__dirname + '/js/settings_helper');
+const Logger = remote.require(__dirname + '/js/logger');
+const FileReader = remote.require(__dirname + '/js/file_reader');
 
 const _ = require('lodash');
 
@@ -18,7 +16,7 @@ let screenSetting;
 let serverData;
 
 $(function () {
-    readLog();
+    readLogs();
     turnOnLogging();
 
     loadData();
@@ -238,35 +236,17 @@ function turnOnLogging() {
     };
 }
 
-function readLog() {
-    let logFilePath = getLogFileLocation();
-    if (fs.existsSync(logFilePath)) {
-        let logs = fs.readFileSync(logFilePath, 'utf8');
-        insertLogsOnPage(logs);
-    }
+function readLogs() {
+    let logsFilePath = Logger.getLogsFileLocation();
+    let logs = FileReader.readFile(logsFilePath);
+    insertLogsOnPage(logs);
 }
 
 function insertLogsOnPage(logs) {
     let logsElement = $('#logs');
-    let logLines = logs.split('\n').reverse();
+    let logLines = logs.split('\n');
     _.forEach(logLines, line => {
         logsElement.append(line);
         logsElement.append('<br>');
     });
-}
-
-function getLogFileLocation() {
-    let rootPath = process.cwd();
-    if (isDev) {
-        rootPath = __dirname;
-    }
-    return getLocationForPlatform(rootPath)
-}
-
-function getLocationForPlatform(rootPath) {
-    let platform = os.platform();
-    switch (platform) {
-        case 'linux': return rootPath + '/error.log';
-        case 'win32': return rootPath + '\\error.log';
-    }
 }
