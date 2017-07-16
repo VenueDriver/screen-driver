@@ -10,7 +10,8 @@ const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const DataLoader = require('./js/data_loader');
 const {LocalStorageManager, StorageNames} = require('./js/local_storage_manager');
-const SettingsManager = require('./js/current_screen_settings_manager');
+const CurrentScreenSettingsManager = require('./js/current_screen_settings_manager');
+const SettingsHelper = require('./js/settings_helper');
 
 
 const log = require('electron-log');
@@ -33,6 +34,11 @@ app.on('window-all-closed', function () {
     }
 });
 
+function setupLogger() {
+    setupLoggerProperties();
+    addListenerForErrors();
+}
+
 function ready() {
     openWindow();
 }
@@ -40,9 +46,10 @@ function ready() {
 function openWindow() {
     powerSaveBlocker.start('prevent-display-sleep');
 
-    SettingsManager.getCurrentSetting().then(setting => {
+    CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
         if (setting && setting.contentUrl) {
-            openContentWindow(setting.contentUrl);
+            reloadCurrentScreenConfig(setting)
+                .then(contentUrl => openContentWindow(contentUrl));
         } else {
             openAdminPanel();
         }
@@ -53,9 +60,9 @@ function openWindow() {
     addEventListeners();
 }
 
-function setupLogger() {
-    setupLoggerProperties();
-    addListenerForErrors();
+function reloadCurrentScreenConfig(setting) {
+    return DataLoader.loadData()
+        .then(data => SettingsHelper.defineContentUrl(data, setting));
 }
 
 function setupLoggerProperties() {
