@@ -149,21 +149,32 @@ function getAdminPanelUrl() {
 }
 
 function createWindow(url, windowOptions = {}) {
-    if (!windowOptions.kiosk) {
-        windowOptions.kiosk = true;
-    }
+    windowOptions.kiosk = true;
 
     windowOptions.icon = __dirname + '/img/icon_128.ico';
 
     let newWindow = new BrowserWindow(windowOptions);
-    loadUrl(newWindow, url);
 
-    //disable images drag & drop
-    newWindow.webContents.executeJavaScript('window.ondragstart = function(){return false};');
-    if (isDev) {
-        newWindow.webContents.openDevTools();
+    if (url.startsWith('file')) {
+        newWindow.loadURL(url);
+    } else {
+        loadUrl(newWindow, url);
     }
+
+    disableImagesDrugAndDrop(newWindow);
+    openDevTools(newWindow);
+
     return newWindow;
+}
+
+function disableImagesDrugAndDrop(window) {
+    window.webContents.executeJavaScript('window.ondragstart = function(){return false};');
+}
+
+function openDevTools(window) {
+    if (isDev) {
+        window.webContents.openDevTools();
+    }
 }
 
 function loadUrl(browserWindow, url) {
