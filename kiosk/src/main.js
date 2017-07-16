@@ -9,6 +9,7 @@ const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const CurrentScreenSettingsManager = require('./js/current_screen_settings_manager');
 const WindowsHelper = require('./js/windows_helper');
+const CronJobsManager = require('./js/cron_jobs_manager');
 
 const log = require('electron-log');
 const hotkey = require('electron-hotkey');
@@ -17,6 +18,7 @@ const {ipcMain} = require('electron');
 const isDev = require('electron-is-dev');
 
 let mainWindow;
+let settingsLoadJob;
 
 setupLogger();
 
@@ -95,6 +97,7 @@ function registerHotKeys() {
 function addHotKeyListeners() {
     app.on('shortcut-pressed', (event) => {
         if (event === 'open-admin-panel') {
+            CronJobsManager.stopJob(settingsLoadJob);
             openAdminPanel();
         }
     });
@@ -122,6 +125,7 @@ function openContentWindow(contentUrl) {
     closeCurrentWindow();
     mainWindow = newWindow;
     hideCursor(mainWindow);
+    settingsLoadJob = CronJobsManager.initSettingsLoadJob(mainWindow);
 }
 
 function closeCurrentWindow() {
