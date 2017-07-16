@@ -208,7 +208,7 @@ function createObjectFromSelectedValues() {
 }
 
 function initSelector(selector, values) {
-    _.forEach(values, value => {
+    _.forEach(_.sortBy(values, 'name'), value => {
         selector.append($('<option>', {
             value: value.id,
             text: value.name
