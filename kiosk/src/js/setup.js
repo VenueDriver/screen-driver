@@ -12,60 +12,16 @@ const _ = require('lodash');
 
 window.$ = window.jQuery = require('jquery');
 
+let selectedVenue;
+let selectedGroup;
+let selectedScreen;
+
+let contentUrl;
+
 let screenSetting;
 let serverData;
 
 $(function () {
-    readLogs();
-    turnOnLogging();
-
-    loadData();
-
-    let selectedVenue;
-    let selectedGroup;
-    let selectedScreen;
-
-    let contentUrl;
-
-    verifySaveButtonState();
-    verifyCancelButtonState();
-
-    function loadData() {
-        DataLoader.loadData().then(data => {
-            serverData = data;
-            loadCurrentSettings();
-        });
-    }
-
-    function loadCurrentSettings() {
-        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            screenSetting = setting;
-            initSelector($('#venue'), serverData.venues);
-            initSelectorValues();
-        });
-    }
-
-    function initSelectorValues() {
-        if (!_.isEmpty(screenSetting)) {
-            findSelectedItems();
-            putPreviouslySelectedDataIntoSelectors();
-        }
-    }
-
-    function findSelectedItems() {
-        selectedVenue = findById(serverData.venues, screenSetting.selectedVenueId);
-        selectedGroup = findById(selectedVenue.screen_groups, screenSetting.selectedGroupId);
-        selectedScreen = findById(selectedGroup.screens, screenSetting.selectedScreenId);
-    }
-
-    function putPreviouslySelectedDataIntoSelectors() {
-        if (screenSetting.contentUrl) {
-            $('#venue').val(screenSetting.selectedVenueId).trigger("change");
-            $('#screen-group').val(screenSetting.selectedGroupId).trigger("change");
-            $('#screen-id').val(screenSetting.selectedScreenId).trigger("change");
-        }
-    }
-
     $("#save").click(function () {
         if (verifySaveButtonState()) {
             saveSelectionInStorage();
@@ -74,9 +30,8 @@ $(function () {
     });
 
     $("#cancel").click(function () {
-        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            openContentWindow(setting.contentUrl);
-        });
+        CurrentScreenSettingsManager.getCurrentSetting()
+            .then(setting => openContentWindow(setting.contentUrl));
     });
 
     $("#venue").change(function () {
@@ -98,75 +53,6 @@ $(function () {
         verifySaveButtonState();
     });
 
-    function defineContentUrl() {
-        contentUrl = SettingsHelper.defineContentUrl(serverData, createObjectFromSelectedValues());
-    }
-
-    function verifySaveButtonState() {
-        if (!contentUrl || selectedScreen.id === 'none') {
-            disableSaveButton();
-            return false;
-        }
-        enableSaveButton();
-        return true;
-    }
-
-    function verifyCancelButtonState() {
-        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            if (_.isEmpty(setting.contentUrl)) {
-                hideCancelButton();
-            } else {
-                showCancelButton();
-            }
-        });
-    }
-
-    function loadValues(sourceDropdown, destinationDropdown) {
-        let selectedDropdownValue = sourceDropdown.find(":selected").val();
-        if (selectedDropdownValue && selectedDropdownValue !== 'none') {
-            let valuesForDropdown = getValuesForDropdown(sourceDropdown, selectedDropdownValue);
-            performValuesLoading(destinationDropdown, valuesForDropdown);
-        }
-    }
-
-    function getValuesForDropdown(sourceDropdown, selectedDropdownValue) {
-        switch (sourceDropdown.attr('id')) {
-            case ('venue'):
-                selectedVenue = findById(serverData.venues, selectedDropdownValue);
-                return selectedVenue.screen_groups;
-            case ('screen-group'):
-                if (selectedVenue) {
-                    selectedGroup = findById(selectedVenue.screen_groups, selectedDropdownValue);
-                    return selectedGroup.screens;
-                }
-        }
-    }
-
-    function findById(items, itemId) {
-        return _.find(items, item => item.id === itemId);
-    }
-
-    function performValuesLoading(destinationDropdown, valuesForDropdown) {
-        destinationDropdown.empty();
-        setDefaultEmptyValue(destinationDropdown);
-        if (valuesForDropdown) {
-            initSelector(destinationDropdown, valuesForDropdown);
-        }
-    }
-
-    function saveSelectionInStorage() {
-        CurrentScreenSettingsManager.saveCurrentSetting(createObjectFromSelectedValues());
-    }
-
-    function createObjectFromSelectedValues() {
-        return {
-            contentUrl: contentUrl,
-            selectedScreenId: selectedScreen ? selectedScreen.id : '',
-            selectedGroupId: selectedGroup ? selectedGroup.id : '',
-            selectedVenueId: selectedVenue ? selectedVenue.id : ''
-        }
-    }
-
     $("#show-logs").click(function () {
         $(this).hide();
         $("#hide-logs").show();
@@ -178,17 +64,159 @@ $(function () {
         $("#show-logs").show();
         $("#logs").hide();
     });
-
-    function initSelector(selector, values) {
-        _.forEach(values, value => {
-            selector.append($('<option>', {
-                value: value.id,
-                text: value.name
-            }));
-        });
-        selector.selectpicker('refresh');
-    }
 });
+
+readLogs();
+turnOnLogging();
+
+loadData();
+
+verifySaveButtonState();
+verifyCancelButtonState();
+
+function readLogs() {
+    let logsFilePath = Logger.getLogsFileLocation();
+    let logs = FileReader.readFile(logsFilePath);
+    insertLogsOnPage(logs);
+}
+
+function insertLogsOnPage(logs) {
+    let logsElement = $('#logs');
+    let logLines = logs.split('\n');
+    _.forEach(logLines, line => {
+        logsElement.append(line);
+        logsElement.append('<br>');
+    });
+}
+
+function turnOnLogging() {
+    window.onerror = function(error, url, line) {
+        ipcRenderer.send('errorInWindow', {error: error, url: url, line: line});
+    };
+}
+
+function loadData() {
+    DataLoader.loadData()
+        .then(data => {
+            serverData = data;
+            loadCurrentSettings();
+        })
+        .catch(error => showError('Couldn\'t load settings'));
+}
+
+function loadCurrentSettings() {
+    CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+        screenSetting = setting;
+        initSelector($('#venue'), serverData.venues);
+        initSelectorValues();
+    });
+}
+
+function initSelectorValues() {
+    if (!_.isEmpty(screenSetting)) {
+        findSelectedItems();
+        putPreviouslySelectedDataIntoSelectors();
+    }
+}
+
+function findSelectedItems() {
+    selectedVenue = findById(serverData.venues, screenSetting.selectedVenueId);
+    selectedGroup = findById(selectedVenue.screen_groups, screenSetting.selectedGroupId);
+    selectedScreen = findById(selectedGroup.screens, screenSetting.selectedScreenId);
+}
+
+function putPreviouslySelectedDataIntoSelectors() {
+    if (screenSetting.contentUrl) {
+        $('#venue').val(screenSetting.selectedVenueId).trigger("change");
+        $('#screen-group').val(screenSetting.selectedGroupId).trigger("change");
+        $('#screen-id').val(screenSetting.selectedScreenId).trigger("change");
+    }
+}
+
+function showError(errorMessage) {
+    $("#config-load-error").text(errorMessage);
+}
+
+
+function defineContentUrl() {
+    contentUrl = SettingsHelper.defineContentUrl(serverData, createObjectFromSelectedValues());
+}
+
+function verifySaveButtonState() {
+    if (!contentUrl || selectedScreen.id === 'none') {
+        disableSaveButton();
+        return false;
+    }
+    enableSaveButton();
+    return true;
+}
+
+function verifyCancelButtonState() {
+    CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+        if (_.isEmpty(setting.contentUrl)) {
+            hideCancelButton();
+        } else {
+            showCancelButton();
+        }
+    });
+}
+
+function loadValues(sourceDropdown, destinationDropdown) {
+    let selectedDropdownValue = sourceDropdown.find(":selected").val();
+    if (selectedDropdownValue && selectedDropdownValue !== 'none') {
+        let valuesForDropdown = getValuesForDropdown(sourceDropdown, selectedDropdownValue);
+        performValuesLoading(destinationDropdown, valuesForDropdown);
+    }
+}
+
+function getValuesForDropdown(sourceDropdown, selectedDropdownValue) {
+    switch (sourceDropdown.attr('id')) {
+        case ('venue'):
+            selectedVenue = findById(serverData.venues, selectedDropdownValue);
+            return selectedVenue.screen_groups;
+        case ('screen-group'):
+            if (selectedVenue) {
+                selectedGroup = findById(selectedVenue.screen_groups, selectedDropdownValue);
+                return selectedGroup.screens;
+            }
+    }
+}
+
+function findById(items, itemId) {
+    return _.find(items, item => item.id === itemId);
+}
+
+function performValuesLoading(destinationDropdown, valuesForDropdown) {
+    destinationDropdown.empty();
+    setDefaultEmptyValue(destinationDropdown);
+    if (valuesForDropdown) {
+        initSelector(destinationDropdown, valuesForDropdown);
+    }
+}
+
+function saveSelectionInStorage() {
+    CurrentScreenSettingsManager.saveCurrentSetting(createObjectFromSelectedValues());
+}
+
+function createObjectFromSelectedValues() {
+    return {
+        contentUrl: contentUrl,
+        selectedScreenId: selectedScreen ? selectedScreen.id : '',
+        selectedGroupId: selectedGroup ? selectedGroup.id : '',
+        selectedVenueId: selectedVenue ? selectedVenue.id : ''
+    }
+}
+
+function initSelector(selector, values) {
+    _.forEach(values, value => {
+        selector.append($('<option>', {
+            value: value.id,
+            text: value.name
+        }));
+    });
+    selector.selectpicker('refresh');
+}
+
 
 function openContentWindow(contentUrl) {
     ipcRenderer.send('open-content-window', contentUrl);
@@ -224,29 +252,4 @@ function showCancelButton() {
 
 function hideCancelButton() {
     $('#cancel').hide();
-}
-
-function showError(errorMessage) {
-    $("#config-load-error").text(errorMessage);
-}
-
-function turnOnLogging() {
-    window.onerror = function(error, url, line) {
-        ipcRenderer.send('errorInWindow', {error: error, url: url, line: line});
-    };
-}
-
-function readLogs() {
-    let logsFilePath = Logger.getLogsFileLocation();
-    let logs = FileReader.readFile(logsFilePath);
-    insertLogsOnPage(logs);
-}
-
-function insertLogsOnPage(logs) {
-    let logsElement = $('#logs');
-    let logLines = logs.split('\n');
-    _.forEach(logLines, line => {
-        logsElement.append(line);
-        logsElement.append('<br>');
-    });
 }
