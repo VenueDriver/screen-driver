@@ -21,6 +21,8 @@ class WindowsHelper {
 
     static addDefaultOptions(windowOptions) {
         windowOptions.kiosk = true;
+        windowOptions.frame = false;
+        windowOptions.fullscreen = true;
         windowOptions.icon = __dirname + '/../../img/icon_128.ico';
     }
 
