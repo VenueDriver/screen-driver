@@ -1,18 +1,14 @@
 const electron = require('electron');
-const {powerSaveBlocker, net} = require('electron');
+const {powerSaveBlocker} = require('electron');
 const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
 const url = require('url');
 const storage = require('electron-json-storage');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../config/app.properties');
-const DataLoader = require('./js/data_loader');
-const {LocalStorageManager, StorageNames} = require('./js/local_storage_manager');
 const CurrentScreenSettingsManager = require('./js/current_screen_settings_manager');
-const SettingsHelper = require('./js/settings_helper');
-
+const WindowsHelper = require('./js/windows_helper');
 
 const log = require('electron-log');
 const hotkey = require('electron-hotkey');
@@ -112,13 +108,13 @@ function addEventListeners() {
 
 function openAdminPanel() {
     let filePath = getAdminPanelUrl();
-    let newWindow = createWindow(filePath);
+    let newWindow = WindowsHelper.createWindow(filePath);
     closeCurrentWindow();
     mainWindow = newWindow;
 }
 
 function openContentWindow(contentUrl) {
-    let newWindow = createWindow(contentUrl, {
+    let newWindow = WindowsHelper.createWindow(contentUrl, {
         webPreferences: {
             preload: path.join(__dirname, 'js/remote_content_preload.js')
         }
@@ -148,50 +144,3 @@ function getAdminPanelUrl() {
     });
 }
 
-function createWindow(url, windowOptions = {}) {
-    windowOptions.kiosk = true;
-
-    windowOptions.icon = __dirname + '/img/icon_128.ico';
-
-    let newWindow = new BrowserWindow(windowOptions);
-
-    if (url.startsWith('file')) {
-        newWindow.loadURL(url);
-    } else {
-        loadUrl(newWindow, url);
-    }
-
-    disableImagesDrugAndDrop(newWindow);
-    openDevTools(newWindow);
-
-    return newWindow;
-}
-
-function disableImagesDrugAndDrop(window) {
-    window.webContents.executeJavaScript('window.ondragstart = function(){return false};');
-}
-
-function openDevTools(window) {
-    if (isDev) {
-        window.webContents.openDevTools();
-    }
-}
-
-function loadUrl(browserWindow, url) {
-    browserWindow.loadURL(url);
-
-    browserWindow.webContents.on('did-fail-load', function (event, errorCode, errorDescription, validatedURL) {
-        log.error(`Can not load url: ${validatedURL} ${errorCode} ${errorDescription}`);
-        // 100-199 Connection related errors (Chromium net errors)
-        if (errorCode > -200 && errorCode <= -100) {
-            setTimeout(function () {
-                try {
-                    log.info("Trying to load url:", validatedURL);
-                    browserWindow.loadURL(url);
-                } catch (error) {
-                    log.info('Content load attempts have been interrupted. Reason: window was closed ')
-                }
-            }, 5000);
-        }
-    });
-}
