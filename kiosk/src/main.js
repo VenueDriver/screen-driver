@@ -40,44 +40,33 @@ function setupLogger() {
 }
 
 function ready() {
-    openWindow();
-}
-
-function openWindow() {
     powerSaveBlocker.start('prevent-display-sleep');
 
-    CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-        if (setting && setting.contentUrl) {
-            reloadCurrentScreenConfig(setting)
-                .then(contentUrl => openContentWindow(contentUrl))
-                .catch(error => {
-                    log.error('Failed to load config. Used old config. Message:', error);
-                    openContentWindow(setting.contentUrl);
-                });
-        } else {
-            openAdminPanel();
-        }
-    });
+    openWindow();
 
     registerHotKeys();
     addHotKeyListeners();
     addEventListeners();
 }
 
-function reloadCurrentScreenConfig(setting) {
-    return DataLoader.loadData()
-        .then(data => {
-            let contentUrl = SettingsHelper.defineContentUrl(data, setting);
-            updateContentUrl(contentUrl);
-            return contentUrl;
-        });
+function openWindow() {
+    CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+        if (setting && setting.contentUrl) {
+            prepareContentWindowData(setting);
+        } else {
+            openAdminPanel();
+        }
+    });
 }
 
-function updateContentUrl(contentUrl, setting) {
-    if (contentUrl !== setting.contentUrl) {
-        setting.contentUrl = contentUrl;
-        CurrentScreenSettingsManager.saveCurrentSetting(setting);
-    }}
+function prepareContentWindowData(setting) {
+    CurrentScreenSettingsManager.reloadCurrentScreenConfig(setting)
+        .then(contentUrl => openContentWindow(contentUrl))
+        .catch(error => {
+            log.error('Failed to load config. Used old config. Message:', error);
+            openContentWindow(setting.contentUrl);
+        });
+}
 
 function setupLoggerProperties() {
     log.transports.file.level = 'error';
