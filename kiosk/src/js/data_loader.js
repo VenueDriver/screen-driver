@@ -1,7 +1,7 @@
 'use strict';
 
 const {net} = require('electron');
-const PropertiesLoader = require('./properties_loader');
+const PropertiesLoader = require('./helpers/properties_load_helper');
 const API = PropertiesLoader.getApiEndpoint();
 
 class DataLoader {

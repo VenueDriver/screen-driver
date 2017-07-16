@@ -1,7 +1,7 @@
 'use strict';
 
-const {LocalStorageManager, StorageNames} = require('./local_storage_manager');
-const SettingsHelper = require('./settings_helper');
+const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
+const SettingsHelper = require('./helpers/settings_helper');
 const DataLoader = require('./data_loader');
 
 const _ = require('lodash');

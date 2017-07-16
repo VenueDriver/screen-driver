@@ -19,7 +19,7 @@ class Logger {
 
     static getLogsFilePath() {
         if (isDev) {
-            return `${__dirname}/..`;
+            return `${__dirname}/../..`;
         }
         return process.cwd();
     }

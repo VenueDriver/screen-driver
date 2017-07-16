@@ -21,7 +21,7 @@ class WindowsHelper {
 
     static addDefaultOptions(windowOptions) {
         windowOptions.kiosk = true;
-        windowOptions.icon = __dirname + '/../img/icon_128.ico';
+        windowOptions.icon = __dirname + '/../../img/icon_128.ico';
     }
 
     static loadWindowContent(url, window) {

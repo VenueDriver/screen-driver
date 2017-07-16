@@ -4,13 +4,10 @@ const app = electron.app;
 
 const path = require('path');
 const url = require('url');
-const storage = require('electron-json-storage');
-const PropertiesReader = require('properties-reader');
-const properties = PropertiesReader(__dirname + '/../config/app.properties');
 const CurrentScreenSettingsManager = require('./js/current_screen_settings_manager');
-const WindowsHelper = require('./js/windows_helper');
-const CronJobsManager = require('./js/cron_jobs_manager');
-const Logger = require('./js/logger');
+const WindowsHelper = require('./js/helpers/windows_helper');
+const CronJobsManager = require('./js/helpers/cron_jobs_helper');
+const Logger = require('./js/logger/logger');
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
@@ -99,7 +96,7 @@ function openAdminPanel() {
 function openContentWindow(contentUrl) {
     let newWindow = WindowsHelper.createWindow(contentUrl, {
         webPreferences: {
-            preload: path.join(__dirname, 'js/remote_content_preload.js')
+            preload: path.join(__dirname, 'js/preload/remote_content_preload.js')
         }
     });
     closeCurrentWindow();
@@ -122,7 +119,7 @@ function hideCursor(window) {
 
 function getAdminPanelUrl() {
     return url.format({
-        pathname: path.join(__dirname, 'index.html'),
+        pathname: path.join(__dirname, 'admin_panel.html'),
         protocol: 'file:',
         slashes: true
     });
