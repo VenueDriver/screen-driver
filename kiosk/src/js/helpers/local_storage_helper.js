@@ -3,9 +3,6 @@
 const storage = require('electron-json-storage');
 
 const StorageNames = {
-    VENUES_STORAGE: 'venues',
-    CONTENT_STORAGE: 'content',
-    SETTINGS_STORAGE: 'settings',
     SELECTED_SETTING_STORAGE: 'selected_setting'
 };
 
