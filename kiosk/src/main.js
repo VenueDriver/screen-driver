@@ -49,7 +49,11 @@ function openWindow() {
     CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
         if (setting && setting.contentUrl) {
             reloadCurrentScreenConfig(setting)
-                .then(contentUrl => openContentWindow(contentUrl));
+                .then(contentUrl => openContentWindow(contentUrl))
+                .catch(error => {
+                    log.error('Failed to load config. Used old config. Message:', error);
+                    openContentWindow(setting.contentUrl);
+                });
         } else {
             openAdminPanel();
         }
@@ -62,8 +66,18 @@ function openWindow() {
 
 function reloadCurrentScreenConfig(setting) {
     return DataLoader.loadData()
-        .then(data => SettingsHelper.defineContentUrl(data, setting));
+        .then(data => {
+            let contentUrl = SettingsHelper.defineContentUrl(data, setting);
+            updateContentUrl(contentUrl);
+            return contentUrl;
+        });
 }
+
+function updateContentUrl(contentUrl, setting) {
+    if (contentUrl !== setting.contentUrl) {
+        setting.contentUrl = contentUrl;
+        CurrentScreenSettingsManager.saveCurrentSetting(setting);
+    }}
 
 function setupLoggerProperties() {
     log.transports.file.level = 'error';

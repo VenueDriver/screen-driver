@@ -55,6 +55,7 @@ class DataLoader {
             response.on('data', data => resolve(data.toString('utf8')));
             response.on('error', error => reject(error))
         });
+        request.on('error', (error) => reject(error));
         request.end();
     }
 }
