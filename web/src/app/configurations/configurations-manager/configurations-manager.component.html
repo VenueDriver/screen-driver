@@ -1,4 +1,9 @@
 <div class="sidebar sidebar-left sidebar-animate sidebar-md-show" [class.active]="showSidebar">
+
+    <div class="side-bar-title">Settings</div>
+
+    <hr>
+
     <ul class="nav navbar-stacked">
         <li *ngFor="let config of configs" [class.active]="isActive(config)">
             <a (click)="onConfigSelected(config)">{{config.name}}
@@ -15,7 +20,7 @@
 
     <div class="form-container">
         <div *ngIf="!creationMode" class="create-btn-container">
-            <button class="btn btn-link" (click)="enableCreationMode()">Create new config</button>
+            <button class="btn btn-link" (click)="enableCreationMode()">Create new setting</button>
         </div>
 
         <div *ngIf="creationMode">
