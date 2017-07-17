@@ -3,6 +3,7 @@ import {Configuration} from "../entities/configuration";
 import {ConfigStateHolderService} from "../configuration-state-manager/config-state-holder.service";
 import {HeaderService} from "../../header/header.service";
 import {ConfigurationsService} from "../configurations.service";
+import {NotificationService} from "../../notifications/notification.service";
 
 @Component({
     selector: 'configurations-manager',
@@ -20,7 +21,8 @@ export class ConfigurationManagerComponent implements OnInit {
 
     constructor(private headerService: HeaderService,
                 private configStateHolderService: ConfigStateHolderService,
-                private configService: ConfigurationsService,) {
+                private configService: ConfigurationsService,
+                private notificationService: NotificationService) {
     }
 
     ngOnInit() {
@@ -69,7 +71,10 @@ export class ConfigurationManagerComponent implements OnInit {
     changeConfigState(config: Configuration, state: boolean) {
         config.enabled = state;
         this.configService.updateConfiguration(config)
-            .subscribe(response => this.configStateHolderService.reloadConfigs());
+            .subscribe(
+                response => this.configStateHolderService.reloadConfigs(),
+                error => this.notificationService.showErrorNotificationBar('Unable to change setting state')
+            );
     }
 
     showCurrentState() {

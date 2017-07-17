@@ -1,8 +1,10 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Output, EventEmitter, Input, OnInit} from '@angular/core';
 import {ConfigurationsService} from "../configurations.service";
 import {Configuration} from "../entities/configuration";
 import {NotificationService} from "../../notifications/notification.service";
 import {ConfigStateHolderService} from "../configuration-state-manager/config-state-holder.service";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'configuration-creator',
@@ -11,10 +13,13 @@ import {ConfigStateHolderService} from "../configuration-state-manager/config-st
 })
 export class ConfigurationCreatorComponent implements OnInit {
 
+    @Input() settings: Configuration[];
+
     @Output() created = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
     config = new Configuration();
+    isInputValid = true;
     priorityTypes = [];
 
     constructor(
@@ -47,5 +52,14 @@ export class ConfigurationCreatorComponent implements OnInit {
 
     prioritySelected(priorityType) {
         this.config.priority = priorityType;
+    }
+
+    validateSettingName() {
+        this.config.name = this.config.name.trim().toLowerCase();
+        this.isInputValid = !_.find(this.settings, s => s.name.toLowerCase() === this.config.name);
+    }
+
+    isButtonEnabled(): boolean {
+        return !_.isEmpty(this.config.name) && this.isInputValid;
     }
 }
