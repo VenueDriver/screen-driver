@@ -3,6 +3,6 @@ export class Configuration {
     name: string;
     enabled = false;
     priority: Object;
-    config: any;
+    config: any = {};
     _rev: number;
 }

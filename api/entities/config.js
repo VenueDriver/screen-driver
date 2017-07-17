@@ -13,7 +13,7 @@ class Config {
             this.id = config.id;
             this.name = config.name;
             this.enabled = config.enabled == null ? false : config.enabled;
-            this.priority = config.priority.id;
+            this.priority = config.priority;
             this.config = config.config == null ? {} : config.config;
             this._rev = config._rev;
         }

@@ -71,4 +71,8 @@ export class ConfigurationManagerComponent implements OnInit {
         this.configService.updateConfiguration(config)
             .subscribe(response => this.configStateHolderService.reloadConfigs());
     }
+
+    showCurrentState() {
+        this.configStateHolderService.changeCurrentConfig(null);
+    }
 }

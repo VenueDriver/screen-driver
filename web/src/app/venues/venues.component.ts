@@ -23,15 +23,15 @@ export class VenuesComponent implements OnInit {
     venuesTree: any;
     content: Content[];
     config: Configuration;
+    settings: Configuration[];
     isShowAddVenueForm = false;
     isCreateContentMode = false;
 
-    constructor(
-        private venuesService: VenuesService,
-        private treeViewService: VenuesTreeViewService,
-        private contentService: ContentService,
-        private configStateHolderService: ConfigStateHolderService,
-    ) { }
+    constructor(private venuesService: VenuesService,
+                private treeViewService: VenuesTreeViewService,
+                private contentService: ContentService,
+                private configStateHolderService: ConfigStateHolderService,) {
+    }
 
     ngOnInit() {
         this.loadVenues();
@@ -39,9 +39,17 @@ export class VenuesComponent implements OnInit {
         this.subscribeToVenueUpdate();
         this.subscribeToContentUpdate();
         this.configStateHolderService.getCurrentConfig().subscribe(config => {
+            if (!config) {
+                let mergedConfig = this.mergeConfigurations(this.settings);
+                this.configStateHolderService.changeCurrentConfig(mergedConfig);
+                return
+            }
+
             this.config = config;
             this.mergeLocationsWithConfig(this.venues, this.config);
         });
+
+        this.configStateHolderService.getAllConfigs().subscribe(settings => this.settings = settings)
     }
 
     subscribeToVenueUpdate() {
@@ -62,17 +70,61 @@ export class VenuesComponent implements OnInit {
             this.venues = response.json();
             this.venuesTree = this.venuesService.getVenuesForTree(this.venues);
 
-            //This is temporary solution until we create priority hierarchy
             if (!this.config) {
-                _initEmptyConfig.call(this);
+                this.initMergedConfig();
             }
             this.mergeLocationsWithConfig(this.venues, this.config);
         });
 
-        function _initEmptyConfig() {
-            this.config = new Configuration();
-            this.config.name = '';
-            this.config.config = {};
+    }
+
+    initMergedConfig() {
+        this.config = this.mergeConfigurations(this.settings);
+    }
+
+    private mergeConfigurations(settings) {
+        let mergedConfig = new Configuration();
+        let enabledSettings = settings.filter((setting => setting.enabled));
+
+        enabledSettings.forEach(setting => {
+            for (let instruction in setting.config) {
+                if (mergedConfig.config.hasOwnProperty(instruction)) {
+                    mergedConfig.config[instruction] = this.resolveSettingConflict(instruction)
+                } else {
+                    mergedConfig.config[instruction] = setting.config[instruction];
+                }
+            }
+        });
+        return mergedConfig;
+    }
+
+    resolveSettingConflict(instruction) {
+        let conflictedSettings = this.settings.filter(setting => setting.enabled && setting.config.hasOwnProperty(instruction));
+        let priorities = this.configStateHolderService.getPriorityTypes();
+        let prioritySetting = this.getMostPrioritySetting(conflictedSettings, priorities);
+        return prioritySetting.config[instruction];
+    }
+
+    private getMostPrioritySetting(conflictedSettings: Configuration[], priorities) {
+        let theMostPrioritySetting = null;
+        conflictedSettings.forEach(setting => {
+            if (!theMostPrioritySetting) {
+                theMostPrioritySetting = setting;
+                return;
+            }
+
+            let settingPriority = _getPriorityIndex(setting.priority);
+            let priorityIndex = _getPriorityIndex(theMostPrioritySetting.priority);
+            if (settingPriority > priorityIndex) {
+                theMostPrioritySetting = setting;
+            }
+        });
+
+        return theMostPrioritySetting;
+
+        function _getPriorityIndex(priorityId) {
+            let priority = priorities.find(element => element.id == priorityId);
+            return priorities.indexOf(priority);
         }
     }
 
@@ -95,7 +147,7 @@ export class VenuesComponent implements OnInit {
 
     mergeLocationsWithConfig(locations, config: Configuration) {
         locations.forEach(location => {
-            if (config.config.hasOwnProperty(location.id)) {
+            if (config && config.config.hasOwnProperty(location.id)) {
                 location.content = this.getContentForVenue(config, location.id);
             } else {
                 location.content = null
