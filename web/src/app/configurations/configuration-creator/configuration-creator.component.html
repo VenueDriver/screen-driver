@@ -1,11 +1,16 @@
-<div class="create-config-corm-container">
+<div class="create-config-corm-container" [class.has-error]="!isInputValid">
+    <div *ngIf="!isInputValid"
+         class="message validation-error">
+        Setting with such name already exists
+    </div>
     <input type="text"
            class="form-control"
            [(ngModel)]="config.name"
+           (ngModelChange)="validateSettingName()"
            input-autofocus>
 
     <div class="btn-container">
         <button class="btn btn-link" (click)="performCancel()">Cancel</button>
-        <button class="btn btn-success" (click)="performSubmit()">Create</button>
+        <button class="btn btn-success" (click)="performSubmit()" [disabled]="!isButtonEnabled()">Create</button>
     </div>
 </div>

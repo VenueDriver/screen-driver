@@ -9,6 +9,7 @@ import {Venue} from "../entities/venue";
 import {ConfigurationsService} from "../../configurations/configurations.service";
 import {Configuration} from "../../configurations/entities/configuration";
 import {ConfigStateHolderService} from "../../configurations/configuration-state-manager/config-state-holder.service";
+import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
 
@@ -20,7 +21,8 @@ export class EditTreeViewNodeFormService {
         private venuesService: VenuesService,
         private contentService: ContentService,
         private configService: ConfigurationsService,
-        private configStateHolderService: ConfigStateHolderService
+        private configStateHolderService: ConfigStateHolderService,
+        private notificationService: NotificationService
     ) { }
 
     getNodeLevelName(node: any): string {
@@ -85,6 +87,9 @@ export class EditTreeViewNodeFormService {
 
     updateConfig(config: Configuration) {
         this.configService.updateConfiguration(config)
-            .subscribe(response => this.configStateHolderService.reloadConfigs());
+            .subscribe(
+                response => this.configStateHolderService.reloadConfigs(),
+                error => this.notificationService.showErrorNotificationBar('Unable to perform setting update operation')
+            );
     }
 }
