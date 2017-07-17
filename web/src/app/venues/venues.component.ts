@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import {Observable} from "rxjs";
 import {ConfigStateHolderService} from "../configurations/configuration-state-manager/config-state-holder.service";
 import {Configuration} from "../configurations/entities/configuration";
+import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
 
 @Component({
     selector: 'venues',
@@ -40,7 +41,7 @@ export class VenuesComponent implements OnInit {
         this.subscribeToContentUpdate();
         this.configStateHolderService.getCurrentConfig().subscribe(config => {
             if (!config) {
-                let mergedConfig = this.mergeConfigurations(this.settings);
+                let mergedConfig = this.mergeSettings();
                 this.configStateHolderService.changeCurrentConfig(mergedConfig);
                 return
             }
@@ -71,61 +72,19 @@ export class VenuesComponent implements OnInit {
             this.venuesTree = this.venuesService.getVenuesForTree(this.venues);
 
             if (!this.config) {
-                this.initMergedConfig();
+                this.config = this.mergeSettings();
             }
             this.mergeLocationsWithConfig(this.venues, this.config);
         });
 
     }
 
-    initMergedConfig() {
-        this.config = this.mergeConfigurations(this.settings);
-    }
-
-    private mergeConfigurations(settings) {
-        let mergedConfig = new Configuration();
-        let enabledSettings = settings.filter((setting => setting.enabled));
-
-        enabledSettings.forEach(setting => {
-            for (let instruction in setting.config) {
-                if (mergedConfig.config.hasOwnProperty(instruction)) {
-                    mergedConfig.config[instruction] = this.resolveSettingConflict(instruction)
-                } else {
-                    mergedConfig.config[instruction] = setting.config[instruction];
-                }
-            }
-        });
-        return mergedConfig;
-    }
-
-    resolveSettingConflict(instruction) {
-        let conflictedSettings = this.settings.filter(setting => setting.enabled && setting.config.hasOwnProperty(instruction));
-        let priorities = this.configStateHolderService.getPriorityTypes();
-        let prioritySetting = this.getMostPrioritySetting(conflictedSettings, priorities);
-        return prioritySetting.config[instruction];
-    }
-
-    private getMostPrioritySetting(conflictedSettings: Configuration[], priorities) {
-        let theMostPrioritySetting = null;
-        conflictedSettings.forEach(setting => {
-            if (!theMostPrioritySetting) {
-                theMostPrioritySetting = setting;
-                return;
-            }
-
-            let settingPriority = _getPriorityIndex(setting.priority);
-            let priorityIndex = _getPriorityIndex(theMostPrioritySetting.priority);
-            if (settingPriority > priorityIndex) {
-                theMostPrioritySetting = setting;
-            }
-        });
-
-        return theMostPrioritySetting;
-
-        function _getPriorityIndex(priorityId) {
-            let priority = priorities.find(element => element.id == priorityId);
-            return priorities.indexOf(priority);
-        }
+    mergeSettings() {
+        return SettingMergeTool
+            .startMerging()
+            .setSettings(this.settings)
+            .setPriorities(this.configStateHolderService.getPriorityTypes())
+            .mergeConfigurations();
     }
 
     loadContent() {
