@@ -1,25 +1,28 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Output, EventEmitter, Input} from '@angular/core';
 import {ConfigurationsService} from "../configurations.service";
 import {Configuration} from "../entities/configuration";
 import {NotificationService} from "../../notifications/notification.service";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'configuration-creator',
     templateUrl: 'configuration-creator.component.html',
     styleUrls: ['configuration-creator.component.sass']
 })
-export class ConfigurationCreatorComponent implements OnInit {
+export class ConfigurationCreatorComponent {
+
+    @Input() settings: Configuration[];
 
     @Output() created = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
     config = new Configuration();
+    isInputValid = true;
 
     constructor(
         private configsService: ConfigurationsService,
         private notificationService: NotificationService) { }
-
-    ngOnInit() { }
 
     performSubmit() {
         this.configsService.createConfiguration(this.config).subscribe(
@@ -38,5 +41,14 @@ export class ConfigurationCreatorComponent implements OnInit {
 
     performCancel() {
         this.cancel.emit();
+    }
+
+    validateSettingName() {
+        this.config.name = this.config.name.trim().toLowerCase();
+        this.isInputValid = !_.find(this.settings, s => s.name.toLowerCase() === this.config.name);
+    }
+
+    isButtonEnabled(): boolean {
+        return !_.isEmpty(this.config.name) && this.isInputValid;
     }
 }
