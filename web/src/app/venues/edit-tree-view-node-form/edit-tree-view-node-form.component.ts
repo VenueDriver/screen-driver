@@ -243,7 +243,6 @@ export class EditTreeViewNodeFormComponent {
     }
 
     isAbleToSetUrl() {
-        console.log(this.currentConfig)
         return !this.createContentMode && this.currentConfig;
     }
 }
