@@ -25,10 +25,11 @@
 
     <hr>
 
+    <div *ngIf="!creationMode" class="create-btn-container" (click)="enableCreationMode()">
+        <button class="btn btn-link">Create new setting</button>
+    </div>
+
     <div class="form-container">
-        <div *ngIf="!creationMode" class="create-btn-container">
-            <button class="btn btn-link" (click)="enableCreationMode()">Create new setting</button>
-        </div>
 
         <div *ngIf="creationMode">
             <configuration-creator
