@@ -1,8 +1,8 @@
 $dropdown-width: 100%
-$dropdown-font-size: 16px
+$dropdown-font-size: 18px
 
 .dropdown
-  font-size: 16px
+  font-size: $dropdown-font-size
 
   .dropdown-toggle
     width: $dropdown-width
@@ -23,21 +23,23 @@ $dropdown-font-size: 16px
     max-height: 260px
     overflow-y: auto
 
-    li a
-      padding: 0 12px
-      min-height: 40px
-      line-height: 40px
-      font-size: $dropdown-font-size
-      overflow: hidden
-
-      .item-with-desc
-        padding: 5px 0
-        line-height: 30px
-
-        .item-desc
-          color: gray
-
-      .item-value
+    li
+      cursor: pointer
+      a
+        padding: 0 12px
+        min-height: 40px
+        line-height: 40px
+        font-size: $dropdown-font-size
         overflow: hidden
-        max-width: $dropdown-width
-        white-space: nowrap
+
+        .item-with-desc
+          padding: 5px 0
+          line-height: 30px
+
+          .item-desc
+            color: gray
+
+        .item-value
+          overflow: hidden
+          max-width: $dropdown-width
+          white-space: nowrap

@@ -55,8 +55,8 @@ export class ConfigurationCreatorComponent implements OnInit {
     }
 
     validateSettingName() {
-        this.config.name = this.config.name.trim().toLowerCase();
-        this.isInputValid = !_.find(this.settings, s => s.name.toLowerCase() === this.config.name);
+        this.config.name = this.config.name.trim();
+        this.isInputValid = !_.find(this.settings, s => s.name === this.config.name);
     }
 
     isButtonEnabled(): boolean {

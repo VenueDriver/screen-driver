@@ -79,5 +79,10 @@ export class ConfigurationManagerComponent implements OnInit {
 
     showCurrentState() {
         this.configStateHolderService.changeCurrentConfig();
+        this.activeConfig = null;
+    }
+
+    isAnyActive(): boolean {
+        return !!this.activeConfig;
     }
 }
