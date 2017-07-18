@@ -1,6 +1,7 @@
 'use strict';
 
 const uuid = require('uuid');
+const PriorityTypes = require('./priority_types');
 
 const Q = require('q');
 let db;
@@ -12,6 +13,7 @@ class Config {
             this.id = config.id;
             this.name = config.name;
             this.enabled = config.enabled == null ? false : config.enabled;
+            this.priority = config.priority;
             this.config = config.config == null ? {} : config.config;
             this._rev = config._rev;
         }
@@ -56,11 +58,12 @@ class Config {
             ExpressionAttributeValues: {
                 ':name': this.name,
                 ':enabled': this.enabled,
+                ':priority': this.priority,
                 ':config': this.config,
                 ':rev': this._rev,
                 ':new_rev': this.increaseRevision(),
             },
-            UpdateExpression: 'SET #config_name = :name, enabled = :enabled, setting = :setting, #rev = :new_rev',
+            UpdateExpression: 'SET #config_name = :name, enabled = :enabled, priority= :priority, setting = :setting, #rev = :new_rev',
             ConditionExpression: "#rev = :rev",
             ReturnValues: 'ALL_NEW',
         };
@@ -94,10 +97,11 @@ class Config {
         if (this.name && this.name.length <= 3) deferred.reject('Config\'s name should be longer then 3 symbols');
         if (typeof(this.enabled) !== 'boolean') deferred.reject('Enabled field should be boolean');
         if (!this.isConfigValid(this.config)) deferred.reject('Enabled field should be boolean');
+        if (!this.priority) deferred.reject('Config couldn\'t be without priority');
+        if (!PriorityTypes.getTypes().find((type) => type.id === this.priority)) deferred.reject('Wrong priority type');
         Config.hasUniqueName(this)
             .then(() => deferred.resolve())
             .fail((errorMessage) => deferred.reject(errorMessage));
-
         return deferred.promise;
     };
 

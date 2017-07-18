@@ -2,6 +2,7 @@ export class Configuration {
     id: string;
     name: string;
     enabled = false;
-    config: any;
+    priority: Object;
+    config: any = {};
     _rev: number;
 }
