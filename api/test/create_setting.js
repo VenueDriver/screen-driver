@@ -24,7 +24,7 @@ describe('create_setting', () => {
     });
 
     it('Should create setting with name', () => {
-        let setting = {name: 'New Year', priority: {'test_id_1': 'test_type_1'}};
+        let setting = {name: 'New Year', priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
@@ -38,7 +38,7 @@ describe('create_setting', () => {
     });
 
     it('Should create enabled setting', () => {
-        let setting = {name: 'New Year', enabled: true, priority: {'test_id_1': 'test_type_1'}};
+        let setting = {name: 'New Year', enabled: true, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
@@ -48,7 +48,7 @@ describe('create_setting', () => {
     });
 
     it('Should create disabled setting', () => {
-        let setting = {name: 'New Year', enabled: false};
+        let setting = {name: 'New Year', enabled: false, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(false);
@@ -102,7 +102,7 @@ describe('create_setting', () => {
     });
 
     it('Shouldn\'t create setting with existing name', () => {
-        let setting = {name: 'New Year'};
+        let setting = {name: 'New Year', priority: 'test_id_1'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Setting with such name already exists');

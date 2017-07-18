@@ -34,7 +34,7 @@ describe('get_settings_list', () => {
     });
 
     it('Should display list with 1 setting', () => {
-        let setting = {name: 'New year', priority: {'test_id_1': 'test_type_1'}};
+        let setting = {name: 'New year', priority: 'test_id_1'};
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);
@@ -45,8 +45,8 @@ describe('get_settings_list', () => {
     });
 
     it('Should display list with 2 configs', () => {
-        let firstSetting = {name: 'New year', priority: {'test_id_1': 'test_type_1'}};
-        let secondSetting = {name: 'July 4', priority: {'test_id_1': 'test_type_1'}};
+        let firstSetting = {name: 'New year', priority: 'test_id_1'};
+        let secondSetting = {name: 'July 4', priority: 'test_id_1'};
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);
@@ -58,7 +58,7 @@ describe('get_settings_list', () => {
     });
 
     it('Should display all properties', () => {
-        let setting = {name: 'July 4', enabled: true, config: {}, priority: {'test_id_1': 'test_type_1'}};
+        let setting = {name: 'July 4', enabled: true, config: {}, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body.settings[0]).to.have.property('id').with.lengthOf(idLength);

@@ -26,8 +26,8 @@ describe('update_setting', () => {
     });
 
     it('Should update the name and increase revision', () => {
-        let newSetting = {name: 'New Year Party'};
-        let updatedSetting = {name: 'New Year', _rev: 0};
+        let newSetting = {name: 'New Year Party', priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', _rev: 0, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
@@ -39,8 +39,8 @@ describe('update_setting', () => {
     });
 
     it('Should enable configuration', () => {
-        let newSetting = {name: 'New Year Party', enabled: false};
-        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0};
+        let newSetting = {name: 'New Year Party', enabled: false, priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
@@ -98,9 +98,9 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update setting with existing name', () => {
-        let existingSetting = {name: 'New Year'};
-        let newSetting = {name: 'New Year Party'};
-        let updatedSetting = {name: 'New Year', _rev: 0};
+        let existingSetting = {name: 'New Year', priority: 'test_id_1'};
+        let newSetting = {name: 'New Year Party', priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', _rev: 0, priority: 'test_id_1'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Setting with such name already exists');
