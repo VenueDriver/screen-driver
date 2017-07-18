@@ -6,22 +6,22 @@ const PriorityTypes = require('./priority_types');
 const Q = require('q');
 let db;
 
-class Config {
-    constructor(config, database) {
+class Setting {
+    constructor(setting, database) {
         if (database) db = database;
-        if (config) {
-            this.id = config.id;
-            this.name = config.name;
-            this.enabled = config.enabled == null ? false : config.enabled;
-            this.priority = config.priority;
-            this.config = config.config == null ? {} : config.config;
-            this._rev = config._rev;
+        if (setting) {
+            this.id = setting.id;
+            this.name = setting.name;
+            this.enabled = setting.enabled == null ? false : setting.enabled;
+            this.priority = setting.priority;
+            this.config = setting.config == null ? {} : setting.config;
+            this._rev = setting._rev;
         }
     }
 
     create() {
         const params = {
-            TableName: process.env.CONFIGS_TABLE,
+            TableName: process.env.SETTINGS_TABLE,
             Item: this,
         };
         let deferred = Q.defer();
@@ -47,12 +47,12 @@ class Config {
     update() {
         let deferred = Q.defer();
         let params = {
-            TableName: process.env.CONFIGS_TABLE,
+            TableName: process.env.SETTINGS_TABLE,
             Key: {
                 id: this.id,
             },
             ExpressionAttributeNames: {
-                '#config_name': 'name',
+                '#setting_name': 'name',
                 '#rev': '_rev',
             },
             ExpressionAttributeValues: {
@@ -63,7 +63,7 @@ class Config {
                 ':rev': this._rev,
                 ':new_rev': this.increaseRevision(),
             },
-            UpdateExpression: 'SET #config_name = :name, enabled = :enabled, priority= :priority, config = :config, #rev = :new_rev',
+            UpdateExpression: 'SET #setting_name = :name, enabled = :enabled, priority= :priority, config = :config, #rev = :new_rev',
             ConditionExpression: "#rev = :rev",
             ReturnValues: 'ALL_NEW',
         };
@@ -72,7 +72,7 @@ class Config {
 
         this.validate()
             .then(() => {
-                return Config.hasUniqueName(this)
+                return Setting.hasUniqueName(this)
             })
             .then(() => _updateInDatabase(params))
             .fail(errorMessage => deferred.reject(errorMessage));
@@ -92,14 +92,15 @@ class Config {
 
     validate() {
         let deferred = Q.defer();
-        if (!this.name) deferred.reject('Config couldn\'t be without name');
-        if (this.name == '') deferred.reject('Config couldn\'t be without name');
-        if (this.name && this.name.length <= 3) deferred.reject('Config\'s name should be longer then 3 symbols');
+        if (!this.name) deferred.reject('Setting couldn\'t be without name');
+        if (this.name == '') deferred.reject('Setting couldn\'t be without name');
+        if (this.name && this.name.length <= 3) deferred.reject('Setting\'s name should be longer then 3 symbols');
         if (typeof(this.enabled) !== 'boolean') deferred.reject('Enabled field should be boolean');
         if (!this.isConfigValid(this.config)) deferred.reject('Enabled field should be boolean');
         if (!this.priority) deferred.reject('Config couldn\'t be without priority');
+
         if (!PriorityTypes.getTypes().find((type) => type.id === this.priority)) deferred.reject('Wrong priority type');
-        Config.hasUniqueName(this)
+        Setting.hasUniqueName(this)
             .then(() => deferred.resolve())
             .fail((errorMessage) => deferred.reject(errorMessage));
         return deferred.promise;
@@ -110,12 +111,12 @@ class Config {
         return true;
     }
 
-    static hasUniqueName(config) {
+    static hasUniqueName(setting) {
         let deferred = Q.defer();
         this.getExistingNames(_getExcludedConfig())
             .then(names => {
-                if (names.includes(config.name)) {
-                    deferred.reject('Config with such name already exists')
+                if (names.includes(setting.name)) {
+                    deferred.reject('Setting with such name already exists')
                 } else {
                     deferred.resolve();
                 }
@@ -123,13 +124,13 @@ class Config {
         return deferred.promise;
 
         function _getExcludedConfig() {
-            return config._rev ? config : null;
+            return setting._rev ? setting : null;
         }
     }
 
     static getExistingNames(excludedVenue) {
         let deferred = Q.defer();
-        let params = {TableName: process.env.CONFIGS_TABLE};
+        let params = {TableName: process.env.SETTINGS_TABLE};
         db.scan(params, (error, data) => {
             if (error) {
                 deferred.reject(error.message);
@@ -156,4 +157,4 @@ class Config {
     };
 }
 
-module.exports = Config;
+module.exports = Setting;

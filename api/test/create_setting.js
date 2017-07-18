@@ -3,7 +3,7 @@
 require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 
-const createFunction = require('../config/create.js');
+const createFunction = require('../setting/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const expect = mochaPlugin.chai.expect;
@@ -14,7 +14,7 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 
 const idLength = 36;
 
-describe('create_config', () => {
+describe('create_setting', () => {
     before((done) => {
         DatabaseCleaner.cleanDatabase().then(() => done());
     });
@@ -23,8 +23,8 @@ describe('create_config', () => {
         DatabaseCleaner.cleanDatabase().then(() => done());
     });
 
-    it('Should create config with name', () => {
-        let config = {name: 'New Year'};
+    it('Should create setting with name', () => {
+        let setting = {name: 'New Year', priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
@@ -34,83 +34,83 @@ describe('create_config', () => {
             expect(body).to.have.property('_rev').that.equal(0);
         };
 
-        return MultiOperationHelper.performCreateTest(config, expectations);
+        return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
-    it('Should create enabled config', () => {
-        let config = {name: 'New Year', enabled: true};
+    it('Should create enabled setting', () => {
+        let setting = {name: 'New Year', enabled: true, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
         };
 
-        return MultiOperationHelper.performCreateTest(config, expectations);
+        return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
-    it('Should create disabled config', () => {
-        let config = {name: 'New Year', enabled: false};
+    it('Should create disabled setting', () => {
+        let setting = {name: 'New Year', enabled: false, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(false);
         };
 
-        return MultiOperationHelper.performCreateTest(config, expectations);
+        return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
-    it('Shouldn\'t create config without name', () => {
-        let config = {};
+    it('Shouldn\'t create setting without name', () => {
+        let setting = {};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Config couldn\'t be without name');
+            expect(body).to.have.property('message').that.equal('Setting couldn\'t be without name');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.performCreateTest(config, expectations);
+        return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
-    it('Shouldn\'t create config with empty name', () => {
-        let config = {};
+    it('Shouldn\'t create setting with empty name', () => {
+        let setting = {};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Config couldn\'t be without name');
+            expect(body).to.have.property('message').that.equal('Setting couldn\'t be without name');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.performCreateTest(config, expectations);
+        return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
-    it('Shouldn\'t create config with name length 3 or less', () => {
-        let config = {name: 'NYP'};
+    it('Shouldn\'t create setting with name length 3 or less', () => {
+        let setting = {name: 'NYP'};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Config\'s name should be longer then 3 symbols');
+            expect(body).to.have.property('message').that.equal('Setting\'s name should be longer then 3 symbols');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.performCreateTest(config, expectations);
+        return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
-    it('Shouldn\'t create config with non-boolean enable field', () => {
-        let config = {name: 'New Year', enabled: "string"};
+    it('Shouldn\'t create setting with non-boolean enable field', () => {
+        let setting = {name: 'New Year', enabled: "string"};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Enabled field should be boolean');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.performCreateTest(config, expectations);
+        return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
-    it('Shouldn\'t create config with existing name', () => {
-        let config = {name: 'New Year'};
+    it('Shouldn\'t create setting with existing name', () => {
+        let setting = {name: 'New Year', priority: 'test_id_1'};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Config with such name already exists');
+            expect(body).to.have.property('message').that.equal('Setting with such name already exists');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.create(config)
-            .then(() => MultiOperationHelper.performCreateTest(config, expectations));
+        return MultiOperationHelper.create(setting)
+            .then(() => MultiOperationHelper.performCreateTest(setting, expectations));
     });
 
 });

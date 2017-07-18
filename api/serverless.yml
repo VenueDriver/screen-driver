@@ -9,7 +9,7 @@ provider:
     STAGE: ${opt:stage}
     CONTENT_TABLE: content
     VENUES_TABLE: venues
-    CONFIGS_TABLE: configs
+    SETTINGS_TABLE: settings
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -17,7 +17,7 @@ provider:
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*"
 
 functions:
-  venues_list:
+  get_venues_list:
     handler: venues/list.list
     events:
       - http:
@@ -49,7 +49,7 @@ functions:
           method: delete
           cors: true
 
-  content_list:
+  get_content_list:
     handler: content/list.list
     events:
       - http:
@@ -81,27 +81,27 @@ functions:
           method: delete
           cors: true
 
-  config_list:
-    handler: config/list.list
+  get_settings_list:
+    handler: setting/list.list
     events:
       - http:
-          path: api/configs
+          path: api/settings
           method: get
           cors: true
 
-  create_config:
-    handler: config/create.create
+  create_setting:
+    handler: setting/create.create
     events:
       - http:
-          path: api/configs
+          path: api/settings
           method: post
           cors: true
 
-  update_config:
-    handler: config/update.update
+  update_setting:
+    handler: setting/update.update
     events:
       - http:
-          path: api/configs/{id}
+          path: api/settings/{id}
           method: put
           cors: true
 
@@ -153,7 +153,7 @@ resources:
           WriteCapacityUnits: 1
         TableName: ${self:provider.environment.VENUES_TABLE}
 
-    ConfigsTable:
+    SettingsTable:
           Type: 'AWS::DynamoDB::Table'
           Properties:
             AttributeDefinitions:
@@ -167,4 +167,4 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
-            TableName: ${self:provider.environment.CONFIGS_TABLE}
+            TableName: ${self:provider.environment.SETTINGS_TABLE}
