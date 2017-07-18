@@ -5,7 +5,8 @@ const responseHelper = require('../helpers/http_response_helper');
 const PriorityTypes = require('../entities/priority_types');
 
 module.exports.list = (event, context, callback) => {
-    dbHelper.findAll(process.env.CONFIGS_TABLE)
+
+    dbHelper.findAll(process.env.SETTINGS_TABLE)
         .then(settings => callback(null, responseHelper.createSuccessfulResponse(generateResponseData(settings))))
         .fail(error => callback(null, responseHelper.createResponseWithError(500, error.message)));
 };

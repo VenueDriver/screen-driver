@@ -26,8 +26,8 @@ describe('update_setting', () => {
     });
 
     it('Should update the name and increase revision', () => {
-        let newConfig = {name: 'New Year Party'};
-        let updatedConfig = {name: 'New Year', _rev: 0};
+        let newConfig = {name: 'New Year Party', priority: 'test_id_1'};
+        let updatedConfig = {name: 'New Year', _rev: 0, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
@@ -39,8 +39,8 @@ describe('update_setting', () => {
     });
 
     it('Should enable configuration', () => {
-        let newConfig = {name: 'New Year Party', enabled: false};
-        let updatedConfig = {name: 'New Year', enabled: true, _rev: 0};
+        let newConfig = {name: 'New Year Party', enabled: false, priority: 'test_id_1'};
+        let updatedConfig = {name: 'New Year', enabled: true, _rev: 0, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
@@ -54,7 +54,7 @@ describe('update_setting', () => {
         let updatedConfig = {_rev: 0};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Config couldn\'t be without name');
+            expect(body).to.have.property('message').that.equal('Setting couldn\'t be without name');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
@@ -66,7 +66,7 @@ describe('update_setting', () => {
         let updatedConfig = {name: '', _rev: 0};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Config couldn\'t be without name');
+            expect(body).to.have.property('message').that.equal('Setting couldn\'t be without name');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
@@ -78,7 +78,7 @@ describe('update_setting', () => {
         let updatedConfig = {name: 'NYP', _rev: 0};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Config\'s name should be longer then 3 symbols');
+            expect(body).to.have.property('message').that.equal('Setting\'s name should be longer then 3 symbols');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
@@ -98,12 +98,12 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update setting with existing name', () => {
-        let existingConfig = {name: 'New Year'};
-        let newConfig = {name: 'New Year Party'};
-        let updatedConfig = {name: 'New Year', _rev: 0};
+        let existingConfig = {name: 'New Year', priority: 'test_id_1'};
+        let newConfig = {name: 'New Year Party', priority: 'test_id_1'};
+        let updatedConfig = {name: 'New Year', _rev: 0, priority: 'test_id_1'};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Config with such name already exists');
+            expect(body).to.have.property('message').that.equal('Setting with such name already exists');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 

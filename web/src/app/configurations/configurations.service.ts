@@ -4,7 +4,7 @@ import {Configuration} from "./entities/configuration";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 
-const CONFIGS_API_URL = `${environment.apiUrl}/api/configs`;
+const CONFIGS_API_URL = `${environment.apiUrl}/api/settings`;
 
 @Injectable()
 export class ConfigurationsService {
