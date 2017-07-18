@@ -60,7 +60,7 @@ class Config {
                 ':rev': this._rev,
                 ':new_rev': this.increaseRevision(),
             },
-            UpdateExpression: 'SET #config_name = :name, enabled = :enabled, setting = :setting, #rev = :new_rev',
+            UpdateExpression: 'SET #config_name = :name, enabled = :enabled, config = :config, #rev = :new_rev',
             ConditionExpression: "#rev = :rev",
             ReturnValues: 'ALL_NEW',
         };
