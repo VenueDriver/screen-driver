@@ -5,8 +5,15 @@
     <hr>
 
     <ul class="nav navbar-stacked">
+
+        <li [class.active]="!isAnyActive()">
+            <a class="default-button" (click)="showCurrentState()">Actual</a>
+        </li>
+
         <li *ngFor="let config of configs" [class.active]="isActive(config)">
-            <a (click)="onConfigSelected(config)">{{config.name}}
+            <a (click)="onConfigSelected(config)">
+                {{config.name}}
+
                 <toggle-button class="switcher"
                                [enabled]="config.enabled"
                                (changed)="changeConfigState(config, $event)"
@@ -18,10 +25,11 @@
 
     <hr>
 
+    <div *ngIf="!creationMode" class="create-btn-container" (click)="enableCreationMode()">
+        <button class="btn btn-link">Create new setting</button>
+    </div>
+
     <div class="form-container">
-        <div *ngIf="!creationMode" class="create-btn-container">
-            <button class="btn btn-link" (click)="enableCreationMode()">Create new setting</button>
-        </div>
 
         <div *ngIf="creationMode">
             <configuration-creator

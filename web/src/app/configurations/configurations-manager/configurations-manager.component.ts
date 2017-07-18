@@ -76,4 +76,13 @@ export class ConfigurationManagerComponent implements OnInit {
                 error => this.notificationService.showErrorNotificationBar('Unable to change setting state')
             );
     }
+
+    showCurrentState() {
+        this.configStateHolderService.changeCurrentConfig();
+        this.activeConfig = null;
+    }
+
+    isAnyActive(): boolean {
+        return !!this.activeConfig;
+    }
 }

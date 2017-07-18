@@ -241,4 +241,8 @@ export class EditTreeViewNodeFormComponent {
             this.nodeData.id = this.editFormService.findNewNodeId(this.updatedVenue, this.node);
         }
     }
+
+    isAbleToSetUrl() {
+        return !this.createContentMode && this.currentConfig;
+    }
 }

@@ -9,20 +9,24 @@ export class ConfigStateHolderService {
 
     private configs: Subject<Configuration[]> = new Subject();
     private currentConfig: Subject<Configuration> = new Subject();
+    private priorityTypes: any[];
 
     constructor(private configurationsService: ConfigurationsService) {
     }
 
     reloadConfigs() {
         this.configurationsService.loadConfigs()
-            .subscribe(response => this.changeConfigs(response.json()));
+            .subscribe(response => {
+                this.changeConfigs(response.json().settings);
+                this.priorityTypes = response.json().priorityTypes;
+            });
     }
 
     changeConfigs(configs: Configuration[]) {
         this.configs.next(configs);
     }
 
-    changeCurrentConfig(config: Configuration) {
+    changeCurrentConfig(config?: Configuration) {
         this.currentConfig.next(config);
     }
 
@@ -32,5 +36,9 @@ export class ConfigStateHolderService {
 
     getCurrentConfig(): Observable<Configuration> {
         return this.currentConfig.asObservable();
+    }
+
+    getPriorityTypes(): any[] {
+        return this.priorityTypes;
     }
 }

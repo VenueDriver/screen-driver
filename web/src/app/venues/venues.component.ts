@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import {Observable} from "rxjs";
 import {ConfigStateHolderService} from "../configurations/configuration-state-manager/config-state-holder.service";
 import {Configuration} from "../configurations/entities/configuration";
+import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
 
 @Component({
     selector: 'venues',
@@ -23,15 +24,15 @@ export class VenuesComponent implements OnInit {
     venuesTree: any;
     content: Content[];
     config: Configuration;
+    settings: Configuration[];
     isShowAddVenueForm = false;
     isCreateContentMode = false;
 
-    constructor(
-        private venuesService: VenuesService,
-        private treeViewService: VenuesTreeViewService,
-        private contentService: ContentService,
-        private configStateHolderService: ConfigStateHolderService,
-    ) { }
+    constructor(private venuesService: VenuesService,
+                private treeViewService: VenuesTreeViewService,
+                private contentService: ContentService,
+                private configStateHolderService: ConfigStateHolderService,) {
+    }
 
     ngOnInit() {
         this.loadVenues();
@@ -39,9 +40,17 @@ export class VenuesComponent implements OnInit {
         this.subscribeToVenueUpdate();
         this.subscribeToContentUpdate();
         this.configStateHolderService.getCurrentConfig().subscribe(config => {
+            if (!config) {
+                let mergedConfig = this.mergeSettings();
+                this.configStateHolderService.changeCurrentConfig(mergedConfig);
+                return
+            }
+
             this.config = config;
             this.mergeLocationsWithConfig(this.venues, this.config);
         });
+
+        this.configStateHolderService.getAllConfigs().subscribe(settings => this.settings = settings)
     }
 
     subscribeToVenueUpdate() {
@@ -62,18 +71,20 @@ export class VenuesComponent implements OnInit {
             this.venues = response.json();
             this.venuesTree = this.venuesService.getVenuesForTree(this.venues);
 
-            //This is temporary solution until we create priority hierarchy
             if (!this.config) {
-                _initEmptyConfig.call(this);
+                this.config = this.mergeSettings();
             }
             this.mergeLocationsWithConfig(this.venues, this.config);
         });
 
-        function _initEmptyConfig() {
-            this.config = new Configuration();
-            this.config.name = '';
-            this.config.config = {};
-        }
+    }
+
+    mergeSettings() {
+        return SettingMergeTool
+            .startMerging()
+            .setSettings(this.settings)
+            .setPriorities(this.configStateHolderService.getPriorityTypes())
+            .mergeConfigurations();
     }
 
     loadContent() {
@@ -95,7 +106,7 @@ export class VenuesComponent implements OnInit {
 
     mergeLocationsWithConfig(locations, config: Configuration) {
         locations.forEach(location => {
-            if (config.config.hasOwnProperty(location.id)) {
+            if (config && config.config.hasOwnProperty(location.id)) {
                 location.content = this.getContentForVenue(config, location.id);
             } else {
                 location.content = null

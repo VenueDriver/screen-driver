@@ -29,7 +29,7 @@ describe('get_settings_list', () => {
     it('Should display empty list', () => {
         return MultiOperationHelper.getAll().then((response) => {
             let body = JSON.parse(response.body);
-            expect(body).to.be.an('array').that.is.empty;
+            expect(body.settings).to.be.an('array').that.is.empty;
         });
     });
 
@@ -38,19 +38,19 @@ describe('get_settings_list', () => {
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);
-            expect(body).is.an('array').that.lengthOf(1);
+            expect(body.settings).is.an('array').that.lengthOf(1);
         };
 
         return MultiOperationHelper.performListTest(config, expectations);
     });
 
     it('Should display list with 2 configs', () => {
-        let firstConfig = {name: 'New year'};
-        let secondConfig = {name: 'July 4'};
+        let firstConfig = {name: 'New year', priority: {'test_id_1': 'test_type_1'}};
+        let secondConfig = {name: 'July 4', priority: {'test_id_1': 'test_type_1'}};
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);
-            expect(body).is.an('array').that.lengthOf(2);
+            expect(body.settings).is.an('array').that.lengthOf(2);
         };
 
         return MultiOperationHelper.create(firstConfig)
@@ -58,14 +58,14 @@ describe('get_settings_list', () => {
     });
 
     it('Should display all properties', () => {
-        let config = {name: 'July 4', enabled: true, config: {}};
+        let config = {name: 'July 4', enabled: true, config: {}, priority: {'test_id_1': 'test_type_1'}};
 
         let expectations = (body) => {
-            expect(body[0]).to.have.property('id').with.lengthOf(idLength);
-            expect(body[0]).to.have.property('name').that.equal('July 4');
-            expect(body[0]).to.have.property('enabled').that.equal(true);
-            expect(body[0]).to.have.property('config').to.be.an('object').that.is.empty;
-            expect(body[0]).to.have.property('_rev').that.equal(0);
+            expect(body.settings[0]).to.have.property('id').with.lengthOf(idLength);
+            expect(body.settings[0]).to.have.property('name').that.equal('July 4');
+            expect(body.settings[0]).to.have.property('enabled').that.equal(true);
+            expect(body.settings[0]).to.have.property('config').to.be.an('object').that.is.empty;
+            expect(body.settings[0]).to.have.property('_rev').that.equal(0);
         };
 
         return MultiOperationHelper.performListTest(config, expectations)
