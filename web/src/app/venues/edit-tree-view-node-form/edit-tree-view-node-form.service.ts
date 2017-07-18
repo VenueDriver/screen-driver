@@ -20,8 +20,8 @@ export class EditTreeViewNodeFormService {
         private treeViewService: VenuesTreeViewService,
         private venuesService: VenuesService,
         private contentService: ContentService,
-        private configService: SettingsService,
-        private configStateHolderService: SettingStateHolderService,
+        private settingsService: SettingsService,
+        private settingStateHolderService: SettingStateHolderService,
         private notificationService: NotificationService
     ) { }
 
@@ -79,16 +79,16 @@ export class EditTreeViewNodeFormService {
         return item.id;
     }
 
-    getSettingToUpdate(currentConfig: Setting, nodeData: any) {
-        let configToUpdate = _.clone(currentConfig);
-        configToUpdate.config[nodeData.id] = nodeData.content.id;
-        return configToUpdate;
+    getSettingToUpdate(currentSetting: Setting, nodeData: any) {
+        let settingToUpdate = _.clone(currentSetting);
+        settingToUpdate.config[nodeData.id] = nodeData.content.id;
+        return settingToUpdate;
     }
 
-    updateSetting(config: Setting) {
-        this.configService.updateSetting(config)
+    updateSetting(setting: Setting) {
+        this.settingsService.updateSetting(setting)
             .subscribe(
-                response => this.configStateHolderService.reloadSetting(),
+                response => this.settingStateHolderService.reloadSetting(),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform setting update operation')
             );
     }
