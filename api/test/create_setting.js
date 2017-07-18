@@ -3,7 +3,7 @@
 require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 
-const createFunction = require('../config/create.js');
+const createFunction = require('../setting/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const expect = mochaPlugin.chai.expect;
@@ -14,7 +14,7 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 
 const idLength = 36;
 
-describe('create_config', () => {
+describe('create_setting', () => {
     before((done) => {
         DatabaseCleaner.cleanDatabase().then(() => done());
     });
@@ -23,7 +23,7 @@ describe('create_config', () => {
         DatabaseCleaner.cleanDatabase().then(() => done());
     });
 
-    it('Should create config with name', () => {
+    it('Should create setting with name', () => {
         let config = {name: 'New Year'};
 
         let expectations = (body) => {
@@ -37,7 +37,7 @@ describe('create_config', () => {
         return MultiOperationHelper.performCreateTest(config, expectations);
     });
 
-    it('Should create enabled config', () => {
+    it('Should create enabled setting', () => {
         let config = {name: 'New Year', enabled: true};
 
         let expectations = (body) => {
@@ -47,7 +47,7 @@ describe('create_config', () => {
         return MultiOperationHelper.performCreateTest(config, expectations);
     });
 
-    it('Should create disabled config', () => {
+    it('Should create disabled setting', () => {
         let config = {name: 'New Year', enabled: false};
 
         let expectations = (body) => {
@@ -57,7 +57,7 @@ describe('create_config', () => {
         return MultiOperationHelper.performCreateTest(config, expectations);
     });
 
-    it('Shouldn\'t create config without name', () => {
+    it('Shouldn\'t create setting without name', () => {
         let config = {};
 
         let expectations = (body, response) => {
@@ -68,7 +68,7 @@ describe('create_config', () => {
         return MultiOperationHelper.performCreateTest(config, expectations);
     });
 
-    it('Shouldn\'t create config with empty name', () => {
+    it('Shouldn\'t create setting with empty name', () => {
         let config = {};
 
         let expectations = (body, response) => {
@@ -79,7 +79,7 @@ describe('create_config', () => {
         return MultiOperationHelper.performCreateTest(config, expectations);
     });
 
-    it('Shouldn\'t create config with name length 3 or less', () => {
+    it('Shouldn\'t create setting with name length 3 or less', () => {
         let config = {name: 'NYP'};
 
         let expectations = (body, response) => {
@@ -90,7 +90,7 @@ describe('create_config', () => {
         return MultiOperationHelper.performCreateTest(config, expectations);
     });
 
-    it('Shouldn\'t create config with non-boolean enable field', () => {
+    it('Shouldn\'t create setting with non-boolean enable field', () => {
         let config = {name: 'New Year', enabled: "string"};
 
         let expectations = (body, response) => {
@@ -101,7 +101,7 @@ describe('create_config', () => {
         return MultiOperationHelper.performCreateTest(config, expectations);
     });
 
-    it('Shouldn\'t create config with existing name', () => {
+    it('Shouldn\'t create setting with existing name', () => {
         let config = {name: 'New Year'};
 
         let expectations = (body, response) => {

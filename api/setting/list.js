@@ -6,7 +6,7 @@ const PriorityTypes = require('../entities/priority_types');
 
 module.exports.list = (event, context, callback) => {
     dbHelper.findAll(process.env.CONFIGS_TABLE)
-        .then(config => callback(null, responseHelper.createSuccessfulResponse(generateResponseData(config))))
+        .then(settings => callback(null, responseHelper.createSuccessfulResponse(generateResponseData(settings))))
         .fail(error => callback(null, responseHelper.createResponseWithError(500, error.message)));
 };
 

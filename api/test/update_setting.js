@@ -3,8 +3,8 @@
 require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 
-const createFunction = require('../config/create');
-const updateFunction = require('../config/update');
+const createFunction = require('../setting/create');
+const updateFunction = require('../setting/update');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const expect = mochaPlugin.chai.expect;
@@ -16,7 +16,7 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 
 const idLength = 36;
 
-describe('update_config', () => {
+describe('update_setting', () => {
     before((done) => {
         DatabaseCleaner.cleanDatabase().then(() => done());
     });
@@ -49,7 +49,7 @@ describe('update_config', () => {
         return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
     });
 
-    it('Shouldn\'t update config without name', () => {
+    it('Shouldn\'t update setting without name', () => {
         let newConfig = {name: 'New Year'};
         let updatedConfig = {_rev: 0};
 
@@ -61,7 +61,7 @@ describe('update_config', () => {
         return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
     });
 
-    it('Shouldn\'t update config with empty name', () => {
+    it('Shouldn\'t update setting with empty name', () => {
         let newConfig = {name: 'New Year'};
         let updatedConfig = {name: '', _rev: 0};
 
@@ -73,7 +73,7 @@ describe('update_config', () => {
         return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
     });
 
-    it('Shouldn\'t update config with name length 3 or less', () => {
+    it('Shouldn\'t update setting with name length 3 or less', () => {
         let newConfig = {name: 'New Year'};
         let updatedConfig = {name: 'NYP', _rev: 0};
 
@@ -85,7 +85,7 @@ describe('update_config', () => {
         return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
     });
 
-    it('Shouldn\'t update config with non-boolean enable field', () => {
+    it('Shouldn\'t update setting with non-boolean enable field', () => {
         let newConfig = {name: 'New Year'};
         let updatedConfig = {name: 'New Year', enabled: 'string', _rev: 0};
 
@@ -97,7 +97,7 @@ describe('update_config', () => {
         return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
     });
 
-    it('Shouldn\'t update config with existing name', () => {
+    it('Shouldn\'t update setting with existing name', () => {
         let existingConfig = {name: 'New Year'};
         let newConfig = {name: 'New Year Party'};
         let updatedConfig = {name: 'New Year', _rev: 0};
@@ -111,5 +111,5 @@ describe('update_config', () => {
             .then(() => MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations));
     });
 
-    //Todo: implement tests for updating the config field;
+    //Todo: implement tests for updating the setting field;
 });
