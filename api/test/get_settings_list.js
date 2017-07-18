@@ -34,31 +34,31 @@ describe('get_settings_list', () => {
     });
 
     it('Should display list with 1 setting', () => {
-        let config = {name: 'New year', priority: {'test_id_1': 'test_type_1'}};
+        let setting = {name: 'New year', priority: {'test_id_1': 'test_type_1'}};
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);
             expect(body.settings).is.an('array').that.lengthOf(1);
         };
 
-        return MultiOperationHelper.performListTest(config, expectations);
+        return MultiOperationHelper.performListTest(setting, expectations);
     });
 
     it('Should display list with 2 configs', () => {
-        let firstConfig = {name: 'New year', priority: {'test_id_1': 'test_type_1'}};
-        let secondConfig = {name: 'July 4', priority: {'test_id_1': 'test_type_1'}};
+        let firstSetting = {name: 'New year', priority: {'test_id_1': 'test_type_1'}};
+        let secondSetting = {name: 'July 4', priority: {'test_id_1': 'test_type_1'}};
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);
             expect(body.settings).is.an('array').that.lengthOf(2);
         };
 
-        return MultiOperationHelper.create(firstConfig)
-            .then(() => MultiOperationHelper.performListTest(secondConfig, expectations));
+        return MultiOperationHelper.create(firstSetting)
+            .then(() => MultiOperationHelper.performListTest(secondSetting, expectations));
     });
 
     it('Should display all properties', () => {
-        let config = {name: 'July 4', enabled: true, config: {}, priority: {'test_id_1': 'test_type_1'}};
+        let setting = {name: 'July 4', enabled: true, config: {}, priority: {'test_id_1': 'test_type_1'}};
 
         let expectations = (body) => {
             expect(body.settings[0]).to.have.property('id').with.lengthOf(idLength);
@@ -68,7 +68,7 @@ describe('get_settings_list', () => {
             expect(body.settings[0]).to.have.property('_rev').that.equal(0);
         };
 
-        return MultiOperationHelper.performListTest(config, expectations)
+        return MultiOperationHelper.performListTest(setting, expectations)
     });
 
 });
