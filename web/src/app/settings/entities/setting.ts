@@ -1,4 +1,4 @@
-export class Configuration {
+export class Setting {
     id: string;
     name: string;
     enabled = false;

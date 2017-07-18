@@ -8,8 +8,8 @@ import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service
 
 import * as _ from 'lodash';
 import {Observable} from "rxjs";
-import {ConfigStateHolderService} from "../configurations/configuration-state-manager/config-state-holder.service";
-import {Configuration} from "../configurations/entities/configuration";
+import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
+import {Setting} from "../settings/entities/setting";
 import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
 
 @Component({
@@ -23,15 +23,15 @@ export class VenuesComponent implements OnInit {
     venues: Venue[];
     venuesTree: any;
     content: Content[];
-    config: Configuration;
-    settings: Configuration[];
+    setting: Setting;
+    settings: Setting[];
     isShowAddVenueForm = false;
     isCreateContentMode = false;
 
     constructor(private venuesService: VenuesService,
                 private treeViewService: VenuesTreeViewService,
                 private contentService: ContentService,
-                private configStateHolderService: ConfigStateHolderService,) {
+                private settingStateHolderService: SettingStateHolderService,) {
     }
 
     ngOnInit() {
@@ -39,18 +39,18 @@ export class VenuesComponent implements OnInit {
         this.loadContent();
         this.subscribeToVenueUpdate();
         this.subscribeToContentUpdate();
-        this.configStateHolderService.getCurrentConfig().subscribe(config => {
+        this.settingStateHolderService.getCurrentSetting().subscribe(config => {
             if (!config) {
                 let mergedConfig = this.mergeSettings();
-                this.configStateHolderService.changeCurrentConfig(mergedConfig);
+                this.settingStateHolderService.changeCurrentSetting(mergedConfig);
                 return
             }
 
-            this.config = config;
-            this.mergeLocationsWithConfig(this.venues, this.config);
+            this.setting = config;
+            this.mergeLocationsWithConfig(this.venues, this.setting);
         });
 
-        this.configStateHolderService.getAllConfigs().subscribe(settings => this.settings = settings)
+        this.settingStateHolderService.getAllSettings().subscribe(settings => this.settings = settings)
     }
 
     subscribeToVenueUpdate() {
@@ -71,10 +71,10 @@ export class VenuesComponent implements OnInit {
             this.venues = response.json();
             this.venuesTree = this.venuesService.getVenuesForTree(this.venues);
 
-            if (!this.config) {
-                this.config = this.mergeSettings();
+            if (!this.setting) {
+                this.setting = this.mergeSettings();
             }
-            this.mergeLocationsWithConfig(this.venues, this.config);
+            this.mergeLocationsWithConfig(this.venues, this.setting);
         });
 
     }
@@ -83,8 +83,8 @@ export class VenuesComponent implements OnInit {
         return SettingMergeTool
             .startMerging()
             .setSettings(this.settings)
-            .setPriorities(this.configStateHolderService.getPriorityTypes())
-            .mergeConfigurations();
+            .setPriorities(this.settingStateHolderService.getPriorityTypes())
+            .mergeSettings();
     }
 
     loadContent() {
@@ -104,22 +104,22 @@ export class VenuesComponent implements OnInit {
         this.isCreateContentMode = createContentMode;
     }
 
-    mergeLocationsWithConfig(locations, config: Configuration) {
+    mergeLocationsWithConfig(locations, setting: Setting) {
         locations.forEach(location => {
-            if (config && config.config.hasOwnProperty(location.id)) {
-                location.content = this.getContentForVenue(config, location.id);
+            if (setting && setting.config.hasOwnProperty(location.id)) {
+                location.content = this.getContentForVenue(setting, location.id);
             } else {
                 location.content = null
             }
 
             if (location.hasOwnProperty('children')) {
-                this.mergeLocationsWithConfig(location.children, config)
+                this.mergeLocationsWithConfig(location.children, setting)
             }
         });
     }
 
-    getContentForVenue(config, venueId) {
-        let contentId = config.config[venueId];
+    getContentForVenue(setting, venueId) {
+        let contentId = setting.config[venueId];
         return _.find(this.content, {id: contentId});
     }
 }

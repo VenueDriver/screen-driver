@@ -6,10 +6,10 @@ import {TreeComponent} from "angular-tree-component/dist/angular-tree-component"
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {Content} from "../../content/content";
 import {VenuesService} from "../venues.service";
-import {Configuration} from "../../configurations/entities/configuration";
+import {Setting} from "../../settings/entities/setting";
 
 import * as _ from 'lodash';
-import {ConfigStateHolderService} from "../../configurations/configuration-state-manager/config-state-holder.service";
+import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
 
@@ -27,7 +27,7 @@ export class VenuesTreeViewComponent implements OnInit {
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
-    currentConfig: Configuration;
+    currentSetting: Setting;
     options: any;
     actionMapping: any;
     currentNodeData: any;
@@ -38,14 +38,14 @@ export class VenuesTreeViewComponent implements OnInit {
     constructor(
         private venuesService: VenuesService,
         private treeViewService: VenuesTreeViewService,
-        private configStateHolderService: ConfigStateHolderService,
+        private settingStateHolderService: SettingStateHolderService,
     ) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
         this.venuesService.getVenueUpdateSubscription().subscribe(() => this.onVenueUpdate());
-        this.configStateHolderService.getCurrentConfig().subscribe(config => {
-            this.currentConfig = config;
+        this.settingStateHolderService.getCurrentSetting().subscribe(setting => {
+            this.currentSetting = setting;
         });
     }
 
@@ -135,7 +135,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isAllowToEditNode() {
-        return _.isEmpty(this.currentNodeData) && this.currentConfig;
+        return _.isEmpty(this.currentNodeData) && this.currentSetting;
     }
 
     performCancel(node: any) {

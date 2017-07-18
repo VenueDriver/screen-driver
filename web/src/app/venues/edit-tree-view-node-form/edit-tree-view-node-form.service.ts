@@ -6,9 +6,9 @@ import {Response} from "@angular/http";
 import {Content} from "../../content/content";
 import {ContentService} from "../../content/content.service";
 import {Venue} from "../entities/venue";
-import {ConfigurationsService} from "../../configurations/configurations.service";
-import {Configuration} from "../../configurations/entities/configuration";
-import {ConfigStateHolderService} from "../../configurations/configuration-state-manager/config-state-holder.service";
+import {SettingsService} from "../../settings/settings.service";
+import {Setting} from "../../settings/entities/setting";
+import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
@@ -20,8 +20,8 @@ export class EditTreeViewNodeFormService {
         private treeViewService: VenuesTreeViewService,
         private venuesService: VenuesService,
         private contentService: ContentService,
-        private configService: ConfigurationsService,
-        private configStateHolderService: ConfigStateHolderService,
+        private configService: SettingsService,
+        private configStateHolderService: SettingStateHolderService,
         private notificationService: NotificationService
     ) { }
 
@@ -79,16 +79,16 @@ export class EditTreeViewNodeFormService {
         return item.id;
     }
 
-    getConfigToUpdate(currentConfig: Configuration, nodeData: any) {
+    getSettingToUpdate(currentConfig: Setting, nodeData: any) {
         let configToUpdate = _.clone(currentConfig);
         configToUpdate.config[nodeData.id] = nodeData.content.id;
         return configToUpdate;
     }
 
-    updateConfig(config: Configuration) {
-        this.configService.updateConfiguration(config)
+    updateSetting(config: Setting) {
+        this.configService.updateSetting(config)
             .subscribe(
-                response => this.configStateHolderService.reloadConfigs(),
+                response => this.configStateHolderService.reloadSetting(),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform setting update operation')
             );
     }
