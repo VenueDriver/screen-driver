@@ -81,8 +81,16 @@ export class EditTreeViewNodeFormService {
 
     getSettingToUpdate(currentSetting: Setting, nodeData: any) {
         let settingToUpdate = _.clone(currentSetting);
-        settingToUpdate.config[nodeData.id] = nodeData.content.id;
+        if (!_.isEmpty(nodeData.content)) {
+            settingToUpdate.config[nodeData.id] = nodeData.content.id;
+        } else {
+            this.removeNodeFromConfig(settingToUpdate, nodeData.id);
+        }
         return settingToUpdate;
+    }
+
+    removeNodeFromConfig(setting: Setting, nodeId: string) {
+        delete setting.config[nodeId];
     }
 
     updateSetting(setting: Setting) {
