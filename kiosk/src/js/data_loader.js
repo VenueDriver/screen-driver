@@ -2,6 +2,7 @@
 
 const {net} = require('electron');
 const PropertiesLoader = require('./helpers/properties_load_helper');
+let SettingMergeTool = require('./setting-merge-tool');
 const API = PropertiesLoader.getApiEndpoint();
 
 class DataLoader {
@@ -18,11 +19,21 @@ class DataLoader {
     }
 
     static composeServerData(values) {
+        let settings = JSON.parse(values[2]).settings;
         let serverData = {};
         serverData.venues = JSON.parse(values[0]);
         serverData.content = JSON.parse(values[1]);
-        serverData.settings = JSON.parse(values[2]);
+        serverData.priorityTypes = JSON.parse(values[2]).priorityTypes;
+        serverData.settings = this.mergeSettings(settings, serverData.priorityTypes);
         return serverData;
+    }
+
+    static mergeSettings(settings, priorityTypes) {
+        return SettingMergeTool
+            .startMerging()
+            .setSettings(settings)
+            .setPriorities(priorityTypes)
+            .mergeConfigurations();
     }
 
     static loadVenues() {

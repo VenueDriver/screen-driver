@@ -20,20 +20,22 @@ $dropdown-width: inherit
     &.shown
       display: block
 
-    li a
-      padding: 5px 12px
-      min-height: 40px
-      line-height: 30px
-      font-size: $input-font-size
-      overflow: hidden
-
-      .item-desc
-        color: gray
-
-      .item-value
+    li
+      cursor: pointer
+      a
+        padding: 5px 12px
+        min-height: 40px
+        line-height: 30px
+        font-size: $input-font-size
         overflow: hidden
-        max-width: $dropdown-width
-        white-space: nowrap
+
+        .item-desc
+          color: gray
+
+        .item-value
+          overflow: hidden
+          max-width: $dropdown-width
+          white-space: nowrap
 
   .dropdown-footer
     border-top: 1px solid #dfdfdf

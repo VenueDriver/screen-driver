@@ -16,6 +16,7 @@ export class ConfigurationsService {
     }
 
     createConfiguration(config: Configuration): Observable<Response> {
+        config.priority = config.priority['id'];
         return this.http.post(CONFIGS_API_URL, config);
     }
 

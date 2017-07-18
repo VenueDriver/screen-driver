@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div *ngIf="!createContentMode" class="autocomplete-container">
+        <div *ngIf="isAbleToSetUrl()" class="autocomplete-container">
             <content-autocomplete
                     [value]="getDropdownValue()"
                     [content]="content"

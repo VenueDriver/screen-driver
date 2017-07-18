@@ -16,8 +16,8 @@ class SettingsHelper {
         return selectedContent ? selectedContent.url : '';
     }
 
-    static getContentId(settings, itemId) {
-        return settings[0].config[itemId];
+    static getContentId(setting, itemId) {
+        return setting.config[itemId];
     }
 }
 
