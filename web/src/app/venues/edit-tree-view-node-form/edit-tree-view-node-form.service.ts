@@ -79,16 +79,16 @@ export class EditTreeViewNodeFormService {
         return item.id;
     }
 
-    getConfigToUpdate(currentConfig: Setting, nodeData: any) {
+    getSettingToUpdate(currentConfig: Setting, nodeData: any) {
         let configToUpdate = _.clone(currentConfig);
         configToUpdate.config[nodeData.id] = nodeData.content.id;
         return configToUpdate;
     }
 
-    updateConfig(config: Setting) {
-        this.configService.updateConfiguration(config)
+    updateSetting(config: Setting) {
+        this.configService.updateSetting(config)
             .subscribe(
-                response => this.configStateHolderService.reloadConfigs(),
+                response => this.configStateHolderService.reloadSetting(),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform setting update operation')
             );
     }

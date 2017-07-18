@@ -11,16 +11,16 @@ export class SettingsService {
 
     constructor(private http: Http) { }
 
-    loadConfigs(): Observable<Response> {
+    loadSettings(): Observable<Response> {
         return this.http.get(CONFIGS_API_URL)
     }
 
-    createConfiguration(config: Setting): Observable<Response> {
-        config.priority = config.priority['id'];
-        return this.http.post(CONFIGS_API_URL, config);
+    createSetting(setting: Setting): Observable<Response> {
+        setting.priority = setting.priority['id'];
+        return this.http.post(CONFIGS_API_URL, setting);
     }
 
-    updateConfiguration(config: Setting): Observable<Response> {
-        return this.http.put(`${CONFIGS_API_URL}/${config.id}`, config);
+    updateSetting(setting: Setting): Observable<Response> {
+        return this.http.put(`${CONFIGS_API_URL}/${setting.id}`, setting);
     }
 }

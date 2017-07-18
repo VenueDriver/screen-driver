@@ -13,7 +13,7 @@ export class SettingMergeTool {
     }
 
 
-    public mergeConfigurations(): Setting {
+    public mergeSettings(): Setting {
         let mergedConfig = new Setting();
         let enabledSettings = this.settings.filter((setting => setting.enabled));
 

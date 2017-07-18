@@ -12,22 +12,22 @@ import {NotificationService} from "../../notifications/notification.service";
 })
 export class SettingsManagerComponent implements OnInit {
 
-    @Input() configs: Setting[];
-    @Output() configSelected: EventEmitter<Setting> = new EventEmitter();
+    @Input() settings: Setting[];
+    @Output() settingSelected: EventEmitter<Setting> = new EventEmitter();
 
-    activeConfig: Setting;
+    activeSetting: Setting;
     creationMode = false;
     showSidebar = true;
 
     constructor(private headerService: HeaderService,
-                private configStateHolderService: SettingStateHolderService,
-                private configService: SettingsService,
+                private settingStateHolderService: SettingStateHolderService,
+                private settingsService: SettingsService,
                 private notificationService: NotificationService) {
     }
 
     ngOnInit() {
-        if (this.configs) {
-            this.activeConfig = this.configs[0];
+        if (this.settings) {
+            this.activeSetting = this.settings[0];
         }
         this.subscribeOnSidebarToggle();
     }
@@ -41,18 +41,18 @@ export class SettingsManagerComponent implements OnInit {
         this.showSidebar = !this.showSidebar;
     }
 
-    onConfigSelected(config: Setting) {
-        this.configSelected.emit(config);
-        this.activeConfig = config;
+    onSettingSelection(setting: Setting) {
+        this.settingSelected.emit(setting);
+        this.activeSetting = setting;
         this.headerService.pushSidebarToggleEvent();
     }
 
-    isActive(config: Setting): boolean {
-        return this.activeConfig && this.activeConfig.id === config.id;
+    isActive(setting: Setting): boolean {
+        return this.activeSetting && this.activeSetting.id === setting.id;
     }
 
-    handleConfigCreation() {
-        this.configStateHolderService.reloadConfigs();
+    handleSettingCreation() {
+        this.settingStateHolderService.reloadSetting();
         this.disableCreationMode();
     }
 
@@ -68,21 +68,21 @@ export class SettingsManagerComponent implements OnInit {
         event.stopPropagation();
     }
 
-    changeConfigState(config: Setting, state: boolean) {
-        config.enabled = state;
-        this.configService.updateConfiguration(config)
+    changeSettingState(setting: Setting, state: boolean) {
+        setting.enabled = state;
+        this.settingsService.updateSetting(setting)
             .subscribe(
-                response => this.configStateHolderService.reloadConfigs(),
+                response => this.settingStateHolderService.reloadSetting(),
                 error => this.notificationService.showErrorNotificationBar('Unable to change setting state')
             );
     }
 
     showCurrentState() {
-        this.configStateHolderService.changeCurrentConfig();
-        this.activeConfig = null;
+        this.settingStateHolderService.changeCurrentSetting();
+        this.activeSetting = null;
     }
 
     isAnyActive(): boolean {
-        return !!this.activeConfig;
+        return !!this.activeSetting;
     }
 }

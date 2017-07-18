@@ -27,7 +27,7 @@ export class VenuesTreeViewComponent implements OnInit {
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
-    currentConfig: Setting;
+    currentSetting: Setting;
     options: any;
     actionMapping: any;
     currentNodeData: any;
@@ -38,14 +38,14 @@ export class VenuesTreeViewComponent implements OnInit {
     constructor(
         private venuesService: VenuesService,
         private treeViewService: VenuesTreeViewService,
-        private configStateHolderService: SettingStateHolderService,
+        private settingStateHolderService: SettingStateHolderService,
     ) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
         this.venuesService.getVenueUpdateSubscription().subscribe(() => this.onVenueUpdate());
-        this.configStateHolderService.getCurrentConfig().subscribe(config => {
-            this.currentConfig = config;
+        this.settingStateHolderService.getCurrentSetting().subscribe(setting => {
+            this.currentSetting = setting;
         });
     }
 
@@ -135,7 +135,7 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isAllowToEditNode() {
-        return _.isEmpty(this.currentNodeData) && this.currentConfig;
+        return _.isEmpty(this.currentNodeData) && this.currentSetting;
     }
 
     performCancel(node: any) {

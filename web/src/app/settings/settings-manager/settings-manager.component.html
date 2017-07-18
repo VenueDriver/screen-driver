@@ -10,13 +10,13 @@
             <a class="default-button" (click)="showCurrentState()">Actual</a>
         </li>
 
-        <li *ngFor="let config of configs" [class.active]="isActive(config)">
-            <a (click)="onConfigSelected(config)">
-                {{config.name}}
+        <li *ngFor="let setting of settings" [class.active]="isActive(setting)">
+            <a (click)="onSettingSelection(setting)">
+                {{setting.name}}
 
                 <toggle-button class="switcher"
-                               [enabled]="config.enabled"
-                               (changed)="changeConfigState(config, $event)"
+                               [enabled]="setting.enabled"
+                               (changed)="changeSettingState(setting, $event)"
                                (click)="onToggleClick($event)">
                 </toggle-button>
             </a>
@@ -33,8 +33,8 @@
 
         <div *ngIf="creationMode">
             <setting-creator
-                    [settings]="configs"
-                    (created)="handleConfigCreation()"
+                    [settings]="settings"
+                    (created)="handleSettingCreation()"
                     (cancel)="disableCreationMode()">
             </setting-creator>
         </div>

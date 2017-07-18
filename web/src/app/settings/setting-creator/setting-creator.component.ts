@@ -18,21 +18,21 @@ export class SettingCreatorComponent implements OnInit {
     @Output() created = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
-    config = new Setting();
+    setting = new Setting();
     isInputValid = true;
     priorityTypes = [];
 
     constructor(
-        private configsService: SettingsService,
+        private settingsService: SettingsService,
         private notificationService: NotificationService,
-        private configStateHolderService: SettingStateHolderService) { }
+        private settingStateHolderService: SettingStateHolderService) { }
 
     ngOnInit() {
-        this.priorityTypes = this.configStateHolderService.getPriorityTypes();
+        this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
     }
 
     performSubmit() {
-        this.configsService.createConfiguration(this.config).subscribe(
+        this.settingsService.createSetting(this.setting).subscribe(
             response => this.handleResponse(),
             error => this.handleError()
         );
@@ -43,7 +43,7 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     handleError() {
-        this.notificationService.showErrorNotificationBar(`Unable to create config`);
+        this.notificationService.showErrorNotificationBar(`Unable to create setting`);
     }
 
     performCancel() {
@@ -51,15 +51,15 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     prioritySelected(priorityType) {
-        this.config.priority = priorityType;
+        this.setting.priority = priorityType;
     }
 
     validateSettingName() {
-        this.config.name = this.config.name.trim();
-        this.isInputValid = !_.find(this.settings, s => s.name === this.config.name);
+        this.setting.name = this.setting.name.trim();
+        this.isInputValid = !_.find(this.settings, s => s.name === this.setting.name);
     }
 
     isButtonEnabled(): boolean {
-        return !_.isEmpty(this.config.name) && this.isInputValid;
+        return !_.isEmpty(this.setting.name) && this.isInputValid;
     }
 }

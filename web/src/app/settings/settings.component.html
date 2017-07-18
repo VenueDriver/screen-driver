@@ -1,8 +1,8 @@
-<div class="configurations-container">
+<div class="settings-container">
     <div>
         <settings-manager
-                [configs]="configs"
-                (configSelected)="configSelected($event)">
+                [settings]="settings"
+                (settingSelected)="handleSettingSelection($event)">
         </settings-manager>
     </div>
 </div>

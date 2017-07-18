@@ -15,7 +15,7 @@ import {Setting} from "../../settings/entities/setting";
 })
 export class EditTreeViewNodeFormComponent {
 
-    @Input() currentConfig: Setting;
+    @Input() currentSetting: Setting;
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
     @Input('currentNode') set componentModel(currentNode: any) {
@@ -192,7 +192,7 @@ export class EditTreeViewNodeFormComponent {
         this.editFormService.updateVenue(venueToUpdate)
             .subscribe(
                 response => this.handleVenueListUpdateResponse(response),
-                error => this.handleError('Unable to update configuration')
+                error => this.handleError('Unable to update setting')
             );
     }
 
@@ -201,7 +201,7 @@ export class EditTreeViewNodeFormComponent {
         this.editFormService.pushVenueUpdateEvent();
         this.createContentMode = false;
         if (this.contentChanged) {
-            this.updateConfig();
+            this.updateSetting();
         }
     }
 
@@ -229,10 +229,10 @@ export class EditTreeViewNodeFormComponent {
         this.notificationService.showErrorNotificationBar(errorMessage);
     }
 
-    updateConfig() {
+    updateSetting() {
         this.defineNodeId();
-        let configToUpdate = this.editFormService.getConfigToUpdate(this.currentConfig, this.nodeData);
-        this.editFormService.updateConfig(configToUpdate);
+        let settingToUpdate = this.editFormService.getSettingToUpdate(this.currentSetting, this.nodeData);
+        this.editFormService.updateSetting(settingToUpdate);
         this.contentChanged = false;
     }
 
@@ -243,6 +243,6 @@ export class EditTreeViewNodeFormComponent {
     }
 
     isAbleToSetUrl() {
-        return !this.createContentMode && this.currentConfig;
+        return !this.createContentMode && this.currentSetting;
     }
 }

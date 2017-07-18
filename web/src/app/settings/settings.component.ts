@@ -9,20 +9,20 @@ import {SettingStateHolderService} from "./setting-state-manager/settings-state-
 })
 export class SettingsComponent implements OnInit {
 
-    configs: Setting[];
-    currentConfig: Setting;
+    settings: Setting[];
+    currentSetting: Setting;
 
-    constructor(private configStateHolderService: SettingStateHolderService) {
+    constructor(private settingStateHolderService: SettingStateHolderService) {
     }
 
     ngOnInit() {
-        this.configStateHolderService.reloadConfigs();
-        this.configStateHolderService.getAllConfigs().subscribe(configs => this.configs = configs);
-        this.configStateHolderService.getCurrentConfig().subscribe(config => this.currentConfig = config);
+        this.settingStateHolderService.reloadSetting();
+        this.settingStateHolderService.getAllSettings().subscribe(settings => this.settings = settings);
+        this.settingStateHolderService.getCurrentSetting().subscribe(setting => this.currentSetting = setting);
     }
 
-    configSelected(config: Setting) {
-        this.configStateHolderService.changeCurrentConfig(config);
+    handleSettingSelection(setting: Setting) {
+        this.settingStateHolderService.changeCurrentSetting(setting);
     }
 
 }

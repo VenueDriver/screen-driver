@@ -7,35 +7,35 @@ import {SettingsService} from "../settings.service";
 @Injectable()
 export class SettingStateHolderService {
 
-    private configs: Subject<Setting[]> = new Subject();
-    private currentConfig: Subject<Setting> = new Subject();
+    private setting: Subject<Setting[]> = new Subject();
+    private currentSetting: Subject<Setting> = new Subject();
     private priorityTypes: any[];
 
-    constructor(private configurationsService: SettingsService) {
+    constructor(private settingsService: SettingsService) {
     }
 
-    reloadConfigs() {
-        this.configurationsService.loadConfigs()
+    reloadSetting() {
+        this.settingsService.loadSettings()
             .subscribe(response => {
-                this.changeConfigs(response.json().settings);
+                this.updateSettings(response.json().settings);
                 this.priorityTypes = response.json().priorityTypes;
             });
     }
 
-    changeConfigs(configs: Setting[]) {
-        this.configs.next(configs);
+    updateSettings(settings: Setting[]) {
+        this.setting.next(settings);
     }
 
-    changeCurrentConfig(config?: Setting) {
-        this.currentConfig.next(config);
+    changeCurrentSetting(setting?: Setting) {
+        this.currentSetting.next(setting);
     }
 
-    getAllConfigs(): Observable<Setting[]> {
-        return this.configs.asObservable();
+    getAllSettings(): Observable<Setting[]> {
+        return this.setting.asObservable();
     }
 
-    getCurrentConfig(): Observable<Setting> {
-        return this.currentConfig.asObservable();
+    getCurrentSetting(): Observable<Setting> {
+        return this.currentSetting.asObservable();
     }
 
     getPriorityTypes(): any[] {
