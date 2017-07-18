@@ -8,7 +8,7 @@ import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {DropdownModule} from "../dropdown/dropdown.module";
 import {SettingsManagerComponent} from "./settings-manager/settings-manager.component";
-import {ToggleButtonComponent} from "../toggle-button/toggle-button/toggle-button.component";
+import {ToggleButtonComponent} from "../toggle-button/toggle-button.component";
 
 @NgModule({
     imports: [
