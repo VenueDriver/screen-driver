@@ -1,5 +1,5 @@
 'use strict';
-let Config = require('./../entities/config');
+let Config = require('./../entities/setting');
 
 const dynamodb = require('../dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
