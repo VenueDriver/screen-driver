@@ -26,7 +26,7 @@ export class ConfigStateHolderService {
         this.configs.next(configs);
     }
 
-    changeCurrentConfig(config: Configuration) {
+    changeCurrentConfig(config?: Configuration) {
         this.currentConfig.next(config);
     }
 

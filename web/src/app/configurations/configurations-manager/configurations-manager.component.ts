@@ -78,6 +78,6 @@ export class ConfigurationManagerComponent implements OnInit {
     }
 
     showCurrentState() {
-        this.configStateHolderService.changeCurrentConfig(null);
+        this.configStateHolderService.changeCurrentConfig();
     }
 }

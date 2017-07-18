@@ -13,7 +13,7 @@ export class SettingMergeTool {
     }
 
 
-    public mergeConfigurations() {
+    public mergeConfigurations(): Configuration {
         let mergedConfig = new Configuration();
         let enabledSettings = this.settings.filter((setting => setting.enabled));
 
@@ -29,13 +29,13 @@ export class SettingMergeTool {
         return mergedConfig;
     }
 
-    private resolveSettingConflict(instruction) {
+    private resolveSettingConflict(instruction): string {
         let conflictedSettings = this.settings.filter(setting => setting.enabled && setting.config.hasOwnProperty(instruction));
         let prioritySetting = this.getMostPrioritySetting(conflictedSettings);
         return prioritySetting.config[instruction];
     }
 
-    private getMostPrioritySetting(conflictedSettings: Configuration[]) {
+    private getMostPrioritySetting(conflictedSettings: Configuration[]): Configuration {
         let theMostPrioritySetting = null;
         conflictedSettings.forEach(setting => {
             if (!theMostPrioritySetting) {
@@ -51,16 +51,15 @@ export class SettingMergeTool {
         });
 
         return theMostPrioritySetting;
-
     }
 
-    private getPriorityIndex(priorityId) {
+    private getPriorityIndex(priorityId): number {
         let priorities = this.priorities;
         let priority = priorities.find(element => element.id == priorityId);
         return priorities.indexOf(priority);
     }
 
-    static startMerging() {
+    static startMerging(): SettingMergeTool {
         return new SettingMergeTool();
     }
 
