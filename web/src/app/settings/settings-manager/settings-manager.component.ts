@@ -1,27 +1,27 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {Configuration} from "../entities/configuration";
-import {ConfigStateHolderService} from "../configuration-state-manager/config-state-holder.service";
+import {Setting} from "../entities/setting";
+import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 import {HeaderService} from "../../header/header.service";
-import {ConfigurationsService} from "../configurations.service";
+import {SettingsService} from "../settings.service";
 import {NotificationService} from "../../notifications/notification.service";
 
 @Component({
-    selector: 'configurations-manager',
-    templateUrl: 'configurations-manager.component.html',
-    styleUrls: ['configurations-manager.component.sass']
+    selector: 'settings-manager',
+    templateUrl: 'settings-manager.component.html',
+    styleUrls: ['settings-manager.component.sass']
 })
-export class ConfigurationManagerComponent implements OnInit {
+export class SettingsManagerComponent implements OnInit {
 
-    @Input() configs: Configuration[];
-    @Output() configSelected: EventEmitter<Configuration> = new EventEmitter();
+    @Input() configs: Setting[];
+    @Output() configSelected: EventEmitter<Setting> = new EventEmitter();
 
-    activeConfig: Configuration;
+    activeConfig: Setting;
     creationMode = false;
     showSidebar = true;
 
     constructor(private headerService: HeaderService,
-                private configStateHolderService: ConfigStateHolderService,
-                private configService: ConfigurationsService,
+                private configStateHolderService: SettingStateHolderService,
+                private configService: SettingsService,
                 private notificationService: NotificationService) {
     }
 
@@ -41,13 +41,13 @@ export class ConfigurationManagerComponent implements OnInit {
         this.showSidebar = !this.showSidebar;
     }
 
-    onConfigSelected(config: Configuration) {
+    onConfigSelected(config: Setting) {
         this.configSelected.emit(config);
         this.activeConfig = config;
         this.headerService.pushSidebarToggleEvent();
     }
 
-    isActive(config: Configuration): boolean {
+    isActive(config: Setting): boolean {
         return this.activeConfig && this.activeConfig.id === config.id;
     }
 
@@ -68,7 +68,7 @@ export class ConfigurationManagerComponent implements OnInit {
         event.stopPropagation();
     }
 
-    changeConfigState(config: Configuration, state: boolean) {
+    changeConfigState(config: Setting, state: boolean) {
         config.enabled = state;
         this.configService.updateConfiguration(config)
             .subscribe(

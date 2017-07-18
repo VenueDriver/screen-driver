@@ -1,4 +1,4 @@
-import {Configuration} from "../configurations/entities/configuration";
+import {Setting} from "../settings/entities/setting";
 
 export class SettingMergeTool {
     private settings;
@@ -13,8 +13,8 @@ export class SettingMergeTool {
     }
 
 
-    public mergeConfigurations(): Configuration {
-        let mergedConfig = new Configuration();
+    public mergeConfigurations(): Setting {
+        let mergedConfig = new Setting();
         let enabledSettings = this.settings.filter((setting => setting.enabled));
 
         enabledSettings.forEach(setting => {
@@ -35,7 +35,7 @@ export class SettingMergeTool {
         return prioritySetting.config[instruction];
     }
 
-    private getMostPrioritySetting(conflictedSettings: Configuration[]): Configuration {
+    private getMostPrioritySetting(conflictedSettings: Setting[]): Setting {
         let theMostPrioritySetting = null;
         conflictedSettings.forEach(setting => {
             if (!theMostPrioritySetting) {

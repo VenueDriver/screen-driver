@@ -10,7 +10,7 @@ import {HeaderComponent} from "./header/header.component";
 import {NotificationModule} from "./notifications/notification.module";
 import {NotificationService} from "./notifications/notification.service";
 import {HttpModule} from "@angular/http";
-import {ConfigurationsModule} from "./configurations/configurations.module";
+import {SettingsModule} from "./settings/settings.module";
 import {HeaderService} from "./header/header.service";
 
 @NgModule({
@@ -24,7 +24,7 @@ import {HeaderService} from "./header/header.service";
         AlertModule.forRoot(),
         NotificationModule,
         VenuesModule,
-        ConfigurationsModule
+        SettingsModule
     ],
     providers: [
         NotificationService,

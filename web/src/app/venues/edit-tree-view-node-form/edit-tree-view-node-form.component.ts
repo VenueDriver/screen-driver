@@ -5,7 +5,7 @@ import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
 import {Venue} from "../entities/venue";
-import {Configuration} from "../../configurations/entities/configuration";
+import {Setting} from "../../settings/entities/setting";
 
 @Component({
     selector: 'edit-tree-view-node-form',
@@ -15,7 +15,7 @@ import {Configuration} from "../../configurations/entities/configuration";
 })
 export class EditTreeViewNodeFormComponent {
 
-    @Input() currentConfig: Configuration;
+    @Input() currentConfig: Setting;
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
     @Input('currentNode') set componentModel(currentNode: any) {

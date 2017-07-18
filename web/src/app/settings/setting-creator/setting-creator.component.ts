@@ -1,31 +1,31 @@
 import {Component, Output, EventEmitter, Input, OnInit} from '@angular/core';
-import {ConfigurationsService} from "../configurations.service";
-import {Configuration} from "../entities/configuration";
+import {SettingsService} from "../settings.service";
+import {Setting} from "../entities/setting";
 import {NotificationService} from "../../notifications/notification.service";
-import {ConfigStateHolderService} from "../configuration-state-manager/config-state-holder.service";
+import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'configuration-creator',
-    templateUrl: 'configuration-creator.component.html',
-    styleUrls: ['configuration-creator.component.sass']
+    selector: 'setting-creator',
+    templateUrl: 'setting-creator.component.html',
+    styleUrls: ['setting-creator.component.sass']
 })
-export class ConfigurationCreatorComponent implements OnInit {
+export class SettingCreatorComponent implements OnInit {
 
-    @Input() settings: Configuration[];
+    @Input() settings: Setting[];
 
     @Output() created = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
-    config = new Configuration();
+    config = new Setting();
     isInputValid = true;
     priorityTypes = [];
 
     constructor(
-        private configsService: ConfigurationsService,
+        private configsService: SettingsService,
         private notificationService: NotificationService,
-        private configStateHolderService: ConfigStateHolderService) { }
+        private configStateHolderService: SettingStateHolderService) { }
 
     ngOnInit() {
         this.priorityTypes = this.configStateHolderService.getPriorityTypes();

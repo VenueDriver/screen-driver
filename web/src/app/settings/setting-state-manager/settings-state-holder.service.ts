@@ -1,17 +1,17 @@
 import {Injectable} from '@angular/core';
-import {Configuration} from "../../configurations/entities/configuration";
+import {Setting} from "../entities/setting";
 import {Subject, Observable} from "rxjs";
-import {ConfigurationsService} from "../configurations.service";
+import {SettingsService} from "../settings.service";
 
 
 @Injectable()
-export class ConfigStateHolderService {
+export class SettingStateHolderService {
 
-    private configs: Subject<Configuration[]> = new Subject();
-    private currentConfig: Subject<Configuration> = new Subject();
+    private configs: Subject<Setting[]> = new Subject();
+    private currentConfig: Subject<Setting> = new Subject();
     private priorityTypes: any[];
 
-    constructor(private configurationsService: ConfigurationsService) {
+    constructor(private configurationsService: SettingsService) {
     }
 
     reloadConfigs() {
@@ -22,19 +22,19 @@ export class ConfigStateHolderService {
             });
     }
 
-    changeConfigs(configs: Configuration[]) {
+    changeConfigs(configs: Setting[]) {
         this.configs.next(configs);
     }
 
-    changeCurrentConfig(config?: Configuration) {
+    changeCurrentConfig(config?: Setting) {
         this.currentConfig.next(config);
     }
 
-    getAllConfigs(): Observable<Configuration[]> {
+    getAllConfigs(): Observable<Setting[]> {
         return this.configs.asObservable();
     }
 
-    getCurrentConfig(): Observable<Configuration> {
+    getCurrentConfig(): Observable<Setting> {
         return this.currentConfig.asObservable();
     }
 

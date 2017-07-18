@@ -32,11 +32,11 @@
     <div class="form-container">
 
         <div *ngIf="creationMode">
-            <configuration-creator
+            <setting-creator
                     [settings]="configs"
                     (created)="handleConfigCreation()"
                     (cancel)="disableCreationMode()">
-            </configuration-creator>
+            </setting-creator>
         </div>
     </div>
 </div>

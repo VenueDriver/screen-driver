@@ -8,8 +8,8 @@ import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service
 
 import * as _ from 'lodash';
 import {Observable} from "rxjs";
-import {ConfigStateHolderService} from "../configurations/configuration-state-manager/config-state-holder.service";
-import {Configuration} from "../configurations/entities/configuration";
+import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
+import {Setting} from "../settings/entities/setting";
 import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
 
 @Component({
@@ -23,15 +23,15 @@ export class VenuesComponent implements OnInit {
     venues: Venue[];
     venuesTree: any;
     content: Content[];
-    config: Configuration;
-    settings: Configuration[];
+    config: Setting;
+    settings: Setting[];
     isShowAddVenueForm = false;
     isCreateContentMode = false;
 
     constructor(private venuesService: VenuesService,
                 private treeViewService: VenuesTreeViewService,
                 private contentService: ContentService,
-                private configStateHolderService: ConfigStateHolderService,) {
+                private configStateHolderService: SettingStateHolderService,) {
     }
 
     ngOnInit() {
@@ -104,7 +104,7 @@ export class VenuesComponent implements OnInit {
         this.isCreateContentMode = createContentMode;
     }
 
-    mergeLocationsWithConfig(locations, config: Configuration) {
+    mergeLocationsWithConfig(locations, config: Setting) {
         locations.forEach(location => {
             if (config && config.config.hasOwnProperty(location.id)) {
                 location.content = this.getContentForVenue(config, location.id);
