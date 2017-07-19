@@ -72,9 +72,16 @@ export class SettingsManagerComponent implements OnInit {
         setting.enabled = state;
         this.settingsService.updateSetting(setting)
             .subscribe(
-                response => this.settingStateHolderService.reloadSetting(),
+                response => this.handleUpdateSettingResponse(),
                 error => this.notificationService.showErrorNotificationBar('Unable to change setting state')
             );
+    }
+
+    handleUpdateSettingResponse() {
+        this.settingStateHolderService.reloadSetting();
+        if (!this.activeSetting) {
+            this.showCurrentState();
+        }
     }
 
     showCurrentState() {
