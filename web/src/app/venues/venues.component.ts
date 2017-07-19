@@ -37,18 +37,8 @@ export class VenuesComponent implements OnInit {
         this.loadContent();
         this.subscribeToVenueUpdate();
         this.subscribeToContentUpdate();
-        this.settingStateHolderService.getCurrentSetting().subscribe(setting => {
-            if (!setting) {
-                let mergedSetting = this.mergeSettings();
-                this.settingStateHolderService.changeCurrentSetting(mergedSetting);
-                return;
-            }
-
-            this.setting = setting;
-            this.mergeLocationsWithConfig(this.venues, this.setting);
-        });
-
-        this.settingStateHolderService.getAllSettings().subscribe(settings => this.settings = settings);
+        this.subscribeToCurrentSettingUpdate();
+        this.subscribeToSettingsUpdate();
     }
 
     subscribeToVenueUpdate() {
@@ -62,6 +52,23 @@ export class VenuesComponent implements OnInit {
     subscribeToContentUpdate() {
         this.contentService.getContentUpdateSubscription()
             .subscribe(() => this.loadContent());
+    }
+
+    subscribeToCurrentSettingUpdate() {
+        this.settingStateHolderService.getCurrentSetting().subscribe(setting => {
+            if (!setting) {
+                let mergedSetting = this.mergeSettings();
+                this.settingStateHolderService.changeCurrentSetting(mergedSetting);
+                return;
+            }
+
+            this.setting = setting;
+            this.mergeLocationsWithConfig(this.venues, this.setting);
+        });
+    }
+
+    subscribeToSettingsUpdate() {
+        this.settingStateHolderService.getAllSettings().subscribe(settings => this.settings = settings);
     }
 
     loadVenues() {
