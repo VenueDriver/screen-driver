@@ -72,7 +72,10 @@ $(function () {
     $("#show-logs").click(function () {
         $(this).hide();
         $("#hide-logs").show();
-        $("#logs").show();
+
+        let logsElement = $("#logs");
+        logsElement.show();
+        logsElement.scrollTop(logsElement[0].scrollHeight);
     });
 
     $("#hide-logs").click(function () {
