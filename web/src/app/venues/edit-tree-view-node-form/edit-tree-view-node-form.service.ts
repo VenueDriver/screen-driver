@@ -89,6 +89,11 @@ export class EditTreeViewNodeFormService {
         return settingToUpdate;
     }
 
+    defineSettingRevision(currentSetting: Setting, settings: Setting[]) {
+        let setting = _.find(settings, s => s.id === currentSetting.id) as Setting;
+        currentSetting._rev = setting._rev;
+    }
+
     removeNodeFromConfig(setting: Setting, nodeId: string) {
         delete setting.config[nodeId];
     }
