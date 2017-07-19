@@ -28,6 +28,7 @@ export class VenuesTreeViewComponent implements OnInit {
     private tree: TreeComponent;
 
     currentSetting: Setting;
+    settings: Setting[];
     options: any;
     actionMapping: any;
     currentNodeData: any;
@@ -44,8 +45,19 @@ export class VenuesTreeViewComponent implements OnInit {
     ngOnInit() {
         this.updateTreeViewOptions();
         this.venuesService.getVenueUpdateSubscription().subscribe(() => this.onVenueUpdate());
+        this.subscribeToCurrentSettingUpdate();
+        this.subscribeToSettingsUpdate();
+    }
+
+    subscribeToCurrentSettingUpdate() {
         this.settingStateHolderService.getCurrentSetting().subscribe(setting => {
             this.currentSetting = setting;
+        });
+    }
+
+    subscribeToSettingsUpdate() {
+        this.settingStateHolderService.getAllSettings().subscribe(settings => {
+            this.settings = settings;
         });
     }
 

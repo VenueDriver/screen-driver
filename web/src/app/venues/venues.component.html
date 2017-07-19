@@ -16,6 +16,8 @@
             <div class="form-container">
                 <edit-tree-view-node-form
                         [venues]="venues"
+                        [currentSetting]="getCurrentSettingForEditForm()"
+                        [settings]="settings"
                         [content]="content"
                         [currentNode]="node"
                         contentUrlPlaceholder="Content URL is not specified"

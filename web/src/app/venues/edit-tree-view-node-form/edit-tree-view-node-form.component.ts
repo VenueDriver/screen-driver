@@ -16,6 +16,7 @@ import {Setting} from "../../settings/entities/setting";
 export class EditTreeViewNodeFormComponent {
 
     @Input() currentSetting: Setting;
+    @Input() settings: Setting[];
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
     @Input('currentNode') set componentModel(currentNode: any) {
@@ -232,6 +233,7 @@ export class EditTreeViewNodeFormComponent {
     updateSetting() {
         this.defineNodeId();
         let settingToUpdate = this.editFormService.getSettingToUpdate(this.currentSetting, this.nodeData);
+        this.editFormService.defineSettingRevision(settingToUpdate, this.settings);
         this.editFormService.updateSetting(settingToUpdate);
         this.contentChanged = false;
     }
