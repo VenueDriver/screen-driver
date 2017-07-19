@@ -33,8 +33,6 @@ export class VenuesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loadVenues();
-        this.loadContent();
         this.subscribeToVenueUpdate();
         this.subscribeToContentUpdate();
         this.subscribeToCurrentSettingUpdate();
