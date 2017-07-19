@@ -3,11 +3,8 @@ import {VenuesService} from "./venues.service";
 import {Venue} from "./entities/venue";
 import {Content} from "../content/content";
 import {ContentService} from "../content/content.service";
-import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
-
 
 import * as _ from 'lodash';
-import {Observable} from "rxjs";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../settings/entities/setting";
 import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
@@ -28,10 +25,11 @@ export class VenuesComponent implements OnInit {
     isShowAddVenueForm = false;
     isCreateContentMode = false;
 
-    constructor(private venuesService: VenuesService,
-                private treeViewService: VenuesTreeViewService,
-                private contentService: ContentService,
-                private settingStateHolderService: SettingStateHolderService,) {
+    constructor(
+            private venuesService: VenuesService,
+            private contentService: ContentService,
+            private settingStateHolderService: SettingStateHolderService
+    ) {
     }
 
     ngOnInit() {
@@ -39,18 +37,18 @@ export class VenuesComponent implements OnInit {
         this.loadContent();
         this.subscribeToVenueUpdate();
         this.subscribeToContentUpdate();
-        this.settingStateHolderService.getCurrentSetting().subscribe(config => {
-            if (!config) {
-                let mergedConfig = this.mergeSettings();
-                this.settingStateHolderService.changeCurrentSetting(mergedConfig);
-                return
+        this.settingStateHolderService.getCurrentSetting().subscribe(setting => {
+            if (!setting) {
+                let mergedSetting = this.mergeSettings();
+                this.settingStateHolderService.changeCurrentSetting(mergedSetting);
+                return;
             }
 
-            this.setting = config;
+            this.setting = setting;
             this.mergeLocationsWithConfig(this.venues, this.setting);
         });
 
-        this.settingStateHolderService.getAllSettings().subscribe(settings => this.settings = settings)
+        this.settingStateHolderService.getAllSettings().subscribe(settings => this.settings = settings);
     }
 
     subscribeToVenueUpdate() {
