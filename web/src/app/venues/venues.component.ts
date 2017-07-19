@@ -3,11 +3,8 @@ import {VenuesService} from "./venues.service";
 import {Venue} from "./entities/venue";
 import {Content} from "../content/content";
 import {ContentService} from "../content/content.service";
-import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
-
 
 import * as _ from 'lodash';
-import {Observable} from "rxjs";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../settings/entities/setting";
 import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
@@ -28,29 +25,18 @@ export class VenuesComponent implements OnInit {
     isShowAddVenueForm = false;
     isCreateContentMode = false;
 
-    constructor(private venuesService: VenuesService,
-                private treeViewService: VenuesTreeViewService,
-                private contentService: ContentService,
-                private settingStateHolderService: SettingStateHolderService,) {
+    constructor(
+            private venuesService: VenuesService,
+            private contentService: ContentService,
+            private settingStateHolderService: SettingStateHolderService
+    ) {
     }
 
     ngOnInit() {
-        this.loadVenues();
-        this.loadContent();
         this.subscribeToVenueUpdate();
         this.subscribeToContentUpdate();
-        this.settingStateHolderService.getCurrentSetting().subscribe(config => {
-            if (!config) {
-                let mergedConfig = this.mergeSettings();
-                this.settingStateHolderService.changeCurrentSetting(mergedConfig);
-                return
-            }
-
-            this.setting = config;
-            this.mergeLocationsWithConfig(this.venues, this.setting);
-        });
-
-        this.settingStateHolderService.getAllSettings().subscribe(settings => this.settings = settings)
+        this.subscribeToCurrentSettingUpdate();
+        this.subscribeToSettingsUpdate();
     }
 
     subscribeToVenueUpdate() {
@@ -64,6 +50,24 @@ export class VenuesComponent implements OnInit {
     subscribeToContentUpdate() {
         this.contentService.getContentUpdateSubscription()
             .subscribe(() => this.loadContent());
+    }
+
+    subscribeToCurrentSettingUpdate() {
+        this.settingStateHolderService.getCurrentSetting().subscribe(setting => {
+            if (!setting) {
+                let mergedSetting = this.mergeSettings();
+                this.settingStateHolderService.changeCurrentSetting(mergedSetting);
+                return;
+            }
+
+            this.setting = setting;
+            this.mergeLocationsWithConfig(this.venues, this.setting);
+        });
+    }
+
+    subscribeToSettingsUpdate() {
+        this.settingStateHolderService.getAllSettings()
+            .subscribe(settings => this.settings = settings);
     }
 
     loadVenues() {
@@ -104,22 +108,29 @@ export class VenuesComponent implements OnInit {
         this.isCreateContentMode = createContentMode;
     }
 
-    mergeLocationsWithConfig(locations, setting: Setting) {
-        locations.forEach(location => {
-            if (setting && setting.config.hasOwnProperty(location.id)) {
-                location.content = this.getContentForVenue(setting, location.id);
-            } else {
-                location.content = null
-            }
-
+    mergeLocationsWithConfig(locations: any, setting: Setting) {
+        _.forEach(locations, location => {
+            this.defineContentForLocation(location, setting);
             if (location.hasOwnProperty('children')) {
-                this.mergeLocationsWithConfig(location.children, setting)
+                this.mergeLocationsWithConfig(location.children, setting);
             }
         });
     }
 
-    getContentForVenue(setting, venueId) {
+    defineContentForLocation(location: any, setting: Setting) {
+        if (setting && setting.config.hasOwnProperty(location.id)) {
+            location.content = this.getContentForVenue(setting, location.id);
+        } else {
+            location.content = null;
+        }
+    }
+
+    getContentForVenue(setting: Setting, venueId: string) {
         let contentId = setting.config[venueId];
         return _.find(this.content, {id: contentId});
+    }
+
+    getCurrentSettingForEditForm() {
+        return this.setting.id ? this.setting : null;
     }
 }

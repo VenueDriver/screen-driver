@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Input, Output} from '@angular/core';
 import {EditTreeViewNodeFormService} from "./edit-tree-view-node-form.service";
 import {Content} from "../../content/content";
 import {NotificationService} from "../../notifications/notification.service";
@@ -6,6 +6,7 @@ import {NotificationService} from "../../notifications/notification.service";
 import * as _ from 'lodash';
 import {Venue} from "../entities/venue";
 import {Setting} from "../../settings/entities/setting";
+import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 
 @Component({
     selector: 'edit-tree-view-node-form',
@@ -13,9 +14,10 @@ import {Setting} from "../../settings/entities/setting";
     styleUrls: ['edit-tree-view-node-form.component.sass'],
     providers: [EditTreeViewNodeFormService]
 })
-export class EditTreeViewNodeFormComponent {
+export class EditTreeViewNodeFormComponent implements OnInit{
 
     @Input() currentSetting: Setting;
+    @Input() settings: Setting[];
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
     @Input('currentNode') set componentModel(currentNode: any) {
@@ -37,8 +39,16 @@ export class EditTreeViewNodeFormComponent {
 
     constructor(
         private editFormService: EditTreeViewNodeFormService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        private settingStateHolderService: SettingStateHolderService
     ) { }
+
+    ngOnInit() {
+        let configChangedSubscription = this.settingStateHolderService.getCurrentSetting().subscribe(() => {
+            configChangedSubscription.unsubscribe();
+            this.cancel.emit(this.node);
+        })
+    }
 
     setUpComponentModel(node: any) {
         this.isFormValid = false;
@@ -232,6 +242,7 @@ export class EditTreeViewNodeFormComponent {
     updateSetting() {
         this.defineNodeId();
         let settingToUpdate = this.editFormService.getSettingToUpdate(this.currentSetting, this.nodeData);
+        this.editFormService.defineSettingRevision(settingToUpdate, this.settings);
         this.editFormService.updateSetting(settingToUpdate);
         this.contentChanged = false;
     }

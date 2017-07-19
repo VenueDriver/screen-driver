@@ -20,8 +20,8 @@ export class EditTreeViewNodeFormService {
         private treeViewService: VenuesTreeViewService,
         private venuesService: VenuesService,
         private contentService: ContentService,
-        private configService: SettingsService,
-        private configStateHolderService: SettingStateHolderService,
+        private settingsService: SettingsService,
+        private settingStateHolderService: SettingStateHolderService,
         private notificationService: NotificationService
     ) { }
 
@@ -79,16 +79,29 @@ export class EditTreeViewNodeFormService {
         return item.id;
     }
 
-    getSettingToUpdate(currentConfig: Setting, nodeData: any) {
-        let configToUpdate = _.clone(currentConfig);
-        configToUpdate.config[nodeData.id] = nodeData.content.id;
-        return configToUpdate;
+    getSettingToUpdate(currentSetting: Setting, nodeData: any) {
+        let settingToUpdate = _.clone(currentSetting);
+        if (!_.isEmpty(nodeData.content)) {
+            settingToUpdate.config[nodeData.id] = nodeData.content.id;
+        } else {
+            this.removeNodeFromConfig(settingToUpdate, nodeData.id);
+        }
+        return settingToUpdate;
     }
 
-    updateSetting(config: Setting) {
-        this.configService.updateSetting(config)
+    defineSettingRevision(currentSetting: Setting, settings: Setting[]) {
+        let setting = _.find(settings, s => s.id === currentSetting.id) as Setting;
+        currentSetting._rev = setting._rev;
+    }
+
+    removeNodeFromConfig(setting: Setting, nodeId: string) {
+        delete setting.config[nodeId];
+    }
+
+    updateSetting(setting: Setting) {
+        this.settingsService.updateSetting(setting)
             .subscribe(
-                response => this.configStateHolderService.reloadSetting(),
+                response => this.settingStateHolderService.reloadSetting(),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform setting update operation')
             );
     }
