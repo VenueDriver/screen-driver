@@ -51,7 +51,7 @@ class DataLoader {
     }
 
     static loadConfigs() {
-        let contentUrl = `${API}/api/configs`;
+        let contentUrl = `${API}/api/settings`;
         let request = net.request(contentUrl);
 
         return DataLoader.generatePromise(request);
