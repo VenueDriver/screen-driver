@@ -66,7 +66,8 @@ export class VenuesComponent implements OnInit {
     }
 
     subscribeToSettingsUpdate() {
-        this.settingStateHolderService.getAllSettings().subscribe(settings => this.settings = settings);
+        this.settingStateHolderService.getAllSettings()
+            .subscribe(settings => this.settings = settings);
     }
 
     loadVenues() {
@@ -107,21 +108,24 @@ export class VenuesComponent implements OnInit {
         this.isCreateContentMode = createContentMode;
     }
 
-    mergeLocationsWithConfig(locations, setting: Setting) {
-        locations.forEach(location => {
-            if (setting && setting.config.hasOwnProperty(location.id)) {
-                location.content = this.getContentForVenue(setting, location.id);
-            } else {
-                location.content = null
-            }
-
+    mergeLocationsWithConfig(locations: any, setting: Setting) {
+        _.forEach(locations, location => {
+            this.defineContentForLocation(location, setting);
             if (location.hasOwnProperty('children')) {
-                this.mergeLocationsWithConfig(location.children, setting)
+                this.mergeLocationsWithConfig(location.children, setting);
             }
         });
     }
 
-    getContentForVenue(setting, venueId) {
+    defineContentForLocation(location: any, setting: Setting) {
+        if (setting && setting.config.hasOwnProperty(location.id)) {
+            location.content = this.getContentForVenue(setting, location.id);
+        } else {
+            location.content = null;
+        }
+    }
+
+    getContentForVenue(setting: Setting, venueId: string) {
         let contentId = setting.config[venueId];
         return _.find(this.content, {id: contentId});
     }
