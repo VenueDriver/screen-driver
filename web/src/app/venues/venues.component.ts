@@ -129,4 +129,8 @@ export class VenuesComponent implements OnInit {
         let contentId = setting.config[venueId];
         return _.find(this.content, {id: contentId});
     }
+
+    getCurrentSettingForEditForm() {
+        return this.setting.id ? this.setting : null;
+    }
 }
