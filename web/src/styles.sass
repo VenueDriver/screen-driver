@@ -3,6 +3,12 @@
 body
   margin: 0 25px 45px 0
 
+  @media (max-width: $sidebar-visibility-width)
+    padding-left: 0
+    .navbar-toggle, .navbar-brand
+      float: none
+      display: inline-block
+
   @media screen and (max-width: $tablet-resolution)
     margin: 0 5px 45px
 
