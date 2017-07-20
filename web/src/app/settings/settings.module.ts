@@ -20,7 +20,8 @@ import { PriorityTypeTagComponent } from './priority-type-tag/priority-type-tag.
     ],
     exports: [
         SettingsComponent,
-        SettingCreatorComponent
+        SettingCreatorComponent,
+        PriorityTypeTagComponent
     ],
     declarations: [
         SettingsComponent,
