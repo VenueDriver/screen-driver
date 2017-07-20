@@ -11,7 +11,7 @@ class DataLoader {
         let promises = [
             DataLoader.loadVenues(),
             DataLoader.loadContent(),
-            DataLoader.loadConfigs()
+            DataLoader.loadSettings()
         ];
 
         return Promise.all(promises)
@@ -50,9 +50,9 @@ class DataLoader {
         return DataLoader.generatePromise(request);
     }
 
-    static loadConfigs() {
-        let contentUrl = `${API}/api/configs`;
-        let request = net.request(contentUrl);
+    static loadSettings() {
+        let settingsUrl = `${API}/api/settings`;
+        let request = net.request(settingsUrl);
 
         return DataLoader.generatePromise(request);
     }
