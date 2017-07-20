@@ -2,7 +2,11 @@
     <div class="venues-container">
 
         <div class="header">
-            <span *ngIf="!isEditSettingMode">
+            <div *ngIf="!isEditSettingMode"
+                 class="setting-header"
+                 [class.editable]="isAllowToEditSetting()"
+                 (click)="changeEditSettingMode()">
+
                 <div class="page-title">
                     {{getPageTitle()}}
                 </div>
@@ -11,13 +15,6 @@
                     <priority-type-tag [setting]="setting"></priority-type-tag>
                 </div>
 
-            </span>
-
-            <div class="buttons-container">
-                <div *ngIf="isAllowToEditSetting()"
-                     class="button edit-button"
-                     (click)="changeEditSettingMode()">
-                </div>
             </div>
 
             <setting-creator

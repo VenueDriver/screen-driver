@@ -148,6 +148,8 @@ export class VenuesComponent implements OnInit {
     }
 
     changeEditSettingMode() {
-        this.isEditSettingMode = !this.isEditSettingMode;
+        if (this.isAllowToEditSetting()) {
+            this.isEditSettingMode = !this.isEditSettingMode;
+        }
     }
 }
