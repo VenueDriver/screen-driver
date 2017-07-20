@@ -105,6 +105,14 @@ functions:
           method: put
           cors: true
 
+  push:
+    handler: pusher.trigger_pusher
+    events:
+      - http:
+          path: api/push
+          method: get
+          cors: true
+
 custom:
   dynamodb:
     start:
