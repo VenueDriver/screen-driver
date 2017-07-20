@@ -5,7 +5,7 @@
             <div *ngIf="!isEditSettingMode"
                  class="setting-header"
                  [class.editable]="isAllowToEditSetting()"
-                 (click)="changeEditSettingMode()">
+                 (click)="activateEditMode()">
 
                 <div class="page-title">
                     {{getPageTitle()}}
@@ -22,7 +22,7 @@
                     [settings]="settings"
                     [settingToEdit]="setting"
                     (submitted)="onSettingEdited()"
-                    (cancel)="changeEditSettingMode()">
+                    (cancel)="toggleEditSettingMode()">
             </setting-creator>
         </div>
 

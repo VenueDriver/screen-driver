@@ -147,14 +147,18 @@ export class VenuesComponent implements OnInit {
         return this.isExistingSetting() && !this.isEditSettingMode;
     }
 
-    changeEditSettingMode() {
+    activateEditMode() {
         if (this.isAllowToEditSetting()) {
-            this.isEditSettingMode = !this.isEditSettingMode;
+            this.isEditSettingMode = true;
         }
+    }
+
+    toggleEditSettingMode() {
+        this.isEditSettingMode = !this.isEditSettingMode;
     }
 
     onSettingEdited() {
         this.settingStateHolderService.reloadSetting();
-        this.changeEditSettingMode();
+        this.toggleEditSettingMode();
     }
 }
