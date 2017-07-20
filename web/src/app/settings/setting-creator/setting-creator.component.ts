@@ -14,11 +14,12 @@ import * as _ from 'lodash';
 export class SettingCreatorComponent implements OnInit {
 
     @Input() settings: Setting[];
-    @Input() setting: Setting;
+    @Input() settingToEdit: Setting;
 
     @Output() submitted = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
+    setting: Setting;
     isInputValid = true;
     priorityTypes = [];
 
@@ -29,16 +30,29 @@ export class SettingCreatorComponent implements OnInit {
 
     ngOnInit() {
         this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
-        if (!this.setting){
-            this.setting = new Setting();
-        }
+        this.setting = this.settingToEdit ? _.clone(this.settingToEdit) : new Setting();
     }
 
     performSubmit() {
+        if (this.settingToEdit){
+            this.updateSetting();
+        } else {
+            this.createSetting();
+        }
+    }
+
+    private createSetting() {
         this.settingsService.createSetting(this.setting).subscribe(
             response => this.handleResponse(),
             error => this.handleError()
         );
+    }
+
+    private updateSetting() {
+        this.settingsService.updateSetting(this.setting).subscribe(
+            response => this.handleResponse(),
+            error => this.handleError()
+        )
     }
 
     handleResponse() {
@@ -54,8 +68,7 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     prioritySelected(priorityType) {
-        console.log('priority selected after dropdown emit')
-        this.setting.priority = priorityType;
+        this.setting.priority = priorityType.id;
     }
 
     validateSettingName() {
@@ -67,8 +80,7 @@ export class SettingCreatorComponent implements OnInit {
         return !_.isEmpty(this.setting.name) && this.isInputValid;
     }
 
-    getPriorityType() {
-        console.log(this.priorityTypes, this.setting.priority)
-        return this.priorityTypes.find(type => type.id === this.setting);
+    getPriorityToEdit() {
+        return this.settingToEdit ? this.settingToEdit.priority : null;
     }
 }
