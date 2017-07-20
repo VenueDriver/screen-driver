@@ -136,19 +136,14 @@ export class VenuesComponent implements OnInit {
     }
 
     getPageTitle() {
-        if (this.isExistingSetting()) {
-            let priorityTypes = this.settingStateHolderService.getPriorityTypes();
-            let currentSettingType= priorityTypes.find(type => type.id === this.setting.priority);
-            return `${this.setting.name} (${currentSettingType.name})`;
-        }
-        return 'Actual';
+        return this.isExistingSetting() ? this.setting.name : 'Final';
     }
 
     private isExistingSetting() {
         return this.setting && this.setting.name;
     }
 
-    isAllowToEditSetting():boolean {
+    isAllowToEditSetting(): boolean {
         return this.isExistingSetting() && !this.isEditSettingMode;
     }
 
