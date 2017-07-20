@@ -14,11 +14,11 @@ import * as _ from 'lodash';
 export class SettingCreatorComponent implements OnInit {
 
     @Input() settings: Setting[];
+    @Input() setting: Setting;
 
-    @Output() created = new EventEmitter();
+    @Output() submitted = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
-    setting = new Setting();
     isInputValid = true;
     priorityTypes = [];
 
@@ -29,6 +29,9 @@ export class SettingCreatorComponent implements OnInit {
 
     ngOnInit() {
         this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
+        if (!this.setting){
+            this.setting = new Setting();
+        }
     }
 
     performSubmit() {
@@ -39,7 +42,7 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     handleResponse() {
-        this.created.emit();
+        this.submitted.emit();
     }
 
     handleError() {
@@ -51,6 +54,7 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     prioritySelected(priorityType) {
+        console.log('priority selected after dropdown emit')
         this.setting.priority = priorityType;
     }
 
@@ -61,5 +65,10 @@ export class SettingCreatorComponent implements OnInit {
 
     isButtonEnabled(): boolean {
         return !_.isEmpty(this.setting.name) && this.isInputValid;
+    }
+
+    getPriorityType() {
+        console.log(this.priorityTypes, this.setting.priority)
+        return this.priorityTypes.find(type => type.id === this.setting);
     }
 }

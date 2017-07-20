@@ -18,7 +18,8 @@ import {ToggleButtonComponent} from "../toggle-button/toggle-button.component";
         DropdownModule
     ],
     exports: [
-        SettingsComponent
+        SettingsComponent,
+        SettingCreatorComponent
     ],
     declarations: [
         SettingsComponent,

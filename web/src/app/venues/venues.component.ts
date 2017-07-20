@@ -24,6 +24,7 @@ export class VenuesComponent implements OnInit {
     settings: Setting[];
     isShowAddVenueForm = false;
     isCreateContentMode = false;
+    isEditSettingMode = false;
 
     constructor(
             private venuesService: VenuesService,
@@ -132,5 +133,26 @@ export class VenuesComponent implements OnInit {
 
     getCurrentSettingForEditForm() {
         return this.setting.id ? this.setting : null;
+    }
+
+    getPageTitle() {
+        if (this.isExistingSetting()) {
+            let priorityTypes = this.settingStateHolderService.getPriorityTypes();
+            let currentSettingType= priorityTypes.find(type => type.id === this.setting.priority);
+            return `${this.setting.name} (${currentSettingType.name})`;
+        }
+        return 'Actual';
+    }
+
+    private isExistingSetting() {
+        return this.setting && this.setting.name;
+    }
+
+    isAllowToEditSetting():boolean {
+        return this.isExistingSetting() && !this.isEditSettingMode;
+    }
+
+    changeEditSettingMode() {
+        this.isEditSettingMode = !this.isEditSettingMode;
     }
 }

@@ -1,7 +1,26 @@
 <div class="page-container">
     <div class="venues-container">
+
         <div class="header">
-            <div class="page-title">
+            <div *ngIf="!isEditSettingMode" class="page-title">
+                {{getPageTitle()}}
+            </div>
+            <div class="buttons-container">
+                <div *ngIf="isAllowToEditSetting()"
+                     class="button edit-button"
+                     (click)="changeEditSettingMode()">
+                </div>
+            </div>
+            <setting-creator
+                    *ngIf="isEditSettingMode"
+                    [settings]="settings"
+                    [setting]="setting">
+            </setting-creator>
+        </div>
+
+
+        <div class="venues-header">
+            <div class="title">
                 Venues
             </div>
             <div *ngIf="!isShowAddVenueForm"
