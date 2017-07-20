@@ -16,7 +16,6 @@ export class SettingsService {
     }
 
     createSetting(setting: Setting): Observable<Response> {
-        setting.priority = setting.priority['id'];
         return this.http.post(SETTINGS_API_URL, setting);
     }
 

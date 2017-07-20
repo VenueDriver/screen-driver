@@ -14,7 +14,9 @@
             <setting-creator
                     *ngIf="isEditSettingMode"
                     [settings]="settings"
-                    [setting]="setting">
+                    [settingToEdit]="setting"
+                    (submitted)="onSettingEdited()"
+                    (cancel)="changeEditSettingMode()">
             </setting-creator>
         </div>
 
