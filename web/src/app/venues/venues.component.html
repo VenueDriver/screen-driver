@@ -1,13 +1,13 @@
 <div class="page-container">
     <div class="venues-container">
 
-        <div class="header">
+        <div class="selected-setting-container">
             <div *ngIf="!isEditSettingMode"
                  class="setting-header"
                  [class.editable]="isAllowToEditSetting()"
                  (click)="activateEditMode()">
 
-                <div class="page-title" [class.disabled]="isSettingDisabled(setting)">
+                <div class="setting-title" [class.disabled]="isSettingDisabled(setting)">
                     {{getPageTitle()}}
                 </div>
 

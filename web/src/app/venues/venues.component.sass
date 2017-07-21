@@ -11,22 +11,32 @@
   .venues-container
     width: 800px
 
-    .setting-header
-      display: inline-block
-      padding: 4px 8px
-      border: 1px solid transparent
-      border-radius: 4px
-      cursor: text
+    .selected-setting-container
+      padding-bottom: 20px
+      margin-bottom: 20px
+      border-bottom: solid 1px #eee
+      min-height: 70px
 
-      &.editable:hover
-          border-color: #eee
-
-      .tag-container
+      .setting-header
         display: inline-block
-        margin-left: 10px
+        padding: 4px 8px
+        border: 1px solid transparent
+        border-radius: 4px
+        cursor: text
 
-        /deep/ .tag
-          font-size: 22px
+        &.editable:hover
+            border-color: #eee
+
+        .setting-title
+          font-size: 25px
+          display: inline-block
+
+        .tag-container
+          display: inline-block
+          margin-left: 10px
+
+          /deep/ .tag
+            font-size: 22px
 
     .venues-header
       border: none
