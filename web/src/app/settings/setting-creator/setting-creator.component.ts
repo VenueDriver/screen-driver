@@ -32,7 +32,14 @@ export class SettingCreatorComponent implements OnInit {
     ngOnInit() {
         this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
         this.setting = this.settingToEdit ? _.clone(this.settingToEdit) : new Setting();
+        this.filterCurrentSetting();
         this.subscribeOnCurrentSettingUpdate();
+    }
+
+    filterCurrentSetting() {
+        if (this.settingToEdit) {
+            this.settings = _.filter(this.settings, s => s.id !== this.settingToEdit.id);
+        }
     }
 
     subscribeOnCurrentSettingUpdate() {
@@ -83,7 +90,8 @@ export class SettingCreatorComponent implements OnInit {
 
     validateSettingName() {
         this.setting.name = this.setting.name.trim();
-        this.isInputValid = !_.find(this.settings, s => s.name === this.setting.name);
+
+        this.isInputValid = !_.find(this.settings, s => s.name.trim() === this.setting.name);
     }
 
     isButtonEnabled(): boolean {
