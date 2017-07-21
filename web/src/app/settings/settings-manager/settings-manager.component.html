@@ -36,7 +36,7 @@
         <div *ngIf="creationMode">
             <setting-creator
                     [settings]="settings"
-                    (submitted)="handleSettingCreation()"
+                    (submit)="handleSettingCreation()"
                     (cancel)="disableCreationMode()">
             </setting-creator>
         </div>

@@ -16,7 +16,7 @@ export class SettingCreatorComponent implements OnInit {
     @Input() settings: Setting[];
     @Input() settingToEdit: Setting;
 
-    @Output() submitted = new EventEmitter();
+    @Output() submit = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
     setting: Setting;
@@ -65,7 +65,7 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     handleResponse() {
-        this.submitted.emit();
+        this.submit.emit();
     }
 
     handleError() {

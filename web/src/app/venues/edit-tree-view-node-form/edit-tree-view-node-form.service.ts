@@ -101,7 +101,7 @@ export class EditTreeViewNodeFormService {
     updateSetting(setting: Setting) {
         this.settingsService.updateSetting(setting)
             .subscribe(
-                response => this.settingStateHolderService.reloadSetting(),
+                response => this.settingStateHolderService.reloadSettings(),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform setting update operation')
             );
     }

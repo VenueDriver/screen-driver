@@ -21,7 +21,7 @@
                     *ngIf="isEditSettingMode"
                     [settings]="settings"
                     [settingToEdit]="setting"
-                    (submitted)="onSettingEdited()"
+                    (submit)="onSettingEdited()"
                     (cancel)="toggleEditSettingMode()">
             </setting-creator>
         </div>

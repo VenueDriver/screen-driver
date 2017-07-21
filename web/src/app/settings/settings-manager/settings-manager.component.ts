@@ -52,7 +52,7 @@ export class SettingsManagerComponent implements OnInit {
     }
 
     handleSettingCreation() {
-        this.settingStateHolderService.reloadSetting();
+        this.settingStateHolderService.reloadSettings();
         this.disableCreationMode();
     }
 
@@ -78,7 +78,7 @@ export class SettingsManagerComponent implements OnInit {
     }
 
     handleUpdateSettingResponse() {
-        this.settingStateHolderService.reloadSetting();
+        this.settingStateHolderService.reloadSettings(this.activeSetting.id);
         if (!this.activeSetting) {
             this.showCurrentState();
         }
