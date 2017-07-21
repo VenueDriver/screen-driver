@@ -26,7 +26,8 @@ export class SettingCreatorComponent implements OnInit {
     constructor(
         private settingsService: SettingsService,
         private notificationService: NotificationService,
-        private settingStateHolderService: SettingStateHolderService) { }
+        private settingStateHolderService: SettingStateHolderService
+    ) { }
 
     ngOnInit() {
         this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
@@ -34,7 +35,7 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     performSubmit() {
-        if (this.settingToEdit){
+        if (this.settingToEdit) {
             this.updateSetting();
         } else {
             this.createSetting();
