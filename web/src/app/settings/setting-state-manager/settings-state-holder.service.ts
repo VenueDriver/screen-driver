@@ -41,7 +41,7 @@ export class SettingStateHolderService {
     }
 
     getAllSettings(): Observable<Setting[]> {
-        return this.setting.asObservable();
+        return this.setting.map(settings => _.sortBy(settings, 'name'));
     }
 
     getCurrentSetting(): Observable<Setting> {
