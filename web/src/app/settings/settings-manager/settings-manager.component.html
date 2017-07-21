@@ -27,7 +27,10 @@
 
     <div class="settings-list-footer">
         <a class="default-button" (click)="showCurrentState()">Show merged setting</a>
-        <span class="enabled">{{getEnabledSettingsCount()}} enabled</span>
+        <span class="enabled"
+              [ngClass]="{'warning': getEnabledSettingsCount() == 0}">
+            {{getEnabledSettingsCount()}} enabled
+        </span>
     </div>
 
 </div>
