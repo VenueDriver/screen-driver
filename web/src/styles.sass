@@ -1,4 +1,4 @@
-@import "variables"
+@import "styles/variables"
 
 body
   margin: 50px 25px 45px 0
@@ -93,5 +93,13 @@ body
     label
       margin-bottom: 0 !important
 
+  .info-message
+    font-size: 17px
+    font-style: italic
+    color: $gray-color
+
 .edit-button
   content: url('./assets/images/edit.png')
+
+  &.disabled
+    content: url('./assets/images/edit-disabled.png')

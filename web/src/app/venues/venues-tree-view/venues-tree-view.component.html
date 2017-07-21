@@ -13,7 +13,7 @@
                         <span class="content-url">{{ getContentUrl(node) }}</span>
                     </div>
                     <ng-template #contentPlaceholder>
-                        <div class="content-url-placeholder">{{getPlaceholderForDefaultUrl(node)}}</div>
+                        <div class="content-url-placeholder info-message">{{getPlaceholderForDefaultUrl(node)}}</div>
                     </ng-template>
                 </div>
 
@@ -33,6 +33,7 @@
                 <div class="buttons-container">
                     <div *ngIf="isAllowToEditNode()"
                          class="node-button edit-button"
+                         [ngClass]="{'disabled': !currentSetting}"
                          (click)="editNode($event, node); validateForm(node)"
                          [title]="getEditButtonTitle(node)">
                     </div>

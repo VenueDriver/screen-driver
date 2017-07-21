@@ -90,7 +90,6 @@ export class SettingCreatorComponent implements OnInit {
 
     validateSettingName() {
         this.setting.name = this.setting.name.trim();
-
         this.isInputValid = !_.find(this.settings, s => s.name.trim() === this.setting.name);
     }
 

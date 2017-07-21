@@ -143,11 +143,11 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     isAllowToAddChild(node: any) {
-        return node.level < 3 && _.isEmpty(this.currentNodeData);
+        return node.level < 3 && this.isAllowToEditNode();
     }
 
     isAllowToEditNode() {
-        return _.isEmpty(this.currentNodeData) && this.currentSetting;
+        return _.isEmpty(this.currentNodeData);
     }
 
     performCancel(node: any) {
@@ -199,9 +199,11 @@ export class VenuesTreeViewComponent implements OnInit {
 
     editNode(event: any, node: any) {
         this.stopClickPropagation(event);
-        this.currentNodeData = node.data;
-        this.originalNodeData = _.clone(node.data);
-        this.updateTreeViewOptions();
+        if (this.currentSetting) {
+            this.currentNodeData = node.data;
+            this.originalNodeData = _.clone(node.data);
+            this.updateTreeViewOptions();
+        }
     }
 
     hasChildren(node: any): boolean {
