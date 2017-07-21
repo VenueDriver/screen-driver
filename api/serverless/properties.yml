@@ -1,0 +1,5 @@
+pusher:
+  app_id: "370855"
+  key: "c16dc8056048b523c68a"
+  secret: "2e072fa506ae6f10a741"
+  cluster: "eu"
