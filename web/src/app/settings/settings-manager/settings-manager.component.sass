@@ -1,3 +1,5 @@
+@import "../../../variables"
+
 .sidebar
   font-size: 18px
   position: fixed
@@ -10,15 +12,29 @@
   background-color: #f5f5f5
   width: 250px
 
-  @media screen and (max-width: 1300px)
+  @media screen and (min-width: 1550px)
+    width: 350px
+
+  @media screen and (max-width: $sidebar-visibility-width)
     display: none
     margin-left: -5px
+    width: 350px
+
+  @media screen and (max-width: $tablet-resolution)
+    width: 100%
 
   &.active
     display: block
 
   .side-bar-title
+    display: flex
+    align-items: center
     padding: 10px 0 0 15px
+
+    .plus-button
+      margin: 0 15px 0 auto
+      content: url('../../../assets/images/add-circular-outlined-button.png')
+      cursor: pointer
 
   ul
     li
@@ -40,18 +56,3 @@
       .switcher
         margin: 5px 0 0 auto
         display: inline-block
-
-  .form-container
-    margin-top: 25px
-    padding: 0 10px
-
-  .create-btn-container
-    cursor: pointer
-
-    &:hover
-      background-color: #e7e7e7
-
-    button
-      font-size: 18px
-      &:hover
-        text-decoration: none

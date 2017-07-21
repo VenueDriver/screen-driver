@@ -14,32 +14,66 @@ import * as _ from 'lodash';
 export class SettingCreatorComponent implements OnInit {
 
     @Input() settings: Setting[];
+    @Input() settingToEdit: Setting;
 
-    @Output() created = new EventEmitter();
+    @Output() submit = new EventEmitter();
     @Output() cancel = new EventEmitter();
 
-    setting = new Setting();
+    setting: Setting;
     isInputValid = true;
     priorityTypes = [];
 
     constructor(
         private settingsService: SettingsService,
         private notificationService: NotificationService,
-        private settingStateHolderService: SettingStateHolderService) { }
+        private settingStateHolderService: SettingStateHolderService
+    ) { }
 
     ngOnInit() {
         this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
+        this.setting = this.settingToEdit ? _.clone(this.settingToEdit) : new Setting();
+        this.filterCurrentSetting();
+        this.subscribeOnCurrentSettingUpdate();
+    }
+
+    filterCurrentSetting() {
+        if (this.settingToEdit) {
+            this.settings = _.filter(this.settings, s => s.id !== this.settingToEdit.id);
+        }
+    }
+
+    subscribeOnCurrentSettingUpdate() {
+        let configUpdateSubscription = this.settingStateHolderService.getCurrentSetting().subscribe(() => {
+            configUpdateSubscription.unsubscribe();
+            this.performCancel();
+        });
     }
 
     performSubmit() {
+        if (this.settingToEdit) {
+            this.updateSetting();
+        } else {
+            this.createSetting();
+        }
+    }
+
+    private createSetting() {
         this.settingsService.createSetting(this.setting).subscribe(
-            response => this.handleResponse(),
+            (setting: Setting) => this.handleResponse(setting.id),
             error => this.handleError()
         );
     }
 
-    handleResponse() {
-        this.created.emit();
+    private updateSetting() {
+        this.settingsService.updateSetting(this.setting).subscribe(
+            response => this.handleResponse(),
+            error => this.handleError()
+        )
+    }
+
+    handleResponse(currentSettingId?: string) {
+        this.settingStateHolderService.reloadSettings(currentSettingId);
+        this.submit.emit();
     }
 
     handleError() {
@@ -51,15 +85,20 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     prioritySelected(priorityType) {
-        this.setting.priority = priorityType;
+        this.setting.priority = priorityType.id;
     }
 
     validateSettingName() {
         this.setting.name = this.setting.name.trim();
-        this.isInputValid = !_.find(this.settings, s => s.name === this.setting.name);
+
+        this.isInputValid = !_.find(this.settings, s => s.name.trim() === this.setting.name);
     }
 
     isButtonEnabled(): boolean {
         return !_.isEmpty(this.setting.name) && this.isInputValid;
+    }
+
+    getPriorityToEdit() {
+        return this.settingToEdit ? this.settingToEdit.priority : null;
     }
 }

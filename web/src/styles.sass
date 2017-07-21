@@ -1,36 +1,26 @@
 @import "variables"
 
 body
-  margin: 0 25px 45px 0
+  margin: 50px 25px 45px 0
 
   @media (max-width: $sidebar-visibility-width)
     padding-left: 0
+
     .navbar-toggle, .navbar-brand
       float: none
       display: inline-block
 
   @media screen and (max-width: $tablet-resolution)
-    margin: 0 5px 45px
+    margin: 25px 5px 45px
+
+    .navbar-brand
+      margin-left: -15px
 
   .notifications-container
     line-height: 50px !important
 
     .notification
       font-size: 16px !important
-
-  .header
-    padding: 0 0 20px 5px
-    margin-bottom: 20px
-    border-bottom: solid 1px #eee
-
-    .page-title
-      font-size: 25px
-      display: inline-block
-
-    .add-button
-      display: inline-block
-      float: right
-      cursor: pointer
 
   .navbar-default
     margin: 0 -25px 20px 0
@@ -81,6 +71,8 @@ body
     font-size: 13px
 
   .btn
+    width: 75px
+
     &.btn-link:focus
       outline: none
 
@@ -100,3 +92,6 @@ body
   .switcher
     label
       margin-bottom: 0 !important
+
+.edit-button
+  content: url('./assets/images/edit.png')

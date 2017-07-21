@@ -1,7 +1,46 @@
 <div class="page-container">
-    <div class="venues-container">
-        <div class="header">
-            <div class="page-title">
+
+    <div class="create-setting-container main-container" *ngIf="isCreateSettingMode">
+        <div class="title">
+            Create new setting
+        </div>
+        <setting-creator
+                [settings]="settings"
+                (submit)="toggleCreateSettingMode()"
+                (cancel)="toggleCreateSettingMode()">
+        </setting-creator>
+    </div>
+
+    <div class="venues-container main-container" *ngIf="!isCreateSettingMode">
+
+        <div class="selected-setting-container">
+            <div *ngIf="!isEditSettingMode"
+                 class="setting-header"
+                 [class.editable]="isAllowToEditSetting()"
+                 (click)="activateEditMode()">
+
+                <div class="setting-title" [class.disabled]="isSettingDisabled(setting)">
+                    {{getPageTitle()}}
+                </div>
+
+                <div class="tag-container" *ngIf="isAllowToEditSetting()">
+                    <priority-type-tag [setting]="setting"></priority-type-tag>
+                </div>
+
+            </div>
+
+            <setting-creator
+                    *ngIf="isEditSettingMode"
+                    [settings]="settings"
+                    [settingToEdit]="setting"
+                    (submit)="onSettingEdited()"
+                    (cancel)="toggleEditSettingMode()">
+            </setting-creator>
+        </div>
+
+
+        <div class="venues-header">
+            <div class="title">
                 Venues
             </div>
             <div *ngIf="!isShowAddVenueForm"

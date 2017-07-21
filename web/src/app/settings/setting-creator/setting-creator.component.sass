@@ -1,14 +1,33 @@
+@import "../../../variables"
+
 .create-setting-corm-container
+  display: inline-block
+  width: 100%
 
   .validation-error
     margin-top: -18px
 
-  input
-    font-size: 18px
+  .inputs-container
 
-  .setting-type-dropdown
-    margin-top: 10px
+    @media screen and (min-width: $tablet-resolution)
+      display: flex
+      align-items: center
 
-  .btn-container
-    margin-top: 10px
-    float: right
+    input
+      font-size: 18px
+      height: 35px
+      margin-right: 15px
+      flex: 1
+
+      @media screen and (max-width: $tablet-resolution)
+        margin-bottom: 10px
+
+    .setting-type-dropdown
+      flex: 1
+
+    .btn-container
+      float: right
+      margin-left: 15px
+
+      @media screen and (max-width: $tablet-resolution)
+        margin-top: 10px

@@ -3,6 +3,7 @@ import {Setting} from "../entities/setting";
 import {Subject, Observable} from "rxjs";
 import {SettingsService} from "../settings.service";
 
+import * as _ from 'lodash';
 
 @Injectable()
 export class SettingStateHolderService {
@@ -14,12 +15,21 @@ export class SettingStateHolderService {
     constructor(private settingsService: SettingsService) {
     }
 
-    reloadSetting() {
+    reloadSettings(currentSettingId?: string) {
         this.settingsService.loadSettings()
             .subscribe(response => {
-                this.updateSettings(response.json().settings);
+                let settings = response.json().settings;
+                this.updateSettings(settings);
                 this.priorityTypes = response.json().priorityTypes;
+                this.updateCurrentSettingIfSelected(settings, currentSettingId);
             });
+    }
+
+    updateCurrentSettingIfSelected(settings: Setting[], currentSettingId: string) {
+        if (currentSettingId) {
+            let currentSetting = _.find(settings, s => s.id === currentSettingId);
+            this.changeCurrentSetting(currentSetting);
+        }
     }
 
     updateSettings(settings: Setting[]) {
@@ -31,7 +41,7 @@ export class SettingStateHolderService {
     }
 
     getAllSettings(): Observable<Setting[]> {
-        return this.setting.asObservable();
+        return this.setting.map(settings => _.sortBy(settings, 'name'));
     }
 
     getCurrentSetting(): Observable<Setting> {

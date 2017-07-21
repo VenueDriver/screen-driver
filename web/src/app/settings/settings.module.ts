@@ -19,7 +19,9 @@ import { PriorityTypeTagComponent } from './priority-type-tag/priority-type-tag.
         DropdownModule
     ],
     exports: [
-        SettingsComponent
+        SettingsComponent,
+        SettingCreatorComponent,
+        PriorityTypeTagComponent
     ],
     declarations: [
         SettingsComponent,

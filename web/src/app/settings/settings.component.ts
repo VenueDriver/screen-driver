@@ -16,7 +16,7 @@ export class SettingsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.settingStateHolderService.reloadSetting();
+        this.settingStateHolderService.reloadSettings();
         this.settingStateHolderService.getAllSettings().subscribe(settings => this.settings = settings);
         this.settingStateHolderService.getCurrentSetting().subscribe(setting => this.currentSetting = setting);
     }
