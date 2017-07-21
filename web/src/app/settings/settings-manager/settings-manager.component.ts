@@ -76,7 +76,8 @@ export class SettingsManagerComponent implements OnInit {
     }
 
     handleUpdateSettingResponse() {
-        this.settingStateHolderService.reloadSettings(this.activeSetting.id);
+        let currentSettingId = this.activeSetting ? this.activeSetting.id : '';
+        this.settingStateHolderService.reloadSettings(currentSettingId);
         if (!this.activeSetting) {
             this.showCurrentState();
         }
