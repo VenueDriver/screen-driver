@@ -10,6 +10,7 @@ import {Setting} from "../../settings/entities/setting";
 
 import * as _ from 'lodash';
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
+import {ScreensService} from "../screens.service";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
 
@@ -40,6 +41,7 @@ export class VenuesTreeViewComponent implements OnInit {
         private venuesService: VenuesService,
         private treeViewService: VenuesTreeViewService,
         private settingStateHolderService: SettingStateHolderService,
+        private screensService: ScreensService,
     ) { }
 
     ngOnInit() {
@@ -146,6 +148,10 @@ export class VenuesTreeViewComponent implements OnInit {
         return node.level < 3 && _.isEmpty(this.currentNodeData);
     }
 
+    isAllowToRefreshScreenContent(node: any) {
+        return node.level == 3 && _.isEmpty(this.currentNodeData);
+    }
+
     isAllowToEditNode() {
         return _.isEmpty(this.currentNodeData) && this.currentSetting;
     }
@@ -212,6 +218,10 @@ export class VenuesTreeViewComponent implements OnInit {
         event.stopPropagation();
     }
 
+    refreshContent(id: string) {
+        this.screensService.refreshScreen(id).subscribe();
+    }
+
     isCurrentNodeHasName(): boolean {
         return !_.isEmpty(this.currentNodeData.name);
     }
@@ -224,6 +234,11 @@ export class VenuesTreeViewComponent implements OnInit {
     getEditButtonTitle(node: any): string {
         let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
         return `Edit ${nodeLevelName.toLowerCase()}`;
+    }
+
+    getRefreshButtonTitle(node: any): string {
+        let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
+        return `Refresh ${nodeLevelName.toLowerCase()} content`;
     }
 
     getNodeLevelName(node: any): string {
