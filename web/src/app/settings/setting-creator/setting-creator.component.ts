@@ -52,7 +52,7 @@ export class SettingCreatorComponent implements OnInit {
 
     private createSetting() {
         this.settingsService.createSetting(this.setting).subscribe(
-            response => this.handleResponse(),
+            (setting: Setting) => this.handleResponse(setting.id),
             error => this.handleError()
         );
     }
@@ -64,8 +64,8 @@ export class SettingCreatorComponent implements OnInit {
         )
     }
 
-    handleResponse() {
-        this.settingStateHolderService.reloadSettings();
+    handleResponse(currentSettingId?: string) {
+        this.settingStateHolderService.reloadSettings(currentSettingId);
         this.submit.emit();
     }
 

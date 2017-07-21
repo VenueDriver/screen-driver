@@ -16,7 +16,6 @@ export class SettingsManagerComponent implements OnInit {
     @Output() settingSelected: EventEmitter<Setting> = new EventEmitter();
 
     activeSetting: Setting;
-    creationMode = false;
     showSidebar = true;
 
     constructor(private headerService: HeaderService,
@@ -30,11 +29,17 @@ export class SettingsManagerComponent implements OnInit {
             this.activeSetting = this.settings[0];
         }
         this.subscribeOnSidebarToggle();
+        this.subscribeOnCurrentSettingChange();
     }
 
     subscribeOnSidebarToggle() {
         this.headerService.getSideBarToggleSubscription()
             .subscribe(() => this.toggle());
+    }
+
+    subscribeOnCurrentSettingChange() {
+        this.settingStateHolderService.getCurrentSetting()
+            .subscribe(setting => this.activeSetting = setting);
     }
 
     toggle() {
@@ -43,7 +48,6 @@ export class SettingsManagerComponent implements OnInit {
 
     onSettingSelection(setting: Setting) {
         this.settingSelected.emit(setting);
-        this.activeSetting = setting;
         this.headerService.pushSidebarToggleEvent();
     }
 

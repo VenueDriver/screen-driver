@@ -17,8 +17,9 @@ export class SettingsService {
         return this.http.get(SETTINGS_API_URL)
     }
 
-    createSetting(setting: Setting): Observable<Response> {
-        return this.http.post(SETTINGS_API_URL, setting);
+    createSetting(setting: Setting): Observable<Setting> {
+        return this.http.post(SETTINGS_API_URL, setting)
+            .map(response => response.json());
     }
 
     updateSetting(setting: Setting): Observable<Response> {
