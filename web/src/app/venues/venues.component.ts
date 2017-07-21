@@ -145,7 +145,7 @@ export class VenuesComponent implements OnInit {
     }
 
     getPageTitle() {
-        return this.isExistingSetting() ? this.setting.name : 'Final';
+        return this.isExistingSetting() ? this.setting.name : 'Merged setting';
     }
 
     private isExistingSetting() {
