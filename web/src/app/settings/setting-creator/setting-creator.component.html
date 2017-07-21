@@ -4,19 +4,21 @@
         Setting with such name already exists
     </div>
 
-    <input type="text"
-           class="form-control"
-           [(ngModel)]="setting.name"
-           placeholder="Setting name"
-           (ngModelChange)="validateSettingName()"
-           input-autofocus>
+    <div class="inputs-container">
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="setting.name"
+               placeholder="Setting name"
+               (ngModelChange)="validateSettingName()"
+               input-autofocus>
 
-    <div class="setting-type-dropdown">
-        <dropdown
-                [items]="priorityTypes"
-                [selected]="getPriorityToEdit()"
-                (select)="prioritySelected($event)">
-        </dropdown>
+        <div class="setting-type-dropdown">
+            <dropdown
+                    [items]="priorityTypes"
+                    [selected]="getPriorityToEdit()"
+                    (select)="prioritySelected($event)">
+            </dropdown>
+        </div>
     </div>
 
     <div class="btn-container">
