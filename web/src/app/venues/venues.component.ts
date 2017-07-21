@@ -178,4 +178,8 @@ export class VenuesComponent implements OnInit {
     toggleCreateSettingMode() {
         this.isCreateSettingMode = !this.isCreateSettingMode;
     }
+
+    showInfoMessage(): boolean {
+        return this.setting ? !this.setting.id : false;
+    }
 }
