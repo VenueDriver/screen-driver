@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import {Http, Response} from "@angular/http";
 import {Setting} from "./entities/setting";
 import {environment} from "../../environments/environment";
-import {Observable} from "rxjs";
+import {Observable, Subject, BehaviorSubject} from "rxjs";
 
 const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;
 
 @Injectable()
 export class SettingsService {
+
+    private createSettingEvent: Subject<any> = new BehaviorSubject({});
 
     constructor(private http: Http) { }
 
@@ -21,5 +23,13 @@ export class SettingsService {
 
     updateSetting(setting: Setting): Observable<Response> {
         return this.http.put(`${SETTINGS_API_URL}/${setting.id}`, setting);
+    }
+
+    getCreateSettingEventSubscription(): Observable<any> {
+        return this.createSettingEvent;
+    }
+
+    emitCreateSettingEvent() {
+        this.createSettingEvent.next();
     }
 }

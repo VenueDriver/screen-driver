@@ -1,5 +1,14 @@
 <div class="page-container">
-    <div class="venues-container">
+
+    <div class="create-setting main-container" *ngIf="isCreateSettingMode">
+        <setting-creator
+                [settings]="settings"
+                (submit)="toggleCreateSettingMode()"
+                (cancel)="toggleCreateSettingMode()">
+        </setting-creator>
+    </div>
+
+    <div class="venues-container main-container" *ngIf="!isCreateSettingMode">
 
         <div class="selected-setting-container">
             <div *ngIf="!isEditSettingMode"

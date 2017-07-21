@@ -9,7 +9,6 @@
         </div>
     </div>
 
-
     <hr>
 
     <ul class="nav navbar-stacked">
@@ -34,15 +33,4 @@
     </ul>
 
     <hr>
-
-    <div class="form-container">
-
-        <div *ngIf="creationMode">
-            <setting-creator
-                    [settings]="settings"
-                    (submit)="handleSettingCreation()"
-                    (cancel)="disableCreationMode()">
-            </setting-creator>
-        </div>
-    </div>
 </div>

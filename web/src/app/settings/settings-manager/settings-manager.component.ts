@@ -51,17 +51,8 @@ export class SettingsManagerComponent implements OnInit {
         return this.activeSetting && this.activeSetting.id === setting.id;
     }
 
-    handleSettingCreation() {
-        this.settingStateHolderService.reloadSettings();
-        this.disableCreationMode();
-    }
-
     enableCreationMode() {
-        this.creationMode = true;
-    }
-
-    disableCreationMode() {
-        this.creationMode = false;
+        this.settingsService.emitCreateSettingEvent();
     }
 
     onToggleClick(event: any) {

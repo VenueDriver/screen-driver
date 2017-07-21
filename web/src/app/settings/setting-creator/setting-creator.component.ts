@@ -65,6 +65,7 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     handleResponse() {
+        this.settingStateHolderService.reloadSettings();
         this.submit.emit();
     }
 

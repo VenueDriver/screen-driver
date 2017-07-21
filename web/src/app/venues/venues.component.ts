@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../settings/entities/setting";
 import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
+import {SettingsService} from "../settings/settings.service";
 
 @Component({
     selector: 'venues',
@@ -25,10 +26,12 @@ export class VenuesComponent implements OnInit {
     isShowAddVenueForm = false;
     isCreateContentMode = false;
     isEditSettingMode = false;
+    isCreateSettingMode;
 
     constructor(
             private venuesService: VenuesService,
             private contentService: ContentService,
+            private settingsService: SettingsService,
             private settingStateHolderService: SettingStateHolderService
     ) {
     }
@@ -38,6 +41,8 @@ export class VenuesComponent implements OnInit {
         this.subscribeToContentUpdate();
         this.subscribeToCurrentSettingUpdate();
         this.subscribeToSettingsUpdate();
+        this.subscribeToSettingCreateEvent();
+        this.isCreateSettingMode = false;
     }
 
     subscribeToVenueUpdate() {
@@ -69,6 +74,10 @@ export class VenuesComponent implements OnInit {
     subscribeToSettingsUpdate() {
         this.settingStateHolderService.getAllSettings()
             .subscribe(settings => this.settings = settings);
+    }
+
+    subscribeToSettingCreateEvent() {
+        this.settingsService.getCreateSettingEventSubscription().subscribe(() => this.isCreateSettingMode = true);
     }
 
     loadVenues() {
@@ -164,5 +173,9 @@ export class VenuesComponent implements OnInit {
 
     isSettingDisabled(setting: Setting): boolean {
         return setting ? !setting.enabled : true;
+    }
+
+    toggleCreateSettingMode() {
+        this.isCreateSettingMode = !this.isCreateSettingMode;
     }
 }
