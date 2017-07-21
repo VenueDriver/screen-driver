@@ -8,12 +8,14 @@ const CurrentScreenSettingsManager = require('./js/current_screen_settings_manag
 const WindowsHelper = require('./js/helpers/windows_helper');
 const CronJobsManager = require('./js/helpers/cron_jobs_helper');
 const Logger = require('./js/logger/logger');
+const NotificationListener = require('./js/notification-listener/notification_listener');
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
 
 let mainWindow;
 let settingsLoadJob;
+let notificationListener;
 
 setupLogger();
 
@@ -34,6 +36,7 @@ function setupLogger() {
 
 function ready() {
     powerSaveBlocker.start('prevent-display-sleep');
+    notificationListener = new NotificationListener();
 
     openWindow();
 
@@ -103,6 +106,16 @@ function openContentWindow(contentUrl) {
     mainWindow = newWindow;
     hideCursor(mainWindow);
     settingsLoadJob = CronJobsManager.initSettingsLoadJob(mainWindow);
+    subscribeToScreenReloadNotification();
+}
+
+function subscribeToScreenReloadNotification() {
+    notificationListener.subscribe('screens', 'refresh', (data) => {
+        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+            if (data.screens.includes(setting.selectedScreenId))
+                mainWindow.reload();
+        })
+    });
 }
 
 function closeCurrentWindow() {

@@ -94,3 +94,12 @@ reload_screens:
         path: api/screens/reload
         method: post
         cors: true
+
+get_pusher_config:
+  handler: screens/get_config.getConfig
+  environment: ${self:custom.properties.pusher}
+  events:
+    - http:
+        path: api/screens/notification-config
+        method: get
+        cors: true

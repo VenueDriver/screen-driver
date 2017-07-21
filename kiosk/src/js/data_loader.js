@@ -51,8 +51,15 @@ class DataLoader {
     }
 
     static loadConfigs() {
-        let contentUrl = `${API}/api/configs`;
+        let contentUrl = `${API}/api/settings`;
         let request = net.request(contentUrl);
+
+        return DataLoader.generatePromise(request);
+    }
+
+    static loadNotificationsConfig() {
+        let notificationsConfigUrl = `${API}/api/screens/notification-config`;
+        let request = net.request(notificationsConfigUrl);
 
         return DataLoader.generatePromise(request);
     }
