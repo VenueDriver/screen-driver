@@ -1,0 +1,95 @@
+get_venues_list:
+  handler: venues/list.list
+  events:
+    - http:
+        path: api/venues
+        method: get
+        cors: true
+
+create_venue:
+  handler: venues/create.create
+  events:
+    - http:
+        path: api/venues
+        method: post
+        cors: true
+
+update_venue:
+  handler: venues/update.update
+  events:
+    - http:
+        path: api/venues/{id}
+        method: put
+        cors: true
+
+delete_venue:
+  handler: venues/delete.delete
+  events:
+    - http:
+        path: api/venues/{id}
+        method: delete
+        cors: true
+
+get_content_list:
+  handler: content/list.list
+  events:
+    - http:
+        path: api/content
+        method: get
+        cors: true
+
+create_content:
+  handler: content/create.create
+  events:
+    - http:
+        path: api/content
+        method: post
+        cors: true
+
+update_content:
+  handler: content/update.update
+  events:
+    - http:
+        path: api/content/{id}
+        method: put
+        cors: true
+
+delete_content:
+  handler: content/delete.delete
+  events:
+    - http:
+        path: api/content/{id}
+        method: delete
+        cors: true
+
+get_settings_list:
+  handler: setting/list.list
+  events:
+    - http:
+        path: api/settings
+        method: get
+        cors: true
+
+create_setting:
+  handler: setting/create.create
+  events:
+    - http:
+        path: api/settings
+        method: post
+        cors: true
+
+update_setting:
+  handler: setting/update.update
+  events:
+    - http:
+        path: api/settings/{id}
+        method: put
+        cors: true
+
+push:
+  handler: pusher.trigger_pusher
+  events:
+    - http:
+        path: api/push
+        method: get
+        cors: true
