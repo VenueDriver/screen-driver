@@ -21,11 +21,15 @@ export class SettingStateHolderService {
                 let settings = response.json().settings;
                 this.updateSettings(settings);
                 this.priorityTypes = response.json().priorityTypes;
-                if (currentSettingId) {
-                    let currentSetting = _.find(settings, s => s.id === currentSettingId);
-                    this.changeCurrentSetting(currentSetting);
-                }
+                this.updateCurrentSettingIfSelected(settings, currentSettingId);
             });
+    }
+
+    updateCurrentSettingIfSelected(settings: Setting[], currentSettingId: string) {
+        if (currentSettingId) {
+            let currentSetting = _.find(settings, s => s.id === currentSettingId);
+            this.changeCurrentSetting(currentSetting);
+        }
     }
 
     updateSettings(settings: Setting[]) {
