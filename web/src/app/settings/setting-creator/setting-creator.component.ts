@@ -32,6 +32,14 @@ export class SettingCreatorComponent implements OnInit {
     ngOnInit() {
         this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
         this.setting = this.settingToEdit ? _.clone(this.settingToEdit) : new Setting();
+        this.subscribeOnCurrentSettingUpdate();
+    }
+
+    subscribeOnCurrentSettingUpdate() {
+        let configUpdateSubscription = this.settingStateHolderService.getCurrentSetting().subscribe(() => {
+            configUpdateSubscription.unsubscribe();
+            this.performCancel();
+        });
     }
 
     performSubmit() {
