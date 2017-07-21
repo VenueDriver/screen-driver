@@ -1,6 +1,9 @@
 <div class="page-container">
 
-    <div class="create-setting main-container" *ngIf="isCreateSettingMode">
+    <div class="create-setting-container main-container" *ngIf="isCreateSettingMode">
+        <div class="title">
+            Create new setting
+        </div>
         <setting-creator
                 [settings]="settings"
                 (submit)="toggleCreateSettingMode()"
