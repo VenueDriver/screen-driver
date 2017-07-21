@@ -9,6 +9,7 @@ export class DropdownComponent implements OnInit {
 
     @Input() items: any;
     @Input() dropdownValue: string;
+    @Input() selected: any;
 
     @Output() select = new EventEmitter();
 
@@ -16,8 +17,16 @@ export class DropdownComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.dropdownValue = this.items[0].name;
-        this.select.emit(this.items[0]);
+        this.initDefaultItem();
+    }
+
+    private initDefaultItem() {
+        if (this.selected) {
+            let foundType = this.items.find(item => item.id === this.selected);
+            this.selectItem(foundType);
+        } else {
+            this.selectItem(this.items[0]);
+        }
     }
 
     getItems() {

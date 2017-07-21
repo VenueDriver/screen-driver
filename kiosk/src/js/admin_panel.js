@@ -20,6 +20,24 @@ let screenSetting;
 let serverData;
 
 $(function () {
+
+    readLogs();
+
+    function readLogs() {
+        let logsFilePath = Logger.getLogsFileLocation();
+        let logs = FileReader.readFile(logsFilePath);
+        insertLogsOnPage(logs);
+    }
+
+    function insertLogsOnPage(logs) {
+        let logsElement = $('#logs');
+        let logLines = logs.split('\n');
+        _.forEach(logLines, line => {
+            logsElement.append(line);
+            logsElement.append('<br>');
+        });
+    }
+
     $("#save").click(function () {
         if (verifySaveButtonState()) {
             saveSelectionInStorage();
@@ -54,7 +72,10 @@ $(function () {
     $("#show-logs").click(function () {
         $(this).hide();
         $("#hide-logs").show();
-        $("#logs").show();
+
+        let logsElement = $("#logs");
+        logsElement.show();
+        logsElement.scrollTop(logsElement[0].scrollHeight);
     });
 
     $("#hide-logs").click(function () {
@@ -64,28 +85,12 @@ $(function () {
     });
 });
 
-readLogs();
 turnOnLogging();
 
 loadData();
 
 verifySaveButtonState();
 verifyCancelButtonState();
-
-function readLogs() {
-    let logsFilePath = Logger.getLogsFileLocation();
-    let logs = FileReader.readFile(logsFilePath);
-    insertLogsOnPage(logs);
-}
-
-function insertLogsOnPage(logs) {
-    let logsElement = $('#logs');
-    let logLines = logs.split('\n');
-    _.forEach(logLines, line => {
-        logsElement.append(line);
-        logsElement.append('<br>');
-    });
-}
 
 function turnOnLogging() {
     window.onerror = function(error, url, line) {

@@ -9,6 +9,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {DropdownModule} from "../dropdown/dropdown.module";
 import {SettingsManagerComponent} from "./settings-manager/settings-manager.component";
 import {ToggleButtonComponent} from "../toggle-button/toggle-button.component";
+import { PriorityTypeTagComponent } from './priority-type-tag/priority-type-tag.component';
 
 @NgModule({
     imports: [
@@ -18,13 +19,16 @@ import {ToggleButtonComponent} from "../toggle-button/toggle-button.component";
         DropdownModule
     ],
     exports: [
-        SettingsComponent
+        SettingsComponent,
+        SettingCreatorComponent,
+        PriorityTypeTagComponent
     ],
     declarations: [
         SettingsComponent,
         SettingCreatorComponent,
         SettingsManagerComponent,
-        ToggleButtonComponent
+        ToggleButtonComponent,
+        PriorityTypeTagComponent
     ],
     providers: [
         SettingsService,

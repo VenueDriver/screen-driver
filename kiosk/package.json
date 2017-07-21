@@ -1,6 +1,6 @@
 {
   "name": "ScreenDriver",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "ScreenDriver kiosk app",
   "main": "src/main.js",
   "scripts": {

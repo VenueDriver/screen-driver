@@ -26,6 +26,7 @@ export class SettingMergeTool {
                 }
             }
         });
+        mergedConfig.enabled = true;
         return mergedConfig;
     }
 
