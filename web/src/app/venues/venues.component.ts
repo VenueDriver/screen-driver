@@ -161,4 +161,8 @@ export class VenuesComponent implements OnInit {
         this.settingStateHolderService.reloadSettings(this.setting.id);
         this.toggleEditSettingMode();
     }
+
+    isSettingDisabled(setting: Setting): boolean {
+        return setting ? !setting.enabled : true;
+    }
 }

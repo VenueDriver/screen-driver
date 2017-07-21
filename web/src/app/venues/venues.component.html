@@ -7,7 +7,7 @@
                  [class.editable]="isAllowToEditSetting()"
                  (click)="activateEditMode()">
 
-                <div class="page-title">
+                <div class="page-title" [class.disabled]="isSettingDisabled(setting)">
                     {{getPageTitle()}}
                 </div>
 
