@@ -9,7 +9,7 @@
   bottom: 0
   z-index: 1000
   overflow: hidden
-  padding: 10px 0
+  padding: 10px 0 25px
   background-color: #f5f5f5
   width: 250px
 
@@ -29,7 +29,8 @@
 
   .scrollable
     overflow-y: auto
-    height: 80%
+    max-height: 80%
+    min-height: 70px
 
   .settings-list
     border-color: $border-color
@@ -42,6 +43,9 @@
     display: flex
     align-items: center
     padding: 10px 0 0 15px
+
+    div
+      font-size: 25px
 
     .plus-button
       margin: 0 15px 0 auto
@@ -63,8 +67,26 @@
         background-color: #ffffff
 
       &.default-button
-        font-weight: bold
+        display: inline-block
+
+        &:hover
+          background-color: transparent
+          text-decoration: underline
 
       .switcher
         margin: 5px 0 0 auto
         display: inline-block
+
+  .settings-list-footer
+    display: flex
+    align-items: center
+    width: inherit
+    padding: 15px
+
+    a
+      cursor: pointer
+
+    span
+      margin-left: auto
+      color: #979797
+      font-size: 16px

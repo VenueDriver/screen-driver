@@ -25,10 +25,9 @@
         </li>
     </ul>
 
-    <ul class="nav navbar-stacked">
-        <li [class.active]="!isAnyActive()">
-            <a class="default-button" (click)="showCurrentState()">Show merged setting</a>
-        </li>
-    </ul>
+    <div class="settings-list-footer">
+        <a class="default-button" (click)="showCurrentState()">Show merged setting</a>
+        <span class="enabled">{{getEnabledSettingsCount()}} enabled</span>
+    </div>
 
 </div>

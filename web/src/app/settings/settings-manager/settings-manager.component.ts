@@ -5,6 +5,8 @@ import {HeaderService} from "../../header/header.service";
 import {SettingsService} from "../settings.service";
 import {NotificationService} from "../../notifications/notification.service";
 
+import * as _ from 'lodash';
+
 @Component({
     selector: 'settings-manager',
     templateUrl: 'settings-manager.component.html',
@@ -85,7 +87,8 @@ export class SettingsManagerComponent implements OnInit {
         this.activeSetting = null;
     }
 
-    isAnyActive(): boolean {
-        return !!this.activeSetting;
+    getEnabledSettingsCount(): number {
+        let enabledSettings = _.filter(this.settings, 'enabled');
+        return enabledSettings.length;
     }
 }
