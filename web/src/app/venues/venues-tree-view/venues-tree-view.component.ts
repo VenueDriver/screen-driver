@@ -11,7 +11,7 @@ import {Setting} from "../../settings/entities/setting";
 import * as _ from 'lodash';
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 
-const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
+const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 
 @Component({
     selector: 'venues-tree-view',
