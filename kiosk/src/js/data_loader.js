@@ -33,7 +33,7 @@ class DataLoader {
             .startMerging()
             .setSettings(settings)
             .setPriorities(priorityTypes)
-            .mergeConfigurations();
+            .mergeSettings();
     }
 
     static loadVenues() {
@@ -53,6 +53,13 @@ class DataLoader {
     static loadSettings() {
         let settingsUrl = `${API}/api/settings`;
         let request = net.request(settingsUrl);
+
+        return DataLoader.generatePromise(request);
+    }
+
+    static loadNotificationsConfig() {
+        let notificationsConfigUrl = `${API}/api/screens/notification-config`;
+        let request = net.request(notificationsConfigUrl);
 
         return DataLoader.generatePromise(request);
     }

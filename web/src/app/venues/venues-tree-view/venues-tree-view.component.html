@@ -31,6 +31,12 @@
                 </div>
 
                 <div class="buttons-container">
+                    <div *ngIf="isAllowToRefreshScreenContent(node)"
+                         class="node-button refresh-button"
+                         (click)="refreshContent(node.data.id)"
+                         [title]="getRefreshButtonTitle(node)">
+                    </div>
+
                     <div *ngIf="isAllowToEditNode()"
                          class="node-button edit-button"
                          [ngClass]="{'disabled': !currentSetting}"
