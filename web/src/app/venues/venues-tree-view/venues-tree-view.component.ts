@@ -11,6 +11,7 @@ import {Setting} from "../../settings/entities/setting";
 import * as _ from 'lodash';
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 import {ScreensMessagingService} from "../../messaging/screens-messaging.service";
+import {NotificationService} from "../../notifications/notification.service";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
 
@@ -42,6 +43,7 @@ export class VenuesTreeViewComponent implements OnInit {
         private treeViewService: VenuesTreeViewService,
         private settingStateHolderService: SettingStateHolderService,
         private screensService: ScreensMessagingService,
+        private screensService: ScreensService,
     ) { }
 
     ngOnInit() {
@@ -221,7 +223,10 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     refreshContent(id: string) {
-        this.screensService.refreshScreen(id).subscribe();
+        this.screensService.refreshScreen(id).subscribe(
+            response => this.notificationService.showSuccessNotificationBar('Reload screen request was sent'),
+            error => this.notificationService.showErrorNotificationBar('Unable to send reload screen request')
+        );
     }
 
     isCurrentNodeHasName(): boolean {
