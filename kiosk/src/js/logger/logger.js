@@ -18,10 +18,7 @@ class Logger {
     }
 
     static getLogsFilePath() {
-        if (isDev) {
-            return `${__dirname}/../..`;
-        }
-        return process.cwd();
+        return isDev ? `${__dirname}/../..` : process.cwd();
     }
 
     static logGlobalError(data) {

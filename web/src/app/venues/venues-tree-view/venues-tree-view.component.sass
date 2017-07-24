@@ -1,4 +1,4 @@
-@import "../../../variables"
+@import "../../../styles/variables"
 
 .node-content-wrapper
 
@@ -46,6 +46,9 @@
     .edit-button
       margin-right: 8px
 
+      &.disabled
+        cursor: not-allowed
+
     .refresh-button
       padding: 3px
       margin-right: 8px
@@ -66,12 +69,7 @@
         margin-right: 15px
 
       .content-url
-        color: gray
-
-    .content-url-placeholder
-      font-size: 16px
-      color: gray
-      font-style: italic
+        color: $gray-color
 
   .edit-node-form
     flex: 1

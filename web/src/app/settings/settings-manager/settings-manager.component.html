@@ -9,14 +9,7 @@
         </div>
     </div>
 
-    <hr>
-
-    <ul class="nav navbar-stacked">
-
-        <li [class.active]="!isAnyActive()">
-            <a class="default-button" (click)="showCurrentState()">Actual</a>
-        </li>
-
+    <ul class="nav navbar-stacked settings-list scrollable">
         <li *ngFor="let setting of settings" [class.active]="isActive(setting)">
             <a (click)="onSettingSelection(setting)">
                 <div>
@@ -32,5 +25,12 @@
         </li>
     </ul>
 
-    <hr>
+    <div class="settings-list-footer">
+        <a class="default-button" (click)="showCurrentState()">Show merged setting</a>
+        <span class="enabled"
+              [ngClass]="{'warning': getEnabledSettingsCount() == 0}">
+            {{getEnabledSettingsCount()}} enabled
+        </span>
+    </div>
+
 </div>

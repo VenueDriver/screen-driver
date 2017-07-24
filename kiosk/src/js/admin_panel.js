@@ -89,9 +89,6 @@ turnOnLogging();
 
 loadData();
 
-verifySaveButtonState();
-verifyCancelButtonState();
-
 function turnOnLogging() {
     window.onerror = function(error, url, line) {
         ipcRenderer.send('errorInWindow', {error: error, url: url, line: line});
@@ -103,6 +100,8 @@ function loadData() {
         .then(data => {
             serverData = data;
             loadCurrentSettings();
+            verifySaveButtonState();
+            verifyCancelButtonState();
         })
         .catch(error => showError('Couldn\'t load settings'));
 }

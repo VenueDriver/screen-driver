@@ -52,6 +52,10 @@
                     (add)="enableCreateContentMode($event)">
             </content-autocomplete>
         </div>
+
+        <div *ngIf="!currentSetting" class="info-message">
+            Select setting before setup content URL
+        </div>
     </div>
 
     <div class="buttons-container">

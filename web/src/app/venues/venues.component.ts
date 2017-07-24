@@ -145,7 +145,7 @@ export class VenuesComponent implements OnInit {
     }
 
     getPageTitle() {
-        return this.isExistingSetting() ? this.setting.name : 'Final';
+        return this.isExistingSetting() ? this.setting.name : 'Merged setting';
     }
 
     private isExistingSetting() {
@@ -177,5 +177,9 @@ export class VenuesComponent implements OnInit {
 
     toggleCreateSettingMode() {
         this.isCreateSettingMode = !this.isCreateSettingMode;
+    }
+
+    showInfoMessage(): boolean {
+        return this.setting ? !this.setting.id : false;
     }
 }
