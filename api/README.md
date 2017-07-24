@@ -4,6 +4,7 @@
 
 1. ```npm install -g serverless```
 1. ```npm i```
+1. create ```serverless/properties.yaml``` file by pattern in ```serverless/properties.sample.yaml``` and fill the Pusher properties(```app_id```, ```key```, ```secret``` and ```cluster```) 
 
 ## Run service offline
 Setup dynamodb-local before start:

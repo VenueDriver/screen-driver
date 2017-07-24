@@ -8,12 +8,17 @@ const CurrentScreenSettingsManager = require('./js/current_screen_settings_manag
 const WindowsHelper = require('./js/helpers/windows_helper');
 const CronJobsManager = require('./js/helpers/cron_jobs_helper');
 const Logger = require('./js/logger/logger');
+const NotificationListener = require('./js/notification-listener/notification_listener');
+const SettingMergeTool = require('./js/setting-merge-tool');
+const SettingsHelper = require('./js/helpers/settings_helper');
+
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
 
 let mainWindow;
 let settingsLoadJob;
+let notificationListener;
 
 setupLogger();
 
@@ -34,7 +39,8 @@ function setupLogger() {
 
 function ready() {
     powerSaveBlocker.start('prevent-display-sleep');
-
+    notificationListener = new NotificationListener();
+    bindSettingChanges();
     openWindow();
 
     registerHotKeys();
@@ -62,7 +68,7 @@ function prepareContentWindowData(setting) {
 }
 
 function addListenerForErrors() {
-    ipcMain.on('errorInWindow', function(event, data) {
+    ipcMain.on('errorInWindow', function (event, data) {
         Logger.logGlobalError(data);
     });
 }
@@ -103,6 +109,35 @@ function openContentWindow(contentUrl) {
     mainWindow = newWindow;
     hideCursor(mainWindow);
     settingsLoadJob = CronJobsManager.initSettingsLoadJob(mainWindow);
+    subscribeToScreenReloadNotification();
+}
+
+function subscribeToScreenReloadNotification() {
+    notificationListener.subscribe('screens', 'refresh', (data) => {
+        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+            if (data.screens.includes(setting.selectedScreenId))
+                mainWindow.reload();
+        })
+    });
+}
+
+function bindSettingChanges() {
+    notificationListener.subscribe('screens', 'setting_updated', (data) => {
+        data.settings = SettingMergeTool
+            .startMerging()
+            .setSettings(data.settings)
+            .setPriorities(data.priorityTypes)
+            .mergeSettings();
+        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+            let contentUrl = SettingsHelper.defineContentUrl(data, setting);
+            if (setting.contentUrl != contentUrl) {
+                setting.contentUrl = contentUrl;
+                CurrentScreenSettingsManager.saveCurrentSetting(setting);
+                mainWindow.loadURL(setting.contentUrl);
+            }
+        });
+
+    })
 }
 
 function closeCurrentWindow() {
@@ -112,7 +147,7 @@ function closeCurrentWindow() {
 }
 
 function hideCursor(window) {
-    window.webContents.on('did-finish-load', function() {
+    window.webContents.on('did-finish-load', function () {
         window.webContents.insertCSS('*{ cursor: none !important; user-select: none;}')
     });
 }

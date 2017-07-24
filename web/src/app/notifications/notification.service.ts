@@ -13,6 +13,14 @@ export class NotificationService {
         this.notificationsService.error(
             notificationTitle,
             notificationMessage
+        );
+    }
+
+    showSuccessNotificationBar(notificationMessage: string, title?: string) {
+        let notificationTitle = title ? title : 'Success';
+        this.notificationsService.success(
+            notificationTitle,
+            notificationMessage
         )
     }
 }
