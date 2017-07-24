@@ -33,7 +33,7 @@ class DataLoader {
             .startMerging()
             .setSettings(settings)
             .setPriorities(priorityTypes)
-            .mergeConfigurations();
+            .mergeSettings();
     }
 
     static loadVenues() {

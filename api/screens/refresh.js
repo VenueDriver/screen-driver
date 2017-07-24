@@ -4,17 +4,17 @@ let pusher = require('../entities/pusher');
 const responseHelper = require('./../helpers/http_response_helper');
 
 
-module.exports.reload = (event, context, callback) => {
+module.exports.refresh = (event, context, callback) => {
     const data = JSON.parse(event.body);
 
     try {
         sendRefreshSignal(data.screens);
     } catch (error) {
-        callback(null, responseHelper.createResponseWithError(500, error.message))
-        return
+        callback(null, responseHelper.createResponseWithError(500, error.message));
+        return;
     }
 
-    callback(null, responseHelper.createSuccessfulResponse(data))
+    callback(null, responseHelper.createSuccessfulResponse(data));
 };
 
 function sendRefreshSignal(screens) {

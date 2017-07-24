@@ -87,12 +87,12 @@ update_setting:
         method: put
         cors: true
 
-reload_screens:
-  handler: screens/reload.reload
+refresh_screens:
+  handler: screens/refresh.refresh
   environment: ${self:custom.properties.pusher}
   events:
     - http:
-        path: api/screens/reload
+        path: api/screens/refresh
         method: post
         cors: true
 

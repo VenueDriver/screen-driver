@@ -10,7 +10,7 @@ import {Setting} from "../../settings/entities/setting";
 
 import * as _ from 'lodash';
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
-import {ScreensService} from "../screens.service";
+import {ScreensMessagingService} from "../../messaging/screens-messaging.service";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
 
@@ -41,7 +41,7 @@ export class VenuesTreeViewComponent implements OnInit {
         private venuesService: VenuesService,
         private treeViewService: VenuesTreeViewService,
         private settingStateHolderService: SettingStateHolderService,
-        private screensService: ScreensService,
+        private screensService: ScreensMessagingService,
     ) { }
 
     ngOnInit() {

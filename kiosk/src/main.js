@@ -122,13 +122,12 @@ function subscribeToScreenReloadNotification() {
 }
 
 function bindSettingChanges() {
-    notificationListener.subscribe('screens', 'reload_config', (data) => {
-        let mergedSetting = SettingMergeTool
+    notificationListener.subscribe('screens', 'setting_updated', (data) => {
+        data.settings = SettingMergeTool
             .startMerging()
             .setSettings(data.settings)
             .setPriorities(data.priorityTypes)
-            .mergeConfigurations();
-        data.settings = mergedSetting;
+            .mergeSettings();
         CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
             let contentUrl = SettingsHelper.defineContentUrl(data, setting);
             if (setting.contentUrl != contentUrl) {

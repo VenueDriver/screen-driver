@@ -7,7 +7,7 @@ class SettingMergeTool {
         }
     }
 
-    mergeConfigurations() {
+    mergeSettings() {
         let mergedConfig = {config: {}};
         let enabledSettings = this.settings.filter((setting => setting.enabled));
 

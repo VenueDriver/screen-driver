@@ -4,7 +4,7 @@ import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 
 @Injectable()
-export class ScreensService {
+export class ScreensMessagingService {
     readonly screensApiPath = `${environment.apiUrl}/api/screens`;
 
     constructor(private http: Http) {
@@ -12,6 +12,6 @@ export class ScreensService {
 
     refreshScreen(id: string): Observable<any> {
         let data = {screens: [id]};
-        return this.http.post(this.screensApiPath + '/reload', data);
+        return this.http.post(this.screensApiPath + '/refresh', data);
     }
 }

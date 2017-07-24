@@ -16,13 +16,13 @@ module.exports.update = (event, context, callback) => {
 
     setting.update()
         .then(updatedSetting => callback(null, responseHelper.createSuccessfulResponse(updatedSetting)))
-        .then(() => sendNewConfigInKiosk())
+        .then(() => triggerUpdateEvent())
         .fail(errorMessage => {
             callback(null, responseHelper.createResponseWithError(500, errorMessage));
         });
 };
 
-function sendNewConfigInKiosk() {
+function triggerUpdateEvent() {
     let priorityTypes = PriorityTypes.getTypes();
     prepareData(priorityTypes)
         .then(data => triggerPusher(data))
@@ -45,7 +45,7 @@ function prepareData(priorityTypes) {
 }
 
 function triggerPusher(data) {
-    pusher.trigger('screens', 'reload_config', {
+    pusher.trigger('screens', 'setting_updated', {
         "message": data
     })
 }
