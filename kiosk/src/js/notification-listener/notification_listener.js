@@ -5,16 +5,37 @@ let DataLoader = require('../data_loader');
 
 class NotificationListener {
     constructor() {
-        DataLoader.loadNotificationsConfig().then(config => {
-            this.pusher =  new Pusher(config.key, {
-                cluster: config.cluster
-            });
-        })
+
     }
 
     subscribe(chanel, event, callback) {
-        let channel = this.pusher.subscribe(chanel);
-        channel.bind(event, function(data) {
+        DataLoader.loadNotificationsConfig().then(config => {
+            config = JSON.parse(config);
+
+            this.initPusher(config);
+
+            this.subscribeToChanel(chanel);
+            this.bindEvent(chanel, event, callback)
+        })
+    }
+
+    initPusher(config) {
+        if (this.pusher) return;
+        this.pusher = new Pusher(config.key, {
+            cluster: config.cluster
+        });
+    }
+
+    subscribeToChanel(chanel) {
+        if (this.pusher.channels.find(chanel)) {
+            return;
+        }
+        this.pusher.subscribe(chanel);
+    }
+
+    bindEvent(channel, event, callback) {
+        let existingChanel = this.pusher.channels.find(channel)
+        existingChanel.bind(event, function (data) {
             callback(data.message);
         });
     }

@@ -80,6 +80,7 @@ create_setting:
 
 update_setting:
   handler: setting/update.update
+  environment: ${self:custom.properties.pusher}
   events:
     - http:
         path: api/settings/{id}

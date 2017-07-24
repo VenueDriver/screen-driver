@@ -29,12 +29,16 @@ class CurrentScreenSettingsManager {
     static reloadCurrentScreenConfig(setting) {
         return DataLoader.loadData()
             .then(data => {
-                let convertedSetting = CurrentScreenSettingsManager.convert(data, setting);
-                let contentUrl = SettingsHelper.defineContentUrl(data, convertedSetting);
-                CurrentScreenSettingsManager.updateContentUrl(contentUrl, convertedSetting);
-                LocalStorageManager.removeUnusedStorage();
-                return contentUrl;
+                return CurrentScreenSettingsManager.applyNewSettings(data, setting);
             });
+    }
+
+    static applyNewSettings(data, setting) {
+        let convertedSetting = CurrentScreenSettingsManager.convert(data, setting);
+        let contentUrl = SettingsHelper.defineContentUrl(data, convertedSetting);
+        CurrentScreenSettingsManager.updateContentUrl(contentUrl, convertedSetting);
+        LocalStorageManager.removeUnusedStorage();
+        return contentUrl;
     }
 
     static convert(data, setting) {

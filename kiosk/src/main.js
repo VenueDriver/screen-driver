@@ -9,6 +9,8 @@ const WindowsHelper = require('./js/helpers/windows_helper');
 const CronJobsManager = require('./js/helpers/cron_jobs_helper');
 const Logger = require('./js/logger/logger');
 const NotificationListener = require('./js/notification-listener/notification_listener');
+const SettingMergeTool = require('./js/setting-merge-tool');
+
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
@@ -37,7 +39,7 @@ function setupLogger() {
 function ready() {
     powerSaveBlocker.start('prevent-display-sleep');
     notificationListener = new NotificationListener();
-
+    bindSettingChanges();
     openWindow();
 
     registerHotKeys();
@@ -118,6 +120,24 @@ function subscribeToScreenReloadNotification() {
     });
 }
 
+function bindSettingChanges() {
+    notificationListener.subscribe('screens', 'reload_config', (data) => {
+        let mergedConfig = SettingMergeTool
+            .startMerging()
+            .setSettings(data.settings)
+            .setPriorities(data.priorityTypes)
+            .mergeConfigurations();
+        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+            data.settings = mergedConfig
+            console.log(CurrentScreenSettingsManager.applyNewSettings(data, setting).stackTrace);
+        })
+
+        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
+            console.log(setting);
+        })
+    })
+}
+
 function closeCurrentWindow() {
     if (mainWindow) {
         mainWindow.close();
@@ -125,7 +145,7 @@ function closeCurrentWindow() {
 }
 
 function hideCursor(window) {
-    window.webContents.on('did-finish-load', function() {
+    window.webContents.on('did-finish-load', function () {
         window.webContents.insertCSS('*{ cursor: none !important; user-select: none;}')
     });
 }
