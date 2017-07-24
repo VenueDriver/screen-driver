@@ -12,7 +12,6 @@ export class ScreensService {
 
     refreshScreen(id: string): Observable<any> {
         let data = {screens: [id]};
-        return this.http.post(this.screensApiPath + '/reload', data)
-            .map(response => console.log(response.json()));
+        return this.http.post(this.screensApiPath + '/reload', data);
     }
 }
