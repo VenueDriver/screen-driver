@@ -10,6 +10,7 @@ const CronJobsManager = require('./js/helpers/cron_jobs_helper');
 const Logger = require('./js/logger/logger');
 const NotificationListener = require('./js/notification-listener/notification_listener');
 const SettingMergeTool = require('./js/setting-merge-tool');
+const SettingsHelper = require('./js/helpers/settings_helper');
 
 
 const hotkey = require('electron-hotkey');
@@ -67,7 +68,7 @@ function prepareContentWindowData(setting) {
 }
 
 function addListenerForErrors() {
-    ipcMain.on('errorInWindow', function(event, data) {
+    ipcMain.on('errorInWindow', function (event, data) {
         Logger.logGlobalError(data);
     });
 }
@@ -122,19 +123,21 @@ function subscribeToScreenReloadNotification() {
 
 function bindSettingChanges() {
     notificationListener.subscribe('screens', 'reload_config', (data) => {
-        let mergedConfig = SettingMergeTool
+        let mergedSetting = SettingMergeTool
             .startMerging()
             .setSettings(data.settings)
             .setPriorities(data.priorityTypes)
             .mergeConfigurations();
+        data.settings = mergedSetting;
         CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            data.settings = mergedConfig
-            console.log(CurrentScreenSettingsManager.applyNewSettings(data, setting).stackTrace);
-        })
+            let contentUrl = SettingsHelper.defineContentUrl(data, setting);
+            if (setting.contentUrl != contentUrl) {
+                setting.contentUrl = contentUrl;
+                CurrentScreenSettingsManager.saveCurrentSetting(setting);
+                mainWindow.loadURL(setting.contentUrl);
+            }
+        });
 
-        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            console.log(setting);
-        })
     })
 }
 
