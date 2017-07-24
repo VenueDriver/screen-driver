@@ -66,7 +66,7 @@ export class SettingCreatorComponent implements OnInit {
 
     private updateSetting() {
         this.settingsService.updateSetting(this.setting).subscribe(
-            response => this.handleResponse(),
+            (setting: Setting) => this.handleResponse(setting.id),
             error => this.handleError()
         )
     }

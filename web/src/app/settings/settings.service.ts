@@ -22,8 +22,9 @@ export class SettingsService {
             .map(response => response.json());
     }
 
-    updateSetting(setting: Setting): Observable<Response> {
-        return this.http.put(`${SETTINGS_API_URL}/${setting.id}`, setting);
+    updateSetting(setting: Setting): Observable<Setting> {
+        return this.http.put(`${SETTINGS_API_URL}/${setting.id}`, setting)
+            .map(response => response.json());
     }
 
     getCreateSettingEventSubscription(): Observable<any> {

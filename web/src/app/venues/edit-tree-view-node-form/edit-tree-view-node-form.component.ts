@@ -31,6 +31,7 @@ export class EditTreeViewNodeFormComponent implements OnInit{
 
     node: any;
     nodeData: any;
+    originalNodeData: any;
     isFormValid: boolean;
     createContentMode = false;
     contentChanged = false;
@@ -55,6 +56,7 @@ export class EditTreeViewNodeFormComponent implements OnInit{
         this.nodeData = {name: ''};
         if (node) {
             this.node = node;
+            this.originalNodeData = _.clone(node.data);
             this.nodeData = node.data;
             this.isFormValid = !!this.nodeData.name;
             this.currentVenueId = this.editFormService.getVenueId(node);
@@ -159,7 +161,7 @@ export class EditTreeViewNodeFormComponent implements OnInit{
         if (this.createContentMode) {
             this.createContentBeforeUpdateVenue();
         } else {
-            this.updateVenueList();
+            this.updateVenues();
         }
     }
 
@@ -178,15 +180,23 @@ export class EditTreeViewNodeFormComponent implements OnInit{
     handleCreateContentResponse(content: any) {
         this.editFormService.pushContentUpdateEvent();
         this.nodeData.content = content;
-        this.updateVenueList();
+        this.updateVenues();
     }
 
-    updateVenueList() {
-        if (this.currentVenueId) {
+    updateVenues() {
+        if (this.currentVenueId && this.wasNodeChanged()) {
             this.updateSingleVenue();
-        } else {
+        } else if (!this.currentVenueId) {
             this.addNewVenue();
+        } else {
+            this.disableEditMode();
+            this.updateSetting();
         }
+
+    }
+
+    wasNodeChanged() {
+        return this.nodeData.name !== this.originalNodeData.name;
     }
 
     addNewVenue() {
@@ -208,11 +218,13 @@ export class EditTreeViewNodeFormComponent implements OnInit{
 
     handleVenueListUpdateResponse(response: any) {
         this.updatedVenue = response.json();
+        this.disableEditMode();
+        this.updateSetting();
+    }
+
+    disableEditMode() {
         this.editFormService.pushVenueUpdateEvent();
         this.createContentMode = false;
-        if (this.contentChanged) {
-            this.updateSetting();
-        }
     }
 
     enableCreateContentMode(event) {
@@ -240,11 +252,13 @@ export class EditTreeViewNodeFormComponent implements OnInit{
     }
 
     updateSetting() {
-        this.defineNodeId();
-        let settingToUpdate = this.editFormService.getSettingToUpdate(this.currentSetting, this.nodeData);
-        this.editFormService.defineSettingRevision(settingToUpdate, this.settings);
-        this.editFormService.updateSetting(settingToUpdate);
-        this.contentChanged = false;
+        if (this.contentChanged) {
+            this.defineNodeId();
+            let settingToUpdate = this.editFormService.getSettingToUpdate(this.currentSetting, this.nodeData);
+            this.editFormService.defineSettingRevision(settingToUpdate, this.settings);
+            this.editFormService.updateSetting(settingToUpdate);
+            this.contentChanged = false;
+        }
     }
 
     defineNodeId() {
