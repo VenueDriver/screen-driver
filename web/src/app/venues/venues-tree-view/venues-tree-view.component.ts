@@ -42,8 +42,8 @@ export class VenuesTreeViewComponent implements OnInit {
         private venuesService: VenuesService,
         private treeViewService: VenuesTreeViewService,
         private settingStateHolderService: SettingStateHolderService,
+        private notificationService: NotificationService,
         private screensService: ScreensMessagingService,
-        private screensService: ScreensService,
     ) { }
 
     ngOnInit() {
