@@ -2,6 +2,7 @@
 
 let Pusher = require('pusher-client');
 let DataLoader = require('../data_loader');
+const CronJob = require('cron').CronJob;
 
 class NotificationListener {
     constructor() {
@@ -21,9 +22,32 @@ class NotificationListener {
 
     initPusher(config) {
         if (this.pusher) return;
-        this.pusher = new Pusher(config.key, {
-            cluster: config.cluster
-        });
+        new Promise((resolve, reject) => _initPusher.call(this, resolve))
+            .then(pusher => handleConnectionError(pusher));
+
+        function _initPusher(resolve) {
+            let pusher = new Pusher(config.key, {
+                cluster: config.cluster
+            });
+            this.pusher = pusher;
+            resolve(pusher);
+        }
+
+        function handleConnectionError(pusher) {
+            pusher.connection.bind('error', function (err) {
+                if (err.type === 'WebSocketError') {
+                    startPeriodicalReconnect(pusher);
+                }
+            });
+        }
+
+        function startPeriodicalReconnect(pusher) {
+            let settingsLoadJob = new CronJob('*/10 * * * * *', function () {
+                pusher.connect();
+                settingsLoadJob.stop()
+            }, null, true, 'UTC');
+            settingsLoadJob.start();
+        }
     }
 
     subscribeToChanel(chanel) {
@@ -34,7 +58,7 @@ class NotificationListener {
     }
 
     bindEvent(channel, event, callback) {
-        let existingChanel = this.pusher.channels.find(channel)
+        let existingChanel = this.pusher.channels.find(channel);
         existingChanel.bind(event, function (data) {
             callback(data.message);
         });
