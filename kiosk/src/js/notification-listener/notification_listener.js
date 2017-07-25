@@ -23,7 +23,7 @@ class NotificationListener {
     initPusher(config) {
         if (this.pusher) return;
         new Promise((resolve, reject) => _initPusher.call(this, resolve))
-            .then(pusher => handleConnectionError(pusher));
+            .then(pusher => _handleConnectionError(pusher));
 
         function _initPusher(resolve) {
             let pusher = new Pusher(config.key, {
@@ -33,15 +33,15 @@ class NotificationListener {
             resolve(pusher);
         }
 
-        function handleConnectionError(pusher) {
+        function _handleConnectionError(pusher) {
             pusher.connection.bind('error', function (err) {
                 if (err.type === 'WebSocketError') {
-                    startPeriodicalReconnect(pusher);
+                    _startPeriodicalReconnect(pusher);
                 }
             });
         }
 
-        function startPeriodicalReconnect(pusher) {
+        function _startPeriodicalReconnect(pusher) {
             let settingsLoadJob = new CronJob('*/10 * * * * *', function () {
                 pusher.connect();
                 settingsLoadJob.stop()
