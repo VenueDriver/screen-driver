@@ -12,6 +12,7 @@ import {NotificationService} from "./notifications/notification.service";
 import {HttpModule} from "@angular/http";
 import {SettingsModule} from "./settings/settings.module";
 import {HeaderService} from "./header/header.service";
+import {TabbedSwitcherModule} from "./tabbed-switcher/tabbed-switcher.module";
 import {ScreensMessagingModule} from "./messaging/screens-messaging.module";
 
 @NgModule({
@@ -25,6 +26,8 @@ import {ScreensMessagingModule} from "./messaging/screens-messaging.module";
         AlertModule.forRoot(),
         NotificationModule,
         VenuesModule,
+        SettingsModule,
+        TabbedSwitcherModule,
         SettingsModule,
         ScreensMessagingModule
     ],
