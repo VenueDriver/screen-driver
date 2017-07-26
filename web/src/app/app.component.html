@@ -6,7 +6,7 @@
 
     <setting-header></setting-header>
 
-    <tabbed-switcher [tabTitles]="['Venues', 'Schedules']">
+    <tabbed-switcher [tabTitles]="['Venues', 'Schedules']" [class.hidden]="isCreateSettingMode">
         <single-tab>
             <venues></venues>
         </single-tab>

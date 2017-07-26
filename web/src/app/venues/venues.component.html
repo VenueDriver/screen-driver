@@ -1,17 +1,6 @@
 <div class="page-container">
 
-    <div class="create-setting-container main-container" *ngIf="isCreateSettingMode">
-        <div class="title">
-            Create new setting
-        </div>
-        <setting-creator
-                [settings]="settings"
-                (submit)="toggleCreateSettingMode()"
-                (cancel)="toggleCreateSettingMode()">
-        </setting-creator>
-    </div>
-
-    <div class="venues-container main-container" *ngIf="!isCreateSettingMode">
+    <div class="venues-container main-container">
 
         <div class="venues-header">
             <div class="title">

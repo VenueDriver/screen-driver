@@ -58,7 +58,7 @@ export class SettingsManagerComponent implements OnInit {
     }
 
     enableCreationMode() {
-        this.settingsService.emitCreateSettingEvent();
+        this.settingsService.emitCreateSettingEvent(true);
         this.headerService.pushSidebarToggleEvent();
     }
 
