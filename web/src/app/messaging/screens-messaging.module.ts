@@ -5,7 +5,6 @@ import {ScreensMessagingService} from "./screens-messaging.service";
     imports: [
     ],
     exports: [
-        ScreensMessagingService
     ],
     declarations: [
     ],
@@ -13,6 +12,6 @@ import {ScreensMessagingService} from "./screens-messaging.service";
         ScreensMessagingService
     ]
 })
-export class VenuesModule {
+export class ScreensMessagingModule {
 
 }
