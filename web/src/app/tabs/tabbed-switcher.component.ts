@@ -1,4 +1,4 @@
-import {Component, OnInit, ContentChildren, QueryList} from '@angular/core';
+import {Component, OnInit, ContentChildren, QueryList, Input} from '@angular/core';
 import {SingleTabComponent} from "./tab/single-tab.component";
 
 @Component({
@@ -9,16 +9,18 @@ export class TabbedSwitcherComponent implements OnInit {
 
     @ContentChildren(SingleTabComponent) tabs: QueryList<SingleTabComponent>;
 
+    @Input() tabTitles: Array<string>;
+
     constructor() { }
 
     ngOnInit() { }
 
     switchTab(tabIndex: number) {
         this.tabs.forEach((tab: SingleTabComponent, index) => {
-            if (tab.show && index + 1 != tabIndex) {
+            if (tab.show && index != tabIndex) {
                 tab.show = false;
             }
-            if (index + 1 == tabIndex) {
+            if (index == tabIndex) {
                 tab.show = true;
             }
         })
