@@ -3,7 +3,8 @@ import {SingleTabComponent} from "./tab/single-tab.component";
 
 @Component({
     selector: 'tabbed-switcher',
-    templateUrl: 'tabbed-switcher.component.html'
+    templateUrl: 'tabbed-switcher.component.html',
+    styleUrls: ['tabbed-switcher.component.sass']
 })
 export class TabbedSwitcherComponent implements OnInit, AfterViewInit {
 
