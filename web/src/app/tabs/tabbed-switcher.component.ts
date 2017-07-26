@@ -20,7 +20,9 @@ export class TabbedSwitcherComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this.zone.onMicrotaskEmpty.subscribe(() => {
-            this.tabs.first.show = true;
+            if (this.activeTabIndex == 0) {
+                this.tabs.first.show = true;
+            }
         });
     }
 
