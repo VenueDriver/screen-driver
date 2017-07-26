@@ -12,7 +12,6 @@ class Schedule {
             this.id = schedule.id;
             this.setting_id = schedule.setting_id;
             this.cron = schedule.cron;
-            this.startDate = schedule.startDate;
             this._rev = schedule._rev;
             return;
         }
@@ -54,11 +53,10 @@ class Schedule {
             ExpressionAttributeValues: {
                 ':setting_id': this.setting_id,
                 ':cron': this.cron,
-                ':startDate': this.startDate,
                 ':rev': this._rev,
                 ':new_rev': ++this._rev,
             },
-            UpdateExpression: 'SET setting_id = :setting_id, cron = :cron, startDate= :startDate, #rev = :new_rev',
+            UpdateExpression: 'SET setting_id = :setting_id, cron = :cron, #rev = :new_rev',
             ConditionExpression: "#rev = :rev",
             ReturnValues: 'ALL_NEW',
         };
@@ -92,8 +90,6 @@ class Schedule {
         if (!this._rev && this._rev !== 0) errorMessage = 'Schedule couldn\'t be without revision number';
         if (!Number.isInteger(Number(this._rev)) && this._rev !== 0) errorMessage = 'Schedule\'s revision should be a number';
         if (this._rev < 0) errorMessage = 'Schedule\'s revision can\'t be < 0';
-        if (isNaN(Date.parse(this.startDate))) errorMessage = ('Wrong data format');
-        if (!this.startDate || this.startDate === '') errorMessage = ('Schedule couldn\'t be without start date');
 
         if (errorMessage) {
             errorCallback(errorMessage);

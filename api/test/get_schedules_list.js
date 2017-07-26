@@ -27,6 +27,7 @@ describe('schedule_list', () => {
 
     it('Should display empty list', () => {
         let expectations = (body) => {
+            console.log();
             expect(body).is.an('array').that.is.empty;
         };
 
@@ -34,8 +35,8 @@ describe('schedule_list', () => {
     });
 
     it('Should display list with 2 schedules', () => {
-        let firstContent = {setting_id: 'id_mock_1', startDate: '2017-07-26T00:00:00.000Z', cron: '* */5 * * *'};
-        let secondContent = {setting_id: 'id_mock_2', startDate: '2017-07-26T00:00:00.000Z', cron: '*/5 * * * *'};
+        let firstContent = {setting_id: 'id_mock_1', cron: '* */5 * * *'};
+        let secondContent = {setting_id: 'id_mock_2', cron: '*/5 * * * *'};
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);
