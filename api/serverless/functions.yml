@@ -104,3 +104,11 @@ get_pusher_config:
         path: api/screens/notification-config
         method: get
         cors: true
+
+create_schedule:
+  handler: schedule/create.create
+  events:
+    - http:
+        path: api/schedules
+        method: post
+        cors: true

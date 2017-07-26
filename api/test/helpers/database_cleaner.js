@@ -3,7 +3,7 @@ const Q = require('q');
 const database = require('./../../dynamodb');
 const dbHelper = require('./../../helpers/db_helper');
 
-const tables = [process.env.VENUES_TABLE, process.env.CONTENT_TABLE, process.env.SETTINGS_TABLE];
+const tables = [process.env.VENUES_TABLE, process.env.CONTENT_TABLE, process.env.SETTINGS_TABLE, process.env.SCHEDULES_TABLE];
 
 class DatabaseCleaner {
     static cleanDatabase() {
@@ -16,8 +16,8 @@ class DatabaseCleaner {
     static getAllId(table) {
         let deferred = Q.defer();
         dbHelper.findAll(table)
-            .then(venues => {
-                let identificatiors = venues.map(venue => venue.id);
+            .then(items => {
+                let identificatiors = items.map(item => item.id);
                 deferred.resolve(identificatiors)
             });
 
