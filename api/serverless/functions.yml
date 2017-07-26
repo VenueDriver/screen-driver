@@ -120,3 +120,11 @@ get_schedules_list:
         path: api/schedules
         method: get
         cors: true
+
+update_schedule:
+  handler: schedule/update.update
+  events:
+    - http:
+        path: api/schedules/{id}
+        method: put
+        cors: true
