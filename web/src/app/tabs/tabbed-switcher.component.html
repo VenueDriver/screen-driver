@@ -1,6 +1,6 @@
 <div>
     <ul class="nav nav-tabs">
-        <li *ngFor="let title of tabTitles; let index = index">
+        <li *ngFor="let title of tabTitles; let index = index" [class.active]="isTabActive(index)">
             <a (click)="switchTab(index)">{{title}}</a>
         </li>
     </ul>

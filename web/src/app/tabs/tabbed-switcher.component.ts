@@ -11,6 +11,8 @@ export class TabbedSwitcherComponent implements OnInit, AfterViewInit {
 
     @Input() tabTitles: Array<string>;
 
+    activeTabIndex = 0;
+
     constructor(private zone : NgZone) { }
 
     ngOnInit() { }
@@ -28,7 +30,12 @@ export class TabbedSwitcherComponent implements OnInit, AfterViewInit {
             }
             if (index == tabIndex) {
                 tab.show = true;
+                this.activeTabIndex = index;
             }
         })
+    }
+
+    isTabActive(tabIndex: number): boolean {
+        return this.activeTabIndex == tabIndex;
     }
 }
