@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
     selector: 'single-tab',
     templateUrl: 'single-tab.component.html'
 })
-export class SingleTabComponent implements OnInit {
+export class SingleTabComponent {
 
     show = false;
-
-    constructor() { }
-
-    ngOnInit() { }
 
 }

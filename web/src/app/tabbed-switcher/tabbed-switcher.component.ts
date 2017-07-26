@@ -1,4 +1,4 @@
-import {Component, OnInit, ContentChildren, QueryList, Input, AfterViewInit, NgZone} from '@angular/core';
+import {Component, ContentChildren, QueryList, Input, AfterViewInit, NgZone} from '@angular/core';
 import {SingleTabComponent} from "./single-tab/single-tab.component";
 
 @Component({
@@ -6,7 +6,7 @@ import {SingleTabComponent} from "./single-tab/single-tab.component";
     templateUrl: 'tabbed-switcher.component.html',
     styleUrls: ['tabbed-switcher.component.sass']
 })
-export class TabbedSwitcherComponent implements OnInit, AfterViewInit {
+export class TabbedSwitcherComponent implements AfterViewInit {
 
     @ContentChildren(SingleTabComponent) tabs: QueryList<SingleTabComponent>;
 
@@ -16,14 +16,14 @@ export class TabbedSwitcherComponent implements OnInit, AfterViewInit {
 
     constructor(private zone : NgZone) { }
 
-    ngOnInit() { }
-
     ngAfterViewInit() {
-        this.zone.onMicrotaskEmpty.subscribe(() => {
-            if (this.activeTabIndex == 0) {
-                this.tabs.first.show = true;
-            }
-        });
+        this.zone.onMicrotaskEmpty.subscribe(() => this.activateFirstTab());
+    }
+
+    activateFirstTab() {
+        if (this.activeTabIndex == 0) {
+            this.tabs.first.show = true;
+        }
     }
 
     switchTab(tabIndex: number) {
