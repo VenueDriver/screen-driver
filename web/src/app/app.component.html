@@ -2,5 +2,14 @@
 <notification></notification>
 <div class="app-container">
     <settings></settings>
-    <venues></venues>
+
+    <tabbed-switcher [tabTitles]="['Venues', 'Schedules']">
+        <single-tab>
+            <venues></venues>
+        </single-tab>
+
+        <single-tab>
+            Scheduling
+        </single-tab>
+    </tabbed-switcher>
 </div>

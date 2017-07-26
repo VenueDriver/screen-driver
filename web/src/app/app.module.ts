@@ -12,6 +12,7 @@ import {NotificationService} from "./notifications/notification.service";
 import {HttpModule} from "@angular/http";
 import {SettingsModule} from "./settings/settings.module";
 import {HeaderService} from "./header/header.service";
+import {TabbedSwitcherModule} from "./tabs/tabbed-switcher.module";
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import {HeaderService} from "./header/header.service";
         AlertModule.forRoot(),
         NotificationModule,
         VenuesModule,
-        SettingsModule
+        SettingsModule,
+        TabbedSwitcherModule
     ],
     providers: [
         NotificationService,
