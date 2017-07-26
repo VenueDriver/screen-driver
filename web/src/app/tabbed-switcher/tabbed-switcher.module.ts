@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {TabbedSwitcherComponent} from "./tabbed-switcher.component";
-import {SingleTabComponent} from "./tab/single-tab.component";
+import {SingleTabComponent} from "./single-tab/single-tab.component";
 
 @NgModule({
     imports: [

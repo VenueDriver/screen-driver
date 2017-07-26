@@ -12,7 +12,7 @@ import {NotificationService} from "./notifications/notification.service";
 import {HttpModule} from "@angular/http";
 import {SettingsModule} from "./settings/settings.module";
 import {HeaderService} from "./header/header.service";
-import {TabbedSwitcherModule} from "./tabs/tabbed-switcher.module";
+import {TabbedSwitcherModule} from "./tabbed-switcher/tabbed-switcher.module";
 
 @NgModule({
     declarations: [

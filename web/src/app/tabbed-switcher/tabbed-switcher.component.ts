@@ -1,5 +1,5 @@
 import {Component, OnInit, ContentChildren, QueryList, Input, AfterViewInit, NgZone} from '@angular/core';
-import {SingleTabComponent} from "./tab/single-tab.component";
+import {SingleTabComponent} from "./single-tab/single-tab.component";
 
 @Component({
     selector: 'tabbed-switcher',
