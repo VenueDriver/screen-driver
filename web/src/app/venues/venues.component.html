@@ -13,36 +13,6 @@
 
     <div class="venues-container main-container" *ngIf="!isCreateSettingMode">
 
-        <div class="selected-setting-container">
-            <div *ngIf="!isEditSettingMode"
-                 class="setting-header"
-                 [class.editable]="isAllowToEditSetting()"
-                 (click)="activateEditMode()">
-
-                <div class="setting-title" [class.disabled]="isSettingDisabled(setting)">
-                    {{getPageTitle()}}
-                </div>
-
-                <div *ngIf="showInfoMessage()" class="info-message">
-                    Select setting if you want to edit content URLs
-                </div>
-
-                <div class="tag-container" *ngIf="isAllowToEditSetting()">
-                    <priority-type-tag [setting]="setting"></priority-type-tag>
-                </div>
-
-            </div>
-
-            <setting-creator
-                    *ngIf="isEditSettingMode"
-                    [settings]="settings"
-                    [settingToEdit]="setting"
-                    (submit)="toggleEditSettingMode()"
-                    (cancel)="toggleEditSettingMode()">
-            </setting-creator>
-        </div>
-
-
         <div class="venues-header">
             <div class="title">
                 Venues

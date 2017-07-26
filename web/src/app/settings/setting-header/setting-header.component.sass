@@ -1,0 +1,34 @@
+@import "../../../styles/variables"
+
+.selected-setting-container
+  padding-bottom: 20px
+  min-height: 70px
+  width: 800px
+
+  @media screen and (max-width: $tablet-resolution)
+    width: 100%
+    display: block
+
+  .setting-header
+    display: inline-block
+    padding: 4px 8px
+    border: 1px solid transparent
+    border-radius: 4px
+    cursor: text
+
+    &.editable:hover
+      border-color: $border-color
+
+    .setting-title
+      font-size: 25px
+      display: inline-block
+
+    .tag-container
+      display: inline-block
+      margin-left: 10px
+
+      /deep/ .tag
+        font-size: 22px
+
+.disabled
+  color: $gray-color

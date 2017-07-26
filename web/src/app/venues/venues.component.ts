@@ -25,7 +25,6 @@ export class VenuesComponent implements OnInit {
     settings: Setting[];
     isShowAddVenueForm = false;
     isCreateContentMode = false;
-    isEditSettingMode = false;
     isCreateSettingMode;
 
     constructor(
@@ -144,37 +143,7 @@ export class VenuesComponent implements OnInit {
         return this.setting.id ? this.setting : null;
     }
 
-    getPageTitle() {
-        return this.isExistingSetting() ? this.setting.name : 'Merged setting';
-    }
-
-    private isExistingSetting() {
-        return this.setting && this.setting.name;
-    }
-
-    isAllowToEditSetting(): boolean {
-        return this.isExistingSetting() && !this.isEditSettingMode;
-    }
-
-    activateEditMode() {
-        if (this.isAllowToEditSetting()) {
-            this.isEditSettingMode = true;
-        }
-    }
-
-    toggleEditSettingMode() {
-        this.isEditSettingMode = !this.isEditSettingMode;
-    }
-
-    isSettingDisabled(setting: Setting): boolean {
-        return setting ? !setting.enabled : true;
-    }
-
     toggleCreateSettingMode() {
         this.isCreateSettingMode = !this.isCreateSettingMode;
-    }
-
-    showInfoMessage(): boolean {
-        return this.setting ? !this.setting.id : false;
     }
 }
