@@ -15,7 +15,9 @@
     margin: 0 15px 10px 0
 
   .time-selector-container
-    max-width: 200px
+
+    @media screen and (min-width: $tablet-resolution)
+      max-width: 200px
 
     .time-selector
       display: flex
@@ -35,6 +37,7 @@
 
         /deep/ .dropdown-menu
           min-width: 0
+          width: inherit
 
 .buttons-container
   float: right
