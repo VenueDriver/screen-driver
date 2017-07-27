@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {SchedulesService} from "./schedules.service";
+import {Schedule} from "./schedule";
+import {EventTime} from "./event-time";
 
 @Component({
     selector: 'schedule-creator',
@@ -7,20 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScheduleCreatorComponent implements OnInit {
 
+    schedule = new Schedule();
+    eventTime = new EventTime();
+
     timeItems: Array<string> = [];
     timePeriods = ['AM', 'PM'];
 
-    date = new Date();
-    time = {
-        startTime: '8:00',
-        startTimePeriod: 'AM',
-        endTime: '1:00',
-        endTimePeriod: 'PM'
-    };
-
-    constructor() {
+    constructor(private schedulesService: SchedulesService) {
         this.generateTimeItems();
     }
+
+    ngOnInit() { }
 
     generateTimeItems() {
         for (let i = 1; i <= 12; i++) {
@@ -28,14 +28,13 @@ export class ScheduleCreatorComponent implements OnInit {
         }
     }
 
-    ngOnInit() { }
-
     setTime(field: string, time: string) {
-        this.time[field] = time;
+        this.eventTime[field] = time;
     }
 
     performSubmit() {
 
+        this.schedulesService.createSchedule(this.schedule, this.eventTime);
     }
 
     performCancel() {
