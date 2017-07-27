@@ -4,5 +4,35 @@
             dateFormat="MM-DD-YYYY">
     </material-datepicker>
 
-    {{date}}
+    <div class="time-selector-container">
+        <div class="time-selector">
+            <autocomplete
+                    class="time"
+                    [placeholder]="'Select time'"
+                    [items]="timeItems"
+                    [value]="'1:00'">
+            </autocomplete>
+
+            <autocomplete
+                    class="period"
+                    [items]="timePeriods"
+                    [value]="'PM'">
+            </autocomplete>
+        </div>
+
+        <div class="time-selector">
+            <autocomplete
+                    class="time"
+                    [placeholder]="'Select time'"
+                    [items]="timeItems"
+                    [value]="'1:00'">
+            </autocomplete>
+
+            <autocomplete
+                    class="period"
+                    [items]="timePeriods"
+                    [value]="'PM'">
+            </autocomplete>
+        </div>
+    </div>
 </div>
