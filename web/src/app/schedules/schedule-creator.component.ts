@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {SchedulesService} from "./schedules.service";
 import {Schedule} from "./schedule";
 import {EventTime} from "./event-time";
+import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
+import {Setting} from "../settings/entities/setting";
 
 @Component({
     selector: 'schedule-creator',
@@ -13,14 +15,21 @@ export class ScheduleCreatorComponent implements OnInit {
     schedule = new Schedule();
     eventTime = new EventTime();
 
+    currentSetting: Setting;
+
     timeItems: Array<string> = [];
     timePeriods = ['AM', 'PM'];
 
-    constructor(private schedulesService: SchedulesService) {
+    constructor(
+        private schedulesService: SchedulesService,
+        private settingStateHolderService: SettingStateHolderService
+    ) {
         this.generateTimeItems();
     }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.subscribeToCurrentSettingUpdate();
+    }
 
     generateTimeItems() {
         for (let i = 1; i <= 12; i++) {
@@ -28,11 +37,17 @@ export class ScheduleCreatorComponent implements OnInit {
         }
     }
 
+    subscribeToCurrentSettingUpdate() {
+        this.settingStateHolderService.getCurrentSetting()
+            .subscribe(setting => this.currentSetting = setting);
+    }
+
     setTime(field: string, time: string) {
         this.eventTime[field] = time;
     }
 
     performSubmit() {
+        this.schedule.settingId = this.currentSetting ? this.currentSetting.id : '';
         this.schedulesService.createSchedule(this.schedule, this.eventTime);
     }
 

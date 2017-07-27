@@ -4,6 +4,7 @@ import {ScheduleCreatorComponent} from "./schedule-creator.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {AutocompleteModule} from "../autocomplete/autocomplete.module";
 import {SchedulesService} from "./schedules.service";
+import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import {SchedulesService} from "./schedules.service";
         ScheduleCreatorComponent
     ],
     providers: [
-        SchedulesService
+        SchedulesService,
+        SettingStateHolderService
     ]
 })
 export class SchedulesModule {
