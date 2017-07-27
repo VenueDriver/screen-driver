@@ -33,7 +33,7 @@ export class ScheduleCreatorComponent implements OnInit {
 
     generateTimeItems() {
         for (let i = 1; i <= 12; i++) {
-            this.timeItems.push(`${i}:00`, `${i}:30`);
+            this.timeItems.push(`${i}:00`, `${i}:15`, `${i}:30`, `${i}:45`);
         }
     }
 

@@ -19,6 +19,7 @@
             <autocomplete
                     class="time"
                     [placeholder]="'Select time'"
+                    [readonly]="true"
                     [items]="timeItems"
                     [value]="eventTime.startTime"
                     (valueChanged)="setTime('startTime', $event)">
@@ -40,6 +41,7 @@
             <autocomplete
                     class="time"
                     [placeholder]="'Select time'"
+                    [readonly]="true"
                     [items]="timeItems"
                     [value]="eventTime.endTime"
                     (valueChanged)="setTime('endTime', $event)">
