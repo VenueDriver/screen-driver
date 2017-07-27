@@ -33,7 +33,6 @@ export class ScheduleCreatorComponent implements OnInit {
     }
 
     performSubmit() {
-
         this.schedulesService.createSchedule(this.schedule, this.eventTime);
     }
 
