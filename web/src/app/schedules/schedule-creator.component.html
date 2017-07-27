@@ -1,11 +1,20 @@
 <div class="schedule-container">
-    <material-datepicker
-            class="datepicker"
-            [(date)]="eventTime.date"
-            dateFormat="MM-DD-YYYY">
-    </material-datepicker>
+
+    <div>
+        <div class="title">
+            Event date:
+        </div>
+        <material-datepicker
+                class="datepicker"
+                [(date)]="eventTime.date"
+                dateFormat="MM-DD-YYYY">
+        </material-datepicker>
+    </div>
 
     <div class="time-selector-container">
+        <div class="title">
+            Start at:
+        </div>
         <div class="time-selector">
             <autocomplete
                     class="time"
@@ -23,6 +32,9 @@
             </autocomplete>
         </div>
 
+        <div class="title">
+            End at:
+        </div>
         <div class="time-selector">
             <autocomplete
                     class="time"
@@ -41,8 +53,9 @@
         </div>
     </div>
 
-    <div class="buttons-container">
-        <button class="btn btn-success" (click)="performSubmit()">Save</button>
-        <button class="btn btn-link" (click)="performCancel()">Cancel</button>
-    </div>
+</div>
+
+<div class="buttons-container">
+    <button class="btn btn-success" (click)="performSubmit()">Save</button>
+    <button class="btn btn-link" (click)="performCancel()">Cancel</button>
 </div>

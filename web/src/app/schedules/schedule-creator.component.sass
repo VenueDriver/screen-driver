@@ -1,20 +1,36 @@
 .schedule-container
   display: flex
+  margin-top: 15px
+
+  .title
+    font-size: 16px
+    font-weight: bold
 
   .datepicker
-    margin-top: 15px
+    margin-right: 15px
 
   .time-selector-container
-    max-width: 250px
+    max-width: 200px
 
     .time-selector
       display: flex
 
       autocomplete
-        margin: 15px 15px 0 0
+        margin: 0 8px 10px 0
 
       .time
-        flex: 3
+        flex: 5
+
+        /deep/ .dropdown-menu
+          min-width: 0
+          width: inherit
 
       .period
-        flex: 1
+        flex: 2
+
+        /deep/ .dropdown-menu
+          min-width: 0
+
+.buttons-container
+  float: right
+  margin-top: 25px
