@@ -11,7 +11,8 @@ class Schedule {
         if (schedule) {
             this.id = schedule.id;
             this.setting_id = schedule.setting_id;
-            this.cron = schedule.cron;
+            this.eventCron = schedule.eventCron;
+            this.endEventCron = schedule.endEventCron;
             this._rev = schedule._rev;
             return;
         }
@@ -52,11 +53,12 @@ class Schedule {
             },
             ExpressionAttributeValues: {
                 ':setting_id': this.setting_id,
-                ':cron': this.cron,
+                ':startEventCron': this.eventCron,
+                ':endEventCron': this.endEventCron,
                 ':rev': this._rev,
                 ':new_rev': ++this._rev,
             },
-            UpdateExpression: 'SET setting_id = :setting_id, cron = :cron, #rev = :new_rev',
+            UpdateExpression: 'SET setting_id = :setting_id, eventCron = :eventCron, endEventCron = :endEventCron, #rev = :new_rev',
             ConditionExpression: "#rev = :rev",
             ReturnValues: 'ALL_NEW',
         };
@@ -86,7 +88,8 @@ class Schedule {
     validate(errorCallback) {
         let errorMessage;
         if (!this.setting_id || this.setting_id === '') errorMessage = 'Schedule couldn\'t be without setting';
-        if (!this.cron || this.cron === '') errorMessage = 'Schedule couldn\'t be without cron';
+        if (!this.eventCron || this.eventCron === '') errorMessage = 'Schedule couldn\'t be without eventCron';
+        if (!this.endEventCron || this.endEventCron === '') errorMessage = 'Schedule couldn\'t be without endEventCron';
         if (!this._rev && this._rev !== 0) errorMessage = 'Schedule couldn\'t be without revision number';
         if (!Number.isInteger(Number(this._rev)) && this._rev !== 0) errorMessage = 'Schedule\'s revision should be a number';
         if (this._rev < 0) errorMessage = 'Schedule\'s revision can\'t be < 0';
