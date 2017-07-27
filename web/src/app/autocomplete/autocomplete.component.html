@@ -5,6 +5,7 @@
            [value]="getValue()"
            (focus)="showDropdown()"
            (clickOutside)="handleClickOutside($event)"
+           [detectClickOutside]="isShowDropdown"
            (select)="handleTextSelection($event)"
            (keyup)="handleKeyUp($event)">
 
