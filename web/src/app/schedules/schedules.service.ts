@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {DatetimeToCronConverter} from '../datetime-cron-converter/datetime-cron.converter';
-import {Schedule} from "./schedule";
-import {EventTime} from "./event-time";
+import {Schedule} from "./entities/schedule";
+import {EventTime} from "./entities/event-time";
 import {Http} from "@angular/http";
 import {environment} from "../../environments/environment";
 

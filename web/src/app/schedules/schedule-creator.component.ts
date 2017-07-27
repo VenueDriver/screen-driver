@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {SchedulesService} from "./schedules.service";
-import {Schedule} from "./schedule";
-import {EventTime} from "./event-time";
+import {Schedule} from "./entities/schedule";
+import {EventTime} from "./entities/event-time";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../settings/entities/setting";
 
