@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScheduleCreatorComponent implements OnInit {
 
-    date = new Date();
     timeItems: Array<string> = [];
     timePeriods = ['AM', 'PM'];
+
+    date = new Date();
+    time = {
+        startTime: '8:00',
+        startTimePeriod: 'AM',
+        endTime: '1:00',
+        endTimePeriod: 'PM'
+    };
 
     constructor() {
         this.generateTimeItems();
@@ -22,5 +29,17 @@ export class ScheduleCreatorComponent implements OnInit {
     }
 
     ngOnInit() { }
+
+    setTime(field: string, time: string) {
+        this.time[field] = time;
+    }
+
+    performSubmit() {
+
+    }
+
+    performCancel() {
+
+    }
 
 }

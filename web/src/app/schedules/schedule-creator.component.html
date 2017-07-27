@@ -1,5 +1,6 @@
-<div>
+<div class="schedule-container">
     <material-datepicker
+            class="datepicker"
             [(date)]="date"
             dateFormat="MM-DD-YYYY">
     </material-datepicker>
@@ -10,13 +11,15 @@
                     class="time"
                     [placeholder]="'Select time'"
                     [items]="timeItems"
-                    [value]="'1:00'">
+                    [value]="time.startTime"
+                    (valueChanged)="setTime('startTime', $event)">
             </autocomplete>
 
             <autocomplete
                     class="period"
                     [items]="timePeriods"
-                    [value]="'PM'">
+                    [value]="time.startTimePeriod"
+                    (valueChanged)="setTime('startTimePeriod', $event)">
             </autocomplete>
         </div>
 
@@ -25,14 +28,21 @@
                     class="time"
                     [placeholder]="'Select time'"
                     [items]="timeItems"
-                    [value]="'1:00'">
+                    [value]="time.endTime"
+                    (valueChanged)="setTime('endTime', $event)">
             </autocomplete>
 
             <autocomplete
                     class="period"
                     [items]="timePeriods"
-                    [value]="'PM'">
+                    [value]="time.endTimePeriod"
+                    (valueChanged)="setTime('endTimePeriod', $event)">
             </autocomplete>
         </div>
+    </div>
+
+    <div class="buttons-container">
+        <button class="btn btn-success" (click)="performSubmit()">Save</button>
+        <button class="btn btn-link" (click)="performCancel()">Cancel</button>
     </div>
 </div>

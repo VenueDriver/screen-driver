@@ -13,7 +13,7 @@ export class AutocompleteComponent implements OnInit {
     @Input() value: string;
     @Input() placeholder = '';
 
-    @Output() select = new EventEmitter<string>();
+    @Output() valueChanged = new EventEmitter<string>();
 
     isShowDropdown = false;
 
@@ -58,13 +58,13 @@ export class AutocompleteComponent implements OnInit {
     }
 
     onSelect(item: string) {
-        this.emitSelection(item);
-        this.hideDropdown();
         this.value = item;
+        this.emitSelection();
+        this.hideDropdown();
     }
 
-    emitSelection(item: string) {
-        this.select.emit(item);
+    emitSelection() {
+        this.valueChanged.emit(this.value);
     }
 
 }
