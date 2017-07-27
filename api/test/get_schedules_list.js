@@ -35,8 +35,8 @@ describe('schedule_list', () => {
     });
 
     it('Should display list with 2 schedules', () => {
-        let firstContent = {setting_id: 'id_mock_1', cron: '* */5 * * *'};
-        let secondContent = {setting_id: 'id_mock_2', cron: '*/5 * * * *'};
+        let firstContent = {setting_id: 'id_mock_1', eventCron: '* */5 * * *', endEventCron: '* * * * *'};
+        let secondContent = {setting_id: 'id_mock_2', cron: '*/5 * * * *', endEventCron: '* * * * *'};
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);

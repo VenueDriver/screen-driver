@@ -62,24 +62,24 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
     });
 
-    it('Shouldn\'t update schedule without cron', () => {
+    it('Shouldn\'t update schedule without eventCron', () => {
         let newConfig = {setting_id: 'id_mock', cron: '* * * * *'};
         let updatedConfig = {setting_id: 'id_mock', _rev: 0};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without cron');
+            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
         return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
     });
 
-    it('Shouldn\'t update schedule with empty cron', () => {
+    it('Shouldn\'t update schedule with empty eventCron', () => {
         let newConfig = {setting_id: 'id_mock', cron: '* * * * *'};
         let updatedConfig = {setting_id: 'id_mock', cron: '', _rev: 0};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without cron');
+            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
@@ -91,7 +91,7 @@ describe('update_setting', () => {
         let updatedConfig = {setting_id: 'id_mock', cron: '', _rev: 3};
 
         let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without cron');
+            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
