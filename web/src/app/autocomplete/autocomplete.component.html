@@ -1,6 +1,7 @@
 <div class="dropdown">
     <input type="text"
            class="form-control"
+           [readonly]="readonly"
            [placeholder]="placeholder"
            [value]="getValue()"
            (focus)="showDropdown()"

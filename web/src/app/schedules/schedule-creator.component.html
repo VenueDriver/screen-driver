@@ -1,6 +1,6 @@
 <div class="schedule-container">
 
-    <div>
+    <div class="datepicker-container">
         <div class="title">
             Event date:
         </div>
@@ -26,6 +26,7 @@
 
             <autocomplete
                     class="period"
+                    [readonly]="true"
                     [items]="timePeriods"
                     [value]="eventTime.startTimePeriod"
                     (valueChanged)="setTime('startTimePeriod', $event)">
@@ -46,6 +47,7 @@
 
             <autocomplete
                     class="period"
+                    [readonly]="true"
                     [items]="timePeriods"
                     [value]="eventTime.endTimePeriod"
                     (valueChanged)="setTime('endTimePeriod', $event)">

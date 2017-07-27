@@ -12,6 +12,7 @@ export class AutocompleteComponent implements OnInit {
     @Input() items: Array<string>;
     @Input() value: string;
     @Input() placeholder = '';
+    @Input() readonly = false;
 
     @Output() valueChanged = new EventEmitter<string>();
 

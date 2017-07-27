@@ -1,13 +1,18 @@
+@import "../../styles/variables"
+
 .schedule-container
   display: flex
   margin-top: 15px
+
+  @media screen and (max-width: $tablet-resolution)
+    flex-direction: column
 
   .title
     font-size: 16px
     font-weight: bold
 
-  .datepicker
-    margin-right: 15px
+  .datepicker-container
+    margin: 0 15px 10px 0
 
   .time-selector-container
     max-width: 200px
