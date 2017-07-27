@@ -7,4 +7,14 @@ export class CronToDatetimeConverter {
         let dayOfMonth = +parts[3];
         return new Date(`${month} ${dayOfMonth}, ${year}`);
     }
+
+    static getMinutesFromCron(cron: string): number {
+        let parts = cron.split(' ');
+        return +parts[1];
+    }
+
+    static getHoursFromCron(cron: string): number {
+        let parts = cron.split(' ');
+        return +parts[2];
+    }
 }
