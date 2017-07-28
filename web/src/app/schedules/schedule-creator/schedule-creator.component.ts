@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {SchedulesService} from "../schedules.service";
 import {Schedule} from "../entities/schedule";
 import {EventTime} from "../entities/event-time";
@@ -13,7 +13,8 @@ import {ValidationResult} from "../entities/validation-result";
 })
 export class ScheduleCreatorComponent implements OnInit {
 
-    schedule = new Schedule();
+    @Input() schedule = new Schedule();
+
     eventTime = new EventTime();
 
     currentSetting: Setting;

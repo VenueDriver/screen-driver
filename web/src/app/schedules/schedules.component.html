@@ -2,6 +2,6 @@
     <schedule-creator></schedule-creator>
 
     <div *ngFor="let schedule of filteredSchedules">
-        {{schedule.id}}
+        <schedule-creator [schedule]="schedule" (scheduleChanged)="loadSchedules()"></schedule-creator>
     </div>
 </div>

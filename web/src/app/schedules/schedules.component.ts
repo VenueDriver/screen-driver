@@ -24,13 +24,14 @@ export class SchedulesComponent implements OnInit {
     ngOnInit() {
         this.loadSchedules();
         this.subscribeToCurrentSettingChanging();
+        this.schedulesService.scheduleListUpdated.subscribe(() => this.loadSchedules());
     }
 
     loadSchedules() {
         this.schedulesService.loadSchedules()
             .subscribe(schedules => {
                 this.schedules = schedules;
-                this.filteredSchedules = schedules;
+                this.filteredSchedules = this.getFilteredSchedules();
             });
     }
 
@@ -43,7 +44,10 @@ export class SchedulesComponent implements OnInit {
     }
 
     getFilteredSchedules(): Array<Schedule> {
-        return _.filter(this.schedules, s => s.settingId === this.currentSetting.id);
+        if (this.currentSetting) {
+            return _.filter(this.schedules, s => s.settingId === this.currentSetting.id);
+        }
+        return this.schedules;
     }
 
 }

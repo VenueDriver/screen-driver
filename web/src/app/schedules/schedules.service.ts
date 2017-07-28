@@ -6,12 +6,14 @@ import {Http} from "@angular/http";
 import {environment} from "../../environments/environment";
 import {Setting} from "../settings/entities/setting";
 import {SettingsPriorityHelper} from "../settings/settings-priority.helper";
-import {Observable} from "rxjs";
+import {Observable, Subject, BehaviorSubject} from "rxjs";
 
 const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;
 
 @Injectable()
 export class SchedulesService {
+
+    scheduleListUpdated: Subject<any> = new BehaviorSubject<any>({});
 
     constructor(
         private http: Http,
@@ -44,6 +46,7 @@ export class SchedulesService {
     save(schedule: Schedule, setting: Setting) {
         schedule.settingId = setting ? setting.id : '';
         this.http.post(SCHEDULES_API, schedule).subscribe(response => {
+            this.scheduleListUpdated.next(response);
             this.settingPriorityHelper.setOccasionalPriorityType(setting);
         });
     }
