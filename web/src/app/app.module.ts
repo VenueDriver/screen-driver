@@ -14,6 +14,7 @@ import {SettingsModule} from "./settings/settings.module";
 import {HeaderService} from "./header/header.service";
 import {TabbedSwitcherModule} from "./tabbed-switcher/tabbed-switcher.module";
 import {ScreensMessagingModule} from "./messaging/screens-messaging.module";
+import {SchedulesModule} from "./schedules/schedules.module";
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import {ScreensMessagingModule} from "./messaging/screens-messaging.module";
         SettingsModule,
         TabbedSwitcherModule,
         SettingsModule,
-        ScreensMessagingModule
+        ScreensMessagingModule,
+        SchedulesModule
     ],
     providers: [
         NotificationService,
