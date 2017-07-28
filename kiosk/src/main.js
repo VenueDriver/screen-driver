@@ -11,10 +11,9 @@ const Logger = require('./js/logger/logger');
 const NotificationListener = require('./js/notification-listener/notification_listener');
 const SettingMergeTool = require('./js/setting-merge-tool');
 const SettingsHelper = require('./js/helpers/settings_helper');
-const ScheduleMergeTool = require('./js/schedule-merge-tool');
 const ScheduledTaskManager = require('./js/scheduled-task-manager');
 const WindowInstanceHolder = require('./js/window-instance-holder');
-const {LocalStorageManager, StorageNames} = require('./js/helpers/local_storage_helper');
+
 
 
 const hotkey = require('electron-hotkey');
@@ -62,26 +61,15 @@ function openWindow() {
     });
 }
 
-function prepareContentWindowData(setting) {
-    let window = WindowInstanceHolder.getWindow();
-    CurrentScreenSettingsManager.reloadCurrentScreenConfig(setting)
+function prepareContentWindowData(screenInformation) {
+    CurrentScreenSettingsManager.reloadCurrentScreenConfig(screenInformation)
         .then(contentUrl => openContentWindow(contentUrl))
         .catch(error => {
             Logger.error('Failed to load config. Used old config. Message:', error);
-            openContentWindow(setting.contentUrl);
+            openContentWindow(screenInformation.contentUrl);
         });
 
-    LocalStorageManager.getFromStorage(StorageNames.SERVER_DATA, (error, serverData) => {
-        let convertedSetting = CurrentScreenSettingsManager.convert(serverData, setting);
-        let settingWithSchedules = ScheduleMergeTool.merge(serverData, convertedSetting.selectedScreenId);
-        settingWithSchedules.schedules.forEach(schedule => {
-            let setting = serverData.originalSettings.find(setting => setting.id === schedule.settingId);
-            let contentId = setting.config[convertedSetting.selectedScreenId];
-            schedule.content = serverData.content.find(content => content.id === contentId);
-        });
-        ScheduledTaskManager.resetAllSchedules(settingWithSchedules.schedules, serverData.originalSettings);
-    })
-
+    ScheduledTaskManager.initSchedulingForScreen(screenInformation);
 }
 
 function addListenerForErrors() {

@@ -1,6 +1,8 @@
 const CronJob = require('cron').CronJob;
+const ScheduleMergeTool = require('./schedule-merge-tool');
+const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
 const WindowInstanceHolder = require('./window-instance-holder');
-
+const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
 
 let instance = null;
 
@@ -14,7 +16,7 @@ class ScheduledTaskManager {
         return instance;
     }
 
-    addCronSchedule(schedule, onEndCallback) {
+    addCronSchedule(schedule) {
         let startScheduleCronJob = new CronJob(schedule.eventCron, runScheduledTask);
         let endScheduleCronJob = new CronJob(schedule.endEventCron, disableCron);
         let composedSchedule = {startScheduleCron: startScheduleCronJob, endStartSchedule: endScheduleCronJob};
@@ -26,23 +28,30 @@ class ScheduledTaskManager {
         function runScheduledTask() {
             if (!activeSchedule) {
                 activeSchedule = composedSchedule;
-                WindowInstanceHolder.getWindow().loadURL(schedule.content.url);
+                ScheduledTaskManager.reloadWindow(schedule, schedule.content.url);
             }
         }
 
         function disableCron() {
-            onEndCallback();
+            ScheduledTaskManager.reloadWindow(schedule, schedule.defaultUrl);
             activeSchedule = null;
         }
     }
 
+    static reloadWindow(schedule, url) {
+        let window = WindowInstanceHolder.getWindow();
+        if (ScheduledTaskManager.isNeedToReload(window, url)) {
+            window.loadURL(url);
+        }
+    }
+
+    static isNeedToReload(window, url) {
+        return window.webContents.getURL() !== url;
+    }
+
     resetAllSchedules(schedules) {
         this.clearAllSchedules();
-        schedules.forEach(schedule => this.addCronSchedule(schedule, temporaryEndFunction));
-        
-        function temporaryEndFunction() {
-            console.log('Event was finished');
-        }
+        schedules.forEach(schedule => this.addCronSchedule(schedule));
     }
 
     clearAllSchedules() {
@@ -52,6 +61,20 @@ class ScheduledTaskManager {
         });
         this.scheduledCronJobs.pop();
         this.activeSchedule = null;
+    }
+
+    initSchedulingForScreen(screenInformation) {
+        LocalStorageManager.getFromStorage(StorageNames.SERVER_DATA, (error, serverData) => {
+            let convertedSetting = CurrentScreenSettingsManager.convert(serverData, screenInformation);
+            let settingWithSchedules = ScheduleMergeTool.merge(serverData, convertedSetting.selectedScreenId);
+            settingWithSchedules.schedules.forEach(schedule => {
+                let setting = serverData.originalSettings.find(setting => setting.id === schedule.settingId);
+                let contentId = setting.config[convertedSetting.selectedScreenId];
+                schedule.content = serverData.content.find(content => content.id === contentId);
+                schedule.defaultUrl = screenInformation.contentUrl;
+            });
+            this.resetAllSchedules(settingWithSchedules.schedules, serverData.originalSettings);
+        })
     }
 
 }
