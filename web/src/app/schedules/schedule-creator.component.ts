@@ -4,6 +4,7 @@ import {Schedule} from "./entities/schedule";
 import {EventTime} from "./entities/event-time";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../settings/entities/setting";
+import {ValidationResult} from "./entities/validation-result";
 
 @Component({
     selector: 'schedule-creator',
@@ -20,7 +21,7 @@ export class ScheduleCreatorComponent implements OnInit {
     timeItems: Array<string> = [];
     timePeriods = ['AM', 'PM'];
 
-    isValid = true;
+    validationResult: ValidationResult = {isValid: true};
 
     constructor(
         private schedulesService: SchedulesService,
@@ -50,7 +51,7 @@ export class ScheduleCreatorComponent implements OnInit {
     }
 
     validate() {
-        this.isValid = this.eventTime.validate();
+        this.validationResult = this.eventTime.validate();
     }
 
     performSubmit() {

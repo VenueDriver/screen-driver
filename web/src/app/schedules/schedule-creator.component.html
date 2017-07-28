@@ -1,4 +1,9 @@
 <div class="schedule-container">
+
+    <div *ngIf="validationResult.validationMessage" class="error-message validation-error">
+        {{validationResult.validationMessage}}
+    </div>
+
     <div class="schedule-form-container">
 
         <div class="datepicker-container">
@@ -72,6 +77,10 @@
     </div>
 
     <div class="buttons-container">
-        <button class="btn btn-success" (click)="performSubmit()" [disabled]="!isValid">Create</button>
+        <button class="btn btn-success"
+                (click)="performSubmit()"
+                [disabled]="!validationResult.isValid">
+            Create
+        </button>
     </div>
 </div>

@@ -1,3 +1,5 @@
+import {ValidationResult} from "./validation-result";
+
 export class EventTime {
 
     startDate = new Date();
@@ -7,14 +9,15 @@ export class EventTime {
     endTime = '1:00';
     endTimePeriod = 'PM';
 
-    validate(): boolean {
+    validate(): ValidationResult {
         if (!this.isDateValid()) {
-            return false;
+            return {isValid: false, validationMessage: 'The start and the end date should be specified'};
         }
         if (this.startDate.getTime() === this.endDate.getTime()) {
-            return this.isTimeValid();
+            let isTimeValid = this.isTimeValid();
+            return {isValid: isTimeValid, validationMessage: isTimeValid ? '' : 'Invalid end event time'};
         }
-        return true;
+        return {isValid: true};
     }
 
     static getHours(time: string, timePeriod: string): number {
