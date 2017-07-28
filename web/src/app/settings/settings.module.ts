@@ -11,6 +11,7 @@ import {SettingsManagerComponent} from "./settings-manager/settings-manager.comp
 import {ToggleButtonComponent} from "../toggle-button/toggle-button.component";
 import { PriorityTypeTagComponent } from './priority-type-tag/priority-type-tag.component';
 import {SettingHeaderComponent} from "./setting-header/setting-header.component";
+import {SettingsPriorityHelper} from "./settings-priority.helper";
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import {SettingHeaderComponent} from "./setting-header/setting-header.component"
     ],
     providers: [
         SettingsService,
-        SettingStateHolderService
+        SettingStateHolderService,
+        SettingsPriorityHelper
     ]
 })
 export class SettingsModule {

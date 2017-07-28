@@ -55,8 +55,7 @@ export class ScheduleCreatorComponent implements OnInit {
     }
 
     performSubmit() {
-        this.schedule.settingId = this.currentSetting ? this.currentSetting.id : '';
-        this.schedulesService.createSchedule(this.schedule, this.eventTime);
+        this.schedulesService.createSchedule(this.schedule, this.currentSetting, this.eventTime);
     }
 
     onStartDateSelect() {

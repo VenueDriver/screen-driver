@@ -4,18 +4,23 @@ import {Schedule} from "./entities/schedule";
 import {EventTime} from "./entities/event-time";
 import {Http} from "@angular/http";
 import {environment} from "../../environments/environment";
+import {Setting} from "../settings/entities/setting";
+import {SettingsPriorityHelper} from "../settings/settings-priority.helper";
 
 const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;
 
 @Injectable()
 export class SchedulesService {
 
-    constructor(private http: Http) {
+    constructor(
+        private http: Http,
+        private settingPriorityHelper: SettingsPriorityHelper
+    ) {
     }
 
-    createSchedule(schedule: Schedule, eventTime: EventTime) {
+    createSchedule(schedule: Schedule, setting: Setting, eventTime: EventTime) {
         this.setEventTime(schedule, eventTime);
-        this.save(schedule);
+        this.save(schedule, setting);
     }
 
     setEventTime(schedule: Schedule, eventTime: EventTime) {
@@ -30,7 +35,10 @@ export class SchedulesService {
         return DatetimeToCronConverter.setTimeForCron(cron, hours, minutes);
     }
 
-    save(schedule: Schedule) {
-        this.http.post(SCHEDULES_API, schedule).subscribe();
+    save(schedule: Schedule, setting: Setting) {
+        schedule.settingId = setting ? setting.id : '';
+        this.http.post(SCHEDULES_API, schedule).subscribe(response => {
+            this.settingPriorityHelper.setPersistentPriorityType(setting);
+        });
     }
 }

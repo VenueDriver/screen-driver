@@ -10,7 +10,7 @@ export class SettingStateHolderService {
 
     private setting: Subject<Setting[]> = new Subject();
     private currentSetting: Subject<Setting> = new Subject();
-    private priorityTypes: any[];
+    private priorityTypes: Array<any>;
 
     constructor(private settingsService: SettingsService) {
     }
