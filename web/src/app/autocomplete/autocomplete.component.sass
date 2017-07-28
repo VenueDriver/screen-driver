@@ -13,9 +13,11 @@
   .dropdown-menu
     max-height: 280px
     overflow-y: auto
+    min-width: 0
+    width: inherit
 
     @media screen and (max-width: $tablet-resolution)
-      width: auto
+      height: 170px
 
     &.shown
       display: block
