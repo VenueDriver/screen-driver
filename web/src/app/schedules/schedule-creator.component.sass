@@ -2,37 +2,41 @@
 
 .schedule-container
   display: flex
+  flex-direction: column
   justify-content: center
-  margin-top: 15px
 
-  @media screen and (max-width: $tablet-resolution)
-    flex-direction: column
+  .schedule-form-container
+    display: flex
+    justify-content: center
+    margin-top: 15px
 
-  .title
-    margin-top: 10px
-    font-size: 16px
-    font-weight: bold
+    @media screen and (max-width: $tablet-resolution)
+      flex-direction: column
 
-  .datepicker-container
-    margin: 0 15px 10px 0
+    .title
+      margin-top: 10px
+      font-size: 16px
+      font-weight: bold
 
-  .time-selector-container
+    .datepicker-container
+      margin: 0 15px 10px 0
 
-    @media screen and (min-width: $tablet-resolution)
-      max-width: 200px
+    .time-selector-container
 
-    .time-selector
-      display: flex
+      @media screen and (min-width: $tablet-resolution)
+        max-width: 200px
 
-      autocomplete
-        margin-right: 8px
+      .time-selector
+        display: flex
 
-      .time
-        flex: 5
+        autocomplete
+          margin-right: 8px
 
-      .period
-        flex: 2
+        .time
+          flex: 5
 
-.buttons-container
-  float: right
-  margin-top: 25px
+        .period
+          flex: 2
+
+  .buttons-container
+    margin: 0 0 25px auto

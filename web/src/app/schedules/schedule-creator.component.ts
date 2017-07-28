@@ -58,10 +58,6 @@ export class ScheduleCreatorComponent implements OnInit {
         this.schedulesService.createSchedule(this.schedule, this.eventTime);
     }
 
-    performCancel() {
-
-    }
-
     onStartDateSelect() {
         this.eventTime.endDate = this.eventTime.startDate;
         this.validate();
