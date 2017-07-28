@@ -25,13 +25,9 @@ export class SchedulesService {
 
     convertToCron(date: Date, time: string, timePeriod: string): string {
         let cron = DatetimeToCronConverter.createCronForSpecificDate(date);
-        let hours = this.getHours(time, timePeriod);
+        let hours = EventTime.getHours(time, timePeriod);
         let minutes = +time.split(':')[1];
         return DatetimeToCronConverter.setTimeForCron(cron, hours, minutes);
-    }
-
-    getHours(time: string, timePeriod: string) {
-        return new Date(`2000-01-01 ${time} ${timePeriod}`).getHours();
     }
 
     save(schedule: Schedule) {

@@ -20,6 +20,8 @@ export class ScheduleCreatorComponent implements OnInit {
     timeItems: Array<string> = [];
     timePeriods = ['AM', 'PM'];
 
+    isValid = true;
+
     constructor(
         private schedulesService: SchedulesService,
         private settingStateHolderService: SettingStateHolderService
@@ -44,6 +46,11 @@ export class ScheduleCreatorComponent implements OnInit {
 
     setTime(field: string, time: string) {
         this.eventTime[field] = time;
+        this.validate();
+    }
+
+    validate() {
+        this.isValid = this.eventTime.validate();
     }
 
     performSubmit() {
@@ -53,6 +60,18 @@ export class ScheduleCreatorComponent implements OnInit {
 
     performCancel() {
 
+    }
+
+    onStartDateSelect() {
+        this.eventTime.endDate = this.eventTime.startDate;
+        this.validate();
+    }
+
+    onEndDateSelect() {
+        if (this.eventTime.startDate > this.eventTime.endDate) {
+            this.eventTime.startDate = null;
+        }
+        this.validate();
     }
 
 }

@@ -7,6 +7,7 @@
         <material-datepicker
                 class="datepicker"
                 [(date)]="eventTime.startDate"
+                (onSelect)="onStartDateSelect()"
                 dateFormat="MM-DD-YYYY">
         </material-datepicker>
 
@@ -16,6 +17,7 @@
         <material-datepicker
                 class="datepicker"
                 [(date)]="eventTime.endDate"
+                (onSelect)="onEndDateSelect()"
                 dateFormat="MM-DD-YYYY">
         </material-datepicker>
     </div>
@@ -69,6 +71,6 @@
 </div>
 
 <div class="buttons-container">
-    <button class="btn btn-success" (click)="performSubmit()">Save</button>
+    <button class="btn btn-success" (click)="performSubmit()" [disabled]="!isValid">Save</button>
     <button class="btn btn-link" (click)="performCancel()">Cancel</button>
 </div>
