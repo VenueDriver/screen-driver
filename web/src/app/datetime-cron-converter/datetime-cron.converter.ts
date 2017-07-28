@@ -1,7 +1,5 @@
 export class DatetimeToCronConverter {
 
-    constructor() { }
-
     static createCronForSpecificDate(date: Date): string {
         let dayOfMonth = date.getDate();
         let month = date.toLocaleString('en-us', { month: "short" }).toUpperCase();

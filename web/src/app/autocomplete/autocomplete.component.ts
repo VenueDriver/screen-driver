@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 const DROPDOWN_ITEM_CLASS = 'dropdown-item';
 
@@ -7,7 +7,7 @@ const DROPDOWN_ITEM_CLASS = 'dropdown-item';
     templateUrl: 'autocomplete.component.html',
     styleUrls: ['autocomplete.component.sass']
 })
-export class AutocompleteComponent implements OnInit {
+export class AutocompleteComponent {
 
     @Input() items: Array<string>;
     @Input() value: string;
@@ -17,10 +17,6 @@ export class AutocompleteComponent implements OnInit {
     @Output() valueChanged = new EventEmitter<string>();
 
     isShowDropdown = false;
-
-    constructor() { }
-
-    ngOnInit() { }
 
     getValue(): string {
         return this.value ? this.value : '';
