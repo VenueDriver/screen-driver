@@ -1,3 +1,7 @@
 <div class="schedules-container">
     <schedule-creator></schedule-creator>
+
+    <div *ngFor="let schedule of filteredSchedules">
+        {{schedule.id}}
+    </div>
 </div>

@@ -6,6 +6,7 @@ import {Http} from "@angular/http";
 import {environment} from "../../environments/environment";
 import {Setting} from "../settings/entities/setting";
 import {SettingsPriorityHelper} from "../settings/settings-priority.helper";
+import {Observable} from "rxjs";
 
 const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;
 
@@ -16,6 +17,11 @@ export class SchedulesService {
         private http: Http,
         private settingPriorityHelper: SettingsPriorityHelper
     ) {
+    }
+
+    loadSchedules(): Observable<Array<Schedule>> {
+        return this.http.get(SCHEDULES_API)
+            .map(response => response.json());
     }
 
     createSchedule(schedule: Schedule, setting: Setting, eventTime: EventTime) {
