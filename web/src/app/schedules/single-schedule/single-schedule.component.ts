@@ -7,11 +7,11 @@ import {Setting} from "../../settings/entities/setting";
 import {ValidationResult} from "../entities/validation-result";
 
 @Component({
-    selector: 'schedule-creator',
-    templateUrl: 'schedule-creator.component.html',
-    styleUrls: ['schedule-creator.component.sass']
+    selector: 'single-schedule',
+    templateUrl: 'single-schedule.component.html',
+    styleUrls: ['single-schedule.component.sass']
 })
-export class ScheduleCreatorComponent implements OnInit {
+export class SingleScheduleComponent implements OnInit {
 
     @Input() schedule = new Schedule();
 

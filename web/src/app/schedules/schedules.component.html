@@ -1,7 +1,7 @@
 <div class="schedules-container">
-    <schedule-creator></schedule-creator>
+    <single-schedule></single-schedule>
 
     <div *ngFor="let schedule of filteredSchedules">
-        <schedule-creator [schedule]="schedule" (scheduleChanged)="loadSchedules()"></schedule-creator>
+        <single-schedule [schedule]="schedule" (scheduleChanged)="loadSchedules()"></single-schedule>
     </div>
 </div>
