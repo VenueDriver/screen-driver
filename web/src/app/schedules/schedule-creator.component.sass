@@ -2,12 +2,14 @@
 
 .schedule-container
   display: flex
+  justify-content: center
   margin-top: 15px
 
   @media screen and (max-width: $tablet-resolution)
     flex-direction: column
 
   .title
+    margin-top: 10px
     font-size: 16px
     font-weight: bold
 
@@ -23,7 +25,7 @@
       display: flex
 
       autocomplete
-        margin: 0 8px 10px 0
+        margin-right: 8px
 
       .time
         flex: 5

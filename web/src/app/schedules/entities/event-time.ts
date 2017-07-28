@@ -1,6 +1,7 @@
 export class EventTime {
 
-    date = new Date();
+    startDate = new Date();
+    endDate = this.startDate;
     startTime = '8:00';
     startTimePeriod = 'AM';
     endTime = '1:00';

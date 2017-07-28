@@ -2,18 +2,27 @@
 
     <div class="datepicker-container">
         <div class="title">
-            Event date:
+            Start event date:
         </div>
         <material-datepicker
                 class="datepicker"
-                [(date)]="eventTime.date"
+                [(date)]="eventTime.startDate"
+                dateFormat="MM-DD-YYYY">
+        </material-datepicker>
+
+        <div class="title">
+            End event date:
+        </div>
+        <material-datepicker
+                class="datepicker"
+                [(date)]="eventTime.endDate"
                 dateFormat="MM-DD-YYYY">
         </material-datepicker>
     </div>
 
     <div class="time-selector-container">
         <div class="title">
-            Start at:
+            Start event time:
         </div>
         <div class="time-selector">
             <autocomplete
@@ -35,7 +44,7 @@
         </div>
 
         <div class="title">
-            End at:
+            End event time:
         </div>
         <div class="time-selector">
             <autocomplete

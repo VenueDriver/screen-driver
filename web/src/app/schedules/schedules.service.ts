@@ -19,8 +19,8 @@ export class SchedulesService {
     }
 
     setEventTime(schedule: Schedule, eventTime: EventTime) {
-        schedule.eventCron = this.convertToCron(eventTime.date, eventTime.startTime, eventTime.startTimePeriod);
-        schedule.endEventCron = this.convertToCron(eventTime.date, eventTime.endTime, eventTime.endTimePeriod);
+        schedule.eventCron = this.convertToCron(eventTime.startDate, eventTime.startTime, eventTime.startTimePeriod);
+        schedule.endEventCron = this.convertToCron(eventTime.endDate, eventTime.endTime, eventTime.endTimePeriod);
     }
 
     convertToCron(date: Date, time: string, timePeriod: string): string {
