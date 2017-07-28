@@ -12,14 +12,6 @@
                (ngModelChange)="validateSettingName()"
                input-autofocus>
 
-        <div class="setting-type-dropdown">
-            <dropdown
-                    [items]="priorityTypes"
-                    [selected]="getPriorityToEdit()"
-                    (select)="prioritySelected($event)">
-            </dropdown>
-        </div>
-
         <div class="btn-container">
             <button class="btn btn-success" (click)="performSubmit()" [disabled]="!isButtonEnabled()">Save</button>
             <button class="btn btn-link" (click)="performCancel()">Cancel</button>
