@@ -7,7 +7,8 @@ const StorageNames = {
     SELECTED_SCREEN_STORAGE: 'selectedScreen',
     SELECTED_GROUP_STORAGE: 'selectedGroup',
     SELECTED_VENUE_STORAGE: 'selectedVenue',
-    CONTENT_URL_STORAGE: 'contentUrl'
+    CONTENT_URL_STORAGE: 'contentUrl',
+    SERVER_DATA: 'serverData'
 };
 
 class LocalStorageManager {

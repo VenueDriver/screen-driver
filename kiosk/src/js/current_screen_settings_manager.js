@@ -32,9 +32,6 @@ class CurrentScreenSettingsManager {
             .then(data => {
                 let convertedSetting = CurrentScreenSettingsManager.convert(data, setting);
 
-                let settingWithSchedules = ScheduleMergeTool.merge(data, convertedSetting.selectedScreenId);
-                //TODO implement setting url and scheduled cron jobs
-
                 let contentUrl = SettingsHelper.defineContentUrl(data, convertedSetting);
                 CurrentScreenSettingsManager.updateContentUrl(contentUrl, convertedSetting);
                 LocalStorageManager.removeUnusedStorage();
