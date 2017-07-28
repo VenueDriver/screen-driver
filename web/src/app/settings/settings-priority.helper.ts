@@ -11,10 +11,10 @@ export class SettingsPriorityHelper {
         private settingStateHolderService: SettingStateHolderService
     ) { }
 
-    setPersistentPriorityType(setting: Setting) {
+    setOccasionalPriorityType(setting: Setting) {
         let priorityTypes = this.settingStateHolderService.getPriorityTypes();
-        if (setting.priority !== priorityTypes[1].id) {
-            setting.priority = priorityTypes[1].id;
+        if (setting.priority !== priorityTypes[2].id) {
+            setting.priority = priorityTypes[2].id;
             this.updateSetting(setting);
         }
     }

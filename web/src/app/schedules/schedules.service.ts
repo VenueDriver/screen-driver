@@ -38,7 +38,7 @@ export class SchedulesService {
     save(schedule: Schedule, setting: Setting) {
         schedule.settingId = setting ? setting.id : '';
         this.http.post(SCHEDULES_API, schedule).subscribe(response => {
-            this.settingPriorityHelper.setPersistentPriorityType(setting);
+            this.settingPriorityHelper.setOccasionalPriorityType(setting);
         });
     }
 }
