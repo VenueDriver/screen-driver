@@ -1,0 +1,46 @@
+@import "../../styles/variables"
+
+.schedule-container
+  display: flex
+  flex-direction: column
+  justify-content: center
+  margin-top: 25px
+
+  .error-message
+    margin: -18px 0 0
+    text-align: center
+
+  .schedule-form-container
+    display: flex
+    justify-content: center
+
+    @media screen and (max-width: $tablet-resolution)
+      flex-direction: column
+
+    .title
+      margin-top: 10px
+      font-size: 16px
+      font-weight: bold
+
+    .datepicker-container
+      margin: 0 15px 10px 0
+
+    .time-selector-container
+
+      @media screen and (min-width: $tablet-resolution)
+        max-width: 200px
+
+      .time-selector
+        display: flex
+
+        autocomplete
+          margin-right: 8px
+
+        .time
+          flex: 5
+
+        .period
+          flex: 2
+
+  .buttons-container
+    margin: 0 0 25px auto
