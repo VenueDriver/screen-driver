@@ -5,6 +5,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {AutocompleteModule} from "../autocomplete/autocomplete.module";
 import {SchedulesService} from "./schedules.service";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
+import {SchedulesComponent} from "./schedules.component";
 
 @NgModule({
     imports: [
@@ -13,9 +14,10 @@ import {SettingStateHolderService} from "../settings/setting-state-manager/setti
         AutocompleteModule
     ],
     exports: [
-        ScheduleCreatorComponent
+        SchedulesComponent
     ],
     declarations: [
+        SchedulesComponent,
         ScheduleCreatorComponent
     ],
     providers: [
