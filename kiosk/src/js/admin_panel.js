@@ -123,8 +123,12 @@ function initSelectorValues() {
 
 function findSelectedItems() {
     selectedVenue = findById(serverData.venues, screenSetting.selectedVenueId);
-    selectedGroup = findById(selectedVenue.screen_groups, screenSetting.selectedGroupId);
-    selectedScreen = findById(selectedGroup.screens, screenSetting.selectedScreenId);
+    if (selectedVenue) {
+        selectedGroup = findById(selectedVenue.screen_groups, screenSetting.selectedGroupId);
+    }
+    if (selectedGroup) {
+        selectedScreen = findById(selectedGroup.screens, screenSetting.selectedScreenId);
+    }
 }
 
 function putPreviouslySelectedDataIntoSelectors() {
@@ -145,12 +149,12 @@ function defineContentUrl() {
 }
 
 function verifySaveButtonState() {
-    if (!contentUrl || selectedScreen.id === 'none') {
-        disableSaveButton();
-        return false;
+    if (contentUrl && selectedScreen.id !== 'none') {
+        enableSaveButton();
+        return true;
     }
-    enableSaveButton();
-    return true;
+    disableSaveButton();
+    return false;
 }
 
 function verifyCancelButtonState() {
