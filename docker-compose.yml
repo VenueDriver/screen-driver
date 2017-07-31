@@ -1,12 +1,12 @@
 version: '2.2'
 services:
-  # web:
-  #   build:
-  #     context: web
-  #     dockerfile: ./docker/Dockerfile.deps
-  #   ports:
-  #     - "4200:4200"
-  #   command: npm start
+  web:
+    build:
+      context: web
+      dockerfile: ./docker/Dockerfile.deps
+    ports:
+      - "4200:4200"
+    command: npm start
   api:
     build:
       context: api
