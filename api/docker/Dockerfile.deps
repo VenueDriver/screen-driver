@@ -1,4 +1,4 @@
-FROM node:6.10
+FROM joakimbeng/java-node
 
 CMD cd ..
 ADD package.json /app-src/
