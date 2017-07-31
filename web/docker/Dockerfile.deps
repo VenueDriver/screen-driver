@@ -1,8 +1,10 @@
 FROM node:6.10
 
 CMD cd ..
-ADD package.json /app-src/
-ADD package-lock.json /app-src/
+ADD . /app-src/
+#ADD package.json /app-src/
+#ADD package-lock.json /app-src/
 WORKDIR /app-src
 
-CMD npm install
+RUN npm install
+ENV PATH ./node_modules/.bin:$PATH
