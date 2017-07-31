@@ -1,8 +1,11 @@
-const CronJob = require('cron').CronJob;
+const cron = require('node-cron');
 const ScheduleMergeTool = require('./schedule-merge-tool');
 const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
+const SettingsHelper = require('./helpers/settings_helper');
 const WindowInstanceHolder = require('./window-instance-holder');
 const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
+
+const _ = require('lodash');
 
 let instance = null;
 
@@ -17,8 +20,8 @@ class ScheduledTaskManager {
     }
 
     addCronSchedule(schedule) {
-        let startScheduleCronJob = new CronJob(schedule.eventCron, runScheduledTask);
-        let endScheduleCronJob = new CronJob(schedule.endEventCron, disableCron);
+        let startScheduleCronJob = cron.schedule(schedule.eventCron, runScheduledTask, true);
+        let endScheduleCronJob = cron.schedule(schedule.endEventCron, disableCron, true);
         let composedSchedule = {startScheduleCron: startScheduleCronJob, endStartSchedule: endScheduleCronJob};
         this.scheduledCronJobs.push(composedSchedule);
         startScheduleCronJob.start();
@@ -56,8 +59,8 @@ class ScheduledTaskManager {
 
     clearAllSchedules() {
         this.scheduledCronJobs.forEach(schedule => {
-            schedule.startScheduleCron.stop();
-            schedule.endStartSchedule.stop();
+            schedule.startScheduleCron.destroy();
+            schedule.endStartSchedule.destroy();
         });
         this.scheduledCronJobs.pop();
         this.activeSchedule = null;
@@ -65,11 +68,11 @@ class ScheduledTaskManager {
 
     initSchedulingForScreen(screenInformation) {
         LocalStorageManager.getFromStorage(StorageNames.SERVER_DATA, (error, serverData) => {
-            let convertedSetting = CurrentScreenSettingsManager.convert(serverData, screenInformation);
-            let settingWithSchedules = ScheduleMergeTool.merge(serverData, convertedSetting.selectedScreenId);
-            settingWithSchedules.schedules.forEach(schedule => {
+            let settingWithSchedules = ScheduleMergeTool.merge(serverData, screenInformation.selectedScreenId);
+
+            _.forEach(settingWithSchedules.schedules, schedule => {
                 let setting = serverData.originalSettings.find(setting => setting.id === schedule.settingId);
-                let contentId = setting.config[convertedSetting.selectedScreenId];
+                let contentId = SettingsHelper.defineContentId(setting, screenInformation);
                 schedule.content = serverData.content.find(content => content.id === contentId);
                 schedule.defaultUrl = screenInformation.contentUrl;
             });
