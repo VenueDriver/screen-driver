@@ -1,5 +1,8 @@
 <div class="schedules-container">
-    <single-schedule></single-schedule>
+
+    <div *ngIf="currentSetting && currentSetting.id">
+        <single-schedule></single-schedule>
+    </div>
 
     <div *ngFor="let schedule of filteredSchedules">
         <single-schedule
