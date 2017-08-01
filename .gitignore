@@ -1,3 +1,5 @@
 #IDE directories
 .idea
 .DS_Store
+/codeship.aes
+/deployment.env
