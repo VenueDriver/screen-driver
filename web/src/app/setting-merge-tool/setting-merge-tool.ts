@@ -15,7 +15,10 @@ export class SettingMergeTool {
 
     public mergeSettings(): Setting {
         let mergedConfig = new Setting();
-        let enabledSettings = this.settings.filter((setting => setting.enabled));
+        let enabledSettings = [];
+        if (this.settings) {
+            enabledSettings = this.settings.filter((setting => setting.enabled));
+        }
 
         enabledSettings.forEach(setting => {
             for (let instruction in setting.config) {
