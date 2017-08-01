@@ -5,8 +5,6 @@ const CronJob = require('cron').CronJob;
 const Logger = require('./../logger/logger');
 const scheduledTaskManager = require('../scheduled-task-manager');
 
-// const _ = require('lodahs');
-
 class CronJobsManager {
 
     static initSettingsLoadJob(contentWindow) {
