@@ -13,6 +13,7 @@ export class AutocompleteComponent {
     @Input() value: string;
     @Input() placeholder = '';
     @Input() readonly = false;
+    @Input() disabled = false;
 
     @Output() valueChanged = new EventEmitter<string>();
 
