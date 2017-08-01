@@ -19,7 +19,7 @@ class DataLoader {
         return Promise.all(promises)
             .then(values => {
                 let serverData = DataLoader.composeServerData(values);
-                LocalStorageManager.putInStorage(StorageNames.SERVER_DATA, serverData);
+                LocalStorageManager.putInStorage(StorageNames.SERVER_DATA_STORAGE, serverData);
                 return serverData;
             });
     }

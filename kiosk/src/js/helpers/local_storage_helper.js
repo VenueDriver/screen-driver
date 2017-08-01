@@ -4,11 +4,11 @@ const storage = require('electron-json-storage');
 
 const StorageNames = {
     SELECTED_SETTING_STORAGE: 'selected_setting',
+    SERVER_DATA_STORAGE: 'server_data',
     SELECTED_SCREEN_STORAGE: 'selectedScreen',
     SELECTED_GROUP_STORAGE: 'selectedGroup',
     SELECTED_VENUE_STORAGE: 'selectedVenue',
-    CONTENT_URL_STORAGE: 'contentUrl',
-    SERVER_DATA: 'serverData'
+    CONTENT_URL_STORAGE: 'contentUrl'
 };
 
 class LocalStorageManager {

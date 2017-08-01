@@ -13,6 +13,7 @@ const SettingMergeTool = require('./js/setting-merge-tool');
 const SettingsHelper = require('./js/helpers/settings_helper');
 const ScheduledTaskManager = require('./js/scheduled-task-manager');
 const WindowInstanceHolder = require('./js/window-instance-holder');
+const DataLoader = require('./js/data_loader');
 
 
 
@@ -115,6 +116,7 @@ function openContentWindow(contentUrl) {
     hideCursor(WindowInstanceHolder.getWindow());
     settingsLoadJob = CronJobsManager.initSettingsLoadJob(WindowInstanceHolder.getWindow());
     subscribeToScreenReloadNotification();
+    subscribeToScheduleUpdate();
 }
 
 function subscribeToScreenReloadNotification() {
@@ -123,6 +125,18 @@ function subscribeToScreenReloadNotification() {
             if (data.screens.includes(setting.selectedScreenId))
                 WindowInstanceHolder.getWindow().reload();
         })
+    });
+}
+
+function subscribeToScheduleUpdate() {
+    notificationListener.subscribe('screens', 'schedule_update', (event) => {
+        DataLoader.loadData()
+            .then(() => {
+                CurrentScreenSettingsManager.getCurrentSetting()
+                    .then(setting => {
+                        ScheduledTaskManager.initSchedulingForScreen(setting);
+                    })
+            })
     });
 }
 

@@ -21,6 +21,9 @@ class ScheduledTaskManager {
     }
 
     addCronSchedule(schedule) {
+
+        console.log(schedule.eventCron, schedule.endEventCron);
+
         let startScheduleCronJob = cron.schedule(schedule.eventCron, runScheduledTask, true);
         let endScheduleCronJob = cron.schedule(schedule.endEventCron, disableCron, true);
         let composedSchedule = {startScheduleCron: startScheduleCronJob, endStartSchedule: endScheduleCronJob, backgroundCron: {}};
@@ -72,7 +75,7 @@ class ScheduledTaskManager {
     }
 
     initSchedulingForScreen(screenInformation) {
-        LocalStorageManager.getFromStorage(StorageNames.SERVER_DATA, (error, serverData) => {
+        LocalStorageManager.getFromStorage(StorageNames.SERVER_DATA_STORAGE, (error, serverData) => {
             let settingWithSchedules = ScheduleMergeTool.merge(serverData, screenInformation.selectedScreenId);
 
             _.forEach(settingWithSchedules.schedules, schedule => {
