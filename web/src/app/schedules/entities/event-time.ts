@@ -20,7 +20,7 @@ export class EventTime {
         }
         if (this.startDate.getTime() === this.endDate.getTime()) {
             let isTimeValid = this.isTimeValid();
-            return {isValid: isTimeValid, validationMessage: isTimeValid ? '' : 'Invalid end event time'};
+            return {isValid: isTimeValid, validationMessage: isTimeValid ? '' : 'The end of the event couldn\'t be before the start'};
         }
         return {isValid: true};
     }
