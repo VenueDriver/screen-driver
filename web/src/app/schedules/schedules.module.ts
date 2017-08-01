@@ -1,10 +1,11 @@
 import {NgModule} from "@angular/core";
 import {DatepickerModule} from "angular2-material-datepicker";
-import {ScheduleCreatorComponent} from "./schedule-creator.component";
+import {SingleScheduleComponent} from "./single-schedule/single-schedule.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {AutocompleteModule} from "../autocomplete/autocomplete.module";
 import {SchedulesService} from "./schedules.service";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
+import {SchedulesComponent} from "./schedules.component";
 
 @NgModule({
     imports: [
@@ -13,10 +14,11 @@ import {SettingStateHolderService} from "../settings/setting-state-manager/setti
         AutocompleteModule
     ],
     exports: [
-        ScheduleCreatorComponent
+        SchedulesComponent
     ],
     declarations: [
-        ScheduleCreatorComponent
+        SchedulesComponent,
+        SingleScheduleComponent
     ],
     providers: [
         SchedulesService,

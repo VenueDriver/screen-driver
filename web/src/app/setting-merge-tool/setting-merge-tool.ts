@@ -15,7 +15,10 @@ export class SettingMergeTool {
 
     public mergeSettings(): Setting {
         let mergedConfig = new Setting();
-        let enabledSettings = this.settings.filter((setting => setting.enabled));
+        let enabledSettings = [];
+        if (this.settings) {
+            enabledSettings = this.settings.filter((setting => setting.enabled));
+        }
 
         enabledSettings.forEach(setting => {
             for (let instruction in setting.config) {
@@ -31,7 +34,10 @@ export class SettingMergeTool {
     }
 
     private resolveSettingConflict(instruction): string {
-        let conflictedSettings = this.settings.filter(setting => setting.enabled && setting.config.hasOwnProperty(instruction));
+        let conflictedSettings = [];
+        if (this.settings) {
+            conflictedSettings = this.settings.filter(setting => setting.enabled && setting.config.hasOwnProperty(instruction));
+        }
         let prioritySetting = this.getMostPrioritySetting(conflictedSettings);
         return prioritySetting.config[instruction];
     }

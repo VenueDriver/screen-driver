@@ -2,12 +2,17 @@ import {ValidationResult} from "./validation-result";
 
 export class EventTime {
 
-    startDate = new Date();
+    startDate: Date = EventTime.getTomorrowDate();
     endDate = this.startDate;
     startTime = '8:00';
     startTimePeriod = 'AM';
     endTime = '1:00';
     endTimePeriod = 'PM';
+
+    static getTomorrowDate(): Date {
+        let today = new Date();
+        return new Date(today.setDate(today.getDate() + 1));
+    }
 
     validate(): ValidationResult {
         if (!this.isDateValid()) {

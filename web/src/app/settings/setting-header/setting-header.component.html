@@ -13,10 +13,10 @@
                 Select setting if you want to edit content URLs
             </div>
 
-            <div class="tag-container" *ngIf="isAllowToEditSetting()">
-                <priority-type-tag [setting]="setting"></priority-type-tag>
-            </div>
+        </div>
 
+        <div class="tag-container" *ngIf="isAllowToEditSetting()">
+            <priority-type-tag [setting]="setting"></priority-type-tag>
         </div>
 
         <setting-creator

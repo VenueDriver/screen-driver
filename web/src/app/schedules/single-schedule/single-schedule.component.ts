@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import {SchedulesService} from "./schedules.service";
-import {Schedule} from "./entities/schedule";
-import {EventTime} from "./entities/event-time";
-import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
-import {Setting} from "../settings/entities/setting";
-import {ValidationResult} from "./entities/validation-result";
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {SchedulesService} from "../schedules.service";
+import {Schedule} from "../entities/schedule";
+import {EventTime} from "../entities/event-time";
+import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
+import {Setting} from "../../settings/entities/setting";
+import {ValidationResult} from "../entities/validation-result";
 
 @Component({
-    selector: 'schedule-creator',
-    templateUrl: 'schedule-creator.component.html',
-    styleUrls: ['schedule-creator.component.sass']
+    selector: 'single-schedule',
+    templateUrl: 'single-schedule.component.html',
+    styleUrls: ['single-schedule.component.sass']
 })
-export class ScheduleCreatorComponent implements OnInit {
+export class SingleScheduleComponent implements OnInit {
 
-    schedule = new Schedule();
+    @Input() schedule = new Schedule();
+    @Input() editable = true;
+
     eventTime = new EventTime();
 
     currentSetting: Setting;
@@ -32,6 +34,7 @@ export class ScheduleCreatorComponent implements OnInit {
 
     ngOnInit() {
         this.subscribeToCurrentSettingUpdate();
+        this.subscribeToScheduleListUpdate();
     }
 
     generateTimeItems() {
@@ -45,6 +48,11 @@ export class ScheduleCreatorComponent implements OnInit {
             .subscribe(setting => this.currentSetting = setting);
     }
 
+    subscribeToScheduleListUpdate() {
+        this.schedulesService.scheduleListUpdated
+            .subscribe(() => this.eventTime = new EventTime());
+    }
+
     setTime(field: string, time: string) {
         this.eventTime[field] = time;
         this.validate();
@@ -55,8 +63,7 @@ export class ScheduleCreatorComponent implements OnInit {
     }
 
     performSubmit() {
-        this.schedule.settingId = this.currentSetting ? this.currentSetting.id : '';
-        this.schedulesService.createSchedule(this.schedule, this.eventTime);
+        this.schedulesService.createSchedule(this.schedule, this.currentSetting, this.eventTime);
     }
 
     onStartDateSelect() {
