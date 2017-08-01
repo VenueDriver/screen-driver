@@ -31,7 +31,10 @@ export class SettingMergeTool {
     }
 
     private resolveSettingConflict(instruction): string {
-        let conflictedSettings = this.settings.filter(setting => setting.enabled && setting.config.hasOwnProperty(instruction));
+        let conflictedSettings = [];
+        if (this.settings) {
+            conflictedSettings = this.settings.filter(setting => setting.enabled && setting.config.hasOwnProperty(instruction));
+        }
         let prioritySetting = this.getMostPrioritySetting(conflictedSettings);
         return prioritySetting.config[instruction];
     }
