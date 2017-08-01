@@ -1,0 +1,13 @@
+- service: api
+  name: serverless_api_staging
+  #tag: staging
+  command: serverless deploy --verbose --region us-east-1 --stage staging
+
+- service: web
+  name: web_staging
+  tag: staging
+  command: aws s3 sync /app-dist/ $AWS_S3_BUCKET
+
+# - service: kiosk
+#   name: build_kiosk_exe
+#   command: npm run win-installer
