@@ -18,13 +18,14 @@
   "dependencies": {
     "bootstrap": "3.3.7",
     "bootstrap-select": "1.12.2",
-    "cron": "^1.2.1",
+    "cron": "1.2.1",
     "electron-hotkey": "0.0.1-alpha.1",
     "electron-is-dev": "0.1.2",
     "electron-json-storage": "3.0.5",
     "electron-log": "2.2.6",
     "jquery": "3.2.1",
     "lodash": "4.17.4",
+    "node-cron": "1.2.0",
     "properties-reader": "0.0.15",
     "pusher-client": "^1.1.0"
   },

@@ -2,6 +2,7 @@
 
 const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
 const SettingsHelper = require('./helpers/settings_helper');
+const ScheduleMergeTool = require('./schedule-merge-tool');
 const DataLoader = require('./data_loader');
 
 const _ = require('lodash');
@@ -30,6 +31,7 @@ class CurrentScreenSettingsManager {
         return DataLoader.loadData()
             .then(data => {
                 let convertedSetting = CurrentScreenSettingsManager.convert(data, setting);
+
                 let contentUrl = SettingsHelper.defineContentUrl(data, convertedSetting);
                 CurrentScreenSettingsManager.updateContentUrl(contentUrl, convertedSetting);
                 LocalStorageManager.removeUnusedStorage();

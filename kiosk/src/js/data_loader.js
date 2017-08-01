@@ -2,6 +2,7 @@
 
 const {net} = require('electron');
 const PropertiesLoader = require('./helpers/properties_load_helper');
+const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
 let SettingMergeTool = require('./setting-merge-tool');
 const API = PropertiesLoader.getApiEndpoint();
 
@@ -11,11 +12,16 @@ class DataLoader {
         let promises = [
             DataLoader.loadVenues(),
             DataLoader.loadContent(),
-            DataLoader.loadSettings()
+            DataLoader.loadSettings(),
+            DataLoader.loadSchedules()
         ];
 
         return Promise.all(promises)
-            .then(values => DataLoader.composeServerData(values));
+            .then(values => {
+                let serverData = DataLoader.composeServerData(values);
+                LocalStorageManager.putInStorage(StorageNames.SERVER_DATA_STORAGE, serverData);
+                return serverData;
+            });
     }
 
     static composeServerData(values) {
@@ -25,6 +31,8 @@ class DataLoader {
         serverData.content = JSON.parse(values[1]);
         serverData.priorityTypes = JSON.parse(values[2]).priorityTypes;
         serverData.settings = this.mergeSettings(settings, serverData.priorityTypes);
+        serverData.originalSettings = settings;
+        serverData.schedules = JSON.parse(values[3]);
         return serverData;
     }
 
@@ -60,6 +68,13 @@ class DataLoader {
     static loadNotificationsConfig() {
         let notificationsConfigUrl = `${API}/api/screens/notification-config`;
         let request = net.request(notificationsConfigUrl);
+
+        return DataLoader.generatePromise(request);
+    }
+
+    static loadSchedules() {
+        let settingsUrl = `${API}/api/schedules`;
+        let request = net.request(settingsUrl);
 
         return DataLoader.generatePromise(request);
     }
