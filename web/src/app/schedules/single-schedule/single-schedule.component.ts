@@ -14,6 +14,7 @@ import {ValidationResult} from "../entities/validation-result";
 export class SingleScheduleComponent implements OnInit {
 
     @Input() schedule = new Schedule();
+    @Input() editable = true;
 
     eventTime = new EventTime();
 
