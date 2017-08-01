@@ -34,6 +34,7 @@ export class SingleScheduleComponent implements OnInit {
 
     ngOnInit() {
         this.subscribeToCurrentSettingUpdate();
+        this.subscribeToScheduleListUpdate();
     }
 
     generateTimeItems() {
@@ -45,6 +46,11 @@ export class SingleScheduleComponent implements OnInit {
     subscribeToCurrentSettingUpdate() {
         this.settingStateHolderService.getCurrentSetting()
             .subscribe(setting => this.currentSetting = setting);
+    }
+
+    subscribeToScheduleListUpdate() {
+        this.schedulesService.scheduleListUpdated
+            .subscribe(() => this.eventTime = new EventTime());
     }
 
     setTime(field: string, time: string) {
