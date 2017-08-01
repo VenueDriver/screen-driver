@@ -11,6 +11,10 @@ const Logger = require('./js/logger/logger');
 const NotificationListener = require('./js/notification-listener/notification_listener');
 const SettingMergeTool = require('./js/setting-merge-tool');
 const SettingsHelper = require('./js/helpers/settings_helper');
+const ScheduledTaskManager = require('./js/scheduled-task-manager');
+const WindowInstanceHolder = require('./js/window-instance-holder');
+const DataLoader = require('./js/data_loader');
+
 
 
 const hotkey = require('electron-hotkey');
@@ -58,13 +62,15 @@ function openWindow() {
     });
 }
 
-function prepareContentWindowData(setting) {
-    CurrentScreenSettingsManager.reloadCurrentScreenConfig(setting)
+function prepareContentWindowData(screenInformation) {
+    CurrentScreenSettingsManager.reloadCurrentScreenConfig(screenInformation)
         .then(contentUrl => openContentWindow(contentUrl))
         .catch(error => {
             Logger.error('Failed to load config. Used old config. Message:', error);
-            openContentWindow(setting.contentUrl);
+            openContentWindow(screenInformation.contentUrl);
         });
+
+    ScheduledTaskManager.initSchedulingForScreen(screenInformation);
 }
 
 function addListenerForErrors() {
@@ -96,7 +102,7 @@ function openAdminPanel() {
     let filePath = getAdminPanelUrl();
     let newWindow = WindowsHelper.createWindow(filePath);
     closeCurrentWindow();
-    mainWindow = newWindow;
+    WindowInstanceHolder.setWindow(newWindow);
 }
 
 function openContentWindow(contentUrl) {
@@ -106,18 +112,31 @@ function openContentWindow(contentUrl) {
         }
     });
     closeCurrentWindow();
-    mainWindow = newWindow;
-    hideCursor(mainWindow);
-    settingsLoadJob = CronJobsManager.initSettingsLoadJob(mainWindow);
+    WindowInstanceHolder.setWindow(newWindow);
+    hideCursor(WindowInstanceHolder.getWindow());
+    settingsLoadJob = CronJobsManager.initSettingsLoadJob(WindowInstanceHolder.getWindow());
     subscribeToScreenReloadNotification();
+    subscribeToScheduleUpdate();
 }
 
 function subscribeToScreenReloadNotification() {
     notificationListener.subscribe('screens', 'refresh', (data) => {
         CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
             if (data.screens.includes(setting.selectedScreenId))
-                mainWindow.reload();
+                WindowInstanceHolder.getWindow().reload();
         })
+    });
+}
+
+function subscribeToScheduleUpdate() {
+    notificationListener.subscribe('screens', 'schedule_update', (event) => {
+        DataLoader.loadData()
+            .then(() => {
+                CurrentScreenSettingsManager.getCurrentSetting()
+                    .then(setting => {
+                        ScheduledTaskManager.initSchedulingForScreen(setting);
+                    })
+            })
     });
 }
 
@@ -133,7 +152,7 @@ function bindSettingChanges() {
             if (setting.contentUrl != contentUrl) {
                 setting.contentUrl = contentUrl;
                 CurrentScreenSettingsManager.saveCurrentSetting(setting);
-                mainWindow.loadURL(setting.contentUrl);
+                WindowInstanceHolder.getWindow().loadURL(setting.contentUrl);
             }
         });
 
@@ -141,8 +160,8 @@ function bindSettingChanges() {
 }
 
 function closeCurrentWindow() {
-    if (mainWindow) {
-        mainWindow.close();
+    if (WindowInstanceHolder.getWindow()) {
+        WindowInstanceHolder.getWindow().close();
     }
 }
 

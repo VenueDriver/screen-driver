@@ -128,3 +128,17 @@ update_schedule:
         path: api/schedules/{id}
         method: put
         cors: true
+
+handle_schedules_table_stream:
+  handler: schedule/stream.event
+  events:
+    - stream:
+        type: dynamodb
+        arn:
+          Fn::GetAtt:
+            - SchedulesTable
+            - StreamArn
+
+push_schedule_update_message:
+  handler: screens/reload_schedules.scheduleUpdateMessage
+  environment: ${self:custom.properties.pusher}
