@@ -4,9 +4,10 @@
 
         <div class="venues-header">
             <div *ngIf="!isShowAddVenueForm"
-                 class="plus-button add-button"
-                 (click)="showAddVenueForm()"
-                 title="Add new venue">
+                    class="add-button"
+                    (click)="showAddVenueForm()">
+                <span class="plus-button"></span>
+                <span class="button-title">Add new venue</span>
             </div>
         </div>
 
