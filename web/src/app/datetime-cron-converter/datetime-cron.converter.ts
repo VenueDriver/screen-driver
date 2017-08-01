@@ -4,7 +4,7 @@ export class DatetimeToCronConverter {
         let dayOfMonth = date.getDate();
         let month = date.toLocaleString('en-us', { month: "short" }).toUpperCase();
         let year = date.getFullYear();
-        return `0 0 0 ${dayOfMonth} ${month} ? ${year}`;
+        return `0 0 0 ${dayOfMonth} ${month} * ${year}`;
     }
 
     static addOneDay(date: Date): Date {
