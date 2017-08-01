@@ -2,8 +2,6 @@ FROM node:6.10
 
 CMD cd ..
 ADD . /app-src/
-#ADD package.json /app-src/
-#ADD package-lock.json /app-src/
 WORKDIR /app-src
 
 RUN npm install
