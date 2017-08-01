@@ -59,7 +59,9 @@ class ScheduledTaskManager {
 
     resetAllSchedules(schedules) {
         this.clearAllSchedules();
-        schedules.forEach(schedule => this.addCronSchedule(schedule));
+        if (schedules) {
+            _.forEach(schedules, s => this.addCronSchedule(s));
+        }
     }
 
     clearAllSchedules() {
