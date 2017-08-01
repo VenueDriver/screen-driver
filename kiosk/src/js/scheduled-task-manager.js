@@ -21,9 +21,6 @@ class ScheduledTaskManager {
     }
 
     addCronSchedule(schedule) {
-
-        console.log(schedule.eventCron, schedule.endEventCron);
-
         let startScheduleCronJob = cron.schedule(schedule.eventCron, runScheduledTask, true);
         let endScheduleCronJob = cron.schedule(schedule.endEventCron, disableCron, true);
         let composedSchedule = {startScheduleCron: startScheduleCronJob, endStartSchedule: endScheduleCronJob, backgroundCron: {}};
