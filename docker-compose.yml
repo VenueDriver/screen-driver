@@ -14,7 +14,7 @@ services:
       - AWS_SECRET_ACCESS_KEY=secret
     build:
       context: api
-      dockerfile: ./docker/Dockerfile.deps
+      dockerfile: ./docker/Dockerfile
     ports:
       - "3000:3000"
     command: sls offline start --host 0.0.0.0 --stage test --noEnvironment
