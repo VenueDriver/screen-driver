@@ -9,12 +9,13 @@ const _ = require('lodash');
 
 let instance = null;
 
+const currentSchedule = {task: ''};
+
 class ScheduledTaskManager {
     constructor() {
         if (!instance) {
             instance = this;
             this.scheduledCronJobs = [];
-            this.activeSchedule = null;
         }
         return instance;
     }
@@ -22,22 +23,26 @@ class ScheduledTaskManager {
     addCronSchedule(schedule) {
         let startScheduleCronJob = cron.schedule(schedule.eventCron, runScheduledTask, true);
         let endScheduleCronJob = cron.schedule(schedule.endEventCron, disableCron, true);
-        let composedSchedule = {startScheduleCron: startScheduleCronJob, endStartSchedule: endScheduleCronJob};
+        let composedSchedule = {startScheduleCron: startScheduleCronJob, endStartSchedule: endScheduleCronJob, backgroundCron: {}};
         this.scheduledCronJobs.push(composedSchedule);
         startScheduleCronJob.start();
         endScheduleCronJob.start();
-        let activeSchedule = this.activeSchedule;
 
         function runScheduledTask() {
-            if (!activeSchedule) {
-                activeSchedule = composedSchedule;
+            if (!this.isScheduled()) {
+                currentSchedule.task = startScheduleCronJob;
+                if (!_.isEmpty(composedSchedule.backgroundCron)) {
+                    composedSchedule.backgroundCron.destroy();
+                }
                 ScheduledTaskManager.reloadWindow(schedule, schedule.content.url);
+            } else if (_.isEmpty(composedSchedule.backgroundCron)) {
+                composedSchedule.backgroundCron = cron.schedule('* * * * * *', () => runScheduledTask(), true);
             }
         }
 
         function disableCron() {
             ScheduledTaskManager.reloadWindow(schedule, schedule.defaultUrl);
-            activeSchedule = null;
+            currentSchedule.task = {};
         }
     }
 
@@ -63,7 +68,7 @@ class ScheduledTaskManager {
             schedule.endStartSchedule.destroy();
         });
         this.scheduledCronJobs.pop();
-        this.activeSchedule = null;
+        currentSchedule.task = {};
     }
 
     initSchedulingForScreen(screenInformation) {
@@ -80,6 +85,9 @@ class ScheduledTaskManager {
         })
     }
 
+    isScheduled() {
+        return !_.isEmpty(currentSchedule.task);
+    }
 }
 
 module.exports = new ScheduledTaskManager();
