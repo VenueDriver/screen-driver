@@ -1,8 +1,0 @@
-FROM node:6.10
-
-CMD cd ..
-ADD . /app-src/
-WORKDIR /app-src
-
-RUN npm install
-ENV PATH ./node_modules/.bin:$PATH

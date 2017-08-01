@@ -3,7 +3,7 @@ services:
   web:
     build:
       context: web
-      dockerfile: ./docker/Dockerfile.deps
+      dockerfile: ./docker/Dockerfile
     ports:
       - "4200:4200"
     command: npm start
