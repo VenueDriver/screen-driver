@@ -2,6 +2,10 @@
     <single-schedule></single-schedule>
 
     <div *ngFor="let schedule of filteredSchedules">
-        <single-schedule [schedule]="schedule" (scheduleChanged)="loadSchedules()"></single-schedule>
+        <single-schedule
+                [schedule]="schedule"
+                [editable]="false"
+                (scheduleChanged)="loadSchedules()">
+        </single-schedule>
     </div>
 </div>
