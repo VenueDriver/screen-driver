@@ -1,11 +1,16 @@
 - service: api
   name: serverless_api_staging
-  #tag: staging
+  tag: staging
   command: serverless deploy --verbose --region us-east-1 --stage staging
+
+- service: api
+  name: serverless_api_production
+  tag: production
+  command: serverless deploy --verbose --region us-east-1 --stage production
 
 - service: web
   name: web_staging
-#  tag: staging
+  tag: staging
   command: aws s3 sync /app-dist/ $AWS_S3_BUCKET
 
 # - service: kiosk
