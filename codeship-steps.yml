@@ -5,7 +5,7 @@
 
 - service: web
   name: web_staging
-  tag: staging
+#  tag: staging
   command: aws s3 sync /app-dist/ $AWS_S3_BUCKET
 
 # - service: kiosk
