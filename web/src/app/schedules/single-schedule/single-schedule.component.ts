@@ -95,4 +95,8 @@ export class SingleScheduleComponent implements OnInit {
     hasChanged(): boolean {
         return !_.isEqual(this.eventTime, this.originalEventTime);
     }
+
+    performUpdatingSubmit() {
+        this.schedulesService.updateSchedule(this.schedule, this.eventTime);
+    }
 }
