@@ -1,4 +1,6 @@
 import {ValidationResult} from "./validation-result";
+import {Schedule} from "./schedule";
+import {CronToDatetimeConverter} from '../../datetime-cron-converter/cron-to-datetime.converter';
 
 export class EventTime {
 
@@ -23,6 +25,31 @@ export class EventTime {
             return {isValid: isTimeValid, validationMessage: isTimeValid ? '' : 'The end of the event couldn\'t be before the start'};
         }
         return {isValid: true};
+    }
+
+    setProperties(schedule: Schedule) {
+        this.startDate = this.getDateFromCron(schedule.eventCron);
+        this.startTimePeriod = this.getTimePeriodFromCron(schedule.eventCron);
+        this.startTime = this.getTimeFromCron(schedule.eventCron);
+
+        this.endDate = this.getDateFromCron(schedule.endEventCron);
+        this.endTimePeriod = this.getTimePeriodFromCron(schedule.endEventCron);
+        this.endTime = this.getTimeFromCron(schedule.endEventCron);
+    }
+
+    private getDateFromCron(cron: string): Date {
+        return CronToDatetimeConverter.getDateFromCron(cron);
+    }
+
+    private getTimePeriodFromCron(cron: string): string {
+        let hours = CronToDatetimeConverter.getHoursFromCron(cron);
+        return hours >= 12 ? 'PM' : 'AM';
+    }
+
+    private getTimeFromCron(cron: string): string {
+        let hours = CronToDatetimeConverter.getHoursFromCron(cron);
+        let minutes = CronToDatetimeConverter.getMinutesFromCron(cron);
+        return `${hours % 12}:${minutes}`;
     }
 
     static getHours(time: string, timePeriod: string): number {
