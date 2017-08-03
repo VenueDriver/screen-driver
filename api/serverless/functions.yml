@@ -104,3 +104,41 @@ get_pusher_config:
         path: api/screens/notification-config
         method: get
         cors: true
+
+create_schedule:
+  handler: schedule/create.create
+  events:
+    - http:
+        path: api/schedules
+        method: post
+        cors: true
+
+get_schedules_list:
+  handler: schedule/list.list
+  events:
+    - http:
+        path: api/schedules
+        method: get
+        cors: true
+
+update_schedule:
+  handler: schedule/update.update
+  events:
+    - http:
+        path: api/schedules/{id}
+        method: put
+        cors: true
+
+handle_schedules_table_stream:
+  handler: schedule/stream.event
+  events:
+    - stream:
+        type: dynamodb
+        arn:
+          Fn::GetAtt:
+            - SchedulesTable
+            - StreamArn
+
+push_schedule_update_message:
+  handler: screens/reload_schedules.scheduleUpdateMessage
+  environment: ${self:custom.properties.pusher}

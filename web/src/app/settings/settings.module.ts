@@ -10,6 +10,8 @@ import {DropdownModule} from "../dropdown/dropdown.module";
 import {SettingsManagerComponent} from "./settings-manager/settings-manager.component";
 import {ToggleButtonComponent} from "../toggle-button/toggle-button.component";
 import { PriorityTypeTagComponent } from './priority-type-tag/priority-type-tag.component';
+import {SettingHeaderComponent} from "./setting-header/setting-header.component";
+import {SettingsPriorityHelper} from "./settings-priority.helper";
 
 @NgModule({
     imports: [
@@ -21,18 +23,21 @@ import { PriorityTypeTagComponent } from './priority-type-tag/priority-type-tag.
     exports: [
         SettingsComponent,
         SettingCreatorComponent,
-        PriorityTypeTagComponent
+        PriorityTypeTagComponent,
+        SettingHeaderComponent
     ],
     declarations: [
         SettingsComponent,
         SettingCreatorComponent,
         SettingsManagerComponent,
         ToggleButtonComponent,
-        PriorityTypeTagComponent
+        PriorityTypeTagComponent,
+        SettingHeaderComponent,
     ],
     providers: [
         SettingsService,
-        SettingStateHolderService
+        SettingStateHolderService,
+        SettingsPriorityHelper
     ]
 })
 export class SettingsModule {

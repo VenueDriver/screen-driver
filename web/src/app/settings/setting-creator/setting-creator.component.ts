@@ -58,6 +58,7 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     private createSetting() {
+        this.setting.priority = this.priorityTypes[0].id;
         this.settingsService.createSetting(this.setting).subscribe(
             (setting: Setting) => this.handleResponse(setting.id),
             error => this.handleError()
@@ -84,10 +85,6 @@ export class SettingCreatorComponent implements OnInit {
         this.cancel.emit();
     }
 
-    prioritySelected(priorityType) {
-        this.setting.priority = priorityType.id;
-    }
-
     validateSettingName() {
         this.setting.name = this.setting.name.trim();
         this.isInputValid = !_.find(this.settings, s => s.name.trim() === this.setting.name);
@@ -95,9 +92,5 @@ export class SettingCreatorComponent implements OnInit {
 
     isButtonEnabled(): boolean {
         return !_.isEmpty(this.setting.name) && this.isInputValid;
-    }
-
-    getPriorityToEdit() {
-        return this.settingToEdit ? this.settingToEdit.priority : null;
     }
 }

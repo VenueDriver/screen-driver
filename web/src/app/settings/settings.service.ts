@@ -31,7 +31,7 @@ export class SettingsService {
         return this.createSettingEvent;
     }
 
-    emitCreateSettingEvent() {
-        this.createSettingEvent.next();
+    emitCreateSettingEvent(isEnabled: boolean) {
+        this.createSettingEvent.next(isEnabled);
     }
 }

@@ -1,0 +1,89 @@
+import {Component, OnInit, Input} from '@angular/core';
+import {SchedulesService} from "../schedules.service";
+import {Schedule} from "../entities/schedule";
+import {EventTime} from "../entities/event-time";
+import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
+import {Setting} from "../../settings/entities/setting";
+import {ValidationResult} from "../entities/validation-result";
+
+import * as _ from 'lodash';
+
+@Component({
+    selector: 'single-schedule',
+    templateUrl: 'single-schedule.component.html',
+    styleUrls: ['single-schedule.component.sass']
+})
+export class SingleScheduleComponent implements OnInit {
+
+    @Input() schedule = new Schedule();
+    @Input() editable = true;
+    @Input() currentSetting: Setting;
+
+    eventTime = new EventTime();
+
+    timeItems: Array<string> = [];
+    timePeriods = ['AM', 'PM'];
+
+    validationResult: ValidationResult = {isValid: true};
+
+    constructor(
+        private schedulesService: SchedulesService,
+        private settingStateHolderService: SettingStateHolderService
+    ) {
+        this.generateTimeItems();
+    }
+
+    ngOnInit() {
+        this.subscribeToCurrentSettingUpdate();
+        this.subscribeToScheduleListUpdate();
+        this.setEventTimeProperties();
+    }
+
+    generateTimeItems() {
+        for (let i = 1; i <= 12; i++) {
+            this.timeItems.push(`${i}:00`, `${i}:15`, `${i}:30`, `${i}:45`);
+        }
+    }
+
+    subscribeToCurrentSettingUpdate() {
+        this.settingStateHolderService.getCurrentSetting()
+            .subscribe(setting => this.currentSetting = setting);
+    }
+
+    subscribeToScheduleListUpdate() {
+        this.schedulesService.scheduleListUpdated
+            .subscribe(() => this.eventTime = new EventTime());
+    }
+
+    setEventTimeProperties() {
+        if (!_.isEmpty(this.schedule)) {
+            this.eventTime.setProperties(this.schedule);
+        }
+    }
+
+    setTime(field: string, time: string) {
+        this.eventTime[field] = time;
+        this.validate();
+    }
+
+    validate() {
+        this.validationResult = this.eventTime.validate();
+    }
+
+    performSubmit() {
+        this.schedulesService.createSchedule(this.schedule, this.currentSetting, this.eventTime);
+    }
+
+    onStartDateSelect() {
+        this.eventTime.endDate = this.eventTime.startDate;
+        this.validate();
+    }
+
+    onEndDateSelect() {
+        if (this.eventTime.startDate > this.eventTime.endDate) {
+            this.eventTime.startDate = null;
+        }
+        this.validate();
+    }
+
+}

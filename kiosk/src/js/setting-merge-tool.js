@@ -9,7 +9,10 @@ class SettingMergeTool {
 
     mergeSettings() {
         let mergedConfig = {config: {}};
-        let enabledSettings = this.settings.filter((setting => setting.enabled));
+        let enabledSettings = [];
+        if (this.settings) {
+            enabledSettings = this.settings.filter((setting => setting.enabled));
+        }
 
         enabledSettings.forEach(setting => {
             for (let instruction in setting.config) {
@@ -24,12 +27,15 @@ class SettingMergeTool {
     }
 
     resolveSettingConflict(instruction) {
-        let conflictedSettings = this.settings.filter(setting => setting.enabled && setting.config.hasOwnProperty(instruction));
-        let prioritySetting = this.getMostPrioritySetting(conflictedSettings);
+        let conflictedSettings = [];
+        if (this.settings) {
+            conflictedSettings = this.settings.filter(setting => setting.enabled && setting.config.hasOwnProperty(instruction));
+        }
+        let prioritySetting = SettingMergeTool.getMostPrioritySetting(conflictedSettings, this.priorities);
         return prioritySetting.config[instruction];
     }
 
-    getMostPrioritySetting(conflictedSettings) {
+    static getMostPrioritySetting(conflictedSettings, priorities) {
         let theMostPrioritySetting = null;
         conflictedSettings.forEach(setting => {
             if (!theMostPrioritySetting) {
@@ -37,8 +43,8 @@ class SettingMergeTool {
                 return;
             }
 
-            let settingPriority = this.getPriorityIndex(setting.priority);
-            let priorityIndex = this.getPriorityIndex(theMostPrioritySetting.priority);
+            let settingPriority = this.getPriorityIndex(setting.priority, priorities);
+            let priorityIndex = this.getPriorityIndex(theMostPrioritySetting.priority, priorities);
             if (settingPriority > priorityIndex) {
                 theMostPrioritySetting = setting;
             }
@@ -48,8 +54,7 @@ class SettingMergeTool {
 
     }
 
-    getPriorityIndex(priorityId) {
-        let priorities = this.priorities;
+    static getPriorityIndex(priorityId, priorities) {
         let priority = priorities.find(element => element.id == priorityId);
         return priorities.indexOf(priority);
     }

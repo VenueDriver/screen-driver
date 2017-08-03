@@ -6,48 +6,15 @@
   justify-content: center
 
   .main-container
-    width: 800px
+    width: 100%
 
   .disabled
     color: $gray-color
 
-  .create-setting-container
-    .title
-      font-size: 25px
-      margin-bottom: 20px
-
   .venues-container
-
-    .selected-setting-container
-      padding-bottom: 20px
-      margin-bottom: 20px
-      border-bottom: solid 1px $border-color
-      min-height: 70px
-
-      .setting-header
-        display: inline-block
-        padding: 4px 8px
-        border: 1px solid transparent
-        border-radius: 4px
-        cursor: text
-
-        &.editable:hover
-            border-color: $border-color
-
-        .setting-title
-          font-size: 25px
-          display: inline-block
-
-        .tag-container
-          display: inline-block
-          margin-left: 10px
-
-          /deep/ .tag
-            font-size: 22px
 
     .venues-header
       border: none
-      padding-bottom: 10px
 
       .title
         font-size: 21px
@@ -79,7 +46,22 @@
       font-size: 16px
       margin: 10px 0 17px
 
-  .plus-button
-    content: url('../../assets/images/add-circular-outlined-button.png')
-    float: right
+  .add-button
+    display: flex
+    align-items: center
+    margin: 15px 0 15px auto
+    border: 1px solid transparent
+    border-radius: 3px
+    padding: 3px
     cursor: pointer
+    max-width: 145px
+
+    &:hover
+      border-color: $green-color-rgba
+
+    .plus-button
+      width: 30px
+
+    .button-title
+      color: $green-color
+      margin-left: 5px

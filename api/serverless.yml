@@ -10,6 +10,7 @@ provider:
     CONTENT_TABLE: content
     VENUES_TABLE: venues
     SETTINGS_TABLE: settings
+    SCHEDULES_TABLE: schedules
   iamRoleStatements: ${self:custom.roles}
 
 functions: ${self:custom.functions}
