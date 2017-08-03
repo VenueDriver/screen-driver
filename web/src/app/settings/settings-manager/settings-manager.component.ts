@@ -86,6 +86,7 @@ export class SettingsManagerComponent implements OnInit {
     showCurrentState() {
         this.settingStateHolderService.changeCurrentSetting();
         this.activeSetting = null;
+        this.headerService.pushSidebarToggleEvent();
     }
 
     getEnabledSettingsCount(): number {
