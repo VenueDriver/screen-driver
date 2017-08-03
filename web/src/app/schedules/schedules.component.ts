@@ -8,13 +8,15 @@ import * as _ from 'lodash';
 
 @Component({
     selector: 'schedules',
-    templateUrl: 'schedules.component.html'
+    templateUrl: 'schedules.component.html',
+    styleUrls: ['schedules.component.sass']
 })
 export class SchedulesComponent implements OnInit {
 
     schedules: Array<Schedule>;
     filteredSchedules: Array<Schedule>;
     currentSetting: Setting;
+    isShowCreateScheduleForm = false;
 
     constructor(
         private schedulesService: SchedulesService,
@@ -32,6 +34,7 @@ export class SchedulesComponent implements OnInit {
             .subscribe(schedules => {
                 this.schedules = schedules;
                 this.filteredSchedules = this.getFilteredSchedules();
+                this.hideCreateScheduleForm();
             });
     }
 
@@ -40,6 +43,7 @@ export class SchedulesComponent implements OnInit {
             .subscribe(setting => {
                 this.currentSetting = setting;
                 this.filteredSchedules = this.getFilteredSchedules();
+                this.isShowCreateScheduleForm = this.filteredSchedules.length == 0;
             });
     }
 
@@ -54,4 +58,11 @@ export class SchedulesComponent implements OnInit {
         return !!this.currentSetting && !!this.currentSetting.id;
     }
 
+    showCreateScheduleForm() {
+        this.isShowCreateScheduleForm = true;
+    }
+
+    hideCreateScheduleForm() {
+        this.isShowCreateScheduleForm = false;
+    }
 }

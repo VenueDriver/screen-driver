@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {SchedulesService} from "../schedules.service";
 import {Schedule} from "../entities/schedule";
 import {EventTime} from "../entities/event-time";
@@ -18,6 +18,8 @@ export class SingleScheduleComponent implements OnInit {
     @Input() schedule: Schedule;
     @Input() editable = true;
     @Input() currentSetting: Setting;
+
+    @Output() cancel = new EventEmitter();
 
     eventTime = new EventTime();
     originalEventTime: EventTime;
@@ -101,7 +103,11 @@ export class SingleScheduleComponent implements OnInit {
     }
 
     performCancel() {
-        this.eventTime = _.clone(this.originalEventTime);
-        this.validationResult = {isValid: true};
+        if (this.isCreationMode()) {
+            this.cancel.emit();
+        } else {
+            this.eventTime = _.clone(this.originalEventTime);
+            this.validationResult = {isValid: true};
+        }
     }
 }

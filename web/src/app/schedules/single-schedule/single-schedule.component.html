@@ -87,15 +87,15 @@
     </div>
 
     <div *ngIf="isCreationMode()" class="buttons-container">
-        <button class="btn btn-success"
+        <button *ngIf="isCreationMode()"
+                class="btn btn-success"
                 (click)="performCreatingSubmit()"
                 [disabled]="!validationResult.isValid">
             Create
         </button>
-    </div>
 
-    <div *ngIf="isEditMode()" class="buttons-container">
-        <button class="btn btn-success"
+        <button *ngIf="isEditMode()"
+                class="btn btn-success"
                 (click)="performUpdatingSubmit()"
                 [disabled]="!validationResult.isValid">
             Save
