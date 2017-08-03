@@ -9,7 +9,10 @@ class SettingMergeTool {
 
     mergeSettings() {
         let mergedConfig = {config: {}};
-        let enabledSettings = this.settings.filter((setting => setting.enabled));
+        let enabledSettings = [];
+        if (this.settings) {
+            enabledSettings = this.settings.filter((setting => setting.enabled));
+        }
 
         enabledSettings.forEach(setting => {
             for (let instruction in setting.config) {
