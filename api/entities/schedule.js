@@ -53,7 +53,7 @@ class Schedule {
             },
             ExpressionAttributeValues: {
                 ':settingId': this.settingId,
-                ':startEventCron': this.eventCron,
+                ':eventCron': this.eventCron,
                 ':endEventCron': this.endEventCron,
                 ':rev': this._rev,
                 ':new_rev': ++this._rev,
