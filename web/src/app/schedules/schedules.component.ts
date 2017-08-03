@@ -50,4 +50,8 @@ export class SchedulesComponent implements OnInit {
         return this.schedules;
     }
 
+    isEditable(): boolean {
+        return !!this.currentSetting && !!this.currentSetting.id;
+    }
+
 }

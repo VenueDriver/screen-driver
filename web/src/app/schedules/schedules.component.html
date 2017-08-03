@@ -9,6 +9,7 @@
     <div *ngFor="let schedule of filteredSchedules">
         <single-schedule
                 [schedule]="schedule"
+                [editable]="isEditable()"
                 (scheduleChanged)="loadSchedules()">
         </single-schedule>
     </div>
