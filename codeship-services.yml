@@ -6,8 +6,9 @@ services:
       dockerfile: docker/Dockerfile
     ports:
       - "4200:4200"
+    encrypted_env_file: deployment.env.encrypted
     volumes:
-      - /app-src
+      - ./web:/app-src
     #command: ng build --prod --aot
 
   api:
