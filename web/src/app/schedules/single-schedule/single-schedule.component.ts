@@ -1,10 +1,12 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {SchedulesService} from "../schedules.service";
 import {Schedule} from "../entities/schedule";
 import {EventTime} from "../entities/event-time";
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../../settings/entities/setting";
 import {ValidationResult} from "../entities/validation-result";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'single-schedule',
@@ -35,6 +37,7 @@ export class SingleScheduleComponent implements OnInit {
     ngOnInit() {
         this.subscribeToCurrentSettingUpdate();
         this.subscribeToScheduleListUpdate();
+        this.setEventTimeProperties();
     }
 
     generateTimeItems() {
@@ -51,6 +54,12 @@ export class SingleScheduleComponent implements OnInit {
     subscribeToScheduleListUpdate() {
         this.schedulesService.scheduleListUpdated
             .subscribe(() => this.eventTime = new EventTime());
+    }
+
+    setEventTimeProperties() {
+        if (!_.isEmpty(this.schedule)) {
+            this.eventTime.setProperties(this.schedule);
+        }
     }
 
     setTime(field: string, time: string) {
