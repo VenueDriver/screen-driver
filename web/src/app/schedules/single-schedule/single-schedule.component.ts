@@ -15,11 +15,12 @@ import * as _ from 'lodash';
 })
 export class SingleScheduleComponent implements OnInit {
 
-    @Input() schedule = new Schedule();
+    @Input() schedule: Schedule;
     @Input() editable = true;
     @Input() currentSetting: Setting;
 
     eventTime = new EventTime();
+    originalEventTime: EventTime;
 
     timeItems: Array<string> = [];
     timePeriods = ['AM', 'PM'];
@@ -58,6 +59,7 @@ export class SingleScheduleComponent implements OnInit {
     setEventTimeProperties() {
         if (!_.isEmpty(this.schedule)) {
             this.eventTime.setProperties(this.schedule);
+            this.originalEventTime = _.clone(this.eventTime);
         }
     }
 
@@ -70,8 +72,8 @@ export class SingleScheduleComponent implements OnInit {
         this.validationResult = this.eventTime.validate();
     }
 
-    performSubmit() {
-        this.schedulesService.createSchedule(this.schedule, this.currentSetting, this.eventTime);
+    performCreatingSubmit() {
+        this.schedulesService.createSchedule(this.currentSetting, this.eventTime);
     }
 
     onStartDateSelect() {
@@ -86,4 +88,11 @@ export class SingleScheduleComponent implements OnInit {
         this.validate();
     }
 
+    isCreationMode(): boolean {
+        return _.isEmpty(this.schedule);
+    }
+
+    hasChanged(): boolean {
+        return !_.isEqual(this.eventTime, this.originalEventTime);
+    }
 }

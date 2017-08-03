@@ -13,7 +13,6 @@
             <material-datepicker
                     class="datepicker"
                     [(date)]="eventTime.startDate"
-                    [disabled]="!editable"
                     (onSelect)="onStartDateSelect()"
                     dateFormat="MM-DD-YYYY">
             </material-datepicker>
@@ -24,7 +23,6 @@
             <material-datepicker
                     class="datepicker"
                     [(date)]="eventTime.endDate"
-                    [disabled]="!editable"
                     (onSelect)="onEndDateSelect()"
                     dateFormat="MM-DD-YYYY">
             </material-datepicker>
@@ -39,7 +37,6 @@
                         class="time"
                         [placeholder]="'Select time'"
                         [readonly]="true"
-                        [disabled]="!editable"
                         [items]="timeItems"
                         [value]="eventTime.startTime"
                         (valueChanged)="setTime('startTime', $event)">
@@ -48,7 +45,6 @@
                 <autocomplete
                         class="period"
                         [readonly]="true"
-                        [disabled]="!editable"
                         [items]="timePeriods"
                         [value]="eventTime.startTimePeriod"
                         (valueChanged)="setTime('startTimePeriod', $event)">
@@ -63,7 +59,6 @@
                         class="time"
                         [placeholder]="'Select time'"
                         [readonly]="true"
-                        [disabled]="!editable"
                         [items]="timeItems"
                         [value]="eventTime.endTime"
                         (valueChanged)="setTime('endTime', $event)">
@@ -72,7 +67,6 @@
                 <autocomplete
                         class="period"
                         [readonly]="true"
-                        [disabled]="!editable"
                         [items]="timePeriods"
                         [value]="eventTime.endTimePeriod"
                         (valueChanged)="setTime('endTimePeriod', $event)">
@@ -82,11 +76,19 @@
 
     </div>
 
-    <div *ngIf="editable" class="buttons-container">
+    <div *ngIf="isCreationMode()" class="buttons-container">
         <button class="btn btn-success"
-                (click)="performSubmit()"
+                (click)="performCreatingSubmit()"
                 [disabled]="!validationResult.isValid">
             Create
+        </button>
+    </div>
+
+    <div *ngIf="hasChanged()" class="buttons-container">
+        <button class="btn btn-success"
+                (click)="performCreatingSubmit()"
+                [disabled]="!validationResult.isValid">
+            Save
         </button>
     </div>
 </div>

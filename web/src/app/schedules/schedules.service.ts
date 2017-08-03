@@ -26,7 +26,8 @@ export class SchedulesService {
             .map(response => response.json());
     }
 
-    createSchedule(schedule: Schedule, setting: Setting, eventTime: EventTime) {
+    createSchedule(setting: Setting, eventTime: EventTime) {
+        let schedule = new Schedule();
         this.setEventTime(schedule, eventTime);
         this.save(schedule, setting);
     }
