@@ -28,11 +28,12 @@ export class SchedulesService {
 
     createSchedule(setting: Setting, eventTime: EventTime) {
         let schedule = new Schedule();
-        this.setEventTime(schedule, eventTime);
+        this.setCrons(schedule, eventTime);
+        schedule.settingId = setting ? setting.id : '';
         this.save(schedule, setting);
     }
 
-    setEventTime(schedule: Schedule, eventTime: EventTime) {
+    setCrons(schedule: Schedule, eventTime: EventTime) {
         schedule.eventCron = this.convertToCron(eventTime.startDate, eventTime.startTime, eventTime.startTimePeriod);
         schedule.endEventCron = this.convertToCron(eventTime.endDate, eventTime.endTime, eventTime.endTimePeriod);
     }
@@ -45,10 +46,16 @@ export class SchedulesService {
     }
 
     save(schedule: Schedule, setting: Setting) {
-        schedule.settingId = setting ? setting.id : '';
         this.http.post(SCHEDULES_API, schedule).subscribe(response => {
             this.scheduleListUpdated.next(response);
             this.settingPriorityHelper.setOccasionalPriorityType(setting);
+        });
+    }
+
+    updateSchedule(schedule: Schedule, eventTime: EventTime) {
+        this.setCrons(schedule, eventTime);
+        this.http.put(`${SCHEDULES_API}/${schedule.id}`, schedule).subscribe(response => {
+            this.scheduleListUpdated.next(response);
         });
     }
 }
