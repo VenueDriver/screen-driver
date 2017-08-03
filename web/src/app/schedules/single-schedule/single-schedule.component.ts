@@ -92,8 +92,8 @@ export class SingleScheduleComponent implements OnInit {
         return _.isEmpty(this.schedule);
     }
 
-    hasChanged(): boolean {
-        return !_.isEqual(this.eventTime, this.originalEventTime);
+    isEditMode(): boolean {
+        return !this.isCreationMode() && !_.isEqual(this.eventTime, this.originalEventTime);
     }
 
     performUpdatingSubmit() {

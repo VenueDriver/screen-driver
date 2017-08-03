@@ -84,7 +84,7 @@
         </button>
     </div>
 
-    <div *ngIf="hasChanged()" class="buttons-container">
+    <div *ngIf="isEditMode()" class="buttons-container">
         <button class="btn btn-success"
                 (click)="performUpdatingSubmit()"
                 [disabled]="!validationResult.isValid">
