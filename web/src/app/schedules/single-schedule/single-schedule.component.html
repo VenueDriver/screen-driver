@@ -1,7 +1,11 @@
 <div class="schedule-container">
 
-    <div *ngIf="validationResult.validationMessage" class="error-message validation-error">
+    <div *ngIf="validationResult.validationMessage" class="validation-error message">
         {{validationResult.validationMessage}}
+    </div>
+
+    <div *ngIf="isCreationMode() && !validationResult.validationMessage" class="message header-message">
+        Create new schedule
     </div>
 
     <div class="schedule-form-container">
