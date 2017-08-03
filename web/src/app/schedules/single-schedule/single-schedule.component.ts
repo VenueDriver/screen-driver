@@ -102,5 +102,6 @@ export class SingleScheduleComponent implements OnInit {
 
     performCancel() {
         this.eventTime = _.clone(this.originalEventTime);
+        this.validationResult = {isValid: true};
     }
 }
