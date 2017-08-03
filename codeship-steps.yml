@@ -1,6 +1,6 @@
 - service: api
   name: serverless_api_staging
-  tag: staging
+  #tag: staging
   command: serverless deploy --verbose --region us-east-1 --stage staging
 
 - service: api
@@ -8,10 +8,12 @@
   tag: production
   command: serverless deploy --verbose --region us-east-1 --stage production
 
-- service: web
+- service: awsdeployment
   name: web_staging
-  tag: staging
-  command: aws s3 sync /app-dist/ $AWS_S3_BUCKET
+  encrypted_env_file: deployment.env.encrypted
+  #tag: staging
+  #command: bash -c "ng build --prod --aot && aws s3 sync /dist/ $AWS_S3_BUCKET"
+  command: bash -c "aws s3 sync /app-src/dist $AWS_S3_BUCKET"
 
 # - service: kiosk
 #   name: build_kiosk_exe
