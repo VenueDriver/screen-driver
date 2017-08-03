@@ -99,4 +99,8 @@ export class SingleScheduleComponent implements OnInit {
     performUpdatingSubmit() {
         this.schedulesService.updateSchedule(this.schedule, this.eventTime);
     }
+
+    performCancel() {
+        this.eventTime = _.clone(this.originalEventTime);
+    }
 }
