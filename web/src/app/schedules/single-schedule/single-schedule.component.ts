@@ -17,10 +17,9 @@ export class SingleScheduleComponent implements OnInit {
 
     @Input() schedule = new Schedule();
     @Input() editable = true;
+    @Input() currentSetting: Setting;
 
     eventTime = new EventTime();
-
-    currentSetting: Setting;
 
     timeItems: Array<string> = [];
     timePeriods = ['AM', 'PM'];
