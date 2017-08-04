@@ -2,13 +2,13 @@ import {ValidationResult} from "./validation-result";
 import {Schedule} from "./schedule";
 import {CronToDatetimeConverter} from '../../datetime-cron-converter/cron-to-datetime.converter';
 import {ScheduleTypes} from '../enums/schedule-types';
-import {DAYS_OF_WEEK} from '../enums/days-of-week';
+import {DaysOfWeek} from '../enums/days-of-week';
 import {DatetimeToCronConverter} from "../../datetime-cron-converter/datetime-cron.converter";
 
 export class EventTime {
 
     scheduleType = ScheduleTypes.ONE_TIME_EVENT;
-    dayOfWeek = DAYS_OF_WEEK[1];
+    dayOfWeek = DaysOfWeek.MON;
     startDate: Date = EventTime.getTomorrowDate();
     endDate = this.startDate;
     startTime = '8:00';

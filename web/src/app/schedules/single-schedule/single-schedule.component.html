@@ -18,7 +18,7 @@
                     class="schedule-type"
                     [readonly]="true"
                     [disabled]="!editable"
-                    [items]="scheduleTypeValues"
+                    [itemsMap]="scheduleTypes"
                     [value]="eventTime.scheduleType"
                     (valueChanged)="setScheduleType($event)">
             </autocomplete>
@@ -34,7 +34,7 @@
                     class="day-of-week"
                     [readonly]="true"
                     [disabled]="!editable"
-                    [items]="daysOfWeek"
+                    [itemsMap]="daysOfWeek"
                     [value]="eventTime.dayOfWeek"
                     (valueChanged)="setDayOfWeek($event)">
             </autocomplete>

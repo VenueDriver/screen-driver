@@ -5,8 +5,8 @@ import {EventTime} from "../entities/event-time";
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../../settings/entities/setting";
 import {ValidationResult} from "../entities/validation-result";
-import {ScheduleTypes, getScheduleTypeValues} from '../enums/schedule-types';
-import {DAYS_OF_WEEK} from '../enums/days-of-week';
+import {ScheduleTypes} from '../enums/schedule-types';
+import {DaysOfWeek} from '../enums/days-of-week';
 
 import * as _ from 'lodash';
 
@@ -32,9 +32,8 @@ export class SingleScheduleComponent implements OnInit {
     validationResult: ValidationResult = {isValid: true};
 
     scheduleTypes = ScheduleTypes;
-    scheduleTypeValues = getScheduleTypeValues();
 
-    daysOfWeek = DAYS_OF_WEEK;
+    daysOfWeek = DaysOfWeek;
 
     constructor(
         private schedulesService: SchedulesService,
