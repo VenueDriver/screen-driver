@@ -1,4 +1,4 @@
-@import "../../../variables"
+@import "../../../styles/variables"
 
 .node-content-wrapper
 
@@ -40,11 +40,14 @@
         display: inline-block
         margin: 5px 0
 
-    .plus-button
-      content: url('../../../assets/images/add-circular-outlined-button.png')
-
     .edit-button
-      content: url('../../../assets/images/edit.png')
+      margin-right: 8px
+
+      &.disabled
+        cursor: not-allowed
+
+    .refresh-button
+      padding: 3px
       margin-right: 8px
 
   .node-info
@@ -63,12 +66,7 @@
         margin-right: 15px
 
       .content-url
-        color: gray
-
-    .content-url-placeholder
-      font-size: 16px
-      color: gray
-      font-style: italic
+        color: $gray-color
 
   .edit-node-form
     flex: 1

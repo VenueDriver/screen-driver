@@ -1,3 +1,18 @@
 <screen-driver-header></screen-driver-header>
 <notification></notification>
-<router-outlet></router-outlet>
+<settings></settings>
+
+<div class="app-container">
+
+    <setting-header></setting-header>
+
+    <tabbed-switcher [tabTitles]="['Venues', 'Schedules']" [class.hidden]="isCreateSettingMode">
+        <single-tab>
+            <venues></venues>
+        </single-tab>
+
+        <single-tab>
+            <schedules></schedules>
+        </single-tab>
+    </tabbed-switcher>
+</div>

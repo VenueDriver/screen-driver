@@ -44,13 +44,17 @@
             </div>
         </div>
 
-        <div *ngIf="!createContentMode" class="autocomplete-container">
+        <div *ngIf="isAbleToSetUrl()" class="autocomplete-container">
             <content-autocomplete
                     [value]="getDropdownValue()"
                     [content]="content"
                     (select)="setNodeContent($event)"
-                    (add)="add($event)">
+                    (add)="enableCreateContentMode($event)">
             </content-autocomplete>
+        </div>
+
+        <div *ngIf="!currentSetting" class="info-message">
+            Select setting before setup content URL
         </div>
     </div>
 
@@ -58,14 +62,12 @@
         <button type="button"
                 class="btn btn-success"
                 [disabled]="!isFormValid"
-                (keyup.enter)="performSubmit($event)"
                 (click)="performSubmit($event)">
             Save
         </button>
 
         <button type="button"
                 class="btn btn-link cancel-button"
-                (keyup.enter)="performCancel($event)"
                 (click)="performCancel($event)">
             Cancel
         </button>

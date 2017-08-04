@@ -9,6 +9,7 @@ import {EditTreeViewNodeFormComponent} from "./edit-tree-view-node-form/edit-tre
 import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
 import {ContentAutocompleteModule} from "../content-autocomplete/content-autocomplete.module";
 import {AutofocusModule} from "../directives/autofocus/autofocus.module";
+import {SettingsModule} from "../settings/settings.module";
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import {AutofocusModule} from "../directives/autofocus/autofocus.module";
         FormsModule,
         ContentAutocompleteModule,
         TreeModule,
-        AutofocusModule
+        AutofocusModule,
+        SettingsModule
     ],
     exports: [
         VenuesComponent

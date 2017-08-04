@@ -5,12 +5,15 @@ import {KEYS} from "angular-tree-component/dist/constants/keys";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesTreeViewService} from "./venues-tree-view.service";
 import {Content} from "../../content/content";
-import {Observable} from "rxjs";
-import {NotificationService} from "../../notifications/notification.service";
+import {VenuesService} from "../venues.service";
+import {Setting} from "../../settings/entities/setting";
 
 import * as _ from 'lodash';
+import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
+import {ScreensMessagingService} from "../../messaging/screens-messaging.service";
+import {NotificationService} from "../../notifications/notification.service";
 
-const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 60 : 23;
+const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 
 @Component({
     selector: 'venues-tree-view',
@@ -21,26 +24,45 @@ export class VenuesTreeViewComponent implements OnInit {
 
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
-    @Output() update = new EventEmitter();
     @Output() contentChange = new EventEmitter();
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
+    currentSetting: Setting;
+    settings: Setting[];
     options: any;
     actionMapping: any;
     currentNodeData: any;
     originalNodeData: any;
     isFormValid = false;
-    isCreateContentMode =false;
+    isCreateContentMode = false;
 
     constructor(
+        private venuesService: VenuesService,
         private treeViewService: VenuesTreeViewService,
-        private notificationService: NotificationService
+        private settingStateHolderService: SettingStateHolderService,
+        private notificationService: NotificationService,
+        private screensService: ScreensMessagingService,
     ) { }
 
     ngOnInit() {
         this.updateTreeViewOptions();
+        this.venuesService.getVenueUpdateSubscription().subscribe(() => this.onVenueUpdate());
+        this.subscribeToCurrentSettingUpdate();
+        this.subscribeToSettingsUpdate();
+    }
+
+    subscribeToCurrentSettingUpdate() {
+        this.settingStateHolderService.getCurrentSetting().subscribe(setting => {
+            this.currentSetting = setting;
+        });
+    }
+
+    subscribeToSettingsUpdate() {
+        this.settingStateHolderService.getAllSettings().subscribe(settings => {
+            this.settings = settings;
+        });
     }
 
     updateTreeViewOptions() {
@@ -128,6 +150,10 @@ export class VenuesTreeViewComponent implements OnInit {
         return node.level < 3 && this.isAllowToEditNode();
     }
 
+    isAllowToRefreshScreenContent(node: any) {
+        return node.level == 3 && _.isEmpty(this.currentNodeData);
+    }
+
     isAllowToEditNode() {
         return _.isEmpty(this.currentNodeData);
     }
@@ -173,55 +199,19 @@ export class VenuesTreeViewComponent implements OnInit {
         });
     }
 
-    performSubmit(node: any) {
-        if (this.isCreateContentMode) {
-            this.createContentBeforeUpdateVenue(node);
-            this.isCreateContentMode = false;
-        } else {
-            this.updateVenue(node);
-        }
-    }
-
-    createContentBeforeUpdateVenue(node: any) {
-        this.saveNewContent(node.data.content)
-            .subscribe(
-                content => this.handleCreateContentResponse(node, content),
-                error => this.notificationService.showErrorNotificationBar('Unable to perform save operation')
-            );
-    }
-
-    handleCreateContentResponse(node: any, content: Content) {
-        this.contentChange.emit();
-        node.data.content_id = content.id;
-        this.updateVenue(node);
-    }
-
-    updateVenue(node: any) {
-        let venueId = this.getVenueId(node);
-        let venueToUpdate = _.find(this.venues, venue => venue.id === venueId);
-        this.update.emit(venueToUpdate);
+    onVenueUpdate() {
+        this.isCreateContentMode = false;
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
     }
 
-    saveNewContent(content: Content): Observable<Content> {
-        return this.treeViewService.saveNewContent(content);
-    }
-
-    getVenueId(node: any) {
-        let parentNode = node.parent;
-        switch (node.level) {
-            case 1: return node.data.id;
-            case 2: return parentNode.data.id;
-            default: return parentNode.parent.data.id;
-        }
-    }
-
     editNode(event: any, node: any) {
         this.stopClickPropagation(event);
-        this.currentNodeData = node.data;
-        this.originalNodeData = _.clone(node.data);
-        this.updateTreeViewOptions();
+        if (this.currentSetting) {
+            this.currentNodeData = node.data;
+            this.originalNodeData = _.clone(node.data);
+            this.updateTreeViewOptions();
+        }
     }
 
     hasChildren(node: any): boolean {
@@ -230,6 +220,13 @@ export class VenuesTreeViewComponent implements OnInit {
 
     stopClickPropagation(event: any) {
         event.stopPropagation();
+    }
+
+    refreshContent(id: string) {
+        this.screensService.refreshScreen(id).subscribe(
+            response => this.notificationService.showSuccessNotificationBar('Reload screen request was sent'),
+            error => this.notificationService.showErrorNotificationBar('Unable to send reload screen request')
+        );
     }
 
     isCurrentNodeHasName(): boolean {
@@ -244,6 +241,11 @@ export class VenuesTreeViewComponent implements OnInit {
     getEditButtonTitle(node: any): string {
         let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
         return `Edit ${nodeLevelName.toLowerCase()}`;
+    }
+
+    getRefreshButtonTitle(node: any): string {
+        let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
+        return `Refresh ${nodeLevelName.toLowerCase()} content`;
     }
 
     getNodeLevelName(node: any): string {

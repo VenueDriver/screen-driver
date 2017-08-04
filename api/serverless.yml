@@ -7,80 +7,19 @@ provider:
   runtime: nodejs6.10
   environment:
     STAGE: ${opt:stage}
-    CONTENT_TABLE: content
-    VENUES_TABLE: venues
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:*
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*"
+    CONTENT_TABLE: "${self:service}-content-${opt:stage}"
+    VENUES_TABLE: "${self:service}-venues-${opt:stage}"
+    SETTINGS_TABLE: "${self:service}-settings-${opt:stage}"
+    SCHEDULES_TABLE: "${self:service}-schedules-${opt:stage}"
+  iamRoleStatements: ${self:custom.roles}
 
-functions:
-  venues_list:
-    handler: venues/list.list
-    events:
-      - http:
-          path: api/venues
-          method: get
-          cors: true
-
-  create_venue:
-    handler: venues/create.create
-    events:
-      - http:
-          path: api/venues
-          method: post
-          cors: true
-
-  update_venue:
-    handler: venues/update.update
-    events:
-      - http:
-          path: api/venues/{id}
-          method: put
-          cors: true
-
-  delete_venue:
-    handler: venues/delete.delete
-    events:
-      - http:
-          path: api/venues/{id}
-          method: delete
-          cors: true
-
-  content_list:
-    handler: content/list.list
-    events:
-      - http:
-          path: api/content
-          method: get
-          cors: true
-
-  create_content:
-    handler: content/create.create
-    events:
-      - http:
-          path: api/content
-          method: post
-          cors: true
-
-  update_content:
-    handler: content/update.update
-    events:
-      - http:
-          path: api/content/{id}
-          method: put
-          cors: true
-
-  delete_content:
-    handler: content/delete.delete
-    events:
-      - http:
-          path: api/content/{id}
-          method: delete
-          cors: true
+functions: ${self:custom.functions}
 
 custom:
+  properties: ${file(./serverless/properties.yml)}
+  functions: ${file(./serverless/functions.yml)}
+  resources: ${file(./serverless/resources.yml)}
+  roles: ${file(./serverless/roles.yml)}
   dynamodb:
     start:
       port: 8000
@@ -95,34 +34,4 @@ plugins:
   - serverless-mocha-plugin
 
 resources:
-  Resources:
-    ContentTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: id
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${self:provider.environment.CONTENT_TABLE}
-    VenuesTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: id
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${self:provider.environment.VENUES_TABLE}
+  Resources: ${self:custom.resources}

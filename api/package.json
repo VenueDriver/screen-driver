@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Serverless CRUD service exposing a REST HTTP interface",
   "scripts": {
-    "start": "sls offline start --stage test",
+    "start": "sls offline start",
     "test": "sls invoke test --stage test",
     "invoke": "sls invoke -f",
     "deploy": "serverless deploy",
@@ -12,6 +12,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "pusher": "^1.5.1",
     "q": "1.5.0",
     "uuid": "^2.0.3"
   },

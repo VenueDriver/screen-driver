@@ -1,4 +1,4 @@
-@import "../../variables"
+@import "../../styles/variables"
 
 $dropdown-width: inherit
 
@@ -20,20 +20,22 @@ $dropdown-width: inherit
     &.shown
       display: block
 
-    li a
-      padding: 5px 12px
-      min-height: 40px
-      line-height: 30px
-      font-size: $input-font-size
-      overflow: hidden
-
-      .item-desc
-        color: gray
-
-      .item-value
+    li
+      cursor: pointer
+      a
+        padding: 5px 12px
+        min-height: 40px
+        line-height: 30px
+        font-size: $input-font-size
         overflow: hidden
-        max-width: $dropdown-width
-        white-space: nowrap
+
+        .item-desc
+          color: $gray-color
+
+        .item-value
+          overflow: hidden
+          max-width: $dropdown-width
+          white-space: nowrap
 
   .dropdown-footer
     border-top: 1px solid #dfdfdf
@@ -42,6 +44,7 @@ $dropdown-width: inherit
     .add-button
       border-radius: 0
       background-color: #f9f9f9
+      width: 100%
 
       &:hover
         background-color: #ededed

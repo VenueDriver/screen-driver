@@ -1,0 +1,20 @@
+<div class="create-setting-corm-container" [class.has-error]="!isInputValid">
+    <div *ngIf="!isInputValid"
+         class="message validation-error">
+        Setting with such name already exists
+    </div>
+
+    <div class="inputs-container">
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="setting.name"
+               placeholder="Setting name"
+               (ngModelChange)="validateSettingName()"
+               input-autofocus>
+
+        <div class="btn-container">
+            <button class="btn btn-success" (click)="performSubmit()" [disabled]="!isButtonEnabled()">Save</button>
+            <button class="btn btn-link" (click)="performCancel()">Cancel</button>
+        </div>
+    </div>
+</div>

@@ -12,8 +12,6 @@ module.exports.list = (event, context, callback) => {
             return findAllContent();
         })
         .then(result => {
-            content = result;
-            mergeWithContent(venues, content);
             callback(null, responseHelper.createSuccessfulResponse(venues));
         })
         .fail(error => callback(null, responseHelper.createResponseWithError(500, error)));

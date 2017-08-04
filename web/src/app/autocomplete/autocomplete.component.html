@@ -1,0 +1,21 @@
+<div class="dropdown">
+    <input type="text"
+           class="form-control"
+           [readonly]="readonly"
+           [disabled]="disabled"
+           [placeholder]="placeholder"
+           [value]="getValue()"
+           (focus)="showDropdown()"
+           (clickOutside)="handleClickOutside($event)"
+           [detectClickOutside]="isShowDropdown"
+           (select)="handleTextSelection($event)"
+           (keyup)="handleKeyUp($event)">
+
+    <ul class="dropdown-menu" [class.shown]="isShowDropdown">
+        <li *ngFor="let item of items">
+            <a (click)="onSelect(item)" class="dropdown-item">
+                {{item}}
+            </a>
+        </li>
+    </ul>
+</div>

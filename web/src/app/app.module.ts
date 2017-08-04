@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
-import {routing} from "./app.routing";
 import {AlertModule} from "ngx-bootstrap";
 
 import {VenuesModule} from "./venues/venues.module";
@@ -11,6 +10,11 @@ import {HeaderComponent} from "./header/header.component";
 import {NotificationModule} from "./notifications/notification.module";
 import {NotificationService} from "./notifications/notification.service";
 import {HttpModule} from "@angular/http";
+import {SettingsModule} from "./settings/settings.module";
+import {HeaderService} from "./header/header.service";
+import {TabbedSwitcherModule} from "./tabbed-switcher/tabbed-switcher.module";
+import {ScreensMessagingModule} from "./messaging/screens-messaging.module";
+import {SchedulesModule} from "./schedules/schedules.module";
 
 @NgModule({
     declarations: [
@@ -19,14 +23,19 @@ import {HttpModule} from "@angular/http";
     ],
     imports: [
         BrowserModule,
-        routing,
         HttpModule,
         AlertModule.forRoot(),
         NotificationModule,
         VenuesModule,
+        SettingsModule,
+        TabbedSwitcherModule,
+        SettingsModule,
+        ScreensMessagingModule,
+        SchedulesModule
     ],
     providers: [
-        NotificationService
+        NotificationService,
+        HeaderService
     ],
     bootstrap: [AppComponent]
 })

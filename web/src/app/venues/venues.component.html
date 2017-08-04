@@ -1,13 +1,13 @@
 <div class="page-container">
-    <div class="venues-container">
-        <div class="header">
-            <div class="page-title">
-                Venues
-            </div>
+
+    <div class="venues-container main-container">
+
+        <div class="venues-header">
             <div *ngIf="!isShowAddVenueForm"
-                 class="plus-button add-button"
-                 (click)="showAddVenueForm()"
-                 title="Add new venue">
+                    class="add-button"
+                    (click)="showAddVenueForm()">
+                <span class="plus-button"></span>
+                <span class="button-title">Add new venue</span>
             </div>
         </div>
 
@@ -16,10 +16,11 @@
             <div class="form-container">
                 <edit-tree-view-node-form
                         [venues]="venues"
+                        [currentSetting]="getCurrentSettingForEditForm()"
+                        [settings]="settings"
                         [content]="content"
                         [currentNode]="node"
                         contentUrlPlaceholder="Content URL is not specified"
-                        (submit)="performSubmit($event)"
                         (cancel)="hideAddVenueForm()"
                         (createContent)="toggleCreateContentMode($event)">
                 </edit-tree-view-node-form>
@@ -29,7 +30,7 @@
         <venues-tree-view
                 [venues]="venuesTree"
                 [content]="content"
-                (update)="updateVenue($event)"
+                (update)="loadVenues()"
                 (contentChange)="loadContent()">
         </venues-tree-view>
     </div>

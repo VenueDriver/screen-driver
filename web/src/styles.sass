@@ -1,10 +1,20 @@
-@import "variables"
+@import "styles/variables"
 
 body
-  margin: 0 25px 45px
+  margin: 50px 25px 45px 0
+
+  @media (max-width: $sidebar-visibility-width)
+    padding-left: 0
+
+    .navbar-toggle, .navbar-brand
+      float: none
+      display: inline-block
 
   @media screen and (max-width: $tablet-resolution)
-    margin: 0 5px 45px
+    margin: 25px 5px 45px
+
+    .navbar-brand
+      margin-left: -15px
 
   .notifications-container
     line-height: 50px !important
@@ -12,22 +22,8 @@ body
     .notification
       font-size: 16px !important
 
-  .header
-    padding: 0 0 20px 5px
-    margin-bottom: 20px
-    border-bottom: solid 1px #eee
-
-    .page-title
-      font-size: 25px
-      display: inline-block
-
-    .add-button
-      display: inline-block
-      float: right
-      cursor: pointer
-
   .navbar-default
-    margin: 0 -25px 20px -25px
+    margin: 0 -25px 20px 0
 
     @media screen and (max-width: $tablet-resolution)
       margin: 0 -5px 20px -5px
@@ -75,6 +71,8 @@ body
     font-size: 13px
 
   .btn
+    width: 75px
+
     &.btn-link:focus
       outline: none
 
@@ -83,9 +81,44 @@ body
     justify-content: center !important
 
     .navbar-header
-      width: 800px
-      padding-left: 3px
+      width: 100%
 
       @media screen and (max-width: $tablet-resolution)
-        width: auto
         padding-left: 0
+
+        .navbar-brand, .navbar-toggle
+          float: none
+
+  .switcher
+    label
+      margin-bottom: 0 !important
+
+  .info-message
+    font-size: 17px
+    font-style: italic
+    color: $gray-color
+
+  .datepicker__input
+    font-size: 18px !important
+    padding: 3px 12px !important
+    border: 1px solid #ccc !important
+    border-radius: 4px !important
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075)
+
+    &[disabled]
+      background-color: #eee !important
+
+  .datepicker__calendar
+    top: 36px !important
+
+.plus-button
+  content: url('./assets/images/plus.png')
+
+.edit-button
+  content: url('./assets/images/edit.png')
+
+  &.disabled
+    content: url('./assets/images/edit-disabled.png')
+
+.refresh-button
+  content: url('./assets/images/refresh.png')

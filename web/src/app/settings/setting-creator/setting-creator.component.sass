@@ -1,0 +1,32 @@
+@import "../../../styles/variables"
+
+.create-setting-corm-container
+  display: inline-block
+  width: 100%
+
+  .validation-error
+    margin-top: -18px
+
+  .inputs-container
+
+    @media screen and (min-width: $tablet-resolution)
+      display: flex
+      align-items: center
+
+    input
+      font-size: 18px
+      height: 35px
+      flex: 1
+
+      @media screen and (max-width: $tablet-resolution)
+        margin-bottom: 10px
+
+    .setting-type-dropdown
+      flex: 1
+
+    .btn-container
+      float: right
+      margin-left: 15px
+
+      @media screen and (max-width: $tablet-resolution)
+        margin-top: 10px

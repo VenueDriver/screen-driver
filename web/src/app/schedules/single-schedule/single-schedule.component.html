@@ -1,0 +1,92 @@
+<div class="schedule-container">
+
+    <div *ngIf="validationResult.validationMessage" class="error-message validation-error">
+        {{validationResult.validationMessage}}
+    </div>
+
+    <div class="schedule-form-container">
+
+        <div class="datepicker-container">
+            <div class="title">
+                Start event date:
+            </div>
+            <material-datepicker
+                    class="datepicker"
+                    [(date)]="eventTime.startDate"
+                    [disabled]="!editable"
+                    (onSelect)="onStartDateSelect()"
+                    dateFormat="MM-DD-YYYY">
+            </material-datepicker>
+
+            <div class="title">
+                End event date:
+            </div>
+            <material-datepicker
+                    class="datepicker"
+                    [(date)]="eventTime.endDate"
+                    [disabled]="!editable"
+                    (onSelect)="onEndDateSelect()"
+                    dateFormat="MM-DD-YYYY">
+            </material-datepicker>
+        </div>
+
+        <div class="time-selector-container">
+            <div class="title">
+                Start event time:
+            </div>
+            <div class="time-selector">
+                <autocomplete
+                        class="time"
+                        [placeholder]="'Select time'"
+                        [readonly]="true"
+                        [disabled]="!editable"
+                        [items]="timeItems"
+                        [value]="eventTime.startTime"
+                        (valueChanged)="setTime('startTime', $event)">
+                </autocomplete>
+
+                <autocomplete
+                        class="period"
+                        [readonly]="true"
+                        [disabled]="!editable"
+                        [items]="timePeriods"
+                        [value]="eventTime.startTimePeriod"
+                        (valueChanged)="setTime('startTimePeriod', $event)">
+                </autocomplete>
+            </div>
+
+            <div class="title">
+                End event time:
+            </div>
+            <div class="time-selector">
+                <autocomplete
+                        class="time"
+                        [placeholder]="'Select time'"
+                        [readonly]="true"
+                        [disabled]="!editable"
+                        [items]="timeItems"
+                        [value]="eventTime.endTime"
+                        (valueChanged)="setTime('endTime', $event)">
+                </autocomplete>
+
+                <autocomplete
+                        class="period"
+                        [readonly]="true"
+                        [disabled]="!editable"
+                        [items]="timePeriods"
+                        [value]="eventTime.endTimePeriod"
+                        (valueChanged)="setTime('endTimePeriod', $event)">
+                </autocomplete>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="editable" class="buttons-container">
+        <button class="btn btn-success"
+                (click)="performSubmit()"
+                [disabled]="!validationResult.isValid">
+            Create
+        </button>
+    </div>
+</div>

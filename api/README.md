@@ -4,6 +4,7 @@
 
 1. ```npm install -g serverless```
 1. ```npm i```
+1. Create ```serverless/properties.yaml``` file by pattern in ```serverless/properties.sample.yaml``` and fill the Pusher properties (```app_id```, ```key```, ```secret``` and ```cluster```) 
 
 ## Run service offline
 Setup dynamodb-local before start:
@@ -23,7 +24,8 @@ Use ```npm run deploy ``` to deploy the service
 
 
 ### Deploy with Docker:
-Run `deploy.sh <AWS Access Key ID> <AWS Secret Access Key> <Region> <Stage>` in `docker` directory to deploy project on AWS. 
+1. Create ```serverless/properties.yaml``` file by pattern in ```serverless/properties.sample.yaml``` and fill the Pusher properties (```app_id```, ```key```, ```secret``` and ```cluster```)
+1. Run `deploy.sh <AWS Access Key ID> <AWS Secret Access Key> <Region> <Stage>` in `docker` directory to deploy project on AWS. 
 
 `<Region>` and `<Stage>` are optional. Default values are `us-east-1` and `dev` respectively.
 

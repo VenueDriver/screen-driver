@@ -1,0 +1,20 @@
+version: '2.2'
+services:
+  web:
+    build:
+      context: web
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "4200:4200"
+    command: npm start
+
+  api:
+    environment:
+      - AWS_ACCESS_KEY_ID=access
+      - AWS_SECRET_ACCESS_KEY=secret
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "3000:3000"
+    command: sls offline start --host 0.0.0.0 --stage test --noEnvironment

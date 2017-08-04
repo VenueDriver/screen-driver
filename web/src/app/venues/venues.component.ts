@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {VenuesService} from "./venues.service";
 import {Venue} from "./entities/venue";
 import {Content} from "../content/content";
-import {NotificationService} from "../notifications/notification.service";
-import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
+import {ContentService} from "../content/content.service";
 
 import * as _ from 'lodash';
-import {Observable} from "rxjs";
+import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
+import {Setting} from "../settings/entities/setting";
+import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
 
 @Component({
     selector: 'venues',
@@ -19,25 +20,75 @@ export class VenuesComponent implements OnInit {
     venues: Venue[];
     venuesTree: any;
     content: Content[];
+    setting: Setting;
+    settings: Setting[];
     isShowAddVenueForm = false;
     isCreateContentMode = false;
 
     constructor(
-        private venuesService: VenuesService,
-        private treeViewService: VenuesTreeViewService,
-        private notificationService: NotificationService
-    ) { }
+            private venuesService: VenuesService,
+            private contentService: ContentService,
+            private settingStateHolderService: SettingStateHolderService
+    ) {
+    }
 
     ngOnInit() {
-        this.loadVenues();
-        this.loadContent();
+        this.subscribeToVenueUpdate();
+        this.subscribeToContentUpdate();
+        this.subscribeToCurrentSettingUpdate();
+        this.subscribeToSettingsUpdate();
+    }
+
+    subscribeToVenueUpdate() {
+        this.venuesService.getVenueUpdateSubscription()
+            .subscribe(() => {
+                this.loadVenues();
+                this.hideAddVenueForm();
+            });
+    }
+
+    subscribeToContentUpdate() {
+        this.contentService.getContentUpdateSubscription()
+            .subscribe(() => this.loadContent());
+    }
+
+    subscribeToCurrentSettingUpdate() {
+        this.settingStateHolderService.getCurrentSetting().subscribe(setting => {
+            if (!setting) {
+                let mergedSetting = this.mergeSettings();
+                this.settingStateHolderService.changeCurrentSetting(mergedSetting);
+                return;
+            }
+
+            this.setting = setting;
+            this.mergeLocationsWithConfig(this.venues, this.setting);
+        });
+    }
+
+    subscribeToSettingsUpdate() {
+        this.settingStateHolderService.getAllSettings()
+            .subscribe(settings => this.settings = settings);
     }
 
     loadVenues() {
         this.venuesService.loadVenues().subscribe(response => {
             this.venues = response.json();
             this.venuesTree = this.venuesService.getVenuesForTree(this.venues);
+
+            if (!this.setting) {
+                this.setting = this.mergeSettings();
+            }
+            this.mergeLocationsWithConfig(this.venues, this.setting);
         });
+
+    }
+
+    mergeSettings() {
+        return SettingMergeTool
+            .startMerging()
+            .setSettings(this.settings)
+            .setPriorities(this.settingStateHolderService.getPriorityTypes())
+            .mergeSettings();
     }
 
     loadContent() {
@@ -53,58 +104,33 @@ export class VenuesComponent implements OnInit {
         this.isShowAddVenueForm = false;
     }
 
-    addVenue(venue: Venue) {
-        this.venuesService.saveVenue(venue)
-            .subscribe(
-                response => this.handleResponse(response),
-                error => this.handleError('Unable to perform save operation'));
-    }
-
-    handleResponse(response: any) {
-        if (response.ok) {
-            this.hideAddVenueForm();
-        }
-        this.loadVenues();
-    }
-
-    performSubmit(venue: Venue) {
-        if (this.isCreateContentMode) {
-            this.createContentBeforeCreateVenue(venue);
-        } else {
-            this.addVenue(venue);
-        }
-    }
-
-    createContentBeforeCreateVenue(venue: Venue) {
-        this.saveNewContent(venue.content)
-            .subscribe(
-                content => this.handleCreateContentResponse(venue, content),
-                error => this.handleError('Unable to save new content')
-            );
-    }
-
-    handleCreateContentResponse(venue: Venue, content: Content) {
-        this.loadContent();
-        venue.content_id = content.id;
-        this.addVenue(venue);
-    }
-
-    saveNewContent(content: Content): Observable<Content> {
-        return this.treeViewService.saveNewContent(content);
-    }
-
-    updateVenue(venueNode: any) {
-        this.venuesService.updateVenue(venueNode)
-            .subscribe(
-                response => this.loadVenues(),
-                error => this.handleError('Unable to update configuration'));
-    }
-
-    handleError(errorMessage: string) {
-        return this.notificationService.showErrorNotificationBar(errorMessage);
-    }
-
     toggleCreateContentMode(createContentMode: boolean) {
         this.isCreateContentMode = createContentMode;
+    }
+
+    mergeLocationsWithConfig(locations: any, setting: Setting) {
+        _.forEach(locations, location => {
+            this.defineContentForLocation(location, setting);
+            if (location.hasOwnProperty('children')) {
+                this.mergeLocationsWithConfig(location.children, setting);
+            }
+        });
+    }
+
+    defineContentForLocation(location: any, setting: Setting) {
+        if (setting && setting.config.hasOwnProperty(location.id)) {
+            location.content = this.getContentForVenue(setting, location.id);
+        } else {
+            location.content = null;
+        }
+    }
+
+    getContentForVenue(setting: Setting, venueId: string) {
+        let contentId = setting.config[venueId];
+        return _.find(this.content, {id: contentId});
+    }
+
+    getCurrentSettingForEditForm() {
+        return this.setting.id ? this.setting : null;
     }
 }

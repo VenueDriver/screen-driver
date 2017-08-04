@@ -4,7 +4,7 @@ import {Content} from "../content/content";
 import * as _ from 'lodash';
 
 const DROPDOWN_ITEM_CLASS = 'dropdown-item';
-const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 478 ? 50 : 25;
+const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 50 : 25;
 
 @Component({
     selector: 'content-autocomplete',

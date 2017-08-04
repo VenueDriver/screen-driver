@@ -5,7 +5,7 @@ const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-depe
 let options = {};
 
 // connect to local DB if running offline
-if (process.env.IS_OFFLINE && process.env.STAGE == 'test') {
+if (process.env.IS_OFFLINE || process.env.STAGE == 'test') {
   options = {
     region: 'localhost',
     endpoint: 'http://localhost:8000',

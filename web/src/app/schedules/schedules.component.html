@@ -1,0 +1,16 @@
+<div class="schedules-container">
+
+    <div *ngIf="currentSetting && currentSetting.id">
+        <single-schedule
+                [currentSetting]="currentSetting">
+        </single-schedule>
+    </div>
+
+    <div *ngFor="let schedule of filteredSchedules">
+        <single-schedule
+                [schedule]="schedule"
+                [editable]="false"
+                (scheduleChanged)="loadSchedules()">
+        </single-schedule>
+    </div>
+</div>

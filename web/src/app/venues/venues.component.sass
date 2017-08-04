@@ -1,17 +1,39 @@
-@import "../../variables"
+@import "../../styles/variables"
 
 .page-container
   display: flex
   align-items: center
   justify-content: center
 
+  .main-container
+    width: 100%
+
+  .disabled
+    color: $gray-color
+
   .venues-container
-    width: 800px
+
+    .venues-header
+      border: none
+
+      .title
+        font-size: 21px
+        display: inline-block
+        padding-left: 8px
+
+    .buttons-container
+      display: inline-block
+
+      .edit-button
+        width: 25px
+        height: 25px
+        cursor: pointer
+        margin-left: 10px
 
   .add-venue-form
     margin-bottom: 20px
     padding: 0 8px 0 34px
-    border-bottom: solid 1px #eee
+    border-bottom: solid 1px $border-color
 
     @media screen and (max-width: $small-resolution)
       padding: 8px 0
@@ -24,7 +46,22 @@
       font-size: 16px
       margin: 10px 0 17px
 
-  .plus-button
-    content: url('../../assets/images/add-circular-outlined-button.png')
-    float: right
+  .add-button
+    display: flex
+    align-items: center
+    margin: 15px 0 15px auto
+    border: 1px solid transparent
+    border-radius: 3px
+    padding: 3px
     cursor: pointer
+    max-width: 145px
+
+    &:hover
+      border-color: $green-color-rgba
+
+    .plus-button
+      width: 30px
+
+    .button-title
+      color: $green-color
+      margin-left: 5px
