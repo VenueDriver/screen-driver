@@ -11,6 +11,15 @@ export class DatetimeToCronConverter {
         return new Date(date.setDate(date.getDate() + 1));
     }
 
+    static createCronForDayOfWeek(dayOfWeek: string): string {
+        let day = DatetimeToCronConverter.getShortDayName(dayOfWeek);
+        return `* * * * * ${day}`;
+    }
+
+    private static getShortDayName(day: string): string {
+        return day.substr(0, 3).toUpperCase();
+    }
+
     static setTimeForCron(cron: string, hour: number, minute: number): string {
         let cronDate = cron.substr(6);
         return `0 ${minute} ${hour} ${cronDate}`;
