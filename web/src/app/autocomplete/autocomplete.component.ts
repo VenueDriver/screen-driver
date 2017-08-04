@@ -15,7 +15,7 @@ export class AutocompleteComponent {
     @Input() itemsMap: any;
     @Input() value: string;
     @Input() placeholder = '';
-    @Input() readonly = false;
+    @Input() editable = false;
     @Input() disabled = false;
 
     @Output() valueChanged = new EventEmitter<string>();

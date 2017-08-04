@@ -16,7 +16,7 @@
             </div>
             <autocomplete
                     class="schedule-type"
-                    [readonly]="true"
+                    [editable]="true"
                     [disabled]="!editable"
                     [itemsMap]="scheduleTypes"
                     [value]="eventTime.periodicity"
@@ -32,7 +32,7 @@
             </div>
             <autocomplete
                     class="day-of-week"
-                    [readonly]="true"
+                    [editable]="true"
                     [disabled]="!editable"
                     [itemsMap]="daysOfWeek"
                     [value]="eventTime.dayOfWeek"
@@ -74,7 +74,7 @@
                 <autocomplete
                         class="time"
                         [placeholder]="'Select time'"
-                        [readonly]="true"
+                        [editable]="true"
                         [disabled]="!editable"
                         [items]="timeItems"
                         [value]="eventTime.startTime"
@@ -83,7 +83,7 @@
 
                 <autocomplete
                         class="period"
-                        [readonly]="true"
+                        [editable]="true"
                         [disabled]="!editable"
                         [items]="timePeriods"
                         [value]="eventTime.startTimePeriod"
@@ -98,7 +98,7 @@
                 <autocomplete
                         class="time"
                         [placeholder]="'Select time'"
-                        [readonly]="true"
+                        [editable]="true"
                         [disabled]="!editable"
                         [items]="timeItems"
                         [value]="eventTime.endTime"
@@ -107,7 +107,7 @@
 
                 <autocomplete
                         class="period"
-                        [readonly]="true"
+                        [editable]="true"
                         [disabled]="!editable"
                         [items]="timePeriods"
                         [value]="eventTime.endTimePeriod"
