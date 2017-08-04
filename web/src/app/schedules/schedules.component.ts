@@ -65,4 +65,8 @@ export class SchedulesComponent implements OnInit {
     hideCreateScheduleForm() {
         this.isShowCreateScheduleForm = false;
     }
+
+    showAddScheduleButton(): boolean {
+        return !this.isShowCreateScheduleForm && !!this.currentSetting && !!this.currentSetting.id
+    }
 }

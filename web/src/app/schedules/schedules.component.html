@@ -1,6 +1,6 @@
 <div class="schedules-container">
 
-    <div *ngIf="!isShowCreateScheduleForm && currentSetting && currentSetting.id"
+    <div *ngIf="showAddScheduleButton()"
          class="add-button"
          (click)="showCreateScheduleForm()">
         <span class="plus-button"></span>
