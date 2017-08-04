@@ -37,13 +37,15 @@ export class EventTime {
     }
 
     setProperties(schedule: Schedule) {
-        this.startDate = this.getDateFromCron(schedule.eventCron);
-        this.startTimePeriod = this.getTimePeriodFromCron(schedule.eventCron);
-        this.startTime = this.getTimeFromCron(schedule.eventCron);
-
-        this.endDate = this.getDateFromCron(schedule.endEventCron);
-        this.endTimePeriod = this.getTimePeriodFromCron(schedule.endEventCron);
-        this.endTime = this.getTimeFromCron(schedule.endEventCron);
+        this.periodicity = Periodicity[schedule.periodicity];
+        switch (this.periodicity) {
+            case Periodicity.ONE_TIME_EVENT:
+                this.setPropertiesForOneTimeSchedule(schedule);
+                break;
+            case Periodicity.WEEKLY:
+                this.setPropertiesForWeeklySchedule(schedule);
+                break;
+        }
     }
     
     setCronsForSchedule(schedule: Schedule) {
@@ -55,6 +57,26 @@ export class EventTime {
                 this.setCronsForWeeklySchedule(schedule);
                 break;
         }
+    }
+
+    private setPropertiesForOneTimeSchedule(schedule: Schedule) {
+        this.startDate = this.getDateFromCron(schedule.eventCron);
+        this.startTimePeriod = this.getTimePeriodFromCron(schedule.eventCron);
+        this.startTime = this.getTimeFromCron(schedule.eventCron);
+
+        this.endDate = this.getDateFromCron(schedule.endEventCron);
+        this.endTimePeriod = this.getTimePeriodFromCron(schedule.endEventCron);
+        this.endTime = this.getTimeFromCron(schedule.endEventCron);
+    }
+
+    private setPropertiesForWeeklySchedule(schedule: Schedule) {
+        this.dayOfWeek = CronToDatetimeConverter.getWeekDayFromCron(schedule.eventCron);
+
+        this.startTimePeriod = this.getTimePeriodFromCron(schedule.eventCron);
+        this.startTime = this.getTimeFromCron(schedule.eventCron);
+
+        this.endTimePeriod = this.getTimePeriodFromCron(schedule.endEventCron);
+        this.endTime = this.getTimeFromCron(schedule.endEventCron);
     }
 
     private setCronsForOneTimeSchedule(schedule: Schedule) {
