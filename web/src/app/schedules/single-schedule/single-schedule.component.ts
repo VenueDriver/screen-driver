@@ -6,6 +6,7 @@ import {SettingStateHolderService} from "../../settings/setting-state-manager/se
 import {Setting} from "../../settings/entities/setting";
 import {ValidationResult} from "../entities/validation-result";
 import {ScheduleTypes, getScheduleTypeValues} from '../enums/schedule-types';
+import {DAYS_OF_WEEK} from '../enums/days-of-week';
 
 import * as _ from 'lodash';
 
@@ -32,6 +33,7 @@ export class SingleScheduleComponent implements OnInit {
 
     scheduleTypes = ScheduleTypes;
     scheduleTypeValues = getScheduleTypeValues();
+    daysOfWeek = DAYS_OF_WEEK;
 
     constructor(
         private schedulesService: SchedulesService,

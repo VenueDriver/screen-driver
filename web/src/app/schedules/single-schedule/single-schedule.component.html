@@ -23,6 +23,19 @@
             </autocomplete>
         </div>
 
+        <div class="days-of-week-container">
+            <div class="title">
+                Day of week:
+            </div>
+            <autocomplete
+                    class="day-of-week"
+                    [readonly]="true"
+                    [disabled]="!editable"
+                    [items]="daysOfWeek"
+                    [value]="daysOfWeek[1]">
+            </autocomplete>
+        </div>
+
         <div class="datepicker-container">
             <div class="title">
                 Start event date:
