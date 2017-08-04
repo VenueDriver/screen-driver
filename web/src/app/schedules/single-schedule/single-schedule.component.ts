@@ -5,8 +5,8 @@ import {EventTime} from "../entities/event-time";
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../../settings/entities/setting";
 import {ValidationResult} from "../entities/validation-result";
-import {ScheduleTypes} from '../enums/schedule-types';
-import {DaysOfWeek} from '../enums/days-of-week';
+import {ScheduleTypes} from '../../enums/schedule-types';
+import {DaysOfWeek} from '../../enums/days-of-week';
 
 import * as _ from 'lodash';
 
