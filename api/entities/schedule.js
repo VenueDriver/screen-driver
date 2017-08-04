@@ -1,8 +1,10 @@
 'use strict';
 
 const uuid = require('uuid');
-
 const Q = require('q');
+
+const periodicity = require('../enums/periodicity');
+
 let db;
 
 class Schedule {
@@ -13,8 +15,8 @@ class Schedule {
             this.settingId = schedule.settingId;
             this.eventCron = schedule.eventCron;
             this.endEventCron = schedule.endEventCron;
+            this.periodicity = schedule.periodicity;
             this._rev = schedule._rev;
-            return;
         }
     }
 
@@ -55,10 +57,11 @@ class Schedule {
                 ':settingId': this.settingId,
                 ':eventCron': this.eventCron,
                 ':endEventCron': this.endEventCron,
+                ':periodicity': this.periodicity,
                 ':rev': this._rev,
                 ':new_rev': ++this._rev,
             },
-            UpdateExpression: 'SET settingId = :settingId, eventCron = :eventCron, endEventCron = :endEventCron, #rev = :new_rev',
+            UpdateExpression: 'SET settingId = :settingId, periodicity = :periodicity, eventCron = :eventCron, endEventCron = :endEventCron, #rev = :new_rev',
             ConditionExpression: "#rev = :rev",
             ReturnValues: 'ALL_NEW',
         };
@@ -88,6 +91,7 @@ class Schedule {
     validate(errorCallback) {
         let errorMessage;
         if (!this.settingId || this.settingId === '') errorMessage = 'Schedule couldn\'t be without setting';
+        if (periodicity.indexOf(this.periodicity) < 0) errorMessage = 'Invalid periodicity';
         if (!this.eventCron || this.eventCron === '') errorMessage = 'Schedule couldn\'t be without eventCron';
         if (!this.endEventCron || this.endEventCron === '') errorMessage = 'Schedule couldn\'t be without endEventCron';
         if (!this._rev && this._rev !== 0) errorMessage = 'Schedule couldn\'t be without revision number';
