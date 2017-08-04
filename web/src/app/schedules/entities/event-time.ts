@@ -1,13 +1,13 @@
 import {ValidationResult} from "./validation-result";
 import {Schedule} from "./schedule";
 import {CronToDatetimeConverter} from '../../datetime-cron-converter/cron-to-datetime.converter';
-import {ScheduleTypes} from '../../enums/schedule-types';
+import {Periodicity} from '../../enums/periodicity';
 import {DaysOfWeek} from '../../enums/days-of-week';
 import {DatetimeToCronConverter} from "../../datetime-cron-converter/datetime-cron.converter";
 
 export class EventTime {
 
-    scheduleType = ScheduleTypes.ONE_TIME_EVENT;
+    periodicity = Periodicity.ONE_TIME_EVENT;
     dayOfWeek = DaysOfWeek.MON;
     startDate: Date = EventTime.getTomorrowDate();
     endDate = this.startDate;
@@ -29,7 +29,7 @@ export class EventTime {
         if (!this.isDateValid()) {
             return {isValid: false, validationMessage: 'The start and the end date should be specified'};
         }
-        if (this.startDate.getTime() === this.endDate.getTime() || this.scheduleType !== ScheduleTypes.ONE_TIME_EVENT) {
+        if (this.startDate.getTime() === this.endDate.getTime() || this.periodicity !== Periodicity.ONE_TIME_EVENT) {
             let isTimeValid = this.isTimeValid();
             return {isValid: isTimeValid, validationMessage: isTimeValid ? '' : 'The end of the event couldn\'t be before the start'};
         }
@@ -47,11 +47,11 @@ export class EventTime {
     }
     
     setCronsForSchedule(schedule: Schedule) {
-        switch (this.scheduleType) {
-            case ScheduleTypes.ONE_TIME_EVENT:
+        switch (this.periodicity) {
+            case Periodicity.ONE_TIME_EVENT:
                 this.setCronsForOneTimeSchedule(schedule);
                 break;
-            case ScheduleTypes.WEEKLY:
+            case Periodicity.WEEKLY:
                 this.setCronsForWeeklySchedule(schedule);
                 break;
         }
@@ -103,7 +103,7 @@ export class EventTime {
     }
 
     private isDateValid(): boolean {
-        if (this.scheduleType === ScheduleTypes.ONE_TIME_EVENT) {
+        if (this.periodicity === Periodicity.ONE_TIME_EVENT) {
             return !!(this.startDate && this.endDate);
         }
         return true;
