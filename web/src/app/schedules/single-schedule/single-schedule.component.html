@@ -35,7 +35,8 @@
                     [readonly]="true"
                     [disabled]="!editable"
                     [items]="daysOfWeek"
-                    [value]="daysOfWeek[1]">
+                    [value]="eventTime.dayOfWeek"
+                    (valueChanged)="setDayOfWeek($event)">
             </autocomplete>
         </div>
 

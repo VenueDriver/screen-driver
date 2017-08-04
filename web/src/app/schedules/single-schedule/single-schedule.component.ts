@@ -121,4 +121,8 @@ export class SingleScheduleComponent implements OnInit {
     setScheduleType(scheduleType: string) {
         this.eventTime.scheduleType = scheduleType;
     }
+
+    setDayOfWeek(dayOfWeek: string) {
+        this.eventTime.dayOfWeek = dayOfWeek;
+    }
 }

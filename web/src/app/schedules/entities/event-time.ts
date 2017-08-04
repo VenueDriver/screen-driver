@@ -1,12 +1,13 @@
 import {ValidationResult} from "./validation-result";
 import {Schedule} from "./schedule";
 import {CronToDatetimeConverter} from '../../datetime-cron-converter/cron-to-datetime.converter';
-import {ScheduleTypes, getScheduleTypeValues} from '../enums/schedule-types';
+import {ScheduleTypes} from '../enums/schedule-types';
+import {DAYS_OF_WEEK} from '../enums/days-of-week';
 
 export class EventTime {
 
     scheduleType = ScheduleTypes.ONE_TIME_EVENT;
-    dayOfWeek: string;
+    dayOfWeek = DAYS_OF_WEEK[1];
     startDate: Date = EventTime.getTomorrowDate();
     endDate = this.startDate;
     startTime = '8:00';
