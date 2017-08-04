@@ -7,3 +7,7 @@ export const DaysOfWeek = {
     FRI: 'Friday',
     SAT: 'Saturday'
 };
+
+export const getShortDay = (dayOfWeek: string): string => {
+    return dayOfWeek.substr(0, 3).toUpperCase();
+};
