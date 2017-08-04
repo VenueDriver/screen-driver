@@ -3,6 +3,7 @@ import {Schedule} from "./schedule";
 import {CronToDatetimeConverter} from '../../datetime-cron-converter/cron-to-datetime.converter';
 import {ScheduleTypes} from '../enums/schedule-types';
 import {DAYS_OF_WEEK} from '../enums/days-of-week';
+import {DatetimeToCronConverter} from "../../datetime-cron-converter/datetime-cron.converter";
 
 export class EventTime {
 
@@ -18,6 +19,10 @@ export class EventTime {
     static getTomorrowDate(): Date {
         let today = new Date();
         return new Date(today.setDate(today.getDate() + 1));
+    }
+
+    static getHours(time: string, timePeriod: string): number {
+        return EventTime.convertTimeToDate(time, timePeriod).getHours();
     }
 
     validate(): ValidationResult {
@@ -40,9 +45,44 @@ export class EventTime {
         this.endTimePeriod = this.getTimePeriodFromCron(schedule.endEventCron);
         this.endTime = this.getTimeFromCron(schedule.endEventCron);
     }
+    
+    setCronsForSchedule(schedule: Schedule) {
+        switch (this.scheduleType) {
+            case ScheduleTypes.ONE_TIME_EVENT:
+                this.setCronsForOneTimeSchedule(schedule);
+                break;
+            case ScheduleTypes.WEEKLY:
+                this.setCronsForWeeklySchedule(schedule);
+                break;
+        }
+    }
+
+    private setCronsForOneTimeSchedule(schedule: Schedule) {
+        schedule.eventCron = this.convertDateAndTimeToCron(this.startDate, this.startTime, this.startTimePeriod);
+        schedule.endEventCron = this.convertDateAndTimeToCron(this.endDate, this.endTime, this.endTimePeriod);
+    }
+
+    private convertDateAndTimeToCron(date: Date, time: string, timePeriod: string): string {
+        let cron = DatetimeToCronConverter.createCronForSpecificDate(date);
+        let hours = EventTime.getHours(time, timePeriod);
+        let minutes = +time.split(':')[1];
+        return DatetimeToCronConverter.setTimeForCron(cron, hours, minutes);
+    }
 
     private getDateFromCron(cron: string): Date {
         return CronToDatetimeConverter.getDateFromCron(cron);
+    }
+
+    private setCronsForWeeklySchedule(schedule: Schedule) {
+        schedule.eventCron = this.convertWeekDayAndTimeToCron(this.dayOfWeek, this.startTime, this.startTimePeriod);
+        schedule.endEventCron = this.convertWeekDayAndTimeToCron(this.dayOfWeek, this.endTime, this.endTimePeriod);
+    }
+
+    private convertWeekDayAndTimeToCron(dayOfWeek: string, time: string, timePeriod: string) {
+        let cron = DatetimeToCronConverter.createCronForDayOfWeek(dayOfWeek);
+        let hours = EventTime.getHours(time, timePeriod);
+        let minutes = +time.split(':')[1];
+        return DatetimeToCronConverter.setTimeForCron(cron, hours, minutes);
     }
 
     private getTimePeriodFromCron(cron: string): string {
@@ -54,10 +94,6 @@ export class EventTime {
         let hours = CronToDatetimeConverter.getHoursFromCron(cron);
         let minutes = CronToDatetimeConverter.getMinutesFromCron(cron);
         return `${hours % 12}:${minutes}`;
-    }
-
-    static getHours(time: string, timePeriod: string): number {
-        return EventTime.convertTimeToDate(time, timePeriod).getHours();
     }
 
     private isTimeValid(): boolean {
