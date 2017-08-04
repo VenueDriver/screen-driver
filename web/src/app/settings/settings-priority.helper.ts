@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import {SettingsService} from "./settings.service";
 import {SettingStateHolderService} from "./setting-state-manager/settings-state-holder.service";
 import {Setting} from "./entities/setting";
+import {Schedule} from "../schedules/entities/schedule";
+import {Periodicity} from '../enums/periodicity';
+
+import * as _ from 'lodash';
 
 @Injectable()
 export class SettingsPriorityHelper {
@@ -11,10 +15,21 @@ export class SettingsPriorityHelper {
         private settingStateHolderService: SettingStateHolderService
     ) { }
 
-    setOccasionalPriorityType(setting: Setting) {
+    setPriorityType(setting: Setting, schedule: Schedule) {
+        switch (Periodicity[schedule.periodicity]) {
+            case Periodicity.ONE_TIME_EVENT:
+                this.setPriorityTypeByIndex(setting, 2);
+                break;
+            case Periodicity.WEEKLY:
+                this.setPriorityTypeByIndex(setting, 1);
+                break;
+        }
+    }
+
+    private setPriorityTypeByIndex(setting: Setting, priorityTypeIndex: number) {
         let priorityTypes = this.settingStateHolderService.getPriorityTypes();
-        if (setting.priority !== priorityTypes[2].id) {
-            setting.priority = priorityTypes[2].id;
+        if (this.getPriorityTypeIndex(priorityTypes, setting.priority) < priorityTypeIndex) {
+            setting.priority = priorityTypes[priorityTypeIndex].id;
             this.updateSetting(setting);
         }
     }
@@ -22,6 +37,11 @@ export class SettingsPriorityHelper {
     private updateSetting(setting: Setting) {
         this.settingsService.updateSetting(setting)
             .subscribe(() => this.settingStateHolderService.reloadSettings(setting.id));
+    }
+
+    private getPriorityTypeIndex(priorityTypes: any, priorityId: any): number {
+        let priority = _.find(priorityTypes, t => t.id === priorityId);
+        return priorityTypes.indexOf(priority);
     }
 
 }

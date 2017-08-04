@@ -44,8 +44,9 @@ export class SchedulesService {
     }
 
     handleSaveResponse(response, setting) {
-        this.scheduleListUpdated.next(response);
-        this.settingPriorityHelper.setOccasionalPriorityType(setting);
+        let schedule = response.json();
+        this.scheduleListUpdated.next(schedule);
+        this.settingPriorityHelper.setPriorityType(setting, schedule);
     }
 
     updateSchedule(schedule: Schedule, eventTime: EventTime) {
