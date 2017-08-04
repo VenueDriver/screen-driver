@@ -118,7 +118,7 @@
 
     </div>
 
-    <div *ngIf="isCreationMode()" class="buttons-container">
+    <div class="buttons-container">
         <button *ngIf="isCreationMode()"
                 class="btn btn-success"
                 (click)="performCreatingSubmit()"
@@ -133,7 +133,8 @@
             Save
         </button>
 
-        <button class="btn btn-link"
+        <button *ngIf="isEditMode() || isCreationMode()"
+                class="btn btn-link"
                 (click)="performCancel()">
             Cancel
         </button>
