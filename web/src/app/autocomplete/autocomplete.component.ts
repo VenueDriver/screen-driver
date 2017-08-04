@@ -1,5 +1,7 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 
+import * as _ from 'lodash';
+
 const DROPDOWN_ITEM_CLASS = 'dropdown-item';
 
 @Component({
@@ -10,6 +12,7 @@ const DROPDOWN_ITEM_CLASS = 'dropdown-item';
 export class AutocompleteComponent {
 
     @Input() items: Array<string>;
+    @Input() itemsMap: any;
     @Input() value: string;
     @Input() placeholder = '';
     @Input() readonly = false;
@@ -63,6 +66,10 @@ export class AutocompleteComponent {
 
     emitSelection() {
         this.valueChanged.emit(this.value);
+    }
+
+    getItems() {
+        return this.itemsMap ? _.map(this.itemsMap, t => t) : this.items;
     }
 
 }

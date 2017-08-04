@@ -12,7 +12,7 @@
            (keyup)="handleKeyUp($event)">
 
     <ul class="dropdown-menu" [class.shown]="isShowDropdown">
-        <li *ngFor="let item of items">
+        <li *ngFor="let item of getItems()">
             <a (click)="onSelect(item)" class="dropdown-item">
                 {{item}}
             </a>
