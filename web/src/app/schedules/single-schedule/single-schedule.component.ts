@@ -120,6 +120,7 @@ export class SingleScheduleComponent implements OnInit {
 
     setScheduleType(scheduleType: string) {
         this.eventTime.scheduleType = scheduleType;
+        this.validate();
     }
 
     setDayOfWeek(dayOfWeek: string) {

@@ -24,7 +24,7 @@ export class EventTime {
         if (!this.isDateValid()) {
             return {isValid: false, validationMessage: 'The start and the end date should be specified'};
         }
-        if (this.startDate.getTime() === this.endDate.getTime()) {
+        if (this.startDate.getTime() === this.endDate.getTime() || this.scheduleType !== ScheduleTypes.ONE_TIME_EVENT) {
             let isTimeValid = this.isTimeValid();
             return {isValid: isTimeValid, validationMessage: isTimeValid ? '' : 'The end of the event couldn\'t be before the start'};
         }
@@ -67,7 +67,10 @@ export class EventTime {
     }
 
     private isDateValid(): boolean {
-        return !!(this.startDate && this.endDate);
+        if (this.scheduleType === ScheduleTypes.ONE_TIME_EVENT) {
+            return !!(this.startDate && this.endDate);
+        }
+        return true;
     }
 
     private static convertTimeToDate(time: string, timePeriod: string): Date {
