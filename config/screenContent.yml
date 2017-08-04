@@ -2,6 +2,11 @@ Citizens Kitchen:
   Touch:
     A: http://touchscreen.citizenslasvegas.com/
     B: http://touchscreen.citizenslasvegas.com/
+  Deli:
+    A: http://content.screendriver.engineering/citizenskitchen/deli/coffee.jpg
+    B: http://content.screendriver.engineering/citizenskitchen/deli/juice.jpg
+    C: http://content.screendriver.engineering/citizenskitchen/deli/sandwich.jpg
+    D: http://content.screendriver.engineering/citizenskitchen/deli/soup-salad.jpg
 Hakkasan Las Vegas:
   Restaurant:
     A: http://touchscreen.hakkasan.com/

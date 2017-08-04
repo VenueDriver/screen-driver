@@ -1,8 +1,0 @@
-FROM screendriver-web-app-deps-image:latest
-
-ADD . /app-src
-WORKDIR /app-src
-
-CMD sed -i 's@API_HOST@'"$API_HOST"'@' src/environments/environment.prod.ts && \
-    node_modules/.bin/ng build --prod --aot --no-sourcemap && \
-    cp -r dist/* /app-dist/

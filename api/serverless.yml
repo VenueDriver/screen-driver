@@ -7,8 +7,8 @@ provider:
   runtime: nodejs6.10
   environment:
     STAGE: ${opt:stage}
-    CONTENT_TABLE: content
-    VENUES_TABLE: venues
+    CONTENT_TABLE: "${self:service}-content-${opt:stage}"
+    VENUES_TABLE: "${self:service}-venues-${opt:stage}"
     SETTINGS_TABLE: settings
     SCHEDULES_TABLE: schedules
   iamRoleStatements: ${self:custom.roles}
