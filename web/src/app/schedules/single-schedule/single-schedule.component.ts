@@ -5,6 +5,7 @@ import {EventTime} from "../entities/event-time";
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../../settings/entities/setting";
 import {ValidationResult} from "../entities/validation-result";
+import {ScheduleTypes, getScheduleTypeValues} from '../enums/schedule-types';
 
 import * as _ from 'lodash';
 
@@ -28,6 +29,9 @@ export class SingleScheduleComponent implements OnInit {
     timePeriods = ['AM', 'PM'];
 
     validationResult: ValidationResult = {isValid: true};
+
+    scheduleTypes = ScheduleTypes;
+    scheduleTypeValues = getScheduleTypeValues();
 
     constructor(
         private schedulesService: SchedulesService,

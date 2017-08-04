@@ -10,6 +10,19 @@
 
     <div class="schedule-form-container">
 
+        <div class="schedule-type-container">
+            <div class="title">
+                Schedule type:
+            </div>
+            <autocomplete
+                    class="schedule-type"
+                    [readonly]="true"
+                    [disabled]="!editable"
+                    [items]="scheduleTypeValues"
+                    [value]="scheduleTypes.ONE_TIME_EVENT">
+            </autocomplete>
+        </div>
+
         <div class="datepicker-container">
             <div class="title">
                 Start event date:
