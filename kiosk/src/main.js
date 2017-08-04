@@ -11,16 +11,13 @@ const Logger = require('./js/logger/logger');
 const NotificationListener = require('./js/notification-listener/notification_listener');
 const SettingMergeTool = require('./js/setting-merge-tool');
 const SettingsHelper = require('./js/helpers/settings_helper');
-const ScheduledTaskManager = require('./js/scheduled-task-manager');
+const {scheduledTaskManager} = require('./js/scheduled-task-manager');
 const WindowInstanceHolder = require('./js/window-instance-holder');
 const DataLoader = require('./js/data_loader');
-
-
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
 
-let mainWindow;
 let settingsLoadJob;
 let notificationListener;
 
@@ -70,7 +67,7 @@ function prepareContentWindowData(screenInformation) {
             openContentWindow(screenInformation.contentUrl);
         });
 
-    ScheduledTaskManager.initSchedulingForScreen(screenInformation);
+    scheduledTaskManager.initSchedulingForScreen(screenInformation);
 }
 
 function addListenerForErrors() {
@@ -134,7 +131,7 @@ function subscribeToScheduleUpdate() {
             .then(() => {
                 CurrentScreenSettingsManager.getCurrentSetting()
                     .then(setting => {
-                        ScheduledTaskManager.initSchedulingForScreen(setting);
+                        scheduledTaskManager.initSchedulingForScreen(setting);
                     })
             })
     });

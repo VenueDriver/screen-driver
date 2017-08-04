@@ -3,7 +3,8 @@
 const CurrentScreenSettingsManager = require('./../current_screen_settings_manager');
 const CronJob = require('cron').CronJob;
 const Logger = require('./../logger/logger');
-const scheduledTaskManager = require('../scheduled-task-manager');
+const {currentSchedule} = require('../scheduled-task-manager');
+const _ = require('lodash');
 
 class CronJobsManager {
 
@@ -19,7 +20,7 @@ class CronJobsManager {
     }
 
     static reloadWindowContent(contentWindow, contentUrl) {
-        if (!scheduledTaskManager.isScheduled()) {
+        if (_.isEmpty(currentSchedule.task)) {
             let currentUrl = CronJobsManager.cutSlashAtTheEnd(contentWindow.getURL());
             let newUrl = CronJobsManager.cutSlashAtTheEnd(contentUrl);
             if (currentUrl !== newUrl) {
