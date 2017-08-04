@@ -7,6 +7,7 @@ import {Setting} from "../settings/entities/setting";
 import {SettingsPriorityHelper} from "../settings/settings-priority.helper";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {getPropertyName} from '../enums/periodicity';
+import {NotificationService} from "../notifications/notification.service";
 
 const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;
 
@@ -17,7 +18,8 @@ export class SchedulesService {
 
     constructor(
         private http: Http,
-        private settingPriorityHelper: SettingsPriorityHelper
+        private settingPriorityHelper: SettingsPriorityHelper,
+        private notificationService: NotificationService,
     ) {
     }
 
@@ -35,16 +37,22 @@ export class SchedulesService {
     }
 
     save(schedule: Schedule, setting: Setting) {
-        this.http.post(SCHEDULES_API, schedule).subscribe(response => {
-            this.scheduleListUpdated.next(response);
-            this.settingPriorityHelper.setOccasionalPriorityType(setting);
-        });
+        this.http.post(SCHEDULES_API, schedule).subscribe(
+            response => this.handleSaveResponse(response, setting),
+            error => this.notificationService.showErrorNotificationBar('Unable to perform schedule creation operation')
+        );
+    }
+
+    handleSaveResponse(response, setting) {
+        this.scheduleListUpdated.next(response);
+        this.settingPriorityHelper.setOccasionalPriorityType(setting);
     }
 
     updateSchedule(schedule: Schedule, eventTime: EventTime) {
         eventTime.setCronsForSchedule(schedule);
-        this.http.put(`${SCHEDULES_API}/${schedule.id}`, schedule).subscribe(response => {
-            this.scheduleListUpdated.next(response);
-        });
+        this.http.put(`${SCHEDULES_API}/${schedule.id}`, schedule).subscribe(
+            response => this.scheduleListUpdated.next(response),
+            error => this.notificationService.showErrorNotificationBar('Unable to perform the update schedule operation')
+        );
     }
 }
