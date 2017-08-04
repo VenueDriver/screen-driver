@@ -19,11 +19,14 @@
                     [readonly]="true"
                     [disabled]="!editable"
                     [items]="scheduleTypeValues"
-                    [value]="scheduleTypes.ONE_TIME_EVENT">
+                    [value]="eventTime.scheduleType"
+                    (valueChanged)="setScheduleType($event)">
             </autocomplete>
         </div>
 
-        <div class="days-of-week-container">
+        <div *ngIf="eventTime.scheduleType === scheduleTypes.WEEKLY"
+             class="days-of-week-container">
+
             <div class="title">
                 Day of week:
             </div>
@@ -36,7 +39,9 @@
             </autocomplete>
         </div>
 
-        <div class="datepicker-container">
+        <div *ngIf="eventTime.scheduleType === scheduleTypes.ONE_TIME_EVENT"
+             class="datepicker-container">
+
             <div class="title">
                 Start event date:
             </div>

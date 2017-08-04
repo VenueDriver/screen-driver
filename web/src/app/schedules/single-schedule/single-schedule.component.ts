@@ -33,6 +33,7 @@ export class SingleScheduleComponent implements OnInit {
 
     scheduleTypes = ScheduleTypes;
     scheduleTypeValues = getScheduleTypeValues();
+
     daysOfWeek = DAYS_OF_WEEK;
 
     constructor(
@@ -115,5 +116,9 @@ export class SingleScheduleComponent implements OnInit {
             this.eventTime = _.clone(this.originalEventTime);
             this.validationResult = {isValid: true};
         }
+    }
+
+    setScheduleType(scheduleType: string) {
+        this.eventTime.scheduleType = scheduleType;
     }
 }
