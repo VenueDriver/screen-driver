@@ -15,6 +15,7 @@ import {HeaderService} from "./header/header.service";
 import {TabbedSwitcherModule} from "./tabbed-switcher/tabbed-switcher.module";
 import {ScreensMessagingModule} from "./messaging/screens-messaging.module";
 import {SchedulesModule} from "./schedules/schedules.module";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
     declarations: [
@@ -23,6 +24,7 @@ import {SchedulesModule} from "./schedules/schedules.module";
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         HttpModule,
         AlertModule.forRoot(),
         NotificationModule,
