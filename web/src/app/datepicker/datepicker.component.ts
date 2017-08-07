@@ -463,7 +463,7 @@ export class DatepickerComponent implements OnInit, OnChanges {
      * Visually syncs calendar and input to selected date or current day
      */
     syncVisualsWithDate(): void {
-        if (this.date) {
+        if (this.date && this.date instanceof Date && !isNaN(this.date.valueOf())) {
             this.setInputText(this.date);
             this.setCurrentValues(this.date);
         } else {
