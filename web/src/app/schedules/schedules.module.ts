@@ -1,5 +1,5 @@
 import {NgModule} from "@angular/core";
-import {DatepickerModule} from "angular2-material-datepicker";
+import {DatepickerModule} from "../datepicker/datepicker.module";
 import {SingleScheduleComponent} from "./single-schedule/single-schedule.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {AutocompleteModule} from "../autocomplete/autocomplete.module";
