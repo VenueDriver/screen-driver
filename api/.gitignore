@@ -4,6 +4,3 @@ jspm_packages
 
 # Serverless directories
 .serverless
-
-# Pusher access configuration
-serverless/properties.yml
