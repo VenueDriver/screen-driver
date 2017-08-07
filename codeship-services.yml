@@ -1,0 +1,32 @@
+version: '2.2'
+services:
+  web:
+    build:
+      context: web
+      dockerfile: docker/Dockerfile
+    ports:
+      - "4200:4200"
+    encrypted_env_file: deployment.env.encrypted
+    volumes:
+      - ./web:/app-src
+    #command: ng build --prod --aot
+
+  api:
+    #environment:
+      #- AWS_ACCESS_KEY_ID=access
+      #- AWS_SECRET_ACCESS_KEY=secret
+    build:
+      context: api
+      dockerfile: docker/Dockerfile
+    ports:
+      - "3000:3000"
+    encrypted_env_file: deployment.env.encrypted
+    command: sls offline start --host 0.0.0.0 --stage test --noEnvironment
+
+  awsdeployment:
+    image: codeship/aws-deployment
+    encrypted_env_file: deployment.env.encrypted
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes_from:
+      - web

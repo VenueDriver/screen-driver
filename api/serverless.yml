@@ -7,10 +7,10 @@ provider:
   runtime: nodejs6.10
   environment:
     STAGE: ${opt:stage}
-    CONTENT_TABLE: content
-    VENUES_TABLE: venues
-    SETTINGS_TABLE: settings
-    SCHEDULES_TABLE: schedules
+    CONTENT_TABLE: "${self:service}-content-${opt:stage}"
+    VENUES_TABLE: "${self:service}-venues-${opt:stage}"
+    SETTINGS_TABLE: "${self:service}-settings-${opt:stage}"
+    SCHEDULES_TABLE: "${self:service}-schedules-${opt:stage}"
   iamRoleStatements: ${self:custom.roles}
 
 functions: ${self:custom.functions}
