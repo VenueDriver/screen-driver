@@ -23,7 +23,7 @@ export class DatetimeToCronConverter {
         return `0 ${minute} ${hour} ${cronDate}`;
     }
 
-    static createCronForDailyAction(hour: number, minute: number) {
+    static createCronForDailyAction(hour: number, minute: number): string {
         return `0 ${minute} ${hour} * * *`;
     }
 }

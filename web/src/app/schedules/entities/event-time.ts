@@ -50,7 +50,7 @@ export class EventTime {
                 break;
         }
     }
-    
+
     setCronsForSchedule(schedule: Schedule) {
         switch (this.periodicity) {
             case Periodicity.ONE_TIME_EVENT:
@@ -85,12 +85,12 @@ export class EventTime {
         this.setEndTimeProperties(schedule.endEventCron);
     }
 
-    private setStartTimeProperties(cron: string){
+    private setStartTimeProperties(cron: string) {
         this.startTimePeriod = this.getTimePeriodFromCron(cron);
         this.startTime = this.getTimeFromCron(cron);
     }
 
-    private setEndTimeProperties(cron: string){
+    private setEndTimeProperties(cron: string) {
         this.endTimePeriod = this.getTimePeriodFromCron(cron);
         this.endTime = this.getTimeFromCron(cron);
     }
