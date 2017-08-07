@@ -51,6 +51,7 @@ export class SchedulesService {
 
     updateSchedule(schedule: Schedule, eventTime: EventTime) {
         eventTime.setCronsForSchedule(schedule);
+        schedule.periodicity = getPropertyName(eventTime.periodicity);
         this.http.put(`${SCHEDULES_API}/${schedule.id}`, schedule).subscribe(
             response => this.scheduleListUpdated.next(response),
             error => this.notificationService.showErrorNotificationBar('Unable to perform the update schedule operation')
