@@ -23,6 +23,9 @@ export class SettingsPriorityHelper {
             case Periodicity.WEEKLY:
                 this.setPriorityTypeByIndex(setting, 1);
                 break;
+            case Periodicity.DAILY:
+                this.setPriorityTypeByIndex(setting, 0);
+                break;
         }
     }
 

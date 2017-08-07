@@ -45,6 +45,9 @@ export class EventTime {
             case Periodicity.WEEKLY:
                 this.setPropertiesForWeeklySchedule(schedule);
                 break;
+            case Periodicity.DAILY:
+                this.setPropertiesForDailySchedule(schedule);
+                break;
         }
     }
     
@@ -56,27 +59,40 @@ export class EventTime {
             case Periodicity.WEEKLY:
                 this.setCronsForWeeklySchedule(schedule);
                 break;
+            case Periodicity.DAILY:
+                this.setCronsForDailySchedule(schedule);
+                break;
         }
     }
 
     private setPropertiesForOneTimeSchedule(schedule: Schedule) {
         this.startDate = this.getDateFromCron(schedule.eventCron);
-        this.startTimePeriod = this.getTimePeriodFromCron(schedule.eventCron);
-        this.startTime = this.getTimeFromCron(schedule.eventCron);
+        this.setStartTimeProperties(schedule.eventCron);
 
         this.endDate = this.getDateFromCron(schedule.endEventCron);
-        this.endTimePeriod = this.getTimePeriodFromCron(schedule.endEventCron);
-        this.endTime = this.getTimeFromCron(schedule.endEventCron);
+        this.setEndTimeProperties(schedule.endEventCron);
     }
 
     private setPropertiesForWeeklySchedule(schedule: Schedule) {
         this.dayOfWeek = CronToDatetimeConverter.getWeekDayFromCron(schedule.eventCron);
 
-        this.startTimePeriod = this.getTimePeriodFromCron(schedule.eventCron);
-        this.startTime = this.getTimeFromCron(schedule.eventCron);
+        this.setStartTimeProperties(schedule.eventCron);
+        this.setEndTimeProperties(schedule.endEventCron);
+    }
 
-        this.endTimePeriod = this.getTimePeriodFromCron(schedule.endEventCron);
-        this.endTime = this.getTimeFromCron(schedule.endEventCron);
+    private setPropertiesForDailySchedule(schedule: Schedule) {
+        this.setStartTimeProperties(schedule.eventCron);
+        this.setEndTimeProperties(schedule.endEventCron);
+    }
+
+    private setStartTimeProperties(cron: string){
+        this.startTimePeriod = this.getTimePeriodFromCron(cron);
+        this.startTime = this.getTimeFromCron(cron);
+    }
+
+    private setEndTimeProperties(cron: string){
+        this.endTimePeriod = this.getTimePeriodFromCron(cron);
+        this.endTime = this.getTimeFromCron(cron);
     }
 
     private setCronsForOneTimeSchedule(schedule: Schedule) {
@@ -105,6 +121,17 @@ export class EventTime {
         let hours = EventTime.getHours(time, timePeriod);
         let minutes = +time.split(':')[1];
         return DatetimeToCronConverter.setTimeForCron(cron, hours, minutes);
+    }
+
+    private setCronsForDailySchedule(schedule: Schedule) {
+        schedule.eventCron = this.convertTimeToCron(this.startTime, this.startTimePeriod);
+        schedule.endEventCron = this.convertTimeToCron(this.endTime, this.endTimePeriod);
+    }
+
+    private convertTimeToCron(time: string, timePeriod: string) {
+        let hours = EventTime.getHours(time, timePeriod);
+        let minutes = +time.split(':')[1];
+        return DatetimeToCronConverter.createCronForDailyAction(hours, minutes);
     }
 
     private getTimePeriodFromCron(cron: string): string {
