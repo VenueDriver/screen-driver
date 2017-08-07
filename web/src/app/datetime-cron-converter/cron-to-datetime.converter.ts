@@ -1,3 +1,5 @@
+import {DaysOfWeek} from '../enums/days-of-week';
+
 export class CronToDatetimeConverter {
 
     static getDateFromCron(cron: string): Date {
@@ -26,5 +28,13 @@ export class CronToDatetimeConverter {
         }
         let parts = cron.split(' ');
         return +parts[2];
+    }
+
+    static getWeekDayFromCron(cron: string): string {
+        if (!cron) {
+            return '';
+        }
+        let parts = cron.split(' ');
+        return DaysOfWeek[parts[5]];
     }
 }

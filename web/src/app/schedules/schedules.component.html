@@ -1,15 +1,23 @@
 <div class="schedules-container">
 
-    <div *ngIf="currentSetting && currentSetting.id">
+    <div *ngIf="showAddScheduleButton()"
+         class="add-button"
+         (click)="showCreateScheduleForm()">
+        <span class="plus-button"></span>
+        <span class="button-title">Add new schedule</span>
+    </div>
+
+    <div *ngIf="isShowCreateScheduleForm">
         <single-schedule
-                [currentSetting]="currentSetting">
+                [currentSetting]="currentSetting"
+                (cancel)="hideCreateScheduleForm()">
         </single-schedule>
     </div>
 
     <div *ngFor="let schedule of filteredSchedules">
         <single-schedule
                 [schedule]="schedule"
-                [editable]="false"
+                [editable]="isEditable()"
                 (scheduleChanged)="loadSchedules()">
         </single-schedule>
     </div>

@@ -29,7 +29,7 @@ class ScheduledTaskManager {
         endScheduleCronJob.start();
 
         function runScheduledTask() {
-            if (!this.isScheduled()) {
+            if (!ScheduledTaskManager.isScheduled()) {
                 currentSchedule.task = startScheduleCronJob;
                 if (!_.isEmpty(composedSchedule.backgroundCron)) {
                     composedSchedule.backgroundCron.destroy();
@@ -87,9 +87,14 @@ class ScheduledTaskManager {
         })
     }
 
-    isScheduled() {
+    static isScheduled() {
         return !_.isEmpty(currentSchedule.task);
     }
 }
 
-module.exports = new ScheduledTaskManager();
+const scheduledTaskManager = new ScheduledTaskManager();
+
+module.exports = {
+    scheduledTaskManager: scheduledTaskManager,
+    currentSchedule: currentSchedule
+};

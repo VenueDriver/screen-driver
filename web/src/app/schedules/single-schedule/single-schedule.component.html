@@ -1,19 +1,55 @@
 <div class="schedule-container">
 
-    <div *ngIf="validationResult.validationMessage" class="error-message validation-error">
+    <div *ngIf="validationResult.validationMessage" class="validation-error message">
         {{validationResult.validationMessage}}
+    </div>
+
+    <div *ngIf="isCreationMode() && !validationResult.validationMessage" class="message header-message">
+        Create new schedule
     </div>
 
     <div class="schedule-form-container">
 
-        <div class="datepicker-container">
+        <div class="schedule-type-container">
+            <div class="title">
+                Schedule type:
+            </div>
+            <autocomplete
+                    class="schedule-type"
+                    [editable]="true"
+                    [disabled]="!editable"
+                    [itemsMap]="scheduleTypes"
+                    [value]="eventTime.periodicity"
+                    (valueChanged)="setScheduleType($event)">
+            </autocomplete>
+        </div>
+
+        <div *ngIf="eventTime.periodicity === scheduleTypes.WEEKLY"
+             class="days-of-week-container">
+
+            <div class="title">
+                Day of week:
+            </div>
+            <autocomplete
+                    class="day-of-week"
+                    [editable]="true"
+                    [disabled]="!editable"
+                    [itemsMap]="daysOfWeek"
+                    [value]="eventTime.dayOfWeek"
+                    (valueChanged)="setDayOfWeek($event)">
+            </autocomplete>
+        </div>
+
+        <div *ngIf="eventTime.periodicity === scheduleTypes.ONE_TIME_EVENT"
+             class="datepicker-container">
+
             <div class="title">
                 Start event date:
             </div>
             <material-datepicker
                     class="datepicker"
-                    [(date)]="eventTime.startDate"
                     [disabled]="!editable"
+                    [(date)]="eventTime.startDate"
                     (onSelect)="onStartDateSelect()"
                     dateFormat="MM-DD-YYYY">
             </material-datepicker>
@@ -23,8 +59,8 @@
             </div>
             <material-datepicker
                     class="datepicker"
-                    [(date)]="eventTime.endDate"
                     [disabled]="!editable"
+                    [(date)]="eventTime.endDate"
                     (onSelect)="onEndDateSelect()"
                     dateFormat="MM-DD-YYYY">
             </material-datepicker>
@@ -38,7 +74,7 @@
                 <autocomplete
                         class="time"
                         [placeholder]="'Select time'"
-                        [readonly]="true"
+                        [editable]="true"
                         [disabled]="!editable"
                         [items]="timeItems"
                         [value]="eventTime.startTime"
@@ -47,7 +83,7 @@
 
                 <autocomplete
                         class="period"
-                        [readonly]="true"
+                        [editable]="true"
                         [disabled]="!editable"
                         [items]="timePeriods"
                         [value]="eventTime.startTimePeriod"
@@ -62,7 +98,7 @@
                 <autocomplete
                         class="time"
                         [placeholder]="'Select time'"
-                        [readonly]="true"
+                        [editable]="true"
                         [disabled]="!editable"
                         [items]="timeItems"
                         [value]="eventTime.endTime"
@@ -71,7 +107,7 @@
 
                 <autocomplete
                         class="period"
-                        [readonly]="true"
+                        [editable]="true"
                         [disabled]="!editable"
                         [items]="timePeriods"
                         [value]="eventTime.endTimePeriod"
@@ -82,11 +118,25 @@
 
     </div>
 
-    <div *ngIf="editable" class="buttons-container">
-        <button class="btn btn-success"
-                (click)="performSubmit()"
+    <div class="buttons-container">
+        <button *ngIf="isCreationMode()"
+                class="btn btn-success"
+                (click)="performCreatingSubmit()"
                 [disabled]="!validationResult.isValid">
             Create
+        </button>
+
+        <button *ngIf="isEditMode()"
+                class="btn btn-success"
+                (click)="performUpdatingSubmit()"
+                [disabled]="!validationResult.isValid">
+            Save
+        </button>
+
+        <button *ngIf="isEditMode() || isCreationMode()"
+                class="btn btn-link"
+                (click)="performCancel()">
+            Cancel
         </button>
     </div>
 </div>

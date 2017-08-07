@@ -1,3 +1,5 @@
+import {getShortDay} from "../enums/days-of-week";
+
 export class DatetimeToCronConverter {
 
     static createCronForSpecificDate(date: Date): string {
@@ -9,6 +11,11 @@ export class DatetimeToCronConverter {
 
     static addOneDay(date: Date): Date {
         return new Date(date.setDate(date.getDate() + 1));
+    }
+
+    static createCronForDayOfWeek(dayOfWeek: string): string {
+        let day = getShortDay(dayOfWeek);
+        return `* * * * * ${day}`;
     }
 
     static setTimeForCron(cron: string, hour: number, minute: number): string {

@@ -4,5 +4,6 @@ export class Schedule {
     settingId: string;
     eventCron: string;
     endEventCron: string;
+    periodicity: string;
     _rev: number;
 }
