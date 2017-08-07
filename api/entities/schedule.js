@@ -29,6 +29,9 @@ class Schedule {
         this._rev = 0;
         this.generateId();
         this.validate(deferred.reject);
+        if (deferred.promise.inspect().state === 'rejected') {
+            return deferred.promise;
+        }
         _putInDatabase();
         return deferred.promise;
 
