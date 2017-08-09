@@ -1,7 +1,11 @@
-<div class="checkbox-slider--b-flat">
-    <label>
-        <input type="checkbox"
-               [checked]="enabled"
-               (click)="onClick()"><span></span>
-    </label>
+<div class="toggle-container" style="display: flex">
+    <span>{{title}}</span>
+
+    <div class="checkbox-slider--b-flat">
+        <label>
+            <input type="checkbox"
+                   [checked]="enabled"
+                   (click)="onClick()"><span></span>
+        </label>
+    </div>
 </div>
