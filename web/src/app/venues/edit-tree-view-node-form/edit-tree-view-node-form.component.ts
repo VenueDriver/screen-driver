@@ -34,6 +34,7 @@ export class EditTreeViewNodeFormComponent implements OnInit{
     originalNodeData: any;
     isFormValid: boolean;
     createContentMode = false;
+    removingMode = false;
     contentChanged = false;
     currentVenueId: string;
     updatedVenue: Venue;
@@ -85,6 +86,11 @@ export class EditTreeViewNodeFormComponent implements OnInit{
     getNameInputPlaceholder(): string {
         let nodeLevelName = this.editFormService.getNodeLevelName(this.node);
         return `${nodeLevelName} name`;
+    }
+
+    getNodeName(): string {
+        let nodeLevelName = this.editFormService.getNodeLevelName(this.node).toLowerCase();
+        return `${nodeLevelName} ${this.originalNodeData.name}`;
     }
 
     validateForm() {
@@ -269,5 +275,15 @@ export class EditTreeViewNodeFormComponent implements OnInit{
 
     isAbleToSetUrl() {
         return !this.createContentMode && this.currentSetting;
+    }
+
+    enableRemovingMode(event: any) {
+        this.stopClickPropagation(event);
+        this.removingMode = true;
+    }
+
+    cancelRemoving(event: any) {
+        this.stopClickPropagation(event);
+        this.removingMode = false;
     }
 }
