@@ -3,7 +3,7 @@
 const uuid = require('uuid');
 const Q = require('q');
 
-const periodicity = require('../enums/periodicity');
+const periodicity = require('../../enums/periodicity');
 
 let db;
 
@@ -85,6 +85,22 @@ class Schedule {
                 }
             });
         }
+    }
+
+    deleteSchedule() {
+        let params = {
+            TableName: process.env.SCHEDULES_TABLE,
+            Key: {
+                id: this.id,
+            }
+        };
+        db.delete(params, (error) => {
+            if (error) {
+                deferred.reject(error.message);
+            } else {
+                deferred.resolve();
+            }
+        });
     }
 
     /**

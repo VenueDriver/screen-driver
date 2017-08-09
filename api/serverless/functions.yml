@@ -129,6 +129,14 @@ update_schedule:
         method: put
         cors: true
 
+delete_schedule:
+  handler: schedule/delete.delete
+  events:
+    - http:
+        path: api/schedules/{id}
+        method: delete
+        cors: true
+
 handle_schedules_table_stream:
   handler: schedule/stream.event
   events:
