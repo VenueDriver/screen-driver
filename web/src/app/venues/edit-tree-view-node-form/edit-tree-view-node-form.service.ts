@@ -105,4 +105,17 @@ export class EditTreeViewNodeFormService {
                 error => this.notificationService.showErrorNotificationBar('Unable to perform setting update operation')
             );
     }
+
+    deleteVenue(nodeData: any) {
+        this.venuesService.deleteVenue(nodeData.id)
+            .subscribe(
+                () => this.handleDeleteResponse(nodeData),
+                error => this.notificationService.showErrorNotificationBar('Unable to perform remove operation')
+            )
+    }
+
+    handleDeleteResponse(nodeData: any) {
+        this.notificationService.showSuccessNotificationBar(`Venue ${nodeData.name} has been removed`, 'Successful deletion');
+        this.settingStateHolderService.reloadSettings();
+    }
 }

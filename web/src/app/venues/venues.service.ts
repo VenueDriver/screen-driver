@@ -88,4 +88,8 @@ export class VenuesService {
     getVenueUpdateSubscription(): Observable<any> {
         return this.venueUpdate;
     }
+
+    deleteVenue(venueId: any): Observable<any> {
+        return this.http.delete(`${this.venuesApiPath}/${venueId}`);
+    }
 }

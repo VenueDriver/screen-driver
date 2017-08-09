@@ -286,4 +286,9 @@ export class EditTreeViewNodeFormComponent implements OnInit{
         this.stopClickPropagation(event);
         this.removingMode = false;
     }
+
+    performRemoving(event: any) {
+        this.stopClickPropagation(event);
+        this.editFormService.deleteVenue(this.nodeData);
+    }
 }
