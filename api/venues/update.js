@@ -1,6 +1,6 @@
 'use strict';
 
-let Venue = require('./../entities/venue');
+let Venue = require('./entities/venue');
 
 const dynamodb = require('../dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
