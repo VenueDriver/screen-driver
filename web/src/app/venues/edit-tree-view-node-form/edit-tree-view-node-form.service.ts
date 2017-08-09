@@ -117,5 +117,6 @@ export class EditTreeViewNodeFormService {
     handleDeleteResponse(nodeData: any) {
         this.notificationService.showSuccessNotificationBar(`Venue ${nodeData.name} has been removed`, 'Successful deletion');
         this.settingStateHolderService.reloadSettings();
+        this.pushVenueUpdateEvent();
     }
 }
