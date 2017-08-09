@@ -199,6 +199,27 @@ class Venue {
     increaseRevision() {
         this._rev++;
     };
+
+    deleteVenue() {
+        let deferred = Q.defer();
+        let params = this._getDeleteRequestParameters();
+        db.delete(params, (error) => {
+            if (error) {
+                deferred.reject(error.message);
+            } else {
+                deferred.resolve();
+            }
+        });
+    }
+
+    _getDeleteRequestParameters() {
+        return {
+            TableName: process.env.VENUES_TABLE,
+            Key: {
+                id: this.id,
+            },
+        };
+    }
 }
 
 module.exports = Venue;
