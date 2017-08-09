@@ -6,12 +6,14 @@ import {AutocompleteModule} from "../autocomplete/autocomplete.module";
 import {SchedulesService} from "./schedules.service";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {SchedulesComponent} from "./schedules.component";
+import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
 
 @NgModule({
     imports: [
         BrowserModule,
         DatepickerModule,
-        AutocompleteModule
+        AutocompleteModule,
+        ToggleButtonModule
     ],
     exports: [
         SchedulesComponent
