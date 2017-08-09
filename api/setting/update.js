@@ -1,6 +1,6 @@
 'use strict';
 
-const Setting = require('./../entities/setting');
+const Setting = require('./entities/setting');
 const dbHelper = require('./../helpers/db_helper');
 const PriorityTypes = require('../entities/priority_types');
 const pusher = require('../entities/pusher');

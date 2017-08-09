@@ -2,7 +2,7 @@
 
 const uuid = require('uuid');
 
-let ScreenGroup = require('./../../entities/screen_group');
+const ScreenGroup = require('./../../entities/screen_group');
 const Q = require('q');
 let db;
 

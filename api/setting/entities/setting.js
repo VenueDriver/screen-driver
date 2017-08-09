@@ -1,7 +1,7 @@
 'use strict';
 
 const uuid = require('uuid');
-const PriorityTypes = require('./priority_types');
+const PriorityTypes = require('./../../entities/priority_types');
 
 const Q = require('q');
 let db;
