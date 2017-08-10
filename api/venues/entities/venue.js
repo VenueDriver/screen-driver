@@ -225,41 +225,38 @@ class Venue {
 
     _performDelete() {
         let deleteParams = ParametersBuilder.buildDeleteRequestParameters(this);
-        return new Promise((resolve, reject) => db.delete(deleteParams, (error, data) => {
-            if (error) {
-                reject(error.message);
-            } else {
-                resolve();
-            }
-        }));
+        return new Promise((resolve, reject) => {
+            db.delete(deleteParams, (error, data) => {
+                if (error) {
+                    reject(error.message);
+                } else {
+                    resolve();
+                }
+            })
+        });
     }
 
     _performScreenGroupDelete(venue, groupId) {
         let screenGroup = _.find(venue.screen_groups, g => g.id === groupId);
         _.pull(venue.screen_groups, screenGroup);
-        return new Promise((resolve, reject) => {
-            let updateParameters = ParametersBuilder.buildUpdateGroupsRequestParameters(venue);
-            db.update(updateParameters, (error, result) => {
-                if (error) {
-                    reject(error.message);
-                } else {
-                    resolve(screenGroup);
-                }
-            });
-        });
+        return this._performVenueGroupsUpdate(venue, screenGroup);
     }
 
     _performScreenDelete(venue, groupId, screenId) {
         let screenGroup = _.find(venue.screen_groups, g => g.id === groupId);
         let screen = _.find(screenGroup.screens, s => s.id === screenId);
         _.pull(screenGroup.screens, screen);
+        return this._performVenueGroupsUpdate(venue, screen);
+    }
+
+    _performVenueGroupsUpdate(venue, resolveParameters) {
         return new Promise((resolve, reject) => {
             let updateParameters = ParametersBuilder.buildUpdateGroupsRequestParameters(venue);
             db.update(updateParameters, (error, result) => {
                 if (error) {
                     reject(error.message);
                 } else {
-                    resolve(screen);
+                    resolve(resolveParameters);
                 }
             });
         });
