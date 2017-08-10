@@ -6,7 +6,11 @@ const VenueUtils = require('./../helpers/venue_utils');
 const ScreenGroup = require('./../../entities/screen_group');
 const SettingUtils = require('./../../setting/helpers/setting_utils');
 const DbHelper = require('./../../helpers/db_helper');
+const ParametersBuilder = require('./../helpers/parameters_builder');
 const Q = require('q');
+
+const _ = require('lodash');
+
 let db;
 
 class Venue {
@@ -59,25 +63,7 @@ class Venue {
 
     update() {
         let deferred = Q.defer();
-        let params = {
-            TableName: process.env.VENUES_TABLE,
-            Key: {
-                id: this.id,
-            },
-            ExpressionAttributeNames: {
-                '#venue_name': 'name',
-                '#rev': '_rev',
-            },
-            ExpressionAttributeValues: {
-                ':name': this.name,
-                ':screen_groups': this.screen_groups,
-                ':rev': this._rev,
-                ':new_rev': ++this._rev,
-            },
-            UpdateExpression: 'SET #venue_name = :name, screen_groups = :screen_groups, #rev = :new_rev',
-            ConditionExpression: "#rev = :rev",
-            ReturnValues: 'ALL_NEW',
-        };
+        let params = ParametersBuilder.buildUpdateRequestParameters(this);
 
         if (!this._rev) deferred.reject('Missed revision number');
 
@@ -199,13 +185,9 @@ class Venue {
         this.id = uuid.v1();
     };
 
-    increaseRevision() {
-        this._rev++;
-    };
-
     deleteVenue() {
         let venue;
-        return this._findVenueBuId()
+        return this._findVenueById()
             .then(_venue => {
                 venue = _venue;
                 return this._performDelete();
@@ -216,7 +198,16 @@ class Venue {
             });
     }
 
-    _findVenueBuId() {
+    deleteScreenGroup(groupId) {
+        return this._findVenueById()
+            .then(venue => this._performScreenGroupDelete(venue, groupId))
+            .then(screenGroup => {
+                let itemIds = VenueUtils.getAllGroupItemIds(screenGroup);
+                return SettingUtils.updateConfigs(itemIds);
+            });
+    }
+
+    _findVenueById() {
         return new Promise((resolve, reject) => {
             DbHelper.findOne(process.env.VENUES_TABLE, this.id)
                 .then(venue => resolve(venue.Item));
@@ -241,6 +232,21 @@ class Venue {
                 id: this.id,
             },
         };
+    }
+
+    _performScreenGroupDelete(venue, groupId) {
+        let screenGroup = _.find(venue.screen_groups, g => g.id === groupId);
+        _.pull(venue.screen_groups, screenGroup);
+        return new Promise((resolve, reject) => {
+            let updateParameters = ParametersBuilder.buildUpdateGroupsRequestParameters(venue);
+            db.update(updateParameters, (error, result) => {
+                if (error) {
+                    reject(error.message);
+                } else {
+                    resolve(screenGroup);
+                }
+            });
+        });
     }
 }
 
