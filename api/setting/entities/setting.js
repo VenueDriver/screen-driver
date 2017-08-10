@@ -47,7 +47,7 @@ class Setting {
 
     update() {
         let deferred = Q.defer();
-        let params = ParametersBuilder.buildUpdateParameters(this);
+        let params = ParametersBuilder.buildUpdateRequestParameters(this);
 
         if (!this._rev) deferred.reject('Missed revision number');
 
