@@ -30,7 +30,28 @@
       margin-top: 15px
 
   .buttons-container
+    display: flex
+    align-items: center
     margin-left: auto
 
     .cancel-button
       padding: 12px
+
+    .remove-button
+      display: inline-block
+      height: 30px
+      margin-right: 10px
+      cursor: pointer
+
+    .remove-item-block
+      .btn
+        margin-right: 10px
+
+        @media screen and (max-width: $tablet-resolution)
+          margin-right: 0
+
+          &:first-of-type
+            margin-bottom: 10px
+
+  .warning-message
+    font-size: 18px

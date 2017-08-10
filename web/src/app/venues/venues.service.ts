@@ -88,4 +88,25 @@ export class VenuesService {
     getVenueUpdateSubscription(): Observable<any> {
         return this.venueUpdate;
     }
+
+    deleteVenue(venueId: any): Observable<any> {
+        return this.http.delete(`${this.venuesApiPath}/${venueId}`);
+    }
+
+    deleteScreenGroup(venueId: string, screenGroupId: string) {
+        return this.http.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}`);
+    }
+
+    deleteScreen(venueId: string, screenGroupId: string, screenId: string) {
+        return this.http.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}/screens/${screenId}`);
+    }
+
+    getVenueId(node: any) {
+        let parentNode = node.parent;
+        switch (node.level) {
+            case 1: return node.data.id;
+            case 2: return parentNode.data.id;
+            default: return parentNode.parent.data.id;
+        }
+    }
 }

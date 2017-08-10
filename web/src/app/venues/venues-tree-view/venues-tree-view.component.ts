@@ -207,11 +207,9 @@ export class VenuesTreeViewComponent implements OnInit {
 
     editNode(event: any, node: any) {
         this.stopClickPropagation(event);
-        if (this.currentSetting) {
-            this.currentNodeData = node.data;
-            this.originalNodeData = _.clone(node.data);
-            this.updateTreeViewOptions();
-        }
+        this.currentNodeData = node.data;
+        this.originalNodeData = _.clone(node.data);
+        this.updateTreeViewOptions();
     }
 
     hasChildren(node: any): boolean {

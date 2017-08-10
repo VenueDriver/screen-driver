@@ -2,8 +2,15 @@
 
 const uuid = require('uuid');
 
-let ScreenGroup = require('./../entities/screen_group');
+const VenueUtils = require('./../helpers/venue_utils');
+const ScreenGroup = require('./../../entities/screen_group');
+const SettingUtils = require('./../../setting/helpers/setting_utils');
+const DbHelper = require('./../../helpers/db_helper');
+const ParametersBuilder = require('./../helpers/parameters_builder');
 const Q = require('q');
+
+const _ = require('lodash');
+
 let db;
 
 class Venue {
@@ -56,25 +63,7 @@ class Venue {
 
     update() {
         let deferred = Q.defer();
-        let params = {
-            TableName: process.env.VENUES_TABLE,
-            Key: {
-                id: this.id,
-            },
-            ExpressionAttributeNames: {
-                '#venue_name': 'name',
-                '#rev': '_rev',
-            },
-            ExpressionAttributeValues: {
-                ':name': this.name,
-                ':screen_groups': this.screen_groups,
-                ':rev': this._rev,
-                ':new_rev': ++this._rev,
-            },
-            UpdateExpression: 'SET #venue_name = :name, screen_groups = :screen_groups, #rev = :new_rev',
-            ConditionExpression: "#rev = :rev",
-            ReturnValues: 'ALL_NEW',
-        };
+        let params = ParametersBuilder.buildUpdateRequestParameters(this);
 
         if (!this._rev) deferred.reject('Missed revision number');
 
@@ -196,9 +185,82 @@ class Venue {
         this.id = uuid.v1();
     };
 
-    increaseRevision() {
-        this._rev++;
-    };
+    deleteVenue() {
+        let venue;
+        return this._findVenueById()
+            .then(_venue => {
+                venue = _venue;
+                return this._performDelete();
+            })
+            .then(() => {
+                let itemIds = VenueUtils.getAllItemIds(venue);
+                return SettingUtils.updateConfigs(itemIds);
+            });
+    }
+
+    deleteScreenGroup(groupId) {
+        return this._findVenueById()
+            .then(venue => this._performScreenGroupDelete(venue, groupId))
+            .then(screenGroup => {
+                let itemIds = VenueUtils.getAllGroupItemIds(screenGroup);
+                return SettingUtils.updateConfigs(itemIds);
+            });
+    }
+
+    deleteScreen(groupId, screenId) {
+        return this._findVenueById()
+            .then(venue => this._performScreenDelete(venue, groupId, screenId))
+            .then(screen => {
+                let itemIds = [screen.id];
+                return SettingUtils.updateConfigs(itemIds);
+            });
+    }
+
+    _findVenueById() {
+        return new Promise((resolve, reject) => {
+            DbHelper.findOne(process.env.VENUES_TABLE, this.id)
+                .then(venue => resolve(venue.Item));
+        });
+    }
+
+    _performDelete() {
+        let deleteParams = ParametersBuilder.buildDeleteRequestParameters(this);
+        return new Promise((resolve, reject) => {
+            db.delete(deleteParams, (error, data) => {
+                if (error) {
+                    reject(error.message);
+                } else {
+                    resolve();
+                }
+            })
+        });
+    }
+
+    _performScreenGroupDelete(venue, groupId) {
+        let screenGroup = _.find(venue.screen_groups, g => g.id === groupId);
+        _.pull(venue.screen_groups, screenGroup);
+        return this._performVenueGroupsUpdate(venue, screenGroup);
+    }
+
+    _performScreenDelete(venue, groupId, screenId) {
+        let screenGroup = _.find(venue.screen_groups, g => g.id === groupId);
+        let screen = _.find(screenGroup.screens, s => s.id === screenId);
+        _.pull(screenGroup.screens, screen);
+        return this._performVenueGroupsUpdate(venue, screen);
+    }
+
+    _performVenueGroupsUpdate(venue, resolveParameters) {
+        return new Promise((resolve, reject) => {
+            let updateParameters = ParametersBuilder.buildUpdateGroupsRequestParameters(venue);
+            db.update(updateParameters, (error, result) => {
+                if (error) {
+                    reject(error.message);
+                } else {
+                    resolve(resolveParameters);
+                }
+            });
+        });
+    }
 }
 
 module.exports = Venue;

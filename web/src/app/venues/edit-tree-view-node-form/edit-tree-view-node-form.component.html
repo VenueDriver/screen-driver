@@ -1,6 +1,6 @@
 <div class="form-container">
 
-    <div class="inputs-container">
+    <div class="inputs-container" *ngIf="!removingMode">
         <div [class.has-error]="showValidationMessageForNodeName()">
             <div *ngIf="showValidationMessageForNodeName()"
                  class="message validation-error">
@@ -58,18 +58,44 @@
         </div>
     </div>
 
-    <div class="buttons-container">
-        <button type="button"
-                class="btn btn-success"
-                [disabled]="!isFormValid"
-                (click)="performSubmit($event)">
-            Save
-        </button>
+    <div class="warning-message" *ngIf="removingMode">
+        Are you sure you want to remove <b>{{getNodeName()}}</b>?
+    </div>
 
-        <button type="button"
-                class="btn btn-link cancel-button"
-                (click)="performCancel($event)">
-            Cancel
-        </button>
+    <div class="buttons-container">
+        <div *ngIf="!!nodeData.id && !removingMode"
+             class="remove-button"
+             (click)="enableRemovingMode($event)">
+        </div>
+
+        <div class="remove-item-block"
+             *ngIf="removingMode">
+            <button type="button"
+                    class="btn btn-danger yes-option"
+                    (click)="performRemoving($event)">
+                Yes
+            </button>
+
+            <button type="button"
+                    class="btn btn-success"
+                    (click)="cancelRemoving($event)">
+                No
+            </button>
+        </div>
+
+        <div *ngIf="!removingMode">
+            <button type="button"
+                    class="btn btn-success"
+                    [disabled]="!isFormValid"
+                    (click)="performSubmit($event)">
+                Save
+            </button>
+
+            <button type="button"
+                    class="btn btn-link cancel-button"
+                    (click)="performCancel($event)">
+                Cancel
+            </button>
+        </div>
     </div>
 </div>

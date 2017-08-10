@@ -55,12 +55,7 @@ export class EditTreeViewNodeFormService {
     }
 
     getVenueId(node: any) {
-        let parentNode = node.parent;
-        switch (node.level) {
-            case 1: return node.data.id;
-            case 2: return parentNode.data.id;
-            default: return parentNode.parent.data.id;
-        }
+        return this.venuesService.getVenueId(node);
     }
 
     findNewNodeId(updatedVenue: Venue, node: any): string {
@@ -104,5 +99,55 @@ export class EditTreeViewNodeFormService {
                 response => this.settingStateHolderService.reloadSettings(),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform setting update operation')
             );
+    }
+
+    deleteItem(node: any, currentSetting: Setting) {
+        switch (node.level) {
+            case 1:
+                this.deleteVenue(node, currentSetting);
+                break;
+            case 2:
+                this.deleteScreenGroup(node, currentSetting);
+                break;
+            case 3:
+                this.deleteScreen(node, currentSetting);
+                break;
+        }
+    }
+
+    private deleteVenue(node: any, currentSetting: Setting) {
+        this.venuesService.deleteVenue(node.data.id)
+            .subscribe(
+                () => this.handleDeleteResponse(node, currentSetting),
+                error => this.notificationService.showErrorNotificationBar('Unable to perform remove operation')
+            )
+    }
+
+    private deleteScreenGroup(node: any, currentSetting: Setting) {
+        this.venuesService.deleteScreenGroup(this.getVenueId(node), node.data.id)
+            .subscribe(
+                () => this.handleDeleteResponse(node, currentSetting),
+                error => this.notificationService.showErrorNotificationBar('Unable to perform remove operation')
+            )
+    }
+
+    private deleteScreen(node: any, currentSetting: Setting) {
+        let venueId = this.getVenueId(node);
+        let groupId = node.parent.data.id;
+        this.venuesService.deleteScreen(venueId, groupId, node.data.id)
+            .subscribe(
+                () => this.handleDeleteResponse(node, currentSetting),
+                error => this.notificationService.showErrorNotificationBar('Unable to perform remove operation')
+            )
+    }
+
+    handleDeleteResponse(node: any, currentSetting: Setting) {
+        let nodeLevelName = this.getNodeLevelName(node.level);
+        this.notificationService.showSuccessNotificationBar(`${nodeLevelName} ${node.data.name} has been removed`, 'Successful deletion');
+        if (currentSetting) {
+            this.settingStateHolderService.reloadSettings(currentSetting.id);
+        }
+        this.settingStateHolderService.reloadSettings();
+        this.pushVenueUpdateEvent();
     }
 }
