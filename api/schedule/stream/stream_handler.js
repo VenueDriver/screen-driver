@@ -1,8 +1,8 @@
 'use strict';
 
-const FunctionInvokeHelper = require('../helpers/function_invoke_helper');
+const FunctionInvokeHelper = require('../../helpers/function_invoke_helper');
 
-module.exports.event = (event, context) => {
+module.exports.handleEvent = (event, context) => {
     let params = buildParamsForInvokeFunction(context);
     FunctionInvokeHelper.invokeFunction(params, context);
 };

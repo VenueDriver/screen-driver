@@ -154,7 +154,7 @@ delete_schedule:
         cors: true
 
 handle_schedules_stream:
-  handler: schedule/stream.event
+  handler: schedule/stream/stream_handler.handleEvent
   events:
     - stream:
         type: dynamodb
@@ -168,7 +168,7 @@ push_schedules_update:
   environment: ${self:custom.properties.pusher}
 
 handle_settings_stream:
-  handler: setting/stream.event
+  handler: setting/stream/stream_handler.handleEvent
   events:
     - stream:
         type: dynamodb

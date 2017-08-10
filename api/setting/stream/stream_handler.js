@@ -1,10 +1,10 @@
 'use strict';
 
-const FunctionInvokeHelper = require('../helpers/function_invoke_helper');
-const dbHelper = require('./../helpers/db_helper');
-const PriorityTypes = require('../entities/priority_types');
+const FunctionInvokeHelper = require('../../helpers/function_invoke_helper');
+const dbHelper = require('./../../helpers/db_helper');
+const PriorityTypes = require('../../entities/priority_types');
 
-module.exports.event = (event, context) => {
+module.exports.handleEvent = (event, context) => {
     triggerUpdateEvent(context);
 };
 
