@@ -106,17 +106,17 @@ export class EditTreeViewNodeFormService {
             );
     }
 
-    deleteVenue(nodeData: any) {
+    deleteVenue(nodeData: any, currentSetting: Setting) {
         this.venuesService.deleteVenue(nodeData.id)
             .subscribe(
-                () => this.handleDeleteResponse(nodeData),
+                () => this.handleDeleteResponse(nodeData, currentSetting),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform remove operation')
             )
     }
 
-    handleDeleteResponse(nodeData: any) {
+    handleDeleteResponse(nodeData: any, currentSetting: Setting) {
         this.notificationService.showSuccessNotificationBar(`Venue ${nodeData.name} has been removed`, 'Successful deletion');
-        this.settingStateHolderService.reloadSettings();
+        this.settingStateHolderService.reloadSettings(currentSetting.id);
         this.pushVenueUpdateEvent();
     }
 }
