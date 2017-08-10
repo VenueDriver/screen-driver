@@ -55,12 +55,7 @@ export class EditTreeViewNodeFormService {
     }
 
     getVenueId(node: any) {
-        let parentNode = node.parent;
-        switch (node.level) {
-            case 1: return node.data.id;
-            case 2: return parentNode.data.id;
-            default: return parentNode.parent.data.id;
-        }
+        return this.venuesService.getVenueId(node);
     }
 
     findNewNodeId(updatedVenue: Venue, node: any): string {
@@ -106,16 +101,36 @@ export class EditTreeViewNodeFormService {
             );
     }
 
-    deleteVenue(nodeData: any, currentSetting: Setting) {
-        this.venuesService.deleteVenue(nodeData.id)
+    deleteItem(node: any, currentSetting: Setting) {
+        switch (node.level) {
+            case 1:
+                this.deleteVenue(node, currentSetting);
+                break;
+            case 2:
+                this.deleteScreenGroup(node, currentSetting);
+                break;
+        }
+    }
+
+    private deleteVenue(node: any, currentSetting: Setting) {
+        this.venuesService.deleteVenue(node.data.id)
             .subscribe(
-                () => this.handleDeleteResponse(nodeData, currentSetting),
+                () => this.handleDeleteResponse(node, currentSetting),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform remove operation')
             )
     }
 
-    handleDeleteResponse(nodeData: any, currentSetting: Setting) {
-        this.notificationService.showSuccessNotificationBar(`Venue ${nodeData.name} has been removed`, 'Successful deletion');
+    private deleteScreenGroup(node: any, currentSetting: Setting) {
+        this.venuesService.deleteScreenGroup(this.getVenueId(node), node.data.id)
+            .subscribe(
+                () => this.handleDeleteResponse(node, currentSetting),
+                error => this.notificationService.showErrorNotificationBar('Unable to perform remove operation')
+            )
+    }
+
+    handleDeleteResponse(node: any, currentSetting: Setting) {
+        let nodeLevelName = this.getNodeLevelName(node.level);
+        this.notificationService.showSuccessNotificationBar(`${nodeLevelName} ${node.data.name} has been removed`, 'Successful deletion');
         this.settingStateHolderService.reloadSettings(currentSetting.id);
         this.pushVenueUpdateEvent();
     }
