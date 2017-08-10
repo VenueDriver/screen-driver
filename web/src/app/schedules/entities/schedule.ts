@@ -5,5 +5,6 @@ export class Schedule {
     eventCron: string;
     endEventCron: string;
     periodicity: string;
+    enabled: boolean = true;
     _rev: number;
 }
