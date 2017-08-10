@@ -116,15 +116,33 @@
             </div>
         </div>
 
-        <div class="remove-schedule-container">
+        <div *ngIf="!isCreationMode()"
+             class="remove-schedule-container">
             <div class="remove-button"
-            (click)="removeSchedule()">
+            (click)="setRemovingMode(true)">
             </div>
         </div>
 
     </div>
 
+
     <div class="buttons-container">
+        <div class="remove-item-block"
+             *ngIf="!isEditMode() && removingMode">
+            <div class="message">Are you sure you want to remove this schedule?</div>
+            <button type="button"
+                    class="btn btn-danger yes-option"
+                    (click)="removeSchedule()">
+                Yes
+            </button>
+
+            <button type="button"
+                    class="btn btn-success"
+                    (click)="setRemovingMode(false)">
+                No
+            </button>
+        </div>
+
         <button *ngIf="isCreationMode()"
                 class="btn btn-success"
                 (click)="performCreatingSubmit()"
@@ -132,17 +150,18 @@
             Create
         </button>
 
-        <button *ngIf="isEditMode()"
+        <button *ngIf="isEditMode() && !removingMode"
                 class="btn btn-success"
                 (click)="performUpdatingSubmit()"
                 [disabled]="!validationResult.isValid">
             Save
         </button>
 
-        <button *ngIf="isEditMode() || isCreationMode()"
+        <button *ngIf="isEditMode() || isCreationMode() && !removingMode"
                 class="btn btn-link"
                 (click)="performCancel()">
             Cancel
         </button>
     </div>
 </div>
+<div class="separator"></div>

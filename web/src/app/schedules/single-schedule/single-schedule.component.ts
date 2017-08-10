@@ -23,6 +23,7 @@ export class SingleScheduleComponent implements OnInit {
 
     @Output() cancel = new EventEmitter();
 
+    removingMode = false;
     eventTime = new EventTime();
     originalEventTime: EventTime;
 
@@ -101,7 +102,9 @@ export class SingleScheduleComponent implements OnInit {
     }
 
     isEditMode(): boolean {
-        return !this.isCreationMode() && !_.isEqual(this.eventTime, this.originalEventTime);
+        return !this.isCreationMode()
+            && !this.removingMode
+            && !_.isEqual(this.eventTime, this.originalEventTime);
     }
 
     performUpdatingSubmit() {
@@ -124,6 +127,10 @@ export class SingleScheduleComponent implements OnInit {
 
     setDayOfWeek(dayOfWeek: string) {
         this.eventTime.dayOfWeek = dayOfWeek;
+    }
+
+    setRemovingMode(boolean: boolean) {
+        this.removingMode = boolean;
     }
 
     removeSchedule() {
