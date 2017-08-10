@@ -3,7 +3,7 @@
 const Setting = require('./entities/setting');
 const dbHelper = require('./../helpers/db_helper');
 const PriorityTypes = require('../entities/priority_types');
-const pusher = require('../entities/pusher');
+const pusher = require('../notifier/pusher');
 
 
 const dynamodb = require('../dynamodb');

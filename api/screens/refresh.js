@@ -1,5 +1,5 @@
 'use strict';
-let pusher = require('../entities/pusher');
+let pusher = require('../notifier/pusher');
 
 const responseHelper = require('./../helpers/http_response_helper');
 

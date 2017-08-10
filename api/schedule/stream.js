@@ -1,6 +1,5 @@
 'use strict';
 
-const pusher = require('../entities/pusher');
 const aws = require('aws-sdk');
 const lambda = new aws.Lambda();
 
