@@ -207,6 +207,15 @@ class Venue {
             });
     }
 
+    deleteScreen(groupId, screenId) {
+        return this._findVenueById()
+            .then(venue => this._performScreenDelete(venue, groupId, screenId))
+            .then(screen => {
+                let itemIds = [screen.id];
+                return SettingUtils.updateConfigs(itemIds);
+            });
+    }
+
     _findVenueById() {
         return new Promise((resolve, reject) => {
             DbHelper.findOne(process.env.VENUES_TABLE, this.id)
@@ -244,6 +253,22 @@ class Venue {
                     reject(error.message);
                 } else {
                     resolve(screenGroup);
+                }
+            });
+        });
+    }
+
+    _performScreenDelete(venue, groupId, screenId) {
+        let screenGroup = _.find(venue.screen_groups, g => g.id === groupId);
+        let screen = _.find(screenGroup.screens, s => s.id === screenId);
+        _.pull(screenGroup.screens, screen);
+        return new Promise((resolve, reject) => {
+            let updateParameters = ParametersBuilder.buildUpdateGroupsRequestParameters(venue);
+            db.update(updateParameters, (error, result) => {
+                if (error) {
+                    reject(error.message);
+                } else {
+                    resolve(screen);
                 }
             });
         });
