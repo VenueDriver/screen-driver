@@ -144,7 +144,10 @@ export class EditTreeViewNodeFormService {
     handleDeleteResponse(node: any, currentSetting: Setting) {
         let nodeLevelName = this.getNodeLevelName(node.level);
         this.notificationService.showSuccessNotificationBar(`${nodeLevelName} ${node.data.name} has been removed`, 'Successful deletion');
-        this.settingStateHolderService.reloadSettings(currentSetting.id);
+        if (currentSetting) {
+            this.settingStateHolderService.reloadSettings(currentSetting.id);
+        }
+        this.settingStateHolderService.reloadSettings();
         this.pushVenueUpdateEvent();
     }
 }
