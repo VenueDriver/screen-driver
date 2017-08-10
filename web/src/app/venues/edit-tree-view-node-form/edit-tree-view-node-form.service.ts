@@ -109,6 +109,9 @@ export class EditTreeViewNodeFormService {
             case 2:
                 this.deleteScreenGroup(node, currentSetting);
                 break;
+            case 3:
+                this.deleteScreen(node, currentSetting);
+                break;
         }
     }
 
@@ -122,6 +125,16 @@ export class EditTreeViewNodeFormService {
 
     private deleteScreenGroup(node: any, currentSetting: Setting) {
         this.venuesService.deleteScreenGroup(this.getVenueId(node), node.data.id)
+            .subscribe(
+                () => this.handleDeleteResponse(node, currentSetting),
+                error => this.notificationService.showErrorNotificationBar('Unable to perform remove operation')
+            )
+    }
+
+    private deleteScreen(node: any, currentSetting: Setting) {
+        let venueId = this.getVenueId(node);
+        let groupId = node.parent.data.id;
+        this.venuesService.deleteScreen(venueId, groupId, node.data.id)
             .subscribe(
                 () => this.handleDeleteResponse(node, currentSetting),
                 error => this.notificationService.showErrorNotificationBar('Unable to perform remove operation')

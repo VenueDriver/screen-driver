@@ -97,6 +97,10 @@ export class VenuesService {
         return this.http.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}`);
     }
 
+    deleteScreen(venueId: string, screenGroupId: string, screenId: string) {
+        return this.http.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}/screens/${screenId}`);
+    }
+
     getVenueId(node: any) {
         let parentNode = node.parent;
         switch (node.level) {
