@@ -3,8 +3,7 @@
 const Setting = require('./entities/setting');
 const dbHelper = require('./../helpers/db_helper');
 const PriorityTypes = require('../entities/priority_types');
-const pusher = require('../notifier/pusher');
-
+const Notifier = require('../notifier/notifier');
 
 const dynamodb = require('../dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
@@ -45,7 +44,5 @@ function prepareData(priorityTypes) {
 }
 
 function triggerPusher(data) {
-    pusher.trigger('screens', 'setting_updated', {
-        "message": data
-    })
+    Notifier.pushNotification('screens', 'setting_updated', data);
 }

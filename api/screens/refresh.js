@@ -1,5 +1,6 @@
 'use strict';
-let pusher = require('../notifier/pusher');
+
+const Notifier = require('../notifier/notifier');
 
 const responseHelper = require('./../helpers/http_response_helper');
 
@@ -18,7 +19,5 @@ module.exports.refresh = (event, context, callback) => {
 };
 
 function sendRefreshSignal(screens) {
-    pusher.trigger('screens', 'refresh', {
-        "message": {screens: screens}
-    });
+    Notifier.pushNotification('screens', 'refresh', {screens: screens});
 }
