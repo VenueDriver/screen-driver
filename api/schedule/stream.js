@@ -7,7 +7,7 @@ module.exports.event = (event, context) => {
     let functionName = context.functionName;
     let functionNameSuffix = functionName.substring(0, functionName.lastIndexOf('-') + 1);
     let params = {
-        FunctionName: `${functionNameSuffix}push_schedule_update_message`,
+        FunctionName: `${functionNameSuffix}push_schedules_update`,
         InvocationType: 'RequestResponse'
     };
 

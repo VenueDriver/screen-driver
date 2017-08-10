@@ -153,7 +153,7 @@ delete_schedule:
         method: delete
         cors: true
 
-handle_schedules_table_stream:
+handle_schedules_stream:
   handler: schedule/stream.event
   events:
     - stream:
@@ -163,6 +163,6 @@ handle_schedules_table_stream:
             - SchedulesTable
             - StreamArn
 
-push_schedule_update_message:
+push_schedules_update:
   handler: screens/reload_schedules.scheduleUpdateMessage
   environment: ${self:custom.properties.pusher}
