@@ -1,21 +1,17 @@
 'use strict';
 
-const aws = require('aws-sdk');
-const lambda = new aws.Lambda();
+const FunctionInvokeHelper = require('../helpers/function_invoke_helper');
 
 module.exports.event = (event, context) => {
+    let params = buildParamsForInvokeFunction(context);
+    FunctionInvokeHelper.invokeFunction(params, context);
+};
+
+function buildParamsForInvokeFunction(context) {
     let functionName = context.functionName;
     let functionNameSuffix = functionName.substring(0, functionName.lastIndexOf('-') + 1);
-    let params = {
+    return {
         FunctionName: `${functionNameSuffix}push_schedules_update`,
         InvocationType: 'RequestResponse'
     };
-
-    lambda.invoke(params, function(err, data) {
-        if (err) {
-            context.fail(err);
-        } else {
-            context.succeed('push_schedule_update_message');
-        }
-    })
-};
+}
