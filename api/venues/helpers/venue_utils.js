@@ -7,10 +7,15 @@ module.exports = class VenueUtils {
         let itemIds = [venue.id];
 
         _.forEach(venue.screen_groups, group => {
-            itemIds.push(group.id);
-            _.forEach(group.screens, screen => itemIds.push(screen.id));
+            itemIds.push(...VenueUtils.getAllGroupItemIds(group));
         });
 
+        return itemIds;
+    }
+
+    static getAllGroupItemIds(screenGroup) {
+        let itemIds = [screenGroup.id];
+        _.forEach(screenGroup.screens, screen => itemIds.push(screen.id));
         return itemIds;
     }
 
