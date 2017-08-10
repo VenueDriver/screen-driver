@@ -45,6 +45,8 @@ SettingsTable:
       ReadCapacityUnits: 1
       WriteCapacityUnits: 1
     TableName: ${self:provider.environment.SETTINGS_TABLE}
+    StreamSpecification:
+      StreamViewType: NEW_AND_OLD_IMAGES
 
 SchedulesTable:
   Type: 'AWS::DynamoDB::Table'
