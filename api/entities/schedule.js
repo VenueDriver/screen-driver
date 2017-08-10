@@ -2,6 +2,7 @@
 
 const uuid = require('uuid');
 const Q = require('q');
+const _ = require('lodash');
 
 const periodicity = require('../enums/periodicity');
 
@@ -16,7 +17,7 @@ class Schedule {
             this.eventCron = schedule.eventCron;
             this.endEventCron = schedule.endEventCron;
             this.periodicity = schedule.periodicity;
-            this.enabled = schedule.enabled;
+            this.enabled = schedule.enabled == undefined ? true : schedule.enabled;
             this._rev = schedule._rev;
         }
     }
