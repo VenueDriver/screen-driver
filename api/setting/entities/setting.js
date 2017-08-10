@@ -2,6 +2,7 @@
 
 const uuid = require('uuid');
 const PriorityTypes = require('./../../entities/priority_types');
+const ParametersBuilder = require('./../helpers/parameters_builder');
 
 const Q = require('q');
 let db;
@@ -46,27 +47,7 @@ class Setting {
 
     update() {
         let deferred = Q.defer();
-        let params = {
-            TableName: process.env.SETTINGS_TABLE,
-            Key: {
-                id: this.id,
-            },
-            ExpressionAttributeNames: {
-                '#setting_name': 'name',
-                '#rev': '_rev',
-            },
-            ExpressionAttributeValues: {
-                ':name': this.name,
-                ':enabled': this.enabled,
-                ':priority': this.priority,
-                ':config': this.config,
-                ':rev': this._rev,
-                ':new_rev': this.increaseRevision(),
-            },
-            UpdateExpression: 'SET #setting_name = :name, enabled = :enabled, priority= :priority, config = :config, #rev = :new_rev',
-            ConditionExpression: "#rev = :rev",
-            ReturnValues: 'ALL_NEW',
-        };
+        let params = ParametersBuilder.buildUpdateParameters(this);
 
         if (!this._rev) deferred.reject('Missed revision number');
 
@@ -150,10 +131,6 @@ class Setting {
 
     generateId() {
         this.id = uuid.v1();
-    };
-
-    increaseRevision() {
-        return ++this._rev;
     };
 }
 
