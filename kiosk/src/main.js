@@ -82,6 +82,7 @@ function addHotKeyListeners() {
     app.on('shortcut-pressed', (event) => {
         if (event === 'open-admin-panel') {
             CronJobsManager.stopJob(settingsLoadJob);
+            scheduledTaskManager.clearAllSchedules();
             openAdminPanel();
         }
     });
