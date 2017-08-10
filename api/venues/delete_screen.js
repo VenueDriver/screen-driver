@@ -5,7 +5,7 @@ const responseHelper = require('../helpers/http_response_helper');
 const Venue = require('./entities/venue');
 
 module.exports.delete = (event, context, callback) => {
-    let venueId = event.pathParameters.venue_id;
+    let venueId = event.pathParameters.id;
     let groupId = event.pathParameters.group_id;
     let screenId = event.pathParameters.screen_id;
     let venue = new Venue({id: venueId}, dynamodb);

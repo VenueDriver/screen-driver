@@ -34,7 +34,7 @@ delete_screen_group:
   handler: venues/delete_screen_group.delete
   events:
     - http:
-        path: api/venues/{venue_id}/screen_groups/{group_id}
+        path: api/venues/{id}/screen_groups/{group_id}
         method: delete
         cors: true
 
@@ -42,7 +42,7 @@ delete_screen:
   handler: venues/delete_screen.delete
   events:
     - http:
-        path: api/venues/{venue_id}/screen_groups/{group_id}/screens/{screen_id}
+        path: api/venues/{id}/screen_groups/{group_id}/screens/{screen_id}
         method: delete
         cors: true
 
