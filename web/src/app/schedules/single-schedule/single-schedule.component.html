@@ -9,6 +9,14 @@
     </div>
 
     <div class="schedule-form-container">
+        <div class="change-state-container">
+            <div class="title" *ngIf="schedule && !isEditMode()">
+                <toggle-button class="change-state-button"
+                               [enabled]="schedule.enabled"
+                               (changed)="changeScheduleState($event)">
+                </toggle-button>
+            </div>
+        </div>
 
         <div class="schedule-type-container">
             <div class="title">

@@ -6,6 +6,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 })
 export class ToggleButtonComponent {
     @Input() enabled: boolean;
+    @Input() title: string;
     @Output() changed = new EventEmitter();
 
     constructor() {

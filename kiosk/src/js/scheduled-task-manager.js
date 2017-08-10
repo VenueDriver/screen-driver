@@ -60,7 +60,8 @@ class ScheduledTaskManager {
     resetAllSchedules(schedules) {
         this.clearAllSchedules();
         if (schedules) {
-            _.forEach(schedules, s => this.addCronSchedule(s));
+            let enabledSchedules = _.filter(schedules, (s) => s.enabled);
+            _.forEach(enabledSchedules, s => this.addCronSchedule(s));
         }
     }
 

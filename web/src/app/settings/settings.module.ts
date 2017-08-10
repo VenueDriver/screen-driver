@@ -8,17 +8,18 @@ import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {DropdownModule} from "../dropdown/dropdown.module";
 import {SettingsManagerComponent} from "./settings-manager/settings-manager.component";
-import {ToggleButtonComponent} from "../toggle-button/toggle-button.component";
-import { PriorityTypeTagComponent } from './priority-type-tag/priority-type-tag.component';
+import {PriorityTypeTagComponent} from "./priority-type-tag/priority-type-tag.component";
 import {SettingHeaderComponent} from "./setting-header/setting-header.component";
 import {SettingsPriorityHelper} from "./settings-priority.helper";
+import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
         AutofocusModule,
-        DropdownModule
+        DropdownModule,
+        ToggleButtonModule
     ],
     exports: [
         SettingsComponent,
@@ -30,7 +31,6 @@ import {SettingsPriorityHelper} from "./settings-priority.helper";
         SettingsComponent,
         SettingCreatorComponent,
         SettingsManagerComponent,
-        ToggleButtonComponent,
         PriorityTypeTagComponent,
         SettingHeaderComponent,
     ],
