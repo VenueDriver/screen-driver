@@ -30,6 +30,14 @@ delete_venue:
         method: delete
         cors: true
 
+delete_screen_group:
+  handler: venues/delete_screen_group.delete
+  events:
+    - http:
+        path: api/venues/{venue_id}/screen_groups/{group_id}
+        method: delete
+        cors: true
+
 get_content_list:
   handler: content/list.list
   events:
