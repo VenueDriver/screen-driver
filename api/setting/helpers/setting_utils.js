@@ -7,19 +7,21 @@ module.exports = class SettingUtils {
     static getSettingsWithUpdatedConfig(itemIds, resolve, reject) {
         let settingsList = [];
         dbHelper.findAll(process.env.SETTINGS_TABLE)
-            .then(settings => _.forEach(settings, s => {
-                let settingToUpdate = SettingUtils._deleteConfigOfRemovedItems(s, itemIds);
-                if (Object.keys(s.config).length !== Object.keys(settingToUpdate.config).length) {
-                    settingsList.push(settingToUpdate);
-                }
+            .then(settings => {
+                _.forEach(settings, s => {
+                    let settingToUpdate = SettingUtils._deleteConfigOfRemovedItems(s, itemIds);
+                    if (Object.keys(s.config).length !== Object.keys(settingToUpdate.config).length) {
+                        settingsList.push(settingToUpdate);
+                    }
+                });
                 resolve(settingsList);
-            }));
+            });
     }
 
     static _deleteConfigOfRemovedItems(setting, itemIds) {
-        let settingToUpdate = _.clone(setting);
+        let settingToUpdate = _.cloneDeep(setting);
         _.forEach(itemIds, id => {
-            if (setting.config[id]) {
+            if (!!setting.config[id]) {
                 delete settingToUpdate.config[id];
             }
         });
@@ -28,6 +30,11 @@ module.exports = class SettingUtils {
 
     static updateConfigs(itemIds) {
         return new Promise((resolve, reject) => SettingUtils.getSettingsWithUpdatedConfig(itemIds, resolve, reject))
-            .then(settingsToUpdate => BulkUpdater.performBulkUpdate(settingsToUpdate));
+            .then(settingsToUpdate => {
+                if (settingsToUpdate.length > 0) {
+                    return BulkUpdater.performBulkUpdate(settingsToUpdate);
+                }
+                return new Promise((resolve) => resolve());
+            });
     }
 };

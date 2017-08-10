@@ -21,7 +21,6 @@ module.exports.findOne = (tableName, itemId) => {
         if (error) {
             deferred.reject(`Couldn\'t perform scan operation on ${tableName} table: ${error.message}`);
         }
-        console.log('venue', result);
         deferred.resolve(result);
     });
     return deferred.promise;

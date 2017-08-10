@@ -205,7 +205,7 @@ class Venue {
 
     deleteVenue() {
         let venue;
-        this._findVenueBuId()
+        return this._findVenueBuId()
             .then(_venue => {
                 venue = _venue;
                 return this._performDelete();
@@ -213,10 +213,6 @@ class Venue {
             .then(() => {
                 let itemIds = VenueUtils.getAllItemIds(venue);
                 return SettingUtils.updateConfigs(itemIds);
-            })
-            .then((result, error) => {
-                console.log('result', result);
-                console.log('error', error);
             });
     }
 
