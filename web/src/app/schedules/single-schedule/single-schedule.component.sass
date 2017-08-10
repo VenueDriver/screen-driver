@@ -5,7 +5,6 @@
   flex-direction: column
   justify-content: center
   margin: 30px 0 30px 0
-  border-bottom: 1px solid $border-color
 
   .message
     margin: -22px 0 0
@@ -17,6 +16,13 @@
 
   .change-state-container
     margin: auto 15px auto 0
+
+  .remove-schedule-container
+    margin: auto
+
+    .remove-button
+      height: 30px
+      cursor: pointer
 
   .schedule-form-container
     display: flex
@@ -57,3 +63,14 @@
 
   .buttons-container
     margin: -50px 0 15px auto
+
+    .remove-item-block
+      .btn
+        margin-right: 10px
+
+      .message
+        display: inline-block
+        padding-right: 10px
+
+.separator
+  border-bottom: 1px solid $border-color

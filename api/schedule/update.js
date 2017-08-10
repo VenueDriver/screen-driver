@@ -1,5 +1,5 @@
 'use strict';
-let Schedule = require('./../entities/schedule');
+let Schedule = require('./entities/schedule');
 
 const dynamodb = require('../dynamodb');
 const responseHelper = require('../helpers/http_response_helper');

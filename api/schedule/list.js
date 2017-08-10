@@ -2,7 +2,7 @@
 
 const dbHelper = require('./../helpers/db_helper');
 const responseHelper = require('../helpers/http_response_helper');
-const Schedule = require('./../entities/schedule');
+const Schedule = require('./entities/schedule');
 
 module.exports.list = (event, context, callback) => {
     dbHelper.findAll(process.env.SCHEDULES_TABLE)

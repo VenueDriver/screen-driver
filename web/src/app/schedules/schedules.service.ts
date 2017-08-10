@@ -59,4 +59,11 @@ export class SchedulesService {
             error => this.notificationService.showErrorNotificationBar('Unable to perform the update schedule operation')
         );
     }
+
+    removeSchedule(schedule: Schedule) {
+        this.http.delete(`${SCHEDULES_API}/${schedule.id}`).subscribe(
+            response => this.scheduleListUpdated.next(response),
+            error => this.notificationService.showErrorNotificationBar('Unable to perform the remove schedule operation')
+        );
+    }
 }
