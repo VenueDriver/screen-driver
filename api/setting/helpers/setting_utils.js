@@ -1,3 +1,5 @@
+'use strict';
+
 const dbHelper = require('./../../helpers/db_helper');
 const BulkUpdater = require('./bulk_updater');
 const _ = require('lodash');

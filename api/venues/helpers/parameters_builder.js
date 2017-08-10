@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports.buildUpdateRequestParameters = (venue) => {
     return {
         TableName: process.env.VENUES_TABLE,

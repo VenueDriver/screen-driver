@@ -1,3 +1,5 @@
+'use strict';
+
 const ParametersBuilder = require('./parameters_builder');
 const db = require('../../dynamodb');
 const _ = require('lodash');

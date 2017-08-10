@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports.buildUpdateRequestParameters = (setting) => {
     return {
         TableName: process.env.SETTINGS_TABLE,
