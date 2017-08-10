@@ -10,7 +10,7 @@ module.exports.delete = (event, context, callback) => {
 
     venue.deleteVenue()
         .then(() => callback(null, responseHelper.createSuccessfulResponse()))
-        .fail(errorMessage => {
+        .catch(errorMessage => {
             callback(null, responseHelper.createResponseWithError(500, `Couldn\'t remove the venue. ${errorMessage}`))
         });
 };

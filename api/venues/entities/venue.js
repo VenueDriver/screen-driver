@@ -2,7 +2,10 @@
 
 const uuid = require('uuid');
 
+const VenueUtils = require('./../helpers/venue_utils');
 const ScreenGroup = require('./../../entities/screen_group');
+const SettingUtils = require('./../../setting/helpers/setting_utils');
+const DbHelper = require('./../../helpers/db_helper');
 const Q = require('q');
 let db;
 
@@ -201,15 +204,38 @@ class Venue {
     };
 
     deleteVenue() {
-        let deferred = Q.defer();
-        let params = this._getDeleteRequestParameters();
-        db.delete(params, (error) => {
-            if (error) {
-                deferred.reject(error.message);
-            } else {
-                deferred.resolve();
-            }
+        let venue;
+        this._findVenueBuId()
+            .then(_venue => {
+                venue = _venue;
+                return this._performDelete();
+            })
+            .then(() => {
+                let itemIds = VenueUtils.getAllItemIds(venue);
+                return SettingUtils.updateConfigs(itemIds);
+            })
+            .then((result, error) => {
+                console.log('result', result);
+                console.log('error', error);
+            });
+    }
+
+    _findVenueBuId() {
+        return new Promise((resolve, reject) => {
+            DbHelper.findOne(process.env.VENUES_TABLE, this.id)
+                .then(venue => resolve(venue.Item));
         });
+    }
+
+    _performDelete() {
+        let deleteParams = this._getDeleteRequestParameters();
+        return new Promise((resolve, reject) => db.delete(deleteParams, (error, data) => {
+            if (error) {
+                reject(error.message);
+            } else {
+                resolve();
+            }
+        }));
     }
 
     _getDeleteRequestParameters() {
