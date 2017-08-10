@@ -166,3 +166,17 @@ handle_schedules_stream:
 push_schedules_update:
   handler: screens/reload_schedules.scheduleUpdateMessage
   environment: ${self:custom.properties.pusher}
+
+handle_settings_stream:
+  handler: setting/stream.event
+  events:
+    - stream:
+        type: dynamodb
+        arn:
+          Fn::GetAtt:
+            - SettingsTable
+            - StreamArn
+
+push_settings_update:
+  handler: screens/reload_settings.settingUpdateMessage
+  environment: ${self:custom.properties.pusher}

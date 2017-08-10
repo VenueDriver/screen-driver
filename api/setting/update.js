@@ -1,9 +1,6 @@
 'use strict';
 
 const Setting = require('./entities/setting');
-const dbHelper = require('./../helpers/db_helper');
-const PriorityTypes = require('../entities/priority_types');
-const Notifier = require('../notifier/notifier');
 
 const dynamodb = require('../dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
@@ -15,34 +12,7 @@ module.exports.update = (event, context, callback) => {
 
     setting.update()
         .then(updatedSetting => callback(null, responseHelper.createSuccessfulResponse(updatedSetting)))
-        .then(() => triggerUpdateEvent())
         .fail(errorMessage => {
             callback(null, responseHelper.createResponseWithError(500, errorMessage));
         });
 };
-
-function triggerUpdateEvent() {
-    let priorityTypes = PriorityTypes.getTypes();
-    prepareData(priorityTypes)
-        .then(data => triggerPusher(data))
-}
-
-function prepareData(priorityTypes) {
-    return dbHelper.findAll(process.env.SETTINGS_TABLE)
-        .then(settings => {
-            return dbHelper.findAll(process.env.CONTENT_TABLE)
-                .then(content => {
-                    return {settings: settings, content: content, priorityTypes: priorityTypes}
-                })
-        }).then(data => {
-            return dbHelper.findAll(process.env.VENUES_TABLE)
-                .then(venues => {
-                    data.venues = venues;
-                    return data;
-                })
-        });
-}
-
-function triggerPusher(data) {
-    Notifier.pushNotification('screens', 'setting_updated', data);
-}
