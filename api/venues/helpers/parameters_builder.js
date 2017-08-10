@@ -40,3 +40,12 @@ module.exports.buildUpdateGroupsRequestParameters = (venue) => {
     };
 };
 
+module.exports.buildDeleteRequestParameters = (venue) => {
+    return {
+        TableName: process.env.VENUES_TABLE,
+        Key: {
+            id: venue.id,
+        },
+    };
+};
+

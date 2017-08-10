@@ -224,7 +224,7 @@ class Venue {
     }
 
     _performDelete() {
-        let deleteParams = this._getDeleteRequestParameters();
+        let deleteParams = ParametersBuilder.buildDeleteRequestParameters(this);
         return new Promise((resolve, reject) => db.delete(deleteParams, (error, data) => {
             if (error) {
                 reject(error.message);
@@ -232,15 +232,6 @@ class Venue {
                 resolve();
             }
         }));
-    }
-
-    _getDeleteRequestParameters() {
-        return {
-            TableName: process.env.VENUES_TABLE,
-            Key: {
-                id: this.id,
-            },
-        };
     }
 
     _performScreenGroupDelete(venue, groupId) {
