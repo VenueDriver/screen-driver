@@ -11,6 +11,6 @@ module.exports.delete = (event, context, callback) => {
     schedule.deleteSchedule()
         .then(() => callback(null, responseHelper.createSuccessfulResponse()))
         .fail(errorMessage => {
-            callback(null, responseHelper.createResponseWithError(500, `Couldn\'t remove the venue. ${errorMessage}`))
+            callback(null, responseHelper.createResponseWithError(500, `Couldn\'t remove the schedule. ${errorMessage}`))
         });
 };
