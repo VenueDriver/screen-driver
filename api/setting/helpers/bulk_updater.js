@@ -5,15 +5,16 @@ const db = require('../../dynamodb');
 const _ = require('lodash');
 
 module.exports.performBulkUpdate = (settings) => {
-    let promises = [];
+    let promiseList = [];
     _.forEach(settings, s => {
         let params = ParametersBuilder.buildUpdateConfigParameters(s);
-        promises.push(generateUpdatePromise(params));
+        let promise = updateSetting(params);
+        promiseList.push(promise);
     });
-    return Promise.all(promises);
+    return Promise.all(promiseList);
 };
 
-function generateUpdatePromise(params) {
+function updateSetting(params) {
     return new Promise((resolve, reject) => {
         db.update(params, (error) => {
             if (error) {
