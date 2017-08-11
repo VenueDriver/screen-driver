@@ -13,16 +13,22 @@ module.exports.handleEvent = (event, context) => {
 };
 
 function shouldBeNotified(record) {
-    if (record.eventName === 'MODIFY') {
-        return isEnabledScheduleChanged(record.dynamodb);
+    switch (record.eventName) {
+        case 'REMOVE': return isEnabledScheduleRemoved(record.dynamodb);
+        case 'MODIFY': return isEnabledScheduleChanged(record.dynamodb);
+        default: return true;
     }
-    return true;
 }
 
 function isEnabledScheduleChanged(streamInfo) {
     let oldSchedule = streamInfo.OldImage;
     let newSchedule = streamInfo.NewImage;
     return !(!newSchedule.enabled.BOOL && !oldSchedule.enabled.BOOL);
+}
+
+function isEnabledScheduleRemoved(streamInfo) {
+    let removedSchedule = streamInfo.OldImage;
+    return removedSchedule.enabled.BOOL;
 }
 
 function triggerUpdateEvent(context) {

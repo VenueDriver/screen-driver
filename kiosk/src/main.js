@@ -127,6 +127,7 @@ function subscribeToScreenReloadNotification() {
 
 function subscribeToScheduleUpdate() {
     notificationListener.subscribe('screens', 'schedule_update', (event) => {
+        console.log('schedule updated');
         DataLoader.loadData()
             .then(() => {
                 initScheduling();
