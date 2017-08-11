@@ -115,6 +115,7 @@ export class SingleScheduleComponent implements OnInit {
         if (this.isCreationMode()) {
             this.cancel.emit();
         } else {
+            this.eventTime.daysOfWeek = this.originalEventTime.daysOfWeek;
             this.eventTime = _.clone(this.originalEventTime);
             this.validationResult = {isValid: true};
         }
@@ -125,8 +126,8 @@ export class SingleScheduleComponent implements OnInit {
         this.validate();
     }
 
-    setDayOfWeek(dayOfWeek: string) {
-        this.eventTime.dayOfWeek = dayOfWeek;
+    setDaysOfWeek(daysOfWeek: string) {
+        this.eventTime.daysOfWeek = daysOfWeek;
     }
 
     changeScheduleState(state: boolean) {
@@ -140,5 +141,9 @@ export class SingleScheduleComponent implements OnInit {
 
     removeSchedule() {
         this.schedulesService.removeSchedule(this.schedule);
+    }
+
+    getDaysOfWeek() {
+        return this.eventTime.daysOfWeek.split(',');
     }
 }

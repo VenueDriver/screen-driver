@@ -8,7 +8,7 @@ import {DatetimeToCronConverter} from "../../datetime-cron-converter/datetime-cr
 export class EventTime {
 
     periodicity = Periodicity.ONE_TIME_EVENT;
-    dayOfWeek = DaysOfWeek.MON;
+    daysOfWeek = DaysOfWeek.MON;
     startDate: Date = EventTime.getTomorrowDate();
     endDate = this.startDate;
     startTime = '8:00';
@@ -74,7 +74,7 @@ export class EventTime {
     }
 
     private setPropertiesForWeeklySchedule(schedule: Schedule) {
-        this.dayOfWeek = CronToDatetimeConverter.getWeekDayFromCron(schedule.eventCron);
+        this.daysOfWeek = CronToDatetimeConverter.getWeekDaysFromCron(schedule.eventCron);
 
         this.setStartTimeProperties(schedule.eventCron);
         this.setEndTimeProperties(schedule.endEventCron);
@@ -112,12 +112,12 @@ export class EventTime {
     }
 
     private setCronsForWeeklySchedule(schedule: Schedule) {
-        schedule.eventCron = this.convertWeekDayAndTimeToCron(this.dayOfWeek, this.startTime, this.startTimePeriod);
-        schedule.endEventCron = this.convertWeekDayAndTimeToCron(this.dayOfWeek, this.endTime, this.endTimePeriod);
+        schedule.eventCron = this.convertWeekDayAndTimeToCron(this.daysOfWeek, this.startTime, this.startTimePeriod);
+        schedule.endEventCron = this.convertWeekDayAndTimeToCron(this.daysOfWeek, this.endTime, this.endTimePeriod);
     }
 
-    private convertWeekDayAndTimeToCron(dayOfWeek: string, time: string, timePeriod: string) {
-        let cron = DatetimeToCronConverter.createCronForDayOfWeek(dayOfWeek);
+    private convertWeekDayAndTimeToCron(daysOfWeek: string, time: string, timePeriod: string) {
+        let cron = DatetimeToCronConverter.createCronForDaysOfWeek(daysOfWeek);
         let hours = EventTime.getHours(time, timePeriod);
         let minutes = +time.split(':')[1];
         return DatetimeToCronConverter.setTimeForCron(cron, hours, minutes);

@@ -37,10 +37,12 @@
              class="days-of-week-container">
 
             <div class="title">
-                Day of week:
+                Days of week:
             </div>
 
-            <date-multiselector (selected)="setDayOfWeek($event)">
+            <date-multiselector
+                    [selectedDays]="getDaysOfWeek()"
+                    (selected)="setDaysOfWeek($event)">
             </date-multiselector>
         </div>
 
