@@ -2,28 +2,25 @@
 
 const _ = require('lodash');
 
-let selectedSetting = {};
-let serverData = {};
+class Storage {
 
-function setServerData(serverData) {
-    serverData = _.cloneDeep(serverData);
+    setServerData(serverData) {
+        this._serverData = _.cloneDeep(serverData);
+    }
+
+    getServerData() {
+        return _.clone(this._serverData);
+    }
+
+    setSelectedSetting(selectedSetting) {
+        this._selectedSetting = _.cloneDeep(selectedSetting);
+    }
+
+    getSelectedSetting() {
+        return _.cloneDeep(this._selectedSetting);
+    }
 }
 
-function getServerData() {
-    return _.clone(serverData);
-}
+const STORAGE = new Storage();
 
-function setSelectedSetting(selectedSetting) {
-    selectedSetting = _.cloneDeep(selectedSetting);
-}
-
-function getSelectedSetting() {
-    return _.cloneDeep(selectedSetting);
-}
-
-module.exports = {
-    getServerData: getServerData,
-    setServerData: setServerData,
-    getSelectedSetting: getSelectedSetting,
-    setSelectedSetting: setSelectedSetting
-};
+module.exports = STORAGE;
