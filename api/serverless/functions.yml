@@ -113,7 +113,7 @@ refresh_screens:
         cors: true
 
 get_pusher_config:
-  handler: screens/get_config.getConfig
+  handler: notifier/notification_config.getConfig
   environment: ${self:custom.properties.pusher}
   events:
     - http:
@@ -153,8 +153,8 @@ delete_schedule:
         method: delete
         cors: true
 
-handle_schedules_table_stream:
-  handler: schedule/stream.event
+handle_schedules_stream:
+  handler: schedule/stream/stream_handler.handleEvent
   events:
     - stream:
         type: dynamodb
@@ -163,6 +163,20 @@ handle_schedules_table_stream:
             - SchedulesTable
             - StreamArn
 
-push_schedule_update_message:
+push_schedules_update:
   handler: screens/reload_schedules.scheduleUpdateMessage
+  environment: ${self:custom.properties.pusher}
+
+handle_settings_stream:
+  handler: setting/stream/stream_handler.handleEvent
+  events:
+    - stream:
+        type: dynamodb
+        arn:
+          Fn::GetAtt:
+            - SettingsTable
+            - StreamArn
+
+push_settings_update:
+  handler: screens/reload_settings.settingUpdateMessage
   environment: ${self:custom.properties.pusher}

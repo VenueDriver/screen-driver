@@ -1,11 +1,9 @@
 'use strict';
 
-const pusher = require('../entities/pusher');
+const Notifier = require('../notifier/notifier');
 
 module.exports.scheduleUpdateMessage = (event, context) => {
 
-    pusher.trigger('screens', 'schedule_update', {
-        "message": event
-    });
+    Notifier.pushNotification('screens', 'schedule_update');
 
 };
