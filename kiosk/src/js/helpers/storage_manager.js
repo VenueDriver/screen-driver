@@ -5,6 +5,10 @@ const Storage = require('../storage/storage');
 
 class StorageManager {
 
+    static getStorage() {
+        return Storage;
+    }
+
     static loadDataFromLocalStorage() {
         return new Promise((resolve, reject) => StorageManager.getAllFromStorage((error, data) => {
             Storage.setServerData(data.server_data);

@@ -12,15 +12,8 @@ class CurrentScreenSettingsManager {
 
     static getCurrentSetting() {
         return new Promise((resolve, reject) => {
-            LocalStorageManager.hasStorage(StorageNames.SELECTED_SCREEN_STORAGE, (error, hasKey) => {
-                if (hasKey) {
-                    LocalStorageManager.getAllFromStorage((error, data) => resolve(data));
-                } else {
-                    LocalStorageManager.getFromStorage(StorageNames.SELECTED_SETTING_STORAGE, (error, data) => {
-                        return resolve(data);
-                    });
-                }
-            });
+            let currentSetting = StorageManager.getStorage().getSelectedSetting();
+            resolve(currentSetting);
         });
     }
 
