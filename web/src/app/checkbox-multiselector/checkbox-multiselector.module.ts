@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CheckboxMultiselectorComponent} from './ckeckbox-multiselector.component';
+import {CheckboxMultiselectorComponent} from './checkbox-multiselector.component';
 
 @NgModule({
     imports: [
