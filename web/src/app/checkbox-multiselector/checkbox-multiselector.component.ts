@@ -28,8 +28,7 @@ export class CheckboxMultiselectorComponent implements OnInit {
     }
 
     checkItem(item) {
-        console.log(item);
         item.checked = !item.checked;
-        this.changed.emit(this.items);
+        this.changed.emit(this.convertedItems);
     }
 }

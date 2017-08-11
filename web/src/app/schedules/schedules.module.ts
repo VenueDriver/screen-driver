@@ -7,20 +7,24 @@ import {SchedulesService} from "./schedules.service";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {SchedulesComponent} from "./schedules.component";
 import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
+import {CheckboxMultiselectorModule} from "../checkbox-multiselector/checkbox-multiselector.module";
+import { DateMultiselectorComponent } from './single-schedule/date-multiselector/date-multiselector.component';
 
 @NgModule({
     imports: [
         BrowserModule,
         DatepickerModule,
         AutocompleteModule,
-        ToggleButtonModule
+        ToggleButtonModule,
+        CheckboxMultiselectorModule
     ],
     exports: [
         SchedulesComponent
     ],
     declarations: [
         SchedulesComponent,
-        SingleScheduleComponent
+        SingleScheduleComponent,
+        DateMultiselectorComponent
     ],
     providers: [
         SchedulesService,
