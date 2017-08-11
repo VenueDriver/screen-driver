@@ -1,6 +1,5 @@
 const cron = require('node-cron');
 const ScheduleMergeTool = require('./schedule-merge-tool');
-const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
 const SettingsHelper = require('./helpers/settings_helper');
 const WindowInstanceHolder = require('./window-instance-holder');
 const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
@@ -60,7 +59,7 @@ class ScheduledTaskManager {
     resetAllSchedules(schedules) {
         this.clearAllSchedules();
         if (schedules) {
-            let enabledSchedules = _.filter(schedules, (s) => s.enabled);
+            let enabledSchedules = _.filter(schedules, (s) => s.enabled && s.content);
             _.forEach(enabledSchedules, s => this.addCronSchedule(s));
         }
     }
@@ -76,13 +75,15 @@ class ScheduledTaskManager {
 
     initSchedulingForScreen(screenInformation) {
         LocalStorageManager.getFromStorage(StorageNames.SERVER_DATA_STORAGE, (error, serverData) => {
-            let settingWithSchedules = ScheduleMergeTool.merge(serverData, screenInformation.selectedScreenId);
+            let settingWithSchedules = ScheduleMergeTool.merge(serverData, screenInformation);
 
             _.forEach(settingWithSchedules.schedules, schedule => {
                 let setting = serverData.originalSettings.find(setting => setting.id === schedule.settingId);
                 let contentId = SettingsHelper.defineContentId(setting, screenInformation);
-                schedule.content = serverData.content.find(content => content.id === contentId);
-                schedule.defaultUrl = screenInformation.contentUrl;
+                if (contentId) {
+                    schedule.content = serverData.content.find(content => content.id === contentId);
+                    schedule.defaultUrl = screenInformation.contentUrl;
+                }
             });
             this.resetAllSchedules(settingWithSchedules.schedules, serverData.originalSettings);
         })
