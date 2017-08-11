@@ -1,16 +1,18 @@
 const SettingMergeTool = require('./setting-merge-tool');
+const SettingsHelper = require('./helpers/settings_helper');
+const _ = require('lodash');
 
 class ScheduleMergeTool {
 
-    static merge(serverData, locationId) {
+    static merge(serverData, screenInfo) {
         let settings = serverData.originalSettings;
         let schedules = serverData.schedules;
         let priorityTypes = serverData.priorityTypes;
 
-        let settingsForLocation = this.getSettingsForScreen(locationId, settings);
+        let settingsForLocation = this.getSettingsForLocation(screenInfo, settings);
         let enabledSetting = this.getMostPriorityEnabledSetting(settingsForLocation, priorityTypes);
 
-        if (enabledSetting) {
+        if (!_.isEmpty(enabledSetting)) {
             return enabledSetting;
         }
 
@@ -26,12 +28,12 @@ class ScheduleMergeTool {
         });
     }
 
-    static getSettingsForScreen(locationId, settings) {
-        return settings.filter(setting => !!setting.config[locationId])
+    static getSettingsForLocation(screenInfo, settings) {
+        return _.filter(settings, setting => !!SettingsHelper.defineContentId(setting, screenInfo));
     }
 
     static getMostPriorityEnabledSetting(settings, priorityTypes) {
-        let filteredSettings = settings.filter(setting => setting.enabled && _isNotPersistent(setting));
+        let filteredSettings = _.filter(settings, setting => setting.enabled && _isNotPersistent(setting));
         return SettingMergeTool.getMostPrioritySetting(filteredSettings, priorityTypes);
 
         function _isNotPersistent(setting) {
