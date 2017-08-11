@@ -1,8 +1,9 @@
 'use strict';
 
 const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
-const SettingsHelper = require('./helpers/settings_helper');
+const StorageManager = require('./helpers/storage_manager');
 const ScheduleMergeTool = require('./schedule-merge-tool');
+const SettingsHelper = require('./helpers/settings_helper');
 const DataLoader = require('./data_loader');
 
 const _ = require('lodash');
@@ -24,7 +25,7 @@ class CurrentScreenSettingsManager {
     }
 
     static saveCurrentSetting(selectedSetting) {
-        LocalStorageManager.putInStorage(StorageNames.SELECTED_SETTING_STORAGE, selectedSetting);
+        StorageManager.saveSelectedSetting(selectedSetting);
     }
 
     static reloadCurrentScreenConfig(setting) {

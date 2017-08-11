@@ -86,7 +86,7 @@ class ScheduledTaskManager {
                 }
             });
             this.resetAllSchedules(settingWithSchedules.schedules, serverData.originalSettings);
-        })
+        });
     }
 
     static isScheduled() {

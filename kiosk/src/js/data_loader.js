@@ -2,8 +2,8 @@
 
 const {net} = require('electron');
 const PropertiesLoader = require('./helpers/properties_load_helper');
-const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
-let SettingMergeTool = require('./setting-merge-tool');
+const StorageManager = require('./helpers/storage_manager');
+const SettingMergeTool = require('./setting-merge-tool');
 const API = PropertiesLoader.getApiEndpoint();
 
 class DataLoader {
@@ -19,7 +19,7 @@ class DataLoader {
         return Promise.all(promises)
             .then(values => {
                 let serverData = DataLoader.composeServerData(values);
-                LocalStorageManager.putInStorage(StorageNames.SERVER_DATA_STORAGE, serverData);
+                StorageManager.saveServerData(serverData);
                 return serverData;
             });
     }
