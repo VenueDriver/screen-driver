@@ -91,6 +91,7 @@ class Schedule {
     }
 
     deleteSchedule() {
+        let deferred = Q.defer();
         let params = {
             TableName: process.env.SCHEDULES_TABLE,
             Key: {
@@ -104,6 +105,7 @@ class Schedule {
                 deferred.resolve();
             }
         });
+        return deferred.promise;
     }
 
     /**
