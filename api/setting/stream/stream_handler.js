@@ -6,16 +6,25 @@ const PriorityTypes = require('../../entities/priority_types');
 const _ = require('lodash');
 
 module.exports.handleEvent = (event, context) => {
-    let changedSetting = _.find(event.Records, r => {
-        let result = r.dynamodb;
-        return isSettingChanged(result.OldImage, result.NewImage);
+    let changedSetting = _.find(event.Records, record => {
+        return shouldBeNotified(record);
     });
     if (changedSetting) {
         triggerUpdateEvent(context);
     }
 };
 
-function isSettingChanged(oldSetting, newSetting) {
+function shouldBeNotified(record) {
+    switch (record.eventName) {
+        case 'INSERT': return false;
+        case 'REMOVE': return true;
+        case 'MODIFY': return isSettingChanged(record.dynamodb);
+    }
+}
+
+function isSettingChanged(streamInfo) {
+    let oldSetting = streamInfo.OldImage;
+    let newSetting = streamInfo.NewImage;
     if (!_.isEqual(oldSetting.priority, newSetting.priority)) {
         return true;
     }
