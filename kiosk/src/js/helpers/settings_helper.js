@@ -10,13 +10,13 @@ class SettingsHelper {
         return selectedContent ? selectedContent.url : '';
     }
 
-    static defineContentId(settings, selectedValues) {
-        let contentId = SettingsHelper.getContentId(settings, selectedValues.selectedScreenId);
+    static defineContentId(setting, selectedValues) {
+        let contentId = SettingsHelper.getContentId(setting, selectedValues.selectedScreenId);
         if (!contentId && selectedValues.selectedGroupId) {
-            contentId = SettingsHelper.getContentId(settings, selectedValues.selectedGroupId);
+            contentId = SettingsHelper.getContentId(setting, selectedValues.selectedGroupId);
         }
         if (!contentId && selectedValues.selectedVenueId) {
-            contentId = SettingsHelper.getContentId(settings, selectedValues.selectedVenueId);
+            contentId = SettingsHelper.getContentId(setting, selectedValues.selectedVenueId);
         }
         return contentId;
     }
