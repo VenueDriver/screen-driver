@@ -5,6 +5,14 @@ const Storage = require('../storage/storage');
 
 class StorageManager {
 
+    static loadDataFromLocalStorage() {
+        return new Promise((resolve, reject) => StorageManager.getAllFromStorage((error, data) => {
+            Storage.setServerData(data.server_data);
+            Storage.setSelectedSetting(data.selected_setting);
+            resolve(data);
+        }));
+    }
+
     static saveServerData(serverData) {
         StorageManager.putInStorage(StorageNames.SERVER_DATA_STORAGE, serverData);
         Storage.setServerData(serverData);
@@ -32,4 +40,4 @@ class StorageManager {
     }
 }
 
-module.exports.StorageManager = StorageManager;
+module.exports = StorageManager;
