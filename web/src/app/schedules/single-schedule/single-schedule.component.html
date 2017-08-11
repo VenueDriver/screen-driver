@@ -39,14 +39,9 @@
             <div class="title">
                 Day of week:
             </div>
-            <autocomplete
-                    class="day-of-week"
-                    [editable]="true"
-                    [disabled]="!editable"
-                    [itemsMap]="daysOfWeek"
-                    [value]="eventTime.dayOfWeek"
-                    (valueChanged)="setDayOfWeek($event)">
-            </autocomplete>
+
+            <date-multiselector (selected)="setDayOfWeek($event)">
+            </date-multiselector>
         </div>
 
         <div *ngIf="eventTime.periodicity === scheduleTypes.ONE_TIME_EVENT"

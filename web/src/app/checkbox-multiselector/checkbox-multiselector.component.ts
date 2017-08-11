@@ -8,7 +8,7 @@ import {Component, OnInit, Input, EventEmitter, Output} from "@angular/core";
 export class CheckboxMultiselectorComponent implements OnInit {
     @Input() items: Array<any>;
     @Input() titleField: string;
-    @Input() checkField: string;
+    @Input() selectedField: string = 'selected';
     @Output() changed = new EventEmitter();
     convertedItems;
 
@@ -22,13 +22,13 @@ export class CheckboxMultiselectorComponent implements OnInit {
     getItems() {
         let values = [];
         this.items.forEach(item => {
-            values.push({title: item[this.titleField], value: item, checked: item[this.checkField]})
+            values.push({title: item[this.titleField], value: item, selected: item[this.selectedField]})
         });
         return values;
     }
 
     checkItem(item) {
-        item.checked = !item.checked;
+        item.selected = !item.selected;
         this.changed.emit(this.convertedItems);
     }
 }

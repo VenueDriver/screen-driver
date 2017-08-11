@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
 import {DaysOfWeek} from '../../../enums/days-of-week';
 
 import * as _ from 'lodash';
@@ -6,10 +6,11 @@ import * as _ from 'lodash';
 
 @Component({
     selector: 'date-multiselector',
-    templateUrl: './date-multiselector.component.html',
-    styleUrls: ['./date-multiselector.component.sass']
+    templateUrl: 'days-of-week-multiselector.component.html',
+    styleUrls: ['days-of-week-multiselector.component.sass']
 })
 export class DateMultiselectorComponent implements OnInit {
+    @Output() selected = new EventEmitter();
 
     constructor() {
     }
@@ -27,7 +28,9 @@ export class DateMultiselectorComponent implements OnInit {
         return daysOfWeek;
     }
 
-    onSelectedDateChanged(data) {
-        console.log(data);
+    onSelectedDaysOfWeekChanged(daysOfWeek) {
+        let selectedDays = daysOfWeek.filter(day => day.selected);
+        selectedDays = selectedDays.map(day => day.title.toUpperCase());
+        this.selected.emit(selectedDays.join(','))
     }
 }

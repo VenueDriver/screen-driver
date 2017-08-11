@@ -1,7 +1,7 @@
 <div class="checkbox-multiselector-container">
     <div *ngFor="let item of convertedItems"
          class="checkbox-element"
-         [ngClass]="{'active' : item.checked}"
+         [ngClass]="{'active' : item.selected}"
          (click)="checkItem(item)">
         {{item.title}}
     </div>
