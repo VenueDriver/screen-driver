@@ -66,8 +66,6 @@ function prepareContentWindowData(screenInformation) {
             Logger.error('Failed to load config. Used old config. Message:', error);
             openContentWindow(screenInformation.contentUrl);
         });
-
-    scheduledTaskManager.initSchedulingForScreen(screenInformation);
 }
 
 function addListenerForErrors() {
@@ -84,6 +82,7 @@ function addHotKeyListeners() {
     app.on('shortcut-pressed', (event) => {
         if (event === 'open-admin-panel') {
             CronJobsManager.stopJob(settingsLoadJob);
+            scheduledTaskManager.clearAllSchedules();
             openAdminPanel();
         }
     });
@@ -114,6 +113,7 @@ function openContentWindow(contentUrl) {
     settingsLoadJob = CronJobsManager.initSettingsLoadJob(WindowInstanceHolder.getWindow());
     subscribeToScreenReloadNotification();
     subscribeToScheduleUpdate();
+    initScheduling();
 }
 
 function subscribeToScreenReloadNotification() {
@@ -129,12 +129,17 @@ function subscribeToScheduleUpdate() {
     notificationListener.subscribe('screens', 'schedule_update', (event) => {
         DataLoader.loadData()
             .then(() => {
-                CurrentScreenSettingsManager.getCurrentSetting()
-                    .then(setting => {
-                        scheduledTaskManager.initSchedulingForScreen(setting);
-                    })
+                initScheduling();
             })
     });
+}
+
+
+function initScheduling() {
+    CurrentScreenSettingsManager.getCurrentSetting()
+        .then(screenInformation => {
+            scheduledTaskManager.initSchedulingForScreen(screenInformation);
+        })
 }
 
 function bindSettingChanges() {
