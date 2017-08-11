@@ -3,12 +3,10 @@
 const aws = require('aws-sdk');
 const lambda = new aws.Lambda();
 
-module.exports.invokeFunction = (params, context) => {
-    lambda.invoke(params, function(err, data) {
-        if (err) {
-            context.fail(err);
-        } else {
-            context.succeed(data);
-        }
+module.exports.invokeFunction = (params, context, callback) => {
+
+    lambda.invoke(params, (err, data) => {
+        callback(null, err ? err : data);
     })
+
 };
