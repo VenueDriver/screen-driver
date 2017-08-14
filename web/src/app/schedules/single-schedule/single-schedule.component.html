@@ -13,7 +13,7 @@
             <div class="title" *ngIf="schedule">
                 <toggle-button class="change-state-button"
                                [enabled]="schedule.enabled"
-                               [disabled]="isEditMode()"
+                               [disabled]="!editable || isEditMode()"
                                (changed)="changeScheduleState($event)">
                 </toggle-button>
             </div>
