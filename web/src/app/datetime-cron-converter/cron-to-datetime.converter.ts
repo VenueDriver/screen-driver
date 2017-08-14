@@ -30,11 +30,11 @@ export class CronToDatetimeConverter {
         return +parts[2];
     }
 
-    static getWeekDayFromCron(cron: string): string {
+    static getWeekDaysFromCron(cron: string): string {
         if (!cron) {
             return '';
         }
         let parts = cron.split(' ');
-        return DaysOfWeek[parts[5]];
+        return parts[5];
     }
 }
