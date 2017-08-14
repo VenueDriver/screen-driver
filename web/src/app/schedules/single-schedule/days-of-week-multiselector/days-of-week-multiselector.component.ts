@@ -1,8 +1,6 @@
 import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
 import {DaysOfWeek} from '../../../enums/days-of-week';
 
-import * as _ from 'lodash';
-
 
 @Component({
     selector: 'date-multiselector',

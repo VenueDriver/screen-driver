@@ -5,6 +5,8 @@ import {Periodicity} from '../../enums/periodicity';
 import {DaysOfWeek} from '../../enums/days-of-week';
 import {DatetimeToCronConverter} from "../../datetime-cron-converter/datetime-cron.converter";
 
+import * as _ from 'lodash';
+
 export class EventTime {
 
     periodicity = Periodicity.ONE_TIME_EVENT;
@@ -26,6 +28,10 @@ export class EventTime {
     }
 
     validate(): ValidationResult {
+        if (_.isEmpty(this.daysOfWeek)) {
+            return {isValid: false, validationMessage: 'You should choose at least one day of week'};
+        }
+
         if (!this.isDateValid()) {
             return {isValid: false, validationMessage: 'The start and the end date should be specified'};
         }

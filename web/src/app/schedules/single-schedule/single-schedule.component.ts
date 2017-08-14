@@ -127,6 +127,7 @@ export class SingleScheduleComponent implements OnInit {
 
     setDaysOfWeek(daysOfWeek: string) {
         this.eventTime.daysOfWeek = daysOfWeek;
+        this.validate();
     }
 
     changeScheduleState(state: boolean) {
