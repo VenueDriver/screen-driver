@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 })
 export class DateMultiselectorComponent implements OnInit {
     @Input() selectedDays;
+    @Input() editMode = false;
     @Output() selected = new EventEmitter();
 
     constructor() {

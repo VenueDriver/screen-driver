@@ -11,6 +11,7 @@ export class CheckboxMultiselectorComponent implements OnInit {
     };
     @Input() titleField = 'title';
     @Input() selectedField = 'selected';
+    @Input() editMode = false;
     @Output() changed = new EventEmitter();
 
     items: Array<any>;
@@ -28,7 +29,9 @@ export class CheckboxMultiselectorComponent implements OnInit {
     }
 
     checkItem(item) {
-        item.selected = !item.selected;
-        this.changed.emit(this.items);
+        if (this.editMode) {
+            item.selected = !item.selected;
+            this.changed.emit(this.items);
+        }
     }
 }

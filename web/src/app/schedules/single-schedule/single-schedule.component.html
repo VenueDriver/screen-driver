@@ -42,6 +42,7 @@
 
             <date-multiselector
                     [selectedDays]="getDaysOfWeek()"
+                    [editMode]="editable"
                     (selected)="setDaysOfWeek($event)">
             </date-multiselector>
         </div>
