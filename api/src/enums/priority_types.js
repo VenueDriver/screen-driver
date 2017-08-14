@@ -16,7 +16,7 @@ function getTestTypes() {
 
 function getTypes() {
     return [
-        {id: 'ef48d7d3', name: 'Persistant'},
+        {id: 'ef48d7d3', name: 'Persistent'},
         {id: '1d7c6369', name: 'Periodical'},
         {id: '9a0a758a', name: 'Occasional'}
     ]

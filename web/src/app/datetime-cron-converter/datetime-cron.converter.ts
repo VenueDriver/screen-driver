@@ -13,9 +13,8 @@ export class DatetimeToCronConverter {
         return new Date(date.setDate(date.getDate() + 1));
     }
 
-    static createCronForDayOfWeek(dayOfWeek: string): string {
-        let day = getShortDay(dayOfWeek);
-        return `* * * * * ${day}`;
+    static createCronForDaysOfWeek(daysOfWeek: string): string {
+        return `* * * * * ${daysOfWeek}`;
     }
 
     static setTimeForCron(cron: string, hour: number, minute: number): string {

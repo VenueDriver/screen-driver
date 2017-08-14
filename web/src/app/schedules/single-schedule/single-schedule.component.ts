@@ -125,8 +125,9 @@ export class SingleScheduleComponent implements OnInit {
         this.validate();
     }
 
-    setDayOfWeek(dayOfWeek: string) {
-        this.eventTime.dayOfWeek = dayOfWeek;
+    setDaysOfWeek(daysOfWeek: Array<string>) {
+        this.eventTime.daysOfWeek = daysOfWeek.join(',');
+        this.validate();
     }
 
     changeScheduleState(state: boolean) {
@@ -140,5 +141,9 @@ export class SingleScheduleComponent implements OnInit {
 
     removeSchedule() {
         this.schedulesService.removeSchedule(this.schedule);
+    }
+
+    getDaysOfWeek(): Array<string> {
+        return this.eventTime.daysOfWeek.split(',');
     }
 }

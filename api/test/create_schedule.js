@@ -25,7 +25,7 @@ describe('create_schedule', () => {
 
 
     it('Should create schedule with all fields, id and revision number', () => {
-        let content = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT', enabled: false};
+        let content = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME', enabled: false};
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
@@ -40,7 +40,7 @@ describe('create_schedule', () => {
     });
 
     it('Should create schedule with automatically generated `enabled` field', () => {
-        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body)=> {
             expect(body).to.have.property('enabled').that.equal(true);
@@ -50,7 +50,7 @@ describe('create_schedule', () => {
     });
 
     it('Shouldn\'t create schedule without setting id', () => {
-        let content = {eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let content = {eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without setting');
