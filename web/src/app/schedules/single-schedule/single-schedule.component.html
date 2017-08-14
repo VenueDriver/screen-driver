@@ -40,11 +40,11 @@
                 Days of week:
             </div>
 
-            <date-multiselector
+            <days-of-week-multiselector
                     [selectedDays]="getDaysOfWeek()"
                     [editMode]="editable"
                     (selected)="setDaysOfWeek($event)">
-            </date-multiselector>
+            </days-of-week-multiselector>
         </div>
 
         <div *ngIf="eventTime.periodicity === scheduleTypes.ONE_TIME_EVENT"

@@ -3,11 +3,11 @@ import {DaysOfWeek} from '../../../enums/days-of-week';
 
 
 @Component({
-    selector: 'date-multiselector',
+    selector: 'days-of-week-multiselector',
     templateUrl: 'days-of-week-multiselector.component.html',
     styleUrls: ['days-of-week-multiselector.component.sass']
 })
-export class DateMultiselectorComponent {
+export class DaysOfWeekMultiselectorComponent {
     @Input() selectedDays;
     @Input() editMode = false;
     @Output() selected = new EventEmitter();
