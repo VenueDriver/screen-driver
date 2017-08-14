@@ -2,7 +2,7 @@ import {ValidationResult} from "./validation-result";
 import {Schedule} from "./schedule";
 import {CronToDatetimeConverter} from '../../datetime-cron-converter/cron-to-datetime.converter';
 import {Periodicity} from '../../enums/periodicity';
-import {DaysOfWeek} from '../../enums/days-of-week';
+import {DaysOfWeek, getShortDay} from '../../enums/days-of-week';
 import {DatetimeToCronConverter} from "../../datetime-cron-converter/datetime-cron.converter";
 
 import * as _ from 'lodash';
@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 export class EventTime {
 
     periodicity = Periodicity.ONE_TIME;
-    daysOfWeek = DaysOfWeek.MON;
+    daysOfWeek = getShortDay(DaysOfWeek.SUN);
     startDate: Date = EventTime.getTomorrowDate();
     endDate = this.startDate;
     startTime = '8:00';
