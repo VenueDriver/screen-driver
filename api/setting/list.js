@@ -2,7 +2,7 @@
 
 const dbHelper = require('./../helpers/db_helper');
 const responseHelper = require('../helpers/http_response_helper');
-const PriorityTypes = require('../entities/priority_types');
+const PriorityTypes = require('../enums/priority_types');
 
 module.exports.list = (event, context, callback) => {
 

@@ -1,7 +1,7 @@
 'use strict';
 
 const uuid = require('uuid');
-const PriorityTypes = require('./../../entities/priority_types');
+const PriorityTypes = require('./../../enums/priority_types');
 const ParametersBuilder = require('./../helpers/parameters_builder');
 
 const Q = require('q');

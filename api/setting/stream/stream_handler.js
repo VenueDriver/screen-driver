@@ -2,7 +2,7 @@
 
 const FunctionInvokeHelper = require('../../helpers/function_invoke_helper');
 const dbHelper = require('./../../helpers/db_helper');
-const PriorityTypes = require('../../entities/priority_types');
+const PriorityTypes = require('../../enums/priority_types');
 const _ = require('lodash');
 
 module.exports.handleEvent = (event, context) => {
