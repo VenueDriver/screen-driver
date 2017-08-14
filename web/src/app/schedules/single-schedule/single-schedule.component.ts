@@ -143,7 +143,7 @@ export class SingleScheduleComponent implements OnInit {
         this.schedulesService.removeSchedule(this.schedule);
     }
 
-    getDaysOfWeek() {
+    getDaysOfWeek(): Array<string> {
         return this.eventTime.daysOfWeek.split(',');
     }
 }

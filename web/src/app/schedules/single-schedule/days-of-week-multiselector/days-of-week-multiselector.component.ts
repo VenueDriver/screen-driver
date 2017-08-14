@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
+import {Component, Input, EventEmitter, Output} from '@angular/core';
 import {DaysOfWeek} from '../../../enums/days-of-week';
 
 
@@ -7,7 +7,7 @@ import {DaysOfWeek} from '../../../enums/days-of-week';
     templateUrl: 'days-of-week-multiselector.component.html',
     styleUrls: ['days-of-week-multiselector.component.sass']
 })
-export class DateMultiselectorComponent implements OnInit {
+export class DateMultiselectorComponent {
     @Input() selectedDays;
     @Input() editMode = false;
     @Output() selected = new EventEmitter();
@@ -15,10 +15,7 @@ export class DateMultiselectorComponent implements OnInit {
     constructor() {
     }
 
-    ngOnInit() {
-    }
-
-    getDaysOfWeek() {
+    getDaysOfWeek(): Array<any> {
         let daysOfWeek = [];
 
         for (let dayOfWeek in DaysOfWeek) {
