@@ -1,5 +1,5 @@
 get_venues_list:
-  handler: venues/list.list
+  handler: src/venues/list.list
   events:
     - http:
         path: api/venues
@@ -7,7 +7,7 @@ get_venues_list:
         cors: true
 
 create_venue:
-  handler: venues/create.create
+  handler: src/venues/create.create
   events:
     - http:
         path: api/venues
@@ -15,7 +15,7 @@ create_venue:
         cors: true
 
 update_venue:
-  handler: venues/update.update
+  handler: src/venues/update.update
   events:
     - http:
         path: api/venues/{id}
@@ -23,7 +23,7 @@ update_venue:
         cors: true
 
 delete_venue:
-  handler: venues/delete.delete
+  handler: src/venues/delete.delete
   events:
     - http:
         path: api/venues/{id}
@@ -31,7 +31,7 @@ delete_venue:
         cors: true
 
 delete_screen_group:
-  handler: venues/delete_screen_group.delete
+  handler: src/venues/delete_screen_group.delete
   events:
     - http:
         path: api/venues/{id}/screen_groups/{group_id}
@@ -39,7 +39,7 @@ delete_screen_group:
         cors: true
 
 delete_screen:
-  handler: venues/delete_screen.delete
+  handler: src/venues/delete_screen.delete
   events:
     - http:
         path: api/venues/{id}/screen_groups/{group_id}/screens/{screen_id}
@@ -47,7 +47,7 @@ delete_screen:
         cors: true
 
 get_content_list:
-  handler: content/list.list
+  handler: src/content/list.list
   events:
     - http:
         path: api/content
@@ -55,7 +55,7 @@ get_content_list:
         cors: true
 
 create_content:
-  handler: content/create.create
+  handler: src/content/create.create
   events:
     - http:
         path: api/content
@@ -63,7 +63,7 @@ create_content:
         cors: true
 
 update_content:
-  handler: content/update.update
+  handler: src/content/update.update
   events:
     - http:
         path: api/content/{id}
@@ -71,7 +71,7 @@ update_content:
         cors: true
 
 delete_content:
-  handler: content/delete.delete
+  handler: src/content/delete.delete
   events:
     - http:
         path: api/content/{id}
@@ -79,7 +79,7 @@ delete_content:
         cors: true
 
 get_settings_list:
-  handler: setting/list.list
+  handler: src/setting/list.list
   events:
     - http:
         path: api/settings
@@ -87,7 +87,7 @@ get_settings_list:
         cors: true
 
 create_setting:
-  handler: setting/create.create
+  handler: src/setting/create.create
   events:
     - http:
         path: api/settings
@@ -95,7 +95,7 @@ create_setting:
         cors: true
 
 update_setting:
-  handler: setting/update.update
+  handler: src/setting/update.update
   environment: ${self:custom.properties.pusher}
   events:
     - http:
@@ -104,7 +104,7 @@ update_setting:
         cors: true
 
 refresh_screens:
-  handler: screen_notifications/refresh_screens.refresh
+  handler: src/screen_notifications/refresh_screens.refresh
   environment: ${self:custom.properties.pusher}
   events:
     - http:
@@ -113,7 +113,7 @@ refresh_screens:
         cors: true
 
 get_pusher_config:
-  handler: notifier/notification_config.getConfig
+  handler: src/notifier/notification_config.getConfig
   environment: ${self:custom.properties.pusher}
   events:
     - http:
@@ -122,7 +122,7 @@ get_pusher_config:
         cors: true
 
 create_schedule:
-  handler: schedule/create.create
+  handler: src/schedule/create.create
   events:
     - http:
         path: api/schedules
@@ -130,7 +130,7 @@ create_schedule:
         cors: true
 
 get_schedules_list:
-  handler: schedule/list.list
+  handler: src/schedule/list.list
   events:
     - http:
         path: api/schedules
@@ -138,7 +138,7 @@ get_schedules_list:
         cors: true
 
 update_schedule:
-  handler: schedule/update.update
+  handler: src/schedule/update.update
   events:
     - http:
         path: api/schedules/{id}
@@ -146,7 +146,7 @@ update_schedule:
         cors: true
 
 delete_schedule:
-  handler: schedule/delete.delete
+  handler: src/schedule/delete.delete
   events:
     - http:
         path: api/schedules/{id}
@@ -154,7 +154,7 @@ delete_schedule:
         cors: true
 
 handle_schedules_stream:
-  handler: schedule/stream/stream_handler.handleEvent
+  handler: src/schedule/stream/stream_handler.handleEvent
   events:
     - stream:
         type: dynamodb
@@ -164,11 +164,11 @@ handle_schedules_stream:
             - StreamArn
 
 push_schedules_update:
-  handler: screen_notifications/reload_schedules.scheduleUpdateMessage
+  handler: src/screen_notifications/reload_schedules.scheduleUpdateMessage
   environment: ${self:custom.properties.pusher}
 
 handle_settings_stream:
-  handler: setting/stream/stream_handler.handleEvent
+  handler: src/setting/stream/stream_handler.handleEvent
   events:
     - stream:
         type: dynamodb
@@ -178,5 +178,5 @@ handle_settings_stream:
             - StreamArn
 
 push_settings_update:
-  handler: screen_notifications/reload_settings.settingUpdateMessage
+  handler: src/screen_notifications/reload_settings.settingUpdateMessage
   environment: ${self:custom.properties.pusher}

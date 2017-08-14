@@ -1,6 +1,6 @@
 'use strict';
 
-const Notifier = require('../notifier/notifier');
+const Notifier = require('./notifier');
 
 module.exports.scheduleUpdateMessage = (event, context) => {
 

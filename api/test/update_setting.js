@@ -3,8 +3,8 @@
 require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 
-const createFunction = require('../setting/create');
-const updateFunction = require('../setting/update');
+const createFunction = require('../src/setting/create');
+const updateFunction = require('../src/setting/update');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const expect = mochaPlugin.chai.expect;
