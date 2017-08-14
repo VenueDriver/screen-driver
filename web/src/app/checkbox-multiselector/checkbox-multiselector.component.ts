@@ -6,22 +6,22 @@ import {Component, OnInit, Input, EventEmitter, Output} from "@angular/core";
     styleUrls: ['checkbox-multiselector.component.sass']
 })
 export class CheckboxMultiselectorComponent implements OnInit {
-    @Input() items: Array<any>;
+    @Input('items') set _items(items: Array<any>) {
+        this.items = this.convertItems(items);
+    };
     @Input() titleField: string;
     @Input() selectedField: string = 'selected';
     @Output() changed = new EventEmitter();
-    convertedItems;
 
-    constructor() {
-    }
+    items: Array<any>;
 
     ngOnInit() {
-        this.convertedItems = this.getItems();
+
     }
 
-    getItems() {
+    convertItems(items) {
         let values = [];
-        this.items.forEach(item => {
+        items.forEach(item => {
             values.push({title: item[this.titleField], value: item, selected: item[this.selectedField]})
         });
         return values;
@@ -29,6 +29,6 @@ export class CheckboxMultiselectorComponent implements OnInit {
 
     checkItem(item) {
         item.selected = !item.selected;
-        this.changed.emit(this.convertedItems);
+        this.changed.emit(this.items);
     }
 }
