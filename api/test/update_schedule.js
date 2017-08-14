@@ -26,8 +26,8 @@ describe('update_setting', () => {
     });
 
     it('Should update the setting id and increase revision', () => {
-        let newConfig = {settingId: 'id_mock_1', eventCron: '* * * * *', endEventCron: '* * * * *', enabled: true, periodicity: 'ONE_TIME_EVENT'};
-        let updatedConfig = {settingId: 'id_mock_2', eventCron: '* * * * *', _rev: 0, endEventCron: '* * * * *', enabled: false, periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock_1', eventCron: '* * * * *', endEventCron: '* * * * *', enabled: true, periodicity: 'ONE_TIME'};
+        let updatedConfig = {settingId: 'id_mock_2', eventCron: '* * * * *', _rev: 0, endEventCron: '* * * * *', enabled: false, periodicity: 'ONE_TIME'};
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
@@ -40,8 +40,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without settingId', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
-        let updatedConfig = {startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let updatedConfig = {startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without setting');
@@ -52,8 +52,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with empty settingId', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
-        let updatedConfig = {settingId: '', eventCron: '* * * * *', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let updatedConfig = {settingId: '', eventCron: '* * * * *', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without setting');
@@ -64,8 +64,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without eventCron', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
-        let updatedConfig = {settingId: 'id_mock', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let updatedConfig = {settingId: 'id_mock', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
@@ -76,8 +76,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with empty eventCron', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
-        let updatedConfig = {settingId: 'id_mock', eventCron: '', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let updatedConfig = {settingId: 'id_mock', eventCron: '', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
@@ -88,8 +88,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without endEventCron', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
-        let updatedConfig = {settingId: 'id_mock', _rev: 0, eventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let updatedConfig = {settingId: 'id_mock', _rev: 0, eventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without endEventCron');
@@ -100,8 +100,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with empty endEventCron', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
-        let updatedConfig = {settingId: 'id_mock', _rev: 0, eventCron: '* * * * *', endEventCron: '', periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let updatedConfig = {settingId: 'id_mock', _rev: 0, eventCron: '* * * * *', endEventCron: '', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without endEventCron');
@@ -112,7 +112,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without periodicity', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
         let updatedConfig = {settingId: 'id_mock', _rev: 0, eventCron: '* * * * *', endEventCron: '* * * * *'};
 
         let expectations = (body, response) => {
@@ -124,8 +124,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with wrong revision number', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
-        let updatedConfig = {settingId: 'id_mock', eventCron: '', _rev: 3, endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let updatedConfig = {settingId: 'id_mock', eventCron: '', _rev: 3, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
@@ -136,8 +136,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without revision number', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
-        let updatedConfig = {settingId: 'id_mock', eventCron: '', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let updatedConfig = {settingId: 'id_mock', eventCron: '', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Missed revision number');
