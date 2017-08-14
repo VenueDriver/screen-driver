@@ -2,7 +2,7 @@
 
 const uuid = require('uuid');
 const Q = require('q');
-const dynamoDb = require('../dynamodb');
+const dynamoDb = require('../dynamodb/dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
 const validator = require('./content_validator');
 

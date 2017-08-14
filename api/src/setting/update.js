@@ -2,7 +2,7 @@
 
 const Setting = require('./entities/setting');
 
-const dynamodb = require('../dynamodb');
+const dynamodb = require('../dynamodb/dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
 
 module.exports.update = (event, context, callback) => {

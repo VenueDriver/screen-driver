@@ -1,6 +1,6 @@
 'use strict';
 
-const dynamodb = require('../dynamodb');
+const dynamodb = require('../dynamodb/dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
 const Schedule = require('./entities/schedule');
 

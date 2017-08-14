@@ -1,7 +1,7 @@
 'use strict';
 
 const Q = require('q');
-const dynamoDb = require('../dynamodb');
+const dynamoDb = require('../dynamodb/dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
 
 module.exports.delete = (event, context, callback) => {

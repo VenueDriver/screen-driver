@@ -1,7 +1,7 @@
 'use strict';
 
 const Q = require('q');
-const dynamoDb = require('./../dynamodb');
+const dynamoDb = require('./../dynamodb/dynamodb');
 
 module.exports.findAll = (tableName) => {
     let deferred = Q.defer();

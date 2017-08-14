@@ -1,7 +1,7 @@
 'use strict';
 
 const ParametersBuilder = require('./parameters_builder');
-const db = require('../../dynamodb');
+const db = require('../../dynamodb/dynamodb');
 const _ = require('lodash');
 
 module.exports.performBulkUpdate = (settings) => {
