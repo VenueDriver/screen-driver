@@ -17,11 +17,10 @@ export class SettingsPriorityHelper {
 
     setPriorityType(setting: Setting, schedule: Schedule) {
         switch (Periodicity[schedule.periodicity]) {
-            case Periodicity.ONE_TIME_EVENT:
+            case Periodicity.ONE_TIME:
                 this.setPriorityTypeByIndex(setting, 2);
                 break;
-            case Periodicity.DAILY:
-            case Periodicity.WEEKLY:
+            case Periodicity.REPEATABLE:
                 this.setPriorityTypeByIndex(setting, 1);
                 break;
         }

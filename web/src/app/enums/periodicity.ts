@@ -1,9 +1,8 @@
 import * as _ from 'lodash';
 
 export const Periodicity = {
-    ONE_TIME_EVENT: 'One time event',
-    WEEKLY: 'Weekly',
-    DAILY: 'Daily'
+    ONE_TIME: 'One time',
+    REPEATABLE: 'Repeatable'
 };
 
 export const getPropertyName = (value: string) => {

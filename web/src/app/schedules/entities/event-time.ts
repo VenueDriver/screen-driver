@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 
 export class EventTime {
 
-    periodicity = Periodicity.ONE_TIME_EVENT;
+    periodicity = Periodicity.ONE_TIME;
     daysOfWeek = DaysOfWeek.MON;
     startDate: Date = EventTime.getTomorrowDate();
     endDate = this.startDate;
@@ -35,7 +35,7 @@ export class EventTime {
         if (!this.isDateValid()) {
             return {isValid: false, validationMessage: 'The start and the end date should be specified'};
         }
-        if (this.startDate.getTime() === this.endDate.getTime() || this.periodicity !== Periodicity.ONE_TIME_EVENT) {
+        if (this.startDate.getTime() === this.endDate.getTime() || this.periodicity !== Periodicity.ONE_TIME) {
             let isTimeValid = this.isTimeValid();
             return {isValid: isTimeValid, validationMessage: isTimeValid ? '' : 'The end of the event couldn\'t be before the start'};
         }
@@ -45,28 +45,22 @@ export class EventTime {
     setProperties(schedule: Schedule) {
         this.periodicity = Periodicity[schedule.periodicity];
         switch (this.periodicity) {
-            case Periodicity.ONE_TIME_EVENT:
+            case Periodicity.ONE_TIME:
                 this.setPropertiesForOneTimeSchedule(schedule);
                 break;
-            case Periodicity.WEEKLY:
-                this.setPropertiesForWeeklySchedule(schedule);
-                break;
-            case Periodicity.DAILY:
-                this.setPropertiesForDailySchedule(schedule);
+            case Periodicity.REPEATABLE:
+                this.setPropertiesForRepeatableSchedule(schedule);
                 break;
         }
     }
 
     setCronsForSchedule(schedule: Schedule) {
         switch (this.periodicity) {
-            case Periodicity.ONE_TIME_EVENT:
+            case Periodicity.ONE_TIME:
                 this.setCronsForOneTimeSchedule(schedule);
                 break;
-            case Periodicity.WEEKLY:
-                this.setCronsForWeeklySchedule(schedule);
-                break;
-            case Periodicity.DAILY:
-                this.setCronsForDailySchedule(schedule);
+            case Periodicity.REPEATABLE:
+                this.setCronsForRepeatableSchedule(schedule);
                 break;
         }
     }
@@ -79,14 +73,9 @@ export class EventTime {
         this.setEndTimeProperties(schedule.endEventCron);
     }
 
-    private setPropertiesForWeeklySchedule(schedule: Schedule) {
+    private setPropertiesForRepeatableSchedule(schedule: Schedule) {
         this.daysOfWeek = CronToDatetimeConverter.getWeekDaysFromCron(schedule.eventCron);
 
-        this.setStartTimeProperties(schedule.eventCron);
-        this.setEndTimeProperties(schedule.endEventCron);
-    }
-
-    private setPropertiesForDailySchedule(schedule: Schedule) {
         this.setStartTimeProperties(schedule.eventCron);
         this.setEndTimeProperties(schedule.endEventCron);
     }
@@ -117,7 +106,7 @@ export class EventTime {
         return CronToDatetimeConverter.getDateFromCron(cron);
     }
 
-    private setCronsForWeeklySchedule(schedule: Schedule) {
+    private setCronsForRepeatableSchedule(schedule: Schedule) {
         schedule.eventCron = this.convertWeekDayAndTimeToCron(this.daysOfWeek, this.startTime, this.startTimePeriod);
         schedule.endEventCron = this.convertWeekDayAndTimeToCron(this.daysOfWeek, this.endTime, this.endTimePeriod);
     }
@@ -158,7 +147,7 @@ export class EventTime {
     }
 
     private isDateValid(): boolean {
-        if (this.periodicity === Periodicity.ONE_TIME_EVENT) {
+        if (this.periodicity === Periodicity.ONE_TIME) {
             return !!(this.startDate && this.endDate);
         }
         return true;
