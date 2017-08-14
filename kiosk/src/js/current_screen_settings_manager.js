@@ -1,8 +1,7 @@
 'use strict';
 
-const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
+const {LocalStorageManager} = require('./helpers/local_storage_helper');
 const StorageManager = require('./helpers/storage_manager');
-const ScheduleMergeTool = require('./schedule-merge-tool');
 const SettingsHelper = require('./helpers/settings_helper');
 const DataLoader = require('./data_loader');
 
@@ -46,7 +45,7 @@ class CurrentScreenSettingsManager {
     }
 
     static updateContentUrl(contentUrl, setting) {
-        if (contentUrl !== setting.contentUrl || LocalStorageManager.hasStorage(StorageNames.SELECTED_SCREEN_STORAGE)) {
+        if (contentUrl !== setting.contentUrl) {
             let newSetting = _.clone(setting);
             newSetting.contentUrl = contentUrl;
             CurrentScreenSettingsManager.saveCurrentSetting(newSetting);
