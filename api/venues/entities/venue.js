@@ -3,7 +3,7 @@
 const uuid = require('uuid');
 
 const VenueUtils = require('./../helpers/venue_utils');
-const ScreenGroup = require('./../../entities/screen_group');
+const ScreenGroup = require('./screen_group');
 const SettingUtils = require('./../../setting/helpers/setting_utils');
 const DbHelper = require('./../../helpers/db_helper');
 const ParametersBuilder = require('./../helpers/parameters_builder');
