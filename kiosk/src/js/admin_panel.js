@@ -46,8 +46,8 @@ $(function () {
     });
 
     $("#cancel").click(function () {
-        CurrentScreenSettingsManager.getCurrentSetting()
-            .then(setting => openContentWindow(setting.contentUrl));
+        let setting = CurrentScreenSettingsManager.getCurrentSetting();
+        openContentWindow(setting.contentUrl);
     });
 
     $("#venue").change(function () {
@@ -107,11 +107,9 @@ function loadData() {
 }
 
 function loadCurrentSettings() {
-    CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-        screenSetting = setting;
-        initSelector($('#venue'), serverData.venues);
-        initSelectorValues();
-    });
+    screenSetting = CurrentScreenSettingsManager.getCurrentSetting();
+    initSelector($('#venue'), serverData.venues);
+    initSelectorValues();
 }
 
 function initSelectorValues() {
@@ -158,13 +156,12 @@ function verifySaveButtonState() {
 }
 
 function verifyCancelButtonState() {
-    CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-        if (_.isEmpty(setting.contentUrl)) {
-            hideCancelButton();
-        } else {
-            showCancelButton();
-        }
-    });
+    let setting = CurrentScreenSettingsManager.getCurrentSetting();
+    if (_.isEmpty(setting) || _.isEmpty(setting.contentUrl)) {
+        hideCancelButton();
+    } else {
+        showCancelButton();
+    }
 }
 
 function loadValues(sourceDropdown, destinationDropdown) {

@@ -53,13 +53,12 @@ function ready() {
 }
 
 function openWindow() {
-    CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-        if (setting && setting.contentUrl) {
-            prepareContentWindowData(setting);
-        } else {
-            openAdminPanel();
-        }
-    });
+    let setting = CurrentScreenSettingsManager.getCurrentSetting();
+    if (setting && setting.contentUrl) {
+        prepareContentWindowData(setting);
+    } else {
+        openAdminPanel();
+    }
 }
 
 function prepareContentWindowData(screenInformation) {
@@ -121,10 +120,10 @@ function openContentWindow(contentUrl) {
 
 function subscribeToScreenReloadNotification() {
     notificationListener.subscribe('screens', 'refresh', (data) => {
-        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            if (data.screens.includes(setting.selectedScreenId))
-                WindowInstanceHolder.getWindow().reload();
-        })
+        let setting = CurrentScreenSettingsManager.getCurrentSetting();
+        if (data.screens.includes(setting.selectedScreenId)) {
+            WindowInstanceHolder.getWindow().reload();
+        }
     });
 }
 
@@ -139,10 +138,8 @@ function subscribeToScheduleUpdate() {
 
 
 function initScheduling() {
-    CurrentScreenSettingsManager.getCurrentSetting()
-        .then(screenInformation => {
-            scheduledTaskManager.initSchedulingForScreen(screenInformation);
-        })
+    let screenInformation = CurrentScreenSettingsManager.getCurrentSetting();
+    scheduledTaskManager.initSchedulingForScreen(screenInformation);
 }
 
 function bindSettingChanges() {
@@ -152,15 +149,13 @@ function bindSettingChanges() {
             .setSettings(data.settings)
             .setPriorities(data.priorityTypes)
             .mergeSettings();
-        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            let contentUrl = SettingsHelper.defineContentUrl(data, setting);
-            if (setting.contentUrl != contentUrl) {
-                setting.contentUrl = contentUrl;
-                CurrentScreenSettingsManager.saveCurrentSetting(setting);
-                WindowInstanceHolder.getWindow().loadURL(setting.contentUrl);
-            }
-        });
-
+        let setting = CurrentScreenSettingsManager.getCurrentSetting();
+        let contentUrl = SettingsHelper.defineContentUrl(data, setting);
+        if (setting.contentUrl != contentUrl) {
+            setting.contentUrl = contentUrl;
+            CurrentScreenSettingsManager.saveCurrentSetting(setting);
+            WindowInstanceHolder.getWindow().loadURL(setting.contentUrl);
+        }
     })
 }
 

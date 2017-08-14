@@ -10,8 +10,8 @@ class CronJobsManager {
 
     static initSettingsLoadJob(contentWindow) {
         let settingsLoadJob = new CronJob('*/5 * * * *', function() {
-            CurrentScreenSettingsManager.getCurrentSetting()
-                .then(setting => CurrentScreenSettingsManager.reloadCurrentScreenConfig(setting))
+            let setting = CurrentScreenSettingsManager.getCurrentSetting();
+            CurrentScreenSettingsManager.reloadCurrentScreenConfig(setting)
                 .then(contentUrl => CronJobsManager.reloadWindowContent(contentWindow, contentUrl))
                 .catch(error => Logger.error('Error occurred while performing CRON task:', error));
         }, null, true, 'UTC');

@@ -11,10 +11,7 @@ const _ = require('lodash');
 class CurrentScreenSettingsManager {
 
     static getCurrentSetting() {
-        return new Promise((resolve, reject) => {
-            let currentSetting = StorageManager.getStorage().getSelectedSetting();
-            resolve(currentSetting);
-        });
+        return StorageManager.getStorage().getSelectedSetting();
     }
 
     static saveCurrentSetting(selectedSetting) {

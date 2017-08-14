@@ -3,6 +3,7 @@ const ScheduleMergeTool = require('./schedule-merge-tool');
 const SettingsHelper = require('./helpers/settings_helper');
 const WindowInstanceHolder = require('./window-instance-holder');
 const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
+const StorageManager = require('./helpers/storage_manager');
 
 const _ = require('lodash');
 
@@ -74,19 +75,18 @@ class ScheduledTaskManager {
     }
 
     initSchedulingForScreen(screenInformation) {
-        LocalStorageManager.getFromStorage(StorageNames.SERVER_DATA_STORAGE, (error, serverData) => {
-            let settingWithSchedules = ScheduleMergeTool.merge(serverData, screenInformation);
+        let serverData = StorageManager.getStorage().getServerData();
+        let settingWithSchedules = ScheduleMergeTool.merge(serverData, screenInformation);
 
-            _.forEach(settingWithSchedules.schedules, schedule => {
-                let setting = serverData.originalSettings.find(setting => setting.id === schedule.settingId);
-                let contentId = SettingsHelper.defineContentId(setting, screenInformation);
-                if (contentId) {
-                    schedule.content = serverData.content.find(content => content.id === contentId);
-                    schedule.defaultUrl = screenInformation.contentUrl;
-                }
-            });
-            this.resetAllSchedules(settingWithSchedules.schedules, serverData.originalSettings);
+        _.forEach(settingWithSchedules.schedules, schedule => {
+            let setting = serverData.originalSettings.find(setting => setting.id === schedule.settingId);
+            let contentId = SettingsHelper.defineContentId(setting, screenInformation);
+            if (contentId) {
+                schedule.content = serverData.content.find(content => content.id === contentId);
+                schedule.defaultUrl = screenInformation.contentUrl;
+            }
         });
+        this.resetAllSchedules(settingWithSchedules.schedules, serverData.originalSettings);
     }
 
     static isScheduled() {
