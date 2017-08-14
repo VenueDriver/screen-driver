@@ -10,7 +10,7 @@ import {DaysOfWeek} from '../../../enums/days-of-week';
 export class DaysOfWeekMultiselectorComponent {
     @Input() selectedDays;
     @Input() editMode = false;
-    @Output() selected = new EventEmitter();
+    @Output() select = new EventEmitter();
 
     constructor() {
     }
@@ -32,6 +32,6 @@ export class DaysOfWeekMultiselectorComponent {
     onSelectedDaysOfWeekChanged(daysOfWeek) {
         let selectedDays = daysOfWeek.filter(day => day.selected);
         selectedDays = selectedDays.map(day => day.title.toUpperCase());
-        this.selected.emit(selectedDays.join(','))
+        this.select.emit(selectedDays)
     }
 }

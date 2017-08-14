@@ -125,8 +125,8 @@ export class SingleScheduleComponent implements OnInit {
         this.validate();
     }
 
-    setDaysOfWeek(daysOfWeek: string) {
-        this.eventTime.daysOfWeek = daysOfWeek;
+    setDaysOfWeek(daysOfWeek: Array<string>) {
+        this.eventTime.daysOfWeek = daysOfWeek.join(',');
         this.validate();
     }
 

@@ -12,7 +12,7 @@ export class CheckboxMultiselectorComponent {
     @Input() titleField = 'title';
     @Input() selectedField = 'selected';
     @Input() editMode = false;
-    @Output() changed = new EventEmitter();
+    @Output() change = new EventEmitter();
 
     items: Array<any>;
 
@@ -27,7 +27,7 @@ export class CheckboxMultiselectorComponent {
     checkItem(item) {
         if (this.editMode) {
             item.selected = !item.selected;
-            this.changed.emit(this.items);
+            this.change.emit(this.items);
         }
     }
 }
