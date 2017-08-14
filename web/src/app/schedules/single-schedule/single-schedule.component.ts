@@ -115,7 +115,6 @@ export class SingleScheduleComponent implements OnInit {
         if (this.isCreationMode()) {
             this.cancel.emit();
         } else {
-            this.eventTime.daysOfWeek = this.originalEventTime.daysOfWeek;
             this.eventTime = _.clone(this.originalEventTime);
             this.validationResult = {isValid: true};
         }
