@@ -9,8 +9,8 @@ export class CheckboxMultiselectorComponent implements OnInit {
     @Input('items') set _items(items: Array<any>) {
         this.items = this.convertItems(items);
     };
-    @Input() titleField: string;
-    @Input() selectedField: string = 'selected';
+    @Input() titleField = 'title';
+    @Input() selectedField = 'selected';
     @Output() changed = new EventEmitter();
 
     items: Array<any>;
