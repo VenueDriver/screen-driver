@@ -104,7 +104,7 @@ update_setting:
         cors: true
 
 refresh_screens:
-  handler: screens/refresh.refresh
+  handler: screen_notifications/refresh_screens.refresh
   environment: ${self:custom.properties.pusher}
   events:
     - http:
@@ -164,7 +164,7 @@ handle_schedules_stream:
             - StreamArn
 
 push_schedules_update:
-  handler: screens/reload_schedules.scheduleUpdateMessage
+  handler: screen_notifications/reload_schedules.scheduleUpdateMessage
   environment: ${self:custom.properties.pusher}
 
 handle_settings_stream:
@@ -178,5 +178,5 @@ handle_settings_stream:
             - StreamArn
 
 push_settings_update:
-  handler: screens/reload_settings.settingUpdateMessage
+  handler: screen_notifications/reload_settings.settingUpdateMessage
   environment: ${self:custom.properties.pusher}
