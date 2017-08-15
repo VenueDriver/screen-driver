@@ -12,7 +12,7 @@
         <div class="change-state-container">
             <div class="title" *ngIf="schedule">
                 <toggle-button class="change-state-button"
-                               [enabled]="schedule.enabled"
+                               [checked]="schedule.enabled"
                                [disabled]="!editable || isEditMode()"
                                (changed)="changeScheduleState($event)">
                 </toggle-button>
@@ -62,7 +62,7 @@
             </material-datepicker>
 
             <div class="title">
-                End event date:
+                End date:
             </div>
             <material-datepicker
                     class="datepicker"
