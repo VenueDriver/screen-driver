@@ -137,6 +137,10 @@ export class EventTime {
     private getTimeFromCron(cron: string): string {
         let hours = CronToDatetimeConverter.getHoursFromCron(cron);
         let minutes = CronToDatetimeConverter.getMinutesFromCron(cron);
+
+        if (hours == 12) {
+            return `${12}:${minutes}`;
+        }
         return `${hours % 12}:${minutes}`;
     }
 
