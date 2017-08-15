@@ -2,13 +2,15 @@ import {ValidationResult} from "./validation-result";
 import {Schedule} from "./schedule";
 import {CronToDatetimeConverter} from '../../datetime-cron-converter/cron-to-datetime.converter';
 import {Periodicity} from '../../enums/periodicity';
-import {DaysOfWeek} from '../../enums/days-of-week';
+import {DaysOfWeek, getShortDay} from '../../enums/days-of-week';
 import {DatetimeToCronConverter} from "../../datetime-cron-converter/datetime-cron.converter";
+
+import * as _ from 'lodash';
 
 export class EventTime {
 
-    periodicity = Periodicity.ONE_TIME_EVENT;
-    dayOfWeek = DaysOfWeek.MON;
+    periodicity = Periodicity.ONE_TIME;
+    daysOfWeek = getShortDay(DaysOfWeek.SUN);
     startDate: Date = EventTime.getTomorrowDate();
     endDate = this.startDate;
     startTime = '8:00';
@@ -26,10 +28,14 @@ export class EventTime {
     }
 
     validate(): ValidationResult {
+        if (_.isEmpty(this.daysOfWeek)) {
+            return {isValid: false, validationMessage: 'You should choose at least one day of week'};
+        }
+
         if (!this.isDateValid()) {
             return {isValid: false, validationMessage: 'The start and the end date should be specified'};
         }
-        if (this.startDate.getTime() === this.endDate.getTime() || this.periodicity !== Periodicity.ONE_TIME_EVENT) {
+        if (this.startDate.getTime() === this.endDate.getTime() || this.periodicity !== Periodicity.ONE_TIME) {
             let isTimeValid = this.isTimeValid();
             return {isValid: isTimeValid, validationMessage: isTimeValid ? '' : 'The end of the event couldn\'t be before the start'};
         }
@@ -39,28 +45,22 @@ export class EventTime {
     setProperties(schedule: Schedule) {
         this.periodicity = Periodicity[schedule.periodicity];
         switch (this.periodicity) {
-            case Periodicity.ONE_TIME_EVENT:
+            case Periodicity.ONE_TIME:
                 this.setPropertiesForOneTimeSchedule(schedule);
                 break;
-            case Periodicity.WEEKLY:
-                this.setPropertiesForWeeklySchedule(schedule);
-                break;
-            case Periodicity.DAILY:
-                this.setPropertiesForDailySchedule(schedule);
+            case Periodicity.REPEATABLE:
+                this.setPropertiesForRepeatableSchedule(schedule);
                 break;
         }
     }
 
     setCronsForSchedule(schedule: Schedule) {
         switch (this.periodicity) {
-            case Periodicity.ONE_TIME_EVENT:
+            case Periodicity.ONE_TIME:
                 this.setCronsForOneTimeSchedule(schedule);
                 break;
-            case Periodicity.WEEKLY:
-                this.setCronsForWeeklySchedule(schedule);
-                break;
-            case Periodicity.DAILY:
-                this.setCronsForDailySchedule(schedule);
+            case Periodicity.REPEATABLE:
+                this.setCronsForRepeatableSchedule(schedule);
                 break;
         }
     }
@@ -73,14 +73,9 @@ export class EventTime {
         this.setEndTimeProperties(schedule.endEventCron);
     }
 
-    private setPropertiesForWeeklySchedule(schedule: Schedule) {
-        this.dayOfWeek = CronToDatetimeConverter.getWeekDayFromCron(schedule.eventCron);
+    private setPropertiesForRepeatableSchedule(schedule: Schedule) {
+        this.daysOfWeek = CronToDatetimeConverter.getWeekDaysFromCron(schedule.eventCron);
 
-        this.setStartTimeProperties(schedule.eventCron);
-        this.setEndTimeProperties(schedule.endEventCron);
-    }
-
-    private setPropertiesForDailySchedule(schedule: Schedule) {
         this.setStartTimeProperties(schedule.eventCron);
         this.setEndTimeProperties(schedule.endEventCron);
     }
@@ -111,13 +106,13 @@ export class EventTime {
         return CronToDatetimeConverter.getDateFromCron(cron);
     }
 
-    private setCronsForWeeklySchedule(schedule: Schedule) {
-        schedule.eventCron = this.convertWeekDayAndTimeToCron(this.dayOfWeek, this.startTime, this.startTimePeriod);
-        schedule.endEventCron = this.convertWeekDayAndTimeToCron(this.dayOfWeek, this.endTime, this.endTimePeriod);
+    private setCronsForRepeatableSchedule(schedule: Schedule) {
+        schedule.eventCron = this.convertWeekDayAndTimeToCron(this.daysOfWeek, this.startTime, this.startTimePeriod);
+        schedule.endEventCron = this.convertWeekDayAndTimeToCron(this.daysOfWeek, this.endTime, this.endTimePeriod);
     }
 
-    private convertWeekDayAndTimeToCron(dayOfWeek: string, time: string, timePeriod: string) {
-        let cron = DatetimeToCronConverter.createCronForDayOfWeek(dayOfWeek);
+    private convertWeekDayAndTimeToCron(daysOfWeek: string, time: string, timePeriod: string) {
+        let cron = DatetimeToCronConverter.createCronForDaysOfWeek(daysOfWeek);
         let hours = EventTime.getHours(time, timePeriod);
         let minutes = +time.split(':')[1];
         return DatetimeToCronConverter.setTimeForCron(cron, hours, minutes);
@@ -152,7 +147,7 @@ export class EventTime {
     }
 
     private isDateValid(): boolean {
-        if (this.periodicity === Periodicity.ONE_TIME_EVENT) {
+        if (this.periodicity === Periodicity.ONE_TIME) {
             return !!(this.startDate && this.endDate);
         }
         return true;

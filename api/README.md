@@ -1,34 +1,41 @@
-# ScreenDriver Serverless REST API with DynamoDB and offline support
+# ScreenDriver Serverless REST API
 
 ## Setup
 
 1. ```npm install -g serverless```
 1. ```npm i``` 
 
-## Run service offline
-Setup dynamodb-local before start:
-
-* ```sls dynamodb install```
-
-Use ```npm run start-local``` to run locally perform.
-
-## Deploy
+## Run project offline
 ###  Before:
-Before run deploy commands, set environment variables to have access to AWS services:
+1. Java Runtime Engine (JRE) version 6.x or newer should be installed ([serverless-dynamodb-local](https://www.npmjs.com/package/serverless-dynamodb-local#this-plugin-requires) plugin requirement)
+1. Setup serverless-dynamodb-local plugin before start: ```sls dynamodb install``` 
+1. Set environment variables:
+
+  * `AWS_ACCESS_KEY_ID=any_key`
+  * `AWS_SECRET_ACCESS_KEY=any_secret_key`
+  * `PUSHER_APP_ID=<Pusher app ID>`
+  * `PUSHER_KEY=<Pusher key>`
+  * `PUSHER_SECRET=<Pusher secret>`
+  * `PUSHER_CLUSTER=<Pusher cluster>`
+
+
+Use ```npm start``` to run project locally.
+
+## Deployment
+###  Before:
+Before run deploy commands, set environment variables to have access to AWS:
 * ```export AWS_ACCESS_KEY_ID=<Your_AWS_access_key>```
 * ```export AWS_SECRET_ACCESS_KEY=<Your_AWS_secret_access_key>```
 
-###  Deploy all service:
-Use ```npm run deploy ``` to deploy the service
+or 
 
+* `sls config credentials --provider aws --key <Your_AWS_access_key> --secret <Your_AWS_secret_access_key>` to save credentials in serverless configs
 
-### Deploy with Docker:
-1. Run `deploy.sh <AWS Access Key ID> <AWS Secret Access Key> <Region> <Stage>` in `docker` directory to deploy project on AWS. 
+###  Deploy project:
+Use ```npm run deploy``` to deploy project
 
-`<Region>` and `<Stage>` are optional. Default values are `us-east-1` and `dev` respectively.
-
-###  Deploy function:
-Use ```npm run deploy-function <function_name> ``` to deploy single function
+###  Deploy a single function:
+Use ```npm run deploy-function <function_name> ``` to deploy a single function
 
 
 ## Invoke remote function
@@ -38,10 +45,10 @@ To invoke remote function use:
 To invoke with logging use ``-l`` flag (i.e. ```npm run invoke <function_name> -l```)
 
 ## Testing
-You should have running dynamodb on port 8000. Run local dynamodb with migrations using:
-* ```sls dynamodb start```
+You should have running dynamodb on port 8000. Run local dynamodb with migrations use:
+* ```npm run db```
 
-Use one of next commands to start testing:
+Use one of the following commands to start testing:
 * ```npm test```
 * ```sls invoke test --stage test```
 

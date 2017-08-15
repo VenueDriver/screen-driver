@@ -3,8 +3,8 @@
 require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 
-const getAllFunction = require('../schedule/list.js');
-const createFunction = require('../schedule/create.js');
+const getAllFunction = require('../src/schedule/list.js');
+const createFunction = require('../src/schedule/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const expect = mochaPlugin.chai.expect;
@@ -34,8 +34,8 @@ describe('schedule_list', () => {
     });
 
     it('Should display list with 2 schedules', () => {
-        let firstContent =  {settingId: 'id_mock_1', eventCron: '* */5 * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
-        let secondContent = {settingId: 'id_mock_2', eventCron: '*/5 * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME_EVENT'};
+        let firstContent =  {settingId: 'id_mock_1', eventCron: '* */5 * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let secondContent = {settingId: 'id_mock_2', eventCron: '*/5 * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);

@@ -3,8 +3,8 @@
 require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 
-const updateFunction = require('../venues/update.js');
-const createFunction = require('../venues/create.js');
+const updateFunction = require('../src/venues/update.js');
+const createFunction = require('../src/venues/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const lambdaWrapper = mochaPlugin.lambdaWrapper;

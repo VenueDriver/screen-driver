@@ -1,10 +1,9 @@
 'use strict';
 
 const {net} = require('electron');
-const PropertiesLoader = require('./helpers/properties_load_helper');
-const StorageManager = require('./helpers/storage_manager');
 const SettingMergeTool = require('./setting-merge-tool');
-const API_ENDPOINT = PropertiesLoader.getApiEndpoint();
+const StorageManager = require('./helpers/storage_manager');
+const API_ENDPOINT = process.env.API_HOST;
 
 class DataLoader {
 

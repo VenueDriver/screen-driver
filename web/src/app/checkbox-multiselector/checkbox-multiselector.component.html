@@ -1,0 +1,8 @@
+<div class="checkbox-multiselector-container">
+    <div *ngFor="let item of items"
+         class="checkbox-element"
+         [ngClass]="{'active' : item.selected, 'clickable' : editMode}"
+         (mousedown)="checkItem(item)">
+        {{item.title}}
+    </div>
+</div>

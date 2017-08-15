@@ -13,7 +13,7 @@
             <div class="title" *ngIf="schedule">
                 <toggle-button class="change-state-button"
                                [enabled]="schedule.enabled"
-                               [disabled]="isEditMode()"
+                               [disabled]="!editable || isEditMode()"
                                (changed)="changeScheduleState($event)">
                 </toggle-button>
             </div>
@@ -33,27 +33,25 @@
             </autocomplete>
         </div>
 
-        <div *ngIf="eventTime.periodicity === scheduleTypes.WEEKLY"
+        <div *ngIf="eventTime.periodicity === scheduleTypes.REPEATABLE"
              class="days-of-week-container">
 
             <div class="title">
-                Day of week:
+                Days of week:
             </div>
-            <autocomplete
-                    class="day-of-week"
-                    [editable]="true"
-                    [disabled]="!editable"
-                    [itemsMap]="daysOfWeek"
-                    [value]="eventTime.dayOfWeek"
-                    (valueChanged)="setDayOfWeek($event)">
-            </autocomplete>
+
+            <days-of-week-multiselector
+                    [selectedDays]="getDaysOfWeek()"
+                    [editMode]="editable"
+                    (select)="setDaysOfWeek($event)">
+            </days-of-week-multiselector>
         </div>
 
-        <div *ngIf="eventTime.periodicity === scheduleTypes.ONE_TIME_EVENT"
+        <div *ngIf="eventTime.periodicity === scheduleTypes.ONE_TIME"
              class="datepicker-container">
 
             <div class="title">
-                Start event date:
+                Start date:
             </div>
             <material-datepicker
                     class="datepicker"
@@ -77,7 +75,7 @@
 
         <div class="time-selector-container">
             <div class="title">
-                Start event time:
+                Start time:
             </div>
             <div class="time-selector">
                 <autocomplete
@@ -101,7 +99,7 @@
             </div>
 
             <div class="title">
-                End event time:
+                End time:
             </div>
             <div class="time-selector">
                 <autocomplete
