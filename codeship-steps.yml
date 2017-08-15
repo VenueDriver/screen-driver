@@ -14,6 +14,17 @@
   tag: staging
   command: bash -c "aws s3 sync /app-src/dist $AWS_S3_BUCKET_STAGING"
 
+- service: kiosk
+  name: build_kiosk_app
+  tag: staging
+  command: bash -c "npm run win-installer"
+
+- service: kiosk-deployment
+  name: staging_deploy_kiosk
+  encrypted_env_file: deployment.env.encrypted
+  tag: staging
+  command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING --exclude='win-unpacked/*'"
+
 - service: api
   name: serverless_api_production
   tag: production
