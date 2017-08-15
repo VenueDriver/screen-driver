@@ -4,8 +4,8 @@ require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 
 
-const updateFunction = require('../content/update.js');
-const createFunction = require('../content/create.js');
+const updateFunction = require('../src/content/update.js');
+const createFunction = require('../src/content/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const expect = mochaPlugin.chai.expect;

@@ -35,3 +35,17 @@ plugins:
 
 resources:
   Resources: ${self:custom.resources}
+
+package:
+  exclude:
+    - docker/**
+    - test/**
+    - .dockerignore
+    - package.json
+    - package-lock.json
+    - README.md
+    - node_modules/serverless-dynamodb-local/**
+    - node_modules/dynamodb-localhost/**
+    - node_modules/serverless-mocha-plugin/**
+    - node_modules/mocha/**
+    - node_modules/serverless-offline/**
