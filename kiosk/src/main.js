@@ -14,6 +14,7 @@ const SettingsHelper = require('./js/helpers/settings_helper');
 const {scheduledTaskManager} = require('./js/scheduled-task-manager');
 const WindowInstanceHolder = require('./js/window-instance-holder');
 const DataLoader = require('./js/data_loader');
+const StorageManager = require('./js/helpers/storage_manager');
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
@@ -39,24 +40,25 @@ function setupLogger() {
 }
 
 function ready() {
-    powerSaveBlocker.start('prevent-display-sleep');
-    notificationListener = new NotificationListener();
-    bindSettingChanges();
-    openWindow();
+    StorageManager.loadDataFromLocalStorage().then(() => {
+        powerSaveBlocker.start('prevent-display-sleep');
+        notificationListener = new NotificationListener();
+        bindSettingChanges();
+        openWindow();
 
-    registerHotKeys();
-    addHotKeyListeners();
-    addEventListeners();
+        registerHotKeys();
+        addHotKeyListeners();
+        addEventListeners();
+    });
 }
 
 function openWindow() {
-    CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-        if (setting && setting.contentUrl) {
-            prepareContentWindowData(setting);
-        } else {
-            openAdminPanel();
-        }
-    });
+    let setting = CurrentScreenSettingsManager.getCurrentSetting();
+    if (setting && setting.contentUrl) {
+        prepareContentWindowData(setting);
+    } else {
+        openAdminPanel();
+    }
 }
 
 function prepareContentWindowData(screenInformation) {
@@ -118,10 +120,10 @@ function openContentWindow(contentUrl) {
 
 function subscribeToScreenReloadNotification() {
     notificationListener.subscribe('screens', 'refresh', (data) => {
-        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            if (data.screens.includes(setting.selectedScreenId))
-                WindowInstanceHolder.getWindow().reload();
-        })
+        let setting = CurrentScreenSettingsManager.getCurrentSetting();
+        if (data.screens.includes(setting.selectedScreenId)) {
+            WindowInstanceHolder.getWindow().reload();
+        }
     });
 }
 
@@ -136,10 +138,8 @@ function subscribeToScheduleUpdate() {
 
 
 function initScheduling() {
-    CurrentScreenSettingsManager.getCurrentSetting()
-        .then(screenInformation => {
-            scheduledTaskManager.initSchedulingForScreen(screenInformation);
-        })
+    let screenInformation = CurrentScreenSettingsManager.getCurrentSetting();
+    scheduledTaskManager.initSchedulingForScreen(screenInformation);
 }
 
 function bindSettingChanges() {
@@ -149,15 +149,13 @@ function bindSettingChanges() {
             .setSettings(data.settings)
             .setPriorities(data.priorityTypes)
             .mergeSettings();
-        CurrentScreenSettingsManager.getCurrentSetting().then(setting => {
-            let contentUrl = SettingsHelper.defineContentUrl(data, setting);
-            if (setting.contentUrl != contentUrl) {
-                setting.contentUrl = contentUrl;
-                CurrentScreenSettingsManager.saveCurrentSetting(setting);
-                WindowInstanceHolder.getWindow().loadURL(setting.contentUrl);
-            }
-        });
-
+        let setting = CurrentScreenSettingsManager.getCurrentSetting();
+        let contentUrl = SettingsHelper.defineContentUrl(data, setting);
+        if (setting.contentUrl != contentUrl) {
+            setting.contentUrl = contentUrl;
+            CurrentScreenSettingsManager.saveCurrentSetting(setting);
+            WindowInstanceHolder.getWindow().loadURL(setting.contentUrl);
+        }
     })
 }
 
