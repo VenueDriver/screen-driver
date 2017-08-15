@@ -1,7 +1,7 @@
 'use strict';
 
 const {LocalStorageManager, StorageNames} = require('./local_storage_helper');
-const Storage = require('../storage/storage');
+const Storage = require('../storage/data_storage');
 
 class StorageManager {
 

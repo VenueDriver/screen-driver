@@ -2,7 +2,7 @@
 
 const _ = require('lodash');
 
-class Storage {
+class DataStorage {
 
     setServerData(serverData) {
         this._serverData = _.cloneDeep(serverData);
@@ -21,6 +21,6 @@ class Storage {
     }
 }
 
-const STORAGE = new Storage();
+const DATA_STORAGE = new DataStorage();
 
-module.exports = STORAGE;
+module.exports = DATA_STORAGE;
