@@ -30,3 +30,21 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
     volumes_from:
       - web
+
+  kiosk:
+    environment:
+      - API_HOST=
+    build:
+      context: kiosk
+      dockerfile: docker/Dockerfile
+    encrypted_env_file: deployment.env.encrypted
+    volumes:
+      - ./kiosk:/app-src
+
+  kiosk-deployment:
+    image: codeship/aws-deployment
+    encrypted_env_file: deployment.env.encrypted
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes_from:
+      - kiosk
