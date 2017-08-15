@@ -1,0 +1,7 @@
+.idea
+.gitignore
+
+node_modules
+release-builds
+dist
+*.log
