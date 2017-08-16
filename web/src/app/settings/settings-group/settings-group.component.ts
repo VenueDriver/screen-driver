@@ -1,5 +1,7 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {Setting} from "../entities/setting";
+import {SettingsService} from "../settings.service";
+import {HeaderService} from "../../header/header.service";
 
 @Component({
     selector: 'settings-group',
@@ -13,7 +15,8 @@ export class SettingsGroupComponent {
     @Output() settingUpdate = new EventEmitter();
     @Output() settingSelect = new EventEmitter();
 
-    constructor() {
+    constructor(private headerService: HeaderService,
+                private settingsService: SettingsService) {
     }
 
     isActive(setting: Setting): boolean {
@@ -26,6 +29,11 @@ export class SettingsGroupComponent {
 
     onSettingSelection(setting: Setting) {
         this.settingSelect.emit(setting);
+    }
+
+    enableCreationMode(type) {
+        this.settingsService.emitCreateSettingEvent(true, type);
+        this.headerService.pushSidebarToggleEvent();
     }
 
 }

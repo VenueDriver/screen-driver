@@ -20,8 +20,7 @@ export class SettingsManagerComponent implements OnInit {
     showSidebar = true;
 
     constructor(private headerService: HeaderService,
-                private settingStateHolderService: SettingStateHolderService,
-                private settingsService: SettingsService) {
+                private settingStateHolderService: SettingStateHolderService) {
     }
 
     ngOnInit() {
@@ -48,11 +47,6 @@ export class SettingsManagerComponent implements OnInit {
 
     onSettingSelection(setting: Setting) {
         this.settingSelected.emit(setting);
-        this.headerService.pushSidebarToggleEvent();
-    }
-
-    enableCreationMode() {
-        this.settingsService.emitCreateSettingEvent(true);
         this.headerService.pushSidebarToggleEvent();
     }
 

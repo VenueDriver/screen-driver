@@ -1,5 +1,15 @@
 <div class="settings-group-container">
-    {{priorityType.name}}
+
+    <div class="group-header">
+        <div class="title">
+            <b>{{priorityType.name}}</b>
+        </div>
+        <div class="plus-button add-button"
+             (click)="enableCreationMode(type)"
+             title="Add new setting">
+        </div>
+    </div>
+
     <li *ngFor="let setting of settings" [class.active]="isActive(setting)">
         <single-setting
                 [setting]="setting"

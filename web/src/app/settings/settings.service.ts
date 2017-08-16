@@ -9,7 +9,7 @@ const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;
 @Injectable()
 export class SettingsService {
 
-    private createSettingEvent: Subject<any> = new BehaviorSubject({});
+    private createSettingEvent: BehaviorSubject<any> = new BehaviorSubject({});
 
     constructor(private http: Http) { }
 
@@ -31,7 +31,11 @@ export class SettingsService {
         return this.createSettingEvent;
     }
 
-    emitCreateSettingEvent(isEnabled: boolean) {
-        this.createSettingEvent.next(isEnabled);
+    getCreateSettingLastValue(): any {
+        return this.createSettingEvent.getValue();
+    }
+
+    emitCreateSettingEvent(isEnabled: boolean, priorityType?: any) {
+        this.createSettingEvent.next({isEnabled: isEnabled, priorityType: priorityType});
     }
 }
