@@ -51,10 +51,6 @@ export class SettingsManagerComponent implements OnInit {
         this.headerService.pushSidebarToggleEvent();
     }
 
-    isActive(setting: Setting): boolean {
-        return this.activeSetting && this.activeSetting.id === setting.id;
-    }
-
     enableCreationMode() {
         this.settingsService.emitCreateSettingEvent(true);
         this.headerService.pushSidebarToggleEvent();
@@ -77,5 +73,13 @@ export class SettingsManagerComponent implements OnInit {
     getEnabledSettingsCount(): number {
         let enabledSettings = _.filter(this.settings, 'enabled');
         return enabledSettings.length;
+    }
+
+    getPriorityTypes(): any[] {
+        return this.settingStateHolderService.getPriorityTypes();
+    }
+
+    getSettingsForType(type) {
+        return this.settings.filter(setting => setting.priority === type.id);
     }
 }

@@ -10,14 +10,13 @@
     </div>
 
     <ul class="nav navbar-stacked settings-list scrollable">
-        <li *ngFor="let setting of settings" [class.active]="isActive(setting)">
-            <single-setting
-                    [setting]="setting"
-                    [activeSetting]="activeSetting"
-                    (update)="handleUpdateSettingResponse()"
-                    (click)="onSettingSelection(setting)">
-            </single-setting>
-        </li>
+        <settings-group *ngFor="let type of getPriorityTypes()"
+                        [priorityType]="type"
+                        [settings]="getSettingsForType(type)"
+                        [activeSetting]="activeSetting"
+                        (settingUpdate)="handleUpdateSettingResponse()"
+                        (settingSelect)="onSettingSelection($event)">
+        </settings-group>
     </ul>
 
     <div class="settings-list-footer">

@@ -1,0 +1,11 @@
+<div class="settings-group-container">
+    {{priorityType.name}}
+    <li *ngFor="let setting of settings" [class.active]="isActive(setting)">
+        <single-setting
+                [setting]="setting"
+                [activeSetting]="activeSetting"
+                (update)="handleSettingUpdate()"
+                (click)="onSettingSelection(setting)">
+        </single-setting>
+    </li>
+</div>
