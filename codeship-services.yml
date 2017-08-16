@@ -26,8 +26,6 @@ services:
   awsdeployment:
     image: codeship/aws-deployment
     encrypted_env_file: deployment.env.encrypted
-    environment:
-      - AWS_DEFAULT_REGION=us-east-1
     volumes_from:
       - web
 
@@ -42,7 +40,5 @@ services:
   kiosk-deployment:
     image: codeship/aws-deployment
     encrypted_env_file: deployment.env.encrypted
-    environment:
-      - AWS_DEFAULT_REGION=us-east-1
     volumes_from:
       - kiosk
