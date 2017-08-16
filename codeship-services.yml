@@ -32,8 +32,6 @@ services:
       - web
 
   kiosk:
-    environment:
-      - API_HOST=
     build:
       context: kiosk
       dockerfile: docker/Dockerfile

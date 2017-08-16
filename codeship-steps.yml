@@ -17,7 +17,7 @@
 - service: kiosk
   name: build_kiosk_app
   tag: staging
-  command: bash -c "npm run win-installer"
+  command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
 
 - service: kiosk-deployment
   name: staging_deploy_kiosk
