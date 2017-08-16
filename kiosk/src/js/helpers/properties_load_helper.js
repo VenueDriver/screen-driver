@@ -1,7 +1,7 @@
 'use strict';
 
 const PropertiesReader = require('properties-reader');
-const properties = PropertiesReader(__dirname + '/../../../config/app.properties');
+const properties = PropertiesReader(__dirname + '/../../../properties/app.properties');
 
 class PropertiesLoader {
 
