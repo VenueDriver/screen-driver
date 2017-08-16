@@ -12,8 +12,8 @@
         <div class="change-state-container">
             <div class="title" *ngIf="schedule">
                 <toggle-button class="change-state-button"
-                               [enabled]="schedule.enabled"
-                               [disabled]="!editable || isEditMode()"
+                               [checked]="schedule.enabled"
+                               [disabled]="isEditMode()"
                                (changed)="changeScheduleState($event)">
                 </toggle-button>
             </div>
@@ -26,7 +26,6 @@
             <autocomplete
                     class="schedule-type"
                     [editable]="true"
-                    [disabled]="!editable"
                     [itemsMap]="scheduleTypes"
                     [value]="eventTime.periodicity"
                     (valueChanged)="setScheduleType($event)">
@@ -42,7 +41,7 @@
 
             <days-of-week-multiselector
                     [selectedDays]="getDaysOfWeek()"
-                    [editMode]="editable"
+                    [editMode]="true"
                     (select)="setDaysOfWeek($event)">
             </days-of-week-multiselector>
         </div>
@@ -55,18 +54,16 @@
             </div>
             <material-datepicker
                     class="datepicker"
-                    [disabled]="!editable"
                     [(date)]="eventTime.startDate"
                     (onSelect)="onStartDateSelect()"
                     dateFormat="MM-DD-YYYY">
             </material-datepicker>
 
             <div class="title">
-                End event date:
+                End date:
             </div>
             <material-datepicker
                     class="datepicker"
-                    [disabled]="!editable"
                     [(date)]="eventTime.endDate"
                     (onSelect)="onEndDateSelect()"
                     dateFormat="MM-DD-YYYY">
@@ -82,7 +79,6 @@
                         class="time"
                         [placeholder]="'Select time'"
                         [editable]="true"
-                        [disabled]="!editable"
                         [items]="timeItems"
                         [value]="eventTime.startTime"
                         (valueChanged)="setTime('startTime', $event)">
@@ -91,7 +87,6 @@
                 <autocomplete
                         class="period"
                         [editable]="true"
-                        [disabled]="!editable"
                         [items]="timePeriods"
                         [value]="eventTime.startTimePeriod"
                         (valueChanged)="setTime('startTimePeriod', $event)">
@@ -106,7 +101,6 @@
                         class="time"
                         [placeholder]="'Select time'"
                         [editable]="true"
-                        [disabled]="!editable"
                         [items]="timeItems"
                         [value]="eventTime.endTime"
                         (valueChanged)="setTime('endTime', $event)">
@@ -115,7 +109,6 @@
                 <autocomplete
                         class="period"
                         [editable]="true"
-                        [disabled]="!editable"
                         [items]="timePeriods"
                         [value]="eventTime.endTimePeriod"
                         (valueChanged)="setTime('endTimePeriod', $event)">

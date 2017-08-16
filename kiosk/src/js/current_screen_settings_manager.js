@@ -1,8 +1,8 @@
 'use strict';
 
-const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
+const {LocalStorageManager} = require('./helpers/local_storage_helper');
+const StorageManager = require('./helpers/storage_manager');
 const SettingsHelper = require('./helpers/settings_helper');
-const ScheduleMergeTool = require('./schedule-merge-tool');
 const DataLoader = require('./data_loader');
 
 const _ = require('lodash');
@@ -10,21 +10,11 @@ const _ = require('lodash');
 class CurrentScreenSettingsManager {
 
     static getCurrentSetting() {
-        return new Promise((resolve, reject) => {
-            LocalStorageManager.hasStorage(StorageNames.SELECTED_SCREEN_STORAGE, (error, hasKey) => {
-                if (hasKey) {
-                    LocalStorageManager.getAllFromStorage((error, data) => resolve(data));
-                } else {
-                    LocalStorageManager.getFromStorage(StorageNames.SELECTED_SETTING_STORAGE, (error, data) => {
-                        return resolve(data);
-                    });
-                }
-            });
-        });
+        return StorageManager.getStorage().getSelectedSetting();
     }
 
     static saveCurrentSetting(selectedSetting) {
-        LocalStorageManager.putInStorage(StorageNames.SELECTED_SETTING_STORAGE, selectedSetting);
+        StorageManager.saveSelectedSetting(selectedSetting);
     }
 
     static reloadCurrentScreenConfig(setting) {
@@ -55,7 +45,7 @@ class CurrentScreenSettingsManager {
     }
 
     static updateContentUrl(contentUrl, setting) {
-        if (contentUrl !== setting.contentUrl || LocalStorageManager.hasStorage(StorageNames.SELECTED_SCREEN_STORAGE)) {
+        if (contentUrl !== setting.contentUrl) {
             let newSetting = _.clone(setting);
             newSetting.contentUrl = contentUrl;
             CurrentScreenSettingsManager.saveCurrentSetting(newSetting);

@@ -1,11 +1,11 @@
 'use strict';
 
 const {net} = require('electron');
-const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
+const SettingMergeTool = require('./setting-merge-tool');
+const StorageManager = require('./helpers/storage_manager');
 const PropertiesLoader = require('./helpers/properties_load_helper');
-let SettingMergeTool = require('./setting-merge-tool');
 
-const API = PropertiesLoader.getApiEndpoint();
+const API_ENDPOINT = PropertiesLoader.getApiEndpoint();
 
 class DataLoader {
 
@@ -20,7 +20,7 @@ class DataLoader {
         return Promise.all(promises)
             .then(values => {
                 let serverData = DataLoader.composeServerData(values);
-                LocalStorageManager.putInStorage(StorageNames.SERVER_DATA_STORAGE, serverData);
+                StorageManager.saveServerData(serverData);
                 return serverData;
             });
     }
@@ -46,35 +46,35 @@ class DataLoader {
     }
 
     static loadVenues() {
-        let venuesUrl = `${API}/api/venues`;
+        let venuesUrl = `${API_ENDPOINT}/api/venues`;
         let request = net.request(venuesUrl);
 
         return DataLoader.generatePromise(request);
     }
 
     static loadContent() {
-        let contentUrl = `${API}/api/content`;
+        let contentUrl = `${API_ENDPOINT}/api/content`;
         let request = net.request(contentUrl);
 
         return DataLoader.generatePromise(request);
     }
 
     static loadSettings() {
-        let settingsUrl = `${API}/api/settings`;
+        let settingsUrl = `${API_ENDPOINT}/api/settings`;
         let request = net.request(settingsUrl);
 
         return DataLoader.generatePromise(request);
     }
 
     static loadNotificationsConfig() {
-        let notificationsConfigUrl = `${API}/api/screens/notification-config`;
+        let notificationsConfigUrl = `${API_ENDPOINT}/api/screens/notification-config`;
         let request = net.request(notificationsConfigUrl);
 
         return DataLoader.generatePromise(request);
     }
 
     static loadSchedules() {
-        let settingsUrl = `${API}/api/schedules`;
+        let settingsUrl = `${API_ENDPOINT}/api/schedules`;
         let request = net.request(settingsUrl);
 
         return DataLoader.generatePromise(request);

@@ -14,7 +14,10 @@
         </single-schedule>
     </div>
 
-    <div *ngFor="let schedule of filteredSchedules">
+    <div class="schedules" *ngFor="let schedule of filteredSchedules">
+        <div class="setting-name">
+            {{findSettingForSchedule(schedule).name}}
+        </div>
         <single-schedule
                 [schedule]="schedule"
                 [editable]="isEditable()"

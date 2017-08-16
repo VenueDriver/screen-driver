@@ -5,7 +5,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
     templateUrl: './toggle-button.component.html'
 })
 export class ToggleButtonComponent {
-    @Input() enabled: boolean;
+    @Input() checked: boolean;
     @Input() title: string;
     @Input() disabled: boolean = false;
     @Output() changed = new EventEmitter();
@@ -14,6 +14,6 @@ export class ToggleButtonComponent {
     }
 
     onClick() {
-        this.changed.emit(!this.enabled);
+        this.changed.emit(!this.checked);
     }
 }
