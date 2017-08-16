@@ -3,7 +3,6 @@ import {Setting} from "../entities/setting";
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 import {HeaderService} from "../../header/header.service";
 import {SettingsService} from "../settings.service";
-import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
 
@@ -22,8 +21,7 @@ export class SettingsManagerComponent implements OnInit {
 
     constructor(private headerService: HeaderService,
                 private settingStateHolderService: SettingStateHolderService,
-                private settingsService: SettingsService,
-                private notificationService: NotificationService) {
+                private settingsService: SettingsService) {
     }
 
     ngOnInit() {
@@ -60,19 +58,6 @@ export class SettingsManagerComponent implements OnInit {
     enableCreationMode() {
         this.settingsService.emitCreateSettingEvent(true);
         this.headerService.pushSidebarToggleEvent();
-    }
-
-    onToggleClick(event: any) {
-        event.stopPropagation();
-    }
-
-    changeSettingState(setting: Setting, state: boolean) {
-        setting.enabled = state;
-        this.settingsService.updateSetting(setting)
-            .subscribe(
-                response => this.handleUpdateSettingResponse(),
-                error => this.notificationService.showErrorNotificationBar('Unable to change setting state')
-            );
     }
 
     handleUpdateSettingResponse() {

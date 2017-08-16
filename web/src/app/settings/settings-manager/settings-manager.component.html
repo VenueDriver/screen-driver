@@ -11,17 +11,12 @@
 
     <ul class="nav navbar-stacked settings-list scrollable">
         <li *ngFor="let setting of settings" [class.active]="isActive(setting)">
-            <a (click)="onSettingSelection(setting)">
-                <div>
-                    {{setting.name}}
-                    <priority-type-tag [setting]="setting"></priority-type-tag>
-                </div>
-                <toggle-button class="switcher"
-                               [enabled]="setting.enabled"
-                               (changed)="changeSettingState(setting, $event)"
-                               (click)="onToggleClick($event)">
-                </toggle-button>
-            </a>
+            <single-setting
+                    [setting]="setting"
+                    [activeSetting]="activeSetting"
+                    (update)="handleUpdateSettingResponse()"
+                    (click)="onSettingSelection(setting)">
+            </single-setting>
         </li>
     </ul>
 
