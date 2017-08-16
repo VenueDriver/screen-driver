@@ -14,7 +14,6 @@ class StorageManager {
             Storage.setServerData(data[StorageNames.SERVER_DATA_STORAGE]);
             Storage.setSelectedSetting(data[StorageNames.SELECTED_SETTING_STORAGE]);
             Storage.setScheduledTask(data[StorageNames.SCHEDULED_TASK_STORAGE]);
-            console.log(Storage.getScheduledTask());
             resolve(data);
         }));
     }

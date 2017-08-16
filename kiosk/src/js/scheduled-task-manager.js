@@ -76,7 +76,6 @@ class ScheduledTaskManager {
             schedule.endStartSchedule.destroy();
         });
         this.scheduledCronJobs.pop();
-        StorageManager.saveScheduledTask({});
     }
 
     initSchedulingForScreen(screenInformation) {
@@ -103,6 +102,14 @@ class ScheduledTaskManager {
         let serverData = StorageManager.getStorage().getServerData();
         let setting = _.find(serverData.originalSettings, setting => setting.id === schedule.settingId);
         return SettingsHelper.defineContentId(setting, screenInformation);
+    }
+
+    resumeInterruptedScheduledTask() {
+        let schedule = StorageManager.getStorage().getScheduledTask();
+        let window = WindowInstanceHolder.getWindow();
+        if (!_.isEmpty(schedule)) {
+            window.loadURL(schedule.content.url);
+        }
     }
 }
 
