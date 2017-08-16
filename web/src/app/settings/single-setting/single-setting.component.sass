@@ -3,4 +3,20 @@
   display: inline-block
 
 a
+  display: flex
+  align-items: center
   padding: 10px 15px
+
+  &:hover
+    background-color: #ffffff
+
+  &.default-button
+    display: inline-block
+
+    &:hover
+      background-color: transparent
+      text-decoration: underline
+
+  .switcher
+    margin: 5px 0 0 auto
+    display: inline-block
