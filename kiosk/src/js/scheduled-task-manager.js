@@ -3,6 +3,7 @@ const ScheduleMergeTool = require('./schedule-merge-tool');
 const SettingsHelper = require('./helpers/settings_helper');
 const WindowInstanceHolder = require('./window-instance-holder');
 const StorageManager = require('./helpers/storage_manager');
+const CronParser = require('./helpers/cron_parser');
 
 const _ = require('lodash');
 
@@ -27,7 +28,7 @@ class ScheduledTaskManager {
 
         function runScheduledTask() {
             if (!isScheduled()) {
-                this._saveTaskInStorage(schedule);
+                ScheduledTaskManager._saveTaskInStorage(schedule);
                 if (!_.isEmpty(composedSchedule.backgroundCron)) {
                     composedSchedule.backgroundCron.destroy();
                 }
@@ -43,9 +44,10 @@ class ScheduledTaskManager {
         }
     }
 
-    _saveTaskInStorage(schedule) {
+    static _saveTaskInStorage(schedule) {
         let currentSchedule = schedule;
         currentSchedule.startDateTime = new Date();
+        currentSchedule.endDateTime = CronParser.parseEndEventCron(schedule);
         StorageManager.saveScheduledTask(currentSchedule);
     }
 
