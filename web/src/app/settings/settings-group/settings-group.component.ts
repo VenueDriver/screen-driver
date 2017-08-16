@@ -31,7 +31,7 @@ export class SettingsGroupComponent {
         this.settingSelect.emit(setting);
     }
 
-    enableCreationMode(type) {
+    enableCreationMode(type: Object) {
         this.settingsService.emitCreateSettingEvent(true, type);
         this.headerService.pushSidebarToggleEvent();
     }

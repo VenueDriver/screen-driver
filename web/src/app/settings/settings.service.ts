@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Http, Response} from "@angular/http";
 import {Setting} from "./entities/setting";
 import {environment} from "../../environments/environment";
-import {Observable, Subject, BehaviorSubject} from "rxjs";
+import {Observable, BehaviorSubject} from "rxjs";
 
 const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;
 
@@ -35,7 +35,7 @@ export class SettingsService {
         return this.createSettingEvent.getValue();
     }
 
-    emitCreateSettingEvent(isEnabled: boolean, priorityType?: any) {
+    emitCreateSettingEvent(isEnabled: boolean, priorityType?: Object) {
         this.createSettingEvent.next({isEnabled: isEnabled, priorityType: priorityType});
     }
 }
