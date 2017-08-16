@@ -8,6 +8,8 @@ Before run the app for development perform the following set of commands (for Li
 1. `apt-get -y install libgtkextra-dev libgconf2-dev libnss3 libasound2 libxtst-dev libxss1`
 1. `npm i -g electron`
 
+Create `development.app.properties` file inside `properties` directory and specify a properties as in `app.properties` file.
+
 ### Run project 
 
 To run app for development perform:
