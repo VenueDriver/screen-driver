@@ -21,13 +21,25 @@ export class SingleSettingComponent {
         event.stopPropagation();
     }
 
-    changeSettingState(setting: Setting, state: boolean) {
-        setting.enabled = state;
-        this.settingsService.updateSetting(setting)
+    changeSettingState(state: boolean) {
+        this.setting.enabled = state;
+        this.settingsService.updateSetting(this.setting)
             .subscribe(
                 response => this.update.emit(),
                 error => this.notificationService.showErrorNotificationBar('Unable to change setting state')
             );
     }
 
+    onEnableForciblyClicked() {
+        this.setting.forciblyEnabled = !this.setting.forciblyEnabled;
+        this.settingsService.updateSetting(this.setting)
+            .subscribe(
+                response => this.update.emit(),
+                error => this.notificationService.showErrorNotificationBar('Unable to enable setting forcibly')
+            );
+    }
+
+    isEnabledForcibly() {
+        return this.setting.forciblyEnabled;
+    }
 }

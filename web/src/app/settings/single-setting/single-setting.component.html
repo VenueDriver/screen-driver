@@ -2,9 +2,15 @@
     <div>
         {{setting.name}}
     </div>
-    <toggle-button class="switcher"
-                   [enabled]="setting.enabled"
-                   (changed)="changeSettingState(setting, $event)"
-                   (click)="onToggleClick($event)">
-    </toggle-button>
+    <div class="controls">
+        <div class="forced-enabled-button"
+                [ngClass]="{'forced-enabled-button-on' : !isEnabledForcibly(), 'forced-enabled-button-off' : isEnabledForcibly()}"
+             (click)="onEnableForciblyClicked()">
+        </div>
+        <toggle-button class="switcher"
+                       [enabled]="setting.enabled"
+                       (changed)="changeSettingState($event)"
+                       (click)="onToggleClick($event)">
+        </toggle-button>
+    </div>
 </a>
