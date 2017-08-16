@@ -11,8 +11,10 @@ class StorageManager {
 
     static loadDataFromLocalStorage() {
         return new Promise((resolve, reject) => StorageManager.getAllFromStorage((error, data) => {
-            Storage.setServerData(data.server_data);
-            Storage.setSelectedSetting(data.selected_setting);
+            Storage.setServerData(data[StorageNames.SERVER_DATA_STORAGE]);
+            Storage.setSelectedSetting(data[StorageNames.SELECTED_SETTING_STORAGE]);
+            Storage.setScheduledTask(data[StorageNames.SCHEDULED_TASK_STORAGE]);
+            console.log(Storage.getScheduledTask());
             resolve(data);
         }));
     }
@@ -25,6 +27,11 @@ class StorageManager {
     static saveSelectedSetting(selectedSetting) {
         StorageManager.putInStorage(StorageNames.SELECTED_SETTING_STORAGE, selectedSetting);
         Storage.setSelectedSetting(selectedSetting);
+    }
+
+    static saveScheduledTask(scheduledTask) {
+        StorageManager.putInStorage(StorageNames.SCHEDULED_TASK_STORAGE, scheduledTask);
+        Storage.setScheduledTask(scheduledTask);
     }
 
     static putInStorage(key, value) {

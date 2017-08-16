@@ -9,8 +9,6 @@ const _ = require('lodash');
 
 let instance = null;
 
-const currentSchedule = {task: ''};
-
 class ScheduledTaskManager {
     constructor() {
         if (!instance) {
@@ -30,7 +28,9 @@ class ScheduledTaskManager {
 
         function runScheduledTask() {
             if (!ScheduledTaskManager.isScheduled()) {
+                let currentSchedule = {};
                 currentSchedule.task = startScheduleCronJob;
+                StorageManager.saveScheduledTask(currentSchedule);
                 if (!_.isEmpty(composedSchedule.backgroundCron)) {
                     composedSchedule.backgroundCron.destroy();
                 }
@@ -42,7 +42,7 @@ class ScheduledTaskManager {
 
         function disableCron() {
             ScheduledTaskManager.reloadWindow(schedule, schedule.defaultUrl);
-            currentSchedule.task = {};
+            StorageManager.saveScheduledTask({});
         }
     }
 
@@ -71,7 +71,7 @@ class ScheduledTaskManager {
             schedule.endStartSchedule.destroy();
         });
         this.scheduledCronJobs.pop();
-        currentSchedule.task = {};
+        StorageManager.saveScheduledTask({});
     }
 
     initSchedulingForScreen(screenInformation) {
@@ -90,7 +90,7 @@ class ScheduledTaskManager {
     }
 
     static isScheduled() {
-        return !_.isEmpty(currentSchedule.task);
+        return !_.isEmpty(StorageManager.getStorage().getScheduledTask());
     }
 }
 
@@ -98,5 +98,5 @@ const scheduledTaskManager = new ScheduledTaskManager();
 
 module.exports = {
     scheduledTaskManager: scheduledTaskManager,
-    currentSchedule: currentSchedule
+    currentSchedule: StorageManager.getStorage().getSelectedSetting()
 };
