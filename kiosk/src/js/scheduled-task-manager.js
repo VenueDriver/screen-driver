@@ -2,7 +2,6 @@ const cron = require('node-cron');
 const ScheduleMergeTool = require('./schedule-merge-tool');
 const SettingsHelper = require('./helpers/settings_helper');
 const WindowInstanceHolder = require('./window-instance-holder');
-const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
 const StorageManager = require('./helpers/storage_manager');
 
 const _ = require('lodash');
@@ -27,26 +26,30 @@ class ScheduledTaskManager {
         endScheduleCronJob.start();
 
         function runScheduledTask() {
-            if (!ScheduledTaskManager.isScheduled()) {
-                let currentSchedule = {};
-                currentSchedule.task = startScheduleCronJob;
-                StorageManager.saveScheduledTask(currentSchedule);
+            if (!isScheduled()) {
+                this._saveTaskInStorage(schedule);
                 if (!_.isEmpty(composedSchedule.backgroundCron)) {
                     composedSchedule.backgroundCron.destroy();
                 }
-                ScheduledTaskManager.reloadWindow(schedule, schedule.content.url);
+                ScheduledTaskManager.reloadWindow(schedule.content.url);
             } else if (_.isEmpty(composedSchedule.backgroundCron)) {
                 composedSchedule.backgroundCron = cron.schedule('* * * * * *', () => runScheduledTask(), true);
             }
         }
 
         function disableCron() {
-            ScheduledTaskManager.reloadWindow(schedule, schedule.defaultUrl);
+            ScheduledTaskManager.reloadWindow(schedule.defaultUrl);
             StorageManager.saveScheduledTask({});
         }
     }
 
-    static reloadWindow(schedule, url) {
+    _saveTaskInStorage(schedule) {
+        let currentSchedule = schedule;
+        currentSchedule.startDateTime = new Date();
+        StorageManager.saveScheduledTask(currentSchedule);
+    }
+
+    static reloadWindow(url) {
         let window = WindowInstanceHolder.getWindow();
         if (ScheduledTaskManager.isNeedToReload(window, url)) {
             window.loadURL(url);
@@ -79,24 +82,32 @@ class ScheduledTaskManager {
         let settingWithSchedules = ScheduleMergeTool.merge(serverData, screenInformation);
 
         _.forEach(settingWithSchedules.schedules, schedule => {
-            let setting = serverData.originalSettings.find(setting => setting.id === schedule.settingId);
-            let contentId = SettingsHelper.defineContentId(setting, screenInformation);
-            if (contentId) {
-                schedule.content = serverData.content.find(content => content.id === contentId);
-                schedule.defaultUrl = screenInformation.contentUrl;
-            }
+            this._appendContentToSchedule(schedule, screenInformation);
         });
+
         this.resetAllSchedules(settingWithSchedules.schedules, serverData.originalSettings);
     }
 
-    static isScheduled() {
-        return !_.isEmpty(StorageManager.getStorage().getScheduledTask());
+    _appendContentToSchedule(schedule, screenInformation) {
+        let contentId = this.defineContentId(schedule, screenInformation);
+        if (!_.isEmpty(contentId)) {
+            let serverData = StorageManager.getStorage().getServerData();
+            schedule.content = _.find(serverData.content, content => content.id === contentId);
+            schedule.defaultUrl = screenInformation.contentUrl;
+        }
+    }
+
+    defineContentId(schedule, screenInformation) {
+        let serverData = StorageManager.getStorage().getServerData();
+        let setting = _.find(serverData.originalSettings, setting => setting.id === schedule.settingId);
+        return SettingsHelper.defineContentId(setting, screenInformation);
     }
 }
 
 const scheduledTaskManager = new ScheduledTaskManager();
+const isScheduled = () => !_.isEmpty(StorageManager.getStorage().getScheduledTask());
 
 module.exports = {
     scheduledTaskManager: scheduledTaskManager,
-    currentSchedule: StorageManager.getStorage().getSelectedSetting()
+    isScheduled: isScheduled
 };
