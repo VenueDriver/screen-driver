@@ -107,8 +107,10 @@ class ScheduledTaskManager {
     resumeInterruptedScheduledTask() {
         let schedule = StorageManager.getStorage().getScheduledTask();
         let window = WindowInstanceHolder.getWindow();
-        if (!_.isEmpty(schedule)) {
+        if (!_.isEmpty(schedule) && schedule.endDateTime > new Date()) {
             window.loadURL(schedule.content.url);
+        } else {
+            StorageManager.saveScheduledTask({});
         }
     }
 }
