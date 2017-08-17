@@ -43,7 +43,7 @@ export class SchedulesComponent implements OnInit {
             .subscribe(setting => {
                 this.currentSetting = setting;
                 this.filteredSchedules = this.getFilteredSchedules();
-                this.isShowCreateScheduleForm = this.isAbleToAddSchedule();
+                this.isShowCreateScheduleForm = this.filteredSchedules.length == 0 && this.isAbleToAddSchedule();
             });
     }
 
@@ -55,7 +55,7 @@ export class SchedulesComponent implements OnInit {
     }
 
     isAbleToAddSchedule():boolean {
-        return this.filteredSchedules.length == 0 && !!this.currentSetting && !!this.currentSetting;
+        return !!this.currentSetting && this.currentSetting.priority !== 'ef48d7d3';
     }
 
     isEditable(): boolean {
@@ -70,7 +70,7 @@ export class SchedulesComponent implements OnInit {
         this.isShowCreateScheduleForm = false;
     }
 
-    showAddScheduleButton(): boolean {
-        return !this.isShowCreateScheduleForm && !!this.currentSetting && !!this.currentSetting.id
+    isShowAddScheduleButton(): boolean {
+        return !this.isShowCreateScheduleForm && this.isAbleToAddSchedule();
     }
 }
