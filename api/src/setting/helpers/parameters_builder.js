@@ -15,10 +15,11 @@ module.exports.buildUpdateRequestParameters = (setting) => {
             ':enabled': setting.enabled,
             ':priority': setting.priority,
             ':config': setting.config,
+            ':forciblyEnabled': setting.forciblyEnabled,
             ':rev': setting._rev,
             ':new_rev': increaseRevision(setting),
         },
-        UpdateExpression: 'SET #setting_name = :name, enabled = :enabled, priority= :priority, config = :config, #rev = :new_rev',
+        UpdateExpression: 'SET #setting_name = :name, enabled = :enabled, priority= :priority, config = :config, forciblyEnabled = :forciblyEnabled, #rev = :new_rev',
         ConditionExpression: "#rev = :rev",
         ReturnValues: 'ALL_NEW',
     };

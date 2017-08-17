@@ -16,6 +16,7 @@ class Setting {
             this.enabled = setting.enabled == null ? false : setting.enabled;
             this.priority = setting.priority;
             this.config = setting.config == null ? {} : setting.config;
+            this.forciblyEnabled = setting.hasOwnProperty('forciblyEnabled') ? setting.forciblyEnabled : false;
             this._rev = setting._rev;
         }
     }
@@ -79,6 +80,7 @@ class Setting {
         if (typeof(this.enabled) !== 'boolean') deferred.reject('Enabled field should be boolean');
         if (!this.isConfigValid(this.config)) deferred.reject('Enabled field should be boolean');
         if (!this.priority) deferred.reject('Config couldn\'t be without priority');
+        if (typeof this.forciblyEnabled != 'boolean') deferred.reject('Forcibly enabled field should be type of boolean');
 
         if (!PriorityTypes.getTypes().find((type) => type.id === this.priority)) deferred.reject('Wrong priority type');
         Setting.hasUniqueName(this)
