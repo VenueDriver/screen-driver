@@ -5,6 +5,7 @@ import {SettingStateHolderService} from "../settings/setting-state-manager/setti
 import {Setting} from "../settings/entities/setting";
 
 import * as _ from 'lodash';
+import {PriorityTypes} from "../enums/priorty-types";
 
 @Component({
     selector: 'schedules',
@@ -55,7 +56,7 @@ export class SchedulesComponent implements OnInit {
     }
 
     isAbleToAddSchedule():boolean {
-        return !!this.currentSetting && this.currentSetting.priority !== 'ef48d7d3';
+        return !!this.currentSetting && this.currentSetting.priority !== PriorityTypes.PERSISTENT.id;
     }
 
     isEditable(): boolean {

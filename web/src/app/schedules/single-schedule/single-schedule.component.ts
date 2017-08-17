@@ -9,6 +9,7 @@ import {Periodicity} from '../../enums/periodicity';
 import {DaysOfWeek} from '../../enums/days-of-week';
 
 import * as _ from 'lodash';
+import {PriorityTypes} from "../../enums/priorty-types";
 
 @Component({
     selector: 'single-schedule',
@@ -53,13 +54,13 @@ export class SingleScheduleComponent implements OnInit {
     initPeriodicity() {
         if (this.currentSetting) {
             switch (this.currentSetting.priority) {
-                case ("ef48d7d3"): //"Persistent"
+                case (PriorityTypes.PERSISTENT.id):
                     this.setScheduleType();
                     break;
-                case ("1d7c6369"): //"Periodical"
+                case (PriorityTypes.PERIODICAL.id):
                     this.setScheduleType(Periodicity.REPEATABLE);
                     break;
-                case ("9a0a758a"): //"Occasional"
+                case (PriorityTypes.OCCASIONAL.id):
                     this.setScheduleType(Periodicity.ONE_TIME);
                     break;
             }
