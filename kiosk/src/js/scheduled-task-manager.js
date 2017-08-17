@@ -40,6 +40,8 @@ class ScheduledTaskManager {
         }
 
         function disableCron() {
+            composedSchedule.backgroundCron.destroy();
+            composedSchedule.backgroundCron = {};
             ScheduledTaskManager.reloadWindow(schedule.defaultUrl);
             StorageManager.saveScheduledTask({});
         }
