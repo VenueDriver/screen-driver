@@ -51,6 +51,17 @@ describe('create_schedule', () => {
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
+    it('Should create schedule without unknown fields', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.date = new Date();
+
+        let expectations = (body) => {
+            expect(body).to.not.have.not.property('data');
+        };
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
     it('Shouldn\'t create schedule without setting id', () => {
         let schedule = ScheduleDataPreparationHelper.createScheduleWithoutSettingId();
 
