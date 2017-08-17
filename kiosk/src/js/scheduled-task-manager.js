@@ -28,11 +28,7 @@ class ScheduledTaskManager {
 
         function runScheduledTask() {
             if (!isScheduled() || ScheduledTaskManager._isScheduleMorePriority(schedule)) {
-                ScheduledTaskManager._saveTaskInStorage(schedule);
-                if (!_.isEmpty(composedSchedule.backgroundCron)) {
-                    composedSchedule.backgroundCron.destroy();
-                }
-                ScheduledTaskManager.reloadWindow(schedule.content.url);
+                ScheduledTaskManager._runScheduledTask(schedule, composedSchedule);
             }
             if (_.isEmpty(composedSchedule.backgroundCron)) {
                 composedSchedule.backgroundCron = cron.schedule('* * * * * *', () => runScheduledTask(), true);
@@ -40,8 +36,7 @@ class ScheduledTaskManager {
         }
 
         function disableCron() {
-            composedSchedule.backgroundCron.destroy();
-            composedSchedule.backgroundCron = {};
+            ScheduledTaskManager._destroyBackgroundTask(composedSchedule.backgroundCron);
             ScheduledTaskManager.reloadWindow(schedule.defaultUrl);
             StorageManager.saveScheduledTask({});
         }
@@ -57,6 +52,19 @@ class ScheduledTaskManager {
         currentSchedule.startDateTime = new Date();
         currentSchedule.endDateTime = CronParser.parseEndEventCron(schedule);
         StorageManager.saveScheduledTask(currentSchedule);
+    }
+
+    static _runScheduledTask(schedule, composedSchedule) {
+        ScheduledTaskManager._saveTaskInStorage(schedule);
+        if (!_.isEmpty(composedSchedule.backgroundCron)) {
+            composedSchedule.backgroundCron.destroy();
+        }
+        ScheduledTaskManager.reloadWindow(schedule.content.url);
+    }
+
+    static _destroyBackgroundTask(backgroundTask) {
+        backgroundTask.destroy();
+        backgroundTask = {};
     }
 
     static reloadWindow(url) {
