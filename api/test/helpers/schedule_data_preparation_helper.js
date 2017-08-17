@@ -8,7 +8,8 @@ module.exports = class ScheduleDataPreparationHelper {
             settingId: 'id_mock',
             eventCron: defaultCronExpression,
             endEventCron: defaultCronExpression,
-            periodicity: 'ONE_TIME'
+            periodicity: 'ONE_TIME',
+            _rev: 0
         };
     }
 
@@ -22,9 +23,21 @@ module.exports = class ScheduleDataPreparationHelper {
         return schedule;
     }
 
+    static createScheduleWithEmptySettingId() {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.settingId = '';
+        return schedule;
+    }
+
     static createScheduleWithoutEventCron() {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         delete schedule.eventCron;
+        return schedule;
+    }
+
+    static createScheduleWithEmptyEventCron() {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '';
         return schedule;
     }
 
@@ -34,9 +47,21 @@ module.exports = class ScheduleDataPreparationHelper {
         return schedule;
     }
 
+    static createScheduleWithEmptyEndEventCron() {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.endEventCron = '';
+        return schedule;
+    }
+
     static createScheduleWithoutPeriodicity() {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         delete schedule.periodicity;
+        return schedule;
+    }
+
+    static createScheduleWithoutRevisionNumber() {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        delete schedule._rev;
         return schedule;
     }
 };
