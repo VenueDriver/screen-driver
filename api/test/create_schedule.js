@@ -94,6 +94,15 @@ describe('create_schedule', () => {
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
+    it('Shouldn\'t create schedule with invalid periodicity', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.periodicity = 'SOME_PERIODICITY';
+
+        let expectations = generateErrorExpectations('Invalid periodicity', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
     it('Shouldn\'t create schedule with invalid cron expressions', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         schedule.eventCron = '*';

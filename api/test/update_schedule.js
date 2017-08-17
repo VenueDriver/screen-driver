@@ -120,6 +120,16 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
+    it('Shouldn\'t update schedule with invalid periodicity', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutPeriodicity();
+        updatedSchedule.periodicity = 'SOME_PERIODICITY';
+
+        let expectations = generateErrorExpectations('Invalid periodicity', 500);
+
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
+    });
+
     it('Shouldn\'t update schedule with wrong revision number', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
