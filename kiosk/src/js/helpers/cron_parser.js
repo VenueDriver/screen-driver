@@ -20,7 +20,7 @@ module.exports = class CronParser {
         let date = new Date();
         let hours = CronParser.getHoursFromCron(cron);
         let minutes = CronParser.getMinutesFromCron(cron);
-        return new Date(date.getYear(), date.getMonth(), date.getDate(), hours, minutes);
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours, minutes);
     }
 
     static getDateFromCron(cron) {
