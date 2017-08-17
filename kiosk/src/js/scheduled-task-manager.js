@@ -2,14 +2,12 @@ const cron = require('node-cron');
 const ScheduleMergeTool = require('./schedule-merge-tool');
 const SettingsHelper = require('./helpers/settings_helper');
 const WindowInstanceHolder = require('./window-instance-holder');
-const {LocalStorageManager, StorageNames} = require('./helpers/local_storage_helper');
 const StorageManager = require('./helpers/storage_manager');
+const CronParser = require('./helpers/cron_parser');
 
 const _ = require('lodash');
 
 let instance = null;
-
-const currentSchedule = {task: ''};
 
 class ScheduledTaskManager {
     constructor() {
@@ -29,24 +27,47 @@ class ScheduledTaskManager {
         endScheduleCronJob.start();
 
         function runScheduledTask() {
-            if (!ScheduledTaskManager.isScheduled()) {
-                currentSchedule.task = startScheduleCronJob;
-                if (!_.isEmpty(composedSchedule.backgroundCron)) {
-                    composedSchedule.backgroundCron.destroy();
-                }
-                ScheduledTaskManager.reloadWindow(schedule, schedule.content.url);
-            } else if (_.isEmpty(composedSchedule.backgroundCron)) {
+            if (!isScheduled() || ScheduledTaskManager._isScheduleMorePriority(schedule)) {
+                ScheduledTaskManager._runScheduledTask(schedule, composedSchedule);
+            }
+            if (_.isEmpty(composedSchedule.backgroundCron)) {
                 composedSchedule.backgroundCron = cron.schedule('* * * * * *', () => runScheduledTask(), true);
             }
         }
 
         function disableCron() {
-            ScheduledTaskManager.reloadWindow(schedule, schedule.defaultUrl);
-            currentSchedule.task = {};
+            ScheduledTaskManager._destroyBackgroundTask(composedSchedule.backgroundCron);
+            ScheduledTaskManager.reloadWindow(schedule.defaultUrl);
+            StorageManager.saveScheduledTask({});
         }
     }
 
-    static reloadWindow(schedule, url) {
+    static _isScheduleMorePriority(schedule) {
+        let currentSchedule = StorageManager.getStorage().getScheduledTask();
+        return schedule.periodicity === 'ONE_TIME' && currentSchedule.periodicity !== 'ONE_TIME';
+    }
+
+    static _saveTaskInStorage(schedule) {
+        let currentSchedule = schedule;
+        currentSchedule.startDateTime = new Date();
+        currentSchedule.endDateTime = CronParser.parseEndEventCron(schedule);
+        StorageManager.saveScheduledTask(currentSchedule);
+    }
+
+    static _runScheduledTask(schedule, composedSchedule) {
+        ScheduledTaskManager._saveTaskInStorage(schedule);
+        if (!_.isEmpty(composedSchedule.backgroundCron)) {
+            composedSchedule.backgroundCron.destroy();
+        }
+        ScheduledTaskManager.reloadWindow(schedule.content.url);
+    }
+
+    static _destroyBackgroundTask(backgroundTask) {
+        backgroundTask.destroy();
+        backgroundTask = {};
+    }
+
+    static reloadWindow(url) {
         let window = WindowInstanceHolder.getWindow();
         if (ScheduledTaskManager.isNeedToReload(window, url)) {
             window.loadURL(url);
@@ -71,7 +92,6 @@ class ScheduledTaskManager {
             schedule.endStartSchedule.destroy();
         });
         this.scheduledCronJobs.pop();
-        currentSchedule.task = {};
     }
 
     initSchedulingForScreen(screenInformation) {
@@ -79,24 +99,42 @@ class ScheduledTaskManager {
         let settingWithSchedules = ScheduleMergeTool.merge(serverData, screenInformation);
 
         _.forEach(settingWithSchedules.schedules, schedule => {
-            let setting = serverData.originalSettings.find(setting => setting.id === schedule.settingId);
-            let contentId = SettingsHelper.defineContentId(setting, screenInformation);
-            if (contentId) {
-                schedule.content = serverData.content.find(content => content.id === contentId);
-                schedule.defaultUrl = screenInformation.contentUrl;
-            }
+            this._appendContentToSchedule(schedule, screenInformation);
         });
+
         this.resetAllSchedules(settingWithSchedules.schedules, serverData.originalSettings);
     }
 
-    static isScheduled() {
-        return !_.isEmpty(currentSchedule.task);
+    _appendContentToSchedule(schedule, screenInformation) {
+        let contentId = this.defineContentId(schedule, screenInformation);
+        if (!_.isEmpty(contentId)) {
+            let serverData = StorageManager.getStorage().getServerData();
+            schedule.content = _.find(serverData.content, content => content.id === contentId);
+            schedule.defaultUrl = screenInformation.contentUrl;
+        }
+    }
+
+    defineContentId(schedule, screenInformation) {
+        let serverData = StorageManager.getStorage().getServerData();
+        let setting = _.find(serverData.originalSettings, setting => setting.id === schedule.settingId);
+        return SettingsHelper.defineContentId(setting, screenInformation);
+    }
+
+    resumeInterruptedScheduledTask() {
+        let schedule = StorageManager.getStorage().getScheduledTask();
+        let window = WindowInstanceHolder.getWindow();
+        if (!_.isEmpty(schedule) && schedule.endDateTime > new Date()) {
+            window.loadURL(schedule.content.url);
+        } else {
+            StorageManager.saveScheduledTask({});
+        }
     }
 }
 
 const scheduledTaskManager = new ScheduledTaskManager();
+const isScheduled = () => !_.isEmpty(StorageManager.getStorage().getScheduledTask());
 
 module.exports = {
     scheduledTaskManager: scheduledTaskManager,
-    currentSchedule: currentSchedule
+    isScheduled: isScheduled
 };
