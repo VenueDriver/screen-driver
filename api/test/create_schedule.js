@@ -107,4 +107,64 @@ describe('create_schedule', () => {
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
+    it('Shouldn\'t create schedule with cron expression that includes non 0 value for seconds', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '* 0 12 * * *';
+
+        let expectations = (body, response)=> {
+            expect(body).to.have.property('message').that.equal('Invalid cron expression');
+            expect(response).to.have.property('statusCode').that.equal(500);
+        };
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with cron expression that should be repeated every minute', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 * 12 * * *';
+
+        let expectations = (body, response)=> {
+            expect(body).to.have.property('message').that.equal('Invalid cron expression');
+            expect(response).to.have.property('statusCode').that.equal(500);
+        };
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with cron expression that should be repeated every N minutes', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 */2 12 * * *';
+
+        let expectations = (body, response)=> {
+            expect(body).to.have.property('message').that.equal('Invalid cron expression');
+            expect(response).to.have.property('statusCode').that.equal(500);
+        };
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with cron expression that should be repeated every hour', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 8 * * * *';
+
+        let expectations = (body, response)=> {
+            expect(body).to.have.property('message').that.equal('Invalid cron expression');
+            expect(response).to.have.property('statusCode').that.equal(500);
+        };
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with cron expression that should be repeated every N hours', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 8 */5 * * *';
+
+        let expectations = (body, response)=> {
+            expect(body).to.have.property('message').that.equal('Invalid cron expression');
+            expect(response).to.have.property('statusCode').that.equal(500);
+        };
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
 });
