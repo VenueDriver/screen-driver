@@ -2,6 +2,7 @@
 
 require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
+const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 
 const createFunction = require('../src/schedule/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
@@ -25,83 +26,85 @@ describe('create_schedule', () => {
 
 
     it('Should create schedule with all fields, id and revision number', () => {
-        let content = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME', enabled: false};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.enabled = false;
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
             expect(body).to.have.property('settingId').that.equal('id_mock');
-            expect(body).to.have.property('eventCron').that.equal('* * * * *');
+            expect(body).to.have.property('eventCron').that.equal(ScheduleDataPreparationHelper.getDefaultCronExpression());
             expect(body).to.have.property('enabled').that.equal(false);
-            expect(body).to.have.property('endEventCron').that.equal('* * * * *');
+            expect(body).to.have.property('endEventCron').that.equal(ScheduleDataPreparationHelper.getDefaultCronExpression());
             expect(body).to.have.property('_rev').that.equal(0);
         };
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Should create schedule with automatically generated `enabled` field', () => {
-        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
 
         let expectations = (body)=> {
             expect(body).to.have.property('enabled').that.equal(true);
         };
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Shouldn\'t create schedule without setting id', () => {
-        let content = {eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createScheduleWithoutSettingId();
 
         let expectations = (body, response) => {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without setting');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Shouldn\'t create schedule without eventCron', () => {
-        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', endEventCron: '* * * * *'};
+        let schedule = ScheduleDataPreparationHelper.createScheduleWithoutEventCron();
 
         let expectations = (body, response)=> {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Shouldn\'t create schedule without endEventCron', () => {
-        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *'};
+        let schedule = ScheduleDataPreparationHelper.createScheduleWithoutEndEventCron();
 
         let expectations = (body, response)=> {
             expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without endEventCron');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Shouldn\'t create schedule without periodicity', () => {
-        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *', endEventCron: '* * * * *',};
+        let schedule = ScheduleDataPreparationHelper.createScheduleWithoutPeriodicity();
 
         let expectations = (body, response)=> {
             expect(body).to.have.property('message').that.equal('Invalid periodicity');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Shouldn\'t create schedule with invalid cron expressions', () => {
-        let content = {settingId: 'id_mock', eventCron: '*', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '*';
 
         let expectations = (body, response)=> {
             expect(body).to.have.property('message').that.equal('Invalid cron expression');
             expect(response).to.have.property('statusCode').that.equal(500);
         };
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
 });
