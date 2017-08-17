@@ -115,11 +115,11 @@ class Schedule {
      */
     validate(errorCallback) {
         let errorMessage;
-        if (!this.settingId || this.settingId === '') errorMessage = 'Schedule couldn\'t be without setting';
+        if (_.isEmpty(this.settingId)) errorMessage = 'Schedule couldn\'t be without setting';
         if (periodicity.indexOf(this.periodicity) < 0) errorMessage = 'Invalid periodicity';
         if (!CronValidator.validate(this.eventCron) || !CronValidator.validate(this.endEventCron)) errorMessage = 'Invalid cron expression';
-        if (!this.eventCron || this.eventCron === '') errorMessage = 'Schedule couldn\'t be without eventCron';
-        if (!this.endEventCron || this.endEventCron === '') errorMessage = 'Schedule couldn\'t be without endEventCron';
+        if (_.isEmpty(this.eventCron)) errorMessage = 'Schedule couldn\'t be without eventCron';
+        if (_.isEmpty(this.endEventCron)) errorMessage = 'Schedule couldn\'t be without endEventCron';
         if (!this._rev && this._rev !== 0) errorMessage = 'Schedule couldn\'t be without revision number';
         if (!Number.isInteger(Number(this._rev)) && this._rev !== 0) errorMessage = 'Schedule\'s revision should be a number';
         if (this._rev < 0) errorMessage = 'Schedule\'s revision can\'t be < 0';

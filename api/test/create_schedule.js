@@ -33,8 +33,8 @@ describe('create_schedule', () => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
             expect(body).to.have.property('settingId').that.equal('id_mock');
             expect(body).to.have.property('eventCron').that.equal(ScheduleDataPreparationHelper.getDefaultCronExpression());
-            expect(body).to.have.property('enabled').that.equal(false);
             expect(body).to.have.property('endEventCron').that.equal(ScheduleDataPreparationHelper.getDefaultCronExpression());
+            expect(body).to.have.property('enabled').that.equal(false);
             expect(body).to.have.property('_rev').that.equal(0);
         };
 
@@ -54,10 +54,7 @@ describe('create_schedule', () => {
     it('Shouldn\'t create schedule without setting id', () => {
         let schedule = ScheduleDataPreparationHelper.createScheduleWithoutSettingId();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without setting');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without setting', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
@@ -65,10 +62,7 @@ describe('create_schedule', () => {
     it('Shouldn\'t create schedule without eventCron', () => {
         let schedule = ScheduleDataPreparationHelper.createScheduleWithoutEventCron();
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without eventCron', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
@@ -76,10 +70,7 @@ describe('create_schedule', () => {
     it('Shouldn\'t create schedule without endEventCron', () => {
         let schedule = ScheduleDataPreparationHelper.createScheduleWithoutEndEventCron();
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without endEventCron');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without endEventCron', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
@@ -87,10 +78,7 @@ describe('create_schedule', () => {
     it('Shouldn\'t create schedule without periodicity', () => {
         let schedule = ScheduleDataPreparationHelper.createScheduleWithoutPeriodicity();
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Invalid periodicity');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Invalid periodicity', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
@@ -99,10 +87,7 @@ describe('create_schedule', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         schedule.eventCron = '*';
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Invalid cron expression');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
@@ -111,10 +96,7 @@ describe('create_schedule', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         schedule.eventCron = '* 0 12 * * *';
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Invalid cron expression');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
@@ -123,10 +105,7 @@ describe('create_schedule', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         schedule.eventCron = '0 * 12 * * *';
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Invalid cron expression');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
@@ -135,10 +114,7 @@ describe('create_schedule', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         schedule.eventCron = '0 */2 12 * * *';
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Invalid cron expression');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
@@ -147,10 +123,7 @@ describe('create_schedule', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         schedule.eventCron = '0 8 * * * *';
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Invalid cron expression');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
@@ -159,12 +132,16 @@ describe('create_schedule', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         schedule.eventCron = '0 8 */5 * * *';
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Invalid cron expression');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
 });
+
+function generateErrorExpectations(message, statusCode) {
+    return (body, response) => {
+        expect(body).to.have.property('message').that.equal(message);
+        expect(response).to.have.property('statusCode').that.equal(statusCode);
+    };
+}
