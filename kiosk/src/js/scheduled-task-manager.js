@@ -27,7 +27,7 @@ class ScheduledTaskManager {
         endScheduleCronJob.start();
 
         function runScheduledTask() {
-            if (!isScheduled()) {
+            if (!isScheduled() || ScheduledTaskManager._isScheduleMorePriority(schedule)) {
                 ScheduledTaskManager._saveTaskInStorage(schedule);
                 if (!_.isEmpty(composedSchedule.backgroundCron)) {
                     composedSchedule.backgroundCron.destroy();
@@ -42,6 +42,11 @@ class ScheduledTaskManager {
             ScheduledTaskManager.reloadWindow(schedule.defaultUrl);
             StorageManager.saveScheduledTask({});
         }
+    }
+
+    static _isScheduleMorePriority(schedule) {
+        let currentSchedule = StorageManager.getStorage().getScheduledTask();
+        return schedule.periodicity === 'ONE_TIME' && currentSchedule.periodicity !== 'ONE_TIME';
     }
 
     static _saveTaskInStorage(schedule) {
