@@ -14,7 +14,22 @@ module.exports = class ScheduleDataPreparationHelper {
     }
 
     static getDefaultCronExpression() {
-        return '0 0 12 * * *';
+        return '0 0 8 1 JUN * 2017';
+    }
+
+    static createRepeatableSchedule() {
+        let defaultCronExpression = ScheduleDataPreparationHelper.getValidRepeatableCronExpression();
+        return {
+            settingId: 'id_mock',
+            eventCron: defaultCronExpression,
+            endEventCron: defaultCronExpression,
+            periodicity: 'REPEATABLE',
+            _rev: 0
+        };
+    }
+
+    static getValidRepeatableCronExpression() {
+        return '0 0 8 * * MON';
     }
 
     static createScheduleWithoutSettingId() {

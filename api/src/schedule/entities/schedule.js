@@ -117,7 +117,8 @@ class Schedule {
         let errorMessage;
         if (_.isEmpty(this.settingId)) errorMessage = 'Schedule couldn\'t be without setting';
         if (periodicity.indexOf(this.periodicity) < 0) errorMessage = 'Invalid periodicity';
-        if (!CronValidator.validate(this.eventCron) || !CronValidator.validate(this.endEventCron)) errorMessage = 'Invalid cron expression';
+        if (!CronValidator.validate(this.eventCron, this.periodicity)) errorMessage = 'Invalid cron expression';
+        if (!CronValidator.validate(this.endEventCron, this.periodicity)) errorMessage = 'Invalid cron expression';
         if (_.isEmpty(this.eventCron)) errorMessage = 'Schedule couldn\'t be without eventCron';
         if (_.isEmpty(this.endEventCron)) errorMessage = 'Schedule couldn\'t be without endEventCron';
         if (!this._rev && this._rev !== 0) errorMessage = 'Schedule couldn\'t be without revision number';

@@ -143,6 +143,106 @@ describe('create_schedule', () => {
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
+    it('Shouldn\'t create one time schedule that should be repeated every day', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 13 * JAN * 2017';
+        schedule.endEventCron = '0 0 13 * JAN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every N days', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 13 */5 JAN * 2017';
+        schedule.endEventCron = '0 0 13 */5 JAN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every month', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 13 1 * * 2017';
+        schedule.endEventCron = '0 0 13 1 * * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every N months', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 13 1 */5 * 2017';
+        schedule.endEventCron = '0 0 13 1 */5 * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every year', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 8 1 JAN * *';
+        schedule.endEventCron = '0 0 8 1 JAN * *';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every N years', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 8 1 JAN * */5';
+        schedule.endEventCron = '0 0 8 1 JAN * */5';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule with cron expression that includes invalid amount of parts', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 8 1 JAN MON';
+        schedule.endEventCron = '0 0 8 1 JAN MON';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create repeatable schedule with cron expression that includes invalid amount of parts', () => {
+        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        schedule.eventCron = '0 0 8 1 JAN * 2017';
+        schedule.endEventCron = '0 0 8 1 JAN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create repeatable schedule with cron expression that includes date', () => {
+        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        schedule.eventCron = '0 0 8 1 * MON';
+        schedule.endEventCron = '0 0 8 1 * MON';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create repeatable schedule with cron expression that includes month', () => {
+        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        schedule.eventCron = '0 0 8 * JAN MON';
+        schedule.endEventCron = '0 0 8 * JAN MON';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
 });
 
 function generateErrorExpectations(message, statusCode) {
