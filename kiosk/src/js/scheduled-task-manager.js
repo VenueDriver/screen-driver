@@ -33,7 +33,8 @@ class ScheduledTaskManager {
                     composedSchedule.backgroundCron.destroy();
                 }
                 ScheduledTaskManager.reloadWindow(schedule.content.url);
-            } else if (_.isEmpty(composedSchedule.backgroundCron)) {
+            }
+            if (_.isEmpty(composedSchedule.backgroundCron)) {
                 composedSchedule.backgroundCron = cron.schedule('* * * * * *', () => runScheduledTask(), true);
             }
         }
