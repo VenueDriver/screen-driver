@@ -4,6 +4,7 @@ const uuid = require('uuid');
 const Q = require('q');
 const _ = require('lodash');
 
+const CronValidator = require('../helpers/cron-validator');
 const periodicity = require('../../enums/periodicity');
 
 let db;
@@ -116,6 +117,7 @@ class Schedule {
         let errorMessage;
         if (!this.settingId || this.settingId === '') errorMessage = 'Schedule couldn\'t be without setting';
         if (periodicity.indexOf(this.periodicity) < 0) errorMessage = 'Invalid periodicity';
+        if (!CronValidator.validate(this.eventCron) || !CronValidator.validate(this.endEventCron)) errorMessage = 'Invalid cron expression';
         if (!this.eventCron || this.eventCron === '') errorMessage = 'Schedule couldn\'t be without eventCron';
         if (!this.endEventCron || this.endEventCron === '') errorMessage = 'Schedule couldn\'t be without endEventCron';
         if (!this._rev && this._rev !== 0) errorMessage = 'Schedule couldn\'t be without revision number';

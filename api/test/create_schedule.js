@@ -93,4 +93,15 @@ describe('create_schedule', () => {
         return MultiOperationHelper.performCreateTest(content, expectations);
     });
 
+    it('Shouldn\'t create schedule with invalid cron expressions', () => {
+        let content = {settingId: 'id_mock', eventCron: '*', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+
+        let expectations = (body, response)=> {
+            expect(body).to.have.property('message').that.equal('Invalid cron expression');
+            expect(response).to.have.property('statusCode').that.equal(500);
+        };
+
+        return MultiOperationHelper.performCreateTest(content, expectations);
+    });
+
 });
