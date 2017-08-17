@@ -1,7 +1,9 @@
 'use strict';
 
 require('./helpers/test_provider_configurator').configure();
+
 const DatabaseCleaner = require('./helpers/database_cleaner');
+const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 
 const createFunction = require('../src/schedule/create');
 const updateFunction = require('../src/schedule/update');
@@ -26,8 +28,10 @@ describe('update_setting', () => {
     });
 
     it('Should update the setting id and increase revision', () => {
-        let newConfig = {settingId: 'id_mock_1', eventCron: '* * * * *', endEventCron: '* * * * *', enabled: true, periodicity: 'ONE_TIME'};
-        let updatedConfig = {settingId: 'id_mock_2', eventCron: '* * * * *', _rev: 0, endEventCron: '* * * * *', enabled: false, periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        updatedSchedule.settingId = 'id_mock_2';
+        updatedSchedule.enabled = false;
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
@@ -36,114 +40,95 @@ describe('update_setting', () => {
             expect(body).to.have.property('_rev').that.equal(1);
         };
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Shouldn\'t update schedule without settingId', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let updatedConfig = {startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutSettingId();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without setting');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without setting', 500);
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Shouldn\'t update schedule with empty settingId', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let updatedConfig = {settingId: '', eventCron: '* * * * *', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithEmptySettingId();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without setting');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without setting', 500);
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Shouldn\'t update schedule without eventCron', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let updatedConfig = {settingId: 'id_mock', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutEventCron();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without eventCron', 500);
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Shouldn\'t update schedule with empty eventCron', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let updatedConfig = {settingId: 'id_mock', eventCron: '', _rev: 0, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithEmptyEventCron();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without eventCron', 500);
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Shouldn\'t update schedule without endEventCron', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let updatedConfig = {settingId: 'id_mock', _rev: 0, eventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutEndEventCron();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without endEventCron');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without endEventCron', 500);
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Shouldn\'t update schedule with empty endEventCron', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let updatedConfig = {settingId: 'id_mock', _rev: 0, eventCron: '* * * * *', endEventCron: '', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithEmptyEndEventCron();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without endEventCron');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without endEventCron', 500);
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Shouldn\'t update schedule without periodicity', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let updatedConfig = {settingId: 'id_mock', _rev: 0, eventCron: '* * * * *', endEventCron: '* * * * *'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutPeriodicity();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Invalid periodicity');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Invalid periodicity', 500);
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Shouldn\'t update schedule with wrong revision number', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let updatedConfig = {settingId: 'id_mock', eventCron: '', _rev: 3, endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        updatedSchedule._rev = 3;
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('The conditional request failed', 500);
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Shouldn\'t update schedule without revision number', () => {
-        let newConfig = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let updatedConfig = {settingId: 'id_mock', eventCron: '', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutRevisionNumber();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Missed revision number');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Missed revision number', 500);
 
-        return MultiOperationHelper.performUpdateTest(newConfig, updatedConfig, expectations);
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 });
+
+function generateErrorExpectations(message, statusCode) {
+    return (body, response) => {
+        expect(body).to.have.property('message').that.equal(message);
+        expect(response).to.have.property('statusCode').that.equal(statusCode);
+    };
+}
