@@ -43,15 +43,19 @@ export class SchedulesComponent implements OnInit {
             .subscribe(setting => {
                 this.currentSetting = setting;
                 this.filteredSchedules = this.getFilteredSchedules();
-                this.isShowCreateScheduleForm = this.filteredSchedules.length == 0;
+                this.isShowCreateScheduleForm = this.isAbleToAddSchedule();
             });
     }
 
     getFilteredSchedules(): Array<Schedule> {
-        if (this.currentSetting) {
+        if (this.currentSetting && this.currentSetting.id) {
             return _.filter(this.schedules, s => s.settingId === this.currentSetting.id);
         }
         return this.schedules;
+    }
+
+    isAbleToAddSchedule():boolean {
+        return this.filteredSchedules.length == 0 && !!this.currentSetting && !!this.currentSetting;
     }
 
     isEditable(): boolean {

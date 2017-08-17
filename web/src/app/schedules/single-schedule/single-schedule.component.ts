@@ -47,6 +47,23 @@ export class SingleScheduleComponent implements OnInit {
         this.subscribeToCurrentSettingUpdate();
         this.subscribeToScheduleListUpdate();
         this.setEventTimeProperties();
+        this.initPeriodicity();
+    }
+
+    initPeriodicity() {
+        if (this.currentSetting) {
+            switch (this.currentSetting.priority) {
+                case ("ef48d7d3"): //"Persistent"
+                    this.setScheduleType();
+                    break;
+                case ("1d7c6369"): //"Periodical"
+                    this.setScheduleType(Periodicity.REPEATABLE);
+                    break;
+                case ("9a0a758a"): //"Occasional"
+                    this.setScheduleType(Periodicity.ONE_TIME);
+                    break;
+            }
+        }
     }
 
     generateTimeItems() {
@@ -57,7 +74,10 @@ export class SingleScheduleComponent implements OnInit {
 
     subscribeToCurrentSettingUpdate() {
         this.settingStateHolderService.getCurrentSetting()
-            .subscribe(setting => this.currentSetting = setting);
+            .subscribe(setting => {
+                this.currentSetting = setting;
+                this.initPeriodicity();
+            });
     }
 
     subscribeToScheduleListUpdate() {
@@ -120,7 +140,7 @@ export class SingleScheduleComponent implements OnInit {
         }
     }
 
-    setScheduleType(scheduleType: string) {
+    setScheduleType(scheduleType?: string) {
         this.eventTime.periodicity = scheduleType;
         this.validate();
     }

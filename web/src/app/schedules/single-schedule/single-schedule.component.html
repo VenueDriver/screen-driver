@@ -19,20 +19,6 @@
             </div>
         </div>
 
-        <div class="schedule-type-container">
-            <div class="title">
-                Schedule type:
-            </div>
-            <autocomplete
-                    class="schedule-type"
-                    [editable]="true"
-                    [disabled]="!editable"
-                    [itemsMap]="scheduleTypes"
-                    [value]="eventTime.periodicity"
-                    (valueChanged)="setScheduleType($event)">
-            </autocomplete>
-        </div>
-
         <div *ngIf="eventTime.periodicity === scheduleTypes.REPEATABLE"
              class="days-of-week-container">
 
