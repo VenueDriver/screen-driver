@@ -149,7 +149,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create schedule with invalid cron expressions', () => {
+    it('Shouldn\'t update schedule with invalid cron expressions', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '*';
@@ -160,7 +160,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create schedule with cron expression that includes non 0 value for seconds', () => {
+    it('Shouldn\'t update schedule with cron expression that includes non 0 value for seconds', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '* 0 12 * * *';
@@ -171,7 +171,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create schedule with cron expression that should be repeated every minute', () => {
+    it('Shouldn\'t update schedule with cron expression that should be repeated every minute', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 * 12 * * *';
@@ -182,7 +182,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create schedule with cron expression that should be repeated every N minutes', () => {
+    it('Shouldn\'t update schedule with cron expression that should be repeated every N minutes', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 */2 12 * * *';
@@ -193,7 +193,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create schedule with cron expression that should be repeated every hour', () => {
+    it('Shouldn\'t update schedule with cron expression that should be repeated every hour', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 8 * * * *';
@@ -204,7 +204,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create schedule with cron expression that should be repeated every N hours', () => {
+    it('Shouldn\'t update schedule with cron expression that should be repeated every N hours', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 8 */5 * * *';
@@ -215,7 +215,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create one time schedule that should be repeated every day', () => {
+    it('Shouldn\'t update one time schedule that should be repeated every day', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 0 13 * JAN * 2017';
@@ -226,7 +226,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create one time schedule that should be repeated every N days', () => {
+    it('Shouldn\'t update one time schedule that should be repeated every N days', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 0 13 */5 JAN * 2017';
@@ -237,7 +237,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create one time schedule that should be repeated every month', () => {
+    it('Shouldn\'t update one time schedule that should be repeated every month', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 0 13 1 * * 2017';
@@ -248,7 +248,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create one time schedule that should be repeated every N months', () => {
+    it('Shouldn\'t update one time schedule that should be repeated every N months', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 0 13 1 */5 * 2017';
@@ -259,7 +259,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create one time schedule that should be repeated every year', () => {
+    it('Shouldn\'t update one time schedule that should be repeated every year', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 0 8 1 JAN * *';
@@ -270,7 +270,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create one time schedule that should be repeated every N years', () => {
+    it('Shouldn\'t update one time schedule that should be repeated every N years', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 0 8 1 JAN * */5';
@@ -281,7 +281,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create one time schedule with cron expression that includes invalid amount of parts', () => {
+    it('Shouldn\'t update one time schedule with cron expression that includes invalid amount of parts', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         updatedSchedule.eventCron = '0 0 8 1 JAN MON';
@@ -292,7 +292,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create repeatable schedule with cron expression that includes invalid amount of parts', () => {
+    it('Shouldn\'t update repeatable schedule with cron expression that includes invalid amount of parts', () => {
         let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
         updatedSchedule.eventCron = '0 0 8 1 JAN * 2017';
@@ -303,7 +303,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create repeatable schedule with cron expression that includes date', () => {
+    it('Shouldn\'t update repeatable schedule with cron expression that includes date', () => {
         let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
         updatedSchedule.eventCron = '0 0 8 1 * MON';
@@ -314,7 +314,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t create repeatable schedule with cron expression that includes month', () => {
+    it('Shouldn\'t update repeatable schedule with cron expression that includes month', () => {
         let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
         updatedSchedule.eventCron = '0 0 8 * JAN MON';
