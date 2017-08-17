@@ -38,12 +38,46 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
     });
 
-    it('Should enable configuration', () => {
+    it('Should enable setting', () => {
         let newSetting = {name: 'New Year Party', enabled: false, priority: 'test_id_1'};
         let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
+        };
+
+        return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
+    });
+
+    it('Should enable forciblyEnabled state', () => {
+        let newSetting = {name: 'New Year Party', forciblyEnabled: false, priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', forciblyEnabled: true, priority: 'test_id_1', _rev: 0,};
+
+        let expectations = (body) => {
+            expect(body).to.have.property('forciblyEnabled').that.equal(true);
+        };
+
+        return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
+    });
+
+    it('Should disable forciblyEnabled state', () => {
+        let newSetting = {name: 'New Year Party', forciblyEnabled: true, priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', forciblyEnabled: false, priority: 'test_id_1', _rev: 0,};
+
+        let expectations = (body) => {
+            expect(body).to.have.property('forciblyEnabled').that.equal(false);
+        };
+
+        return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
+    });
+
+    it('Shouldn\'t update setting with wrong forcibly enabled updated sate', () => {
+        let newSetting = {name: 'New Year Party', forciblyEnabled: false, priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', forciblyEnabled: 'string', priority: 'test_id_1', _rev: 0,};
+
+        let expectations = (body, response) => {
+            expect(body).to.have.property('message').that.equal('Forcibly enabled field should be type of boolean');
+            expect(response).to.have.property('statusCode').that.equal(500);
         };
 
         return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);

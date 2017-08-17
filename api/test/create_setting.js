@@ -57,6 +57,26 @@ describe('create_setting', () => {
         return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
+    it('Should create forcibly enabled setting', () => {
+        let setting = {name: 'New Year', priority: 'test_id_1', forciblyEnabled: true};
+
+        let expectations = (body) => {
+            expect(body).to.have.property('forciblyEnabled').that.equal(true);
+        };
+
+        return MultiOperationHelper.performCreateTest(setting, expectations);
+    });
+
+    it('Should create setting with forciblyEnabled field', () => {
+        let setting = {name: 'New Year', priority: 'test_id_1'};
+
+        let expectations = (body) => {
+            expect(body).to.have.property('forciblyEnabled').that.equal(false);
+        };
+
+        return MultiOperationHelper.performCreateTest(setting, expectations);
+    });
+
     it('Shouldn\'t create setting without name', () => {
         let setting = {};
 
@@ -111,6 +131,17 @@ describe('create_setting', () => {
 
         return MultiOperationHelper.create(setting)
             .then(() => MultiOperationHelper.performCreateTest(setting, expectations));
+    });
+
+    it('Shouldn\'t create setting with wrong forciblyEnabled field', () => {
+        let setting = {name: 'New Year', priority: 'test_id_1', forciblyEnabled: 'string'};
+
+        let expectations = (body, response) => {
+            expect(body).to.have.property('message').that.equal('Forcibly enabled field should be type of boolean');
+            expect(response).to.have.property('statusCode').that.equal(500);
+        };
+
+        return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
 });
