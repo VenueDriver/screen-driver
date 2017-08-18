@@ -1,6 +1,7 @@
 <div class="settings-group-container">
 
-    <div class="group-header">
+    <div class="triangle-prefix"></div>
+    <div class="group-header line-prefix">
         <div class="title">
             <b>{{priorityType.name}}</b>
         </div>
@@ -10,7 +11,9 @@
         </div>
     </div>
 
-    <li *ngFor="let setting of settings" [class.active]="isActive(setting)">
+    <li *ngFor="let setting of settings"
+        class="line-prefix"
+        [class.active]="isActive(setting)">
         <single-setting
                 [setting]="setting"
                 [activeSetting]="activeSetting"

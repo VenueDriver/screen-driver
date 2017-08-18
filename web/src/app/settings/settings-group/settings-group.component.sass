@@ -1,6 +1,21 @@
-.title
-  display: inline-block
-  padding: 10px 0 0 15px
+$triangle-height: 30px
+
+.group-header
+  margin-top: -$triangle-height
+  .title
+    display: inline-block
+    padding: 10px 0 0 15px
+
+.triangle-prefix
+  width: 0
+  border-style: solid
+  border-width: $triangle-height 25px 0 0
+  border-color: yellow transparent transparent transparent
+
+.line-prefix
+  border-style: solid
+  border-width: 0 0 0 10px
+  border-color: yellow
 
 .plus-button
   display: inline-block
