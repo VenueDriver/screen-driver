@@ -2,7 +2,8 @@
     <div>
         {{setting.name}}
     </div>
-    <div class="controls">
+    <div *ngIf="isControlButtonsDisplayed()"
+         class="controls">
         <div class="forced-enabled-button"
                 [ngClass]="{'forced-enabled-button-on' : !isEnabledForcibly(), 'forced-enabled-button-off' : isEnabledForcibly()}"
              (click)="onEnableForciblyClicked()">
@@ -12,5 +13,10 @@
                        (changed)="changeSettingState($event)"
                        (click)="onToggleClick($event)">
         </toggle-button>
+    </div>
+
+    <div *ngIf="!isControlButtonsDisplayed()"
+         class="message">
+        {{getMessage()}}
     </div>
 </a>
