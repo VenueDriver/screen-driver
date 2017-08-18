@@ -1,10 +1,10 @@
 <a>
-    <div>
+    <div [ngClass]="{'forcibly-enabled-text': this.setting.forciblyEnabled}">
         {{setting.name}}
     </div>
     <div *ngIf="isControlButtonsDisplayed()"
          class="controls">
-        <div class="forced-enabled-button"
+        <div class="forcibly-enabled-button"
                 [ngClass]="{'forced-enabled-button-on' : !isEnabledForcibly(), 'forced-enabled-button-off' : isEnabledForcibly()}"
              (click)="onEnableForciblyClicked()">
         </div>
