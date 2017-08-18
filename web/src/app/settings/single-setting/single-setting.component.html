@@ -9,7 +9,7 @@
              (click)="onEnableForciblyClicked()">
         </div>
         <toggle-button class="switcher"
-                       [enabled]="setting.enabled"
+                       [checked]="setting.enabled"
                        (changed)="changeSettingState($event)"
                        (click)="onToggleClick($event)">
         </toggle-button>
