@@ -1,28 +1,28 @@
 - service: api
   name: staging_deploy_serverless_api
-  tag: staging
+  #tag: staging
   command: serverless deploy --verbose --region us-east-1 --stage staging
 
 - service: web
   name: staging_add_api_endpoint
-  tag: staging
+  #tag: staging
   command: bash -c "npm install && sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng build --prod --aot"
 
 - service: awsdeployment
   name: staging_deploy_web
   encrypted_env_file: deployment.env.encrypted
-  tag: staging
+  #tag: staging
   command: bash -c "aws s3 sync /app-src/dist $AWS_S3_BUCKET_STAGING"
 
 - service: kiosk
   name: staging_build_kiosk_app
-  tag: staging
+  #tag: staging
   command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
 
 - service: kiosk_deployment
   name: staging_deploy_kiosk_app
   encrypted_env_file: deployment.env.encrypted
-  tag: staging
+  #tag: staging
   command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING --exclude='win-unpacked/*'"
 
 - service: api
