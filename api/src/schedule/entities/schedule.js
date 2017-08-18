@@ -4,8 +4,11 @@ const uuid = require('uuid');
 const Q = require('q');
 const _ = require('lodash');
 
+const SettingFinder = require('../../setting/helpers/setting_finder');
 const CronValidator = require('../helpers/cron-validator');
 const periodicity = require('../../enums/periodicity');
+
+const dbHelper = require('../../helpers/db_helper');
 
 let db;
 
@@ -110,7 +113,7 @@ class Schedule {
     }
 
     /**
-     * Validates schedule. Important: don't validates cron format syntax
+     * Validates schedule.
      * @param {function} errorCallback: calls with error message attribute if validation failed
      */
     validate(errorCallback) {
@@ -125,14 +128,27 @@ class Schedule {
         if (!Number.isInteger(Number(this._rev)) && this._rev !== 0) errorMessage = 'Schedule\'s revision should be a number';
         if (this._rev < 0) errorMessage = 'Schedule\'s revision can\'t be < 0';
 
+        this.findSetting()
+            .then(setting => {
+                if (_.isEmpty(setting)) errorMessage = 'Invalid setting';
+
+                if (errorMessage) {
+                    errorCallback(errorMessage);
+                }
+            });
+
         if (errorMessage) {
             errorCallback(errorMessage);
         }
-    };
+    }
+
+    findSetting() {
+        return SettingFinder.findSettingById(this.settingId);
+    }
 
     generateId() {
         this.id = uuid.v1();
-    };
+    }
 }
 
 module.exports = Schedule;

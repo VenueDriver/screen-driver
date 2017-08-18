@@ -3,6 +3,7 @@
 require('./helpers/test_provider_configurator').configure();
 
 const DatabaseCleaner = require('./helpers/database_cleaner');
+const TestDataSever = require('./helpers/test_data_saver');
 const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 
 const createFunction = require('../src/schedule/create.js');
@@ -17,12 +18,17 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 const idLength = 36;
 
 describe('create_schedule', () => {
+
     before((done) => {
-        DatabaseCleaner.cleanDatabase().then(() => done());
+        DatabaseCleaner.cleanDatabase()
+            .then(() => TestDataSever.saveDefaultSetting())
+            .then(() => done());
     });
 
     afterEach(done => {
-        DatabaseCleaner.cleanDatabase().then(() => done());
+        DatabaseCleaner.cleanDatabase()
+            .then(() => TestDataSever.saveDefaultSetting())
+            .then(() => done());
     });
 
 
@@ -260,6 +266,15 @@ describe('create_schedule', () => {
         schedule.endEventCron = '0 0 8 * JAN MON';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule bound with unknown setting', () => {
+        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        schedule.settingId = 'invalid_setting_id';
+
+        let expectations = generateErrorExpectations('Invalid setting', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
