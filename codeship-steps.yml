@@ -46,7 +46,7 @@
   tag: production
   command: bash -c "sed -i 's@API_HOST@'"$PRODUCTION_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
 
-- service: kiosk-deployment
+- service: kiosk_deployment
   name: production_deploy_kiosk_app
   encrypted_env_file: deployment.env.encrypted
   tag: production
