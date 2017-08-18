@@ -1,6 +1,7 @@
 'use strict';
 
 require('./helpers/test_provider_configurator').configure();
+
 const DatabaseCleaner = require('./helpers/database_cleaner');
 const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 
@@ -31,7 +32,7 @@ describe('create_schedule', () => {
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
-            expect(body).to.have.property('settingId').that.equal('id_mock');
+            expect(body).to.have.property('settingId').that.equal('setting_id');
             expect(body).to.have.property('eventCron').that.equal(ScheduleDataPreparationHelper.getDefaultCronExpression());
             expect(body).to.have.property('endEventCron').that.equal(ScheduleDataPreparationHelper.getDefaultCronExpression());
             expect(body).to.have.property('enabled').that.equal(false);
@@ -115,8 +116,8 @@ describe('create_schedule', () => {
 
     it('Shouldn\'t create schedule with cron expression that includes non 0 value for seconds', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        schedule.eventCron = '* 0 12 * * *';
-        schedule.endEventCron = '* 0 12 * * *';
+        schedule.eventCron = '1 0 8 1 JUN * 2017';
+        schedule.endEventCron = '1 0 8 1 JUN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
@@ -125,8 +126,8 @@ describe('create_schedule', () => {
 
     it('Shouldn\'t create schedule with cron expression that should be repeated every minute', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        schedule.eventCron = '0 * 12 * * *';
-        schedule.endEventCron = '0 * 12 * * *';
+        schedule.eventCron = '0 * 8 1 JUN * 2017';
+        schedule.endEventCron = '0 * 8 1 JUN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
@@ -135,8 +136,8 @@ describe('create_schedule', () => {
 
     it('Shouldn\'t create schedule with cron expression that should be repeated every N minutes', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        schedule.eventCron = '0 */2 12 * * *';
-        schedule.endEventCron = '0 */2 12 * * *';
+        schedule.eventCron = '0 */2 8 1 JUN * 2017';
+        schedule.endEventCron = '0 */2 8 1 JUN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
@@ -145,8 +146,8 @@ describe('create_schedule', () => {
 
     it('Shouldn\'t create schedule with cron expression that should be repeated every hour', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        schedule.eventCron = '0 8 * * * *';
-        schedule.endEventCron = '0 8 * * * *';
+        schedule.eventCron = '0 0 * 1 JAN * 2017';
+        schedule.endEventCron = '0 0 * 1 JAN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
@@ -155,8 +156,8 @@ describe('create_schedule', () => {
 
     it('Shouldn\'t create schedule with cron expression that should be repeated every N hours', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        schedule.eventCron = '0 8 */5 * * *';
-        schedule.endEventCron = '0 8 */5 * * *';
+        schedule.eventCron = '0 0 */8 1 JUN * 2017';
+        schedule.endEventCron = '0 0 */8 1 JUN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 

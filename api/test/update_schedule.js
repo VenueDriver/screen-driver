@@ -163,8 +163,8 @@ describe('update_setting', () => {
     it('Shouldn\'t update schedule with cron expression that includes non 0 value for seconds', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        updatedSchedule.eventCron = '* 0 12 * * *';
-        updatedSchedule.endEventCron = '* 0 12 * * *';
+        updatedSchedule.eventCron = '1 0 8 1 JUN * 2017';
+        updatedSchedule.endEventCron = '1 0 8 1 JUN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
@@ -174,8 +174,8 @@ describe('update_setting', () => {
     it('Shouldn\'t update schedule with cron expression that should be repeated every minute', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        updatedSchedule.eventCron = '0 * 12 * * *';
-        updatedSchedule.endEventCron = '0 * 12 * * *';
+        updatedSchedule.eventCron = '0 * 8 1 JUN * 2017';
+        updatedSchedule.endEventCron = '0 * 8 1 JUN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
@@ -185,8 +185,8 @@ describe('update_setting', () => {
     it('Shouldn\'t update schedule with cron expression that should be repeated every N minutes', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        updatedSchedule.eventCron = '0 */2 12 * * *';
-        updatedSchedule.endEventCron = '0 */2 12 * * *';
+        updatedSchedule.eventCron = '0 */2 8 1 JUN * 2017';
+        updatedSchedule.endEventCron = '0 */2 8 1 JUN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
@@ -196,8 +196,8 @@ describe('update_setting', () => {
     it('Shouldn\'t update schedule with cron expression that should be repeated every hour', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        updatedSchedule.eventCron = '0 8 * * * *';
-        updatedSchedule.endEventCron = '0 8 * * * *';
+        updatedSchedule.eventCron = '0 0 * 1 JAN * 2017';
+        updatedSchedule.endEventCron = '0 0 * 1 JAN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 
@@ -207,8 +207,8 @@ describe('update_setting', () => {
     it('Shouldn\'t update schedule with cron expression that should be repeated every N hours', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        updatedSchedule.eventCron = '0 8 */5 * * *';
-        updatedSchedule.endEventCron = '0 8 */5 * * *';
+        updatedSchedule.eventCron = '0 0 */8 1 JUN * 2017';
+        updatedSchedule.endEventCron = '0 0 */8 1 JUN * 2017';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
 

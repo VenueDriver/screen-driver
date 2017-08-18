@@ -5,7 +5,7 @@ module.exports = class ScheduleDataPreparationHelper {
     static createDefaultSchedule() {
         let defaultCronExpression = ScheduleDataPreparationHelper.getDefaultCronExpression();
         return {
-            settingId: 'id_mock',
+            settingId: 'setting_id',
             eventCron: defaultCronExpression,
             endEventCron: defaultCronExpression,
             periodicity: 'ONE_TIME',
@@ -20,7 +20,7 @@ module.exports = class ScheduleDataPreparationHelper {
     static createRepeatableSchedule() {
         let defaultCronExpression = ScheduleDataPreparationHelper.getValidRepeatableCronExpression();
         return {
-            settingId: 'id_mock',
+            settingId: 'setting_id',
             eventCron: defaultCronExpression,
             endEventCron: defaultCronExpression,
             periodicity: 'REPEATABLE',
