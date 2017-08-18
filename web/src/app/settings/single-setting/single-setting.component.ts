@@ -6,6 +6,7 @@ import {NotificationService} from "../../notifications/notification.service";
 import * as _ from 'lodash';
 import {SchedulesService} from "../../schedules/schedules.service";
 import {Schedule} from "../../schedules/entities/schedule";
+import {PriorityTypes} from "../../enums/priorty-types";
 
 @Component({
     selector: 'single-setting',
@@ -55,6 +56,9 @@ export class SingleSettingComponent implements OnInit {
     }
 
     isControlButtonsDisplayed() {
+        if (this.isPersistent()) {
+            return !_.isEmpty(this.setting.config);
+        }
         return !_.isEmpty(this.setting.config) && !_.isEmpty(this.schedules);
     }
 
@@ -63,16 +67,20 @@ export class SingleSettingComponent implements OnInit {
     }
 
     getMessage() {
-        if (_.isEmpty(this.setting.config) && _.isEmpty(this.schedules)) {
+        if (_.isEmpty(this.setting.config) && _.isEmpty(this.schedules) && !this.isPersistent()) {
             return 'Without config and schedule';
         }
 
-        if (_.isEmpty(this.schedules)) {
+        if (_.isEmpty(this.schedules) && !this.isPersistent()) {
             return 'Without schedule';
         }
 
         if (_.isEmpty(this.setting.config)) {
             return 'Without config';
         }
+    }
+
+    private isPersistent() {
+        return this.setting.priority === PriorityTypes.PERSISTENT.id;
     }
 }
