@@ -31,9 +31,13 @@ function isSettingChanged(streamInfo) {
     if (!_.isEqual(oldSetting.enabled, newSetting.enabled)) {
         return true;
     }
-    let oldConfigKeys = Object.keys(oldSetting.config.M);
-    let newConfigKeys = Object.keys(newSetting.config.M);
-    return !_.isEqual(oldConfigKeys.sort(), newConfigKeys.sort());
+    return !areConfigsEqual(oldSetting, newSetting);
+}
+
+function areConfigsEqual(oldSetting, newSetting) {
+    let oldConfigValues = _.map(oldSetting.config.M, c => c);
+    let newConfigValues = _.map(newSetting.config.M, c => c);
+    return _.isEqual(oldConfigValues.sort(), newConfigValues.sort());
 }
 
 function triggerUpdateEvent(context) {

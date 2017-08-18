@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {SchedulesService} from "./schedules.service";
 import {Schedule} from "./entities/schedule";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
@@ -18,6 +18,7 @@ export class SchedulesComponent implements OnInit {
     filteredSchedules: Array<Schedule>;
     currentSetting: Setting;
     isShowCreateScheduleForm = false;
+    settings: Array<Setting>;
 
     constructor(
         private schedulesService: SchedulesService,
@@ -28,6 +29,13 @@ export class SchedulesComponent implements OnInit {
         this.loadSchedules();
         this.subscribeToCurrentSettingChanging();
         this.schedulesService.scheduleListUpdated.subscribe(() => this.loadSchedules());
+        this.loadSettings();
+    }
+
+    private loadSettings() {
+        this.settingStateHolderService.getAllSettings().subscribe(settings => {
+            this.settings = settings;
+        });
     }
 
     loadSchedules() {
@@ -73,5 +81,9 @@ export class SchedulesComponent implements OnInit {
 
     isShowAddScheduleButton(): boolean {
         return !this.isShowCreateScheduleForm && this.isAbleToAddSchedule();
+    }
+
+    findSettingForSchedule(schedule: Schedule): Setting {
+        return this.settings.find(setting => setting.id === schedule.settingId);
     }
 }

@@ -68,7 +68,8 @@ export class SingleScheduleComponent implements OnInit {
     }
 
     generateTimeItems() {
-        for (let i = 1; i <= 12; i++) {
+        this.timeItems.push(`${12}:00`, `${12}:15`, `${12}:30`, `${12}:45`);
+        for (let i = 1; i < 12; i++) {
             this.timeItems.push(`${i}:00`, `${i}:15`, `${i}:30`, `${i}:45`);
         }
     }
