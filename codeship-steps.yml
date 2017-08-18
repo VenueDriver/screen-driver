@@ -19,7 +19,7 @@
   tag: staging
   command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
 
-- service: kiosk-deployment
+- service: kiosk_deployment
   name: staging_deploy_kiosk_app
   encrypted_env_file: deployment.env.encrypted
   tag: staging

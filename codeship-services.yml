@@ -37,7 +37,7 @@ services:
     volumes:
       - ./kiosk:/app-src
 
-  kiosk-deployment:
+  kiosk_deployment:
     image: codeship/aws-deployment
     encrypted_env_file: deployment.env.encrypted
     volumes_from:
