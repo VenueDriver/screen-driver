@@ -35,7 +35,7 @@ services:
       dockerfile: docker/Dockerfile
     encrypted_env_file: deployment.env.encrypted
     volumes:
-      - ./kiosk:/app-src
+      - /app-src/dist
 
   kiosk_deployment:
     image: codeship/aws-deployment
