@@ -36,4 +36,7 @@ export class SettingsGroupComponent {
         this.headerService.pushSidebarToggleEvent();
     }
 
+    getPrefixColor() {
+        return this.priorityType.name.toLowerCase();
+    }
 }

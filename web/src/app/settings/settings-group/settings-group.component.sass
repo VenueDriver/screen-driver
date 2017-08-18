@@ -1,4 +1,7 @@
 $triangle-height: 30px
+$persistent-color: #D4E157
+$periodical-color: #FFCA28
+$occasional-color: #FFA726
 
 .group-header
   margin-top: -$triangle-height
@@ -10,12 +13,30 @@ $triangle-height: 30px
   width: 0
   border-style: solid
   border-width: $triangle-height 25px 0 0
-  border-color: yellow transparent transparent transparent
+
+  &.persistent
+    border-color: $persistent-color transparent transparent transparent
+
+  &.periodical
+    border-color: $periodical-color transparent transparent transparent
+
+  &.occasional
+    border-color: $occasional-color transparent transparent transparent
 
 .line-prefix
   border-style: solid
   border-width: 0 0 0 10px
   border-color: yellow
+
+  &.persistent
+    border-color: $persistent-color
+
+  &.periodical
+    border-color: $periodical-color
+
+  &.occasional
+    border-color: $occasional-color
+
 
 .plus-button
   display: inline-block

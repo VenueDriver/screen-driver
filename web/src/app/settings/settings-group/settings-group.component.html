@@ -1,7 +1,10 @@
 <div class="settings-group-container">
 
-    <div class="triangle-prefix"></div>
-    <div class="group-header line-prefix">
+    <div class="triangle-prefix"
+         [ngClass]="getPrefixColor()">
+    </div>
+    <div class="group-header line-prefix"
+         [ngClass]="getPrefixColor()">
         <div class="title">
             <b>{{priorityType.name}}</b>
         </div>
@@ -13,6 +16,7 @@
 
     <li *ngFor="let setting of settings"
         class="line-prefix"
+        [ngClass]="getPrefixColor()"
         [class.active]="isActive(setting)">
         <single-setting
                 [setting]="setting"
