@@ -58,7 +58,10 @@ class Setting {
             .then(() => Setting.hasUniqueName(this))
             .then(() => Setting.hasConflictsInConfig(this))
             .then(conflictedConfigs => {
-                conflicts = conflictedConfigs;
+                if (!_.isEmpty(conflictedConfigs)) {
+                    conflicts = conflictedConfigs;
+                    params.ExpressionAttributeValues[':enabled'] = false;
+                }
                 return _updateInDatabase(params);
             })
             .then(updatedSetting => {
