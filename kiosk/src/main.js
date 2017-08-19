@@ -9,7 +9,6 @@ const WindowsHelper = require('./js/helpers/windows_helper');
 const CronJobsManager = require('./js/helpers/cron_jobs_helper');
 const Logger = require('./js/logger/logger');
 const NotificationListener = require('./js/notification-listener/notification_listener');
-const SettingMergeTool = require('./js/setting-merge-tool');
 const SettingsHelper = require('./js/helpers/settings_helper');
 const {scheduledTaskManager} = require('./js/scheduled-task-manager');
 const WindowInstanceHolder = require('./js/window-instance-holder');
@@ -18,6 +17,7 @@ const StorageManager = require('./js/helpers/storage_manager');
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
+const SettingMergeTool = require('setting-merge-tool');
 
 let settingsLoadJob;
 let notificationListener;

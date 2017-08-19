@@ -1,7 +1,7 @@
 'use strict';
 
 const {net} = require('electron');
-const SettingMergeTool = require('./setting-merge-tool');
+const SettingMergeTool = require('setting-merge-tool');
 const StorageManager = require('./helpers/storage_manager');
 const API_ENDPOINT = process.env.API_HOST;
 
