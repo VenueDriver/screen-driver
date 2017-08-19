@@ -7,6 +7,8 @@ const createFunction = require('../src/setting/create');
 const updateFunction = require('../src/setting/update');
 const mochaPlugin = require('serverless-mocha-plugin');
 
+const PriorityTypes = require('../src/enums/priority_types');
+
 const expect = mochaPlugin.chai.expect;
 
 const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
@@ -17,6 +19,7 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 const idLength = 36;
 
 describe('update_setting', () => {
+
     before((done) => {
         DatabaseCleaner.cleanDatabase().then(() => done());
     });
@@ -44,6 +47,21 @@ describe('update_setting', () => {
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
+            expect(body).to.have.property('_rev').that.equal(1);
+        };
+
+        return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
+    });
+
+    it('Should update setting with new config', () => {
+        let config = {screen_id: 'content_id'};
+        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypes()[0].id, config: config};
+        let updatedConfig = {screen_id: 'content_id_2'};
+        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypes()[0].id, config: updatedConfig};
+
+        let expectations = (body) => {
+            expect(body).to.have.property('config').that.to.deep.equal(updatedConfig);
+            expect(body).to.have.property('_rev').that.equal(1);
         };
 
         return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
