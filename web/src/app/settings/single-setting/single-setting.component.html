@@ -5,7 +5,8 @@
     <div *ngIf="isControlButtonsDisplayed()"
          class="controls">
         <div class="forcibly-enabled-button"
-                [ngClass]="{'forced-enabled-button-on' : !isEnabledForcibly(), 'forced-enabled-button-off' : isEnabledForcibly()}"
+             [class.forced-enabled-button-on]="!isEnabledForcibly()"
+             [class.forced-enabled-button-off]="isEnabledForcibly()"
              (click)="onEnableForciblyClicked($event)">
         </div>
         <toggle-button class="switcher"
