@@ -89,6 +89,6 @@ export class SchedulesComponent implements OnInit {
 
     getSettingName(schedule: Schedule) {
         let setting = this.findSettingForSchedule(schedule);
-        return setting? setting.name : '';
+        return setting ? setting.name : '';
     }
 }
