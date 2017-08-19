@@ -1,0 +1,8 @@
+{
+  "name": "setting-merge-tool",
+  "version": "0.1.0",
+  "description": "Merge tool for merging settings",
+  "main": "setting-merge-tool.js",
+  "scripts": {},
+  "license": "ISC"
+}
