@@ -57,11 +57,11 @@ describe('create_setting', () => {
         return MultiOperationHelper.performCreateTest(setting, expectations);
     });
 
-    it('Should create forcibly enabled setting', () => {
-        let setting = {name: 'New Year', priority: 'test_id_1', forciblyEnabled: true};
+    it('Should create setting with forcibly enabled field equals to false', () => {
+        let setting = {name: 'New Year', priority: 'test_id_1', forciblyEnabled: false};
 
         let expectations = (body) => {
-            expect(body).to.have.property('forciblyEnabled').that.equal(true);
+            expect(body).to.have.property('forciblyEnabled').that.equal(false);
         };
 
         return MultiOperationHelper.performCreateTest(setting, expectations);
