@@ -5,6 +5,17 @@ const dynamoDb = require('./../dynamodb/dynamodb');
 
 const _ = require('lodash');
 
+module.exports.findByParams = (params) => {
+    let deferred = Q.defer();
+    dynamoDb.scan(params, (error, result) => {
+        if (error) {
+            deferred.reject(error.message);
+        }
+        deferred.resolve(result ? result.Items : result);
+    });
+    return deferred.promise;
+};
+
 module.exports.findAll = (tableName) => {
     let deferred = Q.defer();
     dynamoDb.scan({TableName: tableName}, (error, result) => {

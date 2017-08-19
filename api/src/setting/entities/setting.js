@@ -87,16 +87,17 @@ class Setting {
 
     static hasConflictsInConfig(setting) {
         let deferred = Q.defer();
-        Setting.getExistingConfigs(setting.priority, setting.id)
+        Setting.getExistingConfigs(setting.priority)
             .then(configs => {
-                let currentConfig = _.assignIn(...configs, {});
-                let conflictedConfigs = _.pickBy(setting.config, (v, k) => currentConfig[k] !== v);
-                if (!_.isEmpty(conflictedConfigs)) {
-                    setting.enabled = false;
-                }
+                let conflictedConfigs = Setting._detectConflictInConfigs(configs, setting);
                 deferred.resolve(conflictedConfigs);
             });
         return deferred.promise;
+    }
+
+    static _detectConflictInConfigs(configs, setting) {
+        let currentConfig = _.assignIn(...configs, {});
+        return _.pickBy(setting.config, (v, k) => currentConfig[k] !== v);
     }
 
     static hasUniqueName(setting) {
@@ -136,18 +137,16 @@ class Setting {
         }
     }
 
-    static getExistingConfigs(priorityType, settingId) {
-        let deferred = Q.defer();
-        let params = {TableName: process.env.SETTINGS_TABLE};
-        db.scan(params, (error, data) => {
-            if (error) {
-                deferred.reject(error.message);
-            } else {
-                deferred.resolve(data.Items.filter(i => i.priority === priorityType && i.id !== settingId).map(i => i.config));
-            }
-        });
-        return deferred.promise;
-
+    static getExistingConfigs(priorityType) {
+        let params = {
+            TableName: process.env.SETTINGS_TABLE,
+            ProjectionExpression: 'config',
+            ExpressionAttributeValues: {
+                ':priority': priorityType
+            },
+            FilterExpression: 'priority = :priority'
+        };
+        return DbHelper.findByParams(params);
     }
 
     generateId() {
