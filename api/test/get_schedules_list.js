@@ -1,7 +1,9 @@
 'use strict';
 
 require('./helpers/test_provider_configurator').configure();
+
 const DatabaseCleaner = require('./helpers/database_cleaner');
+const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 
 const getAllFunction = require('../src/schedule/list.js');
 const createFunction = require('../src/schedule/create.js');
@@ -34,8 +36,8 @@ describe('schedule_list', () => {
     });
 
     it('Should display list with 2 schedules', () => {
-        let firstContent =  {settingId: 'id_mock_1', eventCron: '* */5 * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
-        let secondContent = {settingId: 'id_mock_2', eventCron: '*/5 * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let firstContent = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let secondContent = ScheduleDataPreparationHelper.createDefaultSchedule();
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);
