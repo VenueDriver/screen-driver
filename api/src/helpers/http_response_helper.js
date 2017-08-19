@@ -19,3 +19,11 @@ module.exports.createResponseWithError = (statusCode, error) => {
         body: JSON.stringify({message: error})
     };
 };
+
+module.exports.createResponse = (statusCode, params) => {
+    return {
+        statusCode: statusCode,
+        headers: headers,
+        body: JSON.stringify(params)
+    };
+};
