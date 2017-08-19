@@ -3,6 +3,7 @@
 require('./helpers/test_provider_configurator').configure();
 
 const DatabaseCleaner = require('./helpers/database_cleaner');
+const TestDataSever = require('./helpers/test_data_saver');
 const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 
 const createFunction = require('../src/schedule/create');
@@ -19,23 +20,28 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 const idLength = 36;
 
 describe('update_setting', () => {
+
     before((done) => {
-        DatabaseCleaner.cleanDatabase().then(() => done());
+        DatabaseCleaner.cleanDatabase()
+            .then(() => TestDataSever.saveDefaultSetting())
+            .then(() => done());
     });
 
     afterEach(done => {
-        DatabaseCleaner.cleanDatabase().then(() => done());
+        DatabaseCleaner.cleanDatabase()
+            .then(() => TestDataSever.saveDefaultSetting())
+            .then(() => done());
     });
 
     it('Should update the setting id and increase revision', () => {
         let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        updatedSchedule.settingId = 'id_mock_2';
+        updatedSchedule.settingId = 'setting_id';
         updatedSchedule.enabled = false;
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
-            expect(body).to.have.property('settingId').that.equal('id_mock_2');
+            expect(body).to.have.property('settingId').that.equal('setting_id');
             expect(body).to.have.property('enabled').that.equal(false);
             expect(body).to.have.property('_rev').that.equal(1);
         };
@@ -321,6 +327,16 @@ describe('update_setting', () => {
         updatedSchedule.endEventCron = '0 0 8 * JAN MON';
 
         let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
+    });
+
+    it('Shouldn\'t update schedule bound with unknown setting', () => {
+        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        updatedSchedule.settingId = 'invalid_setting_id';
+
+        let expectations = generateErrorExpectations('Invalid setting', 500);
 
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
