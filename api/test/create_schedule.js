@@ -1,7 +1,10 @@
 'use strict';
 
 require('./helpers/test_provider_configurator').configure();
+
 const DatabaseCleaner = require('./helpers/database_cleaner');
+const TestDataSever = require('./helpers/test_data_saver');
+const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 
 const createFunction = require('../src/schedule/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
@@ -15,82 +18,272 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 const idLength = 36;
 
 describe('create_schedule', () => {
+
     before((done) => {
-        DatabaseCleaner.cleanDatabase().then(() => done());
+        DatabaseCleaner.cleanDatabase()
+            .then(() => TestDataSever.saveDefaultSetting())
+            .then(() => done());
     });
 
     afterEach(done => {
-        DatabaseCleaner.cleanDatabase().then(() => done());
+        DatabaseCleaner.cleanDatabase()
+            .then(() => TestDataSever.saveDefaultSetting())
+            .then(() => done());
     });
 
 
     it('Should create schedule with all fields, id and revision number', () => {
-        let content = {settingId: 'id_mock', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME', enabled: false};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.enabled = false;
 
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
-            expect(body).to.have.property('settingId').that.equal('id_mock');
-            expect(body).to.have.property('eventCron').that.equal('* * * * *');
+            expect(body).to.have.property('settingId').that.equal('setting_id');
+            expect(body).to.have.property('eventCron').that.equal(ScheduleDataPreparationHelper.getDefaultCronExpression());
+            expect(body).to.have.property('endEventCron').that.equal(ScheduleDataPreparationHelper.getDefaultCronExpression());
             expect(body).to.have.property('enabled').that.equal(false);
-            expect(body).to.have.property('endEventCron').that.equal('* * * * *');
             expect(body).to.have.property('_rev').that.equal(0);
         };
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Should create schedule with automatically generated `enabled` field', () => {
-        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
 
         let expectations = (body)=> {
             expect(body).to.have.property('enabled').that.equal(true);
         };
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Should create schedule without unknown fields', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.date = new Date();
+
+        let expectations = (body) => {
+            expect(body).to.not.have.not.property('data');
+        };
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Shouldn\'t create schedule without setting id', () => {
-        let content = {eventCron: '* * * * *', endEventCron: '* * * * *', periodicity: 'ONE_TIME'};
+        let schedule = ScheduleDataPreparationHelper.createScheduleWithoutSettingId();
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without setting');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without setting', 500);
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Shouldn\'t create schedule without eventCron', () => {
-        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', endEventCron: '* * * * *'};
+        let schedule = ScheduleDataPreparationHelper.createScheduleWithoutEventCron();
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without eventCron');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without eventCron', 500);
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Shouldn\'t create schedule without endEventCron', () => {
-        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *'};
+        let schedule = ScheduleDataPreparationHelper.createScheduleWithoutEndEventCron();
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Schedule couldn\'t be without endEventCron');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Schedule couldn\'t be without endEventCron', 500);
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
     it('Shouldn\'t create schedule without periodicity', () => {
-        let content = {settingId: 'id_mock', startDate: '2017-07-26T00:00:00.000Z', eventCron: '* * * * *', endEventCron: '* * * * *',};
+        let schedule = ScheduleDataPreparationHelper.createScheduleWithoutPeriodicity();
 
-        let expectations = (body, response)=> {
-            expect(body).to.have.property('message').that.equal('Invalid periodicity');
-            expect(response).to.have.property('statusCode').that.equal(500);
-        };
+        let expectations = generateErrorExpectations('Invalid periodicity', 500);
 
-        return MultiOperationHelper.performCreateTest(content, expectations);
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with invalid periodicity', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.periodicity = 'SOME_PERIODICITY';
+
+        let expectations = generateErrorExpectations('Invalid periodicity', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with invalid cron expressions', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '*';
+        schedule.endEventCron = '*';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with cron expression that includes non 0 value for seconds', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '1 0 8 1 JUN * 2017';
+        schedule.endEventCron = '1 0 8 1 JUN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with cron expression that should be repeated every minute', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 * 8 1 JUN * 2017';
+        schedule.endEventCron = '0 * 8 1 JUN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with cron expression that should be repeated every N minutes', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 */2 8 1 JUN * 2017';
+        schedule.endEventCron = '0 */2 8 1 JUN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with cron expression that should be repeated every hour', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 * 1 JAN * 2017';
+        schedule.endEventCron = '0 0 * 1 JAN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule with cron expression that should be repeated every N hours', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 */8 1 JUN * 2017';
+        schedule.endEventCron = '0 0 */8 1 JUN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every day', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 13 * JAN * 2017';
+        schedule.endEventCron = '0 0 13 * JAN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every N days', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 13 */5 JAN * 2017';
+        schedule.endEventCron = '0 0 13 */5 JAN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every month', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 13 1 * * 2017';
+        schedule.endEventCron = '0 0 13 1 * * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every N months', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 13 1 */5 * 2017';
+        schedule.endEventCron = '0 0 13 1 */5 * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every year', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 8 1 JAN * *';
+        schedule.endEventCron = '0 0 8 1 JAN * *';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule that should be repeated every N years', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 8 1 JAN * */5';
+        schedule.endEventCron = '0 0 8 1 JAN * */5';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create one time schedule with cron expression that includes invalid amount of parts', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        schedule.eventCron = '0 0 8 1 JAN MON';
+        schedule.endEventCron = '0 0 8 1 JAN MON';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create repeatable schedule with cron expression that includes invalid amount of parts', () => {
+        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        schedule.eventCron = '0 0 8 1 JAN * 2017';
+        schedule.endEventCron = '0 0 8 1 JAN * 2017';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create repeatable schedule with cron expression that includes date', () => {
+        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        schedule.eventCron = '0 0 8 1 * MON';
+        schedule.endEventCron = '0 0 8 1 * MON';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create repeatable schedule with cron expression that includes month', () => {
+        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        schedule.eventCron = '0 0 8 * JAN MON';
+        schedule.endEventCron = '0 0 8 * JAN MON';
+
+        let expectations = generateErrorExpectations('Invalid cron expression', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Shouldn\'t create schedule bound with unknown setting', () => {
+        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        schedule.settingId = 'invalid_setting_id';
+
+        let expectations = generateErrorExpectations('Invalid setting', 500);
+
+        return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
 });
+
+function generateErrorExpectations(message, statusCode) {
+    return (body, response) => {
+        expect(body).to.have.property('message').that.equal(message);
+        expect(response).to.have.property('statusCode').that.equal(statusCode);
+    };
+}
