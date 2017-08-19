@@ -56,6 +56,7 @@ describe('update_setting', () => {
     it('Should update setting with new config', () => {
         let config = {screen_id: 'content_id'};
         let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
+
         let updatedConfig = {screen_id: 'content_id_2'};
         let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
 
@@ -65,6 +66,25 @@ describe('update_setting', () => {
         };
 
         return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
+    });
+
+    it('Shouldn\'t update persistent setting with conflicts in config', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let existingSetting = {name: 'Halloween', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
+
+        let newConfig = {screen_id_2: 'content_id'};
+        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: newConfig};
+
+        let updatedConfig = {screen_id: 'content_id_2'};
+        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
+
+        let expectations = (body, response) => {
+            expect(body).to.have.property('_rev').that.equal(1);
+            expect(response).to.have.property('statusCode').that.equal(409);
+        };
+
+        return MultiOperationHelper.create(existingSetting)
+            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
     });
 
     it('Shouldn\'t update setting without name', () => {
