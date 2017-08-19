@@ -16,21 +16,31 @@ export class SettingMergeTool {
     public mergeSettings(): Setting {
         let mergedConfig = new Setting();
         let enabledSettings = [];
+        let forciblyEnabledSettings = [];
         if (this.settings) {
             enabledSettings = this.settings.filter((setting => setting.enabled));
+            forciblyEnabledSettings = this.settings.filter((setting => setting.forciblyEnabled));
         }
 
         enabledSettings.forEach(setting => {
-            for (let instruction in setting.config) {
-                if (mergedConfig.config.hasOwnProperty(instruction)) {
-                    mergedConfig.config[instruction] = this.resolveSettingConflict(instruction)
-                } else {
-                    mergedConfig.config[instruction] = setting.config[instruction];
-                }
-            }
+            this.includeEnabledSettings(setting, mergedConfig);
+        });
+
+        forciblyEnabledSettings.forEach(setting => {
+            this.includeForciblyEnabledSettings(setting, mergedConfig)
         });
         mergedConfig.enabled = true;
         return mergedConfig;
+    }
+
+    private includeEnabledSettings(setting, mergedConfig: Setting) {
+        for (let instruction in setting.config) {
+            if (mergedConfig.config.hasOwnProperty(instruction)) {
+                mergedConfig.config[instruction] = this.resolveSettingConflict(instruction)
+            } else {
+                mergedConfig.config[instruction] = setting.config[instruction];
+            }
+        }
     }
 
     private resolveSettingConflict(instruction): string {
@@ -64,6 +74,12 @@ export class SettingMergeTool {
         let priorities = this.priorities;
         let priority = priorities.find(element => element.id == priorityId);
         return priorities.indexOf(priority);
+    }
+
+    private includeForciblyEnabledSettings(setting, mergedConfig: Setting) {
+        for (let instruction in setting.config) {
+            mergedConfig.config[instruction] = setting.config[instruction];
+        }
     }
 
     static startMerging(): SettingMergeTool {
