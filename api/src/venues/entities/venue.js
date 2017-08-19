@@ -44,7 +44,7 @@ class Venue {
         this._rev = 0;
         this.generateId();
         this.validate()
-            .then(() => this.generateIdentificatorsForGroupsAndScreens())
+            .then(() => this.generateIdentifiersForGroupsAndScreens())
             .then(_putInDatabase)
             .fail(errorMessage => deferred.reject(errorMessage));
 
@@ -69,26 +69,16 @@ class Venue {
 
         this.validate()
             .then(() => {
-                this.generateIdentificatorsForGroupsAndScreens();
+                this.generateIdentifiersForGroupsAndScreens();
                 return Venue.hasUniqueName(this)
             })
-            .then(() => _updateInDatabase(params))
+            .then(() => DbHelper.updateItem(params, deferred))
             .fail(errorMessage => deferred.reject(errorMessage));
 
         return deferred.promise;
-
-        function _updateInDatabase(updateParameters) {
-            db.update(updateParameters, (error, result) => {
-                if (error) {
-                    deferred.reject(error.message);
-                } else {
-                    deferred.resolve(result.Attributes);
-                }
-            });
-        }
     }
 
-    generateIdentificatorsForGroupsAndScreens() {
+    generateIdentifiersForGroupsAndScreens() {
         this.screen_groups.forEach(group => {
             group.generateId();
             group.generateIdForScreens();

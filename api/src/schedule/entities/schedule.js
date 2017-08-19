@@ -79,19 +79,9 @@ class Schedule {
         if (!this._rev) deferred.reject('Missed revision number');
 
         this.validate(deferred.reject);
-        _updateInDatabase(params);
+        dbHelper.updateItem(params, deferred);
 
         return deferred.promise;
-
-        function _updateInDatabase(updateParameters) {
-            db.update(updateParameters, (error, result) => {
-                if (error) {
-                    deferred.reject(error.message);
-                } else {
-                    deferred.resolve(result.Attributes);
-                }
-            });
-        }
     }
 
     deleteSchedule() {

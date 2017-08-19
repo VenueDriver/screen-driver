@@ -3,6 +3,7 @@
 const uuid = require('uuid');
 const PriorityTypes = require('./../../enums/priority_types');
 const ParametersBuilder = require('./../helpers/parameters_builder');
+const DbHelper = require('../../helpers/db_helper');
 
 const _ = require('lodash');
 const Q = require('q');
@@ -62,7 +63,7 @@ class Setting {
                     conflicts = conflictedConfigs;
                     params.ExpressionAttributeValues[':enabled'] = false;
                 }
-                return _updateInDatabase(params);
+                return DbHelper.updateItem(params);
             })
             .then(updatedSetting => {
                 updatedSetting.conflicts = conflicts;
@@ -71,18 +72,6 @@ class Setting {
             .fail(errorMessage => deferred.reject(errorMessage));
 
         return deferred.promise;
-
-        function _updateInDatabase(updateParameters) {
-            let deferred = Q.defer();
-            db.update(updateParameters, (error, result) => {
-                if (error) {
-                    deferred.reject(error.message);
-                } else {
-                    deferred.resolve(result.Attributes);
-                }
-            });
-            return deferred.promise;
-        }
     }
 
     validate() {

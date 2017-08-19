@@ -5,6 +5,8 @@ const dynamoDb = require('../dynamodb/dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
 const validator = require('./content_validator');
 
+const DbHepler = require('../helpers/db_helper');
+
 module.exports.update = (event, context, callback) => {
     let data = JSON.parse(event.body);
     data.id = event.pathParameters.id;
@@ -44,7 +46,7 @@ function getAllExistingShortNamesBesidesCurrent(contentForUpdate) {
 
 function updateContent(content) {
     let params = initParamsForUpdating(content);
-    return performUpdate(params);
+    return DbHepler.updateItem(params);
 }
 
 function initParamsForUpdating(contentForUpdate) {
@@ -67,15 +69,4 @@ function initParamsForUpdating(contentForUpdate) {
         },
         ReturnValues: "ALL_NEW"
     }
-}
-
-function performUpdate(params) {
-    let deferred = Q.defer();
-    dynamoDb.update(params, (error, data) => {
-        if (error) {
-            deferred.reject(`Couldn\'t update the content: ${error.message}`);
-        }
-        deferred.resolve(data ? data.Attributes : {});
-    });
-    return deferred.promise;
 }

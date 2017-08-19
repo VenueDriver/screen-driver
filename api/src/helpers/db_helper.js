@@ -3,6 +3,8 @@
 const Q = require('q');
 const dynamoDb = require('./../dynamodb/dynamodb');
 
+const _ = require('lodash');
+
 module.exports.findAll = (tableName) => {
     let deferred = Q.defer();
     dynamoDb.scan({TableName: tableName}, (error, result) => {
@@ -22,6 +24,20 @@ module.exports.findOne = (tableName, itemId) => {
             deferred.reject(`Couldn\'t perform scan operation on ${tableName} table: ${error.message}`);
         }
         deferred.resolve(result);
+    });
+    return deferred.promise;
+};
+
+module.exports.updateItem = (params, deferred) => {
+    if (_.isEmpty(deferred)) {
+        deferred = Q.defer();
+    }
+    dynamoDb.update(params, (error, result) => {
+        if (error) {
+            deferred.reject(error.message);
+        } else {
+            deferred.resolve(result.Attributes);
+        }
     });
     return deferred.promise;
 };
