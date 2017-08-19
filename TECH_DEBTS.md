@@ -6,7 +6,7 @@
 1. Find a way to test functions which listen DDB streams 
 1. Get rid of active record pattern
 1. ~~Create DB helpers for update operations~~
-1. Create DB helpers for create operations
+1. ~~Create DB helpers for create operations~~
 1. Create DDB parameters builder
 
 ##### Web

@@ -42,6 +42,20 @@ module.exports.updateItem = (params, deferred) => {
     return deferred.promise;
 };
 
+module.exports.putItem = (params, deferred) => {
+    if (_.isEmpty(deferred)) {
+        deferred = Q.defer();
+    }
+    dynamoDb.put(params, error => {
+        if (error) {
+            deferred.reject(error.message);
+        } else {
+            deferred.resolve(params.Item);
+        }
+    });
+    return deferred.promise;
+};
+
 function generateParams(tableName, itemId) {
     return {
         TableName: tableName,

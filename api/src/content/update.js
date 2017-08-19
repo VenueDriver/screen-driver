@@ -5,7 +5,7 @@ const dynamoDb = require('../dynamodb/dynamodb');
 const responseHelper = require('../helpers/http_response_helper');
 const validator = require('./content_validator');
 
-const DbHepler = require('../helpers/db_helper');
+const DbHelper = require('../helpers/db_helper');
 
 module.exports.update = (event, context, callback) => {
     let data = JSON.parse(event.body);
@@ -46,7 +46,7 @@ function getAllExistingShortNamesBesidesCurrent(contentForUpdate) {
 
 function updateContent(content) {
     let params = initParamsForUpdating(content);
-    return DbHepler.updateItem(params);
+    return DbHelper.updateItem(params);
 }
 
 function initParamsForUpdating(contentForUpdate) {

@@ -31,20 +31,10 @@ class Setting {
         this._rev = 0;
         this.generateId();
         this.validate()
-            .then(_putInDatabase)
+            .then(() => DbHelper.putItem(params, deferred))
             .fail(errorMessage => deferred.reject(errorMessage));
 
         return deferred.promise;
-
-        function _putInDatabase() {
-            db.put(params, (error) => {
-                if (error) {
-                    deferred.reject('Couldn\'t create the item. ' + error.message);
-                } else {
-                    deferred.resolve(params.Item);
-                }
-            });
-        }
     }
 
     update() {

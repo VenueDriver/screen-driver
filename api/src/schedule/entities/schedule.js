@@ -38,18 +38,8 @@ class Schedule {
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
         }
-        _putInDatabase();
+        dbHelper.putItem(params, deferred);
         return deferred.promise;
-
-        function _putInDatabase() {
-            db.put(params, (error) => {
-                if (error) {
-                    deferred.reject('Couldn\'t create the item. ' + error.message);
-                } else {
-                    deferred.resolve(params.Item);
-                }
-            });
-        }
     }
 
     update() {
