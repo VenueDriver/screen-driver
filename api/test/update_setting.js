@@ -55,9 +55,9 @@ describe('update_setting', () => {
 
     it('Should update setting with new config', () => {
         let config = {screen_id: 'content_id'};
-        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypes()[0].id, config: config};
+        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
         let updatedConfig = {screen_id: 'content_id_2'};
-        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypes()[0].id, config: updatedConfig};
+        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
 
         let expectations = (body) => {
             expect(body).to.have.property('config').that.to.deep.equal(updatedConfig);
@@ -114,7 +114,6 @@ describe('update_setting', () => {
             .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
     });
 
-    //Todo: implement tests for updating the setting field;
 });
 
 function generateErrorExpectations(message, statusCode) {
