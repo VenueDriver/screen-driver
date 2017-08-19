@@ -14,7 +14,7 @@ export class SettingMergeTool {
 
 
     public mergeSettings(): Setting {
-        let mergedConfig = new Setting();
+        let mergedSetting = new Setting();
         let enabledSettings = [];
         let forciblyEnabledSettings = [];
         if (this.settings) {
@@ -23,22 +23,22 @@ export class SettingMergeTool {
         }
 
         enabledSettings.forEach(setting => {
-            this.includeEnabledSettings(setting, mergedConfig);
+            this.includeEnabledSettings(setting, mergedSetting);
         });
 
         forciblyEnabledSettings.forEach(setting => {
-            this.includeForciblyEnabledSettings(setting, mergedConfig)
+            this.includeForciblyEnabledSettings(setting, mergedSetting)
         });
-        mergedConfig.enabled = true;
-        return mergedConfig;
+        mergedSetting.enabled = true;
+        return mergedSetting;
     }
 
-    private includeEnabledSettings(setting, mergedConfig: Setting) {
+    private includeEnabledSettings(setting, mergedSetting: Setting) {
         for (let instruction in setting.config) {
-            if (mergedConfig.config.hasOwnProperty(instruction)) {
-                mergedConfig.config[instruction] = this.resolveSettingConflict(instruction)
+            if (mergedSetting.config.hasOwnProperty(instruction)) {
+                mergedSetting.config[instruction] = this.resolveSettingConflict(instruction)
             } else {
-                mergedConfig.config[instruction] = setting.config[instruction];
+                mergedSetting.config[instruction] = setting.config[instruction];
             }
         }
     }
@@ -76,9 +76,9 @@ export class SettingMergeTool {
         return priorities.indexOf(priority);
     }
 
-    private includeForciblyEnabledSettings(setting, mergedConfig: Setting) {
+    private includeForciblyEnabledSettings(setting, mergedSetting: Setting) {
         for (let instruction in setting.config) {
-            mergedConfig.config[instruction] = setting.config[instruction];
+            mergedSetting.config[instruction] = setting.config[instruction];
         }
     }
 
