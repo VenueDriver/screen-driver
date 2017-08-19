@@ -48,10 +48,9 @@ To invoke with logging use ``-l`` flag (i.e. ```npm run invoke <function_name> -
 You should have running dynamodb on port 8000. Run local dynamodb with migrations use:
 * ```npm run db```
 
-Use one of the following commands to start testing:
+Use one of the following commands to run tests:
 * ```npm test```
-* ```sls invoke test --stage test```
-
+* ```sls invoke test --stage test [-f <function_name>]```
 
 
 ## Resources
