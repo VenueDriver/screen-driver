@@ -30,8 +30,8 @@ class MultiOperationHelper {
         return this;
     }
 
-    wrapFunction(getAllFunction, handler) {
-        return lambdaWrapper.wrap(getAllFunction, {handler: handler});
+    wrapFunction(sourceFunction, handler) {
+        return lambdaWrapper.wrap(sourceFunction, {handler: handler});
     }
 
     create(items) {
@@ -73,7 +73,7 @@ class MultiOperationHelper {
             .then(response => this.test(response, expectation))
     }
 
-    getParameters(venue, response) {
+    getParameters(item, response) {
         let params = {};
         if (response) {
             let responseBody = JSON.parse(response.body);
@@ -84,7 +84,7 @@ class MultiOperationHelper {
             params.pathParameters = {};
             params.pathParameters.id = id;
         }
-        params.body = JSON.stringify(venue);
+        params.body = JSON.stringify(item);
         return params;
 
         function _addId(sourceElement, sourceField, destinationElement) {
@@ -93,7 +93,7 @@ class MultiOperationHelper {
 
         function _setIdsForChildElements(responseBody) {
             responseBody.screen_groups.forEach(group => {
-                _addId(venue, 'screen_groups', group);
+                _addId(item, 'screen_groups', group);
                 group.screens.forEach(screen => _addId(group, 'screens', screen))
             });
         }
