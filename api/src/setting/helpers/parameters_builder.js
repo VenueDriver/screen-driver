@@ -18,7 +18,14 @@ module.exports.buildUpdateRequestParameters = (setting) => {
             ':rev': setting._rev,
             ':new_rev': increaseRevision(setting),
         },
-        UpdateExpression: 'SET #setting_name = :name, enabled = :enabled, priority= :priority, config = :config, #rev = :new_rev',
+        UpdateExpression:
+            `SET 
+                #setting_name = :name, 
+                enabled = :enabled, 
+                priority = :priority, 
+                config = :config, 
+                #rev = :new_rev
+            `,
         ConditionExpression: "#rev = :rev",
         ReturnValues: 'ALL_NEW',
     };
