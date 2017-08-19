@@ -2,3 +2,4 @@ node_modules
 release-builds
 dist
 *.log
+properties/development.app.properties
