@@ -1,7 +1,7 @@
 'use strict';
 
 const {net} = require('electron');
-const SettingMergeTool = require('./setting-merge-tool');
+const SettingMergeTool = require('setting-merge-tool');
 const StorageManager = require('./helpers/storage_manager');
 const PropertiesLoader = require('./helpers/properties_load_helper');
 

@@ -5,9 +5,9 @@ import {Content} from "../content/content";
 import {ContentService} from "../content/content.service";
 
 import * as _ from 'lodash';
+import * as SettingMergeTool from "setting-merge-tool";
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../settings/entities/setting";
-import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
 
 @Component({
     selector: 'venues',

@@ -1,4 +1,4 @@
-const SettingMergeTool = require('./setting-merge-tool');
+const SettingMergeTool = require('setting-merge-tool');
 const SettingsHelper = require('./helpers/settings_helper');
 const _ = require('lodash');
 
