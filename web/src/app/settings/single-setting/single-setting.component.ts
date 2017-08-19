@@ -60,7 +60,8 @@ export class SingleSettingComponent implements OnInit {
         if (this.isPersistent()) {
             return !_.isEmpty(this.setting.config);
         }
-        return !_.isEmpty(this.setting.config) && !_.isEmpty(this.schedules);
+        return !_.isEmpty(this.setting.config)
+            && this.hasActiveSchedules();
     }
 
     findSchedules(schedules: Schedule[]) {
@@ -68,17 +69,22 @@ export class SingleSettingComponent implements OnInit {
     }
 
     getMessage() {
-        if (_.isEmpty(this.setting.config) && _.isEmpty(this.schedules) && !this.isPersistent()) {
+        if (_.isEmpty(this.setting.config) && !this.hasActiveSchedules() && !this.isPersistent()) {
             return 'Without config and schedule';
         }
 
-        if (_.isEmpty(this.schedules) && !this.isPersistent()) {
+        if (!this.hasActiveSchedules() && !this.isPersistent()) {
             return 'Without schedule';
         }
 
         if (_.isEmpty(this.setting.config)) {
             return 'Without config';
         }
+    }
+
+    private hasActiveSchedules(): boolean {
+        if (_.isEmpty(this.schedules)) return false;
+        return this.schedules.filter(s => s.enabled).length > 0
     }
 
     private isPersistent() {
