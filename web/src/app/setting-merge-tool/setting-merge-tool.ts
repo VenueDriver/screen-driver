@@ -14,23 +14,33 @@ export class SettingMergeTool {
 
 
     public mergeSettings(): Setting {
-        let mergedConfig = new Setting();
+        let mergedSetting = new Setting();
         let enabledSettings = [];
+        let forciblyEnabledSettings = [];
         if (this.settings) {
             enabledSettings = this.settings.filter((setting => setting.enabled));
+            forciblyEnabledSettings = this.settings.filter((setting => setting.forciblyEnabled));
         }
 
         enabledSettings.forEach(setting => {
-            for (let instruction in setting.config) {
-                if (mergedConfig.config.hasOwnProperty(instruction)) {
-                    mergedConfig.config[instruction] = this.resolveSettingConflict(instruction)
-                } else {
-                    mergedConfig.config[instruction] = setting.config[instruction];
-                }
-            }
+            this.includeEnabledSettings(setting, mergedSetting);
         });
-        mergedConfig.enabled = true;
-        return mergedConfig;
+
+        forciblyEnabledSettings.forEach(setting => {
+            this.includeForciblyEnabledSettings(setting, mergedSetting)
+        });
+        mergedSetting.enabled = true;
+        return mergedSetting;
+    }
+
+    private includeEnabledSettings(setting, mergedSetting: Setting) {
+        for (let instruction in setting.config) {
+            if (mergedSetting.config.hasOwnProperty(instruction)) {
+                mergedSetting.config[instruction] = this.resolveSettingConflict(instruction)
+            } else {
+                mergedSetting.config[instruction] = setting.config[instruction];
+            }
+        }
     }
 
     private resolveSettingConflict(instruction): string {
@@ -64,6 +74,12 @@ export class SettingMergeTool {
         let priorities = this.priorities;
         let priority = priorities.find(element => element.id == priorityId);
         return priorities.indexOf(priority);
+    }
+
+    private includeForciblyEnabledSettings(setting, mergedSetting: Setting) {
+        for (let instruction in setting.config) {
+            mergedSetting.config[instruction] = setting.config[instruction];
+        }
     }
 
     static startMerging(): SettingMergeTool {

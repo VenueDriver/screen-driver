@@ -58,7 +58,8 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     private createSetting() {
-        this.setting.priority = this.priorityTypes[0].id;
+        let priorityType = this.settingsService.getCreateSettingLastValue().priorityType;
+        this.setting.priority = priorityType.id;
         this.settingsService.createSetting(this.setting).subscribe(
             (setting: Setting) => this.handleResponse(setting.id),
             error => this.handleError()
