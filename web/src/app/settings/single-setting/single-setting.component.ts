@@ -42,7 +42,8 @@ export class SingleSettingComponent implements OnInit {
             );
     }
 
-    onEnableForciblyClicked() {
+    onEnableForciblyClicked(event) {
+        event.stopPropagation();
         this.setting.forciblyEnabled = !this.setting.forciblyEnabled;
         this.settingsService.updateSetting(this.setting)
             .subscribe(

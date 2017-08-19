@@ -6,7 +6,7 @@
          class="controls">
         <div class="forcibly-enabled-button"
                 [ngClass]="{'forced-enabled-button-on' : !isEnabledForcibly(), 'forced-enabled-button-off' : isEnabledForcibly()}"
-             (click)="onEnableForciblyClicked()">
+             (click)="onEnableForciblyClicked($event)">
         </div>
         <toggle-button class="switcher"
                        [checked]="setting.enabled"
