@@ -20,10 +20,9 @@ export class SchedulesComponent implements OnInit {
     isShowCreateScheduleForm = false;
     settings: Array<Setting>;
 
-    constructor(
-        private schedulesService: SchedulesService,
-        private settingStateHolderService: SettingStateHolderService
-    ) { }
+    constructor(private schedulesService: SchedulesService,
+                private settingStateHolderService: SettingStateHolderService) {
+    }
 
     ngOnInit() {
         this.loadSchedules();
@@ -63,7 +62,7 @@ export class SchedulesComponent implements OnInit {
         return this.schedules;
     }
 
-    isAbleToAddSchedule():boolean {
+    isAbleToAddSchedule(): boolean {
         return !!this.currentSetting && this.currentSetting.priority !== PriorityTypes.PERSISTENT.id;
     }
 
@@ -84,6 +83,12 @@ export class SchedulesComponent implements OnInit {
     }
 
     findSettingForSchedule(schedule: Schedule): Setting {
-        return this.settings.find(setting => setting.id === schedule.settingId);
+        if (this.settings)
+            return this.settings.find(setting => setting.id === schedule.settingId);
+    }
+
+    getSettingName(schedule: Schedule) {
+        let setting = this.findSettingForSchedule(schedule);
+        return setting? setting.name : '';
     }
 }

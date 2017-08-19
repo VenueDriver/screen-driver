@@ -16,7 +16,7 @@
 
     <div class="schedules" *ngFor="let schedule of filteredSchedules">
         <div class="setting-name">
-            {{findSettingForSchedule(schedule).name}}
+            {{getSettingName(schedule)}}
         </div>
         <single-schedule
                 [schedule]="schedule"
