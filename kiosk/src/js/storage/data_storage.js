@@ -19,6 +19,14 @@ class DataStorage {
     getSelectedSetting() {
         return _.cloneDeep(this._selectedSetting);
     }
+
+    setScheduledTask(scheduledTask) {
+        this._scheduledTask = _.cloneDeep(scheduledTask);
+    }
+
+    getScheduledTask() {
+        return _.cloneDeep(this._scheduledTask);
+    }
 }
 
 const DATA_STORAGE = new DataStorage();

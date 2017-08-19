@@ -14,6 +14,17 @@
   tag: staging
   command: bash -c "aws s3 sync /app-src/dist $AWS_S3_BUCKET_STAGING"
 
+- service: kiosk
+  name: staging_build_kiosk_app
+  tag: staging
+  command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
+
+- service: kiosk_deployment
+  name: staging_deploy_kiosk_app
+  encrypted_env_file: deployment.env.encrypted
+  tag: staging
+  command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING --exclude='win-unpacked/*'"
+
 - service: api
   name: serverless_api_production
   tag: production
@@ -29,6 +40,17 @@
   encrypted_env_file: deployment.env.encrypted
   tag: master
   command: bash -c "aws s3 sync /app-src/dist $AWS_S3_BUCKET_PRODUCTION"
+
+- service: kiosk
+  name: production_build_kiosk_app
+  tag: production
+  command: bash -c "sed -i 's@API_HOST@'"$PRODUCTION_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
+
+- service: kiosk_deployment
+  name: production_deploy_kiosk_app
+  encrypted_env_file: deployment.env.encrypted
+  tag: production
+  command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_PRODUCTION --exclude='win-unpacked/*'"
 
 
 # - service: kiosk

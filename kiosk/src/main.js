@@ -63,7 +63,10 @@ function openWindow() {
 
 function prepareContentWindowData(screenInformation) {
     CurrentScreenSettingsManager.reloadCurrentScreenConfig(screenInformation)
-        .then(contentUrl => openContentWindow(contentUrl))
+        .then(contentUrl => {
+            openContentWindow(contentUrl);
+            scheduledTaskManager.resumeInterruptedScheduledTask();
+        })
         .catch(error => {
             Logger.error('Failed to load config. Used old config. Message:', error);
             openContentWindow(screenInformation.contentUrl);
