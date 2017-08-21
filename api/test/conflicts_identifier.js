@@ -13,7 +13,7 @@ describe('conflicts_identifier', () => {
 
             let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
 
-            expect(result).to.deep.equal({screen_id: 'content_id'});
+            expect(result).to.deep.equal([{settingId: "setting", config: {screen_id: 'content_id'}}]);
         });
 
         it('Should return blank object if conflict configs do not intersect', () => {
@@ -22,7 +22,7 @@ describe('conflicts_identifier', () => {
 
             let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
 
-            expect(result).to.deep.equal({});
+            expect(result).to.deep.equal([]);
         });
 
         it('Should return blank object if content id the same in conflicted configs', () => {
@@ -31,14 +31,14 @@ describe('conflicts_identifier', () => {
 
             let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
 
-            expect(result).to.deep.equal({});
+            expect(result).to.deep.equal([]);
         });
     });
 });
 
 function createBaseSetOfSettings() {
     return [
-        { config: {screen_id: 'content_id'} },
-        { config: {screen_id_2: 'content_id', screen_id_3: 'content_id'} },
+        { id: "setting", config: {screen_id: 'content_id'} },
+        { id: "setting2", config: {screen_id_2: 'content_id', screen_id_3: 'content_id'} },
     ];
 }

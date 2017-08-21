@@ -25,7 +25,7 @@ module.exports = class ConflictsIdentifier {
     static _buildFindConfigsByPriorityRequestParameters(priority) {
         return {
             TableName: process.env.SETTINGS_TABLE,
-            ProjectionExpression: 'config',
+            ProjectionExpression: 'id, config',
             ExpressionAttributeValues: {
                 ':priority': priority
             },
@@ -34,8 +34,14 @@ module.exports = class ConflictsIdentifier {
     }
 
     static _detectConflictInConfigs(existingSettings, setting) {
-        let configs = _.map(existingSettings, s => s.config);
-        let currentConfig = _.assignIn(...configs, {});
-        return _.pickBy(currentConfig, (v, k) => !_.isEmpty(setting.config[k]) && setting.config[k] !== v);
+        let conflicts = [];
+        _.each(setting.config, (v, k) => {
+            _.each(existingSettings, s => {
+                if (!_.isEmpty(s.config[k]) && s.config[k] !== v) {
+                    conflicts.push({settingId: s.id, config: s.config});
+                }
+            });
+        });
+        return conflicts;
     }
 };
