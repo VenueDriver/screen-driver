@@ -3,11 +3,12 @@
 1. Rework priority type enum implementation
 1. Write tests on removing functionality
 1. Refactor logic of validation
-1. Find a way to test functions which listen DDB streams 
+1. Add unit tests for table streams handlers 
 1. Get rid of active record pattern
 1. ~~Create DB helpers for update operations~~
 1. ~~Create DB helpers for create operations~~
 1. Create DDB parameters builder
+1. Add unit tests for cron validator
 
 ##### Web
 1. Resolve warnings occurred during build process
