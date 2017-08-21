@@ -122,6 +122,41 @@ describe('update_setting', () => {
             .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
     });
 
+    it('Should update persistent setting if conflict was not detected', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let existingSetting = {name: 'Halloween', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
+
+        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0]};
+
+        let updatedConfig = {screen_id_3: 'content_id'};
+        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
+
+        let expectations = (body, response) => {
+            expect(body).to.have.property('_rev').that.equal(1);
+            expect(response).to.have.property('statusCode').that.equal(200);
+        };
+
+        return MultiOperationHelper.create(existingSetting)
+            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+    });
+
+    it('Should not change a state of an updated persistent setting if conflict was not detected', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let existingSetting = {name: 'Halloween', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
+
+        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0]};
+
+        let updatedConfig = {screen_id_3: 'content_id'};
+        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
+
+        let expectations = (body) => {
+            expect(body).to.have.property('enabled').that.equal(true);
+        };
+
+        return MultiOperationHelper.create(existingSetting)
+            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+    });
+
     it('Shouldn\'t update setting without name', () => {
         let newSetting = {name: 'New Year'};
         let updatedSetting = {_rev: 0};
