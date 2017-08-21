@@ -34,6 +34,9 @@ export class Content {
     }
 
     static getShortUrl(content: Content, maxLength: number): string {
+        if (_.isEmpty(content.url)) {
+            return '';
+        }
         let urlLength = content.url.length;
         if (urlLength > maxLength + 5) {
             let start = content.url.substring(0, maxLength - 5);
