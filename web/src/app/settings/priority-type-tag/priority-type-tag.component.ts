@@ -9,9 +9,9 @@ import {SettingStateHolderService} from "../setting-state-manager/settings-state
 })
 export class PriorityTypeTagComponent {
 
-    @Input('setting') set data(priorityId: any) {
+    @Input('priority') set data(priority: any) {
         this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
-        this.currentPriority = this.priorityTypes.find(type => priorityId === type.id)
+        this.currentPriority = this.priorityTypes.find(type => priority.id === type.id);
     }
 
     priorityTypes: any[];
