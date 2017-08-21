@@ -8,6 +8,7 @@ const updateFunction = require('../src/setting/update');
 const mochaPlugin = require('serverless-mocha-plugin');
 
 const PriorityTypes = require('../src/enums/priority_types');
+const SettingDataPreparationHelper = require('./helpers/setting_data_preparation_helper');
 
 const expect = mochaPlugin.chai.expect;
 
@@ -69,14 +70,9 @@ describe('update_setting', () => {
     });
 
     it('Should update persistent setting with conflicts in config', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let existingSetting = {name: 'Halloween', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
-
-        let newConfig = {screen_id_2: 'content_id'};
-        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: newConfig};
-
-        let updatedConfig = {screen_id: 'content_id_2'};
-        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
 
         let expectations = (body) => {
             expect(body).to.have.property('_rev').that.equal(1);
@@ -87,14 +83,9 @@ describe('update_setting', () => {
     });
 
     it('Should response with an error code if conflict in persistent setting detected', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let existingSetting = {name: 'Halloween', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
-
-        let newConfig = {screen_id_2: 'content_id'};
-        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: newConfig};
-
-        let updatedConfig = {screen_id: 'content_id_2'};
-        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(409);
@@ -105,14 +96,9 @@ describe('update_setting', () => {
     });
 
     it('Should set updated setting status to false if conflict in persistent setting detected', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let existingSetting = {name: 'Halloween', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
-
-        let newConfig = {screen_id_2: 'content_id'};
-        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: newConfig};
-
-        let updatedConfig = {screen_id: 'content_id_2'};
-        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(false);
@@ -123,13 +109,9 @@ describe('update_setting', () => {
     });
 
     it('Should update persistent setting if conflict was not detected', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let existingSetting = {name: 'Halloween', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
-
-        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0]};
-
-        let updatedConfig = {screen_id_3: 'content_id'};
-        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id_3: 'content_id'});
 
         let expectations = (body, response) => {
             expect(body).to.have.property('_rev').that.equal(1);
@@ -141,14 +123,10 @@ describe('update_setting', () => {
     });
 
     it('Should not change a state of an updated persistent setting if conflict was not detected', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let existingSetting = {name: 'Halloween', enabled: true, priority: PriorityTypes.getTypeIds()[0], config: config};
-
-        let newSetting = {name: 'New Year', enabled: true, priority: PriorityTypes.getTypeIds()[0]};
-
-        let updatedConfig = {screen_id_3: 'content_id'};
-        let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: PriorityTypes.getTypeIds()[0], config: updatedConfig};
-
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id_3: 'content_id'});
+        
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
         };
