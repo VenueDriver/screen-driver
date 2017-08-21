@@ -4,6 +4,7 @@ const uuid = require('uuid');
 const PriorityTypes = require('./../../enums/priority_types');
 const ParametersBuilder = require('./../helpers/parameters_builder');
 const DbHelper = require('../../helpers/db_helper');
+const ConflictsIdentifier = require('../helpers/conflicts_identifier');
 
 const _ = require('lodash');
 const Q = require('q');
@@ -47,7 +48,7 @@ class Setting {
 
         this.validate()
             .then(() => Setting.hasUniqueName(this))
-            .then(() => Setting.findConflictsInConfig(this))
+            .then(() => ConflictsIdentifier.findConflictsInConfig(this))
             .then(conflictedConfigs => {
                 if (!_.isEmpty(conflictedConfigs)) {
                     conflicts = conflictedConfigs;
@@ -85,21 +86,6 @@ class Setting {
         return true;
     }
 
-    static findConflictsInConfig(setting) {
-        let deferred = Q.defer();
-        Setting.getExistingConfigs(setting.priority)
-            .then(configs => {
-                let conflictedConfigs = Setting._detectConflictInConfigs(configs, setting);
-                deferred.resolve(conflictedConfigs);
-            });
-        return deferred.promise;
-    }
-
-    static _detectConflictInConfigs(configs, setting) {
-        let currentConfig = _.assignIn(...configs, {});
-        return _.pickBy(setting.config, (v, k) => currentConfig[k] !== v);
-    }
-
     static hasUniqueName(setting) {
         let deferred = Q.defer();
         this.getExistingNames(_getExcludedSetting())
@@ -135,18 +121,6 @@ class Setting {
                 .filter(item => excludedVenue ? item.id !== excludedVenue.id : true)
                 .map((config) => config.name);
         }
-    }
-
-    static getExistingConfigs(priorityType) {
-        let params = {
-            TableName: process.env.SETTINGS_TABLE,
-            ProjectionExpression: 'config',
-            ExpressionAttributeValues: {
-                ':priority': priorityType
-            },
-            FilterExpression: 'priority = :priority'
-        };
-        return DbHelper.findByParams(params);
     }
 
     generateId() {
