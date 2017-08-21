@@ -45,13 +45,19 @@ To invoke remote function use:
 To invoke with logging use ``-l`` flag (i.e. ```npm run invoke <function_name> -l```)
 
 ## Testing
-You should have running dynamodb on port 8000. Run local dynamodb with migrations use:
+
+#### Integration tests for lambda functions
+
+You should have running dynamodb on port 8000. To run dynamodb locally with migrations use:
 * ```npm run db```
 
 Use one of the following commands to run tests:
 * ```npm test```
 * ```sls invoke test --stage test [-f <function_name>]```
 
+#### Unit tests
+
+To run unit tests separately from lambda functions install mocha by `npm i -g mocha` and perform `mocha --grep <file name>`.
 
 ## Resources
 Used plugins:
