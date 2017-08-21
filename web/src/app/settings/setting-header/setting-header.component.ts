@@ -76,4 +76,8 @@ export class SettingHeaderComponent implements OnInit {
     toggleCreateSettingMode() {
         this.settingsService.emitCreateSettingEvent(false);
     }
+
+    getNewSettingPriority(): Object {
+        return this.settingsService.getCreateSettingLastValue().priorityType.id;
+    }
 }
