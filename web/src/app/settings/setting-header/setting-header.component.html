@@ -16,7 +16,7 @@
         </div>
 
         <div class="tag-container" *ngIf="isAllowToEditSetting()">
-            <priority-type-tag [setting]="setting"></priority-type-tag>
+            <priority-type-tag [priority]="setting.priority"></priority-type-tag>
         </div>
 
         <setting-creator
@@ -31,6 +31,9 @@
     <div class="create-setting-container" *ngIf="isCreateSettingMode">
         <div class="title">
             Create new setting
+            <div class="tag-container">
+                <priority-type-tag [priority]="getNewSettingPriority()"></priority-type-tag>
+            </div>
         </div>
         <setting-creator
                 [settings]="settings"
