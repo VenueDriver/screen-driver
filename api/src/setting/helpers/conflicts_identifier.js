@@ -33,8 +33,9 @@ module.exports = class ConflictsIdentifier {
         };
     }
 
-    static _detectConflictInConfigs(configs, setting) {
+    static _detectConflictInConfigs(existingSettings, setting) {
+        let configs = _.map(existingSettings, s => s.config);
         let currentConfig = _.assignIn(...configs, {});
-        return _.pickBy(setting.config, (v, k) => currentConfig[k] !== v);
+        return _.pickBy(currentConfig, (v, k) => !_.isEmpty(setting.config[k]) && setting.config[k] !== v);
     }
 };
