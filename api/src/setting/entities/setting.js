@@ -47,7 +47,7 @@ class Setting {
 
         this.validate()
             .then(() => Setting.hasUniqueName(this))
-            .then(() => Setting.hasConflictsInConfig(this))
+            .then(() => Setting.findConflictsInConfig(this))
             .then(conflictedConfigs => {
                 if (!_.isEmpty(conflictedConfigs)) {
                     conflicts = conflictedConfigs;
@@ -85,7 +85,7 @@ class Setting {
         return true;
     }
 
-    static hasConflictsInConfig(setting) {
+    static findConflictsInConfig(setting) {
         let deferred = Q.defer();
         Setting.getExistingConfigs(setting.priority)
             .then(configs => {
@@ -102,7 +102,7 @@ class Setting {
 
     static hasUniqueName(setting) {
         let deferred = Q.defer();
-        this.getExistingNames(_getExcludedConfig())
+        this.getExistingNames(_getExcludedSetting())
             .then(names => {
                 if (names.includes(setting.name)) {
                     deferred.reject('Setting with such name already exists')
@@ -112,7 +112,7 @@ class Setting {
             });
         return deferred.promise;
 
-        function _getExcludedConfig() {
+        function _getExcludedSetting() {
             return setting._rev ? setting : null;
         }
     }

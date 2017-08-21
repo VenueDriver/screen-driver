@@ -150,8 +150,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update setting with non-boolean enable field', () => {
-        let newSetting = {name: 'New Year'};
-        let updatedSetting = {name: 'New Year', enabled: 'string', _rev: 0};
+        let newSetting = {name: 'New Year', priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', enabled: 'string', priority: 'test_id_1', _rev: 0};
 
         let expectations = generateErrorExpectations('Enabled field should be boolean', 500);
 
