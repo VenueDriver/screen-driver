@@ -13,11 +13,7 @@ describe('conflicts_identifier', () => {
 
             let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
 
-            let expectations = (body) => {
-                expect(body).to.deep.equal({screen_id: 'content_id'});
-            };
-
-            expectations(result);
+            expect(result).to.deep.equal({screen_id: 'content_id'});
         });
 
         it('Should return blank object if conflict configs do not intersect', () => {
@@ -26,11 +22,7 @@ describe('conflicts_identifier', () => {
 
             let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
 
-            let expectations = (body) => {
-                expect(body).to.deep.equal({});
-            };
-
-            expectations(result);
+            expect(result).to.deep.equal({});
         });
 
         it('Should return blank object if content id the same in conflicted configs', () => {
@@ -39,11 +31,7 @@ describe('conflicts_identifier', () => {
 
             let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
 
-            let expectations = (body) => {
-                expect(body).to.deep.equal({});
-            };
-
-            expectations(result);
+            expect(result).to.deep.equal({});
         });
     });
 });
