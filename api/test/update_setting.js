@@ -7,8 +7,10 @@ const createFunction = require('../src/setting/create');
 const updateFunction = require('../src/setting/update');
 const mochaPlugin = require('serverless-mocha-plugin');
 
+const TestDataSever = require('./helpers/test_data_saver');
 const PriorityTypes = require('../src/enums/priority_types');
 const SettingDataPreparationHelper = require('./helpers/setting_data_preparation_helper');
+const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 
 const expect = mochaPlugin.chai.expect;
 
@@ -134,6 +136,39 @@ describe('update_setting', () => {
         return MultiOperationHelper.create(existingSetting)
             .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
     });
+
+    it('Should update setting if content URL coincides in conflicted settings', () => {
+        let existingSetting = SettingDataPreparationHelper.getPeriodicalSettingWithConfig('Morning Menu');
+
+        let newSetting;
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                existingSetting = setting;
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => {
+                let newSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', {});
+                return TestDataSever.saveSetting(newSetting);
+            })
+            .then(setting => {
+                newSetting = setting;
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 9 * * MON', '0 0 10 * * MON', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => {
+                let updatedConfig = {screen_id: 'content_id'};
+                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+            })
+            .then(updatedSetting => {
+                let expectation = (body) => {
+                    expect(body).to.have.property('enabled').that.equal(true);
+                };
+                return MultiOperationHelper.test(updatedSetting, expectation);
+            });
+    });
+
 
     it('Shouldn\'t update setting without name', () => {
         let newSetting = {name: 'New Year'};
