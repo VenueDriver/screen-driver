@@ -55,8 +55,8 @@ describe('schedule_overflow_inspector', () => {
                 endEventCron: '0 0 9 * * MON,TUE,WED'
             };
             let secondSchedule = {
-                eventCron: '0 0 8 * * THU,TUE,SAT',
-                endEventCron: '0 0 9 * * THU,TUE,SAT'
+                eventCron: '0 0 8 * * MON,FRI,SAT',
+                endEventCron: '0 0 9 * * MON,FRI,SAT'
             };
             let result = ScheduleOverflowInspector.areIntersect(firstSchedule, secondSchedule);
 
@@ -99,6 +99,62 @@ describe('schedule_overflow_inspector', () => {
             let secondSchedule = {
                 eventCron: '0 0 11 * * MON',
                 endEventCron: '0 0 12 * * MON'
+            };
+            let result = ScheduleOverflowInspector.areIntersect(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(false);
+        });
+
+        it('Should return true if two schedules have time overlap at the same weekday', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 * * MON',
+                endEventCron: '0 0 10 * * MON',
+            };
+            let secondSchedule = {
+                eventCron: '0 0 9 * * MON',
+                endEventCron: '0 0 11 * * MON'
+            };
+            let result = ScheduleOverflowInspector.areIntersect(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(true);
+        });
+
+        it('Should return true if one schedule performs inside another one', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 * * MON',
+                endEventCron: '0 0 11 * * MON',
+            };
+            let secondSchedule = {
+                eventCron: '0 0 9 * * MON',
+                endEventCron: '0 0 10 * * MON'
+            };
+            let result = ScheduleOverflowInspector.areIntersect(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(true);
+        });
+
+        it('Should return true if one schedule performs inside another one (vise versa)', () => {
+            let firstSchedule = {
+                eventCron: '0 0 9 * * MON',
+                endEventCron: '0 0 10 * * MON',
+            };
+            let secondSchedule = {
+                eventCron: '0 0 8 * * MON',
+                endEventCron: '0 0 11 * * MON'
+            };
+            let result = ScheduleOverflowInspector.areIntersect(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(true);
+        });
+
+        it('Should return false if one schedule performs just after another one', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 * * MON',
+                endEventCron: '0 0 9 * * MON',
+            };
+            let secondSchedule = {
+                eventCron: '0 0 9 * * MON',
+                endEventCron: '0 0 10 * * MON'
             };
             let result = ScheduleOverflowInspector.areIntersect(firstSchedule, secondSchedule);
 
