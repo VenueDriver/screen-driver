@@ -17,8 +17,6 @@ module.exports = class ScheduleOverflowInspector {
     }
 
     static _findDuplicates(firstArray, secondArray) {
-        return _.filter(firstArray, e => {
-            return _.includes(secondArray, e);
-        })
+        return _.filter(firstArray, e => _.includes(secondArray, e));
     }
 };
