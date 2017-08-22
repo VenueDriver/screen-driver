@@ -182,7 +182,7 @@ describe('update_setting', () => {
             });
     });
 
-    it('Should update periodical setting if schedules for conflicted settings are created for different days', () => {
+    it('Should update periodical setting if schedules for conflicted settings are created for different weekdays', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -205,13 +205,58 @@ describe('update_setting', () => {
             });
     });
 
-    it('Should update periodical setting with enabled status if schedules for conflicted settings are created for different days', () => {
+    it('Should update periodical setting with enabled status if schedules for conflicted settings are created for different weekdays', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
             existingEndEventCron: '0 0 10 * * MON',
             newEventCron: '0 0 9 * * TUE',
             newEndEventCron: '0 0 10 * * TUE',
+        };
+        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+            .then((newSetting) => {
+                let updatedConfig = {screen_id: 'content_id_2'};
+                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+            })
+            .then(updatedSetting => {
+                let expectation = (body) => {
+                    expect(body).to.have.property('enabled').that.equal(true);
+                };
+                return MultiOperationHelper.test(updatedSetting, expectation);
+            });
+    });
+
+    it('Should update periodical setting if schedules for conflicted settings are created for different set of weekdays', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let cronExpressions = {
+            existingEventCron: '0 0 8 * * MON',
+            existingEndEventCron: '0 0 10 * * MON',
+            newEventCron: '0 0 9 * * TUE',
+            newEndEventCron: '0 0 10 * * TUE',
+        };
+        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+            .then((newSetting) => {
+                let updatedConfig = {screen_id: 'content_id_2'};
+                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+            })
+            .then(updatedSetting => {
+                let expectation = (body, response) => {
+                    expect(body).to.have.property('_rev').that.equal(1);
+                    expect(response).to.have.property('statusCode').that.equal(200);
+                };
+                return MultiOperationHelper.test(updatedSetting, expectation);
+            });
+    });
+
+    it('Should update periodical setting with enabled status if schedules for conflicted settings are created for different set of weekdays', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let cronExpressions = {
+            existingEventCron: '0 0 8 * * MON,TUE,WED',
+            existingEndEventCron: '0 0 10 * * MON,TUE,WED',
+            newEventCron: '0 0 9 * * TUE,FRI,SAT',
+            newEndEventCron: '0 0 10 * * TUE,FRI,SAT',
         };
         return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
