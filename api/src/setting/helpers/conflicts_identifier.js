@@ -29,8 +29,8 @@ module.exports = class ConflictsIdentifier {
                 return SchedulesFinder.findAllBySettingIds(settingIds);
             })
             .then(schedules => {
-                let scheduleForCurrentSetting = SchedulesFinder.findOneBySettingId(setting.id);
-                let overflow = ScheduleOverflowInspector.findOverflow(schedules, scheduleForCurrentSetting);
+                let schedulesForCurrentSetting = SchedulesFinder.findAllByOneSettingId(setting.id);
+                let overflow = ScheduleOverflowInspector.findOverflow(schedules, schedulesForCurrentSetting);
                 let settingsOverflow = _.map(overflow, o => o.settingId);
                 let conflicts = _.filter(conflictedConfigs, c => settingsOverflow.includes(c.id));
                 deferred.resolve(conflicts);

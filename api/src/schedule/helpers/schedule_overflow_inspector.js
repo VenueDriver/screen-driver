@@ -4,8 +4,11 @@ const _ = require('lodash');
 
 module.exports = class ScheduleOverflowInspector {
 
-    static findOverflow(schedules, updatedSchedule) {
-        return _.filter(schedules, s => ScheduleOverflowInspector.areIntersect(s, updatedSchedule));
+    static findOverflow(schedules, updatedSchedules) {
+        return _.filter(updatedSchedules, s => {
+            let overflow = _.filter(schedules, schedule => ScheduleOverflowInspector.areIntersect(s, schedule));
+            return overflow.length > 0;
+        });
     }
 
     static areIntersect(firstSchedule, secondSchedule) {

@@ -4,7 +4,7 @@ const dbHelper = require('../../helpers/db_helper');
 
 module.exports = class SchedulesFinder {
 
-    static findOneBySettingId(settingId) {
+    static findAllByOneSettingId(settingId) {
         let params = {
             TableName: process.env.SCHEDULES_TABLE,
             ExpressionAttributeValues: {
