@@ -1,13 +1,44 @@
 'use strict';
 
+const PriorityTypes = require('../../enums/priority_types');
 const DbHelper = require('../../helpers/db_helper');
+const SchedulesFinder = require('../../schedule/helpers/schedules_finder');
+const ScheduleOverflowInspector = require('../../schedule/helpers/schedule_overflow_inspector');
 
 const Q = require('q');
 const _ = require('lodash');
 
 module.exports = class ConflictsIdentifier {
 
-    static findConflictsInConfig(setting) {
+    static findConflicts(setting) {
+        switch (setting.priority) {
+            case PriorityTypes.getTypeIds()[0]:
+                return ConflictsIdentifier.findConflictsInPersistentConfig(setting);
+            case PriorityTypes.getTypeIds()[1]:
+                return ConflictsIdentifier.findConflictsInPeriodicalConfig(setting);
+        }
+    }
+
+    static findConflictsInPeriodicalConfig(setting) {
+        let deferred = Q.defer();
+        let conflictedConfigs = [];
+        ConflictsIdentifier._getExistingConfigs(setting.priority)
+            .then(configs => {
+                conflictedConfigs = ConflictsIdentifier._detectConflictInConfigs(configs, setting);
+                let settingIds = ConflictsIdentifier._getSettingIdsArray(conflictedConfigs);
+                return SchedulesFinder.findAllBySettingIds(settingIds);
+            })
+            .then(schedules => {
+                let scheduleForCurrentSetting = SchedulesFinder.findOneBySettingId(setting.id);
+                let overflow = ScheduleOverflowInspector.findOverflow(schedules, scheduleForCurrentSetting);
+                let settingsOverflow = _.map(overflow, o => o.settingId);
+                let conflicts = _.filter(conflictedConfigs, c => settingsOverflow.includes(c.id));
+                deferred.resolve(conflicts);
+            });
+        return deferred.promise;
+    }
+
+    static findConflictsInPersistentConfig(setting) {
         let deferred = Q.defer();
         ConflictsIdentifier._getExistingConfigs(setting.priority)
             .then(configs => {
@@ -43,5 +74,9 @@ module.exports = class ConflictsIdentifier {
             });
         });
         return conflicts;
+    }
+
+    static _getSettingIdsArray(settings) {
+        return _.map(settings, s => s.id);
     }
 };

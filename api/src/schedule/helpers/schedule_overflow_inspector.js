@@ -4,6 +4,10 @@ const _ = require('lodash');
 
 module.exports = class ScheduleOverflowInspector {
 
+    static findOverflow(schedules, updatedSchedule) {
+        return _.filter(schedules, s => ScheduleOverflowInspector.areIntersect(s, updatedSchedule));
+    }
+
     static areIntersect(firstSchedule, secondSchedule) {
         let firstWeekdays = ScheduleOverflowInspector._getWeekdays(firstSchedule.eventCron);
         let secondWeekdays = ScheduleOverflowInspector._getWeekdays(secondSchedule.eventCron);
