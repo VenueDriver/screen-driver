@@ -2,16 +2,23 @@
 
 const Q = require('q');
 
-const database = require('../../src/dynamodb/dynamodb');
+const DbHelper = require('../../src/helpers/db_helper');
 
 module.exports = class TestDataSever {
 
     static saveDefaultSetting() {
         let setting = TestDataSever._generateDefaultSetting();
+        return TestDataSever.saveSetting(setting);
+    }
+
+    static saveSetting(setting) {
         let params = TestDataSever._buildPutParameters(process.env.SETTINGS_TABLE, setting);
-        let deferred = Q.defer();
-        TestDataSever._performPupOperation(params, deferred);
-        return deferred.promise;
+        return TestDataSever._performPutOperation(params);
+    }
+
+    static saveSchedule(schedule) {
+        let params = TestDataSever._buildPutParameters(process.env.SCHEDULES_TABLE, schedule);
+        return TestDataSever._performPutOperation(params);
     }
 
     static _buildPutParameters(tableName, item) {
@@ -28,14 +35,8 @@ module.exports = class TestDataSever {
         }
     }
 
-    static _performPupOperation(params, deferred) {
-        database.put(params, (error) => {
-            if (error) {
-                deferred.reject(error.message);
-            } else {
-                deferred.resolve(params.Item);
-            }
-        });
+    static _performPutOperation(params, deferred) {
+        return DbHelper.putItem(params, deferred);
     }
 };
 
