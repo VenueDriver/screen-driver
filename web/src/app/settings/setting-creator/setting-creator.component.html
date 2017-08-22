@@ -27,7 +27,9 @@
         <div class="warning-message">
             Are you sure you want to remove <b>setting {{setting.name}}</b>?
         </div>
-        <button class="btn btn-success" (click)="cancelRemoving()">No</button>
-        <button class="btn btn-danger" (click)="performRemoving()" [disabled]="!isButtonEnabled()">Yes</button>
+        <div class="remove-confirmation-buttons">
+            <button class="btn btn-success" (click)="cancelRemoving()">No</button>
+            <button class="btn btn-danger" (click)="performRemoving()" [disabled]="!isButtonEnabled()">Yes</button>
+        </div>
     </div>
 </div>

@@ -114,8 +114,11 @@ export class SettingCreatorComponent implements OnInit {
 
     performRemoving() {
         this.settingStateHolderService.removeSetting(this.settingToEdit.id)
-            .subscribe(response => this.settingStateHolderService.reloadSettings(),
-            error => this.handleDeletionError());
+            .subscribe(response => {
+                    this.settingStateHolderService.changeCurrentSetting();
+                    this.settingStateHolderService.reloadSettings()
+                },
+                error => this.handleDeletionError());
     }
 
     cancelRemoving() {
