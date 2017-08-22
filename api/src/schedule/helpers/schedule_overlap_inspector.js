@@ -42,6 +42,8 @@ module.exports = class ScheduleOverlapInspector {
 
     static _getTime(cronExpression) {
         let cronParts = cronExpression.split(' ');
-        return +cronParts[2];
+        let hours = +cronParts[2];
+        let minutes = +cronParts[1];
+        return new Date(2000, 0, 1, hours, minutes);
     }
 };

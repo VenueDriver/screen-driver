@@ -160,5 +160,47 @@ describe('schedule_overlap_inspector', () => {
 
             expect(result).to.equal(false);
         });
+
+        it('Should return false if one schedule performs just after another one during one hour', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 * * MON',
+                endEventCron: '0 30 9 * * MON',
+            };
+            let secondSchedule = {
+                eventCron: '0 30 9 * * MON',
+                endEventCron: '0 0 10 * * MON'
+            };
+            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(false);
+        });
+
+        it('Should return false if two schedules have different time periods during one hour', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 * * MON',
+                endEventCron: '0 15 8 * * MON'
+            };
+            let secondSchedule = {
+                eventCron: '0 30 8 * * MON',
+                endEventCron: '0 0 9 * * MON'
+            };
+            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(false);
+        });
+
+        it('Should return true if two schedules have the same time periods during one hour', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 * * MON',
+                endEventCron: '0 45 8 * * MON'
+            };
+            let secondSchedule = {
+                eventCron: '0 30 8 * * MON',
+                endEventCron: '0 0 9 * * MON'
+            };
+            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(true);
+        });
     });
 });
