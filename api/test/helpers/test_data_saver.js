@@ -1,10 +1,34 @@
 'use strict';
 
-const Q = require('q');
-
 const DbHelper = require('../../src/helpers/db_helper');
+const SettingDataPreparationHelper = require('./setting_data_preparation_helper');
+const ScheduleDataPreparationHelper = require('./schedule_data_preparation_helper');
 
 module.exports = class TestDataSever {
+
+    static savePeriodicalSettingsWithSchedules(cronExpressions, config) {
+        let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning Menu', config);
+
+        let newSetting;
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                existingSetting = setting;
+                let schedule = ScheduleDataPreparationHelper
+                    .createRepeatableSchedule(cronExpressions.existingEventCron, cronExpressions.existingEndEventCron, setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => {
+                let newSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', {});
+                return TestDataSever.saveSetting(newSetting);
+            })
+            .then(setting => {
+                newSetting = setting;
+                let schedule = ScheduleDataPreparationHelper
+                    .createRepeatableSchedule(cronExpressions.newEventCron, existingSetting.newEndEventCron, setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => new Promise((resolve, reject) => resolve(newSetting)));
+    }
 
     static saveDefaultSetting() {
         let setting = TestDataSever._generateDefaultSetting();
