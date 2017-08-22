@@ -9,10 +9,18 @@ module.exports = class ScheduleOverflowInspector {
     }
 
     static areIntersect(firstSchedule, secondSchedule) {
-        let firstWeekdays = ScheduleOverflowInspector._getWeekdays(firstSchedule.eventCron);
-        let secondWeekdays = ScheduleOverflowInspector._getWeekdays(secondSchedule.eventCron);
-        let duplicates = ScheduleOverflowInspector._findDuplicates(firstWeekdays, secondWeekdays);
-        return duplicates.length > 0;
+        let firstInterval = {};
+        firstInterval.weekdays = ScheduleOverflowInspector._getWeekdays(firstSchedule.eventCron);
+        firstInterval.time = ScheduleOverflowInspector._getTime(firstSchedule.eventCron);
+        firstInterval.endTime = ScheduleOverflowInspector._getTime(firstSchedule.endEventCron);
+
+        let secondInterval = {};
+        secondInterval.weekdays = ScheduleOverflowInspector._getWeekdays(secondSchedule.eventCron);
+        secondInterval.time = ScheduleOverflowInspector._getTime(secondSchedule.eventCron);
+        secondInterval.endTime = ScheduleOverflowInspector._getTime(secondSchedule.endEventCron);
+
+        let duplicates = ScheduleOverflowInspector._findDuplicates(firstInterval, secondInterval);
+        return duplicates.length > 0 && ScheduleOverflowInspector._areTimeIntervalsOverflow(firstInterval, secondInterval);
     }
 
     static _getWeekdays(cronExpression) {
@@ -20,7 +28,17 @@ module.exports = class ScheduleOverflowInspector {
         return parts[5].split(',');
     }
 
-    static _findDuplicates(firstArray, secondArray) {
-        return _.filter(firstArray, e => _.includes(secondArray, e));
+    static _findDuplicates(firstInterval, secondInterval) {
+        return _.filter(firstInterval.weekdays, e => _.includes(secondInterval.weekdays, e));
+    }
+
+    static _areTimeIntervalsOverflow(firstInterval, secondInterval) {
+        return firstInterval.time <= secondInterval.time && firstInterval.endTime >= secondInterval.time ||
+               secondInterval.time <= firstInterval.time && secondInterval.endTime >= firstInterval.time;
+    }
+
+    static _getTime(cronExpression) {
+        let cronParts = cronExpression.split(' ');
+        return +cronParts[2];
     }
 };
