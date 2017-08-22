@@ -3,6 +3,9 @@
 const uuid = require('uuid');
 const PriorityTypes = require('./../../enums/priority_types');
 const ParametersBuilder = require('./../helpers/parameters_builder');
+const DbHelper = require('./../../helpers/db_helper');
+const SettingUtils = require('./../helpers/setting_utils');
+const ScheduleUtils = require('./../../schedule/helpers/schedule_utils');
 
 const Q = require('q');
 let db;
@@ -70,6 +73,44 @@ class Setting {
                 }
             });
         }
+    }
+
+    deleteSetting() {
+        let setting;
+        return this._findSettingById()
+            .then(_setting => {
+                setting = _setting;
+                return this._performDelete();
+            })
+            .then(() => {
+                return ScheduleUtils.deleteSchedulesForSetting(setting.id)
+            })
+    }
+
+    _findSettingById() {
+        return new Promise((resolve, reject) => {
+            DbHelper.findOne(process.env.SETTINGS_TABLE, this.id)
+                .then(setting => resolve(setting.Item));
+        });
+    }
+
+    _performDelete() {
+        let deleteParams = {
+            TableName: process.env.SETTINGS_TABLE,
+            Key: {
+                id: this.id,
+            },
+        };
+
+        return new Promise((resolve, reject) => {
+            db.delete(deleteParams, (error, data) => {
+                if (error) {
+                    reject(error.message);
+                } else {
+                    resolve();
+                }
+            })
+        });
     }
 
     validate() {
