@@ -36,8 +36,8 @@ module.exports = class ScheduleOverflowInspector {
     }
 
     static _areTimeIntervalsOverflow(firstInterval, secondInterval) {
-        return firstInterval.time <= secondInterval.time && firstInterval.endTime >= secondInterval.time ||
-               secondInterval.time <= firstInterval.time && secondInterval.endTime >= firstInterval.time;
+        return firstInterval.time <= secondInterval.time && firstInterval.endTime > secondInterval.time ||
+               secondInterval.time <= firstInterval.time && secondInterval.endTime > firstInterval.time;
     }
 
     static _getTime(cronExpression) {
