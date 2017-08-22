@@ -230,10 +230,10 @@ describe('update_setting', () => {
     it('Should update periodical setting if schedules for conflicted settings are created for different set of weekdays', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
-            existingEventCron: '0 0 8 * * MON',
-            existingEndEventCron: '0 0 10 * * MON',
-            newEventCron: '0 0 9 * * TUE',
-            newEndEventCron: '0 0 10 * * TUE',
+            existingEventCron: '0 0 8 * * MON,TUE,WED',
+            existingEndEventCron: '0 0 10 * * MON,TUE,WED',
+            newEventCron: '0 0 9 * * TUE,FRI,SAT',
+            newEndEventCron: '0 0 10 * * TUE,FRI,SAT',
         };
         return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
