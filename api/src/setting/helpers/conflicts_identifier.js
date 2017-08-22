@@ -3,7 +3,7 @@
 const PriorityTypes = require('../../enums/priority_types');
 const DbHelper = require('../../helpers/db_helper');
 const SchedulesFinder = require('../../schedule/helpers/schedules_finder');
-const ScheduleOverflowInspector = require('../../schedule/helpers/schedule_overflow_inspector');
+const ScheduleOverlapInspector = require('../../schedule/helpers/schedule_overlap_inspector');
 
 const Q = require('q');
 const _ = require('lodash');
@@ -30,9 +30,9 @@ module.exports = class ConflictsIdentifier {
             })
             .then(schedules => {
                 let schedulesForCurrentSetting = SchedulesFinder.findAllByOneSettingId(setting.id);
-                let overflow = ScheduleOverflowInspector.findOverflow(schedules, schedulesForCurrentSetting);
-                let settingsOverflow = _.map(overflow, o => o.settingId);
-                let conflicts = _.filter(conflictedConfigs, c => settingsOverflow.includes(c.id));
+                let overlap = ScheduleOverlapInspector.findOverlap(schedules, schedulesForCurrentSetting);
+                let settingsOverlap = _.map(overlap, o => o.settingId);
+                let conflicts = _.filter(conflictedConfigs, c => settingsOverlap.includes(c.id));
                 deferred.resolve(conflicts);
             });
         return deferred.promise;
