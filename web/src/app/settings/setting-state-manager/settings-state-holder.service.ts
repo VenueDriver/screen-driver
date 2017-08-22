@@ -32,6 +32,10 @@ export class SettingStateHolderService {
         }
     }
 
+    removeSetting(id: string) {
+        return this.settingsService.removeSetting(id)
+    }
+
     updateSettings(settings: Setting[]) {
         this.setting.next(settings);
     }

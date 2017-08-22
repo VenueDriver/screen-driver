@@ -21,6 +21,7 @@ export class SettingCreatorComponent implements OnInit {
 
     setting: Setting;
     isInputValid = true;
+    isRemoveMode: boolean = false;
     priorityTypes = [];
 
     constructor(
@@ -62,14 +63,14 @@ export class SettingCreatorComponent implements OnInit {
         this.setting.priority = priorityType.id;
         this.settingsService.createSetting(this.setting).subscribe(
             (setting: Setting) => this.handleResponse(setting.id),
-            error => this.handleError()
+            error => this.handleCreationError()
         );
     }
 
     private updateSetting() {
         this.settingsService.updateSetting(this.setting).subscribe(
             (setting: Setting) => this.handleResponse(setting.id),
-            error => this.handleError()
+            error => this.handleCreationError()
         )
     }
 
@@ -78,7 +79,11 @@ export class SettingCreatorComponent implements OnInit {
         this.submit.emit();
     }
 
-    handleError() {
+    handleCreationError() {
+        this.notificationService.showErrorNotificationBar(`Unable to create setting`);
+    }
+
+    handleDeletionError() {
         this.notificationService.showErrorNotificationBar(`Unable to create setting`);
     }
 
@@ -93,5 +98,27 @@ export class SettingCreatorComponent implements OnInit {
 
     isButtonEnabled(): boolean {
         return !_.isEmpty(this.setting.name) && this.isInputValid;
+    }
+
+    isCreationMode(): boolean {
+        return !this.isEditionMode();
+    }
+
+    isEditionMode(): boolean {
+        return !!this.settingToEdit;
+    }
+
+    enableRemovingMode() {
+        this.isRemoveMode = true;
+    }
+
+    performRemoving() {
+        this.settingStateHolderService.removeSetting(this.settingToEdit.id)
+            .subscribe(response => this.settingStateHolderService.reloadSettings(),
+            error => this.handleDeletionError());
+    }
+
+    cancelRemoving() {
+        this.isRemoveMode = false;
     }
 }

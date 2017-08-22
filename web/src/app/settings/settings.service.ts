@@ -27,6 +27,10 @@ export class SettingsService {
             .map(response => response.json());
     }
 
+    removeSetting(id: string): Observable<Response> {
+        return this.http.delete(`${SETTINGS_API_URL}/${id}`)
+    }
+
     getCreateSettingEventSubscription(): Observable<any> {
         return this.createSettingEvent;
     }
