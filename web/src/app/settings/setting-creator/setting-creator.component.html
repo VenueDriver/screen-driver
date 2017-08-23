@@ -1,7 +1,7 @@
 <div class="create-setting-corm-container" [class.has-error]="!isInputValid">
     <div *ngIf="!isInputValid"
          class="message validation-error">
-        Setting with such name already exists
+        {{getValidationErrorMessage()}}
     </div>
 
     <div class="inputs-container">

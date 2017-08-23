@@ -88,7 +88,23 @@ export class SettingCreatorComponent implements OnInit {
 
     validateSettingName() {
         this.setting.name = this.setting.name.trim();
-        this.isInputValid = !_.find(this.settings, s => s.name.trim() === this.setting.name);
+        this.isInputValid = this.isSettingNameUnique() && this.isSettingNameValid();
+    }
+
+    getValidationErrorMessage(): string {
+        if (!this.isSettingNameValid())
+            return 'Setting name should be longer than 3 symbols';
+
+        if (!this.isSettingNameUnique())
+            return 'Setting with such name already exists'
+    }
+
+    isSettingNameUnique(): boolean {
+        return !_.find(this.settings, s => s.name.trim() === this.setting.name);
+    }
+
+    isSettingNameValid(): boolean {
+        return this.setting.name.length >= 3;
     }
 
     isButtonEnabled(): boolean {
