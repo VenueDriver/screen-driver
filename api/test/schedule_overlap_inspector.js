@@ -175,6 +175,20 @@ describe('schedule_overlap_inspector', () => {
             expect(result).to.equal(false);
         });
 
+        it('Should return true if two schedules overlap and end at the same time', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 * * MON',
+                endEventCron: '0 0 10 * * MON',
+            };
+            let secondSchedule = {
+                eventCron: '0 0 9 * * MON',
+                endEventCron: '0 0 10 * * MON'
+            };
+            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(true);
+        });
+
         it('Should return false if two schedules have different time periods during one hour', () => {
             let firstSchedule = {
                 eventCron: '0 0 8 * * MON',
