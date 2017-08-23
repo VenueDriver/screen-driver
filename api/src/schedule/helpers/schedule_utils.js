@@ -1,11 +1,7 @@
 'use strict';
 
-const Q = require('q');
-
-const db = require('./../../dynamodb/dynamodb');
 const dbHelper = require('./../../helpers/db_helper');
 const _ = require('lodash');
-const Schedule = require('./../entities/schedule');
 
 module.exports = class ScheduleUtils {
 
@@ -15,9 +11,7 @@ module.exports = class ScheduleUtils {
                 let schedulesForSetting = schedules.filter(schedule => {
                     return schedule.settingId === settingId
                 });
-                return Q.all(schedulesForSetting.map(schedule => {
-                    return new Schedule(schedule, db).deleteSchedule()
-                }));
+                return dbHelper.batchDelete(process.env.SCHEDULES_TABLE, schedulesForSetting)
             })
     }
 };
