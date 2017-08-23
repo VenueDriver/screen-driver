@@ -260,5 +260,33 @@ describe('schedule_overlap_inspector', () => {
 
             expect(result).to.equal(false);
         });
+
+        it('Should return false if two schedules have different time during one day', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 1 JAN * 2017',
+                endEventCron: '0 0 9 1 JAN * 2017'
+            };
+            let secondSchedule = {
+                eventCron: '0 0 10 1 JAN * 2017',
+                endEventCron: '0 0 11 1 JAN * 2017'
+            };
+            let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(false);
+        });
+
+        it('Should return true if two schedules have the same time during one day', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 1 JAN * 2017',
+                endEventCron: '0 0 10 1 JAN * 2017'
+            };
+            let secondSchedule = {
+                eventCron: '0 0 9 1 JAN * 2017',
+                endEventCron: '0 0 11 1 JAN * 2017'
+            };
+            let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(true);
+        });
     });
 });

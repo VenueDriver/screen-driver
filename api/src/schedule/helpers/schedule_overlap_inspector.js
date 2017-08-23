@@ -61,9 +61,13 @@ module.exports = class ScheduleOverlapInspector {
 
     static _getDate(cronExpression) {
         let cronParts = cronExpression.split(' ');
+
         let year = +cronParts[6];
         let month = cronParts[4];
         let dayOfMonth = +cronParts[3];
-        return new Date(`${month} ${dayOfMonth}, ${year}`);
+        let hours = +cronParts[2];
+        let minutes = +cronParts[1];
+
+        return new Date(`${month} ${dayOfMonth}, ${year} ${hours}:${minutes}`);
     }
 };
