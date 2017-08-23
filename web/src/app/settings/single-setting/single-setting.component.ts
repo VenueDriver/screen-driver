@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import {SchedulesService} from "../../schedules/schedules.service";
 import {Schedule} from "../../schedules/entities/schedule";
 import {PriorityTypes} from "../../enums/priorty-types";
+import {VenuesTreeViewService} from "../../venues/venues-tree-view/venues-tree-view.service";
 
 @Component({
     selector: 'single-setting',
@@ -22,7 +23,8 @@ export class SingleSettingComponent implements OnInit {
 
     constructor(private settingsService: SettingsService,
                 private notificationService: NotificationService,
-                private schedulesService: SchedulesService) {
+                private schedulesService: SchedulesService,
+                private treeViewService: VenuesTreeViewService) {
     }
 
     ngOnInit() {
@@ -44,6 +46,9 @@ export class SingleSettingComponent implements OnInit {
 
     onEnableForciblyClicked(event) {
         event.stopPropagation();
+        if (this.isSettingInEditMode()) {
+            return;
+        }
         this.setting.forciblyEnabled = !this.setting.forciblyEnabled;
         this.settingsService.updateSetting(this.setting)
             .subscribe(
@@ -89,5 +94,15 @@ export class SingleSettingComponent implements OnInit {
 
     private isPersistent() {
         return this.setting.priority === PriorityTypes.PERSISTENT.id;
+    }
+
+    isSettingInEditMode(): boolean {
+        return this.treeViewService.isTreeEdited()
+            && !!this.activeSetting
+            && this.setting.id === this.activeSetting.id;
+    }
+
+    getForciblyEnabledButtonHint() {
+        return this.isSettingInEditMode() ? 'You can\'t do it, when edit the setting' : '';
     }
 }
