@@ -261,7 +261,7 @@ describe('schedule_overlap_inspector', () => {
             expect(result).to.equal(false);
         });
 
-        it('Should return false if two schedules have different time during one day', () => {
+        it('Should return false if two schedules have different time periods during one day', () => {
             let firstSchedule = {
                 eventCron: '0 0 8 1 JAN * 2017',
                 endEventCron: '0 0 9 1 JAN * 2017'
@@ -275,7 +275,7 @@ describe('schedule_overlap_inspector', () => {
             expect(result).to.equal(false);
         });
 
-        it('Should return true if two schedules have the same time during one day', () => {
+        it('Should return true if two schedules have overlap in time period during one day', () => {
             let firstSchedule = {
                 eventCron: '0 0 8 1 JAN * 2017',
                 endEventCron: '0 0 10 1 JAN * 2017'
@@ -283,6 +283,62 @@ describe('schedule_overlap_inspector', () => {
             let secondSchedule = {
                 eventCron: '0 0 9 1 JAN * 2017',
                 endEventCron: '0 0 11 1 JAN * 2017'
+            };
+            let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(true);
+        });
+
+        it('Should return true if two schedules have overlap in datetime period', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 1 JAN * 2017',
+                endEventCron: '0 0 8 2 JAN * 2017'
+            };
+            let secondSchedule = {
+                eventCron: '0 0 20 1 JAN * 2017',
+                endEventCron: '0 0 20 2 JAN * 2017'
+            };
+            let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(true);
+        });
+
+        it('Should return false if one schedule start just after another one', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 1 JAN * 2017',
+                endEventCron: '0 0 8 2 JAN * 2017'
+            };
+            let secondSchedule = {
+                eventCron: '0 0 8 2 JAN * 2017',
+                endEventCron: '0 0 20 2 JAN * 2017'
+            };
+            let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(false);
+        });
+
+        it('Should return true if one schedule performs inside another one', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 1 JAN * 2017',
+                endEventCron: '0 0 8 7 JAN * 2017'
+            };
+            let secondSchedule = {
+                eventCron: '0 0 8 2 JAN * 2017',
+                endEventCron: '0 0 20 2 JAN * 2017'
+            };
+            let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(true);
+        });
+
+        it('Should return true if two schedules have the same time period', () => {
+            let firstSchedule = {
+                eventCron: '0 30 8 1 JAN * 2017',
+                endEventCron: '0 45 9 1 JAN * 2017'
+            };
+            let secondSchedule = {
+                eventCron: '0 30 8 1 JAN * 2017',
+                endEventCron: '0 45 9 1 JAN * 2017'
             };
             let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
 
