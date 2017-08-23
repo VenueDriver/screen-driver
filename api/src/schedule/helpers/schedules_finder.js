@@ -1,6 +1,7 @@
 'use strict';
 
 const dbHelper = require('../../helpers/db_helper');
+const _ = require('lodash');
 
 module.exports = class SchedulesFinder {
 
@@ -17,12 +18,17 @@ module.exports = class SchedulesFinder {
 
     static findAllBySettingIds(settingIds) {
         let params = {
-            TableName: process.env.SCHEDULES_TABLE,
-            ExpressionAttributeValues: {
-                ':settingIds': settingIds
-            },
-            FilterExpression: 'settingId IN (:settingIds)'
+            TableName: process.env.SCHEDULES_TABLE
         };
-        return dbHelper.findByParams(params);
+        return dbHelper.findByParams(params)
+            .then(schedules => {
+                return new Promise((resolve, reject) => {
+                    resolve(SchedulesFinder._filterSchedulesBySettingIds(schedules, settingIds));
+                });
+            });
+    }
+
+    static _filterSchedulesBySettingIds(schedules, settingIds) {
+        return _.filter(schedules, s => _.includes(settingIds, s.settingId));
     }
 };
