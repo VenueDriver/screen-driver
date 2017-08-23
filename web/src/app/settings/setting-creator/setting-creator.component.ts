@@ -71,7 +71,7 @@ export class SettingCreatorComponent implements OnInit {
     private updateSetting() {
         this.settingsService.updateSetting(this.setting).subscribe(
             (setting: Setting) => this.handleResponse(setting.id),
-            error => this.handleCreationError()
+            error => this.handleUpdatingError()
         )
     }
 
@@ -81,11 +81,19 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     handleCreationError() {
-        this.notificationService.showErrorNotificationBar(`Unable to create setting`);
+        this.handleError('create');
+    }
+
+    handleUpdatingError() {
+        this.handleError('update');
     }
 
     handleDeletionError() {
-        this.notificationService.showErrorNotificationBar(`Unable to create setting`);
+        this.handleError('remove');
+    }
+
+    handleError(operationType: string) {
+        this.notificationService.showErrorNotificationBar(`Unable to ${operationType} setting`);
     }
 
     performCancel() {
