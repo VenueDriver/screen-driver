@@ -12,30 +12,43 @@ module.exports = class ScheduleOverlapInspector {
     }
 
     static arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule) {
-        let firstInterval = {};
-        firstInterval.weekdays = ScheduleOverlapInspector._getWeekdays(firstSchedule.eventCron);
-        firstInterval.time = ScheduleOverlapInspector._getTime(firstSchedule.eventCron);
-        firstInterval.endTime = ScheduleOverlapInspector._getTime(firstSchedule.endEventCron);
-
-        let secondInterval = {};
-        secondInterval.weekdays = ScheduleOverlapInspector._getWeekdays(secondSchedule.eventCron);
-        secondInterval.time = ScheduleOverlapInspector._getTime(secondSchedule.eventCron);
-        secondInterval.endTime = ScheduleOverlapInspector._getTime(secondSchedule.endEventCron);
+        let firstInterval = ScheduleOverlapInspector._createIntervalForPeriodicalSchedule(firstSchedule);
+        let secondInterval = ScheduleOverlapInspector._createIntervalForPeriodicalSchedule(secondSchedule);
 
         let duplicates = ScheduleOverlapInspector._findDuplicates(firstInterval, secondInterval);
         return duplicates.length > 0 && ScheduleOverlapInspector._areTimeIntervalsOverlap(firstInterval, secondInterval);
     }
 
-    static areOneTimeSchedulesOverlap(firstSchedule, secondSchedule) {
-        let firstInterval = {};
-        firstInterval.time = ScheduleOverlapInspector._getDate(firstSchedule.eventCron);
-        firstInterval.endTime = ScheduleOverlapInspector._getDate(firstSchedule.endEventCron);
+    static _createIntervalForPeriodicalSchedule(schedule) {
+        let interval = {};
+        interval.weekdays = ScheduleOverlapInspector._getWeekdays(schedule.eventCron);
 
-        let secondInterval = {};
-        secondInterval.time = ScheduleOverlapInspector._getDate(secondSchedule.eventCron);
-        secondInterval.endTime = ScheduleOverlapInspector._getDate(secondSchedule.endEventCron);
+        let time = ScheduleOverlapInspector._getTime(schedule.eventCron);
+        interval.time = ScheduleOverlapInspector._convertToDateObject(time);
+
+        let endTime = ScheduleOverlapInspector._getTime(schedule.endEventCron);
+        interval.endTime = ScheduleOverlapInspector._convertToDateObject(endTime);
+
+        return interval;
+    }
+
+    static areOneTimeSchedulesOverlap(firstSchedule, secondSchedule) {
+        let firstInterval = ScheduleOverlapInspector._createIntervalForOneTimeSchedule(firstSchedule);
+        let secondInterval = ScheduleOverlapInspector._createIntervalForOneTimeSchedule(secondSchedule);
 
         return ScheduleOverlapInspector._areTimeIntervalsOverlap(firstInterval, secondInterval);
+    }
+
+    static _createIntervalForOneTimeSchedule(schedule) {
+        let interval = {};
+        let time = ScheduleOverlapInspector._getTime(schedule.eventCron);
+        let date = ScheduleOverlapInspector._getDate(schedule.eventCron);
+        interval.time = ScheduleOverlapInspector._convertToDateObject(time, date);
+
+        let endTime = ScheduleOverlapInspector._getTime(schedule.endEventCron);
+        let endDate = ScheduleOverlapInspector._getDate(schedule.endEventCron);
+        interval.endTime = ScheduleOverlapInspector._convertToDateObject(endTime, endDate);
+        return interval;
     }
 
     static _getWeekdays(cronExpression) {
@@ -56,18 +69,21 @@ module.exports = class ScheduleOverlapInspector {
         let cronParts = cronExpression.split(' ');
         let hours = +cronParts[2];
         let minutes = +cronParts[1];
-        return new Date(2000, 0, 1, hours, minutes);
+        return `${hours}:${minutes}`;
     }
 
     static _getDate(cronExpression) {
         let cronParts = cronExpression.split(' ');
-
         let year = +cronParts[6];
         let month = cronParts[4];
         let dayOfMonth = +cronParts[3];
-        let hours = +cronParts[2];
-        let minutes = +cronParts[1];
+        return `${month} ${dayOfMonth}, ${year}`;
+    }
 
-        return new Date(`${month} ${dayOfMonth}, ${year} ${hours}:${minutes}`);
+    static _convertToDateObject(time, date) {
+        if (_.isEmpty(date)) {
+            date = '1 JAN, 2017';
+        }
+        return new Date(`${date} ${time}`);
     }
 };
