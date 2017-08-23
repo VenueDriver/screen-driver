@@ -93,7 +93,7 @@ export class SettingCreatorComponent implements OnInit {
 
     getValidationErrorMessage(): string {
         if (!this.isSettingNameValid())
-            return 'Setting name should be more then 3 symbols';
+            return 'Setting name should be longer than 3 symbols';
 
         if (!this.isSettingNameUnique())
             return 'Setting with such name already exists'
