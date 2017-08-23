@@ -5,8 +5,8 @@ const _ = require('lodash');
 module.exports = class ScheduleOverlapInspector {
 
     static findOverlap(schedules, updatedSchedules) {
-        return _.filter(updatedSchedules, s => {
-            let overlap = _.filter(schedules, schedule => ScheduleOverlapInspector.areOverlap(s, schedule));
+        return _.filter(schedules, s => {
+            let overlap = _.filter(updatedSchedules, schedule => ScheduleOverlapInspector.areOverlap(s, schedule));
             return overlap.length > 0;
         });
     }
