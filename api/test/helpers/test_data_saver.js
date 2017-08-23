@@ -30,6 +30,30 @@ module.exports = class TestDataSever {
             .then(() => new Promise((resolve, reject) => resolve(newSetting)));
     }
 
+    static saveOccasionalSettingsWithSchedules(cronExpressions, config) {
+        let existingSetting = SettingDataPreparationHelper.getOccasionalSetting('Halloween', config);
+
+        let newSetting;
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                existingSetting = setting;
+                let schedule = ScheduleDataPreparationHelper
+                    .createOneTimeSchedule(cronExpressions.existingEventCron, cronExpressions.existingEndEventCron, setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => {
+                let newSetting = SettingDataPreparationHelper.getOccasionalSetting('New Year', {});
+                return TestDataSever.saveSetting(newSetting);
+            })
+            .then(setting => {
+                newSetting = setting;
+                let schedule = ScheduleDataPreparationHelper
+                    .createOneTimeSchedule(cronExpressions.newEventCron, cronExpressions.newEndEventCron, setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => new Promise((resolve, reject) => resolve(newSetting)));
+    }
+
     static saveDefaultSetting() {
         let setting = TestDataSever._generateDefaultSetting();
         return TestDataSever.saveSetting(setting);

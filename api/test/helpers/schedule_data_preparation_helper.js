@@ -45,6 +45,17 @@ module.exports = class ScheduleDataPreparationHelper {
         };
     }
 
+    static createOneTimeSchedule(eventCron, endEventCron, settingId) {
+        return {
+            id: uuid.v1(),
+            eventCron: eventCron,
+            endEventCron: endEventCron,
+            settingId: settingId,
+            periodicity: 'ONE_TIME',
+            _rev: 0
+        };
+    }
+
     static createScheduleWithoutSettingId() {
         let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         delete schedule.settingId;

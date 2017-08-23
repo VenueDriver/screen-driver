@@ -10,11 +10,6 @@ module.exports = class SettingDataPreparationHelper {
         return SettingDataPreparationHelper.getPersistentSetting(name, config);
     }
 
-    static getPeriodicalSettingWithConfig(name) {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        return SettingDataPreparationHelper.getPeriodicalSetting(name, config);
-    }
-
     static getPersistentSetting(name, config) {
         return {
             id: uuid.v1(),
@@ -32,6 +27,17 @@ module.exports = class SettingDataPreparationHelper {
             name: name,
             enabled: true,
             priority: PriorityTypes.getTypeIds()[1],
+            config: config,
+            _rev: 0
+        };
+    }
+
+    static getOccasionalSetting(name, config) {
+        return {
+            id: uuid.v1(),
+            name: name,
+            enabled: true,
+            priority: PriorityTypes.getTypeIds()[2],
             config: config,
             _rev: 0
         };
