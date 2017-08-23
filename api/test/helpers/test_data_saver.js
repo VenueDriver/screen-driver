@@ -24,7 +24,7 @@ module.exports = class TestDataSever {
             .then(setting => {
                 newSetting = setting;
                 let schedule = ScheduleDataPreparationHelper
-                    .createRepeatableSchedule(cronExpressions.newEventCron, existingSetting.newEndEventCron, setting.id);
+                    .createRepeatableSchedule(cronExpressions.newEventCron, cronExpressions.newEndEventCron, setting.id);
                 return TestDataSever.saveSchedule(schedule);
             })
             .then(() => new Promise((resolve, reject) => resolve(newSetting)));
