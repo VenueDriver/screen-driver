@@ -16,7 +16,19 @@ module.exports = class ConflictsIdentifier {
                 return ConflictsIdentifier.findConflictsInPersistentConfig(setting);
             case PriorityTypes.getTypeIds()[1]:
                 return ConflictsIdentifier.findConflictsInPeriodicalConfig(setting);
+            case PriorityTypes.getTypeIds()[2]:
+                return ConflictsIdentifier.findConflictsInOccasionalConfig(setting);
         }
+    }
+
+    static findConflictsInPersistentConfig(setting) {
+        let deferred = Q.defer();
+        ConflictsIdentifier._getExistingConfigs(setting.priority)
+            .then(configs => {
+                let conflictedConfigs = ConflictsIdentifier._detectConflictInConfigs(configs, setting);
+                deferred.resolve(conflictedConfigs);
+            });
+        return deferred.promise;
     }
 
     static findConflictsInPeriodicalConfig(setting) {
@@ -42,12 +54,25 @@ module.exports = class ConflictsIdentifier {
         return deferred.promise;
     }
 
-    static findConflictsInPersistentConfig(setting) {
+    static findConflictsInOccasionalConfig(setting) {
         let deferred = Q.defer();
+        let conflictedConfigs = [];
+        let existingSchedules = [];
         ConflictsIdentifier._getExistingConfigs(setting.priority)
             .then(configs => {
-                let conflictedConfigs = ConflictsIdentifier._detectConflictInConfigs(configs, setting);
-                deferred.resolve(conflictedConfigs);
+                conflictedConfigs = ConflictsIdentifier._detectConflictInConfigs(configs, setting);
+                let settingIds = ConflictsIdentifier._getSettingIdsArray(conflictedConfigs);
+                return SchedulesFinder.findAllBySettingIds(settingIds);
+            })
+            .then(schedules => {
+                existingSchedules = schedules;
+                return SchedulesFinder.findAllByOneSettingId(setting.id)
+            })
+            .then(schedulesForCurrentSetting => {
+                let overlap = ScheduleOverlapInspector.findOverlap(existingSchedules, schedulesForCurrentSetting);
+                let settingsOverlap = _.map(overlap, o => o.settingId);
+                let conflicts = _.filter(conflictedConfigs, c => _.includes(settingsOverlap, c.settingId));
+                deferred.resolve(conflicts);
             });
         return deferred.promise;
     }
