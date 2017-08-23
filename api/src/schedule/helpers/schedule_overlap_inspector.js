@@ -26,6 +26,18 @@ module.exports = class ScheduleOverlapInspector {
         return duplicates.length > 0 && ScheduleOverlapInspector._areTimeIntervalsOverlap(firstInterval, secondInterval);
     }
 
+    static areOneTimeSchedulesOverlap(firstSchedule, secondSchedule) {
+        let firstInterval = {};
+        firstInterval.time = ScheduleOverlapInspector._getDate(firstSchedule.eventCron);
+        firstInterval.endTime = ScheduleOverlapInspector._getDate(firstSchedule.endEventCron);
+
+        let secondInterval = {};
+        secondInterval.time = ScheduleOverlapInspector._getDate(secondSchedule.eventCron);
+        secondInterval.endTime = ScheduleOverlapInspector._getDate(secondSchedule.endEventCron);
+
+        return ScheduleOverlapInspector._areTimeIntervalsOverlap(firstInterval, secondInterval);
+    }
+
     static _getWeekdays(cronExpression) {
         let parts = cronExpression.split(' ');
         return parts[5].split(',');
@@ -45,5 +57,13 @@ module.exports = class ScheduleOverlapInspector {
         let hours = +cronParts[2];
         let minutes = +cronParts[1];
         return new Date(2000, 0, 1, hours, minutes);
+    }
+
+    static _getDate(cronExpression) {
+        let cronParts = cronExpression.split(' ');
+        let year = +cronParts[6];
+        let month = cronParts[4];
+        let dayOfMonth = +cronParts[3];
+        return new Date(`${month} ${dayOfMonth}, ${year}`);
     }
 };

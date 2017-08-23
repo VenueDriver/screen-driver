@@ -217,4 +217,48 @@ describe('schedule_overlap_inspector', () => {
             expect(result).to.equal(true);
         });
     });
+
+    describe('areOneTimeSchedulesOverlap', () => {
+        it('Should return false if two schedules have different dates', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 1 JAN * 2017',
+                endEventCron: '0 0 9 1 JAN * 2017'
+            };
+            let secondSchedule = {
+                eventCron: '0 0 8 2 JAN * 2017',
+                endEventCron: '0 0 9 2 JAN * 2017'
+            };
+            let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(false);
+        });
+
+        it('Should return false if two schedules have different months', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 1 JAN * 2017',
+                endEventCron: '0 0 9 1 JAN * 2017'
+            };
+            let secondSchedule = {
+                eventCron: '0 0 8 1 FEB * 2017',
+                endEventCron: '0 0 9 1 FEB * 2017'
+            };
+            let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(false);
+        });
+
+        it('Should return false if two schedules have different years', () => {
+            let firstSchedule = {
+                eventCron: '0 0 8 1 JAN * 2017',
+                endEventCron: '0 0 9 1 JAN * 2017'
+            };
+            let secondSchedule = {
+                eventCron: '0 0 8 1 JAN * 2018',
+                endEventCron: '0 0 9 1 JAN * 2018'
+            };
+            let result = ScheduleOverlapInspector.areOneTimeSchedulesOverlap(firstSchedule, secondSchedule);
+
+            expect(result).to.equal(false);
+        });
+    });
 });
