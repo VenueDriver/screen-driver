@@ -6,17 +6,30 @@ module.exports = class ScheduleOverlapInspector {
 
     static findOverlap(schedules, updatedSchedules) {
         return _.filter(schedules, s => {
-            let overlap = _.filter(updatedSchedules, schedule => ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(s, schedule));
+            let overlap = _.filter(updatedSchedules, schedule => {
+                if (schedule.periodicity === 'ONE_TIME') {
+                    return ScheduleOverlapInspector.areOneTimeSchedulesOverlap(s, schedule);
+                } else {
+                    return ScheduleOverlapInspector.areRepeatableSchedulesOverlap(s, schedule);
+                }
+            });
             return overlap.length > 0;
         });
     }
 
-    static arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule) {
+    static areRepeatableSchedulesOverlap(firstSchedule, secondSchedule) {
         let firstInterval = ScheduleOverlapInspector._createIntervalForPeriodicalSchedule(firstSchedule);
         let secondInterval = ScheduleOverlapInspector._createIntervalForPeriodicalSchedule(secondSchedule);
 
         let duplicates = ScheduleOverlapInspector._findDuplicates(firstInterval, secondInterval);
         return duplicates.length > 0 && ScheduleOverlapInspector._areTimeIntervalsOverlap(firstInterval, secondInterval);
+    }
+
+    static areOneTimeSchedulesOverlap(firstSchedule, secondSchedule) {
+        let firstInterval = ScheduleOverlapInspector._createIntervalForOneTimeSchedule(firstSchedule);
+        let secondInterval = ScheduleOverlapInspector._createIntervalForOneTimeSchedule(secondSchedule);
+
+        return ScheduleOverlapInspector._areTimeIntervalsOverlap(firstInterval, secondInterval);
     }
 
     static _createIntervalForPeriodicalSchedule(schedule) {
@@ -30,13 +43,6 @@ module.exports = class ScheduleOverlapInspector {
         interval.endTime = ScheduleOverlapInspector._convertToDateObject(endTime);
 
         return interval;
-    }
-
-    static areOneTimeSchedulesOverlap(firstSchedule, secondSchedule) {
-        let firstInterval = ScheduleOverlapInspector._createIntervalForOneTimeSchedule(firstSchedule);
-        let secondInterval = ScheduleOverlapInspector._createIntervalForOneTimeSchedule(secondSchedule);
-
-        return ScheduleOverlapInspector._areTimeIntervalsOverlap(firstInterval, secondInterval);
     }
 
     static _createIntervalForOneTimeSchedule(schedule) {
