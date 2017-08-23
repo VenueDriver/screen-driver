@@ -63,6 +63,12 @@ export class SettingStateHolderService {
             let message = this.getWarningMessageForSettings(forciblyEnabledSettings);
             this.staticNotification = this.notificationService.showNonVanishingWarning(message);
         } else {
+            this.hideNotification();
+        }
+    }
+
+    hideNotification() {
+        if (this.staticNotification) {
             this.notificationService.hide(this.staticNotification.id);
         }
     }
