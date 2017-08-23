@@ -6,12 +6,12 @@ module.exports = class ScheduleOverlapInspector {
 
     static findOverlap(schedules, updatedSchedules) {
         return _.filter(schedules, s => {
-            let overlap = _.filter(updatedSchedules, schedule => ScheduleOverlapInspector.areOverlap(s, schedule));
+            let overlap = _.filter(updatedSchedules, schedule => ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(s, schedule));
             return overlap.length > 0;
         });
     }
 
-    static areOverlap(firstSchedule, secondSchedule) {
+    static arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule) {
         let firstInterval = {};
         firstInterval.weekdays = ScheduleOverlapInspector._getWeekdays(firstSchedule.eventCron);
         firstInterval.time = ScheduleOverlapInspector._getTime(firstSchedule.eventCron);

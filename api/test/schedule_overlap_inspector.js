@@ -6,7 +6,7 @@ const mochaPlugin = require('serverless-mocha-plugin');
 const expect = mochaPlugin.chai.expect;
 
 describe('schedule_overlap_inspector', () => {
-    describe('areOverlap', () => {
+    describe('arePeriodicalSchedulesOverlap', () => {
         it('Should return false if two schedules have different weekdays', () => {
             let firstSchedule = {
                 eventCron: '0 0 8 * * MON',
@@ -16,7 +16,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 8 * * TUE',
                 endEventCron: '0 0 9 * * TUE'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(false);
         });
@@ -30,7 +30,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 8 * * MON',
                 endEventCron: '0 0 9 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(true);
         });
@@ -44,7 +44,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 8 * * THU,FRI,SAT',
                 endEventCron: '0 0 9 * * THU,FRI,SAT'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(false);
         });
@@ -58,7 +58,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 8 * * MON,FRI,SAT',
                 endEventCron: '0 0 9 * * MON,FRI,SAT'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(true);
         });
@@ -72,7 +72,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 8 * * THU,TUE,SAT',
                 endEventCron: '0 0 9 * * THU,TUE,SAT'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(true);
         });
@@ -86,7 +86,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 8 * * MON,TUE,SAT',
                 endEventCron: '0 0 9 * * MON,TUE,SAT'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(true);
         });
@@ -100,7 +100,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 11 * * MON',
                 endEventCron: '0 0 12 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(false);
         });
@@ -114,7 +114,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 9 * * MON',
                 endEventCron: '0 0 11 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(true);
         });
@@ -128,7 +128,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 9 * * MON',
                 endEventCron: '0 0 10 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(true);
         });
@@ -142,7 +142,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 8 * * MON',
                 endEventCron: '0 0 11 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(true);
         });
@@ -156,7 +156,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 9 * * MON',
                 endEventCron: '0 0 10 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(false);
         });
@@ -170,7 +170,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 30 9 * * MON',
                 endEventCron: '0 0 10 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(false);
         });
@@ -184,7 +184,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 0 9 * * MON',
                 endEventCron: '0 0 10 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(true);
         });
@@ -198,7 +198,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 30 8 * * MON',
                 endEventCron: '0 0 9 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(false);
         });
@@ -212,7 +212,7 @@ describe('schedule_overlap_inspector', () => {
                 eventCron: '0 30 8 * * MON',
                 endEventCron: '0 0 9 * * MON'
             };
-            let result = ScheduleOverlapInspector.areOverlap(firstSchedule, secondSchedule);
+            let result = ScheduleOverlapInspector.arePeriodicalSchedulesOverlap(firstSchedule, secondSchedule);
 
             expect(result).to.equal(true);
         });
