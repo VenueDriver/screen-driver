@@ -8,9 +8,7 @@ module.exports = class ScheduleUtils {
     static deleteSchedulesForSetting(settingId) {
         dbHelper.findAll(process.env.SCHEDULES_TABLE)
             .then(schedules => {
-                let schedulesForSetting = schedules.filter(schedule => {
-                    return schedule.settingId === settingId
-                });
+                let schedulesForSetting = schedules.filter(schedule => schedule.settingId === settingId);
                 return dbHelper.batchDelete(process.env.SCHEDULES_TABLE, schedulesForSetting)
             })
     }
