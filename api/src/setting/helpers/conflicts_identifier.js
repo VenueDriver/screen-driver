@@ -22,6 +22,7 @@ module.exports = class ConflictsIdentifier {
     static findConflictsInPeriodicalConfig(setting) {
         let deferred = Q.defer();
         let conflictedConfigs = [];
+        let existingSchedules = [];
         ConflictsIdentifier._getExistingConfigs(setting.priority)
             .then(configs => {
                 conflictedConfigs = ConflictsIdentifier._detectConflictInConfigs(configs, setting);
@@ -29,10 +30,13 @@ module.exports = class ConflictsIdentifier {
                 return SchedulesFinder.findAllBySettingIds(settingIds);
             })
             .then(schedules => {
-                let schedulesForCurrentSetting = SchedulesFinder.findAllByOneSettingId(setting.id);
-                let overlap = ScheduleOverlapInspector.findOverlap(schedules, schedulesForCurrentSetting);
+                existingSchedules = schedules;
+                return SchedulesFinder.findAllByOneSettingId(setting.id)
+            })
+            .then(schedulesForCurrentSetting => {
+                let overlap = ScheduleOverlapInspector.findOverlap(existingSchedules, schedulesForCurrentSetting);
                 let settingsOverlap = _.map(overlap, o => o.settingId);
-                let conflicts = _.filter(conflictedConfigs, c => settingsOverlap.includes(c.id));
+                let conflicts = _.filter(conflictedConfigs, c => _.includes(settingsOverlap, c.settingId));
                 deferred.resolve(conflicts);
             });
         return deferred.promise;
@@ -76,7 +80,7 @@ module.exports = class ConflictsIdentifier {
         return conflicts;
     }
 
-    static _getSettingIdsArray(settings) {
-        return _.map(settings, s => s.id);
+    static _getSettingIdsArray(conflicts) {
+        return _.map(conflicts, s => s.settingId);
     }
 };
