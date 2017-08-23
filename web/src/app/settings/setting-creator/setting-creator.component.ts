@@ -5,6 +5,7 @@ import {NotificationService} from "../../notifications/notification.service";
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 
 import * as _ from 'lodash';
+import {SchedulesService} from "../../schedules/schedules.service";
 
 @Component({
     selector: 'setting-creator',
@@ -24,11 +25,11 @@ export class SettingCreatorComponent implements OnInit {
     isRemoveMode: boolean = false;
     priorityTypes = [];
 
-    constructor(
-        private settingsService: SettingsService,
-        private notificationService: NotificationService,
-        private settingStateHolderService: SettingStateHolderService
-    ) { }
+    constructor(private settingsService: SettingsService,
+                private notificationService: NotificationService,
+                private settingStateHolderService: SettingStateHolderService,
+                private schedulesService: SchedulesService) {
+    }
 
     ngOnInit() {
         this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
@@ -115,8 +116,10 @@ export class SettingCreatorComponent implements OnInit {
     performRemoving() {
         this.settingStateHolderService.removeSetting(this.settingToEdit.id)
             .subscribe(response => {
+                    console.log(response);
                     this.settingStateHolderService.changeCurrentSetting();
-                    this.settingStateHolderService.reloadSettings()
+                    this.settingStateHolderService.reloadSettings();
+                    this.schedulesService.scheduleListUpdated.next();
                 },
                 error => this.handleDeletionError());
     }
