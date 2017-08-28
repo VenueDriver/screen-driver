@@ -8,16 +8,31 @@
         Create new schedule
     </div>
 
-    <div class="schedule-form-container">
-        <div class="change-state-container">
-            <div class="title" *ngIf="schedule">
-                <toggle-button class="change-state-button"
-                               [checked]="schedule.enabled"
-                               [disabled]="isEditMode()"
-                               (changed)="changeScheduleState($event)">
-                </toggle-button>
+    <div class="control-buttons">
+        <toggle-button *ngIf="schedule"
+                       class="change-state-button small-screen"
+                       [checked]="schedule.enabled"
+                       [disabled]="isEditMode()"
+                       (changed)="changeScheduleState($event)">
+        </toggle-button>
+        <div *ngIf="!isCreationMode()"
+             class="remove-schedule-container small-screen">
+            <div class="remove-button"
+                 (click)="setRemovingMode(true)">
             </div>
         </div>
+    </div>
+
+    <div class="schedule-form-container">
+        <div class="change-state-container large-screen">
+            <toggle-button *ngIf="schedule"
+                           class="change-state-button"
+                           [checked]="schedule.enabled"
+                           [disabled]="isEditMode()"
+                           (changed)="changeScheduleState($event)">
+            </toggle-button>
+        </div>
+
 
         <div *ngIf="eventTime.periodicity === scheduleTypes.REPEATABLE"
              class="days-of-week-container">
@@ -104,7 +119,7 @@
         </div>
 
         <div *ngIf="!isCreationMode()"
-             class="remove-schedule-container">
+             class="remove-schedule-container large-screen">
             <div class="remove-button"
                  (click)="setRemovingMode(true)">
             </div>
