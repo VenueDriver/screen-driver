@@ -47,7 +47,6 @@ class Setting {
         let conflicts;
 
         this.validate()
-            .then(() => Setting.hasUniqueName(this))
             .then(() => ConflictsIdentifier.findConflicts(this))
             .then(conflictedConfigs => {
                 if (!_.isEmpty(conflictedConfigs)) {
