@@ -542,6 +542,51 @@ describe('update_setting', () => {
             });
     });
 
+    it('Should update occasional setting if schedules for conflicted settings are created for different dates', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let cronExpressions = {
+            existingEventCron: '0 0 8 1 JAN * 2017',
+            existingEndEventCron: '0 0 10 1 JAN * 2017',
+            newEventCron: '0 0 8 2 JAN * 2017',
+            newEndEventCron: '0 0 10 2 JAN * 2017',
+        };
+        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+            .then((newSetting) => {
+                let updatedConfig = {screen_id: 'content_id_2'};
+                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+            })
+            .then(updatedSetting => {
+                let expectation = (body, response) => {
+                    expect(body).to.have.property('_rev').that.equal(1);
+                    expect(response).to.have.property('statusCode').that.equal(200);
+                };
+                return MultiOperationHelper.test(updatedSetting, expectation);
+            });
+    });
+
+    it('Should update occasional setting with enabled status if schedules for conflicted settings are created for different dates', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let cronExpressions = {
+            existingEventCron: '0 0 8 1 JAN * 2017',
+            existingEndEventCron: '0 0 10 1 JAN * 2017',
+            newEventCron: '0 0 8 2 JAN * 2017',
+            newEndEventCron: '0 0 10 2 JAN * 2017',
+        };
+        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+            .then((newSetting) => {
+                let updatedConfig = {screen_id: 'content_id_2'};
+                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+            })
+            .then(updatedSetting => {
+                let expectation = (body) => {
+                    expect(body).to.have.property('enabled').that.equal(true);
+                };
+                return MultiOperationHelper.test(updatedSetting, expectation);
+            });
+    });
+
     it('Shouldn\'t update setting without name', () => {
         let newSetting = {name: 'New Year'};
         let updatedSetting = {_rev: 0};
