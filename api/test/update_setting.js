@@ -460,7 +460,7 @@ describe('update_setting', () => {
             newEventCron: '0 0 11 1 JAN * 2017',
             newEndEventCron: '0 0 12 1 JAN * 2017',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
                 let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
@@ -483,7 +483,7 @@ describe('update_setting', () => {
             newEventCron: '0 0 11 1 JAN * 2017',
             newEndEventCron: '0 0 12 1 JAN * 2017',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
                 let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
@@ -505,7 +505,7 @@ describe('update_setting', () => {
             newEventCron: '0 0 10 1 JAN * 2017',
             newEndEventCron: '0 0 11 1 JAN * 2017',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
                 let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
@@ -528,7 +528,7 @@ describe('update_setting', () => {
             newEventCron: '0 0 10 1 JAN * 2017',
             newEndEventCron: '0 0 11 1 JAN * 2017',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
                 let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
