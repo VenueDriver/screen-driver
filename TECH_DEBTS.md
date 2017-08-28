@@ -9,6 +9,9 @@
 1. ~~Create DB helpers for create operations~~
 1. Create DDB parameters builder
 1. Add unit tests for cron validator
+1. Create separate module for cron converter
+1. Refactor tests for `update_setting` function
+1. Refactor conflicts identifier class
 
 ##### Web
 1. Resolve warnings occurred during build process
