@@ -9,7 +9,8 @@
     </div>
 
     <div class="control-buttons">
-        <toggle-button class="change-state-button small-screen"
+        <toggle-button *ngIf="schedule"
+                       class="change-state-button small-screen"
                        [checked]="schedule.enabled"
                        [disabled]="isEditMode()"
                        (changed)="changeScheduleState($event)">
@@ -24,7 +25,8 @@
 
     <div class="schedule-form-container">
         <div class="change-state-container large-screen">
-            <toggle-button class="change-state-button"
+            <toggle-button *ngIf="schedule"
+                           class="change-state-button"
                            [checked]="schedule.enabled"
                            [disabled]="isEditMode()"
                            (changed)="changeScheduleState($event)">
