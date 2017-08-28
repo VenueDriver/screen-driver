@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import {Http, Response} from "@angular/http";
 import {Setting} from "./entities/setting";
 import {environment} from "../../environments/environment";
-import {Observable, BehaviorSubject} from "rxjs";
+import {Observable, Subject, BehaviorSubject} from "rxjs";
+import {NotificationService} from "../notifications/notification.service";
 
 const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;
 
@@ -11,7 +12,9 @@ export class SettingsService {
 
     private createSettingEvent: BehaviorSubject<any> = new BehaviorSubject({});
 
-    constructor(private http: Http) { }
+    constructor(private http: Http,
+                private notificationService: NotificationService) {
+    }
 
     loadSettings(): Observable<Response> {
         return this.http.get(SETTINGS_API_URL)
@@ -22,9 +25,27 @@ export class SettingsService {
             .map(response => response.json());
     }
 
-    updateSetting(setting: Setting): Observable<Setting> {
-        return this.http.put(`${SETTINGS_API_URL}/${setting.id}`, setting)
-            .map(response => response.json());
+    updateSetting(setting: Setting, successMessage?: string, errorMessage?: string): Observable<Setting> {
+        let subject = new Subject();
+        this.http.put(`${SETTINGS_API_URL}/${setting.id}`, setting)
+            .map(response => response.json())
+            .subscribe(response => {
+                let message = successMessage ? successMessage : 'Setting was updated successfully';
+                this.notificationService.showSuccessNotificationBar(message);
+                subject.next(response)
+            }, error => {
+                let message = this.getUpdateErrorMessage(error, errorMessage);
+                this.notificationService.showErrorNotificationBar(message);
+                subject.error(error)
+            });
+        return subject;
+    }
+
+    getUpdateErrorMessage(error, errorMessage: string) {
+        if (error.status === 409) {
+            return 'Unable to change setting state. Detected conflict between settings';
+        }
+        return errorMessage ? errorMessage : 'Unable to update setting';
     }
 
     removeSetting(id: string): Observable<Response> {
