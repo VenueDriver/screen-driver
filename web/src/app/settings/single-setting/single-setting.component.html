@@ -7,6 +7,8 @@
         <div class="forcibly-enabled-button"
              [class.forced-enabled-button-on]="!isEnabledForcibly()"
              [class.forced-enabled-button-off]="isEnabledForcibly()"
+             [class.disabled]="isSettingInEditMode()"
+             [attr.title]="getForciblyEnabledButtonHint()"
              (click)="onEnableForciblyClicked($event)">
         </div>
         <toggle-button class="switcher"
