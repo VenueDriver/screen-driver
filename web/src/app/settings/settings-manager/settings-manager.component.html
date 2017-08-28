@@ -2,27 +2,16 @@
 
     <div class="side-bar-title">
         <div>Settings</div>
-
-        <div class="plus-button add-button"
-             (click)="enableCreationMode()"
-             title="Add new setting">
-        </div>
     </div>
 
     <ul class="nav navbar-stacked settings-list scrollable">
-        <li *ngFor="let setting of settings" [class.active]="isActive(setting)">
-            <a (click)="onSettingSelection(setting)">
-                <div>
-                    {{setting.name}}
-                    <priority-type-tag [setting]="setting"></priority-type-tag>
-                </div>
-                <toggle-button class="switcher"
-                               [checked]="setting.enabled"
-                               (changed)="changeSettingState(setting, $event)"
-                               (click)="onToggleClick($event)">
-                </toggle-button>
-            </a>
-        </li>
+        <settings-group *ngFor="let type of getPriorityTypes()"
+                        [priorityType]="type"
+                        [settings]="getSettingsForType(type)"
+                        [activeSetting]="activeSetting"
+                        (settingUpdate)="handleUpdateSettingResponse()"
+                        (settingSelect)="onSettingSelection($event)">
+        </settings-group>
     </ul>
 
     <div class="settings-list-footer">

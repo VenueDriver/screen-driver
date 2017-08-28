@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.settingsService.getCreateSettingEventSubscription()
-            .subscribe(isEnabled => this.isCreateSettingMode = isEnabled);
+            .subscribe(params => this.isCreateSettingMode = params.isEnabled);
         this.isCreateSettingMode = false;
     }
 }

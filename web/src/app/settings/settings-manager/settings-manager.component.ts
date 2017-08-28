@@ -3,7 +3,6 @@ import {Setting} from "../entities/setting";
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 import {HeaderService} from "../../header/header.service";
 import {SettingsService} from "../settings.service";
-import {NotificationService} from "../../notifications/notification.service";
 
 import * as _ from 'lodash';
 
@@ -96,5 +95,13 @@ export class SettingsManagerComponent implements OnInit {
     getEnabledSettingsCount(): number {
         let enabledSettings = _.filter(this.settings, 'enabled');
         return enabledSettings.length;
+    }
+
+    getPriorityTypes(): any[] {
+        return this.settingStateHolderService.getPriorityTypes();
+    }
+
+    getSettingsForType(type) {
+        return this.settings.filter(setting => setting.priority === type.id);
     }
 }

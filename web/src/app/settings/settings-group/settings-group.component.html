@@ -1,0 +1,28 @@
+<div class="settings-group-container">
+
+    <div class="triangle-prefix"
+         [ngClass]="getPrefixColor()">
+    </div>
+    <div class="group-header line-prefix"
+         [ngClass]="getPrefixColor()">
+        <div class="title">
+            <b>{{priorityType.name}}</b>
+        </div>
+        <div class="plus-button add-button"
+             (click)="enableCreationMode(priorityType)"
+             title="Add new setting">
+        </div>
+    </div>
+
+    <li *ngFor="let setting of settings"
+        class="line-prefix"
+        [ngClass]="getPrefixColor()"
+        [class.active]="isActive(setting)">
+        <single-setting
+                [setting]="setting"
+                [activeSetting]="activeSetting"
+                (update)="handleSettingUpdate()"
+                (click)="onSettingSelection(setting)">
+        </single-setting>
+    </li>
+</div>

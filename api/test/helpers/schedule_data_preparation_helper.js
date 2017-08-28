@@ -25,6 +25,7 @@ module.exports = class ScheduleDataPreparationHelper {
             settingId: 'setting_id',
             eventCron: defaultCronExpression,
             endEventCron: defaultCronExpression,
+            enabled: true,
             periodicity: 'REPEATABLE',
             _rev: 0
         };
@@ -39,6 +40,7 @@ module.exports = class ScheduleDataPreparationHelper {
             id: uuid.v1(),
             eventCron: eventCron,
             endEventCron: endEventCron,
+            enabled: true,
             settingId: settingId,
             periodicity: 'REPEATABLE',
             _rev: 0
@@ -50,6 +52,7 @@ module.exports = class ScheduleDataPreparationHelper {
             id: uuid.v1(),
             eventCron: eventCron,
             endEventCron: endEventCron,
+            enabled: true,
             settingId: settingId,
             periodicity: 'ONE_TIME',
             _rev: 0

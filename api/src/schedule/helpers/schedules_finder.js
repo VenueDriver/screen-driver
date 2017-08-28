@@ -5,20 +5,25 @@ const _ = require('lodash');
 
 module.exports = class SchedulesFinder {
 
-    static findAllByOneSettingId(settingId) {
+    static findAllEnabledByOneSettingId(settingId) {
         let params = {
             TableName: process.env.SCHEDULES_TABLE,
             ExpressionAttributeValues: {
-                ':settingId': settingId
+                ':settingId': settingId,
+                ':enabled': true
             },
-            FilterExpression: 'settingId = :settingId'
+            FilterExpression: 'settingId = :settingId AND enabled = :enabled'
         };
         return dbHelper.findByParams(params);
     }
 
-    static findAllBySettingIds(settingIds) {
+    static findAllEnabledBySettingIds(settingIds) {
         let params = {
-            TableName: process.env.SCHEDULES_TABLE
+            TableName: process.env.SCHEDULES_TABLE,
+            ExpressionAttributeValues: {
+                ':enabled': true
+            },
+            FilterExpression: 'enabled = :enabled'
         };
         return dbHelper.findByParams(params)
             .then(schedules => {

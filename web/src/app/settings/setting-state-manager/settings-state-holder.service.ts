@@ -2,8 +2,10 @@ import {Injectable} from '@angular/core';
 import {Setting} from "../entities/setting";
 import {Subject, Observable} from "rxjs";
 import {SettingsService} from "../settings.service";
+import {Notification} from "angular2-notifications/dist";
 
 import * as _ from 'lodash';
+import {NotificationService} from "../../notifications/notification.service";
 
 @Injectable()
 export class SettingStateHolderService {
@@ -11,8 +13,10 @@ export class SettingStateHolderService {
     private setting: Subject<Setting[]> = new Subject();
     private currentSetting: Subject<Setting> = new Subject();
     private priorityTypes: Array<any>;
+    private staticNotification: Notification;
 
-    constructor(private settingsService: SettingsService) {
+    constructor(private settingsService: SettingsService,
+                private notificationService: NotificationService,) {
     }
 
     reloadSettings(currentSettingId?: string) {
@@ -22,6 +26,7 @@ export class SettingStateHolderService {
                 this.updateSettings(settings);
                 this.priorityTypes = response.json().priorityTypes;
                 this.updateCurrentSettingIfSelected(settings, currentSettingId);
+                this.checkForWarnings(settings)
             });
     }
 
@@ -30,6 +35,10 @@ export class SettingStateHolderService {
             let currentSetting = _.find(settings, s => s.id === currentSettingId);
             this.changeCurrentSetting(currentSetting);
         }
+    }
+
+    removeSetting(id: string) {
+        return this.settingsService.removeSetting(id)
     }
 
     updateSettings(settings: Setting[]) {
@@ -50,5 +59,27 @@ export class SettingStateHolderService {
 
     getPriorityTypes(): any[] {
         return this.priorityTypes;
+    }
+
+    private checkForWarnings(settings: Setting[]) {
+        let forciblyEnabledSettings = settings.filter(setting => setting.forciblyEnabled);
+        if (!_.isEmpty(forciblyEnabledSettings)) {
+            let message = this.getWarningMessageForSettings(forciblyEnabledSettings);
+            this.staticNotification = this.notificationService.showNonVanishingWarning(message);
+        } else {
+            this.hideNotification();
+        }
+    }
+
+    hideNotification() {
+        if (this.staticNotification) {
+            this.notificationService.hide(this.staticNotification.id);
+        }
+    }
+
+    private getWarningMessageForSettings(forciblyEnabledSettings: Setting[]) {
+        let forciblyEnabledSettingsLength = forciblyEnabledSettings.length;
+        return `${forciblyEnabledSettingsLength} setting${forciblyEnabledSettingsLength == 1 ? '' : 's'} are enabled forcibly. 
+            Don't forget to disable ${forciblyEnabledSettingsLength == 1 ? 'it' : 'them'}!`;
     }
 }

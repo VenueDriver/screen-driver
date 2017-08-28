@@ -10,7 +10,7 @@ const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;
 @Injectable()
 export class SettingsService {
 
-    private createSettingEvent: Subject<any> = new BehaviorSubject({});
+    private createSettingEvent: BehaviorSubject<any> = new BehaviorSubject({});
 
     constructor(private http: Http,
                 private notificationService: NotificationService) {
@@ -48,11 +48,19 @@ export class SettingsService {
         return errorMessage ? errorMessage : 'Unable to update setting';
     }
 
+    removeSetting(id: string): Observable<Response> {
+        return this.http.delete(`${SETTINGS_API_URL}/${id}`)
+    }
+
     getCreateSettingEventSubscription(): Observable<any> {
         return this.createSettingEvent;
     }
 
-    emitCreateSettingEvent(isEnabled: boolean) {
-        this.createSettingEvent.next(isEnabled);
+    getCreateSettingLastValue(): any {
+        return this.createSettingEvent.getValue();
+    }
+
+    emitCreateSettingEvent(isEnabled: boolean, priorityType?: Object) {
+        this.createSettingEvent.next({isEnabled: isEnabled, priorityType: priorityType});
     }
 }

@@ -10,7 +10,6 @@ const mochaPlugin = require('serverless-mocha-plugin');
 const TestDataSever = require('./helpers/test_data_saver');
 const PriorityTypes = require('../src/enums/priority_types');
 const SettingDataPreparationHelper = require('./helpers/setting_data_preparation_helper');
-const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 
 const expect = mochaPlugin.chai.expect;
 
@@ -44,13 +43,47 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
     });
 
-    it('Should enable configuration', () => {
+    it('Should enable setting', () => {
         let newSetting = {name: 'New Year', enabled: false, priority: 'test_id_1'};
         let updatedSetting = {name: 'New Year', enabled: true, _rev: 0, priority: 'test_id_1'};
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
             expect(body).to.have.property('_rev').that.equal(1);
+        };
+
+        return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
+    });
+
+    it('Should enable forciblyEnabled state', () => {
+        let newSetting = {name: 'New Year Party', forciblyEnabled: false, priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', forciblyEnabled: true, priority: 'test_id_1', _rev: 0,};
+
+        let expectations = (body) => {
+            expect(body).to.have.property('forciblyEnabled').that.equal(true);
+        };
+
+        return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
+    });
+
+    it('Should disable forciblyEnabled state', () => {
+        let newSetting = {name: 'New Year Party', forciblyEnabled: true, priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', forciblyEnabled: false, priority: 'test_id_1', _rev: 0,};
+
+        let expectations = (body) => {
+            expect(body).to.have.property('forciblyEnabled').that.equal(false);
+        };
+
+        return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
+    });
+
+    it('Shouldn\'t update setting with wrong forcibly enabled updated sate', () => {
+        let newSetting = {name: 'New Year Party', forciblyEnabled: false, priority: 'test_id_1'};
+        let updatedSetting = {name: 'New Year', forciblyEnabled: 'string', priority: 'test_id_1', _rev: 0,};
+
+        let expectations = (body, response) => {
+            expect(body).to.have.property('message').that.equal('Forcibly enabled field should be type of boolean');
+            expect(response).to.have.property('statusCode').that.equal(500);
         };
 
         return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
@@ -128,7 +161,7 @@ describe('update_setting', () => {
         let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
         let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
         let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id_3: 'content_id'});
-        
+
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
         };
@@ -137,7 +170,7 @@ describe('update_setting', () => {
             .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
     });
 
-    it('Should update setting with enabled status if conflict with disabled setting detected', () => {
+    it('Should set updated setting status to true if conflict with disabled setting detected', () => {
         let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
         existingSetting.enabled = false;
         let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
@@ -145,6 +178,37 @@ describe('update_setting', () => {
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
+        };
+
+        return MultiOperationHelper.create(existingSetting)
+            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+    });
+
+    it('Should update disabled and conflicted setting with success code', () => {
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        newSetting.enabled = false;
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
+        updatedSetting.enabled = false;
+
+        let expectations = (body, response) => {
+            expect(body).to.have.property('_rev').that.equal(1);
+            expect(response).to.have.property('statusCode').that.equal(200);
+        };
+
+        return MultiOperationHelper.create(existingSetting)
+            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+    });
+
+    it('Should update conflicted setting with success code if new state of setting is false', () => {
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
+        updatedSetting.enabled = false;
+
+        let expectations = (body, response) => {
+            expect(body).to.have.property('_rev').that.equal(1);
+            expect(response).to.have.property('statusCode').that.equal(200);
         };
 
         return MultiOperationHelper.create(existingSetting)
@@ -190,6 +254,7 @@ describe('update_setting', () => {
             })
             .then(updatedSetting => {
                 let expectation = (body) => {
+                    expect(body).to.have.property('_rev').that.equal(1);
                     expect(body).to.have.property('enabled').that.equal(true);
                 };
                 return MultiOperationHelper.test(updatedSetting, expectation);
@@ -421,6 +486,29 @@ describe('update_setting', () => {
             });
     });
 
+    it('Should update periodical setting if conflict with disabled schedule detected', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let cronExpressions = {
+            existingEventCron: '0 0 8 * * MON',
+            existingEndEventCron: '0 0 10 * * MON',
+            newEventCron: '0 0 9 * * MON',
+            newEndEventCron: '0 0 11 * * MON',
+        };
+        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config, false)
+            .then((newSetting) => {
+                let updatedConfig = {screen_id: 'content_id_2'};
+                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+            })
+            .then(updatedSetting => {
+                let expectation = (body, response) => {
+                    expect(body).to.have.property('_rev').that.equal(1);
+                    expect(response).to.have.property('statusCode').that.equal(200);
+                };
+                return MultiOperationHelper.test(updatedSetting, expectation);
+            });
+    });
+
     it('Should update occasional setting if content URL coincides in conflicted settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
@@ -596,6 +684,29 @@ describe('update_setting', () => {
             .then(updatedSetting => {
                 let expectation = (body) => {
                     expect(body).to.have.property('enabled').that.equal(true);
+                };
+                return MultiOperationHelper.test(updatedSetting, expectation);
+            });
+    });
+
+    it('Should update occasional setting if conflict with disabled schedule detected', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let cronExpressions = {
+            existingEventCron: '0 30 8 1 JAN * 2017',
+            existingEndEventCron: '0 45 10 1 JAN * 2017',
+            newEventCron: '0 0 10 1 JAN * 2017',
+            newEndEventCron: '0 0 11 1 JAN * 2017',
+        };
+        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config, false)
+            .then((newSetting) => {
+                let updatedConfig = {screen_id: 'content_id_2'};
+                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
+                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+            })
+            .then(updatedSetting => {
+                let expectation = (body, response) => {
+                    expect(body).to.have.property('_rev').that.equal(1);
+                    expect(response).to.have.property('statusCode').that.equal(200);
                 };
                 return MultiOperationHelper.test(updatedSetting, expectation);
             });

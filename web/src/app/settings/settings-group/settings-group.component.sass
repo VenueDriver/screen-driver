@@ -1,0 +1,53 @@
+$triangle-height: 30px
+$persistent-color: #D4E157
+$periodical-color: #FFCA28
+$occasional-color: #FFA726
+
+=triangle-prefix-color($color)
+  border-color: $color transparent transparent transparent
+
+.group-header
+  margin-top: -$triangle-height
+  .title
+    display: inline-block
+    padding: 10px 0 0 15px
+
+.triangle-prefix
+  width: 0
+  border-style: solid
+  border-width: $triangle-height 25px 0 0
+
+  &.persistent
+    +triangle-prefix-color($persistent-color)
+
+  &.periodical
+    +triangle-prefix-color($periodical-color)
+
+  &.occasional
+    +triangle-prefix-color($occasional-color)
+
+
+.line-prefix
+  border-style: solid
+  border-width: 0 0 0 5px
+  border-color: yellow
+
+  &.group-header
+    border-width: 1px 0 0 5px
+
+  &.persistent
+    border-color: $persistent-color
+
+  &.periodical
+    border-color: $periodical-color
+
+  &.occasional
+    border-color: $occasional-color
+
+
+.plus-button
+  display: inline-block
+  margin: 8px 15px 0 auto
+  float: right
+  width: 25px
+  cursor: pointer

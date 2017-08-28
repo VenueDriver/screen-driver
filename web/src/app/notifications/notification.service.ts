@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {NotificationsService} from "angular2-notifications";
+import {Notification} from "angular2-notifications/dist";
 
 export const NOTIFICATION_DURATION = 6000;
 
@@ -22,5 +23,22 @@ export class NotificationService {
             notificationTitle,
             notificationMessage
         )
+    }
+
+    showWarningNotificationBar(notificationMessage: string, overrideOptions?): Notification {
+        return this.notificationsService.warn(
+            'Warning',
+            notificationMessage,
+            overrideOptions
+        )
+    }
+
+    showNonVanishingWarning(notificationMessage: string): Notification {
+        let overrideOptions = {timeOut: 0, animate: null};
+        return this.showWarningNotificationBar(notificationMessage, overrideOptions);
+    }
+
+    hide(id?: string) {
+        this.notificationsService.remove(id);
     }
 }

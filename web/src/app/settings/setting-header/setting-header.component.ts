@@ -40,7 +40,7 @@ export class SettingHeaderComponent implements OnInit {
 
     subscribeToSettingCreateEvent() {
         this.settingsService.getCreateSettingEventSubscription()
-            .subscribe(isEnabled => this.isCreateSettingMode = isEnabled);
+            .subscribe(params => this.isCreateSettingMode = params.isEnabled);
     }
 
     isAllowToEditSetting(): boolean {
@@ -75,5 +75,9 @@ export class SettingHeaderComponent implements OnInit {
 
     toggleCreateSettingMode() {
         this.settingsService.emitCreateSettingEvent(false);
+    }
+
+    getNewSettingPriority(): Object {
+        return this.settingsService.getCreateSettingLastValue().priorityType.id;
     }
 }
