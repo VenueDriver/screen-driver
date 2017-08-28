@@ -5,6 +5,7 @@ import {SettingStateHolderService} from "../settings/setting-state-manager/setti
 import {Setting} from "../settings/entities/setting";
 
 import * as _ from 'lodash';
+import {PriorityTypes} from "../enums/priorty-types";
 
 @Component({
     selector: 'schedules',
@@ -19,10 +20,9 @@ export class SchedulesComponent implements OnInit {
     isShowCreateScheduleForm = false;
     settings: Array<Setting>;
 
-    constructor(
-        private schedulesService: SchedulesService,
-        private settingStateHolderService: SettingStateHolderService
-    ) { }
+    constructor(private schedulesService: SchedulesService,
+                private settingStateHolderService: SettingStateHolderService) {
+    }
 
     ngOnInit() {
         this.loadSchedules();
@@ -51,15 +51,19 @@ export class SchedulesComponent implements OnInit {
             .subscribe(setting => {
                 this.currentSetting = setting;
                 this.filteredSchedules = this.getFilteredSchedules();
-                this.isShowCreateScheduleForm = this.filteredSchedules.length == 0;
+                this.isShowCreateScheduleForm = this.filteredSchedules.length == 0 && this.isAbleToAddSchedule();
             });
     }
 
     getFilteredSchedules(): Array<Schedule> {
-        if (this.currentSetting) {
+        if (this.currentSetting && this.currentSetting.id) {
             return _.filter(this.schedules, s => s.settingId === this.currentSetting.id);
         }
         return this.schedules;
+    }
+
+    isAbleToAddSchedule(): boolean {
+        return !!this.currentSetting && this.currentSetting.priority !== PriorityTypes.PERSISTENT.id;
     }
 
     isEditable(): boolean {
@@ -74,11 +78,17 @@ export class SchedulesComponent implements OnInit {
         this.isShowCreateScheduleForm = false;
     }
 
-    showAddScheduleButton(): boolean {
-        return !this.isShowCreateScheduleForm && !!this.currentSetting && !!this.currentSetting.id
+    isShowAddScheduleButton(): boolean {
+        return !this.isShowCreateScheduleForm && this.isAbleToAddSchedule();
     }
 
     findSettingForSchedule(schedule: Schedule): Setting {
-        return this.settings.find(setting => setting.id === schedule.settingId);
+        if (this.settings)
+            return this.settings.find(setting => setting.id === schedule.settingId);
+    }
+
+    getSettingName(schedule: Schedule) {
+        let setting = this.findSettingForSchedule(schedule);
+        return setting ? setting.name : '';
     }
 }

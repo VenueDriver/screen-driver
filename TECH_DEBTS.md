@@ -2,6 +2,8 @@
 1. ~~Rework project structure (create `src` directory)~~
 1. Rework priority type enum implementation
 1. Write tests on removing functionality
+1. Use mocks in tests
+1. Export all error messages and remove them from tests
 1. Refactor logic of validation
 1. Add unit tests for table streams handlers 
 1. Get rid of active record pattern

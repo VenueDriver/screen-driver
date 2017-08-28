@@ -3,7 +3,6 @@
 const isDev = require('electron-is-dev');
 const PropertiesReader = require('properties-reader');
 const properties = PropertiesReader(__dirname + '/../../../properties/app.properties');
-const developmentProperties = PropertiesReader(__dirname + '/../../../properties/development.app.properties');
 
 class PropertiesLoader {
 
@@ -12,7 +11,10 @@ class PropertiesLoader {
     }
 
     static _getProperties() {
-        return isDev ? developmentProperties : properties;
+        if (isDev) {
+            return PropertiesReader(__dirname + '/../../../properties/development.app.properties');
+        }
+        return properties;
     }
 }
 

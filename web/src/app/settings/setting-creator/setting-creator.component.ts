@@ -5,6 +5,7 @@ import {NotificationService} from "../../notifications/notification.service";
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 
 import * as _ from 'lodash';
+import {SchedulesService} from "../../schedules/schedules.service";
 
 @Component({
     selector: 'setting-creator',
@@ -21,13 +22,14 @@ export class SettingCreatorComponent implements OnInit {
 
     setting: Setting;
     isInputValid = true;
+    isRemoveMode: boolean = false;
     priorityTypes = [];
 
-    constructor(
-        private settingsService: SettingsService,
-        private notificationService: NotificationService,
-        private settingStateHolderService: SettingStateHolderService
-    ) { }
+    constructor(private settingsService: SettingsService,
+                private notificationService: NotificationService,
+                private settingStateHolderService: SettingStateHolderService,
+                private schedulesService: SchedulesService) {
+    }
 
     ngOnInit() {
         this.priorityTypes = this.settingStateHolderService.getPriorityTypes();
@@ -58,17 +60,18 @@ export class SettingCreatorComponent implements OnInit {
     }
 
     private createSetting() {
-        this.setting.priority = this.priorityTypes[0].id;
+        let priorityType = this.settingsService.getCreateSettingLastValue().priorityType;
+        this.setting.priority = priorityType.id;
         this.settingsService.createSetting(this.setting).subscribe(
             (setting: Setting) => this.handleResponse(setting.id),
-            error => this.handleError()
+            error => this.handleCreationError()
         );
     }
 
     private updateSetting() {
         this.settingsService.updateSetting(this.setting).subscribe(
             (setting: Setting) => this.handleResponse(setting.id),
-            error => this.handleError()
+            error => this.handleUpdatingError()
         )
     }
 
@@ -77,8 +80,20 @@ export class SettingCreatorComponent implements OnInit {
         this.submit.emit();
     }
 
-    handleError() {
-        this.notificationService.showErrorNotificationBar(`Unable to create setting`);
+    handleCreationError() {
+        this.handleError('create');
+    }
+
+    handleUpdatingError() {
+        this.handleError('update');
+    }
+
+    handleDeletionError() {
+        this.handleError('remove');
+    }
+
+    handleError(operationType: string) {
+        this.notificationService.showErrorNotificationBar(`Unable to ${operationType} setting`);
     }
 
     performCancel() {
@@ -87,10 +102,52 @@ export class SettingCreatorComponent implements OnInit {
 
     validateSettingName() {
         this.setting.name = this.setting.name.trim();
-        this.isInputValid = !_.find(this.settings, s => s.name.trim() === this.setting.name);
+        this.isInputValid = this.isSettingNameUnique() && this.isSettingNameValid();
+    }
+
+    getValidationErrorMessage(): string {
+        if (!this.isSettingNameValid())
+            return 'Setting name should be longer than 3 symbols';
+
+        if (!this.isSettingNameUnique())
+            return 'Setting with such name already exists'
+    }
+
+    isSettingNameUnique(): boolean {
+        return !_.find(this.settings, s => s.name.trim() === this.setting.name);
+    }
+
+    isSettingNameValid(): boolean {
+        return this.setting.name.length >= 3;
     }
 
     isButtonEnabled(): boolean {
         return !_.isEmpty(this.setting.name) && this.isInputValid;
+    }
+
+    isCreationMode(): boolean {
+        return !this.isEditionMode();
+    }
+
+    isEditionMode(): boolean {
+        return !!this.settingToEdit;
+    }
+
+    enableRemovingMode() {
+        this.isRemoveMode = true;
+    }
+
+    performRemoving() {
+        this.settingStateHolderService.removeSetting(this.settingToEdit.id)
+            .subscribe(response => {
+                    this.settingStateHolderService.changeCurrentSetting();
+                    this.settingStateHolderService.reloadSettings();
+                    this.schedulesService.scheduleListUpdated.next();
+                },
+                error => this.handleDeletionError());
+    }
+
+    cancelRemoving() {
+        this.isRemoveMode = false;
     }
 }

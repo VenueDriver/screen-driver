@@ -158,6 +158,6 @@ export class EventTime {
     }
 
     private static convertTimeToDate(time: string, timePeriod: string): Date {
-        return new Date(`2000-01-01 ${time} ${timePeriod}`);
+        return new Date(`2000/01/01 ${time} ${timePeriod}`);
     }
 }

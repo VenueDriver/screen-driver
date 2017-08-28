@@ -3,8 +3,10 @@
 const uuid = require('uuid');
 const PriorityTypes = require('./../../enums/priority_types');
 const ParametersBuilder = require('./../helpers/parameters_builder');
-const DbHelper = require('../../helpers/db_helper');
 const ConflictsIdentifier = require('../helpers/conflicts_identifier');
+const DbHelper = require('./../../helpers/db_helper');
+const SettingUtils = require('./../helpers/setting_utils');
+const ScheduleUtils = require('./../../schedule/helpers/schedule_utils');
 
 const _ = require('lodash');
 const Q = require('q');
@@ -19,6 +21,7 @@ class Setting {
             this.enabled = setting.enabled == null ? false : setting.enabled;
             this.priority = setting.priority;
             this.config = setting.config == null ? {} : setting.config;
+            this.forciblyEnabled = setting.hasOwnProperty('forciblyEnabled') ? setting.forciblyEnabled : false;
             this._rev = setting._rev;
         }
     }
@@ -64,6 +67,44 @@ class Setting {
         return deferred.promise;
     }
 
+    deleteSetting() {
+        let setting;
+        return this._findSettingById()
+            .then(_setting => {
+                setting = _setting;
+                return this._performDelete();
+            })
+            .then(() => {
+                return ScheduleUtils.deleteSchedulesForSetting(setting.id)
+            })
+    }
+
+    _findSettingById() {
+        return new Promise((resolve, reject) => {
+            DbHelper.findOne(process.env.SETTINGS_TABLE, this.id)
+                .then(setting => resolve(setting.Item));
+        });
+    }
+
+    _performDelete() {
+        let deleteParams = {
+            TableName: process.env.SETTINGS_TABLE,
+            Key: {
+                id: this.id,
+            },
+        };
+
+        return new Promise((resolve, reject) => {
+            db.delete(deleteParams, (error, data) => {
+                if (error) {
+                    reject(error.message);
+                } else {
+                    resolve();
+                }
+            })
+        });
+    }
+
     validate() {
         let deferred = Q.defer();
         if (!this.name) deferred.reject('Setting couldn\'t be without name');
@@ -72,6 +113,7 @@ class Setting {
         if (typeof(this.enabled) !== 'boolean') deferred.reject('Enabled field should be boolean');
         if (!this.isConfigValid(this.config)) deferred.reject('Enabled field should be boolean');
         if (!this.priority) deferred.reject('Config couldn\'t be without priority');
+        if (typeof this.forciblyEnabled != 'boolean') deferred.reject('Forcibly enabled field should be type of boolean');
 
         if (!PriorityTypes.getTypes().find((type) => type.id === this.priority)) deferred.reject('Wrong priority type');
         Setting.hasUniqueName(this)

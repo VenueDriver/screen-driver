@@ -15,6 +15,7 @@ module.exports.buildUpdateRequestParameters = (setting) => {
             ':enabled': setting.enabled,
             ':priority': setting.priority,
             ':config': setting.config,
+            ':forciblyEnabled': setting.forciblyEnabled,
             ':rev': setting._rev,
             ':new_rev': increaseRevision(setting),
         },
@@ -22,6 +23,7 @@ module.exports.buildUpdateRequestParameters = (setting) => {
             `SET 
                 #setting_name = :name, 
                 enabled = :enabled, 
+                forciblyEnabled = :forciblyEnabled,
                 priority = :priority, 
                 config = :config, 
                 #rev = :new_rev

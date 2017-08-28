@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, Output, ViewChild, EventEmitter, OnDestroy} from '@angular/core';
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
 import {KEYS} from "angular-tree-component/dist/constants/keys";
@@ -20,7 +20,7 @@ const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
     templateUrl: 'venues-tree-view.component.html',
     styleUrls: ['./venues-tree-view.component.sass']
 })
-export class VenuesTreeViewComponent implements OnInit {
+export class VenuesTreeViewComponent implements OnInit, OnDestroy {
 
     @Input() venues: Array<any>;
     @Input() content: Array<Content>;
@@ -51,6 +51,10 @@ export class VenuesTreeViewComponent implements OnInit {
         this.venuesService.getVenueUpdateSubscription().subscribe(() => this.onVenueUpdate());
         this.subscribeToCurrentSettingUpdate();
         this.subscribeToSettingsUpdate();
+    }
+
+    ngOnDestroy() {
+        this.treeViewService.removeEditableNode();
     }
 
     subscribeToCurrentSettingUpdate() {
@@ -164,6 +168,7 @@ export class VenuesTreeViewComponent implements OnInit {
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
         this.isCreateContentMode = false;
+        this.treeViewService.removeEditableNode(node);
     }
 
     dismissChanges(node: any) {
@@ -206,6 +211,10 @@ export class VenuesTreeViewComponent implements OnInit {
     }
 
     editNode(event: any, node: any) {
+        if (this.currentSetting) {
+            this.treeViewService.addEditableNode(node);
+        }
+
         this.stopClickPropagation(event);
         this.currentNodeData = node.data;
         this.originalNodeData = _.clone(node.data);

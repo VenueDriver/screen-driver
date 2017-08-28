@@ -1,6 +1,6 @@
 <div class="schedules-container">
 
-    <div *ngIf="showAddScheduleButton()"
+    <div *ngIf="isShowAddScheduleButton()"
          class="add-button"
          (click)="showCreateScheduleForm()">
         <span class="plus-button"></span>
@@ -17,7 +17,7 @@
     <div class="schedules" *ngFor="let schedule of filteredSchedules">
         <div *ngIf="!currentSetting"
              class="setting-name">
-            {{findSettingForSchedule(schedule).name}}
+            {{getSettingName(schedule)}}
         </div>
         <single-schedule
                 [schedule]="schedule"

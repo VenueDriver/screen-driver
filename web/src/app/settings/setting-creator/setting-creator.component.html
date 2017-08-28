@@ -1,10 +1,11 @@
 <div class="create-setting-corm-container" [class.has-error]="!isInputValid">
     <div *ngIf="!isInputValid"
          class="message validation-error">
-        Setting with such name already exists
+        {{getValidationErrorMessage()}}
     </div>
 
-    <div class="inputs-container">
+    <div *ngIf="!isRemoveMode"
+         class="inputs-container">
         <input type="text"
                class="form-control"
                [(ngModel)]="setting.name"
@@ -13,8 +14,22 @@
                input-autofocus>
 
         <div class="btn-container">
+            <div class="remove-button"
+                 *ngIf="isEditionMode()"
+                 (click)="enableRemovingMode($event)">
+            </div>
             <button class="btn btn-success" (click)="performSubmit()" [disabled]="!isButtonEnabled()">Save</button>
             <button class="btn btn-link" (click)="performCancel()">Cancel</button>
+        </div>
+    </div>
+    <div *ngIf="isRemoveMode"
+         class="confirm-removing-box">
+        <div class="warning-message">
+            Are you sure you want to remove <b>setting {{setting.name}}</b>?
+        </div>
+        <div class="remove-confirmation-buttons">
+            <button class="btn btn-success" (click)="cancelRemoving()">No</button>
+            <button class="btn btn-danger" (click)="performRemoving()" [disabled]="!isButtonEnabled()">Yes</button>
         </div>
     </div>
 </div>

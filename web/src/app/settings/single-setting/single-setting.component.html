@@ -1,0 +1,25 @@
+<a>
+    <div [ngClass]="{'forcibly-enabled-text': this.setting.forciblyEnabled}">
+        {{setting.name}}
+    </div>
+    <div *ngIf="isControlButtonsDisplayed()"
+         class="controls">
+        <div class="forcibly-enabled-button"
+             [class.forced-enabled-button-on]="!isEnabledForcibly()"
+             [class.forced-enabled-button-off]="isEnabledForcibly()"
+             [class.disabled]="isSettingInEditMode()"
+             [attr.title]="getForciblyEnabledButtonHint()"
+             (click)="onEnableForciblyClicked($event)">
+        </div>
+        <toggle-button class="switcher"
+                       [checked]="setting.enabled"
+                       (changed)="changeSettingState($event)"
+                       (click)="onToggleClick($event)">
+        </toggle-button>
+    </div>
+
+    <div *ngIf="!isControlButtonsDisplayed()"
+         class="message">
+        {{getMessage()}}
+    </div>
+</a>

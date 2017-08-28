@@ -15,6 +15,7 @@ const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;
 export class SchedulesService {
 
     scheduleListUpdated: Subject<any> = new BehaviorSubject<any>({});
+    schedules: BehaviorSubject<Schedule[]> = new BehaviorSubject<Schedule[]>([]);
 
     constructor(
         private http: Http,
@@ -25,7 +26,11 @@ export class SchedulesService {
 
     loadSchedules(): Observable<Array<Schedule>> {
         return this.http.get(SCHEDULES_API)
-            .map(response => response.json());
+            .map(response => {
+                let schedules = response.json();
+                this.schedules.next(schedules);
+                return schedules;
+            });
     }
 
     createSchedule(setting: Setting, eventTime: EventTime) {
