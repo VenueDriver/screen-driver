@@ -2,7 +2,6 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Setting} from "../entities/setting";
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 import {HeaderService} from "../../header/header.service";
-import {SettingsService} from "../settings.service";
 
 import * as _ from 'lodash';
 
@@ -20,8 +19,7 @@ export class SettingsManagerComponent implements OnInit {
     showSidebar = true;
 
     constructor(private headerService: HeaderService,
-                private settingStateHolderService: SettingStateHolderService,
-                private settingsService: SettingsService) {
+                private settingStateHolderService: SettingStateHolderService) {
     }
 
     ngOnInit() {
@@ -49,33 +47,6 @@ export class SettingsManagerComponent implements OnInit {
     onSettingSelection(setting: Setting) {
         this.settingSelected.emit(setting);
         this.headerService.pushSidebarToggleEvent();
-    }
-
-    isActive(setting: Setting): boolean {
-        return this.activeSetting && this.activeSetting.id === setting.id;
-    }
-
-    enableCreationMode() {
-        this.settingsService.emitCreateSettingEvent(true);
-        this.headerService.pushSidebarToggleEvent();
-    }
-
-    onToggleClick(event: any) {
-        event.stopPropagation();
-    }
-
-    changeSettingState(setting: Setting, state: boolean) {
-        setting.enabled = state;
-        this.settingsService.updateSetting(setting, 'Setting state was changed successfully', 'Unable to change setting state')
-            .subscribe(
-                response => this.handleUpdateSettingResponse(),
-                error => this.handleChangeStateError()
-            );
-    }
-
-    handleChangeStateError() {
-        let activeSettingId = this.activeSetting ? this.activeSetting.id : null;
-        this.settingStateHolderService.reloadSettings(activeSettingId);
     }
 
     handleUpdateSettingResponse() {
