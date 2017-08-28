@@ -22,8 +22,7 @@ export class SettingsManagerComponent implements OnInit {
 
     constructor(private headerService: HeaderService,
                 private settingStateHolderService: SettingStateHolderService,
-                private settingsService: SettingsService,
-                private notificationService: NotificationService) {
+                private settingsService: SettingsService) {
     }
 
     ngOnInit() {
@@ -68,11 +67,16 @@ export class SettingsManagerComponent implements OnInit {
 
     changeSettingState(setting: Setting, state: boolean) {
         setting.enabled = state;
-        this.settingsService.updateSetting(setting)
+        this.settingsService.updateSetting(setting, 'Setting state was changed successfully', 'Unable to change setting state')
             .subscribe(
                 response => this.handleUpdateSettingResponse(),
-                error => this.notificationService.showErrorNotificationBar('Unable to change setting state')
+                error => this.handleChangeStateError()
             );
+    }
+
+    handleChangeStateError() {
+        let activeSettingId = this.activeSetting ? this.activeSetting.id : null;
+        this.settingStateHolderService.reloadSettings(activeSettingId);
     }
 
     handleUpdateSettingResponse() {
