@@ -137,6 +137,20 @@ describe('update_setting', () => {
             .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
     });
 
+    it('Should update setting with enabled status if conflict with disabled setting detected', () => {
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        existingSetting.enabled = false;
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
+
+        let expectations = (body) => {
+            expect(body).to.have.property('enabled').that.equal(true);
+        };
+
+        return MultiOperationHelper.create(existingSetting)
+            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+    });
+
     it('Should update periodical setting if content URL coincides in conflicted settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {

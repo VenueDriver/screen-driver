@@ -87,9 +87,10 @@ module.exports = class ConflictsIdentifier {
             TableName: process.env.SETTINGS_TABLE,
             ProjectionExpression: 'id, config',
             ExpressionAttributeValues: {
-                ':priority': priority
+                ':priority': priority,
+                ':enabled': true
             },
-            FilterExpression: 'priority = :priority'
+            FilterExpression: 'priority = :priority AND enabled = :enabled'
         };
     }
 
