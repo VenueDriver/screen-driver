@@ -5,13 +5,12 @@ const _ = require('lodash');
 module.exports = class ScheduleOverlapInspector {
 
     static findOverlap(schedules, updatedSchedules) {
-        return _.filter(schedules, s => {
+        return _.filter(schedules, existingSchedule => {
             let overlap = _.filter(updatedSchedules, schedule => {
                 if (schedule.periodicity === 'ONE_TIME') {
-                    return ScheduleOverlapInspector.areOneTimeSchedulesOverlap(s, schedule);
-                } else {
-                    return ScheduleOverlapInspector.areRepeatableSchedulesOverlap(s, schedule);
+                    return ScheduleOverlapInspector.areOneTimeSchedulesOverlap(existingSchedule, schedule);
                 }
+                return ScheduleOverlapInspector.areRepeatableSchedulesOverlap(existingSchedule, schedule);
             });
             return overlap.length > 0;
         });
@@ -88,7 +87,7 @@ module.exports = class ScheduleOverlapInspector {
 
     static _convertToDateObject(time, date) {
         if (_.isEmpty(date)) {
-            date = '1 JAN, 2017';
+            date = '1 FEB, 2017';
         }
         return new Date(`${date} ${time}`);
     }
