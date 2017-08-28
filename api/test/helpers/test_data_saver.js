@@ -6,7 +6,7 @@ const ScheduleDataPreparationHelper = require('./schedule_data_preparation_helpe
 
 module.exports = class TestDataSever {
 
-    static savePeriodicalSettingsWithSchedules(cronExpressions, config) {
+    static savePeriodicalSettingsWithSchedules(cronExpressions, config, scheduleState) {
         let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning Menu', config);
 
         let newSetting;
@@ -15,6 +15,9 @@ module.exports = class TestDataSever {
                 existingSetting = setting;
                 let schedule = ScheduleDataPreparationHelper
                     .createRepeatableSchedule(cronExpressions.existingEventCron, cronExpressions.existingEndEventCron, setting.id);
+                if (scheduleState !== undefined) {
+                    schedule.enabled = scheduleState;
+                }
                 return TestDataSever.saveSchedule(schedule);
             })
             .then(() => {
@@ -30,7 +33,7 @@ module.exports = class TestDataSever {
             .then(() => new Promise((resolve, reject) => resolve(newSetting)));
     }
 
-    static saveOccasionalSettingsWithSchedules(cronExpressions, config) {
+    static saveOccasionalSettingsWithSchedules(cronExpressions, config, scheduleState) {
         let existingSetting = SettingDataPreparationHelper.getOccasionalSetting('Halloween', config);
 
         let newSetting;
@@ -39,6 +42,9 @@ module.exports = class TestDataSever {
                 existingSetting = setting;
                 let schedule = ScheduleDataPreparationHelper
                     .createOneTimeSchedule(cronExpressions.existingEventCron, cronExpressions.existingEndEventCron, setting.id);
+                if (scheduleState !== undefined) {
+                    schedule.enabled = scheduleState;
+                }
                 return TestDataSever.saveSchedule(schedule);
             })
             .then(() => {

@@ -42,11 +42,12 @@ module.exports = class ConflictsIdentifier {
             .then(configs => {
                 conflictedConfigs = ConflictsIdentifier._detectConflictInConfigs(configs, setting);
                 let settingIds = ConflictsIdentifier._getSettingIdsArray(conflictedConfigs);
-                return SchedulesFinder.findAllBySettingIds(settingIds);
+                return SchedulesFinder.findAllEnabledBySettingIds(settingIds);
             })
             .then(schedules => {
                 existingSchedules = schedules;
-                return SchedulesFinder.findAllByOneSettingId(setting.id)
+                // console.log(existingSchedules)
+                return SchedulesFinder.findAllEnabledByOneSettingId(setting.id)
             })
             .then(schedulesForCurrentSetting => {
                 let overlap = ScheduleOverlapInspector.findOverlap(existingSchedules, schedulesForCurrentSetting);
@@ -65,11 +66,11 @@ module.exports = class ConflictsIdentifier {
             .then(configs => {
                 conflictedConfigs = ConflictsIdentifier._detectConflictInConfigs(configs, setting);
                 let settingIds = ConflictsIdentifier._getSettingIdsArray(conflictedConfigs);
-                return SchedulesFinder.findAllBySettingIds(settingIds);
+                return SchedulesFinder.findAllEnabledBySettingIds(settingIds);
             })
             .then(schedules => {
                 existingSchedules = schedules;
-                return SchedulesFinder.findAllByOneSettingId(setting.id)
+                return SchedulesFinder.findAllEnabledByOneSettingId(setting.id)
             })
             .then(schedulesForCurrentSetting => {
                 let overlap = ScheduleOverlapInspector.findOverlap(existingSchedules, schedulesForCurrentSetting);
