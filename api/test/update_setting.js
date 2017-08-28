@@ -137,7 +137,7 @@ describe('update_setting', () => {
             .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
     });
 
-    it('Should update setting with enabled status if conflict with disabled setting detected', () => {
+    it('Should set updated setting status to true if conflict with disabled setting detected', () => {
         let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
         existingSetting.enabled = false;
         let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
@@ -145,6 +145,37 @@ describe('update_setting', () => {
 
         let expectations = (body) => {
             expect(body).to.have.property('enabled').that.equal(true);
+        };
+
+        return MultiOperationHelper.create(existingSetting)
+            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+    });
+
+    it('Should update disabled and conflicted setting with success code', () => {
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        newSetting.enabled = false;
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
+        updatedSetting.enabled = false;
+
+        let expectations = (body, response) => {
+            expect(body).to.have.property('_rev').that.equal(1);
+            expect(response).to.have.property('statusCode').that.equal(200);
+        };
+
+        return MultiOperationHelper.create(existingSetting)
+            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+    });
+
+    it('Should update conflicted setting with success code if new state of setting is false', () => {
+        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
+        updatedSetting.enabled = false;
+
+        let expectations = (body, response) => {
+            expect(body).to.have.property('_rev').that.equal(1);
+            expect(response).to.have.property('statusCode').that.equal(200);
         };
 
         return MultiOperationHelper.create(existingSetting)
@@ -190,6 +221,7 @@ describe('update_setting', () => {
             })
             .then(updatedSetting => {
                 let expectation = (body) => {
+                    expect(body).to.have.property('_rev').that.equal(1);
                     expect(body).to.have.property('enabled').that.equal(true);
                 };
                 return MultiOperationHelper.test(updatedSetting, expectation);

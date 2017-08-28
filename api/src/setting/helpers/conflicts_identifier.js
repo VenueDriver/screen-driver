@@ -11,6 +11,9 @@ const _ = require('lodash');
 module.exports = class ConflictsIdentifier {
 
     static findConflicts(setting) {
+        if (!setting.enabled) {
+            return new Promise((resolve, reject) => resolve([]));
+        }
         switch (setting.priority) {
             case PriorityTypes.getTypeIds()[0]:
                 return ConflictsIdentifier.findConflictsInPersistentConfig(setting);
