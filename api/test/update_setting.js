@@ -463,7 +463,7 @@ describe('update_setting', () => {
         return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
                 return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
             })
             .then(updatedSetting => {
@@ -486,7 +486,7 @@ describe('update_setting', () => {
         return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
                 return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
             })
             .then(updatedSetting => {
@@ -508,7 +508,7 @@ describe('update_setting', () => {
         return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
                 return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
             })
             .then(updatedSetting => {
@@ -531,7 +531,7 @@ describe('update_setting', () => {
         return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
                 return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
             })
             .then(updatedSetting => {
@@ -553,7 +553,7 @@ describe('update_setting', () => {
         return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
                 return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
             })
             .then(updatedSetting => {
@@ -576,7 +576,7 @@ describe('update_setting', () => {
         return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
             .then((newSetting) => {
                 let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
                 return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
             })
             .then(updatedSetting => {
