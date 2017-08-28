@@ -18,9 +18,8 @@ module.exports = class ConflictsIdentifier {
             case PriorityTypes.getTypeIds()[0]:
                 return ConflictsIdentifier.findConflictsInPersistentConfig(setting);
             case PriorityTypes.getTypeIds()[1]:
-                return ConflictsIdentifier.findConflictsInPeriodicalConfig(setting);
             case PriorityTypes.getTypeIds()[2]:
-                return ConflictsIdentifier.findConflictsInOccasionalConfig(setting);
+                return ConflictsIdentifier.findConflictsInScheduledConfig(setting);
         }
     }
 
@@ -34,31 +33,7 @@ module.exports = class ConflictsIdentifier {
         return deferred.promise;
     }
 
-    static findConflictsInPeriodicalConfig(setting) {
-        let deferred = Q.defer();
-        let conflictedConfigs = [];
-        let existingSchedules = [];
-        ConflictsIdentifier._getExistingConfigs(setting.priority)
-            .then(configs => {
-                conflictedConfigs = ConflictsIdentifier._detectConflictInConfigs(configs, setting);
-                let settingIds = ConflictsIdentifier._getSettingIdsArray(conflictedConfigs);
-                return SchedulesFinder.findAllEnabledBySettingIds(settingIds);
-            })
-            .then(schedules => {
-                existingSchedules = schedules;
-                // console.log(existingSchedules)
-                return SchedulesFinder.findAllEnabledByOneSettingId(setting.id)
-            })
-            .then(schedulesForCurrentSetting => {
-                let overlap = ScheduleOverlapInspector.findOverlap(existingSchedules, schedulesForCurrentSetting);
-                let settingsOverlap = _.map(overlap, o => o.settingId);
-                let conflicts = _.filter(conflictedConfigs, c => _.includes(settingsOverlap, c.settingId));
-                deferred.resolve(conflicts);
-            });
-        return deferred.promise;
-    }
-
-    static findConflictsInOccasionalConfig(setting) {
+    static findConflictsInScheduledConfig(setting) {
         let deferred = Q.defer();
         let conflictedConfigs = [];
         let existingSchedules = [];
