@@ -10,7 +10,7 @@ const _ = require('lodash');
 
 module.exports = class ConflictsIdentifier {
 
-    static findConflicts(setting) {
+    static findConflicts(setting, schedules) {
         if (!setting.enabled) {
             return new Promise((resolve, reject) => resolve([]));
         }
@@ -19,7 +19,7 @@ module.exports = class ConflictsIdentifier {
                 return ConflictsIdentifier.findConflictsInPersistentConfig(setting);
             case PriorityTypes.getTypeIds()[1]:
             case PriorityTypes.getTypeIds()[2]:
-                return ConflictsIdentifier.findConflictsInScheduledConfig(setting);
+                return ConflictsIdentifier.findConflictsInScheduledConfig(setting, schedules);
         }
     }
 
@@ -33,7 +33,7 @@ module.exports = class ConflictsIdentifier {
         return deferred.promise;
     }
 
-    static findConflictsInScheduledConfig(setting) {
+    static findConflictsInScheduledConfig(setting, schedules) {
         let deferred = Q.defer();
         let conflictedConfigs = [];
         let existingSchedules = [];
@@ -48,7 +48,8 @@ module.exports = class ConflictsIdentifier {
                 return SchedulesFinder.findAllEnabledByOneSettingId(setting.id)
             })
             .then(schedulesForCurrentSetting => {
-                let overlap = ScheduleOverlapInspector.findOverlap(existingSchedules, schedulesForCurrentSetting);
+                let overlap = ScheduleOverlapInspector
+                    .findOverlap(existingSchedules, _.isEmpty(schedules) ? schedulesForCurrentSetting : schedules);
                 let settingsOverlap = _.map(overlap, o => o.settingId);
                 let conflicts = _.filter(conflictedConfigs, c => _.includes(settingsOverlap, c.settingId));
                 deferred.resolve(conflicts);
