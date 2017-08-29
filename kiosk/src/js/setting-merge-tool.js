@@ -17,7 +17,10 @@ class SettingMergeTool {
         }
 
         enabledSettings.forEach(setting => {
-            this.includeEnabledSettings(setting, mergedSetting);
+            let priorityIndex = SettingMergeTool.getPriorityIndex(setting.priority, this.priorities);
+            if (priorityIndex === 0) {
+                this.includeEnabledSettings(setting, mergedSetting);
+            }
         });
 
         forciblyEnabledSettings.forEach(setting => {
@@ -68,12 +71,6 @@ class SettingMergeTool {
     static getPriorityIndex(priorityId, priorities) {
         let priority = priorities.find(element => element.id == priorityId);
         return priorities.indexOf(priority);
-    }
-
-    includeForciblyEnabledSettings(setting, mergedSetting) {
-        for (let instruction in setting.config) {
-            mergedSetting.config[instruction] = setting.config[instruction];
-        }
     }
 
     includeForciblyEnabledSettings(setting, mergedSetting) {
