@@ -5,6 +5,7 @@ const Q = require('q');
 const _ = require('lodash');
 
 const SettingFinder = require('../../setting/helpers/setting_finder');
+const ScheduleUtils = require('../helpers/schedule_utils');
 const CronValidator = require('../helpers/cron-validator');
 const periodicity = require('../../enums/periodicity');
 
@@ -27,10 +28,6 @@ class Schedule {
     }
 
     create() {
-        const params = {
-            TableName: process.env.SCHEDULES_TABLE,
-            Item: this,
-        };
         let deferred = Q.defer();
         this._rev = 0;
         this.generateId();
@@ -38,8 +35,30 @@ class Schedule {
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
         }
-        dbHelper.putItem(params, deferred);
+
+        let conflicts;
+        ScheduleUtils.findConflicts(this)
+            .then(conflictedConfigs => {
+                if (!_.isEmpty(conflictedConfigs)) {
+                    conflicts = conflictedConfigs;
+                    this.enabled = false;
+                }
+                let params = this._generateParametersForPutToTable();
+                return dbHelper.putItem(params);
+            })
+            .then(newSchedule => {
+                newSchedule.conflicts = conflicts;
+                deferred.resolve(newSchedule);
+            })
+            .fail(errorMessage => deferred.reject(errorMessage));
         return deferred.promise;
+    }
+
+    _generateParametersForPutToTable() {
+        return {
+            TableName: process.env.SCHEDULES_TABLE,
+            Item: this,
+        }
     }
 
     update() {

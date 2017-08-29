@@ -5,6 +5,7 @@ require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 const TestDataSever = require('./helpers/test_data_saver');
 const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
+const SettingDataPreparationHelper = require('./helpers/setting_data_preparation_helper');
 
 const createFunction = require('../src/schedule/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
@@ -277,6 +278,31 @@ describe('create_schedule', () => {
         let expectations = generateErrorExpectations('Invalid setting', 500);
 
         return MultiOperationHelper.performCreateTest(schedule, expectations);
+    });
+
+    it('Should update schedule and set status to disabled if conflict detected', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning', config);
+
+        let conflictedConfig = {screen_id: 'content_id_2'};
+        let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
+
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(setting => {
+                let newSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return MultiOperationHelper.create(newSchedule);
+            })
+            .then(schedule => {
+                let expectations = (body) => {
+                    expect(body).to.have.property('enabled').that.equal(false);
+                };
+                return MultiOperationHelper.test(schedule, expectations);
+            });
     });
 
 });
