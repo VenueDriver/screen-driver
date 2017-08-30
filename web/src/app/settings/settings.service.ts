@@ -43,7 +43,7 @@ export class SettingsService {
 
     getUpdateErrorMessage(error, errorMessage: string) {
         if (error.status === 409) {
-            return 'Unable to change setting state. Detected conflict between settings';
+            return 'Conflict between settings has been detected. Setting is disabled now';
         }
         return errorMessage ? errorMessage : 'Unable to update setting';
     }
