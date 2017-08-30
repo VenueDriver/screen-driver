@@ -280,7 +280,7 @@ describe('create_schedule', () => {
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
-    it('Should update schedule and set status to disabled if conflict detected', () => {
+    it('Should create schedule and set status to disabled if conflict detected', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning', config);
 
@@ -300,6 +300,83 @@ describe('create_schedule', () => {
             .then(schedule => {
                 let expectations = (body) => {
                     expect(body).to.have.property('enabled').that.equal(false);
+                };
+                return MultiOperationHelper.test(schedule, expectations);
+            });
+    });
+
+    it('Should create schedule and return error status if conflict detected', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning', config);
+
+        let conflictedConfig = {screen_id: 'content_id_2'};
+        let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
+
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(setting => {
+                let newSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return MultiOperationHelper.create(newSchedule);
+            })
+            .then(schedule => {
+                let expectations = (body, response) => {
+                    expect(response).to.have.property('statusCode').that.equal(409);
+                };
+                return MultiOperationHelper.test(schedule, expectations);
+            });
+    });
+
+    it('Should create schedule and set status to enabled if conflict was not detected between schedules with time overlap', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning', config);
+
+        let conflictedConfig = {screen_id: 'content_id'};
+        let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
+
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(setting => {
+                let newSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return MultiOperationHelper.create(newSchedule);
+            })
+            .then(schedule => {
+                let expectations = (body, response) => {
+                    expect(body).to.have.property('enabled').that.equal(true);
+                    expect(response).to.have.property('statusCode').that.equal(200);
+                };
+                return MultiOperationHelper.test(schedule, expectations);
+            });
+    });
+
+    it('Should create schedule and set status to enabled if conflict detected between schedules without time overlap', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning', config);
+
+        let conflictedConfig = {screen_id: 'content_id_2'};
+        let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
+
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(setting => {
+                let newSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * TUE', '0 0 10 * * TUE', setting.id);
+                return MultiOperationHelper.create(newSchedule);
+            })
+            .then(schedule => {
+                let expectations = (body, response) => {
+                    expect(body).to.have.property('enabled').that.equal(true);
+                    expect(response).to.have.property('statusCode').that.equal(200);
                 };
                 return MultiOperationHelper.test(schedule, expectations);
             });
