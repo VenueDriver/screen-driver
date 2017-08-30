@@ -4,6 +4,7 @@ require('./helpers/test_provider_configurator').configure();
 
 const DatabaseCleaner = require('./helpers/database_cleaner');
 const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
+const TestDataSaver = require('./helpers/test_data_saver');
 
 const getAllFunction = require('../src/schedule/list.js');
 const createFunction = require('../src/schedule/create.js');
@@ -17,7 +18,7 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
     .setCreateFunction(createFunction, 'create');
 
 
-describe('schedule_list', () => {
+describe('get_schedules_list', () => {
     before((done) => {
         DatabaseCleaner.cleanDatabase().then(() => done());
     });
@@ -27,7 +28,7 @@ describe('schedule_list', () => {
     });
 
 
-    it('Should display empty list', () => {
+    it('Should display empty list if no schedules created', () => {
         let expectations = (body) => {
             expect(body).is.an('array').that.is.empty;
         };
@@ -35,15 +36,20 @@ describe('schedule_list', () => {
         return MultiOperationHelper.performListTest({}, expectations);
     });
 
-    it('Should display list with 2 schedules', () => {
-        let firstContent = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
-        let secondContent = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+    it('Should return a list of schedules that contains 2 items if 2 schedules has been created', () => {
+        let firstSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let secondSchedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
 
-        let expectations = (body, response) => {
-            expect(response).to.have.property('statusCode').that.equal(200);
-            expect(body).is.an('array').that.lengthOf(2);
-        };
+        return TestDataSaver.saveSchedule(firstSchedule)
+            .then(() => TestDataSaver.saveSchedule(secondSchedule))
+            .then(() => MultiOperationHelper.getAll())
+            .then(result => {
+                let expectations = (body, response) => {
+                    expect(response).to.have.property('statusCode').that.equal(200);
+                    expect(body).is.an('array').that.lengthOf(2);
+                };
 
-        return MultiOperationHelper.performListTest([firstContent, secondContent], expectations)
+                return MultiOperationHelper.test(result, expectations)
+            })
     });
 });
