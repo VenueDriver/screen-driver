@@ -79,7 +79,8 @@ export class SettingStateHolderService {
 
     private getWarningMessageForSettings(forciblyEnabledSettings: Setting[]) {
         let forciblyEnabledSettingsLength = forciblyEnabledSettings.length;
-        return `${forciblyEnabledSettingsLength} setting${forciblyEnabledSettingsLength == 1 ? '' : 's'} are enabled forcibly. 
-            Don't forget to disable ${forciblyEnabledSettingsLength == 1 ? 'it' : 'them'}!`;
+        let isSingleFormMessage = forciblyEnabledSettingsLength === 1;
+        return `${forciblyEnabledSettingsLength} setting${isSingleFormMessage ? ' is' : 's are'} enabled forcibly. 
+            Don't forget to disable ${isSingleFormMessage ? 'it' : 'them'}!`;
     }
 }
