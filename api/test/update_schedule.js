@@ -366,8 +366,8 @@ describe('update_setting', () => {
             })
             .then(schedule => {
                 let expectations = (body, response) => {
-                    expect(body).to.have.property('enabled').that.equal(true);
                     expect(body).to.have.property('_rev').that.equal(1);
+                    expect(body).to.have.property('enabled').that.equal(true);
                     expect(response).to.have.property('statusCode').that.equal(200);
                 };
                 return MultiOperationHelper.test(schedule, expectations);
@@ -397,8 +397,71 @@ describe('update_setting', () => {
                 return MultiOperationHelper.update({body: JSON.stringify(schedule)}, schedule);
             })
             .then(schedule => {
-                let expectations = (body, response) => {
+                let expectations = (body) => {
+                    expect(body).to.have.property('_rev').that.equal(1);
                     expect(body).to.have.property('enabled').that.equal(false);
+                };
+                return MultiOperationHelper.test(schedule, expectations);
+            });
+    });
+
+    it('Should update schedule and return error status if conflict detected between schedules', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning', config);
+
+        let conflictedConfig = {screen_id: 'content_id_2'};
+        let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
+
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(setting => {
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * TUE', '0 0 10 * * TUE', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(schedule => {
+                schedule.eventCron = '0 0 8 * * MON';
+                schedule.endEventCron = '0 0 10 * * MON';
+                return MultiOperationHelper.update({body: JSON.stringify(schedule)}, schedule);
+            })
+            .then(schedule => {
+                let expectations = (body, response) => {
+                    expect(response).to.have.property('statusCode').that.equal(409);
+                };
+                return MultiOperationHelper.test(schedule, expectations);
+            });
+    });
+
+    it('Should update schedule and set status to enable if conflict between schedules was fixed', () => {
+        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
+        let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning', config);
+
+        let conflictedConfig = {screen_id: 'content_id_2'};
+        let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
+
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(setting => {
+                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(schedule => {
+                schedule.eventCron = '0 0 8 * * TUE';
+                schedule.endEventCron = '0 0 10 * * TUE';
+                return MultiOperationHelper.update({body: JSON.stringify(schedule)}, schedule);
+            })
+            .then(schedule => {
+                let expectations = (body, response) => {
+                    expect(body).to.have.property('_rev').that.equal(1);
+                    expect(body).to.have.property('enabled').that.equal(true);
+                    expect(response).to.have.property('statusCode').that.equal(200);
                 };
                 return MultiOperationHelper.test(schedule, expectations);
             });
