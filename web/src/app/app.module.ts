@@ -19,6 +19,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { ContentManagementComponent } from './content-management/content-management.component';
 import { UsersManagementComponent } from './users-management/users-management.component';
 import {AppRoutingModule} from "./app-routing.module";
+import {AuthModule} from "./auth/auth.module";
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import {AppRoutingModule} from "./app-routing.module";
         TabbedSwitcherModule,
         SettingsModule,
         ScreensMessagingModule,
-        SchedulesModule
+        SchedulesModule,
+        AuthModule
     ],
     providers: [
         NotificationService,
