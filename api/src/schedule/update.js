@@ -19,7 +19,6 @@ module.exports.update = (event, context, callback) => {
             }
         })
         .fail(errorMessage => {
-            console.log(errorMessage)
             callback(null, responseHelper.createResponseWithError(500, errorMessage));
         });
 };
