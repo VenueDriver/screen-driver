@@ -63,7 +63,9 @@ class ScheduledTaskManager {
     }
 
     static _destroyBackgroundTask(backgroundTask) {
-        backgroundTask.destroy();
+        if (!_.isEmpty(backgroundTask)) {
+            backgroundTask.destroy();
+        }
         backgroundTask = {};
     }
 
@@ -121,7 +123,8 @@ class ScheduledTaskManager {
     resumeInterruptedScheduledTask() {
         let schedule = StorageManager.getStorage().getScheduledTask();
         let window = WindowInstanceHolder.getWindow();
-        if (!_.isEmpty(schedule) && schedule.endDateTime > new Date()) {
+        let scheduleEndTimeStamp = new Date(schedule.endDateTime).getTime();
+        if (!_.isEmpty(schedule) && scheduleEndTimeStamp > new Date().getTime()) {
             window.loadURL(schedule.content.url);
         } else {
             StorageManager.saveScheduledTask({});
