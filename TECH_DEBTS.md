@@ -14,6 +14,8 @@
 1. Create separate module for cron converter
 1. Refactor tests for `update_setting` function
 1. Refactor conflicts identifier class
+1. Add tests on setting and schedule type accordance
+1. Add check for invalid cron pair in schedule
 
 ##### Web
 1. Resolve warnings occurred during build process
