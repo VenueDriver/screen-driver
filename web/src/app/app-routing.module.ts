@@ -12,12 +12,12 @@ const appRoutes: Routes = [
     {
         path: 'content',
         component: ContentManagementComponent,
-        data: {isSidebarHidden: true}
+        data: {isSidebarDisplayed: true}
     },
     {
         path: 'users',
         component: UsersManagementComponent,
-        data: {isSidebarHidden: false}
+        data: {isSidebarDisplayed: false}
     },
 ];
 

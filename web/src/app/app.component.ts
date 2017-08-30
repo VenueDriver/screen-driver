@@ -9,7 +9,7 @@ import {Router, RoutesRecognized} from "@angular/router";
 export class AppComponent implements OnInit {
 
     title = 'app';
-    isSidebarHidden: boolean;
+    isSidebarDisplayed: boolean;
 
     constructor(private route: Router) {
     }
@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         this.route.events.subscribe((data) => {
             if (data instanceof RoutesRecognized) {
-                this.isSidebarHidden = data.state.root.firstChild.data['isSidebarHidden'];
+                this.isSidebarDisplayed = data.state.root.firstChild.data['isSidebarDisplayed'];
             }
         });
     }
