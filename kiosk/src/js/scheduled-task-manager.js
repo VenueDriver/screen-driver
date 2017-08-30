@@ -63,7 +63,9 @@ class ScheduledTaskManager {
     }
 
     static _destroyBackgroundTask(backgroundTask) {
-        backgroundTask.destroy();
+        if (!_.isEmpty(backgroundTask)) {
+            backgroundTask.destroy();
+        }
         backgroundTask = {};
     }
 
@@ -81,8 +83,7 @@ class ScheduledTaskManager {
     resetAllSchedules(schedules) {
         this.clearAllSchedules();
         if (schedules) {
-            let enabledSchedules = _.filter(schedules, (s) => s.enabled && s.content);
-            _.forEach(enabledSchedules, s => this.addCronSchedule(s));
+            _.forEach(schedules, s => this.addCronSchedule(s));
         }
     }
 
@@ -96,13 +97,12 @@ class ScheduledTaskManager {
 
     initSchedulingForScreen(screenInformation) {
         let serverData = StorageManager.getStorage().getServerData();
-        let settingWithSchedules = ScheduleMergeTool.merge(serverData, screenInformation);
+        let schedules = ScheduleMergeTool.merge(serverData, screenInformation);
 
-        _.forEach(settingWithSchedules.schedules, schedule => {
+        _.forEach(schedules, schedule => {
             this._appendContentToSchedule(schedule, screenInformation);
         });
-
-        this.resetAllSchedules(settingWithSchedules.schedules, serverData.originalSettings);
+        this.resetAllSchedules(schedules, serverData.originalSettings);
     }
 
     _appendContentToSchedule(schedule, screenInformation) {
@@ -123,7 +123,8 @@ class ScheduledTaskManager {
     resumeInterruptedScheduledTask() {
         let schedule = StorageManager.getStorage().getScheduledTask();
         let window = WindowInstanceHolder.getWindow();
-        if (!_.isEmpty(schedule) && schedule.endDateTime > new Date()) {
+        let scheduleEndTimeStamp = new Date(schedule.endDateTime).getTime();
+        if (!_.isEmpty(schedule) && scheduleEndTimeStamp > new Date().getTime()) {
             window.loadURL(schedule.content.url);
         } else {
             StorageManager.saveScheduledTask({});
