@@ -1,21 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {SettingsService} from "./settings/settings.service";
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.sass']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
     title = 'app';
-    isCreateSettingMode: boolean;
 
-    constructor(private settingsService: SettingsService) {}
+    constructor() {}
 
-    ngOnInit() {
-        this.settingsService.getCreateSettingEventSubscription()
-            .subscribe(params => this.isCreateSettingMode = params.isEnabled);
-        this.isCreateSettingMode = false;
-    }
 }
