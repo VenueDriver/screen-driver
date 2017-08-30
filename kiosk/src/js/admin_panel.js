@@ -20,7 +20,7 @@ let screenSetting;
 let serverData;
 
 $(function () {
-
+    showApplicationVersion();
     readLogs();
 
     function readLogs() {
@@ -255,4 +255,8 @@ function showCancelButton() {
 
 function hideCancelButton() {
     $('#cancel').hide();
+}
+
+function showApplicationVersion() {
+    $('#version').text('v' + process.env.npm_package_version);
 }
