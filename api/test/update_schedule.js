@@ -34,8 +34,8 @@ describe('update_setting', () => {
     });
 
     it('Should update the setting id and increase revision', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.settingId = 'setting_id';
         updatedSchedule.enabled = false;
 
@@ -50,8 +50,8 @@ describe('update_setting', () => {
     });
 
     it('Should update schedule ignoring unknown fields', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.enabled = true;
         updatedSchedule.date = new Date();
 
@@ -64,7 +64,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without settingId', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutSettingId();
 
         let expectations = generateErrorExpectations('Schedule couldn\'t be without setting', 500);
@@ -73,7 +73,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with empty settingId', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithEmptySettingId();
 
         let expectations = generateErrorExpectations('Schedule couldn\'t be without setting', 500);
@@ -82,7 +82,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without eventCron', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutEventCron();
 
         let expectations = generateErrorExpectations('Schedule couldn\'t be without eventCron', 500);
@@ -91,7 +91,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with empty eventCron', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithEmptyEventCron();
 
         let expectations = generateErrorExpectations('Schedule couldn\'t be without eventCron', 500);
@@ -100,7 +100,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without endEventCron', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutEndEventCron();
 
         let expectations = generateErrorExpectations('Schedule couldn\'t be without endEventCron', 500);
@@ -109,7 +109,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with empty endEventCron', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithEmptyEndEventCron();
 
         let expectations = generateErrorExpectations('Schedule couldn\'t be without endEventCron', 500);
@@ -118,7 +118,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without periodicity', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutPeriodicity();
 
         let expectations = generateErrorExpectations('Invalid periodicity', 500);
@@ -127,7 +127,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with invalid periodicity', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutPeriodicity();
         updatedSchedule.periodicity = 'SOME_PERIODICITY';
 
@@ -137,8 +137,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with wrong revision number', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule._rev = 3;
 
         let expectations = generateErrorExpectations('The conditional request failed', 500);
@@ -147,7 +147,7 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule without revision number', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         let updatedSchedule = ScheduleDataPreparationHelper.createScheduleWithoutRevisionNumber();
 
         let expectations = generateErrorExpectations('Missed revision number', 500);
@@ -156,8 +156,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with invalid cron expressions', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '*';
         updatedSchedule.endEventCron = '*';
 
@@ -167,8 +167,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with cron expression that includes non 0 value for seconds', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '1 0 8 1 JUN * 2017';
         updatedSchedule.endEventCron = '1 0 8 1 JUN * 2017';
 
@@ -178,8 +178,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with cron expression that should be repeated every minute', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 * 8 1 JUN * 2017';
         updatedSchedule.endEventCron = '0 * 8 1 JUN * 2017';
 
@@ -189,8 +189,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with cron expression that should be repeated every N minutes', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 */2 8 1 JUN * 2017';
         updatedSchedule.endEventCron = '0 */2 8 1 JUN * 2017';
 
@@ -200,8 +200,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with cron expression that should be repeated every hour', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 0 * 1 JAN * 2017';
         updatedSchedule.endEventCron = '0 0 * 1 JAN * 2017';
 
@@ -211,8 +211,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule with cron expression that should be repeated every N hours', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 0 */8 1 JUN * 2017';
         updatedSchedule.endEventCron = '0 0 */8 1 JUN * 2017';
 
@@ -222,8 +222,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update one time schedule that should be repeated every day', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 0 13 * JAN * 2017';
         updatedSchedule.endEventCron = '0 0 13 * JAN * 2017';
 
@@ -233,8 +233,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update one time schedule that should be repeated every N days', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 0 13 */5 JAN * 2017';
         updatedSchedule.endEventCron = '0 0 13 */5 JAN * 2017';
 
@@ -244,8 +244,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update one time schedule that should be repeated every month', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 0 13 1 * * 2017';
         updatedSchedule.endEventCron = '0 0 13 1 * * 2017';
 
@@ -255,8 +255,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update one time schedule that should be repeated every N months', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 0 13 1 */5 * 2017';
         updatedSchedule.endEventCron = '0 0 13 1 */5 * 2017';
 
@@ -266,8 +266,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update one time schedule that should be repeated every year', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 0 8 1 JAN * *';
         updatedSchedule.endEventCron = '0 0 8 1 JAN * *';
 
@@ -277,8 +277,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update one time schedule that should be repeated every N years', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 0 8 1 JAN * */5';
         updatedSchedule.endEventCron = '0 0 8 1 JAN * */5';
 
@@ -288,8 +288,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update one time schedule with cron expression that includes invalid amount of parts', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         updatedSchedule.eventCron = '0 0 8 1 JAN MON';
         updatedSchedule.endEventCron = '0 0 8 1 JAN MON';
 
@@ -299,8 +299,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update repeatable schedule with cron expression that includes invalid amount of parts', () => {
-        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
         updatedSchedule.eventCron = '0 0 8 1 JAN * 2017';
         updatedSchedule.endEventCron = '0 0 8 1 JAN * 2017';
 
@@ -310,8 +310,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update repeatable schedule with cron expression that includes date', () => {
-        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
         updatedSchedule.eventCron = '0 0 8 1 * MON';
         updatedSchedule.endEventCron = '0 0 8 1 * MON';
 
@@ -321,8 +321,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update repeatable schedule with cron expression that includes month', () => {
-        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
         updatedSchedule.eventCron = '0 0 8 * JAN MON';
         updatedSchedule.endEventCron = '0 0 8 * JAN MON';
 
@@ -332,8 +332,8 @@ describe('update_setting', () => {
     });
 
     it('Shouldn\'t update schedule bound with unknown setting', () => {
-        let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
         updatedSchedule.settingId = 'invalid_setting_id';
 
         let expectations = generateErrorExpectations('Invalid setting', 500);

@@ -3,10 +3,12 @@
 const uuid = require('uuid');
 const PriorityTypes = require('./../../enums/priority_types');
 const ParametersBuilder = require('./../helpers/parameters_builder');
+const ConflictsIdentifier = require('../helpers/conflicts_identifier');
 const DbHelper = require('./../../helpers/db_helper');
 const SettingUtils = require('./../helpers/setting_utils');
 const ScheduleUtils = require('./../../schedule/helpers/schedule_utils');
 
+const _ = require('lodash');
 const Q = require('q');
 let db;
 
@@ -33,20 +35,10 @@ class Setting {
         this._rev = 0;
         this.generateId();
         this.validate()
-            .then(_putInDatabase)
+            .then(() => DbHelper.putItem(params, deferred))
             .fail(errorMessage => deferred.reject(errorMessage));
 
         return deferred.promise;
-
-        function _putInDatabase() {
-            db.put(params, (error) => {
-                if (error) {
-                    deferred.reject('Couldn\'t create the item. ' + error.message);
-                } else {
-                    deferred.resolve(params.Item);
-                }
-            });
-        }
     }
 
     update() {
@@ -55,24 +47,24 @@ class Setting {
 
         if (!this._rev) deferred.reject('Missed revision number');
 
+        let conflicts;
+
         this.validate()
-            .then(() => {
-                return Setting.hasUniqueName(this)
+            .then(() => ConflictsIdentifier.findConflicts(this))
+            .then(conflictedConfigs => {
+                if (!_.isEmpty(conflictedConfigs)) {
+                    conflicts = conflictedConfigs;
+                    params.ExpressionAttributeValues[':enabled'] = false;
+                }
+                return DbHelper.updateItem(params);
             })
-            .then(() => _updateInDatabase(params))
+            .then(updatedSetting => {
+                updatedSetting.conflicts = conflicts;
+                deferred.resolve(updatedSetting);
+            })
             .fail(errorMessage => deferred.reject(errorMessage));
 
         return deferred.promise;
-
-        function _updateInDatabase(updateParameters) {
-            db.update(updateParameters, (error, result) => {
-                if (error) {
-                    deferred.reject(error.message);
-                } else {
-                    deferred.resolve(result.Attributes);
-                }
-            });
-        }
     }
 
     deleteSetting() {
@@ -137,7 +129,7 @@ class Setting {
 
     static hasUniqueName(setting) {
         let deferred = Q.defer();
-        this.getExistingNames(_getExcludedConfig())
+        this.getExistingNames(_getExcludedSetting())
             .then(names => {
                 if (names.includes(setting.name)) {
                     deferred.reject('Setting with such name already exists')
@@ -147,7 +139,7 @@ class Setting {
             });
         return deferred.promise;
 
-        function _getExcludedConfig() {
+        function _getExcludedSetting() {
             return setting._rev ? setting : null;
         }
     }

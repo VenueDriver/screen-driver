@@ -44,21 +44,11 @@ class Venue {
         this._rev = 0;
         this.generateId();
         this.validate()
-            .then(() => this.generateIdentificatorsForGroupsAndScreens())
-            .then(_putInDatabase)
+            .then(() => this.generateIdentifiersForGroupsAndScreens())
+            .then(() => DbHelper.putItem(params, deferred))
             .fail(errorMessage => deferred.reject(errorMessage));
 
         return deferred.promise;
-
-        function _putInDatabase() {
-            db.put(params, (error) => {
-                if (error) {
-                    deferred.reject('Couldn\'t create the item. ' + error.message);
-                } else {
-                    deferred.resolve(params.Item);
-                }
-            });
-        }
     }
 
     update() {
@@ -69,26 +59,16 @@ class Venue {
 
         this.validate()
             .then(() => {
-                this.generateIdentificatorsForGroupsAndScreens();
+                this.generateIdentifiersForGroupsAndScreens();
                 return Venue.hasUniqueName(this)
             })
-            .then(() => _updateInDatabase(params))
+            .then(() => DbHelper.updateItem(params, deferred))
             .fail(errorMessage => deferred.reject(errorMessage));
 
         return deferred.promise;
-
-        function _updateInDatabase(updateParameters) {
-            db.update(updateParameters, (error, result) => {
-                if (error) {
-                    deferred.reject(error.message);
-                } else {
-                    deferred.resolve(result.Attributes);
-                }
-            });
-        }
     }
 
-    generateIdentificatorsForGroupsAndScreens() {
+    generateIdentifiersForGroupsAndScreens() {
         this.screen_groups.forEach(group => {
             group.generateId();
             group.generateIdForScreens();

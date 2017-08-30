@@ -1,17 +1,78 @@
 'use strict';
 
-const Q = require('q');
-
-const database = require('../../src/dynamodb/dynamodb');
+const DbHelper = require('../../src/helpers/db_helper');
+const SettingDataPreparationHelper = require('./setting_data_preparation_helper');
+const ScheduleDataPreparationHelper = require('./schedule_data_preparation_helper');
 
 module.exports = class TestDataSever {
 
+    static savePeriodicalSettingsWithSchedules(cronExpressions, config, scheduleState) {
+        let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning Menu', config);
+
+        let newSetting;
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                existingSetting = setting;
+                let schedule = ScheduleDataPreparationHelper
+                    .createRepeatableSchedule(cronExpressions.existingEventCron, cronExpressions.existingEndEventCron, setting.id);
+                if (scheduleState !== undefined) {
+                    schedule.enabled = scheduleState;
+                }
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => {
+                let newSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', {});
+                return TestDataSever.saveSetting(newSetting);
+            })
+            .then(setting => {
+                newSetting = setting;
+                let schedule = ScheduleDataPreparationHelper
+                    .createRepeatableSchedule(cronExpressions.newEventCron, cronExpressions.newEndEventCron, setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => new Promise((resolve, reject) => resolve(newSetting)));
+    }
+
+    static saveOccasionalSettingsWithSchedules(cronExpressions, config, scheduleState) {
+        let existingSetting = SettingDataPreparationHelper.getOccasionalSetting('Halloween', config);
+
+        let newSetting;
+        return TestDataSever.saveSetting(existingSetting)
+            .then(setting => {
+                existingSetting = setting;
+                let schedule = ScheduleDataPreparationHelper
+                    .createOneTimeSchedule(cronExpressions.existingEventCron, cronExpressions.existingEndEventCron, setting.id);
+                if (scheduleState !== undefined) {
+                    schedule.enabled = scheduleState;
+                }
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => {
+                let newSetting = SettingDataPreparationHelper.getOccasionalSetting('New Year', {});
+                return TestDataSever.saveSetting(newSetting);
+            })
+            .then(setting => {
+                newSetting = setting;
+                let schedule = ScheduleDataPreparationHelper
+                    .createOneTimeSchedule(cronExpressions.newEventCron, cronExpressions.newEndEventCron, setting.id);
+                return TestDataSever.saveSchedule(schedule);
+            })
+            .then(() => new Promise((resolve, reject) => resolve(newSetting)));
+    }
+
     static saveDefaultSetting() {
         let setting = TestDataSever._generateDefaultSetting();
+        return TestDataSever.saveSetting(setting);
+    }
+
+    static saveSetting(setting) {
         let params = TestDataSever._buildPutParameters(process.env.SETTINGS_TABLE, setting);
-        let deferred = Q.defer();
-        TestDataSever._performPupOperation(params, deferred);
-        return deferred.promise;
+        return TestDataSever._performPutOperation(params);
+    }
+
+    static saveSchedule(schedule) {
+        let params = TestDataSever._buildPutParameters(process.env.SCHEDULES_TABLE, schedule);
+        return TestDataSever._performPutOperation(params);
     }
 
     static _buildPutParameters(tableName, item) {
@@ -28,14 +89,8 @@ module.exports = class TestDataSever {
         }
     }
 
-    static _performPupOperation(params, deferred) {
-        database.put(params, (error) => {
-            if (error) {
-                deferred.reject(error.message);
-            } else {
-                deferred.resolve(params.Item);
-            }
-        });
+    static _performPutOperation(params, deferred) {
+        return DbHelper.putItem(params, deferred);
     }
 };
 

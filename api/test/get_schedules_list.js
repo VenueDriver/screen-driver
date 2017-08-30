@@ -36,8 +36,8 @@ describe('schedule_list', () => {
     });
 
     it('Should display list with 2 schedules', () => {
-        let firstContent = ScheduleDataPreparationHelper.createDefaultSchedule();
-        let secondContent = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let firstContent = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
+        let secondContent = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
 
         let expectations = (body, response) => {
             expect(response).to.have.property('statusCode').that.equal(200);
