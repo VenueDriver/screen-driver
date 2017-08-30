@@ -1,6 +1,5 @@
-import {NgModule}              from '@angular/core';
-import {RouterModule, Routes}  from '@angular/router';
-
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
 import {UsersManagementComponent} from "./users-management/users-management.component";
 import {ContentManagementComponent} from "./content-management/content-management.component";
 
