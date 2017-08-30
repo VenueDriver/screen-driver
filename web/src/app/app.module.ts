@@ -18,6 +18,7 @@ import {SchedulesModule} from "./schedules/schedules.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { ContentManagementComponent } from './content-management/content-management.component';
 import { UsersManagementComponent } from './users-management/users-management.component';
+import {AppRoutingModule} from "./app-routing.module";
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { UsersManagementComponent } from './users-management/users-management.co
         UsersManagementComponent
     ],
     imports: [
+        AppRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
         HttpModule,
