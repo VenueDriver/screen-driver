@@ -21,7 +21,6 @@ export class UsersManagementComponent implements OnInit {
 
     createUser(event: any) {
         this.showCreateUserForm(false);
-        console.log(event);
         this.usersService.create(event);
     }
 }

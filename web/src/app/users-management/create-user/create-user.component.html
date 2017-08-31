@@ -4,18 +4,27 @@
         <input id="email"
                class="form-control"
                [(ngModel)]="user.email"
+               (focusout)="validateEmail()"
                type="email"
                placeholder="Email">
     </div>
-
+    <label *ngIf="isShowEmailValidationError"
+           class="email error-message">
+        Invalid Email
+    </label>
     <div>
         <label for="password">Password</label>
         <input id="password"
                class="form-control"
                [(ngModel)]="user.password"
+               (focusout)="validatePassword()"
                type="password"
                placeholder="Password">
     </div>
+    <label *ngIf="isShowPasswordValidationError"
+           class="password error-message">
+        Invalid Password
+    </label>
 
     <div class="control-buttons">
         <button type="button"
@@ -25,7 +34,8 @@
         </button>
         <button type="button"
                 class="btn btn-success"
-                (click)="performSubmit()">
+                (click)="performSubmit()"
+                [disabled]="!isCreateButtonDisplayed()">
             Create
         </button>
     </div>
