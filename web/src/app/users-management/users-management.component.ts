@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {UsersService} from "./users.service";
 
 @Component({
     selector: 'users-management',
@@ -8,7 +9,7 @@ import {Component, OnInit} from '@angular/core';
 export class UsersManagementComponent implements OnInit {
     isShowCreateUserForm: boolean = false;
 
-    constructor() {
+    constructor(private usersService: UsersService) {
     }
 
     ngOnInit() {
@@ -20,5 +21,7 @@ export class UsersManagementComponent implements OnInit {
 
     createUser(event: any) {
         this.showCreateUserForm(false);
+        console.log(event);
+        this.usersService.create(event);
     }
 }
