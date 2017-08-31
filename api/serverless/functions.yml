@@ -179,6 +179,14 @@ create_user:
         method: post
         cors: true
 
+get_users_list:
+  handler: src/users/list.list
+  events:
+    - http:
+        path: api/users
+        method: get
+        cors: true
+
 push_schedules_update:
   handler: src/screen_notifications/reload_schedules.scheduleUpdateMessage
   environment: ${self:custom.properties.pusher}
