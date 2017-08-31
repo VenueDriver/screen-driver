@@ -13,6 +13,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "amazon-cognito-identity-js": "1.19.0",
     "lodash": "4.17.4",
     "node-cron": "1.2.1",
     "pusher": "1.5.1",
