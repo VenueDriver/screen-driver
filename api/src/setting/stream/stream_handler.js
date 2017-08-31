@@ -31,6 +31,9 @@ function isSettingChanged(streamInfo) {
     if (!_.isEqual(oldSetting.enabled, newSetting.enabled)) {
         return true;
     }
+    if (!_.isEqual(oldSetting.forciblyEnabled, newSetting.forciblyEnabled)) {
+        return true;
+    }
     return !areConfigsEqual(oldSetting, newSetting);
 }
 

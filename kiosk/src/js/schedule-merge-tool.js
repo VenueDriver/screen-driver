@@ -6,38 +6,34 @@ class ScheduleMergeTool {
 
     static merge(serverData, screenInfo) {
         let settings = serverData.originalSettings;
-        let schedules = serverData.schedules;
+        let schedules = _.filter(serverData.schedules, schedule => schedule.enabled);
         let priorityTypes = serverData.priorityTypes;
 
-        let settingsForLocation = this.getSettingsForLocation(screenInfo, settings);
-        let enabledSetting = this.getMostPriorityEnabledSetting(settingsForLocation, priorityTypes);
+        let settingsForCurrentLocation = this.getSettingsForLocation(screenInfo, settings);
 
-        if (!_.isEmpty(enabledSetting)) {
-            return enabledSetting;
-        }
-
-        this.mergeSettingsWithSchedules(settingsForLocation, schedules);
-        let enabledPersistentSetting = settingsForLocation.find(setting => setting.enabled && setting.priority === priorityTypes[0].id);
-
-        return enabledPersistentSetting ? enabledPersistentSetting : SettingMergeTool.getMostPrioritySetting(settingsForLocation, priorityTypes);
-    }
-
-    static mergeSettingsWithSchedules(settings, schedules) {
-        settings.forEach(setting => {
-            setting.schedules = schedules;
-        });
+        return this.getSchedulesToRun(settingsForCurrentLocation, schedules, priorityTypes);
     }
 
     static getSettingsForLocation(screenInfo, settings) {
         return _.filter(settings, setting => !!SettingsHelper.defineContentId(setting, screenInfo));
     }
 
-    static getMostPriorityEnabledSetting(settings, priorityTypes) {
-        let filteredSettings = _.filter(settings, setting => setting.enabled && _isNotPersistent(setting));
-        return SettingMergeTool.getMostPrioritySetting(filteredSettings, priorityTypes);
+    static getSchedulesToRun(settings, schedules, priorityTypes) {
+        let enabledScheduledSettings = _.filter(settings, setting => setting.enabled && _isNotPersistent(setting));
+        return _getActiveSchedules();
 
         function _isNotPersistent(setting) {
             return priorityTypes[0].id != setting.priority;
+        }
+
+        function _getActiveSchedules() {
+            let activeSchedules = [];
+            schedules.forEach(schedule => {
+                if (_.find(enabledScheduledSettings, setting => setting.id === schedule.settingId)) {
+                    activeSchedules.push(schedule)
+                }
+            });
+            return activeSchedules;
         }
     }
 }

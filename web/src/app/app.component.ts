@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {SettingsService} from "./settings/settings.service";
+import {Router, RoutesRecognized} from "@angular/router";
 
 @Component({
     selector: 'app-root',
@@ -9,13 +9,16 @@ import {SettingsService} from "./settings/settings.service";
 export class AppComponent implements OnInit {
 
     title = 'app';
-    isCreateSettingMode: boolean;
+    isSidebarDisplayed: boolean;
 
-    constructor(private settingsService: SettingsService) {}
+    constructor(private route: Router) {
+    }
 
     ngOnInit() {
-        this.settingsService.getCreateSettingEventSubscription()
-            .subscribe(params => this.isCreateSettingMode = params.isEnabled);
-        this.isCreateSettingMode = false;
+        this.route.events.subscribe((data) => {
+            if (data instanceof RoutesRecognized) {
+                this.isSidebarDisplayed = data.state.root.firstChild.data['isSidebarDisplayed'];
+            }
+        });
     }
 }

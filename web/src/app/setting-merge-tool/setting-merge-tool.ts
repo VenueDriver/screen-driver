@@ -23,7 +23,10 @@ export class SettingMergeTool {
         }
 
         enabledSettings.forEach(setting => {
-            this.includeEnabledSettings(setting, mergedSetting);
+            let priorityIndex = this.getPriorityIndex(setting.priority);
+            if (priorityIndex === 0) {
+                this.includeEnabledSettings(setting, mergedSetting);
+            }
         });
 
         forciblyEnabledSettings.forEach(setting => {
