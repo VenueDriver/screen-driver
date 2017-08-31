@@ -15,6 +15,7 @@
 1. Disable submit buttons when request to API is performing
 1. Use two way data binding in custom components
 1. Display messages when no items in a list of settings, schedule etc.
+1. Unsubscribe from each subscription on component destroy
 
 ##### Kiosk
 1. Create in memory local storage
