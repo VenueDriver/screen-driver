@@ -11,6 +11,7 @@ provider:
     VENUES_TABLE: "${self:service}-venues-${opt:stage}"
     SETTINGS_TABLE: "${self:service}-settings-${opt:stage}"
     SCHEDULES_TABLE: "${self:service}-schedules-${opt:stage}"
+    USERS_TABLE: "${self:service}-users-${opt:stage}"
   iamRoleStatements: ${self:custom.roles}
 
 functions: ${self:custom.functions}

@@ -171,6 +171,14 @@ handle_schedules_stream:
             - SchedulesTable
             - StreamArn
 
+create_user:
+  handler: src/user/create.create
+  events:
+    - http:
+        path: api/users
+        method: post
+        cors: true
+
 push_schedules_update:
   handler: src/screen_notifications/reload_schedules.scheduleUpdateMessage
   environment: ${self:custom.properties.pusher}
