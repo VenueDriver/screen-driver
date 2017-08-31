@@ -76,10 +76,10 @@ module.exports = class ConflictsIdentifier {
 
     static _detectConflictInConfigs(existingSettings, setting) {
         let conflicts = [];
-        _.each(setting.config, (v, k) => {
-            _.each(existingSettings, s => {
-                if (!_.isEmpty(s.config[k]) && s.config[k] !== v) {
-                    conflicts.push({settingId: s.id, config: s.config});
+        _.each(setting.config, (contentId, venueItemId) => {
+            _.each(existingSettings, setting => {
+                if (!_.isEmpty(setting.config[venueItemId]) && setting.config[venueItemId] !== contentId) {
+                    conflicts.push({settingId: setting.id, config: setting.config});
                 }
             });
         });
