@@ -14,7 +14,11 @@ export class UsersManagementComponent implements OnInit {
     ngOnInit() {
     }
 
-    showCreateUserForm() {
-        this.isShowCreateUserForm = true;
+    showCreateUserForm(flag: boolean) {
+        this.isShowCreateUserForm = flag;
+    }
+
+    createUser(event: any) {
+        this.showCreateUserForm(false);
     }
 }

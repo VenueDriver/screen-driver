@@ -1,4 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, EventEmitter, Output} from '@angular/core';
+import {User} from "../../auth/user";
 
 @Component({
     selector: 'create-user',
@@ -6,6 +7,9 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['./create-user.component.sass']
 })
 export class CreateUserComponent implements OnInit {
+    @Output() cancel = new EventEmitter();
+    @Output() submit = new EventEmitter();
+    user: User = new User();
 
     constructor() {
     }
@@ -13,4 +17,11 @@ export class CreateUserComponent implements OnInit {
     ngOnInit() {
     }
 
+    performCancel() {
+        this.cancel.emit();
+    }
+
+    performSubmit() {
+        this.submit.emit(this.user);
+    }
 }

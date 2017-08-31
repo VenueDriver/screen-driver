@@ -1,12 +1,14 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {NgModule} from "@angular/core";
 import {UsersManagementComponent} from "./users-management.component";
-import { CreateUserComponent } from './create-user/create-user.component';
-import { UsersComponent } from './users/users.component';
+import {CreateUserComponent} from "./create-user/create-user.component";
+import {UsersComponent} from "./users/users.component";
+import {FormsModule} from "@angular/forms";
+import {BrowserModule} from "@angular/platform-browser";
 
 @NgModule({
     imports: [
-        CommonModule
+        BrowserModule,
+        FormsModule
     ],
     declarations: [
         UsersManagementComponent,
