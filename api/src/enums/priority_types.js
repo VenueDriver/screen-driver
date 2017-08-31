@@ -1,8 +1,14 @@
 'use strict';
 
 class PriorityTypes {
+
     static getTypes() {
         return isTestMode() ? getTestTypes() : getTypes();
+    }
+
+    static getTypeIds() {
+        let types = PriorityTypes.getTypes();
+        return types.map(t => t.id);
     }
 }
 

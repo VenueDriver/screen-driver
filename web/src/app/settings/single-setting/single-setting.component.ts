@@ -8,6 +8,7 @@ import {SchedulesService} from "../../schedules/schedules.service";
 import {Schedule} from "../../schedules/entities/schedule";
 import {PriorityTypes} from "../../enums/priorty-types";
 import {VenuesTreeViewService} from "../../venues/venues-tree-view/venues-tree-view.service";
+import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 
 @Component({
     selector: 'single-setting',
@@ -24,7 +25,8 @@ export class SingleSettingComponent implements OnInit {
     constructor(private settingsService: SettingsService,
                 private notificationService: NotificationService,
                 private schedulesService: SchedulesService,
-                private treeViewService: VenuesTreeViewService) {
+                private treeViewService: VenuesTreeViewService,
+                private settingStateHolderService: SettingStateHolderService,) {
     }
 
     ngOnInit() {
@@ -37,11 +39,16 @@ export class SingleSettingComponent implements OnInit {
 
     changeSettingState(state: boolean) {
         this.setting.enabled = state;
-        this.settingsService.updateSetting(this.setting)
+        this.settingsService.updateSetting(this.setting, 'Setting state was changed successfully', 'Unable to change setting state')
             .subscribe(
                 response => this.update.emit(),
-                error => this.notificationService.showErrorNotificationBar('Unable to change setting state')
+                error => this.handleChangeStateError()
             );
+    }
+
+    handleChangeStateError() {
+        let activeSettingId = this.activeSetting ? this.activeSetting.id : null;
+        this.settingStateHolderService.reloadSettings(activeSettingId);
     }
 
     onEnableForciblyClicked(event) {

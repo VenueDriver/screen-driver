@@ -44,12 +44,17 @@ export class SchedulesService {
     save(schedule: Schedule, setting: Setting) {
         this.http.post(SCHEDULES_API, schedule).subscribe(
             response => this.handleSaveResponse(response, setting),
-            error => this.notificationService.showErrorNotificationBar('Unable to perform schedule creation operation')
+            error => {
+                let errorMessage = this.getCreateErrorMessage(error);
+                this.notificationService.showErrorNotificationBar(errorMessage);
+                if (error.status === 409) {
+                    this.handleSaveResponse(error._body, setting);
+                }
+            }
         );
     }
 
-    handleSaveResponse(response, setting) {
-        let schedule = response.json();
+    handleSaveResponse(schedule: any, setting: Setting) {
         this.scheduleListUpdated.next(schedule);
         this.settingPriorityHelper.setPriorityType(setting, schedule);
     }
@@ -61,7 +66,13 @@ export class SchedulesService {
         }
         this.http.put(`${SCHEDULES_API}/${schedule.id}`, schedule).subscribe(
             response => this.scheduleListUpdated.next(response),
-            error => this.notificationService.showErrorNotificationBar('Unable to perform the update schedule operation')
+            error => {
+                let errorMessage = this.getUpdateErrorMessage(error);
+                this.notificationService.showErrorNotificationBar(errorMessage);
+                if (error.status === 409) {
+                    this.scheduleListUpdated.next(error.body);
+                }
+            }
         );
     }
 
@@ -70,5 +81,19 @@ export class SchedulesService {
             response => this.scheduleListUpdated.next(response),
             error => this.notificationService.showErrorNotificationBar('Unable to perform the remove schedule operation')
         );
+    }
+
+    getUpdateErrorMessage(error) {
+        if (error.status === 409) {
+            return 'Conflict between schedules has been detected. Schedule is disabled now';
+        }
+        return 'Unable to perform the update schedule operation';
+    }
+
+    getCreateErrorMessage(error) {
+        if (error.status === 409) {
+            return 'Conflict between schedules has been detected. Schedule saved as disabled now';
+        }
+        return 'Unable to perform the create schedule operation';
     }
 }
