@@ -38,6 +38,10 @@ export class CreateUserComponent implements OnInit {
             && !this.user.password.includes(' ');
     }
 
+    setUserRole(event: boolean) {
+        this.user.isAdmin = event;
+    }
+
     performCancel() {
         this.cancel.emit();
     }

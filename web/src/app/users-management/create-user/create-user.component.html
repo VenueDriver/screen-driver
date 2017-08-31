@@ -25,6 +25,11 @@
            class="password error-message">
         Invalid Password
     </label>
+    <div class="is-admin">
+        <toggle-button [title]="'Has admin access?'"
+                       (changed)="setUserRole($event)">
+        </toggle-button>
+    </div>
 
     <div class="control-buttons">
         <button type="button"

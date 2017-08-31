@@ -5,11 +5,13 @@ import {UsersComponent} from "./users/users.component";
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {UsersService} from "./users.service";
+import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
 
 @NgModule({
     imports: [
         BrowserModule,
-        FormsModule
+        FormsModule,
+        ToggleButtonModule
     ],
     declarations: [
         UsersManagementComponent,
