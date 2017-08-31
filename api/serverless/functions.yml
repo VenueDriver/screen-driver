@@ -180,7 +180,7 @@ create_user:
         cors: true
 
 get_users_list:
-  handler: src/users/list.list
+  handler: src/user/list.list
   events:
     - http:
         path: api/users
