@@ -1,20 +1,9 @@
 <screen-driver-header></screen-driver-header>
 <notification></notification>
-<settings></settings>
+<settings *ngIf="isSidebarDisplayed"></settings>
 
 <div class="app-container">
 
-    <setting-header></setting-header>
+    <router-outlet></router-outlet>
 
-    <tabbed-switcher [tabTitles]="['Venues', 'Schedules']" [class.hidden]="isCreateSettingMode">
-        <single-tab>
-            <venues></venues>
-        </single-tab>
-
-        <single-tab>
-            <schedules></schedules>
-        </single-tab>
-    </tabbed-switcher>
-
-    <div class="small-screen-reserve-space"></div>
 </div>

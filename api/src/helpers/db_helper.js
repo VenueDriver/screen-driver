@@ -34,7 +34,7 @@ module.exports.findOne = (tableName, itemId) => {
         if (error) {
             deferred.reject(`Couldn\'t perform scan operation on ${tableName} table: ${error.message}`);
         }
-        deferred.resolve(result);
+        deferred.resolve(result ? result.Item : result);
     });
     return deferred.promise;
 };

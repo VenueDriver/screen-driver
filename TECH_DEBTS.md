@@ -14,12 +14,15 @@
 1. Create separate module for cron converter
 1. Refactor tests for `update_setting` function
 1. Refactor conflicts identifier class
+1. Add tests on setting and schedule type accordance
+1. Add check for invalid cron pair in schedule
 
 ##### Web
 1. Resolve warnings occurred during build process
 1. Disable submit buttons when request to API is performing
 1. Use two way data binding in custom components
 1. Display messages when no items in a list of settings, schedule etc.
+1. Unsubscribe from each subscription on component destroy
 1. Fix remove schedule button position for mobile devices
 1. Decrease left border of tree view for mobile devices
 1. Fix buttons position on tree view for mobile devices
