@@ -19,6 +19,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { ContentManagementComponent } from './content-management/content-management.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {UsersManagementModule} from "./users-management/users-management.module";
+import {AuthModule} from "./auth/auth.module";
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import {UsersManagementModule} from "./users-management/users-management.module"
         SettingsModule,
         ScreensMessagingModule,
         SchedulesModule,
-        UsersManagementModule
+        UsersManagementModule,
+        AuthModule
     ],
     providers: [
         NotificationService,
