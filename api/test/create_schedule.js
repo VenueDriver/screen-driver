@@ -3,7 +3,7 @@
 require('./helpers/test_provider_configurator').configure();
 
 const DatabaseCleaner = require('./helpers/database_cleaner');
-const TestDataSever = require('./helpers/test_data_saver');
+const TestDataSaver = require('./helpers/test_data_saver');
 const ScheduleDataPreparationHelper = require('./helpers/schedule_data_preparation_helper');
 const SettingDataPreparationHelper = require('./helpers/setting_data_preparation_helper');
 
@@ -22,13 +22,13 @@ describe('create_schedule', () => {
 
     before((done) => {
         DatabaseCleaner.cleanDatabase()
-            .then(() => TestDataSever.saveDefaultSetting())
+            .then(() => TestDataSaver.saveDefaultSetting())
             .then(() => done());
     });
 
     afterEach(done => {
         DatabaseCleaner.cleanDatabase()
-            .then(() => TestDataSever.saveDefaultSetting())
+            .then(() => TestDataSaver.saveDefaultSetting())
             .then(() => done());
     });
 
@@ -287,12 +287,12 @@ describe('create_schedule', () => {
         let conflictedConfig = {screen_id: 'content_id_2'};
         let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
 
-        return TestDataSever.saveSetting(existingSetting)
+        return TestDataSaver.saveSetting(existingSetting)
             .then(setting => {
                 let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
-                return TestDataSever.saveSchedule(schedule);
+                return TestDataSaver.saveSchedule(schedule);
             })
-            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(() => TestDataSaver.saveSetting(scheduledSetting))
             .then(setting => {
                 let newSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
                 return MultiOperationHelper.create(newSchedule);
@@ -312,12 +312,12 @@ describe('create_schedule', () => {
         let conflictedConfig = {screen_id: 'content_id_2'};
         let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
 
-        return TestDataSever.saveSetting(existingSetting)
+        return TestDataSaver.saveSetting(existingSetting)
             .then(setting => {
                 let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
-                return TestDataSever.saveSchedule(schedule);
+                return TestDataSaver.saveSchedule(schedule);
             })
-            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(() => TestDataSaver.saveSetting(scheduledSetting))
             .then(setting => {
                 let newSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
                 return MultiOperationHelper.create(newSchedule);
@@ -337,12 +337,12 @@ describe('create_schedule', () => {
         let conflictedConfig = {screen_id: 'content_id'};
         let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
 
-        return TestDataSever.saveSetting(existingSetting)
+        return TestDataSaver.saveSetting(existingSetting)
             .then(setting => {
                 let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
-                return TestDataSever.saveSchedule(schedule);
+                return TestDataSaver.saveSchedule(schedule);
             })
-            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(() => TestDataSaver.saveSetting(scheduledSetting))
             .then(setting => {
                 let newSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
                 return MultiOperationHelper.create(newSchedule);
@@ -363,12 +363,12 @@ describe('create_schedule', () => {
         let conflictedConfig = {screen_id: 'content_id_2'};
         let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
 
-        return TestDataSever.saveSetting(existingSetting)
+        return TestDataSaver.saveSetting(existingSetting)
             .then(setting => {
                 let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
-                return TestDataSever.saveSchedule(schedule);
+                return TestDataSaver.saveSchedule(schedule);
             })
-            .then(() => TestDataSever.saveSetting(scheduledSetting))
+            .then(() => TestDataSaver.saveSetting(scheduledSetting))
             .then(setting => {
                 let newSchedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * TUE', '0 0 10 * * TUE', setting.id);
                 return MultiOperationHelper.create(newSchedule);
