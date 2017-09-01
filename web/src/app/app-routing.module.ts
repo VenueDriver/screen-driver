@@ -23,7 +23,7 @@ const appRoutes: Routes = [
     {
         path: 'auth',
         component: AuthComponent,
-        data: {isSidebarHidden: false}
+        data: {isSidebarDisplayed: false}
     },
 ];
 
