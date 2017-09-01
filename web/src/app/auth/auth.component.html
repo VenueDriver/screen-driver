@@ -1,0 +1,29 @@
+<div class="auth-container">
+    <div class="auth-form">
+        <div class="inputs">
+            <div>
+                <label for="email">Email address</label>
+                <input [(ngModel)]="user.email"
+                       id="email"
+                       class="form-control"
+                       type="email"
+                       placeholder="Email">
+            </div>
+
+            <div>
+                <label for="password">Password</label>
+                <input [(ngModel)]="user.password"
+                       id="password"
+                       class="form-control"
+                       type="password"
+                       placeholder="Password">
+            </div>
+            <div class="error-message"></div>
+
+        </div>
+        <button type="button"
+                class="btn btn-success btn-block">
+            Sign in
+        </button>
+    </div>
+</div>

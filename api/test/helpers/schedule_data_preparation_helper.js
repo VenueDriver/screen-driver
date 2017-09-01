@@ -1,10 +1,13 @@
 'use strict';
 
+const uuid = require('uuid');
+
 module.exports = class ScheduleDataPreparationHelper {
 
-    static createDefaultSchedule() {
+    static createDefaultOneTimeSchedule() {
         let defaultCronExpression = ScheduleDataPreparationHelper.getDefaultCronExpression();
         return {
+            id: uuid.v1(),
             settingId: 'setting_id',
             eventCron: defaultCronExpression,
             endEventCron: defaultCronExpression,
@@ -17,12 +20,14 @@ module.exports = class ScheduleDataPreparationHelper {
         return '0 0 8 1 JUN * 2017';
     }
 
-    static createRepeatableSchedule() {
+    static createDefaultRepeatableSchedule() {
         let defaultCronExpression = ScheduleDataPreparationHelper.getValidRepeatableCronExpression();
         return {
+            id: uuid.v1(),
             settingId: 'setting_id',
             eventCron: defaultCronExpression,
             endEventCron: defaultCronExpression,
+            enabled: true,
             periodicity: 'REPEATABLE',
             _rev: 0
         };
@@ -32,50 +37,74 @@ module.exports = class ScheduleDataPreparationHelper {
         return '0 0 8 * * MON';
     }
 
+    static createRepeatableSchedule(eventCron, endEventCron, settingId) {
+        return {
+            id: uuid.v1(),
+            eventCron: eventCron,
+            endEventCron: endEventCron,
+            enabled: true,
+            settingId: settingId,
+            periodicity: 'REPEATABLE',
+            _rev: 0
+        };
+    }
+
+    static createOneTimeSchedule(eventCron, endEventCron, settingId) {
+        return {
+            id: uuid.v1(),
+            eventCron: eventCron,
+            endEventCron: endEventCron,
+            enabled: true,
+            settingId: settingId,
+            periodicity: 'ONE_TIME',
+            _rev: 0
+        };
+    }
+
     static createScheduleWithoutSettingId() {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         delete schedule.settingId;
         return schedule;
     }
 
     static createScheduleWithEmptySettingId() {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         schedule.settingId = '';
         return schedule;
     }
 
     static createScheduleWithoutEventCron() {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         delete schedule.eventCron;
         return schedule;
     }
 
     static createScheduleWithEmptyEventCron() {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         schedule.eventCron = '';
         return schedule;
     }
 
     static createScheduleWithoutEndEventCron() {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         delete schedule.endEventCron;
         return schedule;
     }
 
     static createScheduleWithEmptyEndEventCron() {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         schedule.endEventCron = '';
         return schedule;
     }
 
     static createScheduleWithoutPeriodicity() {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         delete schedule.periodicity;
         return schedule;
     }
 
     static createScheduleWithoutRevisionNumber() {
-        let schedule = ScheduleDataPreparationHelper.createDefaultSchedule();
+        let schedule = ScheduleDataPreparationHelper.createDefaultOneTimeSchedule();
         delete schedule._rev;
         return schedule;
     }

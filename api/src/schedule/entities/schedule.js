@@ -5,6 +5,8 @@ const Q = require('q');
 const _ = require('lodash');
 
 const SettingFinder = require('../../setting/helpers/setting_finder');
+const ScheduleUtils = require('../helpers/schedule_utils');
+const ParametersBuilder = require('../helpers/parameters_builder');
 const CronValidator = require('../helpers/cron-validator');
 const periodicity = require('../../enums/periodicity');
 
@@ -27,10 +29,6 @@ class Schedule {
     }
 
     create() {
-        const params = {
-            TableName: process.env.SCHEDULES_TABLE,
-            Item: this,
-        };
         let deferred = Q.defer();
         this._rev = 0;
         this.generateId();
@@ -38,70 +36,53 @@ class Schedule {
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
         }
-        _putInDatabase();
-        return deferred.promise;
 
-        function _putInDatabase() {
-            db.put(params, (error) => {
-                if (error) {
-                    deferred.reject('Couldn\'t create the item. ' + error.message);
-                } else {
-                    deferred.resolve(params.Item);
+        let conflicts;
+        ScheduleUtils.findConflicts(this)
+            .then(conflictedConfigs => {
+                if (!_.isEmpty(conflictedConfigs)) {
+                    conflicts = conflictedConfigs;
+                    this.enabled = false;
                 }
-            });
-        }
+                let params = ParametersBuilder.buildCreateRequestParameters(this);
+                return dbHelper.putItem(params);
+            })
+            .then(newSchedule => {
+                newSchedule.conflicts = conflicts;
+                deferred.resolve(newSchedule);
+            })
+            .fail(errorMessage => deferred.reject(errorMessage));
+        return deferred.promise;
     }
 
     update() {
         let deferred = Q.defer();
-        let params = {
-            TableName: process.env.SCHEDULES_TABLE,
-            Key: {
-                id: this.id,
-            },
-            ExpressionAttributeNames: {
-                '#rev': '_rev',
-            },
-            ExpressionAttributeValues: {
-                ':settingId': this.settingId,
-                ':eventCron': this.eventCron,
-                ':endEventCron': this.endEventCron,
-                ':periodicity': this.periodicity,
-                ':enabled': this.enabled,
-                ':rev': this._rev,
-                ':new_rev': ++this._rev,
-            },
-            UpdateExpression: 'SET settingId = :settingId, periodicity = :periodicity, eventCron = :eventCron, endEventCron = :endEventCron, enabled = :enabled, #rev = :new_rev',
-            ConditionExpression: "#rev = :rev",
-            ReturnValues: 'ALL_NEW',
-        };
+        let params = ParametersBuilder.buildUpdateRequestParameters(this);
 
         if (!this._rev) deferred.reject('Missed revision number');
 
+        let conflicts;
         this.validate(deferred.reject);
-        _updateInDatabase(params);
+        ScheduleUtils.findConflicts(this)
+            .then(conflictedConfigs => {
+                if (!_.isEmpty(conflictedConfigs)) {
+                    conflicts = conflictedConfigs;
+                    params.ExpressionAttributeValues[':enabled'] = false;
+                }
+                return dbHelper.updateItem(params);
+            })
+            .then(updatedSchedule => {
+                updatedSchedule.conflicts = conflicts;
+                deferred.resolve(updatedSchedule);
+            })
+            .fail(errorMessage => deferred.reject(errorMessage));
 
         return deferred.promise;
-
-        function _updateInDatabase(updateParameters) {
-            db.update(updateParameters, (error, result) => {
-                if (error) {
-                    deferred.reject(error.message);
-                } else {
-                    deferred.resolve(result.Attributes);
-                }
-            });
-        }
     }
 
     deleteSchedule() {
         let deferred = Q.defer();
-        let params = {
-            TableName: process.env.SCHEDULES_TABLE,
-            Key: {
-                id: this.id,
-            }
-        };
+        let params = ParametersBuilder.buildDeleteRequestParameters(this);
         db.delete(params, (error) => {
             if (error) {
                 deferred.reject(error.message);

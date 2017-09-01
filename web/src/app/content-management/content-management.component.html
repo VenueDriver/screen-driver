@@ -1,0 +1,15 @@
+<div class="content-management-container">
+    <setting-header></setting-header>
+
+    <tabbed-switcher [tabTitles]="['Venues', 'Schedules']" [class.hidden]="isCreateSettingMode">
+        <single-tab>
+            <venues></venues>
+        </single-tab>
+
+        <single-tab>
+            <schedules></schedules>
+        </single-tab>
+    </tabbed-switcher>
+
+    <div class="small-screen-reserve-space"></div>
+</div>

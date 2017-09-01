@@ -3,6 +3,7 @@
 const uuid = require('uuid');
 const Q = require('q');
 const dynamoDb = require('../dynamodb/dynamodb');
+const DbHelper = require('../helpers/db_helper');
 const responseHelper = require('../helpers/http_response_helper');
 const validator = require('./content_validator');
 
@@ -42,7 +43,7 @@ function getAllExistingShortNames() {
 
 function createContent(content) {
     let params = initParamsForCreation(content);
-    return performPut(params);
+    return DbHelper.putItem(params);
 }
 
 function initParamsForCreation(content) {
@@ -54,15 +55,4 @@ function initParamsForCreation(content) {
             url: content.url.trim()
         }
     }
-}
-
-function performPut(params) {
-    let deferred = Q.defer();
-    dynamoDb.put(params, error => {
-        if (error) {
-            deferred.reject(`Couldn\'t create the content: ${error.message}`);
-        }
-        deferred.resolve(params.Item);
-    });
-    return deferred.promise;
 }
