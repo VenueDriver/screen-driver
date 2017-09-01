@@ -67,7 +67,12 @@ class User {
     }
 
     validateEmailUniqueness(errorCallback) {
-        if (!dbHelper.hasUniqueName(tableName, this.email, 'email')) errorCallback('User with such email already exists');
+        dbHelper.hasUniqueName(tableName, this.email, 'email')
+            .then(result => {
+                if (!result) {
+                    errorCallback('User with such email already exists');
+                }
+            })
     }
 
     isEmailValid() {
