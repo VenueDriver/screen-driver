@@ -16,6 +16,7 @@
 1. Refactor conflicts identifier class
 1. Add tests on setting and schedule type accordance
 1. Add check for invalid cron pair in schedule
+1. Upgrade serverless framework version
 
 ##### Web
 1. Resolve warnings occurred during build process
