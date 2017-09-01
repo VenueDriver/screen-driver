@@ -8,6 +8,13 @@ module.exports = class UserDataPreparationHelper {
         return {
             email: this.getDefaultEmail(),
             password: this.getDefaultPassword(),
+        };
+    }
+
+    static createUpdatedUser() {
+        return {
+            email: this.getDefaultEmail(),
+            password: this.getDefaultPassword(),
             _rev: 0
         };
     }
