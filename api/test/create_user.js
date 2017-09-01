@@ -32,7 +32,6 @@ describe('create_user', () => {
         let expectations = (body) => {
             expect(body).to.have.property('id').with.lengthOf(idLength);
             expect(body).to.have.property('email').that.equal(UserDataPreparationHelper.getDefaultEmail());
-            expect(body).to.have.property('password').that.equal(UserDataPreparationHelper.getDefaultPassword());
             expect(body).to.have.property('isAdmin').that.equal(false);
             expect(body).to.have.property('_rev').that.equal(0);
         };
@@ -47,24 +46,6 @@ describe('create_user', () => {
         let expectations = (body) => {
             expect(body).to.have.property('isAdmin').that.equal(true);
         };
-
-        return MultiOperationHelper.performCreateTest(user, expectations);
-    });
-
-    it('Shouldn\'t create a user without password', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.password = null;
-
-        let expectations = generateErrorExpectations('Invalid password', 500);
-
-        return MultiOperationHelper.performCreateTest(user, expectations);
-    });
-
-    it('Shouldn\'t create a user with short password', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.password = UserDataPreparationHelper.getShortPassword();
-
-        let expectations = generateErrorExpectations('Invalid password', 500);
 
         return MultiOperationHelper.performCreateTest(user, expectations);
     });
