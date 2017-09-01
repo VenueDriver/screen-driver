@@ -41,6 +41,6 @@ module.exports.buildDeleteRequestParameters = (user) => {
     }
 };
 
-function increaseRevision(setting) {
-    return ++setting._rev;
+function increaseRevision(user) {
+    return ++user._rev;
 }
