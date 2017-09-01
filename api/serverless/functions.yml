@@ -173,6 +173,11 @@ handle_schedules_stream:
 
 create_user:
   handler: src/user/create.create
+  environment:
+    USER_POOL_ARN:
+      Fn::GetAtt:
+        - CognitoUserPool
+        - Arn
   events:
     - http:
         path: api/users

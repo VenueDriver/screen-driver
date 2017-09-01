@@ -7,8 +7,11 @@ const Q = require('q');
 const _ = require('lodash');
 
 let db;
+
+const UserPool = require('../../user_pool/user_pool');
+
 //General Email Regex (RFC 5322 Official Standard)
-let emailValidationRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+const emailValidationRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 
 class User {
     constructor(user, database) {
@@ -34,7 +37,10 @@ class User {
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
         }
-        dbHelper.putItem(params, deferred);
+        UserPool.createUser(this)
+            .then(() => dbHelper.putItem(params))
+            .then(result => deferred.resolve(result))
+            .catch(error => deferred.reject(error));
         return deferred.promise;
 
     }
@@ -46,7 +52,6 @@ class User {
         if (!Number.isInteger(Number(this._rev)) && this._rev !== 0) errorMessage = 'User\'s revision should be a number';
         if (this._rev < 0) errorMessage = 'User\'s revision can\'t be < 0';
         if (!this.isEmailValid()) errorMessage = 'Invalid email';
-        if (!this.isPasswordValid()) errorMessage = 'Invalid password';
 
         if (errorMessage) {
             errorCallback(errorMessage);
