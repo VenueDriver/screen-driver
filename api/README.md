@@ -66,3 +66,4 @@ Used plugins:
 * [serverless-dynamodb-local](https://github.com/99xt/serverless-dynamodb-local)
 * [serverless-dynamodb-client](https://github.com/99xt/serverless-dynamodb-client)
 * [serverless-mocha-plugin](https://github.com/SC5/serverless-mocha-plugin)
+* [serverless-export-env](https://github.com/arabold/serverless-export-env)
