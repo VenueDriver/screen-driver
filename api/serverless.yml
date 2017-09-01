@@ -39,6 +39,7 @@ plugins:
   - serverless-dynamodb-local
   - serverless-offline
   - serverless-mocha-plugin
+  - serverless-export-env
 
 resources:
   Resources: ${self:custom.resources}
