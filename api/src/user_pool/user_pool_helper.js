@@ -1,10 +1,8 @@
 'use strict';
 
-module.exports.buildCreateUserParameters = (user, userPoolArn) => {
-    let userPoolSplitedArn = userPoolArn.split('/');
-    let userPoolId = userPoolSplitedArn[userPoolSplitedArn.length - 1];
+module.exports.buildCreateUserParameters = (user) => {
     return {
-        UserPoolId: userPoolId,
+        UserPoolId: process.env.USER_POOL_ID,
         Username: user.email,
         DesiredDeliveryMediums: ['EMAIL'],
         UserAttributes: [
@@ -13,5 +11,12 @@ module.exports.buildCreateUserParameters = (user, userPoolArn) => {
                 Value: user.email
             }
         ]
+    };
+};
+
+module.exports.buildUserPoolData = () => {
+    return {
+        UserPoolId: process.env.USER_POOL_ID,
+        ClientId: process.env.USER_POOL_CLIENT_ID
     };
 };

@@ -1,3 +1,11 @@
+authenticate:
+  handler: src/auth/auth.handler
+  events:
+    - http:
+        path: api/auth
+        method: post
+        cors: true
+
 get_venues_list:
   handler: src/venues/list.list
   events:
@@ -173,11 +181,6 @@ handle_schedules_stream:
 
 create_user:
   handler: src/user/create.create
-  environment:
-    USER_POOL_ARN:
-      Fn::GetAtt:
-        - CognitoUserPool
-        - Arn
   events:
     - http:
         path: api/users
