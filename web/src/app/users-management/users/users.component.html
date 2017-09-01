@@ -1,0 +1,16 @@
+<table class="table table-striped">
+    <tr>
+        <th>Email</th>
+        <th>Is admin</th>
+    </tr>
+
+    <tr *ngFor="let user of users">
+        <th>{{user.email}}</th>
+        <th>
+            <toggle-button [checked]="user.isAdmin"
+                           class="is-admin"
+                           (changed)="changeUserRole(user)">
+            </toggle-button>
+        </th>
+    </tr>
+</table>
