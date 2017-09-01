@@ -13,6 +13,11 @@ provider:
     SCHEDULES_TABLE: "${self:service}-schedules-${opt:stage}"
     USERS_TABLE: "${self:service}-users-${opt:stage}"
     USER_POOL: "${self:service}-userpool-${opt:stage}"
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT: "${self:service}-appclient-${opt:stage}"
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   iamRoleStatements: ${self:custom.roles}
 
 functions: ${self:custom.functions}

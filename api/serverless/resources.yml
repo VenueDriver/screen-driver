@@ -86,3 +86,10 @@ CognitoUserPool:
   Type: AWS::Cognito::UserPool
   Properties:
     UserPoolName: ${self:provider.environment.USER_POOL}
+
+CognitoAppClient:
+  Type: AWS::Cognito::UserPoolClient
+  Properties:
+    ClientName: ${self:provider.environment.USER_POOL_CLIENT}
+    UserPoolId:
+      Ref: CognitoUserPool
