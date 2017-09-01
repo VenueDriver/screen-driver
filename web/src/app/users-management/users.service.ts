@@ -19,17 +19,18 @@ export class UsersService {
         return this.http.get(USERS_API)
     }
 
-    create(user: User) {
-        let subject = new Subject();
+    create(user: User): Observable<User> {
+        let subject = new Subject<User>();
         this.http.post(USERS_API, user)
             .map(response => response.json())
             .subscribe(
                 response => {
                     subject.next(response);
                     this.createUserEvent.next(response);
+                    this.notificationService.showSuccessNotificationBar('User was created successfully');
                 },
                 error => {
-                    let errorMessage = error.json().message;
+                    let errorMessage = this.getErrorMessage(error);
                     this.notificationService.showErrorNotificationBar('Unable to perform the create user operation: ' + errorMessage);
                     subject.error(errorMessage);
                 }
@@ -37,8 +38,25 @@ export class UsersService {
         return subject;
     }
 
-    //TODO Implement it
-    update(user: User) {
+    update(user: User): Observable<User> {
+        let subject = new Subject<User>();
+        this.http.put(`${USERS_API}/${user.id}`, user)
+            .map(response => response.json())
+            .subscribe(
+                response => {
+                    subject.next(response);
+                    this.notificationService.showSuccessNotificationBar('User was updated successfully');
+                },
+                error => {
+                    let errorMessage = this.getErrorMessage(error);
+                    this.notificationService.showErrorNotificationBar('Unable to change user role: ' + errorMessage);
+                    subject.error(errorMessage);
+                }
+            );
+        return subject;
+    }
 
+    private getErrorMessage(error): string {
+        return error.json().error ? error.json().error : error.json().message;
     }
 }

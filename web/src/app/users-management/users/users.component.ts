@@ -26,6 +26,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     changeUserRole(user: User) {
+        user.isAdmin = !user.isAdmin;
         this.usersService.update(user);
     }
 }
