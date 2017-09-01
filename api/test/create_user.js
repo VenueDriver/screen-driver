@@ -50,6 +50,15 @@ describe('create_user', () => {
         return MultiOperationHelper.performCreateTest(user, expectations);
     });
 
+    it('Shouldn\'t create a user with existing email', () => {
+        let user = UserDataPreparationHelper.createDefaultUser();
+
+        let expectations = generateErrorExpectations('User with such email already exists', 500);
+
+        return MultiOperationHelper.create(user)
+            .then(() => MultiOperationHelper.performCreateTest(user, expectations));
+    });
+
     it('Shouldn\'t create a user without email', () => {
         let user = UserDataPreparationHelper.createDefaultUser();
         user.email = null;

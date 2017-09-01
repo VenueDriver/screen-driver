@@ -2,6 +2,7 @@
 
 const uuid = require('uuid');
 const dbHelper = require('../../helpers/db_helper');
+const ParametersBuilder = require('./../helpers/parameters_builder');
 
 const Q = require('q');
 const _ = require('lodash');
@@ -12,6 +13,7 @@ const UserPool = require('../../user_pool/user_pool');
 
 //General Email Regex (RFC 5322 Official Standard)
 const emailValidationRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+const tableName = process.env.USERS_TABLE;
 
 class User {
     constructor(user, database) {
@@ -26,14 +28,12 @@ class User {
     }
 
     create() {
-        const params = {
-            TableName: process.env.USERS_TABLE,
-            Item: this,
-        };
+        const params = ParametersBuilder.buildCreateRequestParameters(this);
         let deferred = Q.defer();
         this._rev = 0;
         this.generateId();
         this.validate(deferred.reject);
+        this.validateEmailUniqueness(deferred.reject);
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
         }
@@ -43,6 +43,19 @@ class User {
             .catch(error => deferred.reject(error));
         return deferred.promise;
 
+    }
+
+    update() {
+        let deferred = Q.defer();
+        let params = ParametersBuilder.buildUpdateRequestParameters(this);
+
+        this.validate(deferred.reject);
+        if (deferred.promise.inspect().state === 'rejected') {
+            return deferred.promise;
+        }
+        dbHelper.updateItem(params, deferred);
+
+        return deferred.promise;
     }
 
     validate(errorCallback) {
@@ -56,6 +69,15 @@ class User {
         if (errorMessage) {
             errorCallback(errorMessage);
         }
+    }
+
+    validateEmailUniqueness(errorCallback) {
+        dbHelper.hasUniqueName(tableName, this.email, 'email')
+            .then(result => {
+                if (!result) {
+                    errorCallback('User with such email already exists');
+                }
+            })
     }
 
     isEmailValid() {

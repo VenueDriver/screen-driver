@@ -93,6 +93,28 @@ module.exports.batchDelete = (tableName, items) => {
     }
 };
 
+module.exports.hasUniqueName = (tableName, name, field = 'name') => {
+    let params = {TableName: tableName};
+
+    return _getAllNames()
+        .then(names => {
+            return !names.includes(name);
+        });
+
+    function _getAllNames() {
+        return new Promise((resolve, reject) => {
+            dynamoDb.scan(params, (error, data) => {
+                error ? reject(error.message) : resolve(_extractNames(data));
+            })
+        });
+    }
+
+    function _extractNames(data) {
+        return data.Items
+            .map((item) => item[field]);
+    }
+};
+
 function generateParams(tableName, itemId) {
     return {
         TableName: tableName,
