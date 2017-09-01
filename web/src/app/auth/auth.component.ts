@@ -8,11 +8,25 @@ import {User} from "./user";
 })
 export class AuthComponent implements OnInit {
     user: User = new User();
+    isFirstLoginMode: boolean = false;
+    firstLoginPasswords = {password: '', newPassword: ''};
 
     constructor() {
     }
 
     ngOnInit() {
+    }
+
+    changeFirstLoginMode() {
+        this.isFirstLoginMode = !this.isFirstLoginMode
+    }
+
+    signIn() {
+        if (this.isFirstLoginMode) {
+            //TODO send data to server
+            return
+        }
+
     }
 
 }
