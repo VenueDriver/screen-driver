@@ -5,6 +5,7 @@ import {environment} from "../../environments/environment";
 import {Subject} from "rxjs";
 
 import * as AuthConsts from "./auth-consts";
+import {Router} from "@angular/router";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
 
@@ -12,7 +13,8 @@ const AUTH_API = `${environment.apiUrl}/api/auth`;
 export class AuthService {
 
     constructor(private http: Http,
-                private notificationService: NotificationService,) {
+                private notificationService: NotificationService,
+                private router: Router) {
     }
 
     signIn(userDetails) {
@@ -23,6 +25,7 @@ export class AuthService {
                 response => {
                     localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response.idToken.jwtToken);
                     subject.next(response);
+                    this.redirect();
                 },
                 error => {
                     let errorMessage = this.getErrorMessage(error);
@@ -41,18 +44,23 @@ export class AuthService {
         return !!localStorage.getItem(AuthConsts.ID_TOKEN_PARAM);
     }
 
-    public saveCurrentUrlAsRollback() {
+    saveCurrentUrlAsRollback() {
         let url = document.location.href;
         let origin = document.location.origin;
         let rollbackUrl = url.replace(origin, '');
         if (this.isNotExclusivePage()) {
-            localStorage.setItem(AuthConsts.ROLLBACK_URL_PARAM, rollbackUrl);
+            localStorage.setItem(AuthConsts.ROLLBACK_URL_PARAM, rollbackUrl.slice(2));
         }
     }
 
-    public isNotExclusivePage() {
+    isNotExclusivePage() {
         let path = document.location.pathname;
         return !AuthConsts.EXCLUSIVE_URLS.includes(path.substr(1));
+    }
+
+    redirect() {
+        let callbackUrl = localStorage.getItem(AuthConsts.ROLLBACK_URL_PARAM);
+        this.router.navigateByUrl(callbackUrl);
     }
 
 }
