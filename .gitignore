@@ -3,3 +3,4 @@
 .DS_Store
 /codeship.aes
 /deployment.env
+/development.env

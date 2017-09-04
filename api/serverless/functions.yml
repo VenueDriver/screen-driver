@@ -1,3 +1,11 @@
+authenticate:
+  handler: src/auth/auth.handler
+  events:
+    - http:
+        path: api/auth
+        method: post
+        cors: true
+
 get_venues_list:
   handler: src/venues/list.list
   events:

@@ -8,3 +8,8 @@
     - lambda:InvokeAsync
     - lambda:InvokeFunction
   Resource: "arn:aws:lambda:*"
+
+- Effect: Allow
+  Action:
+    - cognito-idp:*
+  Resource: "arn:aws:cognito-idp:*"
