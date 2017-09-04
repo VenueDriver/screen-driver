@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "./user";
+import {AuthService} from "./auth.service";
 
 @Component({
     selector: 'app-auth',
@@ -11,7 +12,7 @@ export class AuthComponent implements OnInit {
     isFirstLoginMode: boolean = false;
     firstLoginPasswords = {password: '', newPassword: ''};
 
-    constructor() {
+    constructor(private authService: AuthService) {
     }
 
     ngOnInit() {
@@ -22,11 +23,12 @@ export class AuthComponent implements OnInit {
     }
 
     signIn() {
+        let userDetails = {email: this.user.email, password: this.user.password};
         if (this.isFirstLoginMode) {
-            //TODO send data to server
-            return
+            userDetails['password'] = this.firstLoginPasswords.password;
+            userDetails['newPassword'] = this.firstLoginPasswords.newPassword;
         }
-
+        this.authService.signIn(userDetails);
     }
 
 }
