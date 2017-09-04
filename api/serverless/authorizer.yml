@@ -1,0 +1,3 @@
+arn: ${env:USER_POOL_ARN}
+claims:
+  - email

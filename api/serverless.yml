@@ -27,6 +27,7 @@ custom:
   functions: ${file(./serverless/functions.yml)}
   resources: ${file(./serverless/resources.yml)}
   roles: ${file(./serverless/roles.yml)}
+  authorizer: ${file(./serverless/authorizer.yml)}
   dynamodb:
     start:
       port: 8000
