@@ -7,7 +7,8 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand">ScreenDriver</a>
-            <ul *ngIf="isAuthenticated()"class="nav navbar-nav">
+            <ul *ngIf="isAuthenticated()"
+                class="nav navbar-nav">
                 <li [routerLinkActive]="['active']"><a routerLink="/content" routerLinkActive="active">Content</a></li>
                 <li [routerLinkActive]="['active']"><a routerLink="/users" routerLinkActive="active">Users</a></li>
             </ul>
