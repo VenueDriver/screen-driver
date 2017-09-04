@@ -20,6 +20,8 @@ import { ContentManagementComponent } from './content-management/content-managem
 import {AppRoutingModule} from "./app-routing.module";
 import {UsersManagementModule} from "./users-management/users-management.module";
 import {AuthModule} from "./auth/auth.module";
+import {AuthHttpInterceptor} from "./auth-http.interceptor";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 
 @NgModule({
     declarations: [
@@ -32,6 +34,7 @@ import {AuthModule} from "./auth/auth.module";
         BrowserModule,
         BrowserAnimationsModule,
         HttpModule,
+        HttpClientModule,
         AlertModule.forRoot(),
         NotificationModule,
         VenuesModule,
@@ -45,7 +48,12 @@ import {AuthModule} from "./auth/auth.module";
     ],
     providers: [
         NotificationService,
-        HeaderService
+        HeaderService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthHttpInterceptor,
+            multi: true
+        }
     ],
     bootstrap: [AppComponent]
 })
