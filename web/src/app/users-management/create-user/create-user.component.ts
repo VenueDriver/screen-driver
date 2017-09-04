@@ -11,7 +11,6 @@ export class CreateUserComponent implements OnInit {
     @Output() submit = new EventEmitter();
     user: User = new User();
     isShowEmailValidationError: boolean = false;
-    isShowPasswordValidationError: boolean = false;
 
     constructor() {
     }
@@ -28,16 +27,6 @@ export class CreateUserComponent implements OnInit {
         return regex.test(this.user.email)
     }
 
-    validatePassword() {
-        this.isShowPasswordValidationError = !this.isPasswordValid();
-    }
-
-    isPasswordValid(): boolean {
-        return this.user.password
-            && this.user.password.length >= 6
-            && !this.user.password.includes(' ');
-    }
-
     setUserRole(event: boolean) {
         this.user.isAdmin = event;
     }
@@ -52,6 +41,5 @@ export class CreateUserComponent implements OnInit {
 
     isCreateButtonDisplayed(): boolean {
         return this.isEmailValid()
-            && this.isPasswordValid()
     }
 }

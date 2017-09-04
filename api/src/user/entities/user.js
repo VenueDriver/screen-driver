@@ -32,6 +32,7 @@ class User {
         let deferred = Q.defer();
         this._rev = 0;
         this.generateId();
+        this.password = 1;
         this.validate(deferred.reject);
         this.validateEmailUniqueness(deferred.reject);
         if (deferred.promise.inspect().state === 'rejected') {
