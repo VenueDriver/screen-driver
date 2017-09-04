@@ -3,6 +3,11 @@ import {RouterModule, Routes} from "@angular/router";
 import {UsersManagementComponent} from "./users-management/users-management.component";
 import {ContentManagementComponent} from "./content-management/content-management.component";
 import {AuthComponent} from "./auth/auth.component";
+import {AuthGuard} from "./auth/auth.guard";
+
+import * as AuthConsts from "./auth/auth-consts";
+import * as _ from "lodash";
+
 
 const appRoutes: Routes = [
     {
@@ -30,13 +35,22 @@ const appRoutes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forRoot(
-            appRoutes,
+            addCanActivateParameter(),
             {useHash: true}
         )
     ],
     exports: [
         RouterModule
-    ]
+    ],
+    providers: [AuthGuard]
 })
 export class AppRoutingModule {
+}
+
+function addCanActivateParameter() {
+    _.filter(appRoutes, r => {
+        return !AuthConsts.EXCLUSIVE_URLS.includes(r.path);
+    })
+        .forEach(r => r.canActivate = [AuthGuard]);
+    return appRoutes;
 }
