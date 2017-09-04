@@ -73,6 +73,6 @@ export class SettingsManagerComponent implements OnInit {
     }
 
     getSettingsForType(type) {
-        return this.settings.filter(setting => setting.priority === type.id);
+        return _.filter(this.settings, setting => setting.priority === type.id);
     }
 }
