@@ -5,10 +5,6 @@ import {ContentManagementComponent} from "./content-management/content-managemen
 import {AuthComponent} from "./auth/auth.component";
 import {AuthGuard} from "./auth/auth.guard";
 
-import * as AuthConsts from "./auth/auth-consts";
-import * as _ from "lodash";
-
-
 const appRoutes: Routes = [
     {
         path: '',
@@ -18,12 +14,14 @@ const appRoutes: Routes = [
     {
         path: 'content',
         component: ContentManagementComponent,
-        data: {isSidebarDisplayed: true}
+        data: {isSidebarDisplayed: true},
+        canActivate: [AuthGuard]
     },
     {
         path: 'users',
         component: UsersManagementComponent,
-        data: {isSidebarDisplayed: false}
+        data: {isSidebarDisplayed: false},
+        canActivate: [AuthGuard]
     },
     {
         path: 'auth',
@@ -35,7 +33,7 @@ const appRoutes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forRoot(
-            addCanActivateParameter(),
+            appRoutes,
             {useHash: true}
         )
     ],
@@ -47,10 +45,3 @@ const appRoutes: Routes = [
 export class AppRoutingModule {
 }
 
-function addCanActivateParameter() {
-    _.filter(appRoutes, r => {
-        return !AuthConsts.EXCLUSIVE_URLS.includes(r.path);
-    })
-        .forEach(r => r.canActivate = [AuthGuard]);
-    return appRoutes;
-}
