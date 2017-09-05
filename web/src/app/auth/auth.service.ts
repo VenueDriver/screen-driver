@@ -3,9 +3,10 @@ import {NotificationService} from "../notifications/notification.service";
 import {Http} from "@angular/http";
 import {environment} from "../../environments/environment";
 import {Subject} from "rxjs";
+import {Router} from "@angular/router";
 
 import * as AuthConsts from "./auth-consts";
-import {Router} from "@angular/router";
+import * as _ from 'lodash';
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
 
@@ -53,9 +54,18 @@ export class AuthService {
         }
     }
 
-    isNotExclusivePage() {
-        let path = document.location.pathname;
+    isNotExclusivePage(): boolean {
+        let path = this.getCurrentPageUri();
         return !AuthConsts.EXCLUSIVE_URLS.includes(path.substr(1));
+    }
+
+    isAuthPage(): boolean {
+        let path = this.getCurrentPageUri();
+        return !_.isEqual(path, '/auth');
+    }
+
+    private getCurrentPageUri() {
+        return document.location.hash.replace('#', '');
     }
 
     redirect() {

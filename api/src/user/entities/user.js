@@ -28,6 +28,7 @@ class User {
     }
 
     create() {
+        delete this.password;
         const params = ParametersBuilder.buildCreateRequestParameters(this);
         let deferred = Q.defer();
         this._rev = 0;
