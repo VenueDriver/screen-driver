@@ -1,15 +1,15 @@
 - Effect: Allow
   Action:
     - dynamodb:*
-  Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*"
+  Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*
 
 - Effect: Allow
   Action:
     - lambda:InvokeAsync
     - lambda:InvokeFunction
-  Resource: "arn:aws:lambda:*"
+  Resource: arn:aws:lambda:*
 
 - Effect: Allow
   Action:
     - cognito-idp:*
-  Resource: "arn:aws:cognito-idp:*"
+  Resource: arn:aws:cognito-idp:*
