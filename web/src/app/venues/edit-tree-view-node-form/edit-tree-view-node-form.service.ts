@@ -34,11 +34,11 @@ export class EditTreeViewNodeFormService {
         return this.venuesService.getValidationMessage(nodeLevelName);
     }
 
-    updateVenue(venueToUpdate: any): Observable<Response> {
+    updateVenue(venueToUpdate: any): Observable<Venue> {
         return this.venuesService.updateVenue(venueToUpdate);
     }
 
-    saveVenue(venue: any): Observable<Response> {
+    saveVenue(venue: any): Observable<Venue> {
         return this.venuesService.saveVenue(venue);
     }
 
