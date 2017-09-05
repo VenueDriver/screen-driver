@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import {Http, Response} from "@angular/http";
+import {Response} from "@angular/http";
 import {Setting} from "./entities/setting";
 import {environment} from "../../environments/environment";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {NotificationService} from "../notifications/notification.service";
+import {HttpClient} from "@angular/common/http";
 
 const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;
 
@@ -12,23 +13,21 @@ export class SettingsService {
 
     private createSettingEvent: BehaviorSubject<any> = new BehaviorSubject({});
 
-    constructor(private http: Http,
+    constructor(private httpClient: HttpClient,
                 private notificationService: NotificationService) {
     }
 
-    loadSettings(): Observable<Response> {
-        return this.http.get(SETTINGS_API_URL)
+    loadSettings(): Observable<any> {
+        return this.httpClient.get(SETTINGS_API_URL)
     }
 
     createSetting(setting: Setting): Observable<Setting> {
-        return this.http.post(SETTINGS_API_URL, setting)
-            .map(response => response.json());
+        return this.httpClient.post(SETTINGS_API_URL, setting)
     }
 
     updateSetting(setting: Setting, successMessage?: string, errorMessage?: string): Observable<Setting> {
         let subject = new Subject();
-        this.http.put(`${SETTINGS_API_URL}/${setting.id}`, setting)
-            .map(response => response.json())
+        this.httpClient.put(`${SETTINGS_API_URL}/${setting.id}`, setting)
             .subscribe(response => {
                 let message = successMessage ? successMessage : 'Setting was updated successfully';
                 this.notificationService.showSuccessNotificationBar(message);
@@ -49,7 +48,7 @@ export class SettingsService {
     }
 
     removeSetting(id: string): Observable<Response> {
-        return this.http.delete(`${SETTINGS_API_URL}/${id}`)
+        return this.httpClient.delete(`${SETTINGS_API_URL}/${id}`)
     }
 
     getCreateSettingEventSubscription(): Observable<any> {

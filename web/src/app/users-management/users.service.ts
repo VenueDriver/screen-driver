@@ -15,7 +15,7 @@ export class UsersService {
                 private notificationService: NotificationService,) {
     }
 
-    loadUsers(): Observable<User[]> {
+    loadUsers(): Observable<Array<User>> {
         return this.httpClient.get(USERS_API)
     }
 
