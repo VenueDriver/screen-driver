@@ -47,8 +47,11 @@ export class AuthComponent implements OnInit {
 
     setFailMessage(error) {
         switch (error) {
+            case (''):
+                this.failMessage = 'Incorrect username or password.';
+                break;
             case ('Missing required parameter USERNAME'):
-                this.failMessage = 'Missed email field';
+                this.failMessage = 'Email required';
                 break;
             default:
                 this.failMessage = error;
