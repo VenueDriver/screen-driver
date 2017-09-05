@@ -138,7 +138,7 @@ export class SettingCreatorComponent implements OnInit {
 
     performRemoving() {
         this.settingStateHolderService.removeSetting(this.settingToEdit.id)
-            .subscribe(response => {
+            .subscribe(() => {
                     this.settingStateHolderService.changeCurrentSetting();
                     this.settingStateHolderService.reloadSettings();
                     this.schedulesService.scheduleListUpdated.next();

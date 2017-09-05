@@ -225,13 +225,13 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
         let venueToUpdate = _.find(this.venues, venue => venue.id === this.currentVenueId);
         this.editFormService.updateVenue(venueToUpdate)
             .subscribe(
-                response => this.handleVenueListUpdateResponse(response),
+                venue => this.handleVenueListUpdateResponse(venue),
                 error => this.handleError('Unable to update setting')
             );
     }
 
-    handleVenueListUpdateResponse(response: any) {
-        this.updatedVenue = response.json();
+    handleVenueListUpdateResponse(venue: Venue) {
+        this.updatedVenue = venue;
         this.disableEditMode();
         this.updateSetting();
     }

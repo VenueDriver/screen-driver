@@ -1,17 +1,17 @@
 import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class ScreensMessagingService {
     readonly screensApiPath = `${environment.apiUrl}/api/screens`;
 
-    constructor(private http: Http) {
+    constructor(private httpClient: HttpClient) {
     }
 
     refreshScreen(id: string): Observable<any> {
         let data = {screens: [id]};
-        return this.http.post(this.screensApiPath + '/refresh', data);
+        return this.httpClient.post(this.screensApiPath + '/refresh', data);
     }
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {Http, Response} from "@angular/http";
 import { environment } from '../../environments/environment';
 import {Venue} from "./entities/venue";
 import { Observable } from 'rxjs/Observable';
@@ -8,6 +7,7 @@ import {ContentService} from "../content/content.service";
 
 import * as _ from 'lodash';
 import {Subject, BehaviorSubject} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class VenuesService {
@@ -16,12 +16,12 @@ export class VenuesService {
     private venueUpdate: Subject<any> = new BehaviorSubject({});
 
     constructor(
-        private http: Http,
+        private httpClient: HttpClient,
         private contentService: ContentService
     ) { }
 
-    loadVenues(): Observable<Response> {
-        return this.http.get(this.venuesApiPath);
+    loadVenues(): Observable<Array<Venue>> {
+        return this.httpClient.get(this.venuesApiPath);
     }
 
     loadContent(): Observable<Content[]> {
@@ -34,8 +34,8 @@ export class VenuesService {
         return venuesTree;
     }
 
-    saveVenue(venue: Venue): Observable<Response> {
-        return this.http.post(this.venuesApiPath, venue);
+    saveVenue(venue: Venue): Observable<Venue> {
+        return this.httpClient.post(this.venuesApiPath, venue);
     }
 
     private convertToTree(items: Array<any>) {
@@ -57,9 +57,9 @@ export class VenuesService {
         }
     }
 
-    updateVenue(venueNode: any): Observable<Response> {
+    updateVenue(venueNode: any): Observable<Venue> {
         let venue = this.prepareVenuesToUpdate(venueNode);
-        return this.http.put(`${this.venuesApiPath}/${venueNode.id}`, venue);
+        return this.httpClient.put(`${this.venuesApiPath}/${venueNode.id}`, venue);
     }
 
     private prepareVenuesToUpdate(venueNode: any): Venue {
@@ -90,15 +90,15 @@ export class VenuesService {
     }
 
     deleteVenue(venueId: any): Observable<any> {
-        return this.http.delete(`${this.venuesApiPath}/${venueId}`);
+        return this.httpClient.delete(`${this.venuesApiPath}/${venueId}`);
     }
 
     deleteScreenGroup(venueId: string, screenGroupId: string) {
-        return this.http.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}`);
+        return this.httpClient.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}`);
     }
 
     deleteScreen(venueId: string, screenGroupId: string, screenId: string) {
-        return this.http.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}/screens/${screenId}`);
+        return this.httpClient.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}/screens/${screenId}`);
     }
 
     getVenueId(node: any) {

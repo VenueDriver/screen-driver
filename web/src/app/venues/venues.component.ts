@@ -71,8 +71,8 @@ export class VenuesComponent implements OnInit {
     }
 
     loadVenues() {
-        this.venuesService.loadVenues().subscribe(response => {
-            this.venues = response.json();
+        this.venuesService.loadVenues().subscribe(venues => {
+            this.venues = venues;
             this.venuesTree = this.venuesService.getVenuesForTree(this.venues);
 
             if (!this.setting) {
