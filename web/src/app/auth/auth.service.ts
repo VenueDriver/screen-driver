@@ -1,30 +1,29 @@
 import {Injectable} from '@angular/core';
 import {NotificationService} from "../notifications/notification.service";
-import {Http} from "@angular/http";
 import {environment} from "../../environments/environment";
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
 
 import * as AuthConsts from "./auth-consts";
 import * as _ from 'lodash';
+import {HttpClient} from "@angular/common/http";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
 
 @Injectable()
 export class AuthService {
 
-    constructor(private http: Http,
+    constructor(private httpClient: HttpClient,
                 private notificationService: NotificationService,
                 private router: Router) {
     }
 
     signIn(userDetails) {
         let subject = new Subject();
-        this.http.post(AUTH_API, userDetails)
-            .map(response => response.json())
+        this.httpClient.post(AUTH_API, userDetails)
             .subscribe(
                 response => {
-                    localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response.idToken.jwtToken);
+                    localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['idToken'].jwtToken);
                     subject.next(response);
                     this.redirect();
                 },
@@ -38,7 +37,7 @@ export class AuthService {
     }
 
     private getErrorMessage(error): string {
-        return error.json().error ? error.json().error : error.json().message.message;
+        return error.error ? error.error.message.message : error.message;
     }
 
     authenticated(): boolean {
