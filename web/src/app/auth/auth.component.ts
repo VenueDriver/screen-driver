@@ -9,6 +9,7 @@ import {AuthService} from "./auth.service";
 })
 export class AuthComponent implements OnInit {
     user: User = new User();
+    isRequestPerforming: boolean = false;
     isFirstLoginMode: boolean = false;
     firstLoginPasswords = {password: '', newPassword: ''};
 
@@ -28,7 +29,15 @@ export class AuthComponent implements OnInit {
             userDetails['password'] = this.firstLoginPasswords.password;
             userDetails['newPassword'] = this.firstLoginPasswords.newPassword;
         }
-        this.authService.signIn(userDetails);
+        this.setRequestPerforming(true);
+        this.authService.signIn(userDetails)
+            .subscribe(
+                () => this.setRequestPerforming(false),
+                () => this.setRequestPerforming(false))
+    }
+
+    setRequestPerforming(flag: boolean) {
+        this.isRequestPerforming = flag;
     }
 
 }

@@ -50,7 +50,8 @@
         </div>
         <button type="button"
                 class="btn btn-success btn-block sign-in-button"
-                (click)="signIn()">
+                (click)="signIn()"
+                [disabled]="isRequestPerforming">
             Sign in
         </button>
     </div>
