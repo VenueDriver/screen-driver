@@ -1,31 +1,30 @@
 import {Injectable} from '@angular/core';
-import {Http, Response} from "@angular/http";
 import {NotificationService} from "../notifications/notification.service";
 import {User} from "../auth/user";
 import {environment} from "../../environments/environment";
-import {Subject, Observable, BehaviorSubject} from "rxjs";
+import {Subject, Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 const USERS_API = `${environment.apiUrl}/api/users`;
 
 @Injectable()
 export class UsersService {
-    createUserEvent: Subject<User> = new Subject();
+    createUserEvent: Subject<any> = new Subject();
 
-    constructor(private http: Http,
+    constructor(private httpClient: HttpClient,
                 private notificationService: NotificationService,) {
     }
 
-    loadUsers(): Observable<Response> {
-        return this.http.get(USERS_API)
+    loadUsers(): Observable<User[]> {
+        return this.httpClient.get(USERS_API)
     }
 
     create(user: User): Observable<User> {
         let subject = new Subject<User>();
-        this.http.post(USERS_API, user)
-            .map(response => response.json())
+        this.httpClient.post(USERS_API, user)
             .subscribe(
                 response => {
-                    subject.next(response);
+                    subject.next(response as User);
                     this.createUserEvent.next(response);
                     this.notificationService.showSuccessNotificationBar('User was created successfully');
                 },
@@ -40,11 +39,10 @@ export class UsersService {
 
     update(user: User): Observable<User> {
         let subject = new Subject<User>();
-        this.http.put(`${USERS_API}/${user.id}`, user)
-            .map(response => response.json())
+        this.httpClient.put(`${USERS_API}/${user.id}`, user)
             .subscribe(
                 response => {
-                    subject.next(response);
+                    subject.next(response as User);
                     this.notificationService.showSuccessNotificationBar('User was updated successfully');
                 },
                 error => {
@@ -57,6 +55,6 @@ export class UsersService {
     }
 
     private getErrorMessage(error): string {
-        return error.json().error ? error.json().error : error.json().message;
+        return error.error ? error.error.message.message : error.message;
     }
 }
