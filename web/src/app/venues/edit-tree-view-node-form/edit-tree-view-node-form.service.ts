@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 import {VenuesService} from "../venues.service";
 import {Observable} from "rxjs";
-import {Response} from "@angular/http";
 import {Content} from "../../content/content";
 import {ContentService} from "../../content/content.service";
 import {Venue} from "../entities/venue";

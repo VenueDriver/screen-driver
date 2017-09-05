@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import {Response} from "@angular/http";
 import {Setting} from "./entities/setting";
 import {environment} from "../../environments/environment";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {NotificationService} from "../notifications/notification.service";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 
 const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;
 
@@ -47,7 +46,7 @@ export class SettingsService {
         return errorMessage ? errorMessage : 'Unable to update setting';
     }
 
-    removeSetting(id: string): Observable<Response> {
+    removeSetting(id: string): Observable<HttpResponse<any>> {
         return this.httpClient.delete(`${SETTINGS_API_URL}/${id}`)
     }
 

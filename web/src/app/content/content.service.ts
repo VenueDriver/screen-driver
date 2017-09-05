@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {Response} from "@angular/http";
 import { environment } from '../../environments/environment';
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {Content} from "./content";
@@ -26,10 +25,6 @@ export class ContentService {
 
     updateContent(content: Content): Observable<Content> {
         return this.httpClient.put(`${this.contentApiPath}/${content.id}`, content)
-    }
-
-    private extractData(res: Response) {
-        return res.json() || { };
     }
 
     pushContentUpdateEvent() {
