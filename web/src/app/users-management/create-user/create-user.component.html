@@ -12,19 +12,6 @@
            class="email error-message">
         Invalid Email
     </label>
-    <div>
-        <label for="password">Password</label>
-        <input id="password"
-               class="form-control"
-               [(ngModel)]="user.password"
-               (focusout)="validatePassword()"
-               type="password"
-               placeholder="Password">
-    </div>
-    <label *ngIf="isShowPasswordValidationError"
-           class="password error-message">
-        Invalid Password
-    </label>
     <div class="is-admin">
         <toggle-button [title]="'Has admin access?'"
                        (changed)="setUserRole($event)">

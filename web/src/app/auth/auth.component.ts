@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "./user";
+import {AuthService} from "./auth.service";
 
 @Component({
     selector: 'app-auth',
@@ -8,11 +9,26 @@ import {User} from "./user";
 })
 export class AuthComponent implements OnInit {
     user: User = new User();
+    isFirstLoginMode: boolean = false;
+    firstLoginPasswords = {password: '', newPassword: ''};
 
-    constructor() {
+    constructor(private authService: AuthService) {
     }
 
     ngOnInit() {
+    }
+
+    changeFirstLoginMode() {
+        this.isFirstLoginMode = !this.isFirstLoginMode
+    }
+
+    signIn() {
+        let userDetails = {email: this.user.email, password: this.user.password};
+        if (this.isFirstLoginMode) {
+            userDetails['password'] = this.firstLoginPasswords.password;
+            userDetails['newPassword'] = this.firstLoginPasswords.newPassword;
+        }
+        this.authService.signIn(userDetails);
     }
 
 }
