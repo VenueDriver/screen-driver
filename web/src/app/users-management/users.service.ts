@@ -9,7 +9,7 @@ const USERS_API = `${environment.apiUrl}/api/users`;
 
 @Injectable()
 export class UsersService {
-    createUserEvent: Subject<any> = new Subject();
+    createUserEvent: Subject<User> = new Subject();
 
     constructor(private httpClient: HttpClient,
                 private notificationService: NotificationService,) {
@@ -23,8 +23,8 @@ export class UsersService {
         let subject = new Subject<User>();
         this.httpClient.post(USERS_API, user)
             .subscribe(
-                response => {
-                    subject.next(response as User);
+                (response: User) => {
+                    subject.next(response);
                     this.createUserEvent.next(response);
                     this.notificationService.showSuccessNotificationBar('User was created successfully');
                 },
