@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "./user";
 import {AuthService} from "./auth.service";
+import {NgModel} from "@angular/forms";
 
 @Component({
     selector: 'app-auth',
@@ -12,6 +13,7 @@ export class AuthComponent implements OnInit {
     isRequestPerforming: boolean = false;
     isFirstLoginMode: boolean = false;
     firstLoginPasswords = {password: '', newPassword: ''};
+    failMessage: string;
 
     constructor(private authService: AuthService) {
     }
@@ -33,11 +35,29 @@ export class AuthComponent implements OnInit {
         this.authService.signIn(userDetails)
             .subscribe(
                 () => this.setRequestPerforming(false),
-                () => this.setRequestPerforming(false))
+                (error) => {
+                    this.setFailMessage(error);
+                    this.setRequestPerforming(false)
+                })
     }
 
     setRequestPerforming(flag: boolean) {
         this.isRequestPerforming = flag;
+    }
+
+    setFailMessage(error) {
+        switch (error) {
+            case ('Missing required parameter USERNAME'):
+                this.failMessage = 'Missed email field';
+                break;
+            default:
+                this.failMessage = error;
+        }
+    }
+
+    getValidationMessage(model: NgModel) {
+        if (model.errors['required'])
+            return 'This field is required';
     }
 
 }
