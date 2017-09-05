@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import {Http, Response} from "@angular/http";
+import {Response} from "@angular/http";
 import { environment } from '../../environments/environment';
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {Content} from "./content";
 
 import 'rxjs/add/operator/map';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class ContentService {
@@ -13,21 +14,18 @@ export class ContentService {
 
     private contentUpdate: Subject<any> = new BehaviorSubject({});
 
-    constructor(private http: Http) { }
+    constructor(private httpClient: HttpClient) { }
 
-    getContent(): Observable<Content[]> {
-        return this.http.get(this.contentApiPath)
-            .map(this.extractData);
+    getContent(): Observable<Array<Content>> {
+        return this.httpClient.get(this.contentApiPath)
     }
 
     createContent(content: Content): Observable<Content> {
-        return this.http.post(this.contentApiPath, content)
-            .map(this.extractData);
+        return this.httpClient.post(this.contentApiPath, content)
     }
 
     updateContent(content: Content): Observable<Content> {
-        return this.http.put(`${this.contentApiPath}/${content.id}`, content)
-            .map(this.extractData);
+        return this.httpClient.put(`${this.contentApiPath}/${content.id}`, content)
     }
 
     private extractData(res: Response) {
