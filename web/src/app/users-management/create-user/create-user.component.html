@@ -5,9 +5,10 @@
                class="form-control"
                [(ngModel)]="user.email"
                (focusout)="validateEmail(email)"
+               #email="ngModel"
                type="email"
                placeholder="Email"
-               #email="ngModel">
+               autofocus>
     </div>
     <label *ngIf="email.invalid"
            class="email error-message">
