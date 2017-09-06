@@ -4,13 +4,14 @@
         <input id="email"
                class="form-control"
                [(ngModel)]="user.email"
-               (focusout)="validateEmail()"
+               (focusout)="validateEmail(email)"
                type="email"
-               placeholder="Email">
+               placeholder="Email"
+               #email="ngModel">
     </div>
-    <label *ngIf="isShowEmailValidationError"
+    <label *ngIf="email.invalid"
            class="email error-message">
-        Invalid Email
+        {{getValidationMessage(email)}}
     </label>
     <div class="is-admin">
         <toggle-button [title]="'Has admin access?'"
@@ -27,7 +28,7 @@
         <button type="button"
                 class="btn btn-success"
                 (click)="performSubmit()"
-                [disabled]="!isCreateButtonDisplayed()">
+                [disabled]="!isCreateButtonDisplayed() || email.invalid">
             Create
         </button>
     </div>
