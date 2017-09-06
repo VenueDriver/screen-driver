@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "./user";
 import {AuthService} from "./auth.service";
+import {NgModel} from "@angular/forms";
 
 @Component({
     selector: 'app-auth',
@@ -9,8 +10,10 @@ import {AuthService} from "./auth.service";
 })
 export class AuthComponent implements OnInit {
     user: User = new User();
+    isRequestPerforming: boolean = false;
     isFirstLoginMode: boolean = false;
     firstLoginPasswords = {password: '', newPassword: ''};
+    failMessage: string;
 
     constructor(private authService: AuthService) {
     }
@@ -28,7 +31,36 @@ export class AuthComponent implements OnInit {
             userDetails['password'] = this.firstLoginPasswords.password;
             userDetails['newPassword'] = this.firstLoginPasswords.newPassword;
         }
-        this.authService.signIn(userDetails);
+        this.setRequestPerforming(true);
+        this.authService.signIn(userDetails)
+            .subscribe(
+                () => this.setRequestPerforming(false),
+                (error) => {
+                    this.setFailMessage(error);
+                    this.setRequestPerforming(false)
+                })
+    }
+
+    setRequestPerforming(flag: boolean) {
+        this.isRequestPerforming = flag;
+    }
+
+    setFailMessage(error) {
+        switch (error) {
+            case (''):
+                this.failMessage = 'Incorrect username or password.';
+                break;
+            case ('Missing required parameter USERNAME'):
+                this.failMessage = 'Email required';
+                break;
+            default:
+                this.failMessage = error;
+        }
+    }
+
+    getValidationMessage(model: NgModel) {
+        if (model.errors['required'])
+            return 'This field is required';
     }
 
 }

@@ -29,7 +29,6 @@ export class AuthService {
                 },
                 error => {
                     let errorMessage = this.getErrorMessage(error);
-                    this.notificationService.showErrorNotificationBar(errorMessage, 'Cannot login user');
                     subject.error(errorMessage);
                 }
             );
