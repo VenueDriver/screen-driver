@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {NotificationService} from "../notifications/notification.service";
 import {environment} from "../../environments/environment";
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
@@ -14,7 +13,6 @@ const AUTH_API = `${environment.apiUrl}/api/auth`;
 export class AuthService {
 
     constructor(private httpClient: HttpClient,
-                private notificationService: NotificationService,
                 private router: Router) {
     }
 
@@ -23,7 +21,7 @@ export class AuthService {
         this.httpClient.post(AUTH_API, userDetails)
             .subscribe(
                 response => {
-                    localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['idToken'].jwtToken);
+                    localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
                     subject.next(response);
                     this.redirect();
                 },

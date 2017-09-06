@@ -5,7 +5,7 @@ const ClientApp = require('../user_pool/client_app/client_app');
 const PolicyGenerator = require('./policy_generator');
 
 module.exports.handler = (event, context, callback) => {
-    let idToken = event.authorizationToken;
+    let idToken = getTokenFromHeader(event);
     let decodedToken = TokenParser.decodeToken(idToken);
 
     ClientApp.loadKeySet(decodedToken.payload.iss)
@@ -20,3 +20,8 @@ module.exports.handler = (event, context, callback) => {
             callback(null, PolicyGenerator.generateDenyPolicy(decodedToken.payload.email, event.methodArn));
         });
 };
+
+function getTokenFromHeader(event) {
+    let authorizationHeader = event.authorizationToken;
+    return authorizationHeader.replace('Bearer ', '');
+}

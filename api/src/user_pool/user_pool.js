@@ -29,7 +29,8 @@ module.exports.authenticate = (userDetails) => {
     return new Promise((resolve, reject) => {
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function(result) {
-                resolve(result);
+                let token = `Bearer ${result.idToken.jwtToken}`;
+                resolve({token: token});
             },
 
             onFailure: function(error) {
