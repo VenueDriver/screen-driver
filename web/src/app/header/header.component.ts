@@ -4,7 +4,8 @@ import {AuthService} from "../auth/auth.service";
 
 @Component({
     selector: 'screen-driver-header',
-    templateUrl: 'header.component.html'
+    templateUrl: 'header.component.html',
+    styleUrls: ['header.component.sass']
 })
 export class HeaderComponent implements OnInit {
   
