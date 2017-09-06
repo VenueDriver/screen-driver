@@ -60,8 +60,4 @@ export class CreateUserComponent implements OnInit {
     performSubmit() {
         this.submit.emit(this.user);
     }
-
-    isCreateButtonDisplayed(): boolean {
-        return this.isEmailValid()
-    }
 }
