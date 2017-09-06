@@ -6,6 +6,9 @@ authenticate:
         method: post
         cors: true
 
+authorizer:
+  handler: src/auth/authorizer.handler
+
 get_venues_list:
   handler: src/venues/list.list
   events:
