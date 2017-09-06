@@ -1,7 +1,6 @@
 import {Component, OnInit, EventEmitter, Output, Input} from '@angular/core';
 import {User} from "../../auth/user";
 import {UsersService} from "../users.service";
-import {Subscription} from "rxjs";
 import {NgModel} from "@angular/forms";
 
 @Component({
@@ -35,7 +34,7 @@ export class CreateUserComponent implements OnInit {
         return validationResult;
     }
 
-    isEmailUnique(emailModel: NgModel) {
+    isEmailUnique(emailModel: NgModel): boolean {
         let emails = this.users.map(user => user.email);
         let validationResult = !emails.find(email => email === this.user.email);
         if (!validationResult) {
