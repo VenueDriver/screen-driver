@@ -216,7 +216,7 @@ get_users_list:
         authorizer: ${self:custom.authorizer}
 
 update_user:
-  handler: src/users/update.update
+  handler: src/user/update.update
   events:
     - http:
         path: api/users/{id}
