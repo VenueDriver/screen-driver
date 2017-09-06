@@ -24,7 +24,6 @@ create_venue:
         path: api/venues
         method: post
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 update_venue:
@@ -34,7 +33,6 @@ update_venue:
         path: api/venues/{id}
         method: put
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 delete_venue:
@@ -44,7 +42,6 @@ delete_venue:
         path: api/venues/{id}
         method: delete
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 delete_screen_group:
@@ -54,7 +51,6 @@ delete_screen_group:
         path: api/venues/{id}/screen_groups/{group_id}
         method: delete
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 delete_screen:
@@ -64,7 +60,6 @@ delete_screen:
         path: api/venues/{id}/screen_groups/{group_id}/screens/{screen_id}
         method: delete
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 get_content_list:
@@ -82,7 +77,6 @@ create_content:
         path: api/content
         method: post
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 update_content:
@@ -92,7 +86,6 @@ update_content:
         path: api/content/{id}
         method: put
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 delete_content:
@@ -102,7 +95,6 @@ delete_content:
         path: api/content/{id}
         method: delete
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 get_settings_list:
@@ -120,7 +112,6 @@ create_setting:
         path: api/settings
         method: post
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 update_setting:
@@ -131,7 +122,6 @@ update_setting:
         path: api/settings/{id}
         method: put
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 delete_setting:
@@ -141,7 +131,6 @@ delete_setting:
         path: api/settings/{id}
         method: delete
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 refresh_screens:
@@ -152,7 +141,6 @@ refresh_screens:
         path: api/screens/refresh
         method: post
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 get_pusher_config:
@@ -171,7 +159,6 @@ create_schedule:
         path: api/schedules
         method: post
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 get_schedules_list:
@@ -189,7 +176,6 @@ update_schedule:
         path: api/schedules/{id}
         method: put
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 delete_schedule:
@@ -199,7 +185,6 @@ delete_schedule:
         path: api/schedules/{id}
         method: delete
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 handle_schedules_stream:
@@ -219,7 +204,6 @@ create_user:
         path: api/users
         method: post
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 get_users_list:
@@ -229,7 +213,6 @@ get_users_list:
         path: api/users
         method: get
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 update_user:
@@ -239,7 +222,6 @@ update_user:
         path: api/users/{id}
         method: put
         cors: true
-        integration: lambda
         authorizer: ${self:custom.authorizer}
 
 push_schedules_update:
