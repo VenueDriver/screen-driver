@@ -1,24 +1,25 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, RoutesRecognized} from "@angular/router";
+import {Component} from '@angular/core';
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.sass']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
     title = 'app';
-    isSidebarDisplayed: boolean;
 
-    constructor(private route: Router) {
+    constructor() {
     }
 
-    ngOnInit() {
-        this.route.events.subscribe((data) => {
-            if (data instanceof RoutesRecognized) {
-                this.isSidebarDisplayed = data.state.root.firstChild.data['isSidebarDisplayed'];
-            }
-        });
+    isSidebarDisplayed(): boolean {
+        let path = this.getCurrentPageUri();
+        return _.isEqual(path, '/content');
+    }
+
+    private getCurrentPageUri() {
+        return document.location.hash.replace('#', '');
     }
 }
