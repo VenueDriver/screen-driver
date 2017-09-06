@@ -1,13 +1,16 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" (click)="toggleSideBar()">
+            <button *ngIf="isSidebarDisplayed()"
+                    type="button"
+                    class="navbar-toggle"
+                    (click)="toggleSideBar()">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand">ScreenDriver</a>
-            <ul class="nav navbar-nav" *ngIf="isAuthPage()">
+            <ul class="nav navbar-nav" *ngIf="!isAuthPage()">
                 <li [routerLinkActive]="['active']"><a routerLink="/content" routerLinkActive="active">Content</a></li>
                 <li [routerLinkActive]="['active']"><a routerLink="/users" routerLinkActive="active">Users</a></li>
             </ul>

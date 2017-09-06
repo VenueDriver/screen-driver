@@ -29,6 +29,7 @@
 1. Decrease left border of tree view for mobile devices
 1. Fix buttons position on tree view for mobile devices
 1. Get rid of deprecated `/deep/` selector
+1. Get rid of checking route to display the sidebar
 
 ##### Kiosk
 1. Create in memory local storage

@@ -1,5 +1,9 @@
 <div class="auth-container">
     <div class="auth-form">
+        <div *ngIf="failMessage"
+             class="alert alert-danger">
+            {{failMessage}}
+        </div>
         <div class="inputs">
             <div>
                 <label for="email">Email address</label>
@@ -7,7 +11,13 @@
                        id="email"
                        class="form-control"
                        type="email"
-                       placeholder="Email">
+                       placeholder="Email"
+                       #email="ngModel"
+                       required>
+                <span *ngIf="email.invalid && (email.dirty || email.touched)"
+                      class="email error-message">
+                    {{getValidationMessage(email)}}
+                </span>
             </div>
 
             <div *ngIf="!isFirstLoginMode">
@@ -16,7 +26,13 @@
                        id="password"
                        class="form-control"
                        type="password"
-                       placeholder="Password">
+                       placeholder="Password"
+                       #password="ngModel"
+                       required>
+                <span *ngIf="password.invalid && (password.dirty || password.touched)"
+                      class="password error-message">
+                    {{getValidationMessage(password)}}
+                </span>
             </div>
 
             <div *ngIf="isFirstLoginMode">
@@ -26,7 +42,13 @@
                            id="temporary-password"
                            class="form-control"
                            type="password"
-                           placeholder="Password">
+                           placeholder="Password"
+                           #temporaryPassword="ngModel"
+                           required>
+                    <span *ngIf="temporaryPassword.invalid && (temporaryPassword.dirty || temporaryPassword.touched)"
+                          class="password error-message">
+                    {{getValidationMessage(temporaryPassword)}}
+                </span>
                 </div>
                 <div>
                     <label for="new-password">New password</label>
@@ -34,7 +56,13 @@
                            id="new-password"
                            class="form-control"
                            type="password"
-                           placeholder="Password">
+                           placeholder="Password"
+                           #newPassword="ngModel"
+                           required>
+                    <span *ngIf="newPassword.invalid && (newPassword.dirty || newPassword.touched)"
+                          class="password error-message">
+                    {{getValidationMessage(newPassword)}}
+                </span>
                 </div>
             </div>
 
@@ -50,7 +78,8 @@
         </div>
         <button type="button"
                 class="btn btn-success btn-block sign-in-button"
-                (click)="signIn()">
+                (click)="signIn()"
+                [disabled]="isRequestPerforming">
             Sign in
         </button>
     </div>
