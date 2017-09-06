@@ -14,13 +14,13 @@ export class CreateUserComponent implements OnInit {
     @Output() cancel = new EventEmitter();
     @Output() submit = new EventEmitter();
     user: User = new User();
-    users: Array<User> = [];
+    emails: Array<string> = [];
 
     constructor(private usersService: UsersService) {
     }
 
     ngOnInit() {
-        this.users = this.usersService.getUsers();
+        this.emails = _.map(this.usersService.getUsers(), user => user.email);
     }
 
     validateEmail(emailModel: NgModel) {
@@ -37,8 +37,7 @@ export class CreateUserComponent implements OnInit {
     }
 
     isEmailUnique(emailModel: NgModel): boolean {
-        let emails = this.users.map(user => user.email);
-        let validationResult = !_.find(emails, email => email === this.user.email);
+        let validationResult = !_.find(this.emails, email => email === this.user.email);
         if (!validationResult) {
             emailModel.control.setErrors({notUnique: true});
         }
