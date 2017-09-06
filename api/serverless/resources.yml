@@ -93,6 +93,10 @@ CognitoUserPool:
         RequireNumbers: true
         RequireSymbols: false
         RequireUppercase: false
+    Schema:
+      - AttributeDataType: Boolean
+        Mutable: true
+        Name: admin
 
 CognitoAppClient:
   Type: AWS::Cognito::UserPoolClient
