@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
-
-import * as _ from 'lodash';
+import {AuthService} from "./auth/auth.service";
 
 @Component({
     selector: 'app-root',
@@ -11,15 +10,11 @@ export class AppComponent {
 
     title = 'app';
 
-    constructor() {
+    constructor(private authService: AuthService) {
     }
 
     isSidebarDisplayed(): boolean {
-        let path = this.getCurrentPageUri();
-        return _.isEqual(path, '/content');
+        return this.authService.isCurrentPath('/content');
     }
 
-    private getCurrentPageUri() {
-        return document.location.hash.replace('#', '');
-    }
 }
