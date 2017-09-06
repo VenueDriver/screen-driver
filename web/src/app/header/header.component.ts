@@ -22,5 +22,9 @@ export class HeaderComponent implements OnInit {
     isAuthPage(): boolean {
         return this.authService.isAuthPage();
     }
+
+    isSidebarDisplayed() {
+        return this.authService.isCurrentPath('/content');
+    }
     
 }

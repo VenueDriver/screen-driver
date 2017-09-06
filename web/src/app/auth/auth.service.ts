@@ -59,8 +59,7 @@ export class AuthService {
     }
 
     isAuthPage(): boolean {
-        let path = this.getCurrentPageUri();
-        return !_.isEqual(path, '/auth');
+        return this.isCurrentPath('/auth');
     }
 
     private getCurrentPageUri() {
@@ -70,6 +69,11 @@ export class AuthService {
     redirect() {
         let callbackUrl = localStorage.getItem(AuthConsts.ROLLBACK_URL_PARAM);
         this.router.navigateByUrl(callbackUrl);
+    }
+
+    isCurrentPath(path: string): boolean {
+        let currentPath = this.getCurrentPageUri();
+        return _.isEqual(currentPath, path);
     }
 
 }
