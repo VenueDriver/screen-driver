@@ -1,7 +1,9 @@
-import {Component, OnInit, EventEmitter, Output, Input} from '@angular/core';
+import {Component, OnInit, EventEmitter, Output} from '@angular/core';
 import {User} from "../../auth/user";
 import {UsersService} from "../users.service";
 import {NgModel} from "@angular/forms";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'create-user',
@@ -36,7 +38,7 @@ export class CreateUserComponent implements OnInit {
 
     isEmailUnique(emailModel: NgModel): boolean {
         let emails = this.users.map(user => user.email);
-        let validationResult = !emails.find(email => email === this.user.email);
+        let validationResult = !_.find(emails, email => email === this.user.email);
         if (!validationResult) {
             emailModel.control.setErrors({notUnique: true});
         }
