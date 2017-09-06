@@ -22,9 +22,9 @@ export class SettingStateHolderService {
     reloadSettings(currentSettingId?: string) {
         this.settingsService.loadSettings()
             .subscribe(response => {
-                let settings = response.json().settings;
+                let settings = response.settings;
                 this.updateSettings(settings);
-                this.priorityTypes = response.json().priorityTypes;
+                this.priorityTypes = response.priorityTypes;
                 this.updateCurrentSettingIfSelected(settings, currentSettingId);
                 this.checkForWarnings(settings)
             });

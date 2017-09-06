@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import {Schedule} from "./entities/schedule";
 import {EventTime} from "./entities/event-time";
-import {Http} from "@angular/http";
 import {environment} from "../../environments/environment";
 import {Setting} from "../settings/entities/setting";
 import {SettingsPriorityHelper} from "../settings/settings-priority.helper";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {getPropertyName} from '../enums/periodicity';
 import {NotificationService} from "../notifications/notification.service";
+import {HttpClient} from "@angular/common/http";
 
 const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;
 
@@ -15,21 +15,20 @@ const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;
 export class SchedulesService {
 
     scheduleListUpdated: Subject<any> = new BehaviorSubject<any>({});
-    schedules: BehaviorSubject<Schedule[]> = new BehaviorSubject<Schedule[]>([]);
+    schedules: BehaviorSubject<Array<Schedule>> = new BehaviorSubject<Array<Schedule>>([]);
 
     constructor(
-        private http: Http,
+        private httpClient: HttpClient,
         private settingPriorityHelper: SettingsPriorityHelper,
         private notificationService: NotificationService,
     ) {
     }
 
     loadSchedules(): Observable<Array<Schedule>> {
-        return this.http.get(SCHEDULES_API)
-            .map(response => {
-                let schedules = response.json();
-                this.schedules.next(schedules);
-                return schedules;
+        return this.httpClient.get(SCHEDULES_API)
+            .map((response: Array<Schedule>) => {
+                this.schedules.next(response);
+                return response;
             });
     }
 
@@ -42,7 +41,7 @@ export class SchedulesService {
     }
 
     save(schedule: Schedule, setting: Setting) {
-        this.http.post(SCHEDULES_API, schedule).subscribe(
+        this.httpClient.post(SCHEDULES_API, schedule).subscribe(
             response => this.handleSaveResponse(response, setting),
             error => {
                 let errorMessage = this.getCreateErrorMessage(error);
@@ -64,7 +63,7 @@ export class SchedulesService {
             eventTime.setCronsForSchedule(schedule);
             schedule.periodicity = getPropertyName(eventTime.periodicity);
         }
-        this.http.put(`${SCHEDULES_API}/${schedule.id}`, schedule).subscribe(
+        this.httpClient.put(`${SCHEDULES_API}/${schedule.id}`, schedule).subscribe(
             response => this.scheduleListUpdated.next(response),
             error => {
                 let errorMessage = this.getUpdateErrorMessage(error);
@@ -77,7 +76,7 @@ export class SchedulesService {
     }
 
     removeSchedule(schedule: Schedule) {
-        this.http.delete(`${SCHEDULES_API}/${schedule.id}`).subscribe(
+        this.httpClient.delete(`${SCHEDULES_API}/${schedule.id}`).subscribe(
             response => this.scheduleListUpdated.next(response),
             error => this.notificationService.showErrorNotificationBar('Unable to perform the remove schedule operation')
         );

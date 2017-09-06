@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 import {VenuesService} from "../venues.service";
 import {Observable} from "rxjs";
-import {Response} from "@angular/http";
 import {Content} from "../../content/content";
 import {ContentService} from "../../content/content.service";
 import {Venue} from "../entities/venue";
@@ -34,11 +33,11 @@ export class EditTreeViewNodeFormService {
         return this.venuesService.getValidationMessage(nodeLevelName);
     }
 
-    updateVenue(venueToUpdate: any): Observable<Response> {
+    updateVenue(venueToUpdate: any): Observable<Venue> {
         return this.venuesService.updateVenue(venueToUpdate);
     }
 
-    saveVenue(venue: any): Observable<Response> {
+    saveVenue(venue: any): Observable<Venue> {
         return this.venuesService.saveVenue(venue);
     }
 
