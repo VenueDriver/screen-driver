@@ -7,15 +7,15 @@ provider:
   runtime: nodejs6.10
   environment:
     STAGE: ${opt:stage}
-    CONTENT_TABLE: "${self:service}-content-${opt:stage}"
-    VENUES_TABLE: "${self:service}-venues-${opt:stage}"
-    SETTINGS_TABLE: "${self:service}-settings-${opt:stage}"
-    SCHEDULES_TABLE: "${self:service}-schedules-${opt:stage}"
-    USERS_TABLE: "${self:service}-users-${opt:stage}"
-    USER_POOL: "${self:service}-userpool-${opt:stage}"
+    CONTENT_TABLE: ${self:service}-content-${opt:stage}
+    VENUES_TABLE: ${self:service}-venues-${opt:stage}
+    SETTINGS_TABLE: ${self:service}-settings-${opt:stage}
+    SCHEDULES_TABLE: ${self:service}-schedules-${opt:stage}
+    USERS_TABLE: ${self:service}-users-${opt:stage}
+    USER_POOL: ${self:service}-userpool-${opt:stage}
     USER_POOL_ID:
       Ref: CognitoUserPool
-    USER_POOL_CLIENT: "${self:service}-appclient-${opt:stage}"
+    USER_POOL_CLIENT: ${self:service}-appclient-${opt:stage}
     USER_POOL_CLIENT_ID:
       Ref: CognitoAppClient
   iamRoleStatements: ${self:custom.roles}
@@ -27,6 +27,7 @@ custom:
   functions: ${file(./serverless/functions.yml)}
   resources: ${file(./serverless/resources.yml)}
   roles: ${file(./serverless/roles.yml)}
+  authorizer: ${file(./serverless/authorizer.yml)}
   dynamodb:
     start:
       port: 8000

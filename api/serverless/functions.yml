@@ -1,10 +1,13 @@
 authenticate:
-  handler: src/auth/auth.handler
+  handler: src/auth/authenticator.handler
   events:
     - http:
         path: api/auth
         method: post
         cors: true
+
+authorizer:
+  handler: src/auth/authorizer.handler
 
 get_venues_list:
   handler: src/venues/list.list
@@ -21,6 +24,7 @@ create_venue:
         path: api/venues
         method: post
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 update_venue:
   handler: src/venues/update.update
@@ -29,6 +33,7 @@ update_venue:
         path: api/venues/{id}
         method: put
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 delete_venue:
   handler: src/venues/delete.delete
@@ -37,6 +42,7 @@ delete_venue:
         path: api/venues/{id}
         method: delete
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 delete_screen_group:
   handler: src/venues/delete_screen_group.delete
@@ -45,6 +51,7 @@ delete_screen_group:
         path: api/venues/{id}/screen_groups/{group_id}
         method: delete
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 delete_screen:
   handler: src/venues/delete_screen.delete
@@ -53,6 +60,7 @@ delete_screen:
         path: api/venues/{id}/screen_groups/{group_id}/screens/{screen_id}
         method: delete
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 get_content_list:
   handler: src/content/list.list
@@ -69,6 +77,7 @@ create_content:
         path: api/content
         method: post
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 update_content:
   handler: src/content/update.update
@@ -77,6 +86,7 @@ update_content:
         path: api/content/{id}
         method: put
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 delete_content:
   handler: src/content/delete.delete
@@ -85,6 +95,7 @@ delete_content:
         path: api/content/{id}
         method: delete
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 get_settings_list:
   handler: src/setting/list.list
@@ -101,6 +112,7 @@ create_setting:
         path: api/settings
         method: post
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 update_setting:
   handler: src/setting/update.update
@@ -110,6 +122,7 @@ update_setting:
         path: api/settings/{id}
         method: put
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 delete_setting:
   handler: src/setting/delete.delete
@@ -118,6 +131,7 @@ delete_setting:
         path: api/settings/{id}
         method: delete
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 refresh_screens:
   handler: src/screen_notifications/refresh_screens.refresh
@@ -127,6 +141,7 @@ refresh_screens:
         path: api/screens/refresh
         method: post
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 get_pusher_config:
   handler: src/notifier/notification_config.getConfig
@@ -144,6 +159,7 @@ create_schedule:
         path: api/schedules
         method: post
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 get_schedules_list:
   handler: src/schedule/list.list
@@ -160,6 +176,7 @@ update_schedule:
         path: api/schedules/{id}
         method: put
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 delete_schedule:
   handler: src/schedule/delete.delete
@@ -168,6 +185,7 @@ delete_schedule:
         path: api/schedules/{id}
         method: delete
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 handle_schedules_stream:
   handler: src/schedule/stream/stream_handler.handleEvent
@@ -186,6 +204,7 @@ create_user:
         path: api/users
         method: post
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 get_users_list:
   handler: src/user/list.list
@@ -194,14 +213,16 @@ get_users_list:
         path: api/users
         method: get
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 update_user:
-  handler: src/users/update.update
+  handler: src/user/update.update
   events:
     - http:
         path: api/users/{id}
         method: put
         cors: true
+        authorizer: ${self:custom.authorizer}
 
 push_schedules_update:
   handler: src/screen_notifications/reload_schedules.scheduleUpdateMessage
