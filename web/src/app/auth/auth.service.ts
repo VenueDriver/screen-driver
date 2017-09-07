@@ -93,7 +93,7 @@ export class AuthService {
         let decodedToken = this.jwtHelper.decodeToken(token);
         let user = new User();
         user.email = decodedToken.email;
-        user.isAdmin = decodedToken['custom:admin'];
+        user.isAdmin = _.isEqual(decodedToken['custom:admin'], 'true');
         return user;
     }
 
