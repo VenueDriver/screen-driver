@@ -1,3 +1,4 @@
+export const USER_INFO = 'user_info';
 export const ID_TOKEN_PARAM = 'id_token';
 export const ROLLBACK_URL_PARAM = 'rollbackUrl';
 
