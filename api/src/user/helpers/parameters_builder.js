@@ -16,7 +16,6 @@ module.exports.buildUpdateRequestParameters = (user) => {
             ':new_rev': increaseRevision(user),
         },
         UpdateExpression: `SET 
-                password = :password, 
                 isAdmin = :isAdmin, 
                 #rev = :new_rev
             `,
