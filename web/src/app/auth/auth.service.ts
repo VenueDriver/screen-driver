@@ -7,7 +7,7 @@ import * as AuthConsts from "./auth-consts";
 import * as _ from 'lodash';
 import {JwtHelper} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
-import {User} from "./user";
+import {User} from "../user/user";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
 
