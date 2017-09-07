@@ -91,6 +91,10 @@ export class AuthService {
     private parseUserData(token: string): User {
         token = token.replace('Bearer ', '');
         let decodedToken = this.jwtHelper.decodeToken(token);
+        return this.initUserFromToken(decodedToken);
+    }
+
+    private initUserFromToken(decodedToken: any): User {
         let user = new User();
         user.email = decodedToken.email;
         user.isAdmin = _.isEqual(decodedToken['custom:admin'], 'true');
