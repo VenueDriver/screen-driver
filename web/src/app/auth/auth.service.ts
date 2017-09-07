@@ -7,7 +7,7 @@ import * as AuthConsts from "./auth-consts";
 import * as _ from 'lodash';
 import {JwtHelper} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
-import {User} from "./user";
+import {User} from "../user/user";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
 
@@ -91,9 +91,13 @@ export class AuthService {
     private parseUserData(token: string): User {
         token = token.replace('Bearer ', '');
         let decodedToken = this.jwtHelper.decodeToken(token);
+        return this.initUserFromToken(decodedToken);
+    }
+
+    private initUserFromToken(decodedToken: any): User {
         let user = new User();
         user.email = decodedToken.email;
-        user.isAdmin = decodedToken['custom:admin'];
+        user.isAdmin = _.isEqual(decodedToken['custom:admin'], 'true');
         return user;
     }
 
