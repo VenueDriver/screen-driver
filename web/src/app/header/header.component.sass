@@ -1,11 +1,21 @@
 @import "../../styles/variables"
-.container-fluid
-  display: flex !important
-  justify-content: center !important
 
-  .navbar-header
-    width: auto
+.router-links
+  display: inline-block
 
-@media screen and (max-width: $sidebar-visibility-width)
-  .navbar-toggle
-    float: none
+  .link
+    display: inline-block
+    padding: 15px
+
+    @media screen and (max-width: 350px)
+      padding: 15px 5px
+
+    &.active
+      background-color: #e7e7e7
+
+      a
+        color: #555
+
+    a
+      text-decoration: none
+      color: #777
