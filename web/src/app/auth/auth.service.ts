@@ -25,10 +25,8 @@ export class AuthService {
         this.httpClient.post(AUTH_API, userDetails)
             .subscribe(
                 response => {
-                    let user = this.parseUserData(response['token']);
                     localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
-                    localStorage.setItem(AuthConsts.USER_INFO, JSON.stringify(user));
-                    this.currentUser.next(user);
+                    this.initCurrentUser(response['token']);
                     subject.next(response);
                     this.redirect();
                 },
@@ -42,6 +40,13 @@ export class AuthService {
 
     private getErrorMessage(error): string {
         return error.error ? error.error.message.message : error.message;
+    }
+
+    initCurrentUser(token: string) {
+        let user = this.parseUserData(token);
+        localStorage.setItem(AuthConsts.USER_EMAIL, user.email);
+        localStorage.setItem(AuthConsts.USER_IS_ADMIN, user.isAdmin.toString());
+        this.currentUser.next(user);
     }
 
     authenticated(): boolean {
@@ -69,7 +74,7 @@ export class AuthService {
         return !AuthConsts.EXCLUSIVE_URLS.includes(path.substr(1));
     }
 
-    private getCurrentPageUri() {
+    getCurrentPageUri() {
         return document.location.hash.replace('#', '');
     }
 
@@ -93,8 +98,12 @@ export class AuthService {
     }
 
     getUserInfo(): User {
-        let user = localStorage.getItem(AuthConsts.USER_INFO);
-        return JSON.parse(user) as User;
+        let email = localStorage.getItem(AuthConsts.USER_EMAIL);
+        let isAdmin = localStorage.getItem(AuthConsts.USER_IS_ADMIN);
+        let user = new User();
+        user.email = email;
+        user.isAdmin = JSON.parse(isAdmin);
+        return user;
     }
 
 }
