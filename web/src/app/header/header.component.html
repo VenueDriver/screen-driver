@@ -10,7 +10,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand">ScreenDriver</a>
-            <div class="router-links" *ngIf="!isAuthPage()">
+            <div class="router-links" *ngIf="isUserAdmin()">
                 <div class="link" [routerLinkActive]="['active']"><a routerLink="/content" routerLinkActive="active">Content</a></div>
                 <div class="link" [routerLinkActive]="['active']"><a routerLink="/users" routerLinkActive="active">Users</a></div>
             </div>
