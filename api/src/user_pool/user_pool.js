@@ -45,6 +45,21 @@ module.exports.authenticate = (userDetails) => {
     });
 };
 
+module.exports.updateUser = (user) => {
+    let updateParams = UserPoolHelper.buildUpdateUserParameters(user);
+
+    let cognito = new AWS.CognitoIdentityServiceProvider();
+    return new Promise((resolve, reject) => {
+        cognito.adminUpdateUserAttributes(updateParams, (err, data) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        });
+    });
+};
+
 function getAuthenticationDetails(userDetails) {
     let authenticationData = {
         Username : userDetails.email,
