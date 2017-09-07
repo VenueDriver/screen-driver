@@ -9,6 +9,10 @@ module.exports.buildCreateUserParameters = (user) => {
             {
                 Name: 'email',
                 Value: user.email
+            },
+            {
+                Name: 'custom:admin',
+                Value: user.isAdmin.toString()
             }
         ]
     };

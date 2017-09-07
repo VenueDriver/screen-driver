@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {HeaderService} from "./header.service";
 import {AuthService} from "../auth/auth.service";
+import {User} from "../auth/user";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'screen-driver-header',
@@ -8,24 +11,33 @@ import {AuthService} from "../auth/auth.service";
     styleUrls: ['header.component.sass']
 })
 export class HeaderComponent implements OnInit {
-  
+    currentUser: User;
+
     constructor(
         private headerService: HeaderService,
         private authService: AuthService
     ) { }
 
-    ngOnInit() { }
+    ngOnInit() {
+        this.currentUser = this.authService.currentUser.getValue();
+        this.authService.currentUser.subscribe(user => {
+            this.currentUser = user;
+        })
+    }
 
     toggleSideBar() {
         this.headerService.pushSidebarToggleEvent();
     }
 
-    isAuthPage(): boolean {
-        return this.authService.isAuthPage();
+    isUserAdmin(): boolean {
+        return this.authService.isAdmin();
     }
 
     isSidebarDisplayed() {
         return this.authService.isCurrentPath('/content');
     }
-    
+
+    getUserEmail() {
+        return _.isEmpty(this.currentUser) ? '' : this.currentUser.email;
+    }
 }

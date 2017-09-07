@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
 
     canActivate() {
         if (this.authService.authenticated()) {
-            return true;
+            return this.hasAccess();
         }
 
         this.authService.saveCurrentUrlAsRollback();
@@ -21,5 +21,11 @@ export class AuthGuard implements CanActivate {
         return false;
     }
 
-
+    hasAccess(): boolean {
+        if (!this.authService.isAdmin() && this.authService.getCurrentPageUri() === AuthConsts.USERS_URI){
+            this.router.navigateByUrl('');
+            return false;
+        }
+        return true;
+    }
 }
