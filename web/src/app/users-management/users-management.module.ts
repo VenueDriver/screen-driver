@@ -6,12 +6,14 @@ import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {UsersService} from "./users.service";
 import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
+import {AutofocusModule} from "../directives/autofocus/autofocus.module";
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
-        ToggleButtonModule
+        ToggleButtonModule,
+        AutofocusModule
     ],
     declarations: [
         UsersManagementComponent,
