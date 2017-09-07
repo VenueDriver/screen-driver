@@ -2,10 +2,8 @@
 
 const _ = require('lodash');
 
-const ADMIN_ONLY_ACCESS = [
-    'GET/api/users',
-    'PUT/api/users',
-    'POST/api/users',
+const URIS_REQUIRED_ADMIN_ACCESS = [
+    '/api/users'
 ];
 
 module.exports.hasAccessToResource = (decodedToken, resourceArn) => {
@@ -16,5 +14,5 @@ module.exports.hasAccessToResource = (decodedToken, resourceArn) => {
 };
 
 function requireAdminRights(methodArn) {
-    return _.find(ADMIN_ONLY_ACCESS, uri => methodArn.includes(uri));
+    return _.find(URIS_REQUIRED_ADMIN_ACCESS, uri => methodArn.includes(uri));
 }
