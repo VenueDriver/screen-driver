@@ -18,6 +18,19 @@ module.exports.buildCreateUserParameters = (user) => {
     };
 };
 
+module.exports.buildUpdateUserParameters = (user) => {
+    return {
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: user.email,
+        UserAttributes: [
+            {
+                Name: 'custom:admin',
+                Value: user.isAdmin.toString()
+            }
+        ]
+    };
+};
+
 module.exports.buildUserPoolData = () => {
     return {
         UserPoolId: process.env.USER_POOL_ID,
