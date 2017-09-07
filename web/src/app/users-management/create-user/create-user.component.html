@@ -8,7 +8,7 @@
                #email="ngModel"
                type="email"
                placeholder="Email"
-               autofocus>
+               input-autofocus>
     </div>
     <label *ngIf="email.invalid"
            class="email error-message">
@@ -23,7 +23,7 @@
     <div class="control-buttons">
         <button type="button"
                 class="btn btn-link"
-                (click)="performCancel()">
+                (click)="performCancel($event)">
             Cancel
         </button>
         <button type="button"
