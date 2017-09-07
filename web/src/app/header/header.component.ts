@@ -40,4 +40,8 @@ export class HeaderComponent implements OnInit {
     getUserEmail() {
         return _.isEmpty(this.currentUser) ? '' : this.currentUser.email;
     }
+
+    signOut() {
+        this.authService.signOut();
+    }
 }

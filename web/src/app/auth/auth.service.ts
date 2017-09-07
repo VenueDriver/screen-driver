@@ -10,6 +10,7 @@ import {HttpClient} from "@angular/common/http";
 import {User} from "./user";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
+const SIGN_OUT_API = `${environment.apiUrl}/api/sign_out`;
 
 @Injectable()
 export class AuthService {
@@ -104,6 +105,20 @@ export class AuthService {
         user.email = email;
         user.isAdmin = JSON.parse(isAdmin);
         return email || isAdmin ? user : null;
+    }
+
+    signOut() {
+        localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
+        localStorage.removeItem(AuthConsts.USER_EMAIL);
+        localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
+        let email = this.currentUser.getValue().email;
+
+        this.sendSignOutRequest(email);
+        this.router.navigateByUrl(AuthConsts.AUTH_URI);
+    }
+
+    private sendSignOutRequest(email: string) {
+        this.httpClient.post(SIGN_OUT_API, {email: email}).subscribe()
     }
 
 }
