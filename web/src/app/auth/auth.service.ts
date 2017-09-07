@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {Subject} from "rxjs";
+import {Subject, BehaviorSubject} from "rxjs";
 import {Router} from "@angular/router";
 
 import * as AuthConsts from "./auth-consts";
@@ -14,6 +14,7 @@ const AUTH_API = `${environment.apiUrl}/api/auth`;
 @Injectable()
 export class AuthService {
     private jwtHelper = new JwtHelper();
+    currentUser: BehaviorSubject<User> = new BehaviorSubject(null);
 
     constructor(private httpClient: HttpClient,
                 private router: Router) {
@@ -27,6 +28,7 @@ export class AuthService {
                     let user = this.parseUserData(response['token']);
                     localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
                     localStorage.setItem(AuthConsts.USER_INFO, JSON.stringify(user));
+                    this.currentUser.next(user);
                     subject.next(response);
                     this.redirect();
                 },
@@ -43,7 +45,14 @@ export class AuthService {
     }
 
     authenticated(): boolean {
-        return !!localStorage.getItem(AuthConsts.ID_TOKEN_PARAM);
+        if (_.isEmpty(this.currentUser.getValue())){
+            this.currentUser.next(this.getUserInfo());
+        }
+        return !!this.currentUser.getValue();
+    }
+
+    isAdmin(): boolean {
+        return this.authenticated() && this.currentUser.getValue().isAdmin;
     }
 
     saveCurrentUrlAsRollback() {
@@ -58,10 +67,6 @@ export class AuthService {
     isNotExclusivePage(): boolean {
         let path = this.getCurrentPageUri();
         return !AuthConsts.EXCLUSIVE_URLS.includes(path.substr(1));
-    }
-
-    isAuthPage(): boolean {
-        return this.isCurrentPath('/auth');
     }
 
     private getCurrentPageUri() {
