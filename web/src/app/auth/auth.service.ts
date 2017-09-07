@@ -103,7 +103,7 @@ export class AuthService {
         let user = new User();
         user.email = email;
         user.isAdmin = JSON.parse(isAdmin);
-        return user;
+        return email || isAdmin ? user : null;
     }
 
 }
