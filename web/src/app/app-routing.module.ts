@@ -4,6 +4,7 @@ import {UsersManagementComponent} from "./users-management/users-management.comp
 import {ContentManagementComponent} from "./content-management/content-management.component";
 import {AuthComponent} from "./auth/auth-page/auth.component";
 import {CanActivateUser} from "./auth/auth-guards/can-acticate-user";
+import {CanActivateAdmin} from "./auth/auth-guards/can-acticate-admin";
 
 const appRoutes: Routes = [
     {
@@ -21,7 +22,7 @@ const appRoutes: Routes = [
         path: 'users',
         component: UsersManagementComponent,
         data: {isSidebarDisplayed: false},
-        canActivate: [CanActivateUser]
+        canActivate: [CanActivateAdmin]
     },
     {
         path: 'auth',
@@ -40,7 +41,10 @@ const appRoutes: Routes = [
     exports: [
         RouterModule
     ],
-    providers: [CanActivateUser]
+    providers: [
+        CanActivateUser,
+        CanActivateAdmin
+    ]
 })
 export class AppRoutingModule {
 }
