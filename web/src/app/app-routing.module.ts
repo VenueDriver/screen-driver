@@ -3,7 +3,7 @@ import {RouterModule, Routes} from "@angular/router";
 import {UsersManagementComponent} from "./users-management/users-management.component";
 import {ContentManagementComponent} from "./content-management/content-management.component";
 import {AuthComponent} from "./auth/auth-page/auth.component";
-import {AuthGuard} from "./auth/auth.guard";
+import {CanActivateUser} from "./auth/auth-guards/can-acticate-user";
 
 const appRoutes: Routes = [
     {
@@ -15,13 +15,13 @@ const appRoutes: Routes = [
         path: 'content',
         component: ContentManagementComponent,
         data: {isSidebarDisplayed: true},
-        canActivate: [AuthGuard]
+        canActivate: [CanActivateUser]
     },
     {
         path: 'users',
         component: UsersManagementComponent,
         data: {isSidebarDisplayed: false},
-        canActivate: [AuthGuard]
+        canActivate: [CanActivateUser]
     },
     {
         path: 'auth',
@@ -40,7 +40,7 @@ const appRoutes: Routes = [
     exports: [
         RouterModule
     ],
-    providers: [AuthGuard]
+    providers: [CanActivateUser]
 })
 export class AppRoutingModule {
 }
