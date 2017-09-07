@@ -29,8 +29,7 @@ module.exports.authenticate = (userDetails) => {
     return new Promise((resolve, reject) => {
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function(result) {
-                let token = `Bearer ${result.idToken.jwtToken}`;
-                resolve({token: token});
+                resolve(buildResponseWithTokens(result));
             },
 
             onFailure: function(error) {
@@ -65,4 +64,13 @@ function getCognitoUser(userDetails) {
         Pool: userPool
     };
     return new AWSCognito.CognitoUser(userData);
+}
+
+function buildResponseWithTokens(tokenSet) {
+    let token = `Bearer ${tokenSet.idToken.jwtToken}`;
+    let refreshToken = tokenSet.refreshToken.token;
+    return {
+        token: token,
+        refreshToken: refreshToken
+    };
 }
