@@ -49,6 +49,21 @@ module.exports.signOut = (userDetails) => {
     cognitoUser.signOut();
 };
 
+module.exports.refreshToken = (refreshToken) => {
+    let params = UserPoolHelper.buildRefreshTokenParameters(refreshToken);
+    let cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+    return new Promise((resolve, reject) => {
+        cognitoIdentityServiceProvider.adminInitiateAuth(params, (error, data) => {
+            if (error) {
+                reject(error);
+            } else {
+                let token = `Bearer ${data.AuthenticationResult.IdToken}`;
+                resolve({token: token});
+            }
+        });
+    });
+};
+
 function getAuthenticationDetails(userDetails) {
     let authenticationData = {
         Username : userDetails.email,
