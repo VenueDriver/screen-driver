@@ -11,6 +11,7 @@ import {User} from "../user/user";
 import {AuthTokenService} from "./auth-token.service";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
+const TOKEN_REFRESH_API = `${environment.apiUrl}/api/token/refresh`;
 const SIGN_OUT_API = `${environment.apiUrl}/api/sign_out`;
 
 @Injectable()
@@ -157,7 +158,7 @@ export class AuthService {
 
     refreshToken() {
         let refreshToken = localStorage.getItem(AuthConsts.REFRESH_TOKEN_PARAM);
-        this.httpClient.post('api/token/refresh', {refreshToken: refreshToken}).subscribe((response) => {
+        this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe((response) => {
             localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
             this.tokenService.tokenReceived.next(response['token']);
         });
