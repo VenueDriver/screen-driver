@@ -1,7 +1,8 @@
 <div class="toggle-container" style="display: flex">
     <span>{{title}}</span>
 
-    <div class="checkbox-slider--b-flat">
+    <div class="checkbox-slider--b-flat"
+         [class.disabled]="disabled">
         <label>
             <input type="checkbox"
                    [checked]="checked"
