@@ -3,7 +3,8 @@ export class User {
 
     id: string = '';
     email: string = '';
-    password: string = '';
+    password?: string = '';
+    newPassword?: string = '';
     isAdmin: boolean = false;
 
     constructor(user?: User) {
@@ -11,6 +12,7 @@ export class User {
             this.id = user.id;
             this.email = user.email;
             this.password = user.password;
+            this.newPassword = user.newPassword;
             this.isAdmin = user.isAdmin;
         }
     }

@@ -5,9 +5,17 @@
             <div class="profile-management">
                 <user-profile [user]="user">
                 </user-profile>
-                <button type="button" class="btn btn-primary btn-xs btn-block">Change password</button>
 
+
+                <change-password *ngIf="isChangePasswordMode">
+                </change-password>
             </div>
+            <button *ngIf="!isChangePasswordMode"
+                    type="button"
+                    class="btn btn-primary btn-xs btn-block"
+                    (click)="setChangePasswordMode(true)">
+                Change password
+            </button>
 
         </div>
         <div class="col-md-4 col-sm-12 col-xs-1"></div>
