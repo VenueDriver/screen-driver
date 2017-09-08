@@ -45,6 +45,11 @@ module.exports.authenticate = (userDetails) => {
     });
 };
 
+module.exports.signOut = (userDetails) => {
+    let cognitoUser = getCognitoUser(userDetails);
+    cognitoUser.signOut();
+};
+
 function getAuthenticationDetails(userDetails) {
     let authenticationData = {
         Username : userDetails.email,

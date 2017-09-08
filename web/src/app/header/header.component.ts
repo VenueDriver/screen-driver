@@ -33,11 +33,19 @@ export class HeaderComponent implements OnInit {
         return this.authService.isAdmin();
     }
 
+    isAuthPage(): boolean {
+        return !!this.authService.isAuthPage();
+    }
+
     isSidebarDisplayed() {
         return this.authService.isCurrentPath('/content');
     }
 
     getUserEmail() {
         return _.isEmpty(this.currentUser) ? '' : this.currentUser.email;
+    }
+
+    signOut() {
+        this.authService.signOut();
     }
 }
