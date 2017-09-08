@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {Subject, BehaviorSubject} from "rxjs";
+import {Subject, BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 
 import * as AuthConsts from "./auth-consts";
 import * as _ from 'lodash';
-import {JwtHelper} from 'angular2-jwt';
+import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
 import {User} from "../user/user";
 
@@ -19,6 +19,17 @@ export class AuthService {
 
     constructor(private httpClient: HttpClient,
                 private router: Router) {
+        this.checkSessionExpiration();
+    }
+
+    checkSessionExpiration() {
+        return Observable
+            .interval(3 * 1000)
+            .subscribe(() => {
+                if (!this.authenticated() && !this.isAuthPage() && tokenNotExpired()) {
+                    this.signOut();
+                }
+            });
     }
 
     signIn(userDetails) {
@@ -26,7 +37,7 @@ export class AuthService {
         this.httpClient.post(AUTH_API, userDetails)
             .subscribe(
                 response => {
-                    localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
+                    this.saveTokens(response)
                     this.initCurrentUser(response['token']);
                     subject.next(response);
                     this.redirect();
@@ -41,6 +52,11 @@ export class AuthService {
 
     private getErrorMessage(error): string {
         return error.error ? error.error.message.message : error.message;
+    }
+
+    saveTokens(response: Object) {
+        localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
+        localStorage.setItem(AuthConsts.REFRESH_TOKEN_PARAM, response['refreshToken']);
     }
 
     initCurrentUser(token: string) {
@@ -133,7 +149,10 @@ export class AuthService {
     }
 
     clearLocalStorage() {
-        localStorage.clear();
+        localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
+        localStorage.removeItem(AuthConsts.REFRESH_TOKEN_PARAM);
+        localStorage.removeItem(AuthConsts.USER_EMAIL);
+        localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
     }
 
 }

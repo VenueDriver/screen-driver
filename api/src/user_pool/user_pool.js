@@ -30,7 +30,11 @@ module.exports.authenticate = (userDetails) => {
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function(result) {
                 let token = `Bearer ${result.idToken.jwtToken}`;
-                resolve({token: token});
+                let refreshToken = `Bearer ${result.refreshToken.token}`;
+                resolve({
+                    token: token,
+                    refreshToken: refreshToken
+                });
             },
 
             onFailure: function(error) {
