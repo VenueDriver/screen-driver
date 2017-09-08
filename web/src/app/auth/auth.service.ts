@@ -62,7 +62,7 @@ export class AuthService {
     }
 
     isAdmin(): boolean {
-        return this.authenticated() && this.currentUser.getValue().isAdmin;
+        return !_.isEmpty(this.currentUser.getValue()) && this.currentUser.getValue().isAdmin;
     }
 
     isAuthPage(): boolean {
@@ -89,7 +89,7 @@ export class AuthService {
 
     redirect() {
         let callbackUrl = localStorage.getItem(AuthConsts.ROLLBACK_URL_PARAM);
-        this.router.navigateByUrl(callbackUrl);
+        this.router.navigateByUrl(_.isEmpty(callbackUrl) ? '' : callbackUrl);
     }
 
     isCurrentPath(path: string): boolean {
@@ -124,6 +124,7 @@ export class AuthService {
         let email = this.currentUser.getValue().email;
 
         this.sendSignOutRequest(email);
+        this.currentUser = new BehaviorSubject(null);
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
     }
 
@@ -132,10 +133,7 @@ export class AuthService {
     }
 
     clearLocalStorage() {
-        localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
-        localStorage.removeItem(AuthConsts.USER_EMAIL);
-        localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
-        localStorage.removeItem(AuthConsts.ROLLBACK_URL_PARAM);
+        localStorage.clear();
     }
 
 }
