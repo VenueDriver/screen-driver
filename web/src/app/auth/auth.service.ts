@@ -7,7 +7,7 @@ import * as AuthConsts from "./auth-consts";
 import * as _ from 'lodash';
 import {JwtHelper} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
-import {User} from "./user";
+import {User} from "../user/user";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
 const SIGN_OUT_API = `${environment.apiUrl}/api/sign_out`;
@@ -45,9 +45,13 @@ export class AuthService {
 
     initCurrentUser(token: string) {
         let user = this.parseUserData(token);
+        this.saveUserInfoInLocalStorage(user);
+        this.currentUser.next(user);
+    }
+
+    private saveUserInfoInLocalStorage(user) {
         localStorage.setItem(AuthConsts.USER_EMAIL, user.email);
         localStorage.setItem(AuthConsts.USER_IS_ADMIN, user.isAdmin.toString());
-        this.currentUser.next(user);
     }
 
     authenticated(): boolean {
@@ -58,7 +62,7 @@ export class AuthService {
     }
 
     isAdmin(): boolean {
-        return this.authenticated() && this.currentUser.getValue().isAdmin;
+        return !_.isEmpty(this.currentUser.getValue()) && this.currentUser.getValue().isAdmin;
     }
 
     isAuthPage(): boolean {
@@ -85,7 +89,7 @@ export class AuthService {
 
     redirect() {
         let callbackUrl = localStorage.getItem(AuthConsts.ROLLBACK_URL_PARAM);
-        this.router.navigateByUrl(callbackUrl);
+        this.router.navigateByUrl(_.isEmpty(callbackUrl) ? '' : callbackUrl);
     }
 
     isCurrentPath(path: string): boolean {
@@ -96,9 +100,13 @@ export class AuthService {
     private parseUserData(token: string): User {
         token = token.replace('Bearer ', '');
         let decodedToken = this.jwtHelper.decodeToken(token);
+        return this.initUserFromToken(decodedToken);
+    }
+
+    private initUserFromToken(decodedToken: any): User {
         let user = new User();
         user.email = decodedToken.email;
-        user.isAdmin = decodedToken['custom:admin'];
+        user.isAdmin = _.isEqual(decodedToken['custom:admin'], 'true');
         return user;
     }
 
@@ -112,17 +120,20 @@ export class AuthService {
     }
 
     signOut() {
-        localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
-        localStorage.removeItem(AuthConsts.USER_EMAIL);
-        localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
+        this.clearLocalStorage();
         let email = this.currentUser.getValue().email;
 
         this.sendSignOutRequest(email);
+        this.currentUser = new BehaviorSubject(null);
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
     }
 
     private sendSignOutRequest(email: string) {
         this.httpClient.post(SIGN_OUT_API, {email: email}).subscribe()
+    }
+
+    clearLocalStorage() {
+        localStorage.clear();
     }
 
 }

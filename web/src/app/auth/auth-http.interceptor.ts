@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
-import * as AuthConsts from "./auth/auth-consts";
+import * as AuthConsts from "./auth-consts";
 import {Observable} from "rxjs";
 
 @Injectable()
