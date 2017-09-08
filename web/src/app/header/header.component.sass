@@ -1,5 +1,7 @@
 @import "../../styles/variables"
 
+$hover-color: #555
+
 .router-links
   display: inline-block
 
@@ -7,14 +9,22 @@
   display: inline-block
   padding: 15px
 
+  a
+    color: $hover-color
+
+  &:hover
+    cursor: pointer
+
+    a
+      color: $hover-color
+
+
   @media screen and (max-width: 350px)
     padding: 15px 5px
 
   &.active
     background-color: #e7e7e7
 
-    a
-      color: #555
 
   a
     text-decoration: none
