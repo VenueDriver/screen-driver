@@ -37,7 +37,7 @@ export class AuthService {
         this.httpClient.post(AUTH_API, userDetails)
             .subscribe(
                 response => {
-                    localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
+                    this.saveTokens(response)
                     this.initCurrentUser(response['token']);
                     subject.next(response);
                     this.redirect();
@@ -52,6 +52,11 @@ export class AuthService {
 
     private getErrorMessage(error): string {
         return error.error ? error.error.message.message : error.message;
+    }
+
+    saveTokens(response: Object) {
+        localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
+        localStorage.setItem(AuthConsts.REFRESH_TOKEN_PARAM, response['refreshToken']);
     }
 
     initCurrentUser(token: string) {
@@ -124,6 +129,7 @@ export class AuthService {
 
     signOut() {
         localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
+        localStorage.removeItem(AuthConsts.REFRESH_TOKEN_PARAM);
         localStorage.removeItem(AuthConsts.USER_EMAIL);
         localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
         let email = this.currentUser.getValue().email;
