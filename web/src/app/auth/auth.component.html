@@ -1,5 +1,6 @@
 <div class="auth-container">
-    <div class="auth-form">
+    <form class="auth-form"
+          (ngSubmit)="signIn()">
         <div *ngIf="failMessage"
              class="alert alert-danger">
             {{failMessage}}
@@ -9,6 +10,7 @@
                 <label for="email">Email address</label>
                 <input [(ngModel)]="user.email"
                        id="email"
+                       name="email"
                        class="form-control"
                        type="email"
                        placeholder="Email"
@@ -24,6 +26,7 @@
                 <label for="password">Password</label>
                 <input [(ngModel)]="user.password"
                        id="password"
+                       name="password"
                        class="form-control"
                        type="password"
                        placeholder="Password"
@@ -40,6 +43,7 @@
                     <label for="temporary-password">Temporary password</label>
                     <input [(ngModel)]="firstLoginPasswords.password"
                            id="temporary-password"
+                           name="temporary-password"
                            class="form-control"
                            type="password"
                            placeholder="Password"
@@ -54,6 +58,7 @@
                     <label for="new-password">New password</label>
                     <input [(ngModel)]="firstLoginPasswords.newPassword"
                            id="new-password"
+                           name="new-password"
                            class="form-control"
                            type="password"
                            placeholder="Password"
@@ -76,11 +81,10 @@
             <div class="error-message"></div>
 
         </div>
-        <button type="button"
+        <button type="submit"
                 class="btn btn-success btn-block sign-in-button"
-                (click)="signIn()"
                 [disabled]="isRequestPerforming">
             Sign in
         </button>
-    </div>
+    </form>
 </div>
