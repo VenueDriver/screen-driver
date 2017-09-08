@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HeaderService} from "./header.service";
 import {AuthService} from "../auth/auth.service";
-import {User} from "../auth/user";
+import {User} from "../user/user";
 
 import * as _ from 'lodash';
 
@@ -33,11 +33,19 @@ export class HeaderComponent implements OnInit {
         return this.authService.isAdmin();
     }
 
+    isAuthPage(): boolean {
+        return !!this.authService.isAuthPage();
+    }
+
     isSidebarDisplayed() {
         return this.authService.isCurrentPath('/content');
     }
 
     getUserEmail() {
         return _.isEmpty(this.currentUser) ? '' : this.currentUser.email;
+    }
+
+    signOut() {
+        this.authService.signOut();
     }
 }

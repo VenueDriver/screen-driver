@@ -1,21 +1,37 @@
 @import "../../styles/variables"
 
+$hover-color: #555
+
 .router-links
   display: inline-block
 
-  .link
-    display: inline-block
-    padding: 15px
+.link
+  display: inline-block
+  padding: 15px
 
-    @media screen and (max-width: 350px)
-      padding: 15px 5px
+  a
+    color: $hover-color
 
-    &.active
-      background-color: #e7e7e7
-
-      a
-        color: #555
+  &:hover
+    cursor: pointer
 
     a
-      text-decoration: none
-      color: #777
+      color: $hover-color
+
+
+  @media screen and (max-width: 350px)
+    padding: 15px 5px
+
+  &.active
+    background-color: #e7e7e7
+
+
+  a
+    text-decoration: none
+    color: #777
+
+.control-panel
+  float: right
+
+  @media screen and (min-width: $sidebar-visibility-width)
+    margin-right: 20px
