@@ -16,6 +16,11 @@ export class CanActivateAdmin implements CanActivate {
             return true;
         }
 
+        if (this.authService.authenticated()) {
+            this.router.navigateByUrl(AuthConsts.CONTENT_URI);
+            return true;
+        }
+
         this.authService.saveCurrentUrlAsRollback();
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
         return false;
