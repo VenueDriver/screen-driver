@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {Subject, BehaviorSubject} from "rxjs";
+import {Subject, BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 
 import * as AuthConsts from "./auth-consts";
 import * as _ from 'lodash';
-import {JwtHelper} from 'angular2-jwt';
+import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
 import {User} from "./user";
 
@@ -19,6 +19,17 @@ export class AuthService {
 
     constructor(private httpClient: HttpClient,
                 private router: Router) {
+        this.checkSessionExpiration();
+    }
+
+    checkSessionExpiration() {
+        return Observable
+            .interval(3 * 1000)
+            .subscribe(() => {
+                if (!this.authenticated() && !this.isAuthPage() && tokenNotExpired()) {
+                    this.signOut();
+                }
+            });
     }
 
     signIn(userDetails) {
