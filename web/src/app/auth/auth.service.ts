@@ -45,9 +45,13 @@ export class AuthService {
 
     initCurrentUser(token: string) {
         let user = this.parseUserData(token);
+        this.saveUserInfoInLocalStorage(user);
+        this.currentUser.next(user);
+    }
+
+    private saveUserInfoInLocalStorage(user) {
         localStorage.setItem(AuthConsts.USER_EMAIL, user.email);
         localStorage.setItem(AuthConsts.USER_IS_ADMIN, user.isAdmin.toString());
-        this.currentUser.next(user);
     }
 
     authenticated(): boolean {
@@ -116,9 +120,7 @@ export class AuthService {
     }
 
     signOut() {
-        localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
-        localStorage.removeItem(AuthConsts.USER_EMAIL);
-        localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
+        this.clearLocalStorage();
         let email = this.currentUser.getValue().email;
 
         this.sendSignOutRequest(email);
@@ -127,6 +129,13 @@ export class AuthService {
 
     private sendSignOutRequest(email: string) {
         this.httpClient.post(SIGN_OUT_API, {email: email}).subscribe()
+    }
+
+    clearLocalStorage() {
+        localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
+        localStorage.removeItem(AuthConsts.USER_EMAIL);
+        localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
+        localStorage.removeItem(AuthConsts.ROLLBACK_URL_PARAM);
     }
 
 }
