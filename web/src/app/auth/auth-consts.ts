@@ -6,7 +6,7 @@ export const REFRESH_TOKEN_PARAM = 'refresh_token';
 export const ROLLBACK_URL_PARAM = 'rollbackUrl';
 
 export const AUTH_URI = '/auth';
-export const USERS_URI = '/users';
+export const CONTENT_URI = '/content';
 
 export const EXCLUSIVE_URLS = [
     'auth',
