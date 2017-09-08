@@ -15,7 +15,7 @@
                 <div class="link" [routerLinkActive]="['active']"><a routerLink="/users" routerLinkActive="active">Users</a></div>
             </div>
 
-            <div class="control-panel" *ngIf="isUserAdmin()">
+            <div class="control-panel" *ngIf="!isAuthPage()">
                 <div class="link" [routerLinkActive]="['active']" (click)="signOut()"><a>Sign out</a></div>
             </div>
         </div>

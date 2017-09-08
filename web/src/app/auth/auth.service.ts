@@ -61,6 +61,10 @@ export class AuthService {
         return this.authenticated() && this.currentUser.getValue().isAdmin;
     }
 
+    isAuthPage(): boolean {
+        return _.isEqual(this.getCurrentPageUri(), AuthConsts.AUTH_URI);
+    }
+
     saveCurrentUrlAsRollback() {
         let url = document.location.href;
         let origin = document.location.origin;
