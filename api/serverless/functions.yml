@@ -9,6 +9,14 @@ authenticate:
 authorizer:
   handler: src/auth/authorizer.handler
 
+sign_out:
+  handler: src/auth/sign_out.handler
+  events:
+    - http:
+        path: api/sign_out
+        method: post
+        cors: true
+
 get_venues_list:
   handler: src/venues/list.list
   events:

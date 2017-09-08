@@ -8,7 +8,7 @@ const URIS_REQUIRED_ADMIN_ACCESS = [
 
 module.exports.hasAccessToResource = (decodedToken, resourceArn) => {
     let isAdmin = decodedToken.payload['custom:admin'];
-    if (!_.isEmpty(requireAdminRights(resourceArn)) && !isAdmin) {
+    if (!_.isEmpty(requireAdminRights(resourceArn)) && !_.isEqual(isAdmin, 'true')) {
         throw new Error('Access denied');
     }
 };

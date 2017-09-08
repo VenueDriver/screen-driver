@@ -10,10 +10,14 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand">ScreenDriver</a>
-            <ul class="nav navbar-nav" *ngIf="!isAuthPage()">
-                <li [routerLinkActive]="['active']"><a routerLink="/content" routerLinkActive="active">Content</a></li>
-                <li [routerLinkActive]="['active']"><a routerLink="/users" routerLinkActive="active">Users</a></li>
-            </ul>
+            <div class="router-links" *ngIf="isUserAdmin()">
+                <div class="link" [routerLinkActive]="['active']"><a routerLink="/content" routerLinkActive="active">Content</a></div>
+                <div class="link" [routerLinkActive]="['active']"><a routerLink="/users" routerLinkActive="active">Users</a></div>
+            </div>
+
+            <div class="control-panel" *ngIf="!isAuthPage()">
+                <div class="link" [routerLinkActive]="['active']" (click)="signOut()"><a>Sign out</a></div>
+            </div>
         </div>
     </div>
 </nav>
