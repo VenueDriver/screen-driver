@@ -26,7 +26,7 @@ export class AuthService {
         return Observable
             .interval(3 * 1000)
             .subscribe(() => {
-                if (!this.authenticated() && !this.isAuthPage() && tokenNotExpired()) {
+                if (!this.authenticated() && !this.isAuthPage()) {
                     this.signOut();
                 }
             });
@@ -74,7 +74,7 @@ export class AuthService {
         if (_.isEmpty(this.currentUser.getValue())){
             this.currentUser.next(this.getUserInfo());
         }
-        return !!this.currentUser.getValue();
+        return !!this.currentUser.getValue() && tokenNotExpired('id_token');
     }
 
     isAdmin(): boolean {
