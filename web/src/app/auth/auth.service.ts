@@ -8,17 +8,23 @@ import * as _ from 'lodash';
 import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
 import {User} from "../user/user";
+import {AuthTokenService} from "./auth-token.service";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
+const TOKEN_REFRESH_API = `${environment.apiUrl}/api/token/refresh`;
 const SIGN_OUT_API = `${environment.apiUrl}/api/sign_out`;
 
 @Injectable()
 export class AuthService {
+
     private jwtHelper = new JwtHelper();
     currentUser: BehaviorSubject<User> = new BehaviorSubject(null);
 
     constructor(private httpClient: HttpClient,
-                private router: Router) {
+                private router: Router,
+                private tokenService: AuthTokenService) {
+
+        this.tokenService.performTokenRefresh.subscribe(() => this.refreshToken());
         this.checkSessionExpiration();
     }
 
@@ -37,7 +43,7 @@ export class AuthService {
         this.httpClient.post(AUTH_API, userDetails)
             .subscribe(
                 response => {
-                    this.saveTokens(response)
+                    this.saveTokensToLocalStorage(response);
                     this.initCurrentUser(response['token']);
                     subject.next(response);
                     this.redirect();
@@ -52,11 +58,6 @@ export class AuthService {
 
     private getErrorMessage(error): string {
         return error.error ? error.error.message.message : error.message;
-    }
-
-    saveTokens(response: Object) {
-        localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
-        localStorage.setItem(AuthConsts.REFRESH_TOKEN_PARAM, response['refreshToken']);
     }
 
     initCurrentUser(token: string) {
@@ -153,6 +154,19 @@ export class AuthService {
         localStorage.removeItem(AuthConsts.REFRESH_TOKEN_PARAM);
         localStorage.removeItem(AuthConsts.USER_EMAIL);
         localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
+    }
+
+    refreshToken() {
+        let refreshToken = localStorage.getItem(AuthConsts.REFRESH_TOKEN_PARAM);
+        this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe((response) => {
+            localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
+            this.tokenService.tokenReceived.next(response['token']);
+        });
+    }
+
+    private saveTokensToLocalStorage(response: any) {
+        localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
+        localStorage.setItem(AuthConsts.REFRESH_TOKEN_PARAM, response['refreshToken']);
     }
 
 }

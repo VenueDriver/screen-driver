@@ -29,12 +29,7 @@ module.exports.authenticate = (userDetails) => {
     return new Promise((resolve, reject) => {
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function(result) {
-                let token = `Bearer ${result.idToken.jwtToken}`;
-                let refreshToken = `Bearer ${result.refreshToken.token}`;
-                resolve({
-                    token: token,
-                    refreshToken: refreshToken
-                });
+                resolve(buildResponseWithTokens(result));
             },
 
             onFailure: function(error) {
@@ -52,6 +47,21 @@ module.exports.authenticate = (userDetails) => {
 module.exports.signOut = (userDetails) => {
     let cognitoUser = getCognitoUser(userDetails);
     cognitoUser.signOut();
+};
+
+module.exports.refreshToken = (refreshToken) => {
+    let params = UserPoolHelper.buildRefreshTokenParameters(refreshToken);
+    let cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+    return new Promise((resolve, reject) => {
+        cognitoIdentityServiceProvider.adminInitiateAuth(params, (error, data) => {
+            if (error) {
+                reject(error);
+            } else {
+                let token = `Bearer ${data.AuthenticationResult.IdToken}`;
+                resolve({token: token});
+            }
+        });
+    });
 };
 
 function getAuthenticationDetails(userDetails) {
@@ -74,4 +84,13 @@ function getCognitoUser(userDetails) {
         Pool: userPool
     };
     return new AWSCognito.CognitoUser(userData);
+}
+
+function buildResponseWithTokens(tokenSet) {
+    let token = `Bearer ${tokenSet.idToken.jwtToken}`;
+    let refreshToken = tokenSet.refreshToken.token;
+    return {
+        token: token,
+        refreshToken: refreshToken
+    };
 }
