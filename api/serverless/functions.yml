@@ -17,6 +17,14 @@ sign_out:
         method: post
         cors: true
 
+refresh_token:
+  handler: src/auth_token/auth_token.refresh
+  events:
+    - http:
+        path: api/token/refresh
+        method: post
+        cors: true
+
 get_venues_list:
   handler: src/venues/list.list
   events:
