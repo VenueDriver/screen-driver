@@ -95,24 +95,6 @@ create_content:
         cors: true
         authorizer: ${self:custom.authorizer}
 
-update_content:
-  handler: src/content/update.update
-  events:
-    - http:
-        path: api/content/{id}
-        method: put
-        cors: true
-        authorizer: ${self:custom.authorizer}
-
-delete_content:
-  handler: src/content/delete.delete
-  events:
-    - http:
-        path: api/content/{id}
-        method: delete
-        cors: true
-        authorizer: ${self:custom.authorizer}
-
 get_settings_list:
   handler: src/setting/list.list
   events:
