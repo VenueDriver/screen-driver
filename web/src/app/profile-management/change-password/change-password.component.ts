@@ -66,7 +66,7 @@ export class ChangePasswordComponent implements OnInit {
 
     changePassword() {
         this.setRequestPerforming(true);
-        this.usersService.update(this.user).subscribe(
+        this.usersService.changePassword(this.user).subscribe(
             () => this.setRequestPerforming(false),
             () => this.setRequestPerforming(false)
         )

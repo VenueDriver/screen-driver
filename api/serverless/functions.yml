@@ -232,6 +232,15 @@ update_user:
         cors: true
         authorizer: ${self:custom.authorizer}
 
+change_user_password:
+  handler: src/user/change-password.changePassword
+  events:
+    - http:
+        path: api/change-password/
+        method: post
+        cors: true
+        authorizer: ${self:custom.authorizer}
+
 push_schedules_update:
   handler: src/screen_notifications/reload_schedules.scheduleUpdateMessage
   environment: ${self:custom.properties.pusher}
