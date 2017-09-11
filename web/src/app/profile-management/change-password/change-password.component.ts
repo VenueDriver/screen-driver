@@ -13,6 +13,7 @@ import {UsersService} from "../../users-management/users.service";
 export class ChangePasswordComponent implements OnInit {
     @Input() user: User = new User();
     @Output() cancel = new EventEmitter();
+    @Output() changed = new EventEmitter();
     isRequestPerforming: boolean = false;
     confirmedPassword: string = '';
     failMessage: string;
@@ -67,7 +68,10 @@ export class ChangePasswordComponent implements OnInit {
     changePassword() {
         this.setRequestPerforming(true);
         this.usersService.changePassword(this.user).subscribe(
-            () => this.setRequestPerforming(false),
+            () => {
+                this.setRequestPerforming(false);
+                this.changed.emit();
+            },
             () => this.setRequestPerforming(false)
         )
     }
