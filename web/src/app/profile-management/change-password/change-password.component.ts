@@ -37,7 +37,7 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     private validateNewPassword(passwordModel: NgModel) {
-        let passwordRegexp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        let passwordRegexp = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
         let errors = {};
 
         if (this.user.newPassword.length < 8) errors['smallLength'] = true;
