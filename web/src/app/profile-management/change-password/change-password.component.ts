@@ -11,9 +11,11 @@ import {UsersService} from "../../users-management/users.service";
     styleUrls: ['./change-password.component.sass']
 })
 export class ChangePasswordComponent implements OnInit {
+    
     @Input() user: User = new User();
     @Output() cancel = new EventEmitter();
-    @Output() change = new EventEmitter();
+    @Output() submit = new EventEmitter();
+
     isRequestPerforming: boolean = false;
     confirmedPassword: string = '';
     failMessage: string;
@@ -70,7 +72,7 @@ export class ChangePasswordComponent implements OnInit {
         this.usersService.changePassword(this.user).subscribe(
             () => {
                 this.setRequestPerforming(false);
-                this.change.emit();
+                this.submit.emit();
             },
             () => this.setRequestPerforming(false)
         )
