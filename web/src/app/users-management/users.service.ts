@@ -6,6 +6,7 @@ import {Subject, Observable, BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 
 const USERS_API = `${environment.apiUrl}/api/users`;
+const RESET_PASSWORD_API = `${environment.apiUrl}/api/change-password`;
 
 @Injectable()
 export class UsersService {
@@ -54,6 +55,23 @@ export class UsersService {
                 error => {
                     let errorMessage = this.getErrorMessage(error);
                     this.notificationService.showErrorNotificationBar('Unable to change user role: ' + errorMessage);
+                    subject.error(errorMessage);
+                }
+            );
+        return subject;
+    }
+
+    changePassword(user: User): Observable<User> {
+        let subject = new Subject<any>();
+        this.httpClient.post(`${RESET_PASSWORD_API}`, user)
+            .subscribe(
+                response => {
+                    subject.next(response);
+                    this.notificationService.showSuccessNotificationBar('Password changed successfully');
+                },
+                error => {
+                    let errorMessage = this.getErrorMessage(error);
+                    this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to change password');
                     subject.error(errorMessage);
                 }
             );

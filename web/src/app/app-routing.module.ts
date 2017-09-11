@@ -5,6 +5,7 @@ import {ContentManagementComponent} from "./content-management/content-managemen
 import {AuthComponent} from "./auth/auth-page/auth.component";
 import {CanActivateUser} from "./auth/auth-guards/can-acticate-user";
 import {CanActivateAdmin} from "./auth/auth-guards/can-acticate-admin";
+import {ProfileManagementComponent} from "./profile-management/profile-management.component";
 
 const appRoutes: Routes = [
     {
@@ -16,6 +17,12 @@ const appRoutes: Routes = [
         path: 'content',
         component: ContentManagementComponent,
         data: {isSidebarDisplayed: true},
+        canActivate: [CanActivateUser]
+    },
+    {
+        path: 'profile',
+        component: ProfileManagementComponent,
+        data: {isSidebarDisplayed: false},
         canActivate: [CanActivateUser]
     },
     {

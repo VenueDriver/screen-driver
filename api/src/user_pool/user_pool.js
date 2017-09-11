@@ -64,6 +64,29 @@ module.exports.refreshToken = (refreshToken) => {
     });
 };
 
+module.exports.changePassword = (userDetails) => {
+    return new Promise((resolve, reject) => {
+        let cognitoUser = getCognitoUser(userDetails);
+        initUserSession(cognitoUser, reject);
+
+        cognitoUser.changePassword(userDetails.password, userDetails.newPassword, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+};
+
+function initUserSession(cognitoUser, rejectCallback) {
+    cognitoUser.getSession((err, session) => {
+        if (err) {
+            rejectCallback(err);
+        }
+    });
+}
+
 function getAuthenticationDetails(userDetails) {
     let authenticationData = {
         Username : userDetails.email,
