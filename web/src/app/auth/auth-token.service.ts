@@ -1,5 +1,6 @@
 import {Observable, BehaviorSubject, Subject} from "rxjs";
 import {Injectable} from "@angular/core";
+import * as AuthConsts from "./auth-consts";
 
 @Injectable()
 export class AuthTokenService {
@@ -19,9 +20,8 @@ export class AuthTokenService {
     }
 
     private getLastToken(): Observable<string> {
-        return this.subject
-            .filter(token => token !== null)
-            .take(1);
+        let token = localStorage.getItem(AuthConsts.ID_TOKEN_PARAM);
+        return new BehaviorSubject(token);
     }
 
     private doRefreshToken() {
