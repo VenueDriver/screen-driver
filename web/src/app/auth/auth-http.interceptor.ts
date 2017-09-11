@@ -13,12 +13,7 @@ export class AuthHttpInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return this.authTokenService
             .token
-            .map(token => {
-                if (!_.isEmpty(token)) {
-                    return req.clone({headers: req.headers.set('Authorization', token)});
-                }
-                return req;
-            })
+            .map(token => this.injectAuthHeader(req, token))
             .concatMap(authReq => next.handle(authReq))
             .catch((err, restart) => {
                 if (err instanceof HttpErrorResponse && err.status === 403) {
@@ -26,6 +21,13 @@ export class AuthHttpInterceptor implements HttpInterceptor {
                 }
                 throw err;
             });
+    }
+
+    private injectAuthHeader(req: HttpRequest<any>, token: string): HttpRequest<any> {
+        if (!_.isEmpty(token)) {
+            return req.clone({headers: req.headers.set('Authorization', token)});
+        }
+        return req;
     }
 
 }
