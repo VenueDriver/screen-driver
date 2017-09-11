@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {User} from "../../user/user";
 import {NgModel} from "@angular/forms";
 
 import * as _ from 'lodash';
+import {UsersService} from "../../users-management/users.service";
 
 @Component({
     selector: 'change-password',
@@ -10,10 +11,13 @@ import * as _ from 'lodash';
     styleUrls: ['./change-password.component.sass']
 })
 export class ChangePasswordComponent implements OnInit {
-    user: User = new User();
+    @Input() user: User = new User();
+    @Output() cancel = new EventEmitter();
+    isRequestPerforming: boolean = false;
     confirmedPassword: string = '';
+    failMessage: string;
 
-    constructor() {
+    constructor(private usersService: UsersService) {
     }
 
     ngOnInit() {
@@ -34,7 +38,7 @@ export class ChangePasswordComponent implements OnInit {
         let errors = {};
 
         if (this.user.newPassword.length < 8) errors['smallLength'] = true;
-        if (passwordRegexp.test(this.user.newPassword)) errors['failRegExp'] = true;
+        if (!passwordRegexp.test(this.user.newPassword)) errors['failRegExp'] = true;
         passwordModel.control.setErrors(errors);
     }
 
@@ -52,8 +56,28 @@ export class ChangePasswordComponent implements OnInit {
         if (passwordModel.control.hasError('notValid')) return 'Invalid password';
     }
 
-    isModelsValid(...models: NgModel[]): boolean {
-        return !!_.find(models, model => model.invalid)
+    shouldDisplaySubmitButton(models: NgModel[]): boolean {
+        return this.isModelsValid(models) && !this.isRequestPerforming;
+    }
+
+    isModelsValid(models: NgModel[]): boolean {
+        return !_.find(models, model => this.getValidationMessage(model));
+    }
+
+    changePassword() {
+        this.setRequestPerforming(true);
+        this.usersService.update(this.user).subscribe(
+            () => this.setRequestPerforming(false),
+            () => this.setRequestPerforming(false)
+        )
+    }
+
+    setRequestPerforming(flag: boolean) {
+        this.isRequestPerforming = flag;
+    }
+
+    performCancel() {
+        this.cancel.emit();
     }
 
 }

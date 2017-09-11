@@ -44,8 +44,9 @@ export class UsersService {
     }
 
     update(user: User): Observable<User> {
+        let identifier = user.id ? user.id : user.email;
         let subject = new Subject<User>();
-        this.httpClient.put(`${USERS_API}/${user.id}`, user)
+        this.httpClient.put(`${USERS_API}/${identifier}`, user)
             .subscribe(
                 response => {
                     subject.next(response as User);

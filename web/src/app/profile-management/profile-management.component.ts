@@ -10,7 +10,7 @@ import {User} from "../user/user";
 export class ProfileManagementComponent implements OnInit {
     @Output() cancel = new EventEmitter();
     user: User;
-    isChangePasswordMode: boolean = true;
+    isChangePasswordMode: boolean = false;
 
     constructor(private authService: AuthService) {
     }
