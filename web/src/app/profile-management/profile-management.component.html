@@ -6,7 +6,6 @@
                 <user-profile [user]="user">
                 </user-profile>
 
-
                 <change-password *ngIf="isChangePasswordMode"
                                  [user]="user"
                                  (cancel)="setChangePasswordMode(false)">
@@ -14,7 +13,7 @@
             </div>
             <button *ngIf="!isChangePasswordMode"
                     type="button"
-                    class="btn btn-primary btn-xs btn-block change-password-button"
+                    class="btn btn-primary btn-block change-password-button"
                     (click)="setChangePasswordMode(true)">
                 Change password
             </button>
