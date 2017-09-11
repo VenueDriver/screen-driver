@@ -169,4 +169,9 @@ export class AuthService {
         localStorage.setItem(AuthConsts.REFRESH_TOKEN_PARAM, response['refreshToken']);
     }
 
+    getCurrentUserLogin(): string {
+        let user = this.currentUser.getValue();
+        return _.isEmpty(user) ? '' : user.email.substr(0, user.email.indexOf('@'));
+    }
+
 }
