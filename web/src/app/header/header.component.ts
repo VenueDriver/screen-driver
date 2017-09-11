@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {HeaderService} from "./header.service";
 import {AuthService} from "../auth/auth.service";
-import {User} from "../user/user";
-
-import * as _ from 'lodash';
 
 @Component({
     selector: 'screen-driver-header',
