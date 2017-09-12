@@ -131,6 +131,17 @@ delete_setting:
         cors: true
         authorizer: ${self:custom.authorizer}
 
+handle_settings_stream:
+  handler: src/setting/stream/stream_handler.handleEvent
+  environment: ${self:custom.properties.pusher}
+  events:
+    - stream:
+        type: dynamodb
+        arn:
+          Fn::GetAtt:
+            - SettingsTable
+            - StreamArn
+
 refresh_screens:
   handler: src/screen_notifications/refresh_screens.refresh
   environment: ${self:custom.properties.pusher}
@@ -231,14 +242,3 @@ change_user_password:
         method: post
         cors: true
         authorizer: ${self:custom.authorizer}
-
-handle_settings_stream:
-  handler: src/setting/stream/stream_handler.handleEvent
-  environment: ${self:custom.properties.pusher}
-  events:
-    - stream:
-        type: dynamodb
-        arn:
-          Fn::GetAtt:
-            - SettingsTable
-            - StreamArn
