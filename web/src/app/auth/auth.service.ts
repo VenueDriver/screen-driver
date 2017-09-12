@@ -24,7 +24,11 @@ export class AuthService {
                 private router: Router,
                 private tokenService: AuthTokenService) {
 
-        this.tokenService.performTokenRefresh.subscribe(() => this.refreshToken());
+        this.tokenService.performTokenRefresh.subscribe(() => {
+            if (!this.isAuthPage()) {
+                this.refreshToken();
+            }
+        });
         this.checkSessionExpiration();
     }
 
