@@ -71,7 +71,7 @@ class User {
             return;
         }
         if (this.email === user.email && this.isAdmin != user.isAdmin) {
-            reject('You can\'t change role for yourself');
+            reject('You can\'t change role of yourself');
         }
     }
 
