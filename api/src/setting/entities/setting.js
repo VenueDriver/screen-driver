@@ -82,7 +82,7 @@ class Setting {
     _findSettingById() {
         return new Promise((resolve, reject) => {
             DbHelper.findOne(process.env.SETTINGS_TABLE, this.id)
-                .then(setting => resolve(setting.Item));
+                .then(setting => resolve(setting));
         });
     }
 

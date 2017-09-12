@@ -21,7 +21,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        let loadUserSubscription = this.usersService.loadUsers().subscribe(users => this.users = users);
+        let loadUserSubscription = this.usersService.getUsers().subscribe(users => this.users = users);
         let createUserSubscription = this.usersService.createUserEvent.subscribe(user => this.users.push(user));
         this.subscriptions.push(loadUserSubscription, createUserSubscription);
         this.currentUser = this.authService.currentUser.getValue();
