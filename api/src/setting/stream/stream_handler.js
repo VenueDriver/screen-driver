@@ -1,6 +1,6 @@
 'use strict';
 
-const FunctionInvokeHelper = require('../../helpers/function_invoke_helper');
+const Notifier = require('../../notifier/notifier');
 const dbHelper = require('./../../helpers/db_helper');
 const PriorityTypes = require('../../enums/priority_types');
 const _ = require('lodash');
@@ -10,7 +10,7 @@ module.exports.handleEvent = (event, context) => {
         return shouldBeNotified(record);
     });
     if (changedSetting) {
-        triggerUpdateEvent(context);
+        triggerUpdateEvent();
     }
 };
 
@@ -43,13 +43,10 @@ function areConfigsEqual(oldSetting, newSetting) {
     return _.isEqual(oldConfigValues.sort(), newConfigValues.sort());
 }
 
-function triggerUpdateEvent(context) {
+function triggerUpdateEvent() {
     let priorityTypes = PriorityTypes.getTypes();
     prepareData(priorityTypes)
-        .then(data => {
-            let params = buildParamsForInvokeFunction(context, data);
-            FunctionInvokeHelper.invokeFunction(params, context);
-        });
+        .then(data => Notifier.pushNotification('screens', 'setting_updated', data));
 }
 
 function prepareData(priorityTypes) {
@@ -68,12 +65,3 @@ function prepareData(priorityTypes) {
         });
 }
 
-function buildParamsForInvokeFunction(context, payload) {
-    let functionName = context.functionName;
-    let functionNameSuffix = functionName.substring(0, functionName.lastIndexOf('-') + 1);
-    return {
-        FunctionName: `${functionNameSuffix}push_settings_update`,
-        InvocationType: 'RequestResponse',
-        Payload: JSON.stringify(payload)
-    };
-}

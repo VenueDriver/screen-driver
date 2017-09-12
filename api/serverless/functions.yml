@@ -187,6 +187,7 @@ delete_schedule:
 
 handle_schedules_stream:
   handler: src/schedule/stream/stream_handler.handleEvent
+  environment: ${self:custom.properties.pusher}
   events:
     - stream:
         type: dynamodb
@@ -231,12 +232,9 @@ change_user_password:
         cors: true
         authorizer: ${self:custom.authorizer}
 
-push_schedules_update:
-  handler: src/screen_notifications/reload_schedules.scheduleUpdateMessage
-  environment: ${self:custom.properties.pusher}
-
 handle_settings_stream:
   handler: src/setting/stream/stream_handler.handleEvent
+  environment: ${self:custom.properties.pusher}
   events:
     - stream:
         type: dynamodb
@@ -244,7 +242,3 @@ handle_settings_stream:
           Fn::GetAtt:
             - SettingsTable
             - StreamArn
-
-push_settings_update:
-  handler: src/screen_notifications/reload_settings.settingUpdateMessage
-  environment: ${self:custom.properties.pusher}

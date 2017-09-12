@@ -1,6 +1,6 @@
 'use strict';
 
-const FunctionInvokeHelper = require('../../helpers/function_invoke_helper');
+const Notifier = require('../../notifier/notifier');
 const _ = require('lodash');
 
 module.exports.handleEvent = (event, context) => {
@@ -8,7 +8,7 @@ module.exports.handleEvent = (event, context) => {
         return shouldBeNotified(record);
     });
     if (changedSchedule) {
-        triggerUpdateEvent(context);
+        triggerUpdateEvent();
     }
 };
 
@@ -31,16 +31,6 @@ function isEnabledScheduleRemoved(streamInfo) {
     return removedSchedule.enabled.BOOL;
 }
 
-function triggerUpdateEvent(context) {
-    let params = buildParamsForInvokeFunction(context);
-    FunctionInvokeHelper.invokeFunction(params, context);
-}
-
-function buildParamsForInvokeFunction(context) {
-    let functionName = context.functionName;
-    let functionNameSuffix = functionName.substring(0, functionName.lastIndexOf('-') + 1);
-    return {
-        FunctionName: `${functionNameSuffix}push_schedules_update`,
-        InvocationType: 'RequestResponse'
-    };
+function triggerUpdateEvent() {
+    Notifier.pushNotification('screens', 'setting_updated');
 }
