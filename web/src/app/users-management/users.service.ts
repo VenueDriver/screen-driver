@@ -5,6 +5,8 @@ import {environment} from "../../environments/environment";
 import {Subject, Observable, BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 
+import * as _ from 'lodash';
+
 const USERS_API = `${environment.apiUrl}/api/users`;
 const RESET_PASSWORD_API = `${environment.apiUrl}/api/change-password`;
 
@@ -48,8 +50,9 @@ export class UsersService {
         let subject = new Subject<User>();
         this.httpClient.put(`${USERS_API}/${user.id}`, user)
             .subscribe(
-                response => {
-                    subject.next(response as User);
+                (response: User) => {
+                    subject.next(response);
+                    this.applyChangesInUserList(response);
                     this.notificationService.showSuccessNotificationBar('User was updated successfully');
                 },
                 error => {
@@ -82,7 +85,17 @@ export class UsersService {
         return error.error ? error.error.message.message : error.message;
     }
 
-    getUsers(): Array<User> {
-        return this.users.getValue();
+    applyChangesInUserList(updatedUser: User) {
+        let users = this.users.getValue();
+        users = _.reject(users, user => user.id === updatedUser.id);
+        users.push(updatedUser);
+        this.users.next(users);
+    }
+
+    getUsers(): Observable<Array<User>> {
+        if (_.isEmpty(this.users.getValue())) {
+            this.loadUsers();
+        }
+        return this.users;
     }
 }

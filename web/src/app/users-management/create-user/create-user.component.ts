@@ -20,7 +20,11 @@ export class CreateUserComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.emails = _.map(this.usersService.getUsers(), user => user.email);
+        this.usersService.getUsers().subscribe(users => this.setEmails(users));
+    }
+
+    private setEmails(users: User[]) {
+        this.emails = _.map(users, user => user.email);
     }
 
     validateEmail(emailModel: NgModel) {

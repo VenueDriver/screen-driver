@@ -6,6 +6,7 @@ export class User {
     password?: string = '';
     newPassword?: string = '';
     isAdmin: boolean = false;
+    _rev: number;
 
     constructor(user?: User) {
         if (user) {
@@ -14,6 +15,7 @@ export class User {
             this.password = user.password;
             this.newPassword = user.newPassword;
             this.isAdmin = user.isAdmin;
+            this._rev = user._rev;
         }
     }
 }
