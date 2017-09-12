@@ -1,11 +1,10 @@
 'use strict';
 
+const {Pusher} = require('./pusher');
 const _ = require('lodash');
 
-let pusher = require('./pusher');
-
 module.exports.pushNotification = (channel, event, data) => {
-    pusher.trigger(channel, event, {
+    Pusher.trigger(channel, event, {
         "message": _.isEmpty(data) ? {} : data
-    })
+    });
 };
