@@ -9,6 +9,7 @@ import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
 import {User} from "../user/user";
 import {AuthTokenService} from "./auth-token.service";
+import {NotificationService} from "../notifications/notification.service";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
 const TOKEN_REFRESH_API = `${environment.apiUrl}/api/token/refresh`;
@@ -22,6 +23,7 @@ export class AuthService {
 
     constructor(private httpClient: HttpClient,
                 private router: Router,
+                private notificationService: NotificationService,
                 private tokenService: AuthTokenService) {
 
         this.tokenService.performTokenRefresh.subscribe(() => this.refreshToken());
@@ -158,10 +160,16 @@ export class AuthService {
 
     refreshToken() {
         let refreshToken = localStorage.getItem(AuthConsts.REFRESH_TOKEN_PARAM);
-        this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe((response) => {
-            localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
-            this.tokenService.tokenReceived.next(response['token']);
-        });
+        this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
+            (response) => {
+                localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
+                this.tokenService.tokenReceived.next(response['token']);
+            },
+            (error) => {
+                if (error.status === 401) {
+                    this.notificationService.showNonVanishingWarning('Session is expired. Please, sign in');
+                }
+            });
     }
 
     private saveTokensToLocalStorage(response: any) {
