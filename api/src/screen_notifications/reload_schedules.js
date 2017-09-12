@@ -2,8 +2,12 @@
 
 const Notifier = require('../notifier/notifier');
 
-module.exports.scheduleUpdateMessage = (event, context) => {
+module.exports.scheduleUpdateMessage = () => {
 
-    Notifier.pushNotification('screens', 'schedule_update');
+    try {
+        Notifier.pushNotification('screens', 'schedule_update');
+    } catch (error) {
+        console.error(error);
+    }
 
 };
