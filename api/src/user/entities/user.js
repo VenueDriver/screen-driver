@@ -47,7 +47,7 @@ class User {
     }
 
     /*
-     * @param {User} user - The user, who made update action
+     * @param {User} user - The user, who made update action (should contain email and role)
      */
     update(user) {
         let deferred = Q.defer();
