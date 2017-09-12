@@ -66,7 +66,7 @@ class User {
     }
 
     validateRoleChanges(reject, user) {
-        if (!user.isAdmin) {
+        if (_.isEmpty(user) || !user.isAdmin) {
             reject('You don\'t have access to do this operation');
             return;
         }
