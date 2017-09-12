@@ -1,11 +1,37 @@
 @import "../../styles/variables"
-.container-fluid
-  display: flex !important
-  justify-content: center !important
 
-  .navbar-header
-    width: auto
+$hover-color: #555
 
-@media screen and (max-width: $sidebar-visibility-width)
-  .navbar-toggle
-    float: none
+.router-links
+  display: inline-block
+
+.link
+  display: inline-block
+  padding: 15px
+
+  a
+    color: $hover-color
+
+  &:hover
+    cursor: pointer
+
+    a
+      color: $hover-color
+
+
+  @media screen and (max-width: 350px)
+    padding: 15px 5px
+
+  &.active
+    background-color: #e7e7e7
+
+
+  a
+    text-decoration: none
+    color: #777
+
+.control-panel
+  float: right
+
+  @media screen and (min-width: $sidebar-visibility-width)
+    margin-right: 20px

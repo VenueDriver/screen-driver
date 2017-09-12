@@ -2,8 +2,10 @@ import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {UsersManagementComponent} from "./users-management/users-management.component";
 import {ContentManagementComponent} from "./content-management/content-management.component";
-import {AuthComponent} from "./auth/auth.component";
-import {AuthGuard} from "./auth/auth.guard";
+import {AuthComponent} from "./auth/auth-page/auth.component";
+import {CanActivateUser} from "./auth/auth-guards/can-acticate-user";
+import {CanActivateAdmin} from "./auth/auth-guards/can-acticate-admin";
+import {ProfileManagementComponent} from "./profile-management/profile-management.component";
 
 const appRoutes: Routes = [
     {
@@ -15,13 +17,19 @@ const appRoutes: Routes = [
         path: 'content',
         component: ContentManagementComponent,
         data: {isSidebarDisplayed: true},
-        canActivate: [AuthGuard]
+        canActivate: [CanActivateUser]
+    },
+    {
+        path: 'profile',
+        component: ProfileManagementComponent,
+        data: {isSidebarDisplayed: false},
+        canActivate: [CanActivateUser]
     },
     {
         path: 'users',
         component: UsersManagementComponent,
         data: {isSidebarDisplayed: false},
-        canActivate: [AuthGuard]
+        canActivate: [CanActivateAdmin]
     },
     {
         path: 'auth',
@@ -40,7 +48,10 @@ const appRoutes: Routes = [
     exports: [
         RouterModule
     ],
-    providers: [AuthGuard]
+    providers: [
+        CanActivateUser,
+        CanActivateAdmin
+    ]
 })
 export class AppRoutingModule {
 }

@@ -1,14 +1,16 @@
 import {Injectable} from '@angular/core';
 import {NotificationService} from "../notifications/notification.service";
-import {User} from "../auth/user";
+import {User} from "../user/user";
 import {environment} from "../../environments/environment";
-import {Subject, Observable} from "rxjs";
+import {Subject, Observable, BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 
 const USERS_API = `${environment.apiUrl}/api/users`;
+const RESET_PASSWORD_API = `${environment.apiUrl}/api/change-password`;
 
 @Injectable()
 export class UsersService {
+    private users: BehaviorSubject<Array<User>> = new BehaviorSubject<Array<User>>([]);
     createUserEvent: Subject<User> = new Subject();
 
     constructor(private httpClient: HttpClient,
@@ -16,7 +18,12 @@ export class UsersService {
     }
 
     loadUsers(): Observable<Array<User>> {
-        return this.httpClient.get(USERS_API)
+        let subject = new Subject<Array<User>>();
+        this.httpClient.get(USERS_API).subscribe((users: Array<User>) => {
+            subject.next(users);
+            this.users.next(users)
+        });
+        return subject;
     }
 
     create(user: User): Observable<User> {
@@ -54,7 +61,28 @@ export class UsersService {
         return subject;
     }
 
+    changePassword(user: User): Observable<User> {
+        let subject = new Subject<any>();
+        this.httpClient.post(`${RESET_PASSWORD_API}`, user)
+            .subscribe(
+                response => {
+                    subject.next(response);
+                    this.notificationService.showSuccessNotificationBar('Password changed successfully');
+                },
+                error => {
+                    let errorMessage = this.getErrorMessage(error);
+                    this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to change password');
+                    subject.error(errorMessage);
+                }
+            );
+        return subject;
+    }
+
     private getErrorMessage(error): string {
         return error.error ? error.error.message.message : error.message;
+    }
+
+    getUsers(): Array<User> {
+        return this.users.getValue();
     }
 }

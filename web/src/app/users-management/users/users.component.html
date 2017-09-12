@@ -7,9 +7,11 @@
     <tr *ngFor="let user of users">
         <th>{{user.email}}</th>
         <th>
-            <toggle-button [checked]="user.isAdmin"
-                           class="is-admin"
-                           (changed)="changeUserRole(user)">
+            <toggle-button class="is-admin"
+                           [checked]="user.isAdmin"
+                           [disabled]="isCurrentUser(user)"
+                           (changed)="changeUserRole(user)"
+                           [attr.title]="getToggleHint(user)">
             </toggle-button>
         </th>
     </tr>

@@ -19,8 +19,9 @@ import { ContentManagementComponent } from './content-management/content-managem
 import {AppRoutingModule} from "./app-routing.module";
 import {UsersManagementModule} from "./users-management/users-management.module";
 import {AuthModule} from "./auth/auth.module";
-import {AuthHttpInterceptor} from "./auth-http.interceptor";
+import {AuthHttpInterceptor} from "./auth/auth-http.interceptor";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {ProfileManagementModule} from "./profile-management/profile-management.module";
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
         ScreensMessagingModule,
         SchedulesModule,
         UsersManagementModule,
-        AuthModule
+        AuthModule,
+        ProfileManagementModule
     ],
     providers: [
         NotificationService,

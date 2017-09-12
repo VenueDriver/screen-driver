@@ -1,7 +1,10 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {UsersService} from "../users.service";
-import {User} from "../../auth/user";
+import {User} from "../../user/user";
 import {Subscription} from "rxjs";
+import {AuthService} from "../../auth/auth.service";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'users',
@@ -10,15 +13,18 @@ import {Subscription} from "rxjs";
 })
 export class UsersComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
+    private currentUser: User;
     users: User[] = [];
 
-    constructor(private usersService: UsersService) {
+    constructor(private usersService: UsersService,
+                private authService: AuthService) {
     }
 
     ngOnInit() {
         let loadUserSubscription = this.usersService.loadUsers().subscribe(users => this.users = users);
         let createUserSubscription = this.usersService.createUserEvent.subscribe(user => this.users.push(user));
         this.subscriptions.push(loadUserSubscription, createUserSubscription);
+        this.currentUser = this.authService.currentUser.getValue();
     }
 
     ngOnDestroy() {
@@ -28,5 +34,13 @@ export class UsersComponent implements OnInit, OnDestroy {
     changeUserRole(user: User) {
         user.isAdmin = !user.isAdmin;
         this.usersService.update(user);
+    }
+
+    isCurrentUser(user: User): boolean {
+        return _.isEqual(user.email, this.currentUser.email);
+    }
+
+    getToggleHint(user: User): string {
+        return this.isCurrentUser(user) ? 'You can\'t change the role of yourself' : '';
     }
 }

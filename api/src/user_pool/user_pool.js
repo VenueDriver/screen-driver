@@ -29,8 +29,7 @@ module.exports.authenticate = (userDetails) => {
     return new Promise((resolve, reject) => {
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: function(result) {
-                let token = `Bearer ${result.idToken.jwtToken}`;
-                resolve({token: token});
+                resolve(buildResponseWithTokens(result));
             },
 
             onFailure: function(error) {
@@ -60,6 +59,49 @@ module.exports.updateUser = (user) => {
     });
 };
 
+module.exports.signOut = (userDetails) => {
+    let cognitoUser = getCognitoUser(userDetails);
+    cognitoUser.signOut();
+};
+
+module.exports.refreshToken = (refreshToken) => {
+    let params = UserPoolHelper.buildRefreshTokenParameters(refreshToken);
+    let cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+    return new Promise((resolve, reject) => {
+        cognitoIdentityServiceProvider.adminInitiateAuth(params, (error, data) => {
+            if (error) {
+                reject(error);
+            } else {
+                let token = `Bearer ${data.AuthenticationResult.IdToken}`;
+                resolve({token: token});
+            }
+        });
+    });
+};
+
+module.exports.changePassword = (userDetails) => {
+    return new Promise((resolve, reject) => {
+        let cognitoUser = getCognitoUser(userDetails);
+        initUserSession(cognitoUser, reject);
+
+        cognitoUser.changePassword(userDetails.password, userDetails.newPassword, (err, result) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
+    });
+};
+
+function initUserSession(cognitoUser, rejectCallback) {
+    cognitoUser.getSession((err, session) => {
+        if (err) {
+            rejectCallback(err);
+        }
+    });
+}
+
 function getAuthenticationDetails(userDetails) {
     let authenticationData = {
         Username : userDetails.email,
@@ -80,4 +122,13 @@ function getCognitoUser(userDetails) {
         Pool: userPool
     };
     return new AWSCognito.CognitoUser(userData);
+}
+
+function buildResponseWithTokens(tokenSet) {
+    let token = `Bearer ${tokenSet.idToken.jwtToken}`;
+    let refreshToken = tokenSet.refreshToken.token;
+    return {
+        token: token,
+        refreshToken: refreshToken
+    };
 }

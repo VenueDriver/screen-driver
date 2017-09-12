@@ -1,8 +1,9 @@
 import {NgModule} from '@angular/core';
-import {AuthComponent} from './auth.component';
+import {AuthComponent} from './auth-page/auth.component';
 import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {AuthService} from "./auth.service";
+import {AuthTokenService} from "./auth-token.service";
 
 @NgModule({
     imports: [
@@ -10,7 +11,10 @@ import {AuthService} from "./auth.service";
         FormsModule
     ],
     declarations: [AuthComponent],
-    providers: [AuthService]
+    providers: [
+        AuthService,
+        AuthTokenService
+    ]
 })
 export class AuthModule {
 }

@@ -1,0 +1,23 @@
+@import "../../styles/variables"
+
+.profile-container
+  margin-top: 80px
+  font-size: 16px
+
+  input
+    font-size: $input-font-size
+
+  .profile-management
+    width: 100%
+    align-items: center
+
+    @media screen and (min-width: $tablet-resolution)
+      padding: 30px
+      border: 1px solid rgb(216, 222, 226)
+      border-radius: 5px
+
+  @media screen and (max-width: $tablet-resolution)
+    margin: inherit 0
+
+  .change-password-button
+    margin-top: -10px

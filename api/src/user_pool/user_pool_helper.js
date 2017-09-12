@@ -37,3 +37,14 @@ module.exports.buildUserPoolData = () => {
         ClientId: process.env.USER_POOL_CLIENT_ID
     };
 };
+
+module.exports.buildRefreshTokenParameters = (refreshToken) => {
+    return {
+        AuthFlow: 'REFRESH_TOKEN_AUTH',
+        AuthParameters: {
+            REFRESH_TOKEN: refreshToken
+        },
+        UserPoolId: process.env.USER_POOL_ID,
+        ClientId: process.env.USER_POOL_CLIENT_ID
+    }
+};

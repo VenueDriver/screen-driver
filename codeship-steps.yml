@@ -1,3 +1,8 @@
+- service: web
+  name: build_web_app
+  exclude: ^(master|production|staging)
+  command: bash -c "npm install && node_modules/.bin/ng build --prod --aot"
+
 - service: api
   name: staging_deploy_serverless_api
   tag: staging
