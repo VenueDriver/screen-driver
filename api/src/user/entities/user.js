@@ -46,10 +46,14 @@ class User {
 
     }
 
-    update() {
+    /*
+     * @param {User} user - The user, who made update action (should contain email and role)
+     */
+    update(user) {
         let deferred = Q.defer();
         let params = ParametersBuilder.buildUpdateRequestParameters(this);
 
+        this.validateRoleChanges(deferred.reject, user);
         this.validate(deferred.reject);
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
@@ -59,6 +63,16 @@ class User {
             .then(data => dbHelper.updateItem(params, deferred));
 
         return deferred.promise;
+    }
+
+    validateRoleChanges(reject, user) {
+        if (_.isEmpty(user) || !user.isAdmin) {
+            reject('You don\'t have access to do this operation');
+            return;
+        }
+        if (this.email === user.email && this.isAdmin != user.isAdmin) {
+            reject('You can\'t change role of yourself');
+        }
     }
 
     validate(errorCallback) {
