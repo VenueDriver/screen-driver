@@ -9,7 +9,6 @@ import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
 import {User} from "../user/user";
 import {AuthTokenService} from "./auth-token.service";
-import {NotificationService} from "../notifications/notification.service";
 
 const AUTH_API = `${environment.apiUrl}/api/auth`;
 const TOKEN_REFRESH_API = `${environment.apiUrl}/api/token/refresh`;
@@ -23,7 +22,6 @@ export class AuthService {
 
     constructor(private httpClient: HttpClient,
                 private router: Router,
-                private notificationService: NotificationService,
                 private tokenService: AuthTokenService) {
 
         this.tokenService.performTokenRefresh.subscribe(() => this.refreshToken());
@@ -140,11 +138,16 @@ export class AuthService {
 
     signOut() {
         this.clearLocalStorage();
-        let email = this.currentUser.getValue().email;
-
-        this.sendSignOutRequest(email);
+        this.signOutUserOnServer();
         this.currentUser = new BehaviorSubject(null);
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
+    }
+
+    private signOutUserOnServer() {
+        if (!_.isEmpty(this.currentUser.getValue())) {
+            let email = this.currentUser.getValue().email;
+            this.sendSignOutRequest(email);
+        }
     }
 
     private sendSignOutRequest(email: string) {
