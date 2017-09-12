@@ -35,7 +35,7 @@ export class AuthService {
             .interval(3 * 1000)
             .subscribe(() => {
                 if (!this.authenticated() && !this.isAuthPage()) {
-                    this.signOut();
+                    this.refreshToken();
                 }
             });
     }
