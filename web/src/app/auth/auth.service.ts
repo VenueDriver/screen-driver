@@ -24,7 +24,11 @@ export class AuthService {
                 private router: Router,
                 private tokenService: AuthTokenService) {
 
-        this.tokenService.performTokenRefresh.subscribe(() => this.refreshToken());
+        this.tokenService.performTokenRefresh.subscribe(() => {
+            if (!this.isAuthPage()) {
+                this.refreshToken();
+            }
+        });
         this.checkSessionExpiration();
     }
 
@@ -32,8 +36,8 @@ export class AuthService {
         return Observable
             .interval(3 * 1000)
             .subscribe(() => {
-                if (!this.authenticated() && !this.isAuthPage() && tokenNotExpired()) {
-                    this.signOut();
+                if (!this.authenticated() && !this.isAuthPage()) {
+                    this.refreshToken();
                 }
             });
     }
@@ -75,7 +79,7 @@ export class AuthService {
         if (_.isEmpty(this.currentUser.getValue())){
             this.currentUser.next(this.getUserInfo());
         }
-        return !!this.currentUser.getValue();
+        return !!this.currentUser.getValue() && tokenNotExpired('id_token');
     }
 
     isAdmin(): boolean {
@@ -138,11 +142,16 @@ export class AuthService {
 
     signOut() {
         this.clearLocalStorage();
-        let email = this.currentUser.getValue().email;
-
-        this.sendSignOutRequest(email);
+        this.signOutUserOnServer();
         this.currentUser = new BehaviorSubject(null);
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
+    }
+
+    private signOutUserOnServer() {
+        if (!_.isEmpty(this.currentUser.getValue())) {
+            let email = this.currentUser.getValue().email;
+            this.sendSignOutRequest(email);
+        }
     }
 
     private sendSignOutRequest(email: string) {
@@ -158,10 +167,16 @@ export class AuthService {
 
     refreshToken() {
         let refreshToken = localStorage.getItem(AuthConsts.REFRESH_TOKEN_PARAM);
-        this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe((response) => {
-            localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
-            this.tokenService.tokenReceived.next(response['token']);
-        });
+        this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
+            (response) => {
+                localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
+                this.tokenService.tokenReceived.next(response['token']);
+            },
+            (error) => {
+                if (error.status === 401) {
+                    this.signOut();
+                }
+            });
     }
 
     private saveTokensToLocalStorage(response: any) {
