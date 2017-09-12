@@ -58,7 +58,9 @@ class User {
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
         }
-        dbHelper.updateItem(params, deferred);
+
+        UserPool.updateUser(this)
+            .then(data => dbHelper.updateItem(params, deferred));
 
         return deferred.promise;
     }

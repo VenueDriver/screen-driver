@@ -199,7 +199,7 @@ class Venue {
     _findVenueById() {
         return new Promise((resolve, reject) => {
             DbHelper.findOne(process.env.VENUES_TABLE, this.id)
-                .then(venue => resolve(venue.Item));
+                .then(venue => resolve(venue));
         });
     }
 

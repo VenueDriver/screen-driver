@@ -93,6 +93,8 @@ CognitoUserPool:
         RequireNumbers: true
         RequireSymbols: false
         RequireUppercase: false
+    AdminCreateUserConfig:
+      AllowAdminCreateUserOnly: true
     Schema:
       - AttributeDataType: Boolean
         Mutable: true

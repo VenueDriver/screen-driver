@@ -2,8 +2,12 @@
 
 const Notifier = require('../notifier/notifier');
 
-module.exports.settingUpdateMessage = (event, context) => {
+module.exports.settingUpdateMessage = (event) => {
 
-    Notifier.pushNotification('screens', 'setting_updated', event);
+    try {
+        Notifier.pushNotification('screens', 'setting_updated', event);
+    } catch (error) {
+        console.error(error);
+    }
 
 };
