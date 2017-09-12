@@ -1,10 +1,17 @@
 'use strict';
 let Pusher = require('pusher');
 
-module.exports = new Pusher({
-    appId: process.env.app_id,
-    key: process.env.key,
-    secret: process.env.secret,
-    cluster: process.env.cluster,
+module.exports.Pusher = new Pusher({
+    appId: process.env.PUSHER_APP_ID,
+    key: process.env.PUSHER_KEY,
+    secret: process.env.PUSHER_SECRET,
+    cluster: process.env.PUSHER_CLUSTER,
     encrypted: true
 });
+
+module.exports.getPusherConfig = () => {
+    return {
+        key: process.env.PUSHER_KEY,
+        cluster: process.env.PUSHER_CLUSTER
+    };
+};
