@@ -1,29 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {HeaderService} from "./header.service";
 import {AuthService} from "../auth/auth.service";
-import {User} from "../user/user";
-
-import * as _ from 'lodash';
 
 @Component({
     selector: 'screen-driver-header',
     templateUrl: 'header.component.html',
     styleUrls: ['header.component.sass']
 })
-export class HeaderComponent implements OnInit {
-    currentUser: User;
+export class HeaderComponent {
 
     constructor(
         private headerService: HeaderService,
         private authService: AuthService
     ) { }
-
-    ngOnInit() {
-        this.currentUser = this.authService.currentUser.getValue();
-        this.authService.currentUser.subscribe(user => {
-            this.currentUser = user;
-        })
-    }
 
     toggleSideBar() {
         this.headerService.pushSidebarToggleEvent();
@@ -41,8 +30,8 @@ export class HeaderComponent implements OnInit {
         return this.authService.isCurrentPath('/content');
     }
 
-    getUserEmail() {
-        return _.isEmpty(this.currentUser) ? '' : this.currentUser.email;
+    getUserLogin() {
+        return this.authService.getCurrentUserLogin();
     }
 
     signOut() {

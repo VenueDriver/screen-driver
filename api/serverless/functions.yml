@@ -17,6 +17,14 @@ sign_out:
         method: post
         cors: true
 
+refresh_token:
+  handler: src/auth_token/auth_token.refresh
+  events:
+    - http:
+        path: api/token/refresh
+        method: post
+        cors: true
+
 get_venues_list:
   handler: src/venues/list.list
   events:
@@ -84,24 +92,6 @@ create_content:
     - http:
         path: api/content
         method: post
-        cors: true
-        authorizer: ${self:custom.authorizer}
-
-update_content:
-  handler: src/content/update.update
-  events:
-    - http:
-        path: api/content/{id}
-        method: put
-        cors: true
-        authorizer: ${self:custom.authorizer}
-
-delete_content:
-  handler: src/content/delete.delete
-  events:
-    - http:
-        path: api/content/{id}
-        method: delete
         cors: true
         authorizer: ${self:custom.authorizer}
 
@@ -229,6 +219,15 @@ update_user:
     - http:
         path: api/users/{id}
         method: put
+        cors: true
+        authorizer: ${self:custom.authorizer}
+
+change_user_password:
+  handler: src/user/change-password.changePassword
+  events:
+    - http:
+        path: api/change-password/
+        method: post
         cors: true
         authorizer: ${self:custom.authorizer}
 
