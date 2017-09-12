@@ -167,7 +167,7 @@ export class AuthService {
             },
             (error) => {
                 if (error.status === 401) {
-                    this.notificationService.showNonVanishingWarning('Session is expired. Please, sign in');
+                    this.signOut();
                 }
             });
     }
