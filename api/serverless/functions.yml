@@ -114,7 +114,6 @@ create_setting:
 
 update_setting:
   handler: src/setting/update.update
-  environment: ${self:custom.properties.pusher}
   events:
     - http:
         path: api/settings/{id}
