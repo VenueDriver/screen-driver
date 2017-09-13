@@ -28,9 +28,6 @@ functions:
           method: post
           cors: true
 
-  authorizer:
-    handler: src/auth/authorizer.handler
-
   sign_out:
     handler: src/auth/sign_out.handler
     events:
@@ -75,6 +72,33 @@ resources:
         UserPoolId:
           Ref: CognitoUserPool
 
+    ApiAuthResource:
+      Type: AWS::ApiGateway::Resource
+      Properties:
+        ParentId: p0wbl9
+        PathPart: auth
+        RestApiId:
+          Fn::ImportValue: ScreenDriverRestApi
+
+    ApiAuthMethod:
+      Type: AWS::ApiGateway::Method
+      Properties:
+        HttpMethod: POST
+        ResourceId:
+          Ref: ApiAuthResource
+        RestApiId:
+          Fn::ImportValue: ScreenDriverRestApi
+
+    AuthFunctionPermission:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName: authenticate
+        Action: lambda:InvokeFunction
+        Principal: apigateway.amazonaws.com
+        SourceArn:
+          Fn::GetAtt:
+            - ApiAuthMethod
+            - Arn
 
 
 plugins:

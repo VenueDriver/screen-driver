@@ -38,6 +38,12 @@ plugins:
 
 resources:
   Resources: ${self:custom.resources}
+  Outputs:
+    ScreenDriverRestApi:
+      Value:
+        Ref: ApiGatewayRestApi
+      Export:
+        Name: ScreenDriverRestApi
 
 package:
   exclude:
