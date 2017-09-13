@@ -23,7 +23,8 @@ export class UserProfileComponent {
         this.isEditEmailMode = flag;
     }
 
-    onEmailChanged(email: string) {
-
+    onEmailChanged(user: User) {
+        this.user = user;
+        this.changeEditEmailMode(false);
     }
 }

@@ -1,7 +1,13 @@
 <div class="change-email-container">
+
+    <div *ngIf="errorMessage"
+         class="alert alert-danger">
+        {{errorMessage}}
+    </div>
+
     <input type="text"
            class="form-control"
-           [(ngModel)]="editedEmail"
+           [(ngModel)]="editedUser.email"
            input-autofocus>
 
     <div class="control-buttons">

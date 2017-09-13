@@ -32,8 +32,7 @@ export class CreateUserComponent implements OnInit {
     }
 
     isEmailValid(emailModel?: NgModel): boolean {
-        let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        let validationResult = regex.test(this.user.email);
+        let validationResult = User.isEmailValid(this.user.email);
         if (emailModel && !validationResult) {
             emailModel.control.setErrors({notValid: true});
         }
