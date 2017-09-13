@@ -28,11 +28,17 @@ export class ChangeEmailComponent implements OnInit {
     }
 
     performSubmit() {
-        if (User.isEmailValid(this.editedUser.email)) {
-            this.updateUser();
-        } else {
-            this.errorMessage = 'Invalid Email';
+        if (this.user.email === this.editedUser.email) {
+            this.errorMessage = "You already have this email";
+            return;
         }
+
+        if (!User.isEmailValid(this.editedUser.email)) {
+            this.errorMessage = 'Invalid Email';
+            return;
+        }
+
+        this.updateUser();
     }
 
     private updateUser() {
