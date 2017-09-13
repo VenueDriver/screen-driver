@@ -1,0 +1,23 @@
+{
+  "name": "screen-driver-auth-api",
+  "version": "1.0.0",
+  "description": "Serverless authentication service",
+  "scripts": {
+    "start": "sls offline start --stage dev",
+    "invoke": "sls invoke -f",
+    "deploy": "serverless deploy --stage dev",
+    "deploy-function": "serverless deploy --stage dev function --function"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "amazon-cognito-identity-js": "1.19.0",
+    "jsonwebtoken": "7.4.3",
+    "jwk-to-pem": "1.2.6",
+    "lodash": "4.17.4"
+  },
+  "devDependencies": {
+    "serverless-export-env": "github:arabold/serverless-export-env",
+    "serverless-offline": "3.15.3"
+  }
+}
