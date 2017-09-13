@@ -1,0 +1,87 @@
+service: screen-driver-auth-api
+
+frameworkVersion: ">=1.20.1 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  environment:
+    STAGE: ${opt:stage}
+    USER_POOL: ${self:service}-userpool-${opt:stage}
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT: ${self:service}-appclient-${opt:stage}
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - cognito-idp:*
+      Resource: arn:aws:cognito-idp:*
+
+functions:
+  authenticate:
+    handler: src/auth/authenticator.handler
+    events:
+      - http:
+          path: api/auth
+          method: post
+          cors: true
+
+  authorizer:
+    handler: src/auth/authorizer.handler
+
+  sign_out:
+    handler: src/auth/sign_out.handler
+    events:
+      - http:
+          path: api/sign_out
+          method: post
+          cors: true
+
+  refresh_token:
+    handler: src/auth_token/auth_token.refresh
+    events:
+      - http:
+          path: api/token/refresh
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    CognitoUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: ${self:provider.environment.USER_POOL}
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+            RequireLowercase: true
+            RequireNumbers: true
+            RequireSymbols: false
+            RequireUppercase: false
+        AdminCreateUserConfig:
+          AllowAdminCreateUserOnly: true
+        Schema:
+          - AttributeDataType: Boolean
+            Mutable: true
+            Name: admin
+
+    CognitoAppClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: ${self:provider.environment.USER_POOL_CLIENT}
+        RefreshTokenValidity: 1
+        UserPoolId:
+          Ref: CognitoUserPool
+
+
+
+plugins:
+  - serverless-offline
+  - serverless-export-env
+
+package:
+  exclude:
+    - .*
+    - package*
