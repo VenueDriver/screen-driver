@@ -1,33 +1,22 @@
 <div class="table-wrapper">
+    <change-email *ngIf="isEditEmailMode"
+                  [email]="user.email"
+                  (submit)="onEmailChanged($event)"
+                  (cancel)="changeEditEmailMode(false)">
+    </change-email>
+
     <table class="table">
         <tr>
             <td class="col-md-2">Email</td>
             <td class="col-md-4">
-                <span *ngIf="!isEditEmailMode">
+                <span>
                     {{user.email}}
                 </span>
-                <input *ngIf="isEditEmailMode"
-                       type="text"
-                       class="form-control"
-                       input-autofocus>
             </td>
             <td class="col-md-3">
                 <div *ngIf="!isEditEmailMode"
                      class="edit-button"
                      (click)="changeEditEmailMode(true)">
-                </div>
-                <div *ngIf="isEditEmailMode"
-                     class="control-buttons">
-                    <button type="button"
-                            class="btn btn-success"
-                            (click)="performSubmit()">
-                        Save
-                    </button>
-                    <button type="button"
-                            class="btn btn-link"
-                            (click)="performCancel()">
-                        Cancel
-                    </button>
                 </div>
             </td>
         </tr>

@@ -1,6 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {User} from "../../user/user";
 
+import * as _ from 'lodash';
+
 @Component({
     selector: 'user-profile',
     templateUrl: './user-profile.component.html',
@@ -8,7 +10,7 @@ import {User} from "../../user/user";
 })
 export class UserProfileComponent {
     @Input() user: User;
-    isEditEmailMode: boolean = false;
+    isEditEmailMode: boolean = true;
 
     constructor() {
     }
@@ -21,11 +23,7 @@ export class UserProfileComponent {
         this.isEditEmailMode = flag;
     }
 
-    performCancel() {
-        this.changeEditEmailMode(false);
-    }
-
-    performSubmit() {
+    onEmailChanged(email: string) {
 
     }
 }
