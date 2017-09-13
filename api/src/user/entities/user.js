@@ -29,18 +29,23 @@ class User {
 
     create() {
         delete this.password;
-        const params = ParametersBuilder.buildCreateRequestParameters(this);
         let deferred = Q.defer();
         this._rev = 0;
-        this.generateId();
         this.validate(deferred.reject);
         this.validateEmailUniqueness(deferred.reject);
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
         }
         UserPool.createUser(this)
-            .then(() => dbHelper.putItem(params))
-            .then(result => deferred.resolve(result))
+            .then(user => {
+                let subAttribute = user.Attributes.find(attribute => attribute.Name === 'sub');
+                this.id = subAttribute.Value;
+                const params = ParametersBuilder.buildCreateRequestParameters(this);
+                return dbHelper.putItem(params)
+            })
+            .then(result => {
+                deferred.resolve(result)
+            })
             .catch(error => deferred.reject(error));
         return deferred.promise;
 
