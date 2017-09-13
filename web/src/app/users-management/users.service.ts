@@ -82,7 +82,15 @@ export class UsersService {
     }
 
     private getErrorMessage(error): string {
-        return error.error ? error.error.message.message : error.message;
+        if (error.error) {
+            return this.getErrorMessage(error.error)
+        }
+
+        if (error.message) {
+            return error.message;
+        }
+
+        return error;
     }
 
     applyChangesInUserList(updatedUser: User) {
