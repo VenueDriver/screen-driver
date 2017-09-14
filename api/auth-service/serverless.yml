@@ -113,6 +113,20 @@ resources:
           Ref: ApiAuthResource
         RestApiId:
           Fn::ImportValue: ScreenDriverRestApi
+        Integration:
+          Type: AWS_PROXY
+          IntegrationHttpMethod: POST
+          Uri:
+            Fn::Join:
+              - ''
+              - - 'arn:aws:apigateway:'
+                - Ref:
+                    AWS::Region
+                - ':lambda:path/2015-03-31/functions/'
+                - Fn::GetAtt:
+                  - AuthenticateLambdaFunction
+                  - Arn
+                - '/invocations'
 
 
 plugins:
