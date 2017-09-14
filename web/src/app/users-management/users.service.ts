@@ -70,11 +70,9 @@ export class UsersService {
             .subscribe(
                 response => {
                     subject.next(response);
-                    console.log(response);
                     this.notificationService.showSuccessNotificationBar('Profile was edited successfully');
                 },
                 error => {
-                    console.log(error);
                     let errorMessage = this.getErrorMessage(error);
                     this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to edit user profile');
                     subject.error(errorMessage);
