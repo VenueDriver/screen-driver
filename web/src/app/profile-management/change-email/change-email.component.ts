@@ -29,7 +29,7 @@ export class ChangeEmailComponent implements OnInit {
 
     performSubmit() {
         if (this.user.email === this.editedUser.email) {
-            this.errorMessage = "You already have this email";
+            this.errorMessage = "You already use this email";
             return;
         }
 
