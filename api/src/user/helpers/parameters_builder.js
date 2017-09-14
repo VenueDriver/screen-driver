@@ -10,6 +10,7 @@ module.exports.buildUpdateRequestParameters = (user) => {
             '#rev': '_rev',
         },
         ExpressionAttributeValues: {
+            ':email': user.email,
             ':password': user.password,
             ':isAdmin': user.isAdmin,
             ':rev': user._rev,
@@ -18,6 +19,7 @@ module.exports.buildUpdateRequestParameters = (user) => {
         UpdateExpression: `SET 
                 ${_getPasswordUpdateExpression()} 
                 isAdmin = :isAdmin, 
+                email = :email, 
                 #rev = :new_rev
             `,
         ConditionExpression: "#rev = :rev",
