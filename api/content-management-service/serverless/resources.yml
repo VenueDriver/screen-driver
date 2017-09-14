@@ -81,8 +81,3 @@ UsersTable:
       ReadCapacityUnits: 1
       WriteCapacityUnits: 1
     TableName: ${self:provider.environment.USERS_TABLE}
-
-ApiGatewayRestApi:
-  Type: AWS::ApiGateway::RestApi
-  Properties:
-    Name: ${self:service}-${self:provider.environment.STAGE}-api
