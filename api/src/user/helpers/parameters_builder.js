@@ -55,6 +55,22 @@ module.exports.buildDeleteRequestParameters = (user) => {
     }
 };
 
+module.exports.buildChangeEmailRequestParameters = (user) => {
+    return {
+        TableName: process.env.USERS_TABLE,
+        Key: {
+            id: user.id,
+        },
+        ExpressionAttributeValues: {
+            ':email': user.email,
+        },
+        UpdateExpression: `SET 
+                email = :email
+            `,
+        ReturnValues: 'ALL_NEW',
+    };
+};
+
 function increaseRevision(user) {
     return ++user._rev;
 }

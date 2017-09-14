@@ -10,7 +10,7 @@ module.exports.update = (event, context, callback) => {
     let token = event.headers.authorization.replace('Bearer ', '');
     let decodedToken = TokenParser.decodeToken(token);
     let currentUser = new User({
-        email: decodedToken.payload['cognito:username'],
+        email: decodedToken.payload['email'],
         isAdmin: decodedToken.payload['custom:admin']
     });
 

@@ -38,11 +38,11 @@ export class ChangeEmailComponent implements OnInit {
             return;
         }
 
-        this.updateUser();
+        this.changeEmail();
     }
 
-    private updateUser() {
-        this.usersService.update(this.editedUser).subscribe(
+    private changeEmail() {
+        this.usersService.editProfile(this.editedUser).subscribe(
             user => {
                 this.submit.emit(user);
             },

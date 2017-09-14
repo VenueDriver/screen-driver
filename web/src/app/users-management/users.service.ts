@@ -8,7 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import * as _ from 'lodash';
 
 const USERS_API = `${environment.apiUrl}/api/users`;
-const RESET_PASSWORD_API = `${environment.apiUrl}/api/change-password`;
+const EDIT_PROFILE_API = `${environment.apiUrl}/api/edit-profile`;
 
 @Injectable()
 export class UsersService {
@@ -64,17 +64,19 @@ export class UsersService {
         return subject;
     }
 
-    changePassword(user: User): Observable<User> {
+    editProfile(user: User): Observable<User> {
         let subject = new Subject<any>();
-        this.httpClient.post(`${RESET_PASSWORD_API}`, user)
+        this.httpClient.post(`${EDIT_PROFILE_API}`, user)
             .subscribe(
                 response => {
                     subject.next(response);
-                    this.notificationService.showSuccessNotificationBar('Password changed successfully');
+                    console.log(response);
+                    this.notificationService.showSuccessNotificationBar('Profile was edited successfully');
                 },
                 error => {
+                    console.log(error);
                     let errorMessage = this.getErrorMessage(error);
-                    this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to change password');
+                    this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to edit user profile');
                     subject.error(errorMessage);
                 }
             );

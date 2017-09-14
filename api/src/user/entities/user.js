@@ -73,10 +73,6 @@ class User {
     }
 
     validateRoleChanges(reject, user) {
-        if (_.isEmpty(user) || !user.isAdmin) {
-            reject('You don\'t have access to do this operation');
-            return;
-        }
         if (this.email === user.email && this.isAdmin != user.isAdmin) {
             reject('You can\'t change role of yourself');
         }
@@ -102,6 +98,21 @@ class User {
                     errorCallback('User with such email already exists');
                 }
             })
+    }
+
+    changeEmail() {
+        let deferred = Q.defer();
+        let params = ParametersBuilder.buildChangeEmailRequestParameters(this);
+
+        if (!this.isEmailValid()) {
+            deferred.reject('Invalid email');
+            return deferred.promise;
+        }
+
+        UserPool.updateUser(this)
+            .then(data => dbHelper.updateItem(params, deferred));
+
+        return deferred.promise;
     }
 
     isEmailValid() {
