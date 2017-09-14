@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 })
 export class UserProfileComponent {
     @Input() user: User;
-    isEditEmailMode: boolean = true;
+    isEditEmailMode: boolean = false;
 
     constructor() {
     }
