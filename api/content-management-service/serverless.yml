@@ -44,6 +44,11 @@ resources:
         Ref: ApiGatewayRestApi
       Export:
         Name: ScreenDriverRestApi
+    ScreenDriverRootResource:
+      Value:
+        Ref: ApiGatewayResourceApi
+      Export:
+        Name: ScreenDriverRootApiResource
 
 package:
   exclude:
