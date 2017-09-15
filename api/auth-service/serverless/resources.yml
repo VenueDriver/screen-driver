@@ -1,0 +1,13 @@
+CognitoUserPool: ${self:custom.cognitoResources.CognitoUserPool}
+CognitoAppClient: ${self:custom.cognitoResources.CognitoAppClient}
+
+ApiAuthResource: ${self:custom.authenticateLambdaResources.ApiAuthResource}
+ApiAuthOptionsMethod: ${self:custom.authenticateLambdaResources.ApiAuthOptionsMethod}
+ApiAuthPostMethod: ${self:custom.authenticateLambdaResources.ApiAuthPostMethod}
+AuthFunctionPermission: ${self:custom.authenticateLambdaResources.AuthFunctionPermission}
+
+ApiTokenResource: ${self:custom.refreshTokenLambdaResources.ApiTokenResource}
+ApiTokenRefreshResource: ${self:custom.refreshTokenLambdaResources.ApiTokenRefreshResource}
+ApiTokenRefreshOptionsMethod: ${self:custom.refreshTokenLambdaResources.ApiTokenRefreshOptionsMethod}
+ApiTokenRefreshPostMethod: ${self:custom.refreshTokenLambdaResources.ApiTokenRefreshPostMethod}
+RefreshTokenFunctionPermission: ${self:custom.refreshTokenLambdaResources.RefreshTokenFunctionPermission}

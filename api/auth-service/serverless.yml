@@ -23,6 +23,10 @@ custom:
   optionsMethod: ${file(./serverless/options-method-properties.yml)}
   restApiArn: ${file(./serverless/rest-api-arn.yml)}
   baseLambdaUri: ${file(./serverless/base-lambda-uri.yml)}
+  cognitoResources: ${file(./serverless/cognito-resources.yml)}
+  authenticateLambdaResources: ${file(./serverless/api-resources-for-authenticate-function.yml)}
+  refreshTokenLambdaResources: ${file(./serverless/api-resources-for-refresh-token-function.yml)}
+  resources: ${file(./serverless/resources.yml)}
   restApiId:
     Fn::ImportValue: ScreenDriverRestApi-${opt:stage}
   rootUrlId:
@@ -44,10 +48,7 @@ functions:
     handler: src/auth_token/auth_token.refresh
 
 resources:
-  Resources:
-    - ${file(serverless/cognito-resources.yml)}
-    - ${file(serverless/api-resources-for-authenticate-function.yml)}
-    - ${file(serverless/api-resources-for-refresh-token-function.yml)}
+  Resources: ${self:custom.resources}
 
 plugins:
   - serverless-offline
