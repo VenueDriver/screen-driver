@@ -34,6 +34,7 @@ custom:
   signOutLambdaResources: ${file(./serverless/api-resources-for-sign-out-function.yml)}
   usersLambdaResource: ${file(./serverless/api-resources-users-function.yml)}
   usersTableResource: ${file(./serverless/users-table-resource.yml)}
+  changeUserPasswordLambdaResource: ${file(./serverless/api-resources-change-user-password-function.yml)}
   resources: ${file(./serverless/resources.yml)}
   restApiId:
     Fn::ImportValue: ScreenDriverRestApi-${opt:stage}
@@ -66,11 +67,6 @@ functions:
 
   change_user_password:
     handler: src/user/change-password.changePassword
-    events:
-      - http:
-          path: api/change-password/
-          method: post
-          cors: true
 
 resources:
   Resources: ${self:custom.resources}

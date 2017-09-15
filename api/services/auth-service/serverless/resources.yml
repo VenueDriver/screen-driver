@@ -25,3 +25,8 @@ GetUsersListFunctionPermission: ${self:custom.usersLambdaResource.GetUsersListFu
 CreateUserFunctionPermission: ${self:custom.usersLambdaResource.CreateUserFunctionPermission}
 
 UsersTable: ${self:custom.usersTableResource}
+
+ApiChangePasswordResource: ${self:custom.changeUserPasswordLambdaResource.ApiChangePasswordResource}
+ApiChangePasswordOptionsMethod: ${self:custom.changeUserPasswordLambdaResource.ApiChangePasswordOptionsMethod}
+ApiChangePasswordPostMethod: ${self:custom.changeUserPasswordLambdaResource.ApiChangePasswordPostMethod}
+ChangeUserPasswordFunctionPermission: ${self:custom.changeUserPasswordLambdaResource.ChangeUserPasswordFunctionPermission}
