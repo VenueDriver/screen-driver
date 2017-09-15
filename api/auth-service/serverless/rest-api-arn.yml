@@ -7,5 +7,5 @@ Fn::Join:
     - Ref:
         AWS::AccountId
     - ':'
-    - ${self:custom.rest-api-id}
+    - ${self:custom.restApiId}
     - '/*/*'

@@ -20,12 +20,12 @@ provider:
       Resource: arn:aws:cognito-idp:*
 
 custom:
-  options-method: ${file(./serverless/options-method-properties.yml)}
-  rest-api-arn: ${file(./serverless/rest-api-arn.yml)}
-  base-lambda-uri: ${file(./serverless/base-lambda-uri.yml)}
-  rest-api-id:
+  optionsMethod: ${file(./serverless/options-method-properties.yml)}
+  restApiArn: ${file(./serverless/rest-api-arn.yml)}
+  baseLambdaUri: ${file(./serverless/base-lambda-uri.yml)}
+  restApiId:
     Fn::ImportValue: ScreenDriverRestApi
-  root-url-id:
+  rootUrlId:
     Fn::ImportValue: ScreenDriverRootApiResource
 
 functions:
@@ -79,20 +79,20 @@ resources:
     ApiAuthResource:
       Type: AWS::ApiGateway::Resource
       Properties:
-        ParentId: ${self:custom.root-url-id}
+        ParentId: ${self:custom.rootUrlId}
         PathPart: auth
-        RestApiId: ${self:custom.rest-api-id}
+        RestApiId: ${self:custom.restApiId}
 
     ApiAuthOptionsMethod:
       Type: AWS::ApiGateway::Method
       Properties:
         AuthorizationType: NONE
         HttpMethod: OPTIONS
-        MethodResponses: ${self:custom.options-method.MethodResponses}
-        Integration: ${self:custom.options-method.Integration}
+        MethodResponses: ${self:custom.optionsMethod.MethodResponses}
+        Integration: ${self:custom.optionsMethod.Integration}
         ResourceId:
           Ref: ApiAuthResource
-        RestApiId: ${self:custom.rest-api-id}
+        RestApiId: ${self:custom.restApiId}
 
     ApiAuthMethod:
       Type: AWS::ApiGateway::Method
@@ -101,14 +101,14 @@ resources:
         HttpMethod: POST
         ResourceId:
           Ref: ApiAuthResource
-        RestApiId: ${self:custom.rest-api-id}
+        RestApiId: ${self:custom.restApiId}
         Integration:
           Type: AWS_PROXY
           IntegrationHttpMethod: POST
           Uri:
             Fn::Join:
               - ''
-              - - ${self:custom.base-lambda-uri}
+              - - ${self:custom.baseLambdaUri}
                 - Fn::GetAtt:
                   - AuthenticateLambdaFunction
                   - Arn
@@ -123,7 +123,7 @@ resources:
             - Arn
         Action: lambda:InvokeFunction
         Principal: apigateway.amazonaws.com
-        SourceArn: ${self:custom.rest-api-arn}
+        SourceArn: ${self:custom.restApiArn}
 
 plugins:
   - serverless-offline
