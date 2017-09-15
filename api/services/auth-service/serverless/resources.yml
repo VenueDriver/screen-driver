@@ -17,7 +17,11 @@ ApiSignOutOptionsMethod: ${self:custom.signOutLambdaResources.ApiSignOutOptionsM
 ApiSignOutPostMethod: ${self:custom.signOutLambdaResources.ApiSignOutPostMethod}
 SignOutFunctionPermission: ${self:custom.signOutLambdaResources.SignOutFunctionPermission}
 
-ApiCreateUserResource: ${self:custom.createUserLambdaResource.ApiCreateUserResource}
-ApiCreateUserOptionsMethod: ${self:custom.createUserLambdaResource.ApiCreateUserOptionsMethod}
-ApiCreateUserPostMethod: ${self:custom.createUserLambdaResource.ApiCreateUserPostMethod}
-CreateUserFunctionPermission: ${self:custom.createUserLambdaResource.CreateUserFunctionPermission}
+ApiUsersResource: ${self:custom.usersLambdaResource.ApiUsersResource}
+ApiUsersOptionsMethod: ${self:custom.usersLambdaResource.ApiUsersOptionsMethod}
+ApiUsersPostMethod: ${self:custom.usersLambdaResource.ApiUsersPostMethod}
+ApiUsersGetMethod: ${self:custom.usersLambdaResource.ApiUsersGetMethod}
+GetUsersListFunctionPermission: ${self:custom.usersLambdaResource.GetUsersListFunctionPermission}
+CreateUserFunctionPermission: ${self:custom.usersLambdaResource.CreateUserFunctionPermission}
+
+UsersTable: ${self:custom.usersTableResource}

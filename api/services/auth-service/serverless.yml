@@ -32,7 +32,8 @@ custom:
   authenticateLambdaResources: ${file(./serverless/api-resources-for-authenticate-function.yml)}
   refreshTokenLambdaResources: ${file(./serverless/api-resources-for-refresh-token-function.yml)}
   signOutLambdaResources: ${file(./serverless/api-resources-for-sign-out-function.yml)}
-  createUserLambdaResource: ${file(./serverless/api-resources-for-create-user-function.yml)}
+  usersLambdaResource: ${file(./serverless/api-resources-users-function.yml)}
+  usersTableResource: ${file(./serverless/users-table-resource.yml)}
   resources: ${file(./serverless/resources.yml)}
   restApiId:
     Fn::ImportValue: ScreenDriverRestApi-${opt:stage}
@@ -54,11 +55,6 @@ functions:
 
   get_users_list:
     handler: src/user/list.list
-    events:
-      - http:
-          path: api/users
-          method: get
-          cors: true
 
   update_user:
     handler: src/user/update.update
