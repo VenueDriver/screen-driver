@@ -24,9 +24,9 @@ custom:
   restApiArn: ${file(./serverless/rest-api-arn.yml)}
   baseLambdaUri: ${file(./serverless/base-lambda-uri.yml)}
   restApiId:
-    Fn::ImportValue: ScreenDriverRestApi
+    Fn::ImportValue: ScreenDriverRestApi-${opt:stage}
   rootUrlId:
-    Fn::ImportValue: ScreenDriverRootApiResource
+    Fn::ImportValue: ScreenDriverRootApiResource-${opt:stage}
 
 functions:
   authenticate:

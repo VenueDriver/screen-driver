@@ -43,12 +43,12 @@ resources:
       Value:
         Ref: ApiGatewayRestApi
       Export:
-        Name: ScreenDriverRestApi
+        Name: ScreenDriverRestApi-${opt:stage}
     ScreenDriverRootResource:
       Value:
         Ref: ApiGatewayResourceApi
       Export:
-        Name: ScreenDriverRootApiResource
+        Name: ScreenDriverRootApiResource-${opt:stage}
 
 package:
   exclude:
