@@ -23,6 +23,10 @@ custom:
   options-method: ${file(./serverless/options-method-properties.yml)}
   rest-api-arn: ${file(./serverless/rest-api-arn.yml)}
   base-lambda-uri: ${file(./serverless/base-lambda-uri.yml)}
+  rest-api-id:
+    Fn::ImportValue: ScreenDriverRestApi
+  root-url-id:
+    Fn::ImportValue: ScreenDriverRootApiResource
 
 functions:
   authenticate:
@@ -75,11 +79,9 @@ resources:
     ApiAuthResource:
       Type: AWS::ApiGateway::Resource
       Properties:
-        ParentId:
-          Fn::ImportValue: ScreenDriverRootApiResource
+        ParentId: ${self:custom.root-url-id}
         PathPart: auth
-        RestApiId:
-          Fn::ImportValue: ScreenDriverRestApi
+        RestApiId: ${self:custom.rest-api-id}
 
     ApiAuthOptionsMethod:
       Type: AWS::ApiGateway::Method
@@ -90,8 +92,7 @@ resources:
         Integration: ${self:custom.options-method.Integration}
         ResourceId:
           Ref: ApiAuthResource
-        RestApiId:
-          Fn::ImportValue: ScreenDriverRestApi
+        RestApiId: ${self:custom.rest-api-id}
 
     ApiAuthMethod:
       Type: AWS::ApiGateway::Method
@@ -100,8 +101,7 @@ resources:
         HttpMethod: POST
         ResourceId:
           Ref: ApiAuthResource
-        RestApiId:
-          Fn::ImportValue: ScreenDriverRestApi
+        RestApiId: ${self:custom.rest-api-id}
         Integration:
           Type: AWS_PROXY
           IntegrationHttpMethod: POST

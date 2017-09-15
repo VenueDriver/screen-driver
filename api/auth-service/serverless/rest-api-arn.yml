@@ -7,6 +7,5 @@ Fn::Join:
     - Ref:
         AWS::AccountId
     - ':'
-    - Fn::ImportValue:
-        ScreenDriverRestApi
+    - ${self:custom.rest-api-id}
     - '/*/*'
