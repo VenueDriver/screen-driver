@@ -44,7 +44,7 @@ ApiTokenRefreshPostMethod:
               - Arn
             - '/invocations'
 
-AuthFunctionPermission:
+RefreshTokenFunctionPermission:
   Type: AWS::Lambda::Permission
   Properties:
     FunctionName:
