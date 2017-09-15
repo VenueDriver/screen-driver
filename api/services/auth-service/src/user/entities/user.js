@@ -9,7 +9,6 @@ const _ = require('lodash');
 
 let db;
 
-const ModulePathManager = require('../../module_path_manager');
 const UserPool = require('../../user_pool/user_pool');
 
 //General Email Regex (RFC 5322 Official Standard)

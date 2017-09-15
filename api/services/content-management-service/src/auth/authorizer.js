@@ -2,7 +2,7 @@
 
 const ModulePathManager = require('../module_path_manager');
 const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/auth_token_parser');
-const ClientApp = require(ModulePathManager.getBasePath() + 'lib/user_pool/client_app/client_app');
+const KeysLoader = require(ModulePathManager.getBasePath() + 'lib/auth/keys_loader');
 const PolicyGenerator = require(ModulePathManager.getBasePath() + 'lib/auth/policy_generator');
 const AccessProvider = require(ModulePathManager.getBasePath() + 'lib/auth/access_provider');
 
@@ -10,7 +10,7 @@ module.exports.handler = (event, context, callback) => {
     let idToken = getTokenFromHeader(event);
     let decodedToken = TokenParser.decodeToken(idToken);
 
-    ClientApp.loadKeySet(decodedToken.payload.iss)
+    KeysLoader.loadKeySet(decodedToken.payload.iss)
         .then(pems => {
             let pem = pems[decodedToken.header.kid];
             TokenParser.verifyToken(idToken, pem);
