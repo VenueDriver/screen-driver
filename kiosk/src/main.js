@@ -97,6 +97,10 @@ function addEventListeners() {
     ipcMain.on('open-content-window', (event, contentUrl) => {
         openContentWindow(contentUrl);
     });
+
+    ipcMain.on('user-action', function (event, data) {
+        console.log(data);
+    });
 }
 
 function openAdminPanel() {
