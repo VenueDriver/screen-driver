@@ -42,16 +42,12 @@ functions:
 
   refresh_token:
     handler: src/auth_token/auth_token.refresh
-    events:
-      - http:
-          path: api/token/refresh
-          method: post
-          cors: true
 
 resources:
   Resources:
     - ${file(serverless/cognito-resources.yml)}
     - ${file(serverless/api-resources-for-authenticate-function.yml)}
+    - ${file(serverless/api-resources-for-refresh-token-function.yml)}
 
 plugins:
   - serverless-offline
