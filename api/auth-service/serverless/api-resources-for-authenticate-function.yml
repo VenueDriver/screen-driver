@@ -1,0 +1,48 @@
+ApiAuthResource:
+  Type: AWS::ApiGateway::Resource
+  Properties:
+    ParentId: ${self:custom.rootUrlId}
+    PathPart: auth
+    RestApiId: ${self:custom.restApiId}
+
+ApiAuthOptionsMethod:
+  Type: AWS::ApiGateway::Method
+  Properties:
+    AuthorizationType: NONE
+    HttpMethod: OPTIONS
+    MethodResponses: ${self:custom.optionsMethod.MethodResponses}
+    Integration: ${self:custom.optionsMethod.Integration}
+    ResourceId:
+      Ref: ApiAuthResource
+    RestApiId: ${self:custom.restApiId}
+
+ApiAuthPostMethod:
+  Type: AWS::ApiGateway::Method
+  Properties:
+    AuthorizationType: NONE
+    HttpMethod: POST
+    ResourceId:
+      Ref: ApiAuthResource
+    RestApiId: ${self:custom.restApiId}
+    Integration:
+      Type: AWS_PROXY
+      IntegrationHttpMethod: POST
+      Uri:
+        Fn::Join:
+          - ''
+          - - ${self:custom.baseLambdaUri}
+            - Fn::GetAtt:
+              - AuthenticateLambdaFunction
+              - Arn
+            - '/invocations'
+
+AuthFunctionPermission:
+  Type: AWS::Lambda::Permission
+  Properties:
+    FunctionName:
+      Fn::GetAtt:
+        - AuthenticateLambdaFunction
+        - Arn
+    Action: lambda:InvokeFunction
+    Principal: apigateway.amazonaws.com
+    SourceArn: ${self:custom.restApiArn}

@@ -1,0 +1,25 @@
+CognitoUserPool:
+  Type: AWS::Cognito::UserPool
+  Properties:
+    UserPoolName: ${self:provider.environment.USER_POOL}
+    Policies:
+      PasswordPolicy:
+        MinimumLength: 8
+        RequireLowercase: true
+        RequireNumbers: true
+        RequireSymbols: false
+        RequireUppercase: false
+    AdminCreateUserConfig:
+      AllowAdminCreateUserOnly: true
+    Schema:
+      - AttributeDataType: Boolean
+        Mutable: true
+        Name: admin
+
+CognitoAppClient:
+  Type: AWS::Cognito::UserPoolClient
+  Properties:
+    ClientName: ${self:provider.environment.USER_POOL_CLIENT}
+    RefreshTokenValidity: 1
+    UserPoolId:
+      Ref: CognitoUserPool
