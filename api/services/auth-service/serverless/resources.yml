@@ -16,3 +16,8 @@ ApiSignOutResource: ${self:custom.signOutLambdaResources.ApiSignOutResource}
 ApiSignOutOptionsMethod: ${self:custom.signOutLambdaResources.ApiSignOutOptionsMethod}
 ApiSignOutPostMethod: ${self:custom.signOutLambdaResources.ApiSignOutPostMethod}
 SignOutFunctionPermission: ${self:custom.signOutLambdaResources.SignOutFunctionPermission}
+
+ApiCreateUserResource: ${self:custom.createUserLambdaResource.ApiCreateUserResource}
+ApiCreateUserOptionsMethod: ${self:custom.createUserLambdaResource.ApiCreateUserOptionsMethod}
+ApiCreateUserPostMethod: ${self:custom.createUserLambdaResource.ApiCreateUserPostMethod}
+CreateUserFunctionPermission: ${self:custom.createUserLambdaResource.CreateUserFunctionPermission}

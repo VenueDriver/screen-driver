@@ -7,6 +7,7 @@ provider:
   runtime: nodejs6.10
   environment:
     STAGE: ${opt:stage}
+    USERS_TABLE: ${self:service}-users-${opt:stage}
     USER_POOL: ${self:service}-userpool-${opt:stage}
     USER_POOL_ID:
       Ref: CognitoUserPool
@@ -18,6 +19,10 @@ provider:
       Action:
         - cognito-idp:*
       Resource: arn:aws:cognito-idp:*
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*
 
 custom:
   optionsMethod: ${file(./serverless/options-method-properties.yml)}
@@ -27,6 +32,7 @@ custom:
   authenticateLambdaResources: ${file(./serverless/api-resources-for-authenticate-function.yml)}
   refreshTokenLambdaResources: ${file(./serverless/api-resources-for-refresh-token-function.yml)}
   signOutLambdaResources: ${file(./serverless/api-resources-for-sign-out-function.yml)}
+  createUserLambdaResource: ${file(./serverless/api-resources-for-create-user-function.yml)}
   resources: ${file(./serverless/resources.yml)}
   restApiId:
     Fn::ImportValue: ScreenDriverRestApi-${opt:stage}
@@ -42,6 +48,33 @@ functions:
 
   refresh_token:
     handler: src/auth_token/auth_token.refresh
+
+  create_user:
+    handler: src/user/create.create
+
+  get_users_list:
+    handler: src/user/list.list
+    events:
+      - http:
+          path: api/users
+          method: get
+          cors: true
+
+  update_user:
+    handler: src/user/update.update
+    events:
+      - http:
+          path: api/users/{id}
+          method: put
+          cors: true
+
+  change_user_password:
+    handler: src/user/change-password.changePassword
+    events:
+      - http:
+          path: api/change-password/
+          method: post
+          cors: true
 
 resources:
   Resources: ${self:custom.resources}
