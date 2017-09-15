@@ -2,7 +2,8 @@
 
 const Notifier = require('../notifier/notifier');
 
-const responseHelper = require('./../helpers/http_response_helper');
+const ModulePathManager = require('../module_path_manager');
+const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
 
 
 module.exports.refresh = (event, context, callback) => {

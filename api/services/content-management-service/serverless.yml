@@ -51,10 +51,10 @@ resources:
         Name: ScreenDriverRootApiResource-${opt:stage}
 
 package:
+  include:
+    - ../lib/**
   exclude:
-    - docker/**
     - test/**
     - serverless/**
     - .*
     - package*
-    - README.md

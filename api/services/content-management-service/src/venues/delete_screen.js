@@ -1,7 +1,8 @@
 'use strict';
 
 const dynamodb = require('../dynamodb/dynamodb');
-const responseHelper = require('../helpers/http_response_helper');
+const ModulePathManager = require('../module_path_manager');
+const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
 const Venue = require('./entities/venue');
 
 module.exports.delete = (event, context, callback) => {

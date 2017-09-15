@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Serverless CRUD service exposing a REST HTTP interface",
   "scripts": {
-    "start": "sls offline start --stage dev",
+    "start": "sls offline start --stage test",
     "db": "sls dynamodb start --stage test",
     "test": "sls invoke test --stage test",
     "test-function": "sls invoke test --stage test --function",

@@ -9,7 +9,8 @@ const _ = require('lodash');
 
 let db;
 
-const UserPool = require('../../user_pool/user_pool');
+const ModulePathManager = require('../../module_path_manager');
+const UserPool = require(ModulePathManager.getBasePath() + '../lib/user_pool/user_pool');
 
 //General Email Regex (RFC 5322 Official Standard)
 const emailValidationRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);

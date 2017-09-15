@@ -1,9 +1,10 @@
 'use strict';
 
-const TokenParser = require('../auth_token/auth_token_parser');
-const ClientApp = require('../user_pool/client_app/client_app');
-const PolicyGenerator = require('./policy_generator');
-const AccessProvider = require('./access_provider');
+const ModulePathManager = require('../module_path_manager');
+const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/auth_token_parser');
+const ClientApp = require(ModulePathManager.getBasePath() + 'lib/user_pool/client_app/client_app');
+const PolicyGenerator = require(ModulePathManager.getBasePath() + 'lib/auth/policy_generator');
+const AccessProvider = require(ModulePathManager.getBasePath() + 'lib/auth/access_provider');
 
 module.exports.handler = (event, context, callback) => {
     let idToken = getTokenFromHeader(event);

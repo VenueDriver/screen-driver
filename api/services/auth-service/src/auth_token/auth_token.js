@@ -1,7 +1,8 @@
 'use strict';
 
-const UserPool = require('../user_pool/user_pool');
-const ResponseHelper = require('../helpers/http_response_helper');
+const ModulePathManager = require('../module_path_manager');
+const UserPool = require(ModulePathManager.getBasePath() + 'lib/user_pool/user_pool');
+const ResponseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
 
 module.exports.refresh = (event, context, callback) => {
     const data = JSON.parse(event.body);

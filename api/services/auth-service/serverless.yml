@@ -51,6 +51,9 @@ plugins:
   - serverless-export-env
 
 package:
+  include:
+    - ../lib/**
   exclude:
+    - serverless
     - .*
     - package*
