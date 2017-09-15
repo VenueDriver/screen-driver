@@ -22,6 +22,7 @@ provider:
 custom:
   options-method: ${file(./serverless/options-method-properties.yml)}
   rest-api-arn: ${file(./serverless/rest-api-arn.yml)}
+  base-lambda-uri: ${file(./serverless/base-lambda-uri.yml)}
 
 functions:
   authenticate:
@@ -107,10 +108,7 @@ resources:
           Uri:
             Fn::Join:
               - ''
-              - - 'arn:aws:apigateway:'
-                - Ref:
-                    AWS::Region
-                - ':lambda:path/2015-03-31/functions/'
+              - - ${self:custom.base-lambda-uri}
                 - Fn::GetAtt:
                   - AuthenticateLambdaFunction
                   - Arn
