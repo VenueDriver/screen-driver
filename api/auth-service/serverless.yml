@@ -94,7 +94,7 @@ resources:
           Ref: ApiAuthResource
         RestApiId: ${self:custom.restApiId}
 
-    ApiAuthMethod:
+    ApiAuthPostMethod:
       Type: AWS::ApiGateway::Method
       Properties:
         AuthorizationType: NONE
