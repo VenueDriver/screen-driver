@@ -1,0 +1,12 @@
+Fn::Join:
+  - ''
+  - - 'arn:aws:execute-api:'
+    - Ref:
+        AWS::Region
+    - ':'
+    - Ref:
+        AWS::AccountId
+    - ':'
+    - Fn::ImportValue:
+        ScreenDriverRestApi
+    - '/*/*'

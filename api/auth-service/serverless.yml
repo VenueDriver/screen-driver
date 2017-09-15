@@ -21,6 +21,7 @@ provider:
 
 custom:
   options-method: ${file(./serverless/options-method-properties.yml)}
+  rest-api-arn: ${file(./serverless/rest-api-arn.yml)}
 
 functions:
   authenticate:
@@ -124,19 +125,7 @@ resources:
             - Arn
         Action: lambda:InvokeFunction
         Principal: apigateway.amazonaws.com
-        SourceArn:
-          Fn::Join:
-            - ''
-            - - 'arn:aws:execute-api:'
-              - Ref:
-                  AWS::Region
-              - ':'
-              - Ref:
-                  AWS::AccountId
-              - ':'
-              - Fn::ImportValue:
-                  ScreenDriverRestApi
-              - '/*/*'
+        SourceArn: ${self:custom.rest-api-arn}
 
 plugins:
   - serverless-offline
