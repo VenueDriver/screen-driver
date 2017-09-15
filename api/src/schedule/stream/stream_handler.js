@@ -32,5 +32,5 @@ function isEnabledScheduleRemoved(streamInfo) {
 }
 
 function triggerUpdateEvent() {
-    Notifier.pushNotification('screens', 'setting_updated');
+    Notifier.pushNotification('screens', 'schedule_updated');
 }
