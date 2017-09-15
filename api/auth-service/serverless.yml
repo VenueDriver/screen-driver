@@ -26,6 +26,7 @@ custom:
   cognitoResources: ${file(./serverless/cognito-resources.yml)}
   authenticateLambdaResources: ${file(./serverless/api-resources-for-authenticate-function.yml)}
   refreshTokenLambdaResources: ${file(./serverless/api-resources-for-refresh-token-function.yml)}
+  signOutLambdaResources: ${file(./serverless/api-resources-for-sign-out-function.yml)}
   resources: ${file(./serverless/resources.yml)}
   restApiId:
     Fn::ImportValue: ScreenDriverRestApi-${opt:stage}
@@ -38,11 +39,6 @@ functions:
 
   sign_out:
     handler: src/auth/sign_out.handler
-    events:
-      - http:
-          path: api/sign_out
-          method: post
-          cors: true
 
   refresh_token:
     handler: src/auth_token/auth_token.refresh

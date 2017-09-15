@@ -11,3 +11,8 @@ ApiTokenRefreshResource: ${self:custom.refreshTokenLambdaResources.ApiTokenRefre
 ApiTokenRefreshOptionsMethod: ${self:custom.refreshTokenLambdaResources.ApiTokenRefreshOptionsMethod}
 ApiTokenRefreshPostMethod: ${self:custom.refreshTokenLambdaResources.ApiTokenRefreshPostMethod}
 RefreshTokenFunctionPermission: ${self:custom.refreshTokenLambdaResources.RefreshTokenFunctionPermission}
+
+ApiSignOutResource: ${self:custom.signOutLambdaResources.ApiSignOutResource}
+ApiSignOutOptionsMethod: ${self:custom.signOutLambdaResources.ApiSignOutOptionsMethod}
+ApiSignOutPostMethod: ${self:custom.signOutLambdaResources.ApiSignOutPostMethod}
+SignOutFunctionPermission: ${self:custom.signOutLambdaResources.SignOutFunctionPermission}
