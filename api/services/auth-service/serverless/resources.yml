@@ -21,8 +21,12 @@ ApiUsersResource: ${self:custom.usersLambdaResource.ApiUsersResource}
 ApiUsersOptionsMethod: ${self:custom.usersLambdaResource.ApiUsersOptionsMethod}
 ApiUsersPostMethod: ${self:custom.usersLambdaResource.ApiUsersPostMethod}
 ApiUsersGetMethod: ${self:custom.usersLambdaResource.ApiUsersGetMethod}
+ApiUsersIdVarResource: ${self:custom.usersLambdaResource.ApiUsersIdVarResource}
+ApiUsersIdVarOptionsMethod: ${self:custom.usersLambdaResource.ApiUsersIdVarOptionsMethod}
+ApiUsersIdVarPutMethod: ${self:custom.usersLambdaResource.ApiUsersIdVarPutMethod}
 GetUsersListFunctionPermission: ${self:custom.usersLambdaResource.GetUsersListFunctionPermission}
 CreateUserFunctionPermission: ${self:custom.usersLambdaResource.CreateUserFunctionPermission}
+UpdateUserFunctionPermission: ${self:custom.usersLambdaResource.UpdateUserFunctionPermission}
 
 UsersTable: ${self:custom.usersTableResource}
 

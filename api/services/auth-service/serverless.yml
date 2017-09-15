@@ -59,11 +59,6 @@ functions:
 
   update_user:
     handler: src/user/update.update
-    events:
-      - http:
-          path: api/users/{id}
-          method: put
-          cors: true
 
   change_user_password:
     handler: src/user/change-password.changePassword
