@@ -1,36 +1,4 @@
 CognitoUserPool: ${self:custom.cognitoResources.CognitoUserPool}
 CognitoAppClient: ${self:custom.cognitoResources.CognitoAppClient}
 
-ApiAuthResource: ${self:custom.authenticateLambdaResources.ApiAuthResource}
-ApiAuthOptionsMethod: ${self:custom.authenticateLambdaResources.ApiAuthOptionsMethod}
-ApiAuthPostMethod: ${self:custom.authenticateLambdaResources.ApiAuthPostMethod}
-AuthFunctionPermission: ${self:custom.authenticateLambdaResources.AuthFunctionPermission}
-
-ApiTokenResource: ${self:custom.refreshTokenLambdaResources.ApiTokenResource}
-ApiTokenRefreshResource: ${self:custom.refreshTokenLambdaResources.ApiTokenRefreshResource}
-ApiTokenRefreshOptionsMethod: ${self:custom.refreshTokenLambdaResources.ApiTokenRefreshOptionsMethod}
-ApiTokenRefreshPostMethod: ${self:custom.refreshTokenLambdaResources.ApiTokenRefreshPostMethod}
-RefreshTokenFunctionPermission: ${self:custom.refreshTokenLambdaResources.RefreshTokenFunctionPermission}
-
-ApiSignOutResource: ${self:custom.signOutLambdaResources.ApiSignOutResource}
-ApiSignOutOptionsMethod: ${self:custom.signOutLambdaResources.ApiSignOutOptionsMethod}
-ApiSignOutPostMethod: ${self:custom.signOutLambdaResources.ApiSignOutPostMethod}
-SignOutFunctionPermission: ${self:custom.signOutLambdaResources.SignOutFunctionPermission}
-
-ApiUsersResource: ${self:custom.usersLambdaResource.ApiUsersResource}
-ApiUsersOptionsMethod: ${self:custom.usersLambdaResource.ApiUsersOptionsMethod}
-ApiUsersPostMethod: ${self:custom.usersLambdaResource.ApiUsersPostMethod}
-ApiUsersGetMethod: ${self:custom.usersLambdaResource.ApiUsersGetMethod}
-ApiUsersIdVarResource: ${self:custom.usersLambdaResource.ApiUsersIdVarResource}
-ApiUsersIdVarOptionsMethod: ${self:custom.usersLambdaResource.ApiUsersIdVarOptionsMethod}
-ApiUsersIdVarPutMethod: ${self:custom.usersLambdaResource.ApiUsersIdVarPutMethod}
-GetUsersListFunctionPermission: ${self:custom.usersLambdaResource.GetUsersListFunctionPermission}
-CreateUserFunctionPermission: ${self:custom.usersLambdaResource.CreateUserFunctionPermission}
-UpdateUserFunctionPermission: ${self:custom.usersLambdaResource.UpdateUserFunctionPermission}
-
 UsersTable: ${self:custom.usersTableResource}
-
-ApiChangePasswordResource: ${self:custom.changeUserPasswordLambdaResource.ApiChangePasswordResource}
-ApiChangePasswordOptionsMethod: ${self:custom.changeUserPasswordLambdaResource.ApiChangePasswordOptionsMethod}
-ApiChangePasswordPostMethod: ${self:custom.changeUserPasswordLambdaResource.ApiChangePasswordPostMethod}
-ChangeUserPasswordFunctionPermission: ${self:custom.changeUserPasswordLambdaResource.ChangeUserPasswordFunctionPermission}

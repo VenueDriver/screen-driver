@@ -25,43 +25,66 @@ provider:
       Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*
 
 custom:
-  optionsMethod: ${file(./serverless/options-method-properties.yml)}
-  restApiArn: ${file(./serverless/rest-api-arn.yml)}
-  baseLambdaUri: ${file(./serverless/base-lambda-uri.yml)}
   cognitoResources: ${file(./serverless/cognito-resources.yml)}
-  authenticateLambdaResources: ${file(./serverless/api-resources-for-authenticate-function.yml)}
-  refreshTokenLambdaResources: ${file(./serverless/api-resources-for-refresh-token-function.yml)}
-  signOutLambdaResources: ${file(./serverless/api-resources-for-sign-out-function.yml)}
-  usersLambdaResource: ${file(./serverless/api-resources-users-function.yml)}
   usersTableResource: ${file(./serverless/users-table-resource.yml)}
-  changeUserPasswordLambdaResource: ${file(./serverless/api-resources-change-user-password-function.yml)}
   resources: ${file(./serverless/resources.yml)}
-  restApiId:
-    Fn::ImportValue: ScreenDriverRestApi-${opt:stage}
-  rootUrlId:
-    Fn::ImportValue: ScreenDriverRootApiResource-${opt:stage}
 
 functions:
   authenticate:
     handler: src/auth/authenticator.handler
+    events:
+      - http:
+          path: api/auth/sign_in
+          method: post
+          cors: true
 
   sign_out:
     handler: src/auth/sign_out.handler
+    events:
+      - http:
+          path: api/auth/sign_out
+          method: post
+          cors: true
 
   refresh_token:
     handler: src/auth_token/auth_token.refresh
+    events:
+      - http:
+          path: api/auth/token/refresh
+          method: post
+          cors: true
 
   create_user:
     handler: src/user/create.create
+    events:
+      - http:
+          path: api/auth/users
+          method: post
+          cors: true
 
   get_users_list:
     handler: src/user/list.list
+    events:
+      - http:
+          path: api/auth/users
+          method: get
+          cors: true
 
   update_user:
     handler: src/user/update.update
+    events:
+      - http:
+          path: api/auth/users/{id}
+          method: put
+          cors: true
 
   change_user_password:
     handler: src/user/change-password.changePassword
+    events:
+      - http:
+          path: api/auth/change-password
+          method: post
+          cors: true
 
 resources:
   Resources: ${self:custom.resources}
