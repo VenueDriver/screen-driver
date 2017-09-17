@@ -66,3 +66,44 @@ SchedulesTable:
     StreamSpecification:
       StreamViewType: NEW_AND_OLD_IMAGES
 
+AuthResource:
+  Type: AWS::ApiGateway::Resource
+  Properties:
+    ParentId:
+      Ref: ApiGatewayResourceApi
+    PathPart: 'auth'
+    RestApiId:
+      Ref: ApiGatewayRestApi
+
+AuthProxyResource:
+  Type: AWS::ApiGateway::Resource
+  Properties:
+    ParentId:
+      Ref: AuthResource
+    PathPart: '{proxy+}'
+    RestApiId:
+      Ref: ApiGatewayRestApi
+
+AuthProxyMethod:
+  Type: AWS::ApiGateway::Method
+  Properties:
+    ResourceId:
+      Ref: AuthProxyResource
+    RestApiId:
+      Ref: ApiGatewayRestApi
+    AuthorizationType: NONE
+    HttpMethod: ANY
+    MethodResponses:
+      - StatusCode: 200
+    RequestParameters:
+      method.request.path.proxy: true
+    Integration:
+      IntegrationHttpMethod: ANY
+      Type: HTTP_PROXY
+      Uri: https://6hsbpm3zs4.execute-api.us-east-1.amazonaws.com/dev/api/auth/{proxy}
+      IntegrationResponses:
+        - StatusCode: 200
+      RequestParameters:
+        integration.request.path.proxy: method.request.path.proxy
+        integration.request.header.Accept-Encoding: "'identity'"
+      PassthroughBehavior: WHEN_NO_MATCH
