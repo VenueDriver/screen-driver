@@ -1,0 +1,5 @@
+ScreenDriverAuthRestApiId:
+  Value:
+    Ref: ApiGatewayRestApi
+  Export:
+    Name: ScreenDriverAuthRestApiId-${opt:stage}

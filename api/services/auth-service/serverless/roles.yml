@@ -1,0 +1,9 @@
+- Effect: Allow
+  Action:
+    - cognito-idp:*
+  Resource: arn:aws:cognito-idp:*
+
+- Effect: Allow
+  Action:
+    - dynamodb:*
+  Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*
