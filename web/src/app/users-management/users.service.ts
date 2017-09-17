@@ -7,8 +7,8 @@ import {HttpClient} from "@angular/common/http";
 
 import * as _ from 'lodash';
 
-const USERS_API = `${environment.apiUrl}/api/users`;
-const RESET_PASSWORD_API = `${environment.apiUrl}/api/change-password`;
+const USERS_API = `${environment.apiUrl}/api/auth/users`;
+const RESET_PASSWORD_API = `${environment.apiUrl}/api/auth/change-password`;
 
 @Injectable()
 export class UsersService {
