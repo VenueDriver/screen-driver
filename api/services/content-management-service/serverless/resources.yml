@@ -100,7 +100,14 @@ AuthProxyMethod:
     Integration:
       IntegrationHttpMethod: ANY
       Type: HTTP_PROXY
-      Uri: https://6hsbpm3zs4.execute-api.us-east-1.amazonaws.com/dev/api/auth/{proxy}
+      Uri:
+        Fn::Join:
+          - ''
+          - - https://
+            - Fn::ImportValue: ScreenDriverAuthRestApiId-${opt:stage}
+            - .execute-api.
+            - Ref: AWS::Region
+            - .amazonaws.com/${opt:stage}/api/auth/{proxy}
       IntegrationResponses:
         - StatusCode: 200
       RequestParameters:

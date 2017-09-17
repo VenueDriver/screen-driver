@@ -21,6 +21,9 @@ custom:
   resources: ${file(./serverless/resources.yml)}
   roles: ${file(./serverless/roles.yml)}
   authorizer: ${file(./serverless/authorizer.yml)}
+  authServiceEndpoint:
+    Fn::ImportValue: ScreenDriverAuthServiceEndpoint-${opt:stage}
+
   dynamodb:
     start:
       port: 8000
