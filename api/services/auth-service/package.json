@@ -16,6 +16,7 @@
     "jwk-to-pem": "1.2.6",
     "lodash": "4.17.4",
     "q": "1.5.0",
+    "request": "2.81.0",
     "uuid": "2.0.3"
   },
   "devDependencies": {

@@ -21,6 +21,7 @@
     "node-cron": "1.2.1",
     "pusher": "1.5.1",
     "q": "1.5.0",
+    "request": "2.81.0",
     "uuid": "2.0.3"
   },
   "devDependencies": {
