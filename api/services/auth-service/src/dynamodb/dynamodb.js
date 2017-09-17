@@ -8,7 +8,7 @@ let options = {};
 if (process.env.IS_OFFLINE || process.env.STAGE == 'test') {
   options = {
     region: 'localhost',
-    endpoint: 'http://localhost:8000',
+    endpoint: 'http://localhost:8001',
   };
 }
 

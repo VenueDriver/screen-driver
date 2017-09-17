@@ -15,6 +15,13 @@ provider:
     USER_POOL_CLIENT_ID:
       Ref: CognitoAppClient
   iamRoleStatements: ${self:custom.roles}
+  dynamodb:
+    start:
+      port: 8001
+      inMemory: true
+      migrate: true
+    migration:
+      dir: migrations
 
 custom:
   cognitoResources: ${file(./serverless/cognito-resources.yml)}
