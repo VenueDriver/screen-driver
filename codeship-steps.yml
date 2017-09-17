@@ -6,7 +6,7 @@
 - service: api
   name: staging_deploy_serverless_api
   tag: staging
-  command: serverless deploy --verbose --region us-east-1 --stage staging
+  command: sh deploy.sh us-east-1 staging
 
 - service: web
   name: staging_add_api_endpoint
