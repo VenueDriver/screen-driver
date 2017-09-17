@@ -3,7 +3,7 @@
 const _ = require('lodash');
 
 const URIS_REQUIRED_ADMIN_ACCESS = [
-    '/api/users'
+    '/api/auth/users'
 ];
 
 module.exports.hasAccessToResource = (decodedToken, resourceArn) => {

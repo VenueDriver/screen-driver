@@ -23,6 +23,7 @@ custom:
   resources: ${file(./serverless/resources.yml)}
   outputs: ${file(./serverless/outputs.yml)}
   roles: ${file(./serverless/roles.yml)}
+  authorizer: ${file(./serverless/authorizer.yml)}
 
 functions: ${self:custom.functions}
 
@@ -38,6 +39,6 @@ package:
   include:
     - ../lib/**
   exclude:
-    - serverless
+    - serverless/**
     - .*
     - package*
