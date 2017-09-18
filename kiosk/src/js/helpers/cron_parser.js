@@ -3,9 +3,17 @@
 module.exports = class CronParser {
 
     static parseEndEventCron(schedule) {
+        return CronParser._parseEventCron(schedule, 'endEventCron');
+    }
+
+    static parseStartEventCron(schedule) {
+        return CronParser._parseEventCron(schedule, 'eventCron');
+    }
+
+    static _parseEventCron(schedule, field) {
         switch (schedule.periodicity) {
-            case 'ONE_TIME': return CronParser.getDateTimeForOneTimeSchedule(schedule.endEventCron);
-            case 'REPEATABLE': return CronParser.getDateTimeForRepeatableSchedule(schedule.endEventCron);
+            case 'ONE_TIME': return CronParser.getDateTimeForOneTimeSchedule(schedule[field]);
+            case 'REPEATABLE': return CronParser.getDateTimeForRepeatableSchedule(schedule[field]);
         }
     }
 
