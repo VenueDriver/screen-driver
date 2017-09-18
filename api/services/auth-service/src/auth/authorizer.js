@@ -8,30 +8,21 @@ const AccessProvider = require(ModulePathManager.getBasePath() + 'lib/auth/acces
 
 module.exports.handler = (event, context, callback) => {
 
-    try {
+    let idToken = getTokenFromHeader(event);
+    let decodedToken = TokenParser.decodeToken(idToken);
 
-        let idToken = getTokenFromHeader(event);
-        console.log('idToken', idToken);
+    KeysLoader.loadKeySet(decodedToken.payload.iss)
+        .then(pems => {
+            let pem = pems[decodedToken.header.kid];
+            TokenParser.verifyToken(idToken, pem);
+            AccessProvider.hasAccessToResource(decodedToken, event.methodArn);
 
-        let decodedToken = TokenParser.decodeToken(idToken);
-        console.log(decodedToken);
-
-        KeysLoader.loadKeySet(decodedToken.payload.iss)
-            .then(pems => {
-                let pem = pems[decodedToken.header.kid];
-                TokenParser.verifyToken(idToken, pem);
-                AccessProvider.hasAccessToResource(decodedToken, event.methodArn);
-
-                callback(null, PolicyGenerator.generateAllowPolicy(decodedToken.payload.email, event.methodArn));
-            })
-            .catch(err => {
-                console.error(err);
-                callback(null, PolicyGenerator.generateDenyPolicy(decodedToken.payload.email, event.methodArn));
-            });
-
-    } catch (error) {
-        console.error(error)
-    }
+            callback(null, PolicyGenerator.generateAllowPolicy(decodedToken.payload.email, event.methodArn));
+        })
+        .catch(err => {
+            console.error(err);
+            callback(null, PolicyGenerator.generateDenyPolicy(decodedToken.payload.email, event.methodArn));
+        });
 };
 
 function getTokenFromHeader(event) {
