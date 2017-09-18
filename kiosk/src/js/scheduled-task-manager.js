@@ -26,6 +26,10 @@ class ScheduledTaskManager {
         startScheduleCronJob.start();
         endScheduleCronJob.start();
 
+        if (ScheduledTaskManager.isScheduleShouldBeRunAlready(schedule)) {
+            runScheduledTask();
+        }
+
         function runScheduledTask() {
             if (!isScheduled() || ScheduledTaskManager._isScheduleMorePriority(schedule)) {
                 ScheduledTaskManager._runScheduledTask(schedule, composedSchedule);
@@ -78,6 +82,14 @@ class ScheduledTaskManager {
 
     static isNeedToReload(window, url) {
         return window.webContents.getURL() !== url;
+    }
+
+    static isScheduleShouldBeRunAlready(schedule) {
+        let startDateTime = CronParser.parseStartEventCron(schedule);
+        let endDateTime = CronParser.parseEndEventCron(schedule);
+        let currentTime = new Date().getTime();
+
+        return startDateTime < currentTime < endDateTime;
     }
 
     resetAllSchedules(schedules) {
