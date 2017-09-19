@@ -1,4 +1,4 @@
-#!/bin/sh -x
+#!/usr/bin/env bash
 
 region="${1:us-east-1}"
 stage="${2:staging}"
