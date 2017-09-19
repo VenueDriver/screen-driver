@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Serverless authentication service",
   "scripts": {
-    "start": "sls offline start --stage test --port 3001",
+    "start": "sls offline start --stage dev",
     "invoke": "sls invoke -f",
     "deploy": "serverless deploy --stage dev",
     "deploy-function": "serverless deploy --stage dev function --function"
