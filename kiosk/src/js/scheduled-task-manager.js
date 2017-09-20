@@ -25,7 +25,6 @@ class ScheduledTaskManager {
         this.scheduledCronJobs.push(composedSchedule);
         startScheduleCronJob.start();
         endScheduleCronJob.start();
-
         if (ScheduledTaskManager.isScheduleShouldBeRunAlready(schedule)) {
             runScheduledTask();
         }
@@ -105,6 +104,7 @@ class ScheduledTaskManager {
             schedule.endStartSchedule.destroy();
         });
         this.scheduledCronJobs.pop();
+        StorageManager.saveScheduledTask({});
     }
 
     initSchedulingForScreen(screenInformation) {

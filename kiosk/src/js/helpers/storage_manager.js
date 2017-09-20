@@ -13,7 +13,6 @@ class StorageManager {
         return new Promise((resolve, reject) => StorageManager.getAllFromStorage((error, data) => {
             Storage.setServerData(data[StorageNames.SERVER_DATA_STORAGE]);
             Storage.setSelectedSetting(data[StorageNames.SELECTED_SETTING_STORAGE]);
-            Storage.setScheduledTask(data[StorageNames.SCHEDULED_TASK_STORAGE]);
             resolve(data);
         }));
     }
@@ -29,7 +28,6 @@ class StorageManager {
     }
 
     static saveScheduledTask(scheduledTask) {
-        StorageManager.putInStorage(StorageNames.SCHEDULED_TASK_STORAGE, scheduledTask);
         Storage.setScheduledTask(scheduledTask);
     }
 
