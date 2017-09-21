@@ -2,6 +2,8 @@
 
 const electron = require('electron');
 const BrowserWindow = electron.BrowserWindow;
+const WindowInstanceHolder = require('./../window-instance-holder');
+
 
 const isDev = require('electron-is-dev');
 const log = require('electron-log');
@@ -11,6 +13,7 @@ class WindowsHelper {
     static createWindow(url, windowOptions = {}) {
         WindowsHelper.addDefaultOptions(windowOptions);
         let newWindow = new BrowserWindow(windowOptions);
+        WindowInstanceHolder.setWindow(newWindow);
 
         WindowsHelper.loadWindowContent(url, newWindow);
         WindowsHelper.disableImagesDrugAndDrop(newWindow);
@@ -48,9 +51,9 @@ class WindowsHelper {
         browserWindow.loadURL(url);
 
         browserWindow.webContents.on('did-fail-load', function (event, errorCode, errorDescription, validatedURL) {
-            log.error(`Can not load url: ${validatedURL} ${errorCode} ${errorDescription}`);
-            // -199 ... -100 - Connection related errors (Chromium net errors)
-            if (errorCode > -200 && errorCode <= -100) {
+            // -199 ... -100 - Connection related error codes (Chromium net errors)
+            if (errorCode != 0 ) {
+                log.error(`Can not load url: ${validatedURL} ${errorCode} ${errorDescription}`);
                 setTimeout(() => {
                     try {
                         log.info("Trying to load URL:", validatedURL);
