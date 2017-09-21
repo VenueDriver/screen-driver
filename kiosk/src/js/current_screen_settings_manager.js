@@ -56,11 +56,17 @@ class CurrentScreenSettingsManager {
 
     static changeScreenConfiguration() {
         let screenInformation = CurrentScreenSettingsManager.getCurrentSetting();
-        this.reloadCurrentScreenConfig(screenInformation).then((contentUrl) => {
-            scheduledTaskManager.initSchedulingForScreen(screenInformation);
 
+        this.reloadCurrentScreenConfig(screenInformation).then((contentUrl) => {
             let currentUrl = this._cutSlashAtTheEndOfUrl(WindowInstanceHolder.getWindow().getURL());
             let newUrl = this._cutSlashAtTheEndOfUrl(contentUrl);
+            if (this._isForciblyEnabled(screenInformation)) {
+                this._applyNewUrl(screenInformation, newUrl);
+                return;
+            }
+
+            scheduledTaskManager.initSchedulingForScreen(screenInformation);
+
             if (!isScheduled() && currentUrl != newUrl) {
                 this._applyNewUrl(screenInformation, newUrl);
             }
@@ -71,6 +77,18 @@ class CurrentScreenSettingsManager {
         screenInformation.contentUrl = newUrl;
         CurrentScreenSettingsManager.saveCurrentSetting(screenInformation);
         WindowInstanceHolder.getWindow().loadURL(screenInformation.contentUrl);
+    }
+
+    static _isForciblyEnabled(screenInformation) {
+        let serverData = StorageManager.getStorage().getServerData();
+        let forciblyEnabledSettings = _.filter(serverData.originalSettings, setting => setting.forciblyEnabled);
+        let isCurrentScreenHasForciblyEnabledConfig = false;
+        _.forEach(forciblyEnabledSettings, setting => {
+            if (setting.config.hasOwnProperty(screenInformation.selectedScreenId)) {
+                isCurrentScreenHasForciblyEnabledConfig = true;
+            }
+        });
+        return isCurrentScreenHasForciblyEnabledConfig;
     }
 
     static _cutSlashAtTheEndOfUrl(url) {
