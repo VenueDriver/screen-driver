@@ -58,4 +58,22 @@ module.exports = class CronParser {
         let parts = cron.split(' ');
         return +parts[2];
     }
+
+    static convertWeekDaysToNumbers(schedule) {
+        var shortWeekDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+        var expressions = schedule.eventCron.split(' ');
+        expressions = appendSeccondExpression(expressions);
+        let daysOfWeek = expressions[5].split(',');
+
+        let numbers = daysOfWeek.map(dayOfWeek => shortWeekDays.indexOf(dayOfWeek.substring(0,3).toLowerCase()));
+        return numbers;
+
+
+        function appendSeccondExpression(expressions) {
+            if (expressions.length === 5) {
+                return ['0'].concat(expressions);
+            }
+            return expressions;
+        }
+    }
 };
