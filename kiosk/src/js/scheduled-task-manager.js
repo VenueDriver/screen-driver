@@ -102,8 +102,9 @@ class ScheduledTaskManager {
         this.scheduledCronJobs.forEach(schedule => {
             schedule.startScheduleCron.destroy();
             schedule.endStartSchedule.destroy();
+            schedule.backgroundCron.destroy();
         });
-        this.scheduledCronJobs.pop();
+        this.scheduledCronJobs = [];
         StorageManager.saveScheduledTask({});
     }
 
