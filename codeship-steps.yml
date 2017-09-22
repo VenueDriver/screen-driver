@@ -5,7 +5,7 @@
 
 - service: api
   name: staging_deploy_serverless_api
-  tag: staging
+  tag: create-separate-service-for-auth
   command: sh deploy.sh us-east-1 staging
 
 - service: web
