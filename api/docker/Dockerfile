@@ -5,8 +5,9 @@ WORKDIR /app-src
 ADD . /app-src/
 
 RUN npm install -g serverless
+RUN cd $(npm root -g)/npm &&  npm install fs-extra && sed -i -e s/graceful-fs/fs-extra/ -e s/fs.rename/fs.move/ ./lib/utils/rename.js
 RUN cd services/auth-service && npm install
-RUN cd ../content-management-service && npm install
+RUN cd services/content-management-service && npm install
 
 
 #RUN sls dynamodb install --stage test
