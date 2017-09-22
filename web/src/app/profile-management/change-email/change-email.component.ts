@@ -3,6 +3,7 @@ import {UsersService} from "../../users-management/users.service";
 import {User} from "../../user/user";
 
 import * as _ from 'lodash';
+import {AuthService} from "../../auth/auth.service";
 
 @Component({
     selector: 'change-email',
@@ -16,7 +17,8 @@ export class ChangeEmailComponent implements OnInit {
     editedUser: User;
     errorMessage: string;
 
-    constructor(private usersService: UsersService) {
+    constructor(private usersService: UsersService,
+                private authService: AuthService) {
     }
 
     ngOnInit() {
@@ -43,11 +45,22 @@ export class ChangeEmailComponent implements OnInit {
 
     private changeEmail() {
         this.usersService.editProfile(this.editedUser).subscribe(
-            user => {
-                this.submit.emit(user);
+            response => {
+                this.handleEditProfileResponse(response);
             },
             error => {
                 this.errorMessage = 'Couldn\'t change the email';
             });
+    }
+
+    private handleEditProfileResponse(response) {
+        this.authService.refreshToken().subscribe(
+            () => {
+                this.submit.emit(response);
+            },
+            () => {
+                this.authService.signOut();
+            }
+        );
     }
 }

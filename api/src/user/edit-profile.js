@@ -14,21 +14,18 @@ module.exports.editProfile = (event, context, callback) => {
     userDetails.isAdmin = currentUser.isAdmin;
     let cognitoUser = UserPool.getCognitoUser(userDetails);
 
-
     if (userDetails.newPassword) {
         changePassword(userDetails, cognitoUser, callback);
         return;
     }
-    if (userDetails.email !== currentUser.email) {
-        changeEmail(userDetails, callback);
-    }
+
+    changeEmail(userDetails, callback);
 };
 
 function changePassword(userDetails, cognitoUser, callback) {
     UserPool.changePassword(cognitoUser, userDetails)
         .then(() => callback(null, responseHelper.createSuccessfulResponse()))
         .catch(errorMessage => {
-            console.log(errorMessage);
             callback(null, responseHelper.createResponseWithError(500, errorMessage))
         });
 }

@@ -171,17 +171,21 @@ export class AuthService {
     }
 
     refreshToken() {
+        let subject = new Subject();
         let refreshToken = localStorage.getItem(AuthConsts.REFRESH_TOKEN_PARAM);
         this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
             (response) => {
                 localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
                 this.tokenService.tokenReceived.next(response['token']);
+                subject.next(response);
             },
             (error) => {
                 if (error.status === 401) {
                     this.signOut();
                 }
+                subject.error(error);
             });
+        return subject;
     }
 
     private saveTokensToLocalStorage(response: any) {
