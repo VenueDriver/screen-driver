@@ -9,12 +9,18 @@ class WindowInstanceHolder {
     }
 
     setWindow(window) {
+        this.closeWindow();
         this.window = window;
     }
 
 
     getWindow() {
         return this.window;
+    }
+
+    closeWindow() {
+        if (this.window)
+            this.window.close()
     }
 }
 
