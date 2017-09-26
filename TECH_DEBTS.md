@@ -17,7 +17,8 @@
 1. Add tests on setting and schedule type accordance
 1. Add check for invalid cron pair in schedule
 1. ~~Upgrade serverless framework version~~
-1. Export DDB request parameters builder functions for create and delete requests to db helper 
+1. Export DDB request parameters builder functions for create and delete requests to db helper
+1. Take out `dynamodb.js` and `db_helper.js` from services to `lib` folder
 
 ##### Web
 1. Resolve warnings occurred during build process

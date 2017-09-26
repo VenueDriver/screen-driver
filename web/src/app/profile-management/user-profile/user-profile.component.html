@@ -1,9 +1,23 @@
 <div class="table-wrapper">
+    <change-email *ngIf="isEditEmailMode"
+                  [user]="user"
+                  (submit)="onEmailChanged($event)"
+                  (cancel)="changeEditEmailMode(false)">
+    </change-email>
+
     <table class="table">
         <tr>
-            <td class="col-md-7">Email</td>
-            <td class="col-md-5">
-                {{user.email}}
+            <td class="col-md-2">Email</td>
+            <td class="col-md-4">
+                <span>
+                    {{user.email}}
+                </span>
+            </td>
+            <td class="col-md-3">
+                <div *ngIf="!isEditEmailMode"
+                     class="edit-button"
+                     (click)="changeEditEmailMode(true)">
+                </div>
             </td>
         </tr>
 
@@ -11,6 +25,8 @@
             <td>Role</td>
             <td>
                 {{getUserRole()}}
+            </td>
+            <td>
             </td>
         </tr>
     </table>

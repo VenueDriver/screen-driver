@@ -69,7 +69,7 @@ export class ChangePasswordComponent implements OnInit {
 
     changePassword() {
         this.setRequestPerforming(true);
-        this.usersService.changePassword(this.user).subscribe(
+        this.usersService.editProfile(this.user).subscribe(
             () => {
                 this.setRequestPerforming(false);
                 this.submit.emit();

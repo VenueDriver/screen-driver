@@ -1,0 +1,62 @@
+service: screen-driver-api
+
+frameworkVersion: ">=1.20.1 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  environment:
+    STAGE: ${opt:stage}
+    CONTENT_TABLE: ${self:service}-content-${opt:stage}
+    VENUES_TABLE: ${self:service}-venues-${opt:stage}
+    SETTINGS_TABLE: ${self:service}-settings-${opt:stage}
+    SCHEDULES_TABLE: ${self:service}-schedules-${opt:stage}
+  iamRoleStatements: ${self:custom.roles}
+
+functions: ${self:custom.functions}
+
+custom:
+  properties: ${file(./serverless/properties.yml)}
+  functions: ${file(./serverless/functions.yml)}
+  resources: ${file(./serverless/resources.yml)}
+  roles: ${file(./serverless/roles.yml)}
+  authorizer: ${file(./serverless/authorizer.yml)}
+  authServiceEndpoint:
+    Fn::ImportValue: ScreenDriverAuthServiceEndpoint-${opt:stage}
+
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    migration:
+      dir: migrations
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-mocha-plugin
+  - serverless-export-env
+
+resources:
+  Resources: ${self:custom.resources}
+  Outputs:
+    ScreenDriverRestApi:
+      Value:
+        Ref: ApiGatewayRestApi
+      Export:
+        Name: ScreenDriverRestApi-${opt:stage}
+    ScreenDriverRootResource:
+      Value:
+        Ref: ApiGatewayResourceApi
+      Export:
+        Name: ScreenDriverRootApiResource-${opt:stage}
+
+package:
+  include:
+    - ../lib/**
+  exclude:
+    - test/**
+    - serverless/**
+    - .*
+    - package*

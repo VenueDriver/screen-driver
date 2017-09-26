@@ -9,11 +9,8 @@ const WindowsHelper = require('./js/helpers/windows_helper');
 const CronJobsManager = require('./js/helpers/cron_jobs_helper');
 const Logger = require('./js/logger/logger');
 const NotificationListener = require('./js/notification-listener/notification_listener');
-const SettingMergeTool = require('./js/setting-merge-tool');
-const SettingsHelper = require('./js/helpers/settings_helper');
 const {scheduledTaskManager} = require('./js/scheduled-task-manager');
 const WindowInstanceHolder = require('./js/window-instance-holder');
-const DataLoader = require('./js/data_loader');
 const StorageManager = require('./js/helpers/storage_manager');
 
 const hotkey = require('electron-hotkey');
@@ -43,12 +40,16 @@ function ready() {
     StorageManager.loadDataFromLocalStorage().then(() => {
         powerSaveBlocker.start('prevent-display-sleep');
         notificationListener = new NotificationListener();
-        bindSettingChanges();
         openWindow();
+
+        subscribeToScreenReloadNotification();
+        subscribeToScheduleUpdate();
+        bindSettingChanges();
 
         registerHotKeys();
         addHotKeyListeners();
         addEventListeners();
+        settingsLoadJob = CronJobsManager.initSettingsLoadJob();
     });
 }
 
@@ -62,15 +63,13 @@ function openWindow() {
 }
 
 function prepareContentWindowData(screenInformation) {
-    CurrentScreenSettingsManager.reloadCurrentScreenConfig(screenInformation)
-        .then(contentUrl => {
-            openContentWindow(contentUrl);
-            scheduledTaskManager.resumeInterruptedScheduledTask();
-        })
-        .catch(error => {
-            Logger.error('Failed to load config. Used old config. Message:', error);
-            openContentWindow(screenInformation.contentUrl);
-        });
+    try {
+        openContentWindow(screenInformation.contentUrl);
+        CurrentScreenSettingsManager.changeScreenConfiguration();
+    } catch (error) {
+        Logger.error('Failed to load config. Used old config. Message:', error);
+        openContentWindow(screenInformation.contentUrl);
+    }
 }
 
 function addListenerForErrors() {
@@ -105,24 +104,16 @@ function addEventListeners() {
 
 function openAdminPanel() {
     let filePath = getAdminPanelUrl();
-    let newWindow = WindowsHelper.createWindow(filePath);
-    closeCurrentWindow();
-    WindowInstanceHolder.setWindow(newWindow);
+    WindowsHelper.createWindow(filePath);
 }
 
 function openContentWindow(contentUrl) {
-    let newWindow = WindowsHelper.createWindow(contentUrl, {
+    WindowsHelper.createWindow(contentUrl, {
         webPreferences: {
             preload: path.join(__dirname, 'js/preload/remote_content_preload.js')
         }
     });
-    closeCurrentWindow();
-    WindowInstanceHolder.setWindow(newWindow);
     hideCursor(WindowInstanceHolder.getWindow());
-    settingsLoadJob = CronJobsManager.initSettingsLoadJob(WindowInstanceHolder.getWindow());
-    subscribeToScreenReloadNotification();
-    subscribeToScheduleUpdate();
-    initScheduling();
 }
 
 function subscribeToScreenReloadNotification() {
@@ -136,10 +127,7 @@ function subscribeToScreenReloadNotification() {
 
 function subscribeToScheduleUpdate() {
     notificationListener.subscribe('screens', 'schedule_update', (event) => {
-        DataLoader.loadData()
-            .then(() => {
-                initScheduling();
-            })
+        CurrentScreenSettingsManager.changeScreenConfiguration();
     });
 }
 
@@ -151,25 +139,8 @@ function initScheduling() {
 
 function bindSettingChanges() {
     notificationListener.subscribe('screens', 'setting_updated', (data) => {
-        data.settings = SettingMergeTool
-            .startMerging()
-            .setSettings(data.settings)
-            .setPriorities(data.priorityTypes)
-            .mergeSettings();
-        let setting = CurrentScreenSettingsManager.getCurrentSetting();
-        let contentUrl = SettingsHelper.defineContentUrl(data, setting);
-        if (setting.contentUrl != contentUrl) {
-            setting.contentUrl = contentUrl;
-            CurrentScreenSettingsManager.saveCurrentSetting(setting);
-            WindowInstanceHolder.getWindow().loadURL(setting.contentUrl);
-        }
+        CurrentScreenSettingsManager.changeScreenConfiguration();
     })
-}
-
-function closeCurrentWindow() {
-    if (WindowInstanceHolder.getWindow()) {
-        WindowInstanceHolder.getWindow().close();
-    }
 }
 
 function hideCursor(window) {

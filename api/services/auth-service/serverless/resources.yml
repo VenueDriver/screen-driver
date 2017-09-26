@@ -1,0 +1,4 @@
+CognitoUserPool: ${self:custom.cognitoResources.CognitoUserPool}
+CognitoAppClient: ${self:custom.cognitoResources.CognitoAppClient}
+
+UsersTable: ${self:custom.usersTableResource}
