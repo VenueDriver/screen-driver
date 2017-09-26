@@ -71,7 +71,7 @@ AuthResource:
   Properties:
     ParentId:
       Ref: ApiGatewayResourceApi
-    PathPart: 'authentication'
+    PathPart: 'auth'
     RestApiId:
       Ref: ApiGatewayRestApi
 
@@ -107,7 +107,7 @@ AuthProxyMethod:
             - Fn::ImportValue: ScreenDriverAuthRestApiId-${opt:stage}
             - .execute-api.
             - Ref: AWS::Region
-            - .amazonaws.com/${opt:stage}/api/authentication/{proxy}
+            - .amazonaws.com/${opt:stage}/api/auth/{proxy}
       IntegrationResponses:
         - StatusCode: 200
       RequestParameters:
