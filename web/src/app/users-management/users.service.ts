@@ -7,8 +7,8 @@ import {HttpClient} from "@angular/common/http";
 
 import * as _ from 'lodash';
 
-const USERS_API = `${environment.apiUrl}/api/users`;
-const EDIT_PROFILE_API = `${environment.apiUrl}/api/edit-profile`;
+const USERS_API = `${environment.apiUrl}/api/auth/users`;
+const EDIT_PROFILE_API = `${environment.apiUrl}/api/auth/edit-profile`;
 
 @Injectable()
 export class UsersService {

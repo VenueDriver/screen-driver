@@ -10,9 +10,9 @@ import {HttpClient} from "@angular/common/http";
 import {User} from "../user/user";
 import {AuthTokenService} from "./auth-token.service";
 
-const AUTH_API = `${environment.apiUrl}/api/auth`;
-const TOKEN_REFRESH_API = `${environment.apiUrl}/api/token/refresh`;
-const SIGN_OUT_API = `${environment.apiUrl}/api/sign_out`;
+const AUTH_API = `${environment.apiUrl}/api/auth/sign_in`;
+const TOKEN_REFRESH_API = `${environment.apiUrl}/api/auth/token/refresh`;
+const SIGN_OUT_API = `${environment.apiUrl}/api/auth/sign_out`;
 
 @Injectable()
 export class AuthService {
