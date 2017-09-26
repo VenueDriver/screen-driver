@@ -258,5 +258,5 @@ function hideCancelButton() {
 }
 
 function showApplicationVersion() {
-    $('#version').text('v' + process.env.npm_package_version);
+    $('#version').text('v' + remote.app.getVersion());
 }
