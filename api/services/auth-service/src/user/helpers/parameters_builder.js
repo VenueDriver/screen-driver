@@ -64,9 +64,7 @@ module.exports.buildChangeEmailRequestParameters = (user) => {
         ExpressionAttributeValues: {
             ':email': user.email,
         },
-        UpdateExpression: `SET 
-                email = :email
-            `,
+        UpdateExpression: `SET email = :email`,
         ReturnValues: 'ALL_NEW',
     };
 };

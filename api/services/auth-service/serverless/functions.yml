@@ -52,11 +52,11 @@ update_user:
         cors: true
         authorizer: ${self:custom.authorizer}
 
-change_user_password:
-  handler: src/user/change-password.changePassword
+edit_user_profile:
+  handler: src/user/edit-profile.editProfile
   events:
     - http:
-        path: api/auth/change-password
+        path: api/auth/edit-profile
         method: post
         cors: true
         authorizer: ${self:custom.authorizer}
