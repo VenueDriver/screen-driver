@@ -1,9 +1,11 @@
 'use strict';
 
 const {LocalStorageManager} = require('./helpers/local_storage_helper');
+const {scheduledTaskManager, isScheduled} = require('./scheduled-task-manager');
 const StorageManager = require('./helpers/storage_manager');
 const SettingsHelper = require('./helpers/settings_helper');
 const DataLoader = require('./data_loader');
+const WindowInstanceHolder = require('./window-instance-holder');
 
 const _ = require('lodash');
 
@@ -50,6 +52,47 @@ class CurrentScreenSettingsManager {
             newSetting.contentUrl = contentUrl;
             CurrentScreenSettingsManager.saveCurrentSetting(newSetting);
         }
+    }
+
+    static changeScreenConfiguration() {
+        let screenInformation = CurrentScreenSettingsManager.getCurrentSetting();
+
+        this.reloadCurrentScreenConfig(screenInformation).then((contentUrl) => {
+            let currentUrl = this._cutSlashAtTheEndOfUrl(WindowInstanceHolder.getWindow().getURL());
+            let newUrl = this._cutSlashAtTheEndOfUrl(contentUrl);
+            if (this._isForciblyEnabled(screenInformation)) {
+                this._applyNewUrl(screenInformation, newUrl);
+                return;
+            }
+
+            scheduledTaskManager.initSchedulingForScreen(screenInformation);
+
+            if (!isScheduled() && currentUrl != newUrl) {
+                this._applyNewUrl(screenInformation, newUrl);
+            }
+        })
+    }
+
+    static _applyNewUrl(screenInformation, newUrl) {
+        screenInformation.contentUrl = newUrl;
+        CurrentScreenSettingsManager.saveCurrentSetting(screenInformation);
+        WindowInstanceHolder.getWindow().loadURL(screenInformation.contentUrl);
+    }
+
+    static _isForciblyEnabled(screenInformation) {
+        let serverData = StorageManager.getStorage().getServerData();
+        let forciblyEnabledSettings = _.filter(serverData.originalSettings, setting => setting.forciblyEnabled);
+        let isCurrentScreenHasForciblyEnabledConfig = false;
+        _.forEach(forciblyEnabledSettings, setting => {
+            if (setting.config.hasOwnProperty(screenInformation.selectedScreenId)) {
+                isCurrentScreenHasForciblyEnabledConfig = true;
+            }
+        });
+        return isCurrentScreenHasForciblyEnabledConfig;
+    }
+
+    static _cutSlashAtTheEndOfUrl(url) {
+        return url.lastIndexOf('/') == url.length - 1 ? url.slice(0, -1) : url;
     }
 }
 

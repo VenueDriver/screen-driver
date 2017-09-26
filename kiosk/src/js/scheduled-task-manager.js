@@ -25,6 +25,9 @@ class ScheduledTaskManager {
         this.scheduledCronJobs.push(composedSchedule);
         startScheduleCronJob.start();
         endScheduleCronJob.start();
+        if (ScheduledTaskManager.isScheduleShouldBeRunAlready(schedule)) {
+            runScheduledTask();
+        }
 
         function runScheduledTask() {
             if (!isScheduled() || ScheduledTaskManager._isScheduleMorePriority(schedule)) {
@@ -56,9 +59,7 @@ class ScheduledTaskManager {
 
     static _runScheduledTask(schedule, composedSchedule) {
         ScheduledTaskManager._saveTaskInStorage(schedule);
-        if (!_.isEmpty(composedSchedule.backgroundCron)) {
-            composedSchedule.backgroundCron.destroy();
-        }
+        this._destroyBackgroundTask(composedSchedule.backgroundCron);
         ScheduledTaskManager.reloadWindow(schedule.content.url);
     }
 
@@ -80,6 +81,26 @@ class ScheduledTaskManager {
         return window.webContents.getURL() !== url;
     }
 
+    static isScheduleShouldBeRunAlready(schedule) {
+        return this._isScheduleShouldRunAtThisTime(schedule) && this._isScheduleShouldRunToday(schedule);
+    }
+
+    static _isScheduleShouldRunAtThisTime(schedule) {
+        let startDateTime = CronParser.parseStartEventCron(schedule);
+        let endDateTime = CronParser.parseEndEventCron(schedule);
+        let currentTime = new Date().getTime();
+
+        return startDateTime < currentTime < endDateTime;
+    }
+
+    static _isScheduleShouldRunToday(schedule) {
+        let currentWeekdayNumber = new Date().getDay();
+        if (schedule.periodicity === 'ONE_TIME') {
+            return true;
+        }
+        return CronParser.convertWeekDaysToNumbers(schedule).indexOf(currentWeekdayNumber) !== -1;
+    }
+
     resetAllSchedules(schedules) {
         this.clearAllSchedules();
         if (schedules) {
@@ -91,8 +112,13 @@ class ScheduledTaskManager {
         this.scheduledCronJobs.forEach(schedule => {
             schedule.startScheduleCron.destroy();
             schedule.endStartSchedule.destroy();
+
+            if (!_.isEmpty(schedule.backgroundCron)) {
+                schedule.backgroundCron.destroy();
+            }
         });
-        this.scheduledCronJobs.pop();
+        this.scheduledCronJobs = [];
+        StorageManager.saveScheduledTask({});
     }
 
     initSchedulingForScreen(screenInformation) {
