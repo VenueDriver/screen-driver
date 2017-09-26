@@ -7,7 +7,7 @@ const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/au
 
 module.exports.handler = (event, context, callback) => {
     const userDetails = JSON.parse(event.body);
-    let token = event.headers.authorization.replace('Bearer ', '');
+    let token = getAuthorizationToken(event);
     let decodedToken = TokenParser.decodeToken(token);
     userDetails.username = decodedToken.payload['cognito:username'];
 
@@ -15,3 +15,9 @@ module.exports.handler = (event, context, callback) => {
 
     callback(null, ResponseHelper.createSuccessfulResponse({}))
 };
+
+function getAuthorizationToken(event) {
+    let headers = event.headers;
+    let token = headers.Authorization ? headers.Authorization : headers.authorization;
+    return token.replace('Bearer ', '');
+}

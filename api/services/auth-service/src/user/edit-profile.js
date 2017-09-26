@@ -10,7 +10,7 @@ let User = require('./entities/user');
 
 module.exports.editProfile = (event, context, callback) => {
     const userDetails = JSON.parse(event.body);
-    let currentUser = extractCurrentUserFromEvent(event);
+    let currentUser = getAuthorizationToken(event);
     userDetails.username = currentUser.username;
     userDetails.isAdmin = currentUser.isAdmin;
     let cognitoUser = UserPool.getCognitoUser(userDetails);
@@ -50,4 +50,10 @@ function extractCurrentUserFromEvent(event) {
         email: decodedToken.payload['email'],
         isAdmin: decodedToken.payload['custom:admin']
     });
+}
+
+function getAuthorizationToken(event) {
+    let headers = event.headers;
+    let token = headers.Authorization ? headers.Authorization : headers.authorization;
+    return token.replace('Bearer ', '');
 }
