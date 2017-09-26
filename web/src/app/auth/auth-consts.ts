@@ -1,4 +1,5 @@
 export const USER_EMAIL = 'user_email';
+export const USER_ID = 'user_id';
 export const USER_IS_ADMIN = 'user_is_admin';
 
 export const ID_TOKEN_PARAM = 'id_token';

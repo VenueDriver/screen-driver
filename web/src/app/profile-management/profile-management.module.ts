@@ -5,6 +5,7 @@ import {ChangePasswordComponent} from './change-password/change-password.compone
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {AutofocusModule} from "../directives/autofocus/autofocus.module";
+import { ChangeEmailComponent } from './change-email/change-email.component';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import {AutofocusModule} from "../directives/autofocus/autofocus.module";
     declarations: [
         ProfileManagementComponent,
         UserProfileComponent,
-        ChangePasswordComponent
+        ChangePasswordComponent,
+        ChangeEmailComponent
     ]
 })
 export class ProfileManagementModule {

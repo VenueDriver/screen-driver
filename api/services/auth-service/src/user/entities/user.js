@@ -21,6 +21,7 @@ class User {
         if (user) {
             this.id = user.id;
             this.email = user.email;
+            this.username = user.username;
             this.password = user.password;
             this.isAdmin = user.isAdmin == undefined ? false : user.isAdmin;
             this._rev = user._rev;
@@ -29,18 +30,24 @@ class User {
 
     create() {
         delete this.password;
-        const params = ParametersBuilder.buildCreateRequestParameters(this);
         let deferred = Q.defer();
         this._rev = 0;
-        this.generateId();
+        this.username = this.email;
         this.validate(deferred.reject);
         this.validateEmailUniqueness(deferred.reject);
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
         }
         UserPool.createUser(this)
-            .then(() => dbHelper.putItem(params))
-            .then(result => deferred.resolve(result))
+            .then(user => {
+                let subAttribute = user.Attributes.find(attribute => attribute.Name === 'sub');
+                this.id = subAttribute.Value;
+                const params = ParametersBuilder.buildCreateRequestParameters(this);
+                return dbHelper.putItem(params)
+            })
+            .then(result => {
+                deferred.resolve(result)
+            })
             .catch(error => deferred.reject(error));
         return deferred.promise;
 
@@ -66,10 +73,6 @@ class User {
     }
 
     validateRoleChanges(reject, user) {
-        if (_.isEmpty(user) || !user.isAdmin) {
-            reject('You don\'t have access to do this operation');
-            return;
-        }
         if (this.email === user.email && this.isAdmin != user.isAdmin) {
             reject('You can\'t change role of yourself');
         }
@@ -95,6 +98,21 @@ class User {
                     errorCallback('User with such email already exists');
                 }
             })
+    }
+
+    changeEmail() {
+        let deferred = Q.defer();
+        let params = ParametersBuilder.buildChangeEmailRequestParameters(this);
+
+        if (!this.isEmailValid()) {
+            deferred.reject('Invalid email');
+            return deferred.promise;
+        }
+
+        UserPool.updateUser(this)
+            .then(data => dbHelper.updateItem(params, deferred));
+
+        return deferred.promise;
     }
 
     isEmailValid() {

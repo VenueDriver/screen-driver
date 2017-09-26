@@ -72,6 +72,7 @@ export class AuthService {
 
     private saveUserInfoInLocalStorage(user) {
         localStorage.setItem(AuthConsts.USER_EMAIL, user.email);
+        localStorage.setItem(AuthConsts.USER_ID, user.id);
         localStorage.setItem(AuthConsts.USER_IS_ADMIN, user.isAdmin.toString());
     }
 
@@ -126,6 +127,7 @@ export class AuthService {
 
     private initUserFromToken(decodedToken: any): User {
         let user = new User();
+        user.id = decodedToken.sub;
         user.email = decodedToken.email;
         user.isAdmin = _.isEqual(decodedToken['custom:admin'], 'true');
         return user;
@@ -134,7 +136,9 @@ export class AuthService {
     getUserInfo(): User {
         let email = localStorage.getItem(AuthConsts.USER_EMAIL);
         let isAdmin = localStorage.getItem(AuthConsts.USER_IS_ADMIN);
+        let userId = localStorage.getItem(AuthConsts.USER_ID);
         let user = new User();
+        user.id = userId;
         user.email = email;
         user.isAdmin = JSON.parse(isAdmin);
         return email || isAdmin ? user : null;
@@ -162,21 +166,26 @@ export class AuthService {
         localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
         localStorage.removeItem(AuthConsts.REFRESH_TOKEN_PARAM);
         localStorage.removeItem(AuthConsts.USER_EMAIL);
+        localStorage.removeItem(AuthConsts.USER_ID);
         localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
     }
 
     refreshToken() {
+        let subject = new Subject();
         let refreshToken = localStorage.getItem(AuthConsts.REFRESH_TOKEN_PARAM);
         this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
             (response) => {
                 localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
                 this.tokenService.tokenReceived.next(response['token']);
+                subject.next(response);
             },
             (error) => {
                 if (error.status === 401) {
                     this.signOut();
                 }
+                subject.error(error);
             });
+        return subject;
     }
 
     private saveTokensToLocalStorage(response: any) {

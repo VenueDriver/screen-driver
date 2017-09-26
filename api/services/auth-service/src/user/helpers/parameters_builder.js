@@ -10,6 +10,7 @@ module.exports.buildUpdateRequestParameters = (user) => {
             '#rev': '_rev',
         },
         ExpressionAttributeValues: {
+            ':email': user.email,
             ':password': user.password,
             ':isAdmin': user.isAdmin,
             ':rev': user._rev,
@@ -18,6 +19,7 @@ module.exports.buildUpdateRequestParameters = (user) => {
         UpdateExpression: `SET 
                 ${_getPasswordUpdateExpression()} 
                 isAdmin = :isAdmin, 
+                email = :email, 
                 #rev = :new_rev
             `,
         ConditionExpression: "#rev = :rev",
@@ -51,6 +53,20 @@ module.exports.buildDeleteRequestParameters = (user) => {
             id: user.id,
         }
     }
+};
+
+module.exports.buildChangeEmailRequestParameters = (user) => {
+    return {
+        TableName: process.env.USERS_TABLE,
+        Key: {
+            id: user.id,
+        },
+        ExpressionAttributeValues: {
+            ':email': user.email,
+        },
+        UpdateExpression: `SET email = :email`,
+        ReturnValues: 'ALL_NEW',
+    };
 };
 
 function increaseRevision(user) {

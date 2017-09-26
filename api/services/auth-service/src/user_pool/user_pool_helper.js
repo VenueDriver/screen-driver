@@ -21,11 +21,15 @@ module.exports.buildCreateUserParameters = (user) => {
 module.exports.buildUpdateUserParameters = (user) => {
     return {
         UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email,
+        Username: user.username,
         UserAttributes: [
             {
                 Name: 'custom:admin',
                 Value: user.isAdmin.toString()
+            },
+            {
+                Name: 'email',
+                Value: user.email
             }
         ]
     };
