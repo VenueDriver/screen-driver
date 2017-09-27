@@ -97,7 +97,7 @@ function addEventListeners() {
         openContentWindow(contentUrl);
     });
 
-    ipcMain.on('user-action', function (event, data) {
+    ipcMain.on('user-interacted', function (event, data) {
         console.log(data);
     });
 }

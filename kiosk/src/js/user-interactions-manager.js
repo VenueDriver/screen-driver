@@ -5,7 +5,7 @@ let instance = null;
 let userActivityTimeMinutes = 1;
 let userActivityTimeMilliseconds = userActivityTimeMinutes * 60 * 1000;
 
-class UserActionsManager {
+class UserInteractionsManager {
 
     constructor() {
         if (!instance) {
@@ -27,4 +27,4 @@ class UserActionsManager {
     }
 }
 
-module.exports = UserActionsManager;
+module.exports = UserInteractionsManager;
