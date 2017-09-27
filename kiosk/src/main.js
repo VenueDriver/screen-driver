@@ -100,7 +100,6 @@ function addEventListeners() {
 
     ipcMain.on('user-interacted', function (event, data) {
         UserInteractionsManager.setLastUserActionTime(data);
-
     });
 }
 

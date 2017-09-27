@@ -56,7 +56,7 @@ class CurrentScreenSettingsManager {
     }
 
     static changeScreenConfiguration() {
-        UserInteractionsManager.applyAfter(this._changeScreenConfiguration);
+        UserInteractionsManager.applyWhenScreenNotInterruptedByUser(this._changeScreenConfiguration);
     }
 
     static _changeScreenConfiguration() {

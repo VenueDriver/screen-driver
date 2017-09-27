@@ -42,7 +42,7 @@ class UserInteractionsManager {
         return (new Date() - userActivityTimeMilliseconds) < this.lastUserActionTime.getTime();
     }
 
-    applyAfter(callback) {
+    applyWhenScreenNotInterruptedByUser(callback) {
         if (this.isUserInteractWithScreen()) {
             this._delayAction(callback);
         } else {
