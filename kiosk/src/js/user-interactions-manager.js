@@ -1,4 +1,5 @@
 'use strict';
+const cron = require('node-cron');
 
 let instance = null;
 
@@ -15,7 +16,7 @@ class UserInteractionsManager {
     }
 
     setLastUserActionTime(timestamp) {
-        this.lastUserActionTime = timestamp;
+        this.lastUserActionTime = new Date(timestamp);
     }
 
     getLastUserActionTime() {
@@ -23,8 +24,25 @@ class UserInteractionsManager {
     }
 
     isUserInteractWithScreen() {
-        return (new Date() - userActivityTimeMilliseconds) < this.lastUserActionTime;
+        return (new Date() - userActivityTimeMilliseconds) < this.lastUserActionTime.getTime();
+    }
+
+    applyAfter(callback) {
+        if (this.isUserInteractWithScreen()) {
+            this._delayAction(callback);
+        } else {
+            callback();
+        }
+    }
+
+    _delayAction(callback) {
+        let cronJob = cron.schedule('* * * * * *', () => {
+            if (!this.isUserInteractWithScreen()) {
+                cronJob.destroy();
+                callback();
+            }
+        }, true);
     }
 }
 
-module.exports = UserInteractionsManager;
+module.exports = new UserInteractionsManager();
