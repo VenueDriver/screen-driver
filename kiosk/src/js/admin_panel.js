@@ -1,3 +1,4 @@
+const {app} = require('electron').remote;
 const remote = require('electron').remote;
 const {ipcRenderer} = require('electron');
 const CurrentScreenSettingsManager = remote.require(__dirname + '/js/current_screen_settings_manager');
@@ -258,5 +259,5 @@ function hideCancelButton() {
 }
 
 function showApplicationVersion() {
-    $('#version').text('v' + process.env.npm_package_version);
+    $('#version').text('v' + app.getVersion());
 }
