@@ -11,8 +11,20 @@ class UserInteractionsManager {
     constructor() {
         if (!instance) {
             instance = this;
+            this.queue = [];
+            this.isApplyingQueueMode = false;
+            this._initQueueWatcher();
         }
         return instance;
+    }
+
+    _initQueueWatcher() {
+        cron.schedule('* * * * * *', () => {
+            if (!this.isUserInteractWithScreen() && this.queue.length != 0 && !this.isApplyingQueueMode) {
+                this.isApplyingQueueMode = true;
+                this._applyDelayedTasks();
+            }
+        }, true);
     }
 
     setLastUserActionTime(timestamp) {
@@ -39,13 +51,29 @@ class UserInteractionsManager {
     }
 
     _delayAction(callback) {
-        let cronJob = cron.schedule('* * * * * *', () => {
-            if (!this.isUserInteractWithScreen()) {
-                cronJob.destroy();
-                callback();
-            }
-        }, true);
+        this.queue.push(callback);
     }
+
+    _applyDelayedTasks() {
+        if (this.queue[0]) {
+            let delayedOperationResult = this.queue[0]();
+            this.queue.splice(0, 1);
+
+            if (_isPromise(delayedOperationResult)) {
+                delayedOperationResult.then(() => this._applyDelayedTasks())
+            } else {
+                this._applyDelayedTasks();
+            }
+
+        } else {
+            this.isApplyingQueueMode = false;
+        }
+
+    }
+}
+
+function _isPromise(object) {
+    return !!object.then;
 }
 
 module.exports = new UserInteractionsManager();

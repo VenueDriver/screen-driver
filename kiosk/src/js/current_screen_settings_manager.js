@@ -62,7 +62,7 @@ class CurrentScreenSettingsManager {
     static _changeScreenConfiguration() {
         let screenInformation = CurrentScreenSettingsManager.getCurrentSetting();
 
-        CurrentScreenSettingsManager.reloadCurrentScreenConfig(screenInformation).then((contentUrl) => {
+        return CurrentScreenSettingsManager.reloadCurrentScreenConfig(screenInformation).then((contentUrl) => {
             let currentUrl = CurrentScreenSettingsManager._cutSlashAtTheEndOfUrl(WindowInstanceHolder.getWindow().getURL());
             let newUrl = CurrentScreenSettingsManager._cutSlashAtTheEndOfUrl(contentUrl);
             if (CurrentScreenSettingsManager._isForciblyEnabled(screenInformation)) {
