@@ -91,9 +91,9 @@ class ScheduledTaskManager {
     static _isScheduleShouldRunAtThisTime(schedule) {
         let startDateTime = CronParser.parseStartEventCron(schedule);
         let endDateTime = CronParser.parseEndEventCron(schedule);
-        let currentTime = new Date().getTime();
+        let currentTime = new Date();
 
-        return startDateTime < currentTime < endDateTime;
+        return startDateTime < currentTime && currentTime < endDateTime;
     }
 
     static _isScheduleShouldRunToday(schedule) {
