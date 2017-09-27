@@ -24,6 +24,9 @@ class UserInteractionsManager {
     }
 
     isUserInteractWithScreen() {
+        if (!this.lastUserActionTime) {
+            return false;
+        }
         return (new Date() - userActivityTimeMilliseconds) < this.lastUserActionTime.getTime();
     }
 

@@ -2,6 +2,7 @@
 
 const {LocalStorageManager} = require('./helpers/local_storage_helper');
 const {scheduledTaskManager, isScheduled} = require('./scheduled-task-manager');
+const UserInteractionsManager = require('./user-interactions-manager');
 const StorageManager = require('./helpers/storage_manager');
 const SettingsHelper = require('./helpers/settings_helper');
 const DataLoader = require('./data_loader');
@@ -55,20 +56,24 @@ class CurrentScreenSettingsManager {
     }
 
     static changeScreenConfiguration() {
+        UserInteractionsManager.applyAfter(this._changeScreenConfiguration);
+    }
+
+    static _changeScreenConfiguration() {
         let screenInformation = CurrentScreenSettingsManager.getCurrentSetting();
 
-        this.reloadCurrentScreenConfig(screenInformation).then((contentUrl) => {
-            let currentUrl = this._cutSlashAtTheEndOfUrl(WindowInstanceHolder.getWindow().getURL());
-            let newUrl = this._cutSlashAtTheEndOfUrl(contentUrl);
-            if (this._isForciblyEnabled(screenInformation)) {
-                this._applyNewUrl(screenInformation, newUrl);
+        CurrentScreenSettingsManager.reloadCurrentScreenConfig(screenInformation).then((contentUrl) => {
+            let currentUrl = CurrentScreenSettingsManager._cutSlashAtTheEndOfUrl(WindowInstanceHolder.getWindow().getURL());
+            let newUrl = CurrentScreenSettingsManager._cutSlashAtTheEndOfUrl(contentUrl);
+            if (CurrentScreenSettingsManager._isForciblyEnabled(screenInformation)) {
+                CurrentScreenSettingsManager._applyNewUrl(screenInformation, newUrl);
                 return;
             }
 
             scheduledTaskManager.initSchedulingForScreen(screenInformation);
 
             if (!isScheduled() && currentUrl != newUrl) {
-                this._applyNewUrl(screenInformation, newUrl);
+                CurrentScreenSettingsManager._applyNewUrl(screenInformation, newUrl);
             }
         })
     }
