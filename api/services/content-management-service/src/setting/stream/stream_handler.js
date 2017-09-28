@@ -18,7 +18,7 @@ function shouldBeNotified(record) {
     switch (record.eventName) {
         case 'INSERT': return false;
         case 'REMOVE': return true;
-        case 'MODIFY': return isSettingChanged(record.dynamodb);
+        case 'MODIFY': return isSettingChanged(record.dynamodb) && !canIgnoreChange(record.dynamodb);
     }
 }
 
@@ -35,6 +35,29 @@ function isSettingChanged(streamInfo) {
         return true;
     }
     return !areConfigsEqual(oldSetting, newSetting);
+}
+
+function canIgnoreChange(streamInfo) {
+    let oldSetting = streamInfo.OldImage;
+    let newSetting = streamInfo.NewImage;
+
+    if (isForciblyEnabledStateChanged(oldSetting, newSetting) || isEnabledStateChanged(oldSetting, newSetting)) {
+        return false;
+    }
+
+    return !isEnabled(oldSetting);
+}
+
+function isEnabledStateChanged(oldSetting, newSetting) {
+    return oldSetting.enabled.BOOL != newSetting.enabled.BOOL;
+}
+
+function isForciblyEnabledStateChanged(oldSetting, newSetting) {
+    return oldSetting.forciblyEnabled.BOOL != newSetting.forciblyEnabled.BOOL;
+}
+
+function isEnabled(setting) {
+    return setting.forciblyEnabled.BOOL || setting.enabled.BOOL
 }
 
 function areConfigsEqual(oldSetting, newSetting) {
