@@ -98,8 +98,8 @@ function addEventListeners() {
         openContentWindow(contentUrl);
     });
 
-    ipcMain.on('user-interacted', function (event, data) {
-        UserInteractionsManager.setLastUserActionTime(data);
+    ipcMain.on('user-interacted', function (event) {
+        UserInteractionsManager.handleUserInteraction();
     });
 }
 

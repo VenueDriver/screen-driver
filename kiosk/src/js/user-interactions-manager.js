@@ -27,8 +27,8 @@ class UserInteractionsManager {
         }, true);
     }
 
-    setLastUserActionTime(timestamp) {
-        this.lastUserActionTime = new Date(timestamp);
+    handleUserInteraction() {
+        this.lastUserActionTime = new Date();
     }
 
     getLastUserActionTime() {

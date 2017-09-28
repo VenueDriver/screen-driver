@@ -18,7 +18,7 @@ window.onscroll = function () {
 };
 
 function sendUserActionEvent() {
-    ipcRenderer.send('user-interacted', new Date());
+    ipcRenderer.send('user-interacted');
 }
 
 function renameExtraSymbols() {
