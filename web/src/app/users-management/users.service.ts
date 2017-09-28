@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {NotificationService} from "../notifications/notification.service";
-import {User} from "../user/user";
+import {User} from "../common/entities/user";
 import {environment} from "../../environments/environment";
 import {Subject, Observable, BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 
 import * as _ from 'lodash';
+import {ErrorMessageExtractor} from "../common/error-message-extractor";
 
 const USERS_API = `${environment.apiUrl}/api/auth/users`;
 const EDIT_PROFILE_API = `${environment.apiUrl}/api/auth/edit-profile`;
@@ -38,7 +39,7 @@ export class UsersService {
                     this.notificationService.showSuccessNotificationBar('User was created successfully');
                 },
                 error => {
-                    let errorMessage = this.getErrorMessage(error);
+                    let errorMessage = ErrorMessageExtractor.extractMessage(error);
                     this.notificationService.showErrorNotificationBar('Unable to perform the create user operation: ' + errorMessage);
                     subject.error(errorMessage);
                 }
@@ -56,7 +57,7 @@ export class UsersService {
                     this.notificationService.showSuccessNotificationBar('User was updated successfully');
                 },
                 error => {
-                    let errorMessage = this.getErrorMessage(error);
+                    let errorMessage = ErrorMessageExtractor.extractMessage(error);
                     this.notificationService.showErrorNotificationBar('Unable to change user role: ' + errorMessage);
                     subject.error(errorMessage);
                 }
@@ -73,7 +74,7 @@ export class UsersService {
                     this.notificationService.showSuccessNotificationBar('Profile was edited successfully');
                 },
                 error => {
-                    let errorMessage = this.getErrorMessage(error);
+                    let errorMessage = ErrorMessageExtractor.extractMessage(error);
                     this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to edit user profile');
                     subject.error(errorMessage);
                 }
@@ -81,17 +82,6 @@ export class UsersService {
         return subject;
     }
 
-    private getErrorMessage(error): string {
-        if (error.error) {
-            return this.getErrorMessage(error.error)
-        }
-
-        if (error.message) {
-            return error.message;
-        }
-
-        return error;
-    }
 
     applyChangesInUserList(updatedUser: User) {
         let users = this.users.getValue();
