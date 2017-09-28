@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {User} from "../../common/entities/user";
 import {AuthService} from "../auth.service";
 import {NgModel} from "@angular/forms";
+import {ErrorMessageExtractor} from "../../common/error-message-extractor";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-auth',
@@ -54,7 +57,11 @@ export class AuthComponent implements OnInit {
                 this.failMessage = 'Email required';
                 break;
             default:
-                this.failMessage = error;
+                if (_.isEmpty(error) || _.isEmpty(ErrorMessageExtractor.extractMessage(error))) {
+                    this.failMessage = 'Couldn\'t log you in';
+                } else {
+                    this.failMessage = ErrorMessageExtractor.extractMessage(error);
+                }
         }
     }
 
