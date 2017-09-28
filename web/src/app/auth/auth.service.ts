@@ -9,6 +9,7 @@ import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
 import {User} from "../common/entities/user";
 import {AuthTokenService} from "./auth-token.service";
+import {ErrorMessageExtractor} from "../common/error-message-extractor";
 
 const AUTH_API = `${environment.apiUrl}/api/auth/sign_in`;
 const TOKEN_REFRESH_API = `${environment.apiUrl}/api/auth/token/refresh`;
@@ -53,15 +54,11 @@ export class AuthService {
                     this.redirect();
                 },
                 error => {
-                    let errorMessage = this.getErrorMessage(error);
+                    let errorMessage = ErrorMessageExtractor.extractMessage(error);
                     subject.error(errorMessage);
                 }
             );
         return subject;
-    }
-
-    private getErrorMessage(error): string {
-        return error.error ? error.error.message.message : error.message;
     }
 
     initCurrentUser(token: string) {
