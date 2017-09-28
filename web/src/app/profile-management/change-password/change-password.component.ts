@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {User} from "../../user/user";
+import {User} from "../../common/entities/user";
 import {NgModel} from "@angular/forms";
 
 import * as _ from 'lodash';

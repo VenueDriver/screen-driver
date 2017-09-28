@@ -1,5 +1,5 @@
 import {Component, OnInit, EventEmitter, Output} from '@angular/core';
-import {User} from "../../user/user";
+import {User} from "../../common/entities/user";
 import {UsersService} from "../users.service";
 import {NgModel} from "@angular/forms";
 
