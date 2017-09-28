@@ -11,18 +11,24 @@
             </button>
             <a class="navbar-brand">ScreenDriver</a>
             <div class="router-links" *ngIf="isUserAdmin()">
-                <div class="link" [routerLinkActive]="['active']">
-                    <a routerLink="/content" routerLinkActive="active">Content</a>
+                <div routerLink="/content"
+                     class="link"
+                     [routerLinkActive]="['active']">
+                    <a routerLinkActive="active">Content</a>
                 </div>
 
-                <div class="link" [routerLinkActive]="['active']">
-                    <a routerLink="/users" routerLinkActive="active">Users</a>
+                <div routerLink="/users"
+                     class="link"
+                     [routerLinkActive]="['active']">
+                    <a routerLinkActive="active">Users</a>
                 </div>
             </div>
 
             <div class="control-panel" *ngIf="!isAuthPage()">
-                <div class="link" [routerLinkActive]="['active']">
-                    <a routerLink="/profile" routerLinkActive="active">{{getUserLogin()}}</a>
+                <div routerLink="/profile"
+                     class="link"
+                     [routerLinkActive]="['active']">
+                    <a routerLinkActive="active">{{getUserLogin()}}</a>
                 </div>
 
                 <div class="link" [routerLinkActive]="['active']" (click)="signOut()">
