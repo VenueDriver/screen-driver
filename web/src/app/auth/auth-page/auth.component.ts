@@ -57,7 +57,7 @@ export class AuthComponent implements OnInit {
                 this.failMessage = 'Email required';
                 break;
             default:
-                if (_.isEmpty(error) || _.isEmpty(ErrorMessageExtractor.extractMessage(error))) {
+                if (_.isEmpty(error)) {
                     this.failMessage = 'Couldn\'t log you in';
                 } else {
                     this.failMessage = ErrorMessageExtractor.extractMessage(error);
