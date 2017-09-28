@@ -1,6 +1,25 @@
+const {ipcRenderer} = require('electron');
+
 turnOnLogging();
 renameExtraSymbols();
 disableZoom();
+
+var scrollCounter = 0;
+
+window.onclick = function () {
+    sendUserActionEvent();
+};
+
+window.onscroll = function () {
+    if (scrollCounter % 10 == 0) {
+        sendUserActionEvent();
+    }
+    scrollCounter++;
+};
+
+function sendUserActionEvent() {
+    ipcRenderer.send('user-interacted');
+}
 
 function renameExtraSymbols() {
     window.nodeRequire = require;

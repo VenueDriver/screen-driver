@@ -12,6 +12,7 @@ const NotificationListener = require('./js/notification-listener/notification_li
 const {scheduledTaskManager} = require('./js/scheduled-task-manager');
 const WindowInstanceHolder = require('./js/window-instance-holder');
 const StorageManager = require('./js/helpers/storage_manager');
+const UserInteractionsManager = require('./js/user-interactions-manager');
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
@@ -95,6 +96,10 @@ function addHotKeyListeners() {
 function addEventListeners() {
     ipcMain.on('open-content-window', (event, contentUrl) => {
         openContentWindow(contentUrl);
+    });
+
+    ipcMain.on('user-interacted', function (event) {
+        UserInteractionsManager.handleUserInteraction();
     });
 }
 
