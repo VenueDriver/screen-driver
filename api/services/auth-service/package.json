@@ -5,8 +5,8 @@
   "scripts": {
     "start": "sls offline start --stage dev",
     "invoke": "sls invoke -f",
-    "deploy": "serverless deploy --stage dev",
-    "deploy-function": "serverless deploy --stage dev function --function"
+    "deploy": "serverless deploy --stage staging",
+    "deploy-function": "serverless deploy --stage staging function --function"
   },
   "author": "",
   "license": "MIT",

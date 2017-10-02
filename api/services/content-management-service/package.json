@@ -8,8 +8,8 @@
     "test": "sls invoke test --stage test",
     "test-function": "sls invoke test --stage test --function",
     "invoke": "sls invoke -f",
-    "deploy": "serverless deploy --stage dev",
-    "deploy-function": "serverless deploy --stage dev function --function"
+    "deploy": "serverless deploy --stage staging",
+    "deploy-function": "serverless deploy --stage staging function --function"
   },
   "author": "",
   "license": "MIT",
