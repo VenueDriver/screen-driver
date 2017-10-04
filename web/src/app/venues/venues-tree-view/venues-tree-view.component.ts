@@ -26,6 +26,8 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
     @Input() content: Array<Content>;
     @Output() contentChange = new EventEmitter();
 
+    @Output() updateClients = new EventEmitter();
+
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
@@ -221,6 +223,30 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
         this.updateTreeViewOptions();
     }
 
+    updateClient(event: any, node: any) {
+        this.stopClickPropagation(event);
+
+        let screens = this.getScreensFrom(node);
+        this.updateTreeViewOptions();
+
+        this.updateClients.emit(screens);
+    }
+
+    getScreensFrom(node: any) {
+        let screens = [];
+        this.currentNodeData = node.data || node.children;
+
+        if (this.hasChildren(node)) {
+            screens = _.map(this.currentNodeData.children, (n: any) => {
+                return this.getScreensFrom(n)
+            });
+        } else {
+            screens.push(node.children);
+        }
+
+        return _.flattenDeep(screens);
+    }
+
     hasChildren(node: any): boolean {
         return node.level < 3 && node.children && node.children.length > 0;
     }
@@ -248,6 +274,11 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
     getEditButtonTitle(node: any): string {
         let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
         return `Edit ${nodeLevelName.toLowerCase()}`;
+    }
+
+    getUpdateClientButtonTitle(node: any): string {
+        let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
+        return `Update client for ${nodeLevelName.toLowerCase()}`;
     }
 
     getRefreshButtonTitle(node: any): string {

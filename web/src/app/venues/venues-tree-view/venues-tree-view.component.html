@@ -48,6 +48,12 @@
                          (click)="addNewNode($event, node)"
                          [title]="getAddButtonTitle(node)">
                     </div>
+
+                    <div class="node-button update-client-button"
+                         *ngIf="isAllowToAddChild(node)"
+                         (click)="updateClient($event, node);"
+                         [title]="getUpdateClientButtonTitle(node)">
+                    </div>
                 </div>
             </div>
         </ng-template>
