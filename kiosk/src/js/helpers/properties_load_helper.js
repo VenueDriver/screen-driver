@@ -10,6 +10,10 @@ class PropertiesLoader {
         return PropertiesLoader._getProperties().get('ScreenDriver.api.endpoint');
     }
 
+    static getWindowsUpdateEndpoint() {
+        return PropertiesLoader._getProperties().get('ScreenDriver.kioks.update-endpoint.windows');
+    }
+
     static _getProperties() {
         if (isDev) {
             return PropertiesReader(__dirname + '/../../../properties/development.app.properties');

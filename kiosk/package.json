@@ -1,6 +1,6 @@
 {
   "name": "ScreenDriver",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "ScreenDriver kiosk app",
   "main": "src/main.js",
   "scripts": {
@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "electron": "1.7.1",
-    "electron-builder": "18.6.2",
+    "electron-builder": "19.33.0",
     "electron-packager": "8.7.0"
   },
   "dependencies": {
@@ -24,6 +24,7 @@
     "electron-is-dev": "0.1.2",
     "electron-json-storage": "3.0.5",
     "electron-log": "2.2.6",
+    "electron-updater": "2.10.1",
     "jquery": "3.2.1",
     "lodash": "4.17.4",
     "node-cron": "1.2.0",
@@ -32,7 +33,13 @@
   },
   "build": {
     "win": {
-      "icon": "./src/img/icon.ico"
+      "icon": "./src/img/icon.ico",
+      "publish": [
+        {
+          "provider": "generic",
+          "url": ""
+        }
+      ]
     },
     "mac": {
       "target": "tar.gz",
