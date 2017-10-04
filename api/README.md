@@ -8,7 +8,7 @@
 ## Run project offline
 ###  Before:
 1. Java Runtime Engine (JRE) version 6.x or newer should be installed ([serverless-dynamodb-local](https://www.npmjs.com/package/serverless-dynamodb-local#this-plugin-requires) plugin requirement)
-1. Setup serverless-dynamodb-local plugin before start: ```sls dynamodb install``` 
+1. Setup serverless-dynamodb-local plugin before start: ```sls dynamodb install --stage dev``` 
 1. Set environment variables:
 
   * `AWS_ACCESS_KEY_ID=any_key`
@@ -22,7 +22,7 @@
 Use ```npm start``` to run project locally.
 
 ## Deployment
-###  Before:
+### Before:
 Before run deploy commands, set environment variables to have access to AWS:
 * ```export AWS_ACCESS_KEY_ID=<Your_AWS_access_key>```
 * ```export AWS_SECRET_ACCESS_KEY=<Your_AWS_secret_access_key>```
