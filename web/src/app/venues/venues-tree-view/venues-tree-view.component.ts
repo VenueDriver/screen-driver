@@ -26,6 +26,8 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
     @Input() content: Array<Content>;
     @Output() contentChange = new EventEmitter();
 
+    @Output() updateClients = new EventEmitter();
+
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
@@ -219,6 +221,30 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
         this.currentNodeData = node.data;
         this.originalNodeData = _.clone(node.data);
         this.updateTreeViewOptions();
+    }
+
+    updateClient(event: any, node: any) {
+        this.stopClickPropagation(event);
+
+        let screens = this.getScreensFrom(node);
+        this.updateTreeViewOptions();
+
+        this.updateClients.emit(screens);
+    }
+
+    getScreensFrom(node: any) {
+        let screens = [];
+        this.currentNodeData = node.data || node.children;
+
+        if (this.hasChildren(node)) {
+            screens = _.map(this.currentNodeData.children, (n: any) => {
+                return this.getScreensFrom(n)
+            });
+        } else {
+            screens.push(node.children);
+        }
+
+        return _.flattenDeep(screens);
     }
 
     hasChildren(node: any): boolean {
