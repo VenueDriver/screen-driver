@@ -250,6 +250,11 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
         return `Edit ${nodeLevelName.toLowerCase()}`;
     }
 
+    getUpdateClientButtonTitle(node: any): string {
+        let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
+        return `Update client for ${nodeLevelName.toLowerCase()}`;
+    }
+
     getRefreshButtonTitle(node: any): string {
         let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
         return `Refresh ${nodeLevelName.toLowerCase()} content`;
