@@ -1,5 +1,6 @@
 const electron = require('electron');
 const {powerSaveBlocker} = require('electron');
+const ApplicationUpdater = require('./js/application-updater');
 const app = electron.app;
 
 const path = require('path');
@@ -38,6 +39,7 @@ function setupLogger() {
 }
 
 function ready() {
+    new ApplicationUpdater().init();
     StorageManager.loadDataFromLocalStorage().then(() => {
         powerSaveBlocker.start('prevent-display-sleep');
         notificationListener = new NotificationListener();
