@@ -234,10 +234,10 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
 
     getScreensFrom(node: any) {
         let screens = [];
-        this.currentNodeData = node.data || node.children;
+        let data = node.data || node.children;
 
         if (this.hasChildren(node)) {
-            screens = _.map(this.currentNodeData.children, (n: any) => {
+            screens = _.map(data.children, (n: any) => {
                 return this.getScreensFrom(n)
             });
         } else {

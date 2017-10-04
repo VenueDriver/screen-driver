@@ -43,16 +43,16 @@
                          [title]="getEditButtonTitle(node)">
                     </div>
 
-                    <div *ngIf="isAllowToAddChild(node)"
-                         class="node-button plus-button"
-                         (click)="addNewNode($event, node)"
-                         [title]="getAddButtonTitle(node)">
-                    </div>
-
                     <div class="node-button update-client-button"
                          *ngIf="isAllowToAddChild(node)"
                          (click)="updateClient($event, node);"
                          [title]="getUpdateClientButtonTitle(node)">
+                    </div>
+
+                    <div *ngIf="isAllowToAddChild(node)"
+                         class="node-button plus-button"
+                         (click)="addNewNode($event, node)"
+                         [title]="getAddButtonTitle(node)">
                     </div>
                 </div>
             </div>
