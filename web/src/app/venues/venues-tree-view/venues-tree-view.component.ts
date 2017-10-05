@@ -156,6 +156,10 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
         return node.level < 3 && this.isAllowToEditNode();
     }
 
+    isAllowToUpdateClientApp(node: any) {
+        return node.level <= 3 && this.isAllowToEditNode();
+    }
+
     isAllowToRefreshScreenContent(node: any) {
         return node.level == 3 && _.isEmpty(this.currentNodeData);
     }
@@ -234,17 +238,23 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
 
     getScreensFrom(node: any) {
         let screens = [];
-        let data = node.data || node.children;
+        let data = node.data || node;
 
-        if (this.hasChildren(node)) {
-            screens = _.map(data.children, (n: any) => {
-                return this.getScreensFrom(n)
-            });
-        } else {
-            screens.push(node.children);
-        }
+        screens = this.getNestedNodes(data);
 
         return _.flattenDeep(screens);
+    }
+
+    getNestedNodes(node) {
+        let screens = [];
+
+        if (node.children) {
+            screens = _.map(node.children, (n: any) => this.getScreensFrom(n));
+        } else {
+            screens.push(node);
+        }
+
+        return screens;
     }
 
     hasChildren(node: any): boolean {
