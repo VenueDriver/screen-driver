@@ -41,11 +41,19 @@
                 Days of week:
             </div>
 
-            <days-of-week-multiselector
-                    [selectedDays]="getDaysOfWeek()"
-                    [editMode]="true"
-                    (select)="setDaysOfWeek($event)">
-            </days-of-week-multiselector>
+            <div class="day-of-week">
+                <days-of-week-multiselector
+                                            [selectedDays]="getDaysOfWeek()"
+                                            [editMode]="true"
+                                            (select)="setDaysOfWeek($event)">
+                </days-of-week-multiselector>
+
+                <button (click)="toggleWeek()"
+                        class="btn btn-sm"
+                        [ngClass]="{'active': isWeekSelected()}">
+                    All
+                </button>
+            </div>
         </div>
 
         <div *ngIf="eventTime.periodicity === scheduleTypes.ONE_TIME"
@@ -124,9 +132,7 @@
                  (click)="setRemovingMode(true)">
             </div>
         </div>
-
     </div>
-
 
     <div class="buttons-container">
         <div class="remove-item-block"

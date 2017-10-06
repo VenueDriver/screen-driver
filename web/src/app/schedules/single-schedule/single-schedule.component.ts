@@ -168,4 +168,28 @@ export class SingleScheduleComponent implements OnInit {
     getDaysOfWeek(): Array<string> {
         return this.eventTime.daysOfWeek.split(',');
     }
+
+    toggleWeek() {
+        this.isWeekSelected() ? this.unSelectWeek() : this.selectWeek();
+    }
+
+    selectWeek() {
+       let allDays = Object.keys(DaysOfWeek);
+       this.eventTime.daysOfWeek = allDays.join(',');
+
+       this.validate();
+    }
+
+    unSelectWeek() {
+        this.eventTime.daysOfWeek = "";
+
+        this.validate();
+    }
+
+    isWeekSelected() {
+        let week = Object.keys(DaysOfWeek);
+        let weekSelector = week.join(',');
+
+        return this.eventTime.daysOfWeek == weekSelector
+    }
 }
