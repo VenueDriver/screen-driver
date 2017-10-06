@@ -15,9 +15,7 @@ module.exports.update = (event, context, callback) => {
         return;
     }
 
-    console.log(data);
-
-    callback(null, responseHelper.createSuccessfulResponse(data));
+    callback(null, responseHelper.createSuccessfulResponse({}));
 };
 
 function notifyAboutNewVersion(screens) {
