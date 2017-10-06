@@ -94,13 +94,10 @@
                         (valueChanged)="setTime('startTime', $event)">
                 </autocomplete>
 
-                <autocomplete
-                        class="period"
-                        [editable]="true"
-                        [items]="timePeriods"
-                        [value]="eventTime.startTimePeriod"
-                        (valueChanged)="setTime('startTimePeriod', $event)">
-                </autocomplete>
+                <div class="period"
+                     (click)="changeTimePeriod('startTimePeriod')">
+                    {{eventTime.startTimePeriod}}
+                </div>
             </div>
 
             <div class="title">
@@ -116,13 +113,10 @@
                         (valueChanged)="setTime('endTime', $event)">
                 </autocomplete>
 
-                <autocomplete
-                        class="period"
-                        [editable]="true"
-                        [items]="timePeriods"
-                        [value]="eventTime.endTimePeriod"
-                        (valueChanged)="setTime('endTimePeriod', $event)">
-                </autocomplete>
+                <div class="period"
+                     (click)="changeTimePeriod('endTimePeriod')">
+                    {{eventTime.endTimePeriod}}
+                </div>
             </div>
         </div>
 

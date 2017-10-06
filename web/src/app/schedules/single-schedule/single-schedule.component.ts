@@ -157,6 +157,14 @@ export class SingleScheduleComponent implements OnInit {
         this.schedulesService.updateSchedule(this.schedule);
     }
 
+    changeTimePeriod(field) {
+        if (this.eventTime[field] === this.timePeriods[0]) {
+            this.setTime(field, this.timePeriods[1])
+        } else {
+            this.setTime(field, this.timePeriods[0]);
+        }
+    }
+
     setRemovingMode(boolean: boolean) {
         this.removingMode = boolean;
     }
