@@ -127,7 +127,7 @@ function subscribeToScreenReloadNotification() {
 }
 
 function subscribeToScheduleUpdate() {
-    notificationListener.subscribe('screens', 'schedule_update', (event) => {
+    notificationListener.subscribe('screens', 'schedule_updated', (event) => {
         CurrentScreenSettingsManager.changeScreenConfiguration();
     });
 }
