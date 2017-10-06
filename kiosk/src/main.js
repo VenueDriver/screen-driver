@@ -120,7 +120,7 @@ function openContentWindow(contentUrl) {
 function subscribeToScreenReloadNotification() {
     notificationListener.subscribe('screens', 'refresh', (data) => {
         let setting = CurrentScreenSettingsManager.getCurrentSetting();
-        if (data.screens.includes(setting.selectedScreenId)) {
+        if (data.screens.includes(setting.selectedScreenId) && !WindowsHelper.isAdminPanelOpened()) {
             WindowInstanceHolder.getWindow().reload();
         }
     });

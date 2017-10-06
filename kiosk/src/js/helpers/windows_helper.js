@@ -65,6 +65,10 @@ class WindowsHelper {
             }
         });
     }
+
+    static isAdminPanelOpened() {
+        return WindowInstanceHolder.getWindow().webContents.getURL().startsWith('file:///');
+    }
 }
 
 module.exports = WindowsHelper;
