@@ -46,6 +46,11 @@ function initAutoUpdaterEvents() {
         Logger.info('update available')
     });
 
+    autoUpdater.on('error', () => {
+        Logger.error('Auto update failed. Restart process...');
+        autoUpdater.checkForUpdates();
+    });
+
     autoUpdater.on('checking-for-update', () => {
         Logger.info('checking-for-update')
     });

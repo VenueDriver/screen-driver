@@ -11,7 +11,7 @@ class PropertiesLoader {
     }
 
     static getWindowsUpdateEndpoint() {
-        return PropertiesLoader._getProperties().get('ScreenDriver.kioks.update-endpoint.windows');
+        return PropertiesLoader._getProperties().get('ScreenDriver.kiosk.update-endpoint.windows');
     }
 
     static _getProperties() {
