@@ -102,7 +102,7 @@ export class VenuesComponent implements OnInit {
         let screensIds = _.map(screens, 'id');
         let body = { screens: screensIds };
 
-        this.screensService.updateClients(body).subscribe(() => {});
+        this.screensService.updateClients(body);
     }
 
     showAddVenueForm() {
