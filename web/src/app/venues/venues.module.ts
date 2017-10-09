@@ -10,7 +10,7 @@ import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service
 import {ContentAutocompleteModule} from "../content-autocomplete/content-autocomplete.module";
 import {AutofocusModule} from "../directives/autofocus/autofocus.module";
 import {SettingsModule} from "../settings/settings.module";
-import {UpdateClientsService} from "../update-client/update-clients.service";
+import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 @NgModule({
     imports: [
@@ -31,7 +31,7 @@ import {UpdateClientsService} from "../update-client/update-clients.service";
     ],
     providers: [
         ContentService,
-        UpdateClientsService,
+        ScreensMessagingService,
         VenuesTreeViewService
     ]
 })

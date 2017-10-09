@@ -14,4 +14,9 @@ export class ScreensMessagingService {
         let data = {screens: [id]};
         return this.httpClient.post(this.screensApiPath + '/refresh', data);
     }
+
+
+    updateClients(content: any): Observable<any> {
+        return this.httpClient.post(this.screensApiPath + '/update', content);
+    };
 }
