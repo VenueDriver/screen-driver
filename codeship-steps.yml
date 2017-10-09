@@ -28,7 +28,7 @@
   name: staging_deploy_kiosk_app_windows
   encrypted_env_file: deployment.env.encrypted
   tag: staging
-  command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING/windows --exclude='*' --include='*.exe'"
+  command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING/windows --exclude='*' --include='*.exe' --include='latest.yml'"
 
 - service: kiosk
   name: staging_build_kiosk_app_linux

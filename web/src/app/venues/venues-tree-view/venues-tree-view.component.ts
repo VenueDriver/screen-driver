@@ -26,6 +26,8 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
     @Input() content: Array<Content>;
     @Output() contentChange = new EventEmitter();
 
+    @Output() updateApplications = new EventEmitter();
+
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
 
@@ -154,6 +156,10 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
         return node.level < 3 && this.isAllowToEditNode();
     }
 
+    isAllowToUpdateClientApp(node: any) {
+        return node.level <= 3 && this.isAllowToEditNode();
+    }
+
     isAllowToRefreshScreenContent(node: any) {
         return node.level == 3 && _.isEmpty(this.currentNodeData);
     }
@@ -221,6 +227,36 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
         this.updateTreeViewOptions();
     }
 
+    updateClientApps(event: any, node: any) {
+        this.stopClickPropagation(event);
+
+        let screens = this.getScreensFrom(node);
+        this.updateTreeViewOptions();
+
+        this.updateApplications.emit(screens);
+    }
+
+    getScreensFrom(node: any) {
+        let screens = [];
+        let data = node.data || node;
+
+        screens = this.getNestedNodes(data);
+
+        return _.flattenDeep(screens);
+    }
+
+    getNestedNodes(node) {
+        let screens = [];
+
+        if (node.children) {
+            screens = _.map(node.children, (n: any) => this.getScreensFrom(n));
+        } else {
+            screens.push(node);
+        }
+
+        return screens;
+    }
+
     hasChildren(node: any): boolean {
         return node.level < 3 && node.children && node.children.length > 0;
     }
@@ -248,6 +284,14 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
     getEditButtonTitle(node: any): string {
         let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
         return `Edit ${nodeLevelName.toLowerCase()}`;
+    }
+
+    getUpdateClientButtonTitle(node: any): string {
+        let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
+
+        let appAmountMessage = this.hasChildren(node) ? "applications in" : "application for" ;
+
+        return `Update client ${appAmountMessage} the ${nodeLevelName.toLowerCase()}`;
     }
 
     getRefreshButtonTitle(node: any): string {

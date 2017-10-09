@@ -127,6 +127,16 @@ refresh_screens:
         cors: true
         authorizer: ${self:custom.authorizer}
 
+update_clients_app:
+  handler: src/screen_notifications/update_clients.update
+  environment: ${self:custom.properties.pusher}
+  events:
+    - http:
+        path: api/screens/update-applications
+        method: post
+        cors: true
+        authorizer: ${self:custom.authorizer}
+
 get_pusher_config:
   handler: src/notifier/notification_config.getConfig
   environment: ${self:custom.properties.pusher}

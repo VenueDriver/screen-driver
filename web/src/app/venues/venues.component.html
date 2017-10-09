@@ -31,6 +31,7 @@
                 [venues]="venuesTree"
                 [content]="content"
                 (update)="loadVenues()"
+                (updateApplications)="updateClientsApps($event)"
                 (contentChange)="loadContent()">
         </venues-tree-view>
     </div>

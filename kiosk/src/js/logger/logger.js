@@ -10,7 +10,7 @@ const LOGS_FILE_NAME = 'error.log';
 class Logger {
 
     static setupLoggerProperties() {
-        log.transports.file.level = 'error';
+        log.transports.file.level = 'debug';
         log.transports.file.maxSize = 10 * 1024 * 1024;
 
         let logsFilePath = Logger.getLogsFilePath();
@@ -48,6 +48,10 @@ class Logger {
 
     static info(message) {
         log.info(message);
+    }
+
+    static getLogger() {
+        return log;
     }
 }
 
