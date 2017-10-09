@@ -37,8 +37,7 @@ function initPusherListener() {
 }
 
 function initAutoUpdaterEvents() {
-    autoUpdater.logger = log;
-    autoUpdater.logger.transports.file.level = "info";
+    autoUpdater.logger = Logger.getLogger();
 
     setFeedUrl();
 
@@ -59,12 +58,9 @@ function initAutoUpdaterEvents() {
         Logger.info('update-not-available')
     });
 
-    autoUpdater.on('update-downloaded', (e) => {
-        if (e) {
-            Logger.error(e);
-        } else {
-            autoUpdater.quitAndInstall()
-        }
+    autoUpdater.on('update-downloaded', (info) => {
+        Logger.info(info);
+        autoUpdater.quitAndInstall()
     });
 }
 
