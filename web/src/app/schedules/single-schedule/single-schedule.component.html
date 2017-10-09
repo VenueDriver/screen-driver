@@ -41,11 +41,19 @@
                 Days of week:
             </div>
 
-            <days-of-week-multiselector
-                    [selectedDays]="getDaysOfWeek()"
-                    [editMode]="true"
-                    (select)="setDaysOfWeek($event)">
-            </days-of-week-multiselector>
+            <div class="day-of-week">
+                <days-of-week-multiselector
+                                            [selectedDays]="getDaysOfWeek()"
+                                            [editMode]="true"
+                                            (select)="setDaysOfWeek($event)">
+                </days-of-week-multiselector>
+
+                <button (click)="toggleWeek()"
+                        class="btn btn-sm"
+                        [ngClass]="{'active': isAllWeekDaysSelected()}">
+                    All
+                </button>
+            </div>
         </div>
 
         <div *ngIf="eventTime.periodicity === scheduleTypes.ONE_TIME"
@@ -86,13 +94,10 @@
                         (valueChanged)="setTime('startTime', $event)">
                 </autocomplete>
 
-                <autocomplete
-                        class="period"
-                        [editable]="true"
-                        [items]="timePeriods"
-                        [value]="eventTime.startTimePeriod"
-                        (valueChanged)="setTime('startTimePeriod', $event)">
-                </autocomplete>
+                <div class="period"
+                     (click)="changeTimePeriod('startTimePeriod')">
+                    {{eventTime.startTimePeriod}}
+                </div>
             </div>
 
             <div class="title">
@@ -108,13 +113,10 @@
                         (valueChanged)="setTime('endTime', $event)">
                 </autocomplete>
 
-                <autocomplete
-                        class="period"
-                        [editable]="true"
-                        [items]="timePeriods"
-                        [value]="eventTime.endTimePeriod"
-                        (valueChanged)="setTime('endTimePeriod', $event)">
-                </autocomplete>
+                <div class="period"
+                     (click)="changeTimePeriod('endTimePeriod')">
+                    {{eventTime.endTimePeriod}}
+                </div>
             </div>
         </div>
 
@@ -124,9 +126,7 @@
                  (click)="setRemovingMode(true)">
             </div>
         </div>
-
     </div>
-
 
     <div class="buttons-container">
         <div class="remove-item-block"

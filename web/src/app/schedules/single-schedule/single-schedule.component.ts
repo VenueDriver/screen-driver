@@ -157,6 +157,14 @@ export class SingleScheduleComponent implements OnInit {
         this.schedulesService.updateSchedule(this.schedule);
     }
 
+    changeTimePeriod(field) {
+        if (this.eventTime[field] === this.timePeriods[0]) {
+            this.setTime(field, this.timePeriods[1])
+        } else {
+            this.setTime(field, this.timePeriods[0]);
+        }
+    }
+
     setRemovingMode(boolean: boolean) {
         this.removingMode = boolean;
     }
@@ -167,5 +175,29 @@ export class SingleScheduleComponent implements OnInit {
 
     getDaysOfWeek(): Array<string> {
         return this.eventTime.daysOfWeek.split(',');
+    }
+
+    toggleWeek() {
+        this.isAllWeekDaysSelected() ? this.unSelectAllWeekDays() : this.selectAllWeekDays();
+    }
+
+    selectAllWeekDays() {
+       let allDays = Object.keys(DaysOfWeek);
+       this.eventTime.daysOfWeek = allDays.join(',');
+
+       this.validate();
+    }
+
+    unSelectAllWeekDays() {
+        this.eventTime.daysOfWeek = "";
+
+        this.validate();
+    }
+
+    isAllWeekDaysSelected() {
+        let week = Object.keys(DaysOfWeek);
+        let weekSelector = week.join(',');
+
+        return this.eventTime.daysOfWeek == weekSelector
     }
 }
