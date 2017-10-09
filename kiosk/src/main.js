@@ -122,14 +122,14 @@ function openContentWindow(contentUrl) {
 function subscribeToScreenReloadNotification() {
     notificationListener.subscribe('screens', 'refresh', (data) => {
         let setting = CurrentScreenSettingsManager.getCurrentSetting();
-        if (data.screens.includes(setting.selectedScreenId)) {
+        if (data.screens.includes(setting.selectedScreenId) && !WindowsHelper.isAdminPanelOpened()) {
             WindowInstanceHolder.getWindow().reload();
         }
     });
 }
 
 function subscribeToScheduleUpdate() {
-    notificationListener.subscribe('screens', 'schedule_update', (event) => {
+    notificationListener.subscribe('screens', 'schedule_updated', (event) => {
         CurrentScreenSettingsManager.changeScreenConfiguration();
     });
 }
