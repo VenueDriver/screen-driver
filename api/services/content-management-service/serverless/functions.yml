@@ -132,7 +132,7 @@ update_clients_app:
   environment: ${self:custom.properties.pusher}
   events:
     - http:
-        path: api/screens/update
+        path: api/screens/update-applications
         method: post
         cors: true
         authorizer: ${self:custom.authorizer}

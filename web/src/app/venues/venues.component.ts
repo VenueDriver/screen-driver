@@ -98,11 +98,11 @@ export class VenuesComponent implements OnInit {
             .subscribe(content => this.content = _.sortBy(content, 'short_name'));
     }
 
-    updateClientsApp(screens: any) {
+    updateClientsApps(screens: any) {
         let screensIds = _.map(screens, 'id');
         let body = { screens: screensIds };
 
-        this.screensService.updateClients(body);
+        this.screensService.updateClientApps(body);
     }
 
     showAddVenueForm() {

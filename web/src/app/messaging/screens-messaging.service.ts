@@ -16,9 +16,8 @@ export class ScreensMessagingService {
         return this.httpClient.post(this.screensApiPath + '/refresh', data);
     }
 
-
-    updateClients(content: any) {
-        return this.httpClient.post(this.screensApiPath + '/update', content).subscribe(
+    updateClientApps(content: any) {
+        return this.httpClient.post(this.screensApiPath + '/update-applications', content).subscribe(
             () => this.notificationService.showSuccessNotificationBar('Update request has been sent successfully.'),
             (error) => this.notificationService.showErrorNotificationBar('Update request failed. Try again after refresh the page.'))
     };

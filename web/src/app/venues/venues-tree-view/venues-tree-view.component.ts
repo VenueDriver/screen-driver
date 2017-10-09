@@ -26,7 +26,7 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
     @Input() content: Array<Content>;
     @Output() contentChange = new EventEmitter();
 
-    @Output() updateClients = new EventEmitter();
+    @Output() updateApplications = new EventEmitter();
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
@@ -227,13 +227,13 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
         this.updateTreeViewOptions();
     }
 
-    updateClient(event: any, node: any) {
+    updateClientApps(event: any, node: any) {
         this.stopClickPropagation(event);
 
         let screens = this.getScreensFrom(node);
         this.updateTreeViewOptions();
 
-        this.updateClients.emit(screens);
+        this.updateApplications.emit(screens);
     }
 
     getScreensFrom(node: any) {
@@ -288,7 +288,10 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
 
     getUpdateClientButtonTitle(node: any): string {
         let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
-        return `Update client for ${nodeLevelName.toLowerCase()}`;
+
+        let appAmountMessage = this.hasChildren(node) ? "applications in" : "application for" ;
+
+        return `Update client ${appAmountMessage} the ${nodeLevelName.toLowerCase()}`;
     }
 
     getRefreshButtonTitle(node: any): string {
