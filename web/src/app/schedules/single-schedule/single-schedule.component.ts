@@ -178,23 +178,23 @@ export class SingleScheduleComponent implements OnInit {
     }
 
     toggleWeek() {
-        this.isWeekSelected() ? this.unSelectWeek() : this.selectWeek();
+        this.isAllWeekDaysSelected() ? this.unSelectAllWeekDays() : this.selectAllWeekDays();
     }
 
-    selectWeek() {
+    selectAllWeekDays() {
        let allDays = Object.keys(DaysOfWeek);
        this.eventTime.daysOfWeek = allDays.join(',');
 
        this.validate();
     }
 
-    unSelectWeek() {
+    unSelectAllWeekDays() {
         this.eventTime.daysOfWeek = "";
 
         this.validate();
     }
 
-    isWeekSelected() {
+    isAllWeekDaysSelected() {
         let week = Object.keys(DaysOfWeek);
         let weekSelector = week.join(',');
 
