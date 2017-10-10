@@ -98,6 +98,7 @@ function addHotKeyListeners() {
 function addEventListeners() {
     ipcMain.on('open-content-window', (event, contentUrl) => {
         openContentWindow(contentUrl);
+        CurrentScreenSettingsManager.changeScreenConfiguration();
     });
 
     ipcMain.on('user-interacted', function (event) {
