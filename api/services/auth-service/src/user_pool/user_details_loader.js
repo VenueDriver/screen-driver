@@ -10,9 +10,9 @@ class UserDetailsLoader {
         let aws = new Aws();
         let userPoolData = UserPoolHelper.buildUserPoolData();
         let command = `cognito-idp admin-get-user --user-pool-id ${userPoolData.UserPoolId} --username ${username}`;
-        return new Promise((resolve, reject) => aws.command(command, (err, data) => {
-            err ? reject(err) : resolve(data.object);
-        }));
+        return new Promise((resolve, reject) => {
+            aws.command(command, (err, data) => err ? reject('User doesn\'t exists') : resolve(data.object))
+        });
     }
 }
 
