@@ -94,6 +94,15 @@ module.exports.changePassword = (cognitoUser, userDetails) => {
     });
 };
 
+module.exports.getCognitoUser = (userDetails) => {
+    let userPool = getUserPool();
+    let userData = {
+        Username: userDetails.username,
+        Pool: userPool
+    };
+    return new AWSCognito.CognitoUser(userData);
+};
+
 function initUserSession(cognitoUser, rejectCallback) {
     cognitoUser.getSession((err, session) => {
         if (err) {
@@ -114,15 +123,6 @@ function getUserPool() {
     let poolData = UserPoolHelper.buildUserPoolData();
     return new AWSCognito.CognitoUserPool(poolData);
 }
-
-module.exports.getCognitoUser = (userDetails) => {
-    let userPool = getUserPool();
-    let userData = {
-        Username: userDetails.username,
-        Pool: userPool
-    };
-    return new AWSCognito.CognitoUser(userData);
-};
 
 function buildResponseWithTokens(tokenSet) {
     let token = `Bearer ${tokenSet.idToken.jwtToken}`;
