@@ -25,6 +25,6 @@ To build app for Windows desktop: `npm run win-build` or follow [this instructio
 
 To create Windows installer: `npm run win-installer`. Installer will be placed in `dist` folder  
 
-> After installation logs will be located in `C:\Users\<user name>\AppData\Local\Programs\ScreenDriver\error.log` file. 
+> After installation logs will be located in `C:\Users\<user name>\AppData\Roaming\ScreenDriver\info.log` file. 
 >
 > App's local storage will be located in `C:\Users\<user name>\AppData\Roaming\ScreenDriver\storage\` (or `~/.config/ScreenDriver/storage` for Linux). Local storage contains info about current setting of a screen.

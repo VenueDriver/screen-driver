@@ -5,7 +5,7 @@ const os = require('os');
 
 const isDev = require('electron-is-dev');
 
-const LOGS_FILE_NAME = 'error.log';
+const LOGS_FILE_NAME = 'info.log';
 
 class Logger {
 
