@@ -6,7 +6,6 @@ AWS.config.update({region: 'us-east-1'});
 const AWSCognito = require('amazon-cognito-identity-js');
 
 const UserPoolHelper = require('./user_pool_helper');
-const DbHelper = require('./../helpers/db_helper');
 
 module.exports.createUser = (userData) => {
     let cognito = new AWS.CognitoIdentityServiceProvider();
@@ -24,27 +23,23 @@ module.exports.createUser = (userData) => {
 };
 
 module.exports.authenticate = (userDetails) => {
-    let params = getFindUserByEmailParams(userDetails.email);
-    return DbHelper.findByParams(params).then(users => {
-        userDetails.username = users[0].username;
-        let authenticationDetails = getAuthenticationDetails(userDetails);
-        let cognitoUser = this.getCognitoUser(userDetails);
+    let authenticationDetails = getAuthenticationDetails(userDetails);
+    let cognitoUser = this.getCognitoUser(userDetails);
 
-        return new Promise((resolve, reject) => {
-            cognitoUser.authenticateUser(authenticationDetails, {
-                onSuccess: function (result) {
-                    resolve(buildResponseWithTokens(result));
-                },
+    return new Promise((resolve, reject) => {
+        cognitoUser.authenticateUser(authenticationDetails, {
+            onSuccess: function (result) {
+                resolve(buildResponseWithTokens(result));
+            },
 
-                onFailure: function (error) {
-                    reject(error);
-                },
+            onFailure: function (error) {
+                reject(error);
+            },
 
-                newPasswordRequired: function (userAttributes, requiredAttributes) {
-                    delete userAttributes.email_verified;
-                    cognitoUser.completeNewPasswordChallenge(userDetails.newPassword, userAttributes, this);
-                }
-            });
+            newPasswordRequired: function (userAttributes, requiredAttributes) {
+                delete userAttributes.email_verified;
+                cognitoUser.completeNewPasswordChallenge(userDetails.newPassword, userAttributes, this);
+            }
         });
     });
 };
@@ -135,15 +130,5 @@ function buildResponseWithTokens(tokenSet) {
     return {
         token: token,
         refreshToken: refreshToken
-    };
-}
-
-function getFindUserByEmailParams(email) {
-    return {
-        TableName: process.env.USERS_TABLE,
-        ExpressionAttributeValues: {
-            ':email': email
-        },
-        FilterExpression: 'email = :email'
     };
 }
