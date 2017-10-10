@@ -25,11 +25,9 @@ function syncUserProfile(userDetails) {
     userDetails.username = userDetails.email;
     return new Promise((resolve, reject) => {
         UserDetailsLoader.loadUserByUsername(userDetails.username)
-            .then(cognitoUser => {
-                UserSaver.saveExistentCognitoUser(cognitoUser)
-                    .then(result => resolve(userDetails))
-                    .catch(error => reject(error));
-            });
+            .then(cognitoUser => UserSaver.saveExistentCognitoUser(cognitoUser))
+            .then(result => resolve(userDetails))
+            .catch(error => reject(error));
     });
 }
 
