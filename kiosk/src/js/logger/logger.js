@@ -18,7 +18,13 @@ class Logger {
     }
 
     static getLogsFilePath() {
-        return isDev ? `${__dirname}/../..` : process.cwd();
+        if (isDev) return `${__dirname}/../..`;
+
+        let platform = os.platform();
+        switch (platform) {
+            case 'linux': return process.cwd();
+            case 'win32': return '%LOCALAPPDATA%\\..\\Roaming\\ScreenDriver';
+        }
     }
 
     static logGlobalError(data) {
