@@ -42,8 +42,11 @@ label {
     padding: 8px;
     overflow-y: auto;
     height: 600px;
-    color: red;
     font-weight: 300;
+}
+
+.error {
+    color: red;
 }
 
 #hide-logs {

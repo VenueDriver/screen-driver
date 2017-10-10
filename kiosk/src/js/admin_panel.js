@@ -27,7 +27,13 @@ $(function () {
     function readLogs() {
         let logsFilePath = Logger.getLogsFileLocation();
         let logs = FileReader.readFile(logsFilePath);
+        logs = highlightErrors(logs);
+
         insertLogsOnPage(logs);
+    }
+
+    function highlightErrors(logs) {
+        return logs.replace(/\[error\]/g, '<span class="error">[error]</span>')
     }
 
     function insertLogsOnPage(logs) {
