@@ -23,7 +23,7 @@ class Logger {
         let platform = os.platform();
         switch (platform) {
             case 'linux': return process.cwd();
-            case 'win32': return '%LOCALAPPDATA%\\..\\Roaming\\ScreenDriver';
+            case 'win32': return '..\\..\\..\\Roaming\\ScreenDriver';
         }
     }
 
