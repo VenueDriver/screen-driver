@@ -6,7 +6,6 @@ const ParametersBuilder = require('./../helpers/parameters_builder');
 const UserSaver = require('../helpers/user_saver');
 
 const Q = require('q');
-const _ = require('lodash');
 
 let db;
 
@@ -111,12 +110,6 @@ class User {
 
     isEmailValid() {
         return emailValidationRegExp.test(this.email)
-    }
-
-    isPasswordValid() {
-        return !_.isEmpty(this.password)
-            && this.password.length >= 6
-            && !this.password.includes(' ');
     }
 
     generateId() {
