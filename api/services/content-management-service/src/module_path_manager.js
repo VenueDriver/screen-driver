@@ -1,5 +1,6 @@
 'use strict';
 
 module.exports.getBasePath = () => {
-    return process.env.STAGE === 'dev' ? '../../../' : '../../';
+    let stage = process.env.STAGE;
+    return stage === 'dev' || stage === 'test' ? '../../../' : '../../';
 };
