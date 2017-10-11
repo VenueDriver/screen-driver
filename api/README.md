@@ -99,7 +99,8 @@ To invoke with logging use ``-l`` flag (i.e. ```npm run invoke <function_name> -
 
 #### Integration tests for lambda functions
 
-You should have running dynamodb on port 8000. To run dynamodb locally with migrations use:
+You should have running dynamodb on port 8000 (for `content-management-service`) or 8001 (for `auth-service`). 
+To run dynamodb locally with migrations use:
 * ```npm run db```
 
 Use one of the following commands to run tests:
@@ -108,7 +109,7 @@ Use one of the following commands to run tests:
 
 #### Unit tests
 
-To run unit tests separately from lambda functions install mocha by `npm i -g mocha` and perform `export STAGE=test && mocha --grep <file name>`.
+To run unit tests separately from lambda functions install mocha by `npm i -g mocha` and perform `mocha --grep <file name>`.
 
 ## Resources
 Used plugins:
