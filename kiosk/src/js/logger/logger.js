@@ -5,7 +5,7 @@ const os = require('os');
 
 const isDev = require('electron-is-dev');
 
-const LOGS_FILE_NAME = 'error.log';
+const LOGS_FILE_NAME = 'info.log';
 
 class Logger {
 
@@ -18,7 +18,13 @@ class Logger {
     }
 
     static getLogsFilePath() {
-        return isDev ? `${__dirname}/../..` : process.cwd();
+        if (isDev) return `${__dirname}/../..`;
+
+        let platform = os.platform();
+        switch (platform) {
+            case 'linux': return process.cwd();
+            case 'win32': return '..\\..\\..\\Roaming\\ScreenDriver';
+        }
     }
 
     static logGlobalError(data) {
