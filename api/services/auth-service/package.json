@@ -12,7 +12,6 @@
   "license": "MIT",
   "dependencies": {
     "amazon-cognito-identity-js": "1.19.0",
-    "aws-cli-js": "2.0.2",
     "jsonwebtoken": "7.4.3",
     "jwk-to-pem": "1.2.6",
     "lodash": "4.17.4",
