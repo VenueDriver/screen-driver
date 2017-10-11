@@ -7,8 +7,7 @@ const tables = [
     process.env.VENUES_TABLE,
     process.env.CONTENT_TABLE,
     process.env.SETTINGS_TABLE,
-    process.env.SCHEDULES_TABLE,
-    process.env.USERS_TABLE
+    process.env.SCHEDULES_TABLE
 ];
 
 class DatabaseCleaner {
@@ -39,7 +38,7 @@ class DatabaseCleaner {
 
     static deleteItem(tableName, id) {
         let deferred = Q.defer();
-        var params = {
+        let params = {
             TableName: tableName,
             Key: {
                 id: id,
