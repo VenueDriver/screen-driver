@@ -23,6 +23,10 @@ let notificationListener;
 
 setupLogger();
 
+process.on('uncaughtException', function (error) {
+    Logger.error(error);
+});
+
 app.disableHardwareAcceleration();
 
 app.on('ready', ready);
