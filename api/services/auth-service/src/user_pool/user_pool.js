@@ -99,6 +99,19 @@ module.exports.changePassword = (cognitoUser, userDetails) => {
     });
 };
 
+module.exports.disableUser = (username) => {
+    let cognito = new AWS.CognitoIdentityServiceProvider();
+    let params = {
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: username
+    };
+    return new Promise((resolve, reject) => {
+        cognito.adminDisableUser(params, (error, data) => {
+            error ? reject(error) : resolve(data);
+        });
+    });
+};
+
 function initUserSession(cognitoUser, rejectCallback) {
     cognitoUser.getSession((err, session) => {
         if (err) {
