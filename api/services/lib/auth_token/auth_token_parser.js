@@ -14,6 +14,7 @@ module.exports.getCurrentUserDetails = (token) => {
     let token = token.replace('Bearer ', '');
     let decodedToken = this.decodeToken(token);
     return new User({
+        id: decodedToken.payload['sub'],
         email: decodedToken.payload['email'],
         isAdmin: decodedToken.payload['custom:admin']
     });
