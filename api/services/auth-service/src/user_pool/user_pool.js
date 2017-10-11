@@ -1,7 +1,7 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-AWS.config.update({region: 'us-east-1'});
+AWS.config.update({region: process.env.REGION});
 
 const AWSCognito = require('amazon-cognito-identity-js');
 
