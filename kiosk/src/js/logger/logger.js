@@ -56,7 +56,7 @@ class Logger {
         log.info(message);
     }
 
-    static warn(message) {
+    static warn(...message) {
         log.warn(message);
     }
 
