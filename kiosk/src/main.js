@@ -14,6 +14,7 @@ const {scheduledTaskManager} = require('./js/scheduled-task-manager');
 const WindowInstanceHolder = require('./js/window-instance-holder');
 const StorageManager = require('./js/helpers/storage_manager');
 const UserInteractionsManager = require('./js/user-interactions-manager');
+const UncaughtErrorsHandlingService = require('./js/error-services/uncaught_errors_handling_service');
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
@@ -24,7 +25,7 @@ let notificationListener;
 setupLogger();
 
 process.on('uncaughtException', function (error) {
-    Logger.error(error);
+    UncaughtErrorsHandlingService.registerError(error);
 });
 
 app.disableHardwareAcceleration();

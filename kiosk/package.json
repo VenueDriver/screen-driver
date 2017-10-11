@@ -29,7 +29,8 @@
     "lodash": "4.17.4",
     "node-cron": "1.2.0",
     "properties-reader": "0.0.15",
-    "pusher-client": "^1.1.0"
+    "pusher-client": "^1.1.0",
+    "rxjs": "5.4.3"
   },
   "build": {
     "win": {
