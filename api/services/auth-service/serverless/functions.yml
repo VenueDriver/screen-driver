@@ -52,6 +52,15 @@ update_user:
         cors: true
         authorizer: ${self:custom.authorizer}
 
+disable_user:
+  handler: src/user/disable.handler
+  events:
+    - http:
+        path: api/auth/users/{id}/disable
+        method: put
+        cors: true
+        authorizer: ${self:custom.authorizer}
+
 edit_user_profile:
   handler: src/user/edit-profile.editProfile
   events:
