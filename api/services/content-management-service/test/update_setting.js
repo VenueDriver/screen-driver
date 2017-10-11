@@ -104,7 +104,7 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
     });
 
-    describe('When conflicts in config of persistent setting detected', () => {
+    context('When conflicts in config of persistent setting detected', () => {
         let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
         let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
         let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
@@ -137,7 +137,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When conflict was not detected in persistent setting', () => {
+    context('When conflict was not detected in persistent setting', () => {
         let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
         let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
         let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id_3: 'content_id'});
@@ -162,7 +162,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When conflict with disabled setting detected', () => {
+    context('When conflict with disabled setting detected', () => {
         it('should set updated setting status to true', () => {
             let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
             existingSetting.enabled = false;
@@ -178,7 +178,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When setting with conflicts is disabled', () => {
+    context('When setting with conflicts is disabled', () => {
         it('should update setting with success code', () => {
             let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
             let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
@@ -196,7 +196,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When setting with conflicts updated with disabled status', () => {
+    context('When setting with conflicts updated with disabled status', () => {
         it('should update with success code', () => {
             let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
             let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
@@ -213,7 +213,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When content URL coincides in conflicted periodical settings', () => {
+    context('When content URL coincides in conflicted periodical settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -255,7 +255,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When schedules for conflicted periodical settings have different time periods', () => {
+    context('When schedules for conflicted periodical settings have different time periods', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -296,7 +296,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When schedules for conflicted periodical settings have the same time periods', () => {
+    context('When schedules for conflicted periodical settings have the same time periods', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -337,7 +337,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When schedules for conflicted periodical settings are created for different weekdays', () => {
+    context('When schedules for conflicted periodical settings are created for different weekdays', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -419,7 +419,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When conflict detected in periodical settings', () => {
+    context('When conflict detected in periodical settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -460,7 +460,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When conflict with disabled schedule for periodical setting detected', () => {
+    context('When conflict with disabled schedule for periodical setting detected', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -486,7 +486,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When content URL coincides in conflicted occasional settings', () => {
+    context('When content URL coincides in conflicted occasional settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 1 JAN * 2017',
@@ -512,7 +512,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When content URL coincides in conflicted occasional settings', () => {
+    context('When content URL coincides in conflicted occasional settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 1 JAN * 2017',
@@ -537,7 +537,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When schedules for conflicted occasional settings have different time periods', () => {
+    context('When schedules for conflicted occasional settings have different time periods', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 1 JAN * 2017',
@@ -578,7 +578,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When schedules for conflicted occasional settings have the same time periods', () => {
+    context('When schedules for conflicted occasional settings have the same time periods', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 30 8 1 JAN * 2017',
@@ -619,7 +619,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When schedules for conflicted occasional settings are created for different dates', () => {
+    context('When schedules for conflicted occasional settings are created for different dates', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 1 JAN * 2017',
@@ -660,7 +660,7 @@ describe('update_setting', () => {
         });
     });
 
-    describe('When conflict with disabled occasional schedule detected', () => {
+    context('When conflict with disabled occasional schedule detected', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 30 8 1 JAN * 2017',
