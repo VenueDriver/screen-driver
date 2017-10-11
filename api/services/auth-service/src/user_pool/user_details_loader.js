@@ -1,17 +1,18 @@
 'use strict';
 
-const awsCli = require('aws-cli-js');
-const Aws = awsCli.Aws;
 const UserPoolHelper = require('./user_pool_helper');
+const AWS = require('aws-sdk');
+AWS.config.update({region: process.env.REGION});
 
 class UserDetailsLoader {
 
     static loadUserByUsername(username) {
-        let aws = new Aws();
-        let userPoolData = UserPoolHelper.buildUserPoolData();
-        let command = `cognito-idp admin-get-user --user-pool-id ${userPoolData.UserPoolId} --username ${username}`;
+        let cognito = new AWS.CognitoIdentityServiceProvider();
+        let params = UserPoolHelper.buildAdminGetUserParams(username);
         return new Promise((resolve, reject) => {
-            aws.command(command, (err, data) => err ? reject('User doesn\'t exists') : resolve(data.object))
+            cognito.adminGetUser(params, (error, data) => {
+               return error ? reject(error) : resolve(data);
+            });
         });
     }
 }
