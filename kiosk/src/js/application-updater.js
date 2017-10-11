@@ -1,4 +1,4 @@
-const {autoUpdater} = require("electron-updater");
+const autoUpdater = require("electron-updater").autoUpdater;
 const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
 const NotificationListener = require('./notification-listener/notification_listener');
 const PropertiesLoader = require('./helpers/properties_load_helper');
@@ -62,6 +62,14 @@ function initAutoUpdaterEvents() {
         Logger.info(info);
         autoUpdater.quitAndInstall()
     });
+
+    autoUpdater.on('download-progress', (progressObj) => {
+        let log_message = "Download speed: " + progressObj.bytesPerSecond * 0.001 + " kB/s";
+        log_message = log_message + ' - Downloaded ' + progressObj.percent.toFixed(2) + '%';
+        log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+        Logger.info(log_message);
+    })
+
 }
 
 //here is an thrown error inside on autoUpdater, but it seems to work ok.
