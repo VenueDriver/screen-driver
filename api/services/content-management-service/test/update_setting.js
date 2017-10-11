@@ -104,118 +104,116 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations);
     });
 
-    it('Should update persistent setting with conflicts in config', () => {
+    describe('When conflicts in config of persistent setting detected', () => {
         let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
         let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
         let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
 
-        let expectations = (body) => {
-            expect(body).to.have.property('_rev').that.equal(1);
-        };
+        it('Should update setting', () => {
+            let expectations = (body) => {
+                expect(body).to.have.property('_rev').that.equal(1);
+            };
 
-        return MultiOperationHelper.create(existingSetting)
-            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+            return MultiOperationHelper.create(existingSetting)
+                .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+        });
+
+        it('Should response with an error code', () => {
+            let expectations = (body, response) => {
+                expect(response).to.have.property('statusCode').that.equal(409);
+            };
+
+            return MultiOperationHelper.create(existingSetting)
+                .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+        });
+
+        it('Should set updated setting status to false', () => {
+            let expectations = (body) => {
+                expect(body).to.have.property('enabled').that.equal(false);
+            };
+
+            return MultiOperationHelper.create(existingSetting)
+                .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+        });
     });
 
-    it('Should response with an error code if conflict in persistent setting detected', () => {
-        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
-        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
-        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
-
-        let expectations = (body, response) => {
-            expect(response).to.have.property('statusCode').that.equal(409);
-        };
-
-        return MultiOperationHelper.create(existingSetting)
-            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
-    });
-
-    it('Should set updated setting status to false if conflict in persistent setting detected', () => {
-        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
-        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
-        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
-
-        let expectations = (body) => {
-            expect(body).to.have.property('enabled').that.equal(false);
-        };
-
-        return MultiOperationHelper.create(existingSetting)
-            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
-    });
-
-    it('Should update persistent setting if conflict was not detected', () => {
+    describe('When conflict was not detected in persistent setting', () => {
         let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
         let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
         let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id_3: 'content_id'});
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('_rev').that.equal(1);
-            expect(response).to.have.property('statusCode').that.equal(200);
-        };
+        it('should update setting', () => {
+            let expectations = (body, response) => {
+                expect(body).to.have.property('_rev').that.equal(1);
+                expect(response).to.have.property('statusCode').that.equal(200);
+            };
 
-        return MultiOperationHelper.create(existingSetting)
-            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+            return MultiOperationHelper.create(existingSetting)
+                .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+        });
+
+        it('should not change a state of updated setting', () => {
+            let expectations = (body) => {
+                expect(body).to.have.property('enabled').that.equal(true);
+            };
+
+            return MultiOperationHelper.create(existingSetting)
+                .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+        });
     });
 
-    it('Should not change a state of an updated persistent setting if conflict was not detected', () => {
-        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
-        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
-        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id_3: 'content_id'});
+    describe('When conflict with disabled setting detected', () => {
+        it('should set updated setting status to true', () => {
+            let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+            existingSetting.enabled = false;
+            let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+            let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
 
-        let expectations = (body) => {
-            expect(body).to.have.property('enabled').that.equal(true);
-        };
+            let expectations = (body) => {
+                expect(body).to.have.property('enabled').that.equal(true);
+            };
 
-        return MultiOperationHelper.create(existingSetting)
-            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+            return MultiOperationHelper.create(existingSetting)
+                .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+        });
     });
 
-    it('Should set updated setting status to true if conflict with disabled setting detected', () => {
-        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
-        existingSetting.enabled = false;
-        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
-        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
+    describe('When setting with conflicts is disabled', () => {
+        it('should update setting with success code', () => {
+            let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+            let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+            newSetting.enabled = false;
+            let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
+            updatedSetting.enabled = false;
 
-        let expectations = (body) => {
-            expect(body).to.have.property('enabled').that.equal(true);
-        };
+            let expectations = (body, response) => {
+                expect(body).to.have.property('_rev').that.equal(1);
+                expect(response).to.have.property('statusCode').that.equal(200);
+            };
 
-        return MultiOperationHelper.create(existingSetting)
-            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+            return MultiOperationHelper.create(existingSetting)
+                .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+        });
     });
 
-    it('Should update disabled and conflicted setting with success code', () => {
-        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
-        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
-        newSetting.enabled = false;
-        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
-        updatedSetting.enabled = false;
+    describe('When setting with conflicts updated with disabled status', () => {
+        it('should update with success code', () => {
+            let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
+            let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
+            let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
+            updatedSetting.enabled = false;
 
-        let expectations = (body, response) => {
-            expect(body).to.have.property('_rev').that.equal(1);
-            expect(response).to.have.property('statusCode').that.equal(200);
-        };
+            let expectations = (body, response) => {
+                expect(body).to.have.property('_rev').that.equal(1);
+                expect(response).to.have.property('statusCode').that.equal(200);
+            };
 
-        return MultiOperationHelper.create(existingSetting)
-            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+            return MultiOperationHelper.create(existingSetting)
+                .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
+        });
     });
 
-    it('Should update conflicted setting with success code if new state of setting is false', () => {
-        let existingSetting = SettingDataPreparationHelper.getPersistentSettingWithConfig('Regular');
-        let newSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {});
-        let updatedSetting = SettingDataPreparationHelper.getPersistentSetting('Regular2', {screen_id: 'content_id_2'});
-        updatedSetting.enabled = false;
-
-        let expectations = (body, response) => {
-            expect(body).to.have.property('_rev').that.equal(1);
-            expect(response).to.have.property('statusCode').that.equal(200);
-        };
-
-        return MultiOperationHelper.create(existingSetting)
-            .then(() => MultiOperationHelper.performUpdateTest(newSetting, updatedSetting, expectations));
-    });
-
-    it('Should update periodical setting if content URL coincides in conflicted settings', () => {
+    describe('When content URL coincides in conflicted periodical settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -223,68 +221,41 @@ describe('update_setting', () => {
             newEventCron: '0 0 9 * * MON',
             newEndEventCron: '0 0 10 * * MON',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting successfully', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(200);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
+
+        it('should update setting with enabled status', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(body).to.have.property('enabled').that.equal(true);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update periodical setting with enabled status if content URL coincides in conflicted settings', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let cronExpressions = {
-            existingEventCron: '0 0 8 * * MON',
-            existingEndEventCron: '0 0 10 * * MON',
-            newEventCron: '0 0 9 * * MON',
-            newEndEventCron: '0 0 10 * * MON',
-        };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(body).to.have.property('enabled').that.equal(true);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
-    });
-
-    it('Should update periodical setting if schedules for conflicted settings have different time periods', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let cronExpressions = {
-            existingEventCron: '0 0 8 * * MON',
-            existingEndEventCron: '0 0 9 * * MON',
-            newEventCron: '0 0 10 * * MON',
-            newEndEventCron: '0 0 11 * * MON',
-        };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
-    });
-
-    it('Should update periodical setting with enabled status if schedules for conflicted settings have different time periods', () => {
+    describe('When schedules for conflicted periodical settings have different time periods', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -292,21 +263,40 @@ describe('update_setting', () => {
             newEventCron: '0 45 9 * * MON',
             newEndEventCron: '0 0 11 * * MON',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('enabled').that.equal(true);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting successfully', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(200);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
+
+        it('should update setting with enabled status', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('enabled').that.equal(true);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update periodical setting and response with an error if schedules for conflicted settings have the same time periods', () => {
+    describe('When schedules for conflicted periodical settings have the same time periods', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -314,67 +304,40 @@ describe('update_setting', () => {
             newEventCron: '0 0 9 * * MON',
             newEndEventCron: '0 0 10 * * MON',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(409);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting and response with an error', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(409);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
+
+        it('should update setting with disabled status', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('enabled').that.equal(false);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update periodical setting with disabled status if schedules for conflicted settings have the same time periods', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let cronExpressions = {
-            existingEventCron: '0 0 8 * * MON',
-            existingEndEventCron: '0 0 10 * * MON',
-            newEventCron: '0 0 9 * * MON',
-            newEndEventCron: '0 0 10 * * MON',
-        };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('enabled').that.equal(false);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
-    });
-
-    it('Should update periodical setting if schedules for conflicted settings are created for different weekdays', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let cronExpressions = {
-            existingEventCron: '0 0 8 * * MON',
-            existingEndEventCron: '0 0 10 * * MON',
-            newEventCron: '0 0 9 * * TUE',
-            newEndEventCron: '0 0 10 * * TUE',
-        };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
-    });
-
-    it('Should update periodical setting with enabled status if schedules for conflicted settings are created for different weekdays', () => {
+    describe('When schedules for conflicted periodical settings are created for different weekdays', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -382,21 +345,40 @@ describe('update_setting', () => {
             newEventCron: '0 0 9 * * TUE',
             newEndEventCron: '0 0 10 * * TUE',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('enabled').that.equal(true);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting successfully', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(200);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
+
+        it('should update setting with enabled status', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('enabled').that.equal(true);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update periodical setting if schedules for conflicted settings are created for different set of weekdays', () => {
+    describe('schedules for conflicted periodical settings are created for different set of weekdays', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON,TUE,WED',
@@ -404,44 +386,40 @@ describe('update_setting', () => {
             newEventCron: '0 0 9 * * THU,FRI,SAT',
             newEndEventCron: '0 0 10 * * THU,FRI,SAT',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting successfully', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(200);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
+
+        it('should update setting with enabled status', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('enabled').that.equal(true);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update periodical setting with enabled status if schedules for conflicted settings are created for different set of weekdays', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let cronExpressions = {
-            existingEventCron: '0 0 8 * * MON,TUE,WED',
-            existingEndEventCron: '0 0 10 * * MON,TUE,WED',
-            newEventCron: '0 0 9 * * THU,FRI,SAT',
-            newEndEventCron: '0 0 10 * * THU,FRI,SAT',
-        };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('enabled').that.equal(true);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
-    });
-
-    it('Should update periodical setting with disabled status if conflict in settings detected', () => {
+    describe('When conflict detected in periodical settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -449,21 +427,40 @@ describe('update_setting', () => {
             newEventCron: '0 0 9 * * MON',
             newEndEventCron: '0 0 11 * * MON',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('enabled').that.equal(false);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting with disabled status', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('enabled').that.equal(false);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
+
+        it('should update setting but response with an error', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(409);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update periodical setting but response with an error if conflict in settings detected', () => {
+    describe('When conflict with disabled schedule for periodical setting detected', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 * * MON',
@@ -471,45 +468,25 @@ describe('update_setting', () => {
             newEventCron: '0 0 9 * * MON',
             newEndEventCron: '0 0 11 * * MON',
         };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(409);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting successfully', () => {
+            return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config, false)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(200);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update periodical setting if conflict with disabled schedule detected', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let cronExpressions = {
-            existingEventCron: '0 0 8 * * MON',
-            existingEndEventCron: '0 0 10 * * MON',
-            newEventCron: '0 0 9 * * MON',
-            newEndEventCron: '0 0 11 * * MON',
-        };
-        return TestDataSever.savePeriodicalSettingsWithSchedules(cronExpressions, config, false)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getPeriodicalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
-    });
-
-    it('Should update occasional setting if content URL coincides in conflicted settings', () => {
+    describe('When content URL coincides in conflicted occasional settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 1 JAN * 2017',
@@ -517,22 +494,25 @@ describe('update_setting', () => {
             newEventCron: '0 0 8 1 JAN * 2017',
             newEndEventCron: '0 0 8 2 JAN * 2017',
         };
-        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id'};
-                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('New Year', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting successfully', () => {
+            return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id'};
+                    let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('New Year', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(200);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update occasional setting with enabled status if content URL coincides in conflicted settings', () => {
+    describe('When content URL coincides in conflicted occasional settings', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 1 JAN * 2017',
@@ -540,21 +520,24 @@ describe('update_setting', () => {
             newEventCron: '0 0 8 1 JAN * 2017',
             newEndEventCron: '0 0 8 2 JAN * 2017',
         };
-        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id'};
-                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('New Year', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('enabled').that.equal(true);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting with enabled status', () => {
+            return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id'};
+                    let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('New Year', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('enabled').that.equal(true);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update occasional setting if schedules for conflicted settings have different time periods', () => {
+    describe('When schedules for conflicted occasional settings have different time periods', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 1 JAN * 2017',
@@ -562,44 +545,40 @@ describe('update_setting', () => {
             newEventCron: '0 0 11 1 JAN * 2017',
             newEndEventCron: '0 0 12 1 JAN * 2017',
         };
-        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting successfully', () => {
+            return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(200);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
+
+        it('should update setting with enabled status', () => {
+            return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('enabled').that.equal(true);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update occasional setting with enabled status if schedules for conflicted settings have different time periods', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let cronExpressions = {
-            existingEventCron: '0 0 8 1 JAN * 2017',
-            existingEndEventCron: '0 0 10 1 JAN * 2017',
-            newEventCron: '0 0 11 1 JAN * 2017',
-            newEndEventCron: '0 0 12 1 JAN * 2017',
-        };
-        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('enabled').that.equal(true);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
-    });
-
-    it('Should update occasional setting and response with an error if schedules for conflicted settings have the same time periods', () => {
+    describe('When schedules for conflicted occasional settings have the same time periods', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 30 8 1 JAN * 2017',
@@ -607,44 +586,40 @@ describe('update_setting', () => {
             newEventCron: '0 0 10 1 JAN * 2017',
             newEndEventCron: '0 0 11 1 JAN * 2017',
         };
-        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(409);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting and response with an error', () => {
+            return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(409);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
+
+        it('should update setting with disabled status', () => {
+            return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('enabled').that.equal(false);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update occasional setting with disabled status if schedules for conflicted settings have the same time periods', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let cronExpressions = {
-            existingEventCron: '0 30 8 1 JAN * 2017',
-            existingEndEventCron: '0 45 10 1 JAN * 2017',
-            newEventCron: '0 0 10 1 JAN * 2017',
-            newEndEventCron: '0 0 11 1 JAN * 2017',
-        };
-        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('enabled').that.equal(false);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
-    });
-
-    it('Should update occasional setting if schedules for conflicted settings are created for different dates', () => {
+    describe('When schedules for conflicted occasional settings are created for different dates', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 0 8 1 JAN * 2017',
@@ -652,44 +627,40 @@ describe('update_setting', () => {
             newEventCron: '0 0 8 2 JAN * 2017',
             newEndEventCron: '0 0 10 2 JAN * 2017',
         };
-        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting successfully', () => {
+            return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(200);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
+
+        it('should update setting with enabled status', () => {
+            return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body) => {
+                        expect(body).to.have.property('enabled').that.equal(true);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
-    it('Should update occasional setting with enabled status if schedules for conflicted settings are created for different dates', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let cronExpressions = {
-            existingEventCron: '0 0 8 1 JAN * 2017',
-            existingEndEventCron: '0 0 10 1 JAN * 2017',
-            newEventCron: '0 0 8 2 JAN * 2017',
-            newEndEventCron: '0 0 10 2 JAN * 2017',
-        };
-        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body) => {
-                    expect(body).to.have.property('enabled').that.equal(true);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
-    });
-
-    it('Should update occasional setting if conflict with disabled schedule detected', () => {
+    describe('When conflict with disabled occasional schedule detected', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
         let cronExpressions = {
             existingEventCron: '0 30 8 1 JAN * 2017',
@@ -697,19 +668,22 @@ describe('update_setting', () => {
             newEventCron: '0 0 10 1 JAN * 2017',
             newEndEventCron: '0 0 11 1 JAN * 2017',
         };
-        return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config, false)
-            .then((newSetting) => {
-                let updatedConfig = {screen_id: 'content_id_2'};
-                let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
-                return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
-            })
-            .then(updatedSetting => {
-                let expectation = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(updatedSetting, expectation);
-            });
+
+        it('should update setting successfully', () => {
+            return TestDataSever.saveOccasionalSettingsWithSchedules(cronExpressions, config, false)
+                .then((newSetting) => {
+                    let updatedConfig = {screen_id: 'content_id_2'};
+                    let updatedSetting = SettingDataPreparationHelper.getOccasionalSetting('Coffee Morning Menu', updatedConfig);
+                    return MultiOperationHelper.update({body: JSON.stringify(newSetting)}, updatedSetting);
+                })
+                .then(updatedSetting => {
+                    let expectation = (body, response) => {
+                        expect(body).to.have.property('_rev').that.equal(1);
+                        expect(response).to.have.property('statusCode').that.equal(200);
+                    };
+                    return MultiOperationHelper.test(updatedSetting, expectation);
+                });
+        });
     });
 
     it('Shouldn\'t update setting without name', () => {
