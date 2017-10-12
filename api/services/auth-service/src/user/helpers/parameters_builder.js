@@ -69,6 +69,20 @@ module.exports.buildChangeEmailRequestParameters = (user) => {
     };
 };
 
+module.exports.buildUpdateUserStatusRequestParameters = (user) => {
+    return {
+        TableName: process.env.USERS_TABLE,
+        Key: {
+            id: user.id,
+        },
+        ExpressionAttributeValues: {
+            ':enabled': user.enabled,
+        },
+        UpdateExpression: `SET enabled = :enabled`,
+        ReturnValues: 'ALL_NEW',
+    };
+};
+
 function increaseRevision(user) {
     return ++user._rev;
 }
