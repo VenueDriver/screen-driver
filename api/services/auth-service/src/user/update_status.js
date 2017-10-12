@@ -2,13 +2,12 @@
 
 const ModulePathManager = require('../module_path_manager');
 const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
-const requestHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_request_helper');
 const UserDisableHelper = require('./helpers/user_status_helper');
 const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/auth_token_parser');
 
 module.exports.handler = (event, context, callback) => {
     let userId = event.pathParameters.id;
-    let currentUserDetails = TokenParser.getCurrentUserDetails(requestHelper.getAuthorizationToken(event));
+    let currentUserDetails = TokenParser.getCurrentUserDetails(event);
 
     const data = JSON.parse(event.body);
 
