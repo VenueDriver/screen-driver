@@ -15,17 +15,20 @@ class UserStatusHelper {
         return new UserStatusHelper(userId, issuer);
     }
 
-    disableUser() {
-        return this.validate()
+    updateStatus(enabled) {
+        return this.validate(enabled)
             .then(() => this.findUser())
-            .then(() => UserPool.disableUser(this.user.username))
-            .then(() => this.updateUserStatus());
-    };
+            .then(() => enabled ? UserPool.enableUser(this.user.username) : UserPool.disableUser(this.user.username))
+            .then(() => this.updateUserStatus(enabled));
+    }
 
-    validate() {
+    validate(enabled) {
         return new Promise((resolve, reject) => {
             if (this.user.id === this.issuer.id) {
                 reject('Unable to perform operation');
+            }
+            if (typeof enabled !== 'boolean') {
+                reject('Invalid request');
             }
             resolve();
         });
@@ -42,8 +45,8 @@ class UserStatusHelper {
         });
     }
 
-    updateUserStatus() {
-        this.user.enabled = false;
+    updateUserStatus(enabled) {
+        this.user.enabled = enabled;
         let params = ParametersBuilder.buildUpdateUserStatusRequestParameters(this.user);
         return new Promise((resolve, reject) => {
             DbHelper.updateItem(params)

@@ -10,8 +10,10 @@ module.exports.handler = (event, context, callback) => {
     let userId = event.pathParameters.id;
     let currentUserDetails = TokenParser.getCurrentUserDetails(requestHelper.getAuthorizationToken(event));
 
+    const data = JSON.parse(event.body);
+
     UserDisableHelper.init(userId, currentUserDetails)
-        .disableUser()
+        .updateStatus(data.enabled)
         .then(() => callback(null, responseHelper.createSuccessfulResponse({})))
         .catch(errorMessage => callback(null, responseHelper.createResponseWithError(500, errorMessage)));
 };
