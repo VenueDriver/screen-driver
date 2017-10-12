@@ -10,7 +10,8 @@ module.exports.handler = (event, context, callback) => {
     let userId = event.pathParameters.id;
     let currentUserDetails = TokenParser.getCurrentUserDetails(requestHelper.getAuthorizationToken(event));
 
-    UserDisableHelper.disableUser(userId, currentUserDetails)
-        .then(newUser => callback(null, responseHelper.createSuccessfulResponse(newUser)))
+    UserDisableHelper.init(userId, currentUserDetails)
+        .disableUser()
+        .then(() => callback(null, responseHelper.createSuccessfulResponse({})))
         .catch(errorMessage => callback(null, responseHelper.createResponseWithError(500, errorMessage)));
 };
