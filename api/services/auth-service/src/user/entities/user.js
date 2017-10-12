@@ -41,7 +41,7 @@ class User {
             return deferred.promise;
         }
         UserPool.createUser(this)
-            .then(cognitoUser => UserSaver.saveCognitoUser(cognitoUser, this))
+            .then(cognitoUser => UserSaver.saveNewCognitoUser(cognitoUser, this))
             .then(result => deferred.resolve(result))
             .catch(error => deferred.reject(error));
         return deferred.promise;
