@@ -3,7 +3,7 @@
 const ModulePathManager = require('../module_path_manager');
 const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
 const requestHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_request_helper');
-const UserDisableHelper = require('./helpers/user_disable_helper');
+const UserDisableHelper = require('./helpers/user_status_helper');
 const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/auth_token_parser');
 
 module.exports.handler = (event, context, callback) => {
