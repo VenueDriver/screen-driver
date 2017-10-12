@@ -4,10 +4,7 @@ const database = require('../../src/dynamodb/dynamodb');
 const dbHelper = require('../../src/helpers/db_helper');
 
 const tables = [
-    process.env.VENUES_TABLE,
-    process.env.CONTENT_TABLE,
-    process.env.SETTINGS_TABLE,
-    process.env.SCHEDULES_TABLE
+    process.env.USERS_TABLE
 ];
 
 class DatabaseCleaner {
