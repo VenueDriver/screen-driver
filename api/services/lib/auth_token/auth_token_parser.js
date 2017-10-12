@@ -10,12 +10,12 @@ module.exports.decodeToken = (token) => {
     return jwt.decode(token, {complete: true});
 };
 
-module.exports.getCurrentUserDetails = (token) => {
-    let token = token.replace('Bearer ', '');
+module.exports.getCurrentUserDetails = (authToken) => {
+    let token = authToken.replace('Bearer ', '');
     let decodedToken = this.decodeToken(token);
-    return new User({
+    return {
         id: decodedToken.payload['sub'],
         email: decodedToken.payload['email'],
         isAdmin: decodedToken.payload['custom:admin']
-    });
+    };
 };
