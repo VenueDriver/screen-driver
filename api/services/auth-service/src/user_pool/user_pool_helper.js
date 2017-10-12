@@ -42,6 +42,13 @@ module.exports.buildUserPoolData = () => {
     };
 };
 
+module.exports.buildAdminGetUserParams = (username) => {
+    return {
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: username
+    };
+};
+
 module.exports.buildRefreshTokenParameters = (refreshToken) => {
     return {
         AuthFlow: 'REFRESH_TOKEN_AUTH',

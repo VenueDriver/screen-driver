@@ -3,9 +3,9 @@
 const uuid = require('uuid');
 const dbHelper = require('../../helpers/db_helper');
 const ParametersBuilder = require('./../helpers/parameters_builder');
+const UserSaver = require('../helpers/user_saver');
 
 const Q = require('q');
-const _ = require('lodash');
 
 let db;
 
@@ -25,7 +25,7 @@ class User {
             this.password = user.password;
             this.isAdmin = user.isAdmin == undefined ? false : user.isAdmin;
             this.enabled = user.enabled;
-            this._rev = user._rev;
+            this._rev = user._rev ? user._rev : 0;
         }
     }
 
@@ -41,15 +41,8 @@ class User {
             return deferred.promise;
         }
         UserPool.createUser(this)
-            .then(user => {
-                let subAttribute = user.Attributes.find(attribute => attribute.Name === 'sub');
-                this.id = subAttribute.Value;
-                const params = ParametersBuilder.buildCreateRequestParameters(this);
-                return dbHelper.putItem(params)
-            })
-            .then(result => {
-                deferred.resolve(result)
-            })
+            .then(cognitoUser => UserSaver.saveCognitoUser(cognitoUser, this))
+            .then(result => deferred.resolve(result))
             .catch(error => deferred.reject(error));
         return deferred.promise;
 
@@ -119,12 +112,6 @@ class User {
 
     isEmailValid() {
         return emailValidationRegExp.test(this.email)
-    }
-
-    isPasswordValid() {
-        return !_.isEmpty(this.password)
-            && this.password.length >= 6
-            && !this.password.includes(' ');
     }
 
     generateId() {

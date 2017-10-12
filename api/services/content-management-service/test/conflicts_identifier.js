@@ -1,5 +1,7 @@
 'use strict';
 
+const _ = require('lodash');
+
 const ConflictsIdentifier = require('../src/setting/helpers/conflicts_identifier');
 
 const mochaPlugin = require('serverless-mocha-plugin');
@@ -7,38 +9,71 @@ const expect = mochaPlugin.chai.expect;
 
 describe('conflicts_identifier', () => {
     describe('_detectConflictInConfigs', () => {
-        it('Should return conflicted fields if content id deffer for the same screen', () => {
-            let settings = createBaseSetOfSettings();
-            let settingToUpdate = {config: {screen_id: 'content_id_2'}};
+        context('When several settings present', () => {
+            let settings;
+            let settingToUpdate;
 
-            let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
+            before(() => {
+                settings = [
+                    {id: "1", config: {screen_1: 'content_1'}},
+                    {id: "2", config: {screen_2: 'content_2', screen_3: 'content_1'}},
+                    {id: "3", config: {screen_1: 'content_1', screen_3: 'content_1'}},
+                ];
+                settingToUpdate = _.cloneDeep(settings[0]);
+            });
 
-            expect(result).to.deep.equal([{settingId: "setting", config: {screen_id: 'content_id'}}]);
+            it('should return conflicted fields if content id deffer for the same screen', () => {
+                settingToUpdate.config = {screen_1: 'content_2'};
+
+                let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
+
+                expect(result).to.deep.equal([{
+                    settingId: "3",
+                    config: {screen_1: 'content_1', screen_3: 'content_1'}
+                }]);
+            });
+
+            it('should return blank array if conflict configs do not intersect', () => {
+                settingToUpdate.config = {screen_id_4: 'content_id'};
+
+                let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
+
+                expect(result).to.deep.equal([]);
+            });
+
+            it('should return blank array if content id the same in conflicted configs', () => {
+                settingToUpdate.config = {screen_id: 'content_id'};
+
+                let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
+
+                expect(result).to.deep.equal([]);
+            });
         });
 
-        it('Should return blank object if conflict configs do not intersect', () => {
-            let settings = createBaseSetOfSettings();
-            let settingToUpdate = {config: {screen_id_4: 'content_id'}};
+        context('When only one setting with appropriate type exists', () => {
+            let existingSetting;
+            let settingToUpdate;
 
-            let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
+            before(() => {
+                existingSetting = {id: "1", config: {screen_1: 'content_1'}};
+                settingToUpdate = _.cloneDeep(existingSetting);
+            });
 
-            expect(result).to.deep.equal([]);
-        });
+            it('should return blank array if configs are defer', () => {
+                settingToUpdate.config = {screen_1: 'content_2'};
 
-        it('Should return blank object if content id the same in conflicted configs', () => {
-            let settings = createBaseSetOfSettings();
-            let settingToUpdate = {config: {screen_id: 'content_id'}};
+                let result = ConflictsIdentifier._detectConflictInConfigs([existingSetting], settingToUpdate);
 
-            let result = ConflictsIdentifier._detectConflictInConfigs(settings, settingToUpdate);
+                expect(result).to.deep.equal([]);
+            });
 
-            expect(result).to.deep.equal([]);
+            it('should return blank array if configs the same', () => {
+                settingToUpdate.config = {screen_1: 'content_1'};
+
+                let result = ConflictsIdentifier._detectConflictInConfigs([existingSetting], settingToUpdate);
+
+                expect(result).to.deep.equal([]);
+            });
         });
     });
 });
-
-function createBaseSetOfSettings() {
-    return [
-        { id: "setting", config: {screen_id: 'content_id'} },
-        { id: "setting2", config: {screen_id_2: 'content_id', screen_id_3: 'content_id'} },
-    ];
-}
