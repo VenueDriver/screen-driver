@@ -6,7 +6,8 @@ provider:
   name: aws
   runtime: nodejs6.10
   environment:
-    STAGE: ${opt:stage}
+    STAGE: ${opt:stage, 'dev'}
+    REGION: ${opt:region, 'us-east-1'}
     CONTENT_TABLE: ${self:service}-content-${opt:stage}
     VENUES_TABLE: ${self:service}-venues-${opt:stage}
     SETTINGS_TABLE: ${self:service}-settings-${opt:stage}
