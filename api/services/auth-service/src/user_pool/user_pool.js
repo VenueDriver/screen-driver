@@ -113,6 +113,16 @@ module.exports.disableUser = (username) => {
     });
 };
 
+module.exports.enableUser = (username) => {
+    let cognito = new AWS.CognitoIdentityServiceProvider();
+    let params = UserPoolHelper.buildUserPoolAdminActionParams(username);
+    return new Promise((resolve, reject) => {
+        cognito.adminEnableUser(params, (error, data) => {
+            error ? reject(error) : resolve(data);
+        });
+    });
+};
+
 function initUserSession(cognitoUser, rejectCallback) {
     cognitoUser.getSession((err, session) => {
         if (err) {
@@ -140,15 +150,5 @@ function buildResponseWithTokens(tokenSet) {
     return {
         token: token,
         refreshToken: refreshToken
-    };
-}
-
-function getFindUserByEmailParams(email) {
-    return {
-        TableName: process.env.USERS_TABLE,
-        ExpressionAttributeValues: {
-            ':email': email
-        },
-        FilterExpression: 'email = :email'
     };
 }
