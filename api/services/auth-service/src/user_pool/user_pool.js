@@ -105,10 +105,7 @@ module.exports.getCognitoUser = (userDetails) => {
 
 module.exports.disableUser = (username) => {
     let cognito = new AWS.CognitoIdentityServiceProvider();
-    let params = {
-        UserPoolId: process.env.USER_POOL_ID,
-        Username: username
-    };
+    let params = UserPoolHelper.buildUserPoolAdminActionParams(username);
     return new Promise((resolve, reject) => {
         cognito.adminDisableUser(params, (error, data) => {
             error ? reject(error) : resolve(data);
