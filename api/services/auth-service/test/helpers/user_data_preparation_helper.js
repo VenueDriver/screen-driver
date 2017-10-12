@@ -58,4 +58,12 @@ module.exports = class UserDataPreparationHelper {
     static getShortPassword() {
         return "12345";
     }
+
+    static getCognitoUserWithAttributes() {
+        return {
+            Attributes: [
+                {Name: 'sub', Value: 'CognitoUserSub'}
+            ]
+        }
+    }
 };
