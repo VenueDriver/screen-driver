@@ -6,9 +6,10 @@ const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/au
 
 const dynamodb = require('../dynamodb/dynamodb');
 const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
+const requestHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_request_helper');
 
 module.exports.update = (event, context, callback) => {
-    let currentUserDetails = TokenParser.getCurrentUserDetails(event.headers['Authorization']);
+    let currentUserDetails = TokenParser.getCurrentUserDetails(requestHelper.getAuthorizationToken(event));
 
     const data = JSON.parse(event.body);
     data.id = event.pathParameters.id;
