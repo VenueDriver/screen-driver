@@ -73,7 +73,7 @@ class User {
     }
 
     validateRoleChanges(reject, user) {
-        if (this.email === user.email && this.isAdmin != user.isAdmin) {
+        if (this.id === user.id && this.isAdmin !== user.isAdmin) {
             reject('You can\'t change role of yourself');
         }
     }
