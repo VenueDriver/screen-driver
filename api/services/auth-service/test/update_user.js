@@ -5,9 +5,16 @@ require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 const UserDataPreparationHelper = require('./helpers/user_data_preparation_helper');
 
+const UserPool = require('../src/user_pool/user_pool');
+const TokenParser = require('../../lib/auth_token/auth_token_parser');
+
 const createFunction = require('../src/user/create');
 const updateFunction = require('../src/user/update');
 const mochaPlugin = require('serverless-mocha-plugin');
+
+const chai = require('chai');
+const spies = require('chai-spies');
+chai.use(spies);
 
 const expect = mochaPlugin.chai.expect;
 
@@ -16,9 +23,19 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
     .setCreateFunction(createFunction, 'create')
     .setUpdateFunction(updateFunction, 'update');
 
-const idLength = 36;
-
 describe('update_user', () => {
+
+    TokenParser.getCurrentUserDetails = chai.spy(() => {
+        return {
+            id: 'CognitoUserId',
+            email: UserDataPreparationHelper.getDefaultEmail(),
+            isAdmin: true
+        }
+    });
+
+    UserPool.updateUser = chai.spy(() => {
+        return new Promise((resolve, reject) => resolve({}));
+    });
 
     before((done) => {
         DatabaseCleaner.cleanDatabase()
@@ -28,19 +45,6 @@ describe('update_user', () => {
     afterEach(done => {
         DatabaseCleaner.cleanDatabase()
             .then(() => done());
-    });
-
-    it('Should update user password', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        let updatedUser = UserDataPreparationHelper.createUpdatedUser();
-        updatedUser.password = '1234567';
-
-        let expectations = (body) => {
-            expect(body).to.have.property('password').that.equal('1234567');
-            expect(body).to.have.property('_rev').that.equal(1);
-        };
-
-        return MultiOperationHelper.performUpdateTest(user, updatedUser, expectations);
     });
 
     it('Should update user role', () => {
@@ -56,25 +60,15 @@ describe('update_user', () => {
         return MultiOperationHelper.performUpdateTest(user, updatedUser, expectations);
     });
 
-    it('Shouldn\'t update user email', () => {
+    it('Should update user email', () => {
         let user = UserDataPreparationHelper.createDefaultUser();
         let updatedUser = UserDataPreparationHelper.createUpdatedUser();
         updatedUser.email = 'updated_test_mail@testmail.com';
 
         let expectations = (body) => {
-            expect(body).to.have.property('email').that.equal(UserDataPreparationHelper.getDefaultEmail());
+            expect(body).to.have.property('email').that.equal('updated_test_mail@testmail.com');
             expect(body).to.have.property('_rev').that.equal(1);
         };
-
-        return MultiOperationHelper.performUpdateTest(user, updatedUser, expectations);
-    });
-
-    it('Shouldn\'t update user to have short password', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        let updatedUser = UserDataPreparationHelper.createUpdatedUser();
-        updatedUser.password = '123';
-
-        let expectations = generateErrorExpectations('Invalid password', 500);
 
         return MultiOperationHelper.performUpdateTest(user, updatedUser, expectations);
     });
