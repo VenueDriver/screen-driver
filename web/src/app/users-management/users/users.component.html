@@ -10,7 +10,7 @@
         <th>
             <toggle-button class="is-admin"
                            [checked]="user.isAdmin"
-                           [disabled]="isCurrentUser(user)"
+                           [disabled]="isCurrentUser(user) || !user.enabled"
                            (changed)="changeUserRole(user)"
                            [attr.title]="getToggleHint(user)">
             </toggle-button>
