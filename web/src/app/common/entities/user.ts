@@ -6,6 +6,7 @@ export class User {
     password?: string = '';
     newPassword?: string = '';
     isAdmin: boolean = false;
+    enabled: boolean = true;
     _rev: number;
 
     constructor(user?: User) {
@@ -15,6 +16,7 @@ export class User {
             this.password = user.password;
             this.newPassword = user.newPassword;
             this.isAdmin = user.isAdmin;
+            this.enabled= user.enabled;
             this._rev = user._rev;
         }
     }

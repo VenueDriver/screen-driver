@@ -8,7 +8,7 @@ class UserDetailsLoader {
 
     static loadUserByUsername(username) {
         let cognito = new AWS.CognitoIdentityServiceProvider();
-        let params = UserPoolHelper.buildAdminGetUserParams(username);
+        let params = UserPoolHelper.buildUserPoolAdminActionParams(username);
         return new Promise((resolve, reject) => {
             cognito.adminGetUser(params, (error, data) => {
                return error ? reject(error) : resolve(data);

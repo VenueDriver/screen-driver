@@ -24,6 +24,7 @@ class User {
             this.username = user.username;
             this.password = user.password;
             this.isAdmin = user.isAdmin == undefined ? false : user.isAdmin;
+            this.enabled = user.enabled;
             this._rev = user._rev ? user._rev : 0;
         }
     }
@@ -32,6 +33,7 @@ class User {
         delete this.password;
         let deferred = Q.defer();
         this._rev = 0;
+        this.enabled = true;
         this.username = this.email;
         this.validate(deferred.reject);
         this.validateEmailUniqueness(deferred.reject);
@@ -66,7 +68,7 @@ class User {
     }
 
     validateRoleChanges(reject, user) {
-        if (this.email === user.email && this.isAdmin != user.isAdmin) {
+        if (this.id === user.id && this.isAdmin !== user.isAdmin) {
             reject('You can\'t change role of yourself');
         }
     }

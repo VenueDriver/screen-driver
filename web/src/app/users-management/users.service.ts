@@ -82,6 +82,23 @@ export class UsersService {
         return subject;
     }
 
+    changeUserStatus(user: User): Observable<any> {
+        let subject = new Subject<any>();
+        this.httpClient.patch(`${USERS_API}/${user.id}/enabled`, user)
+            .subscribe(
+                response => {
+                    subject.next(response);
+                    this.notificationService.showSuccessNotificationBar('User status changed successfully');
+                },
+                error => {
+                    let errorMessage = ErrorMessageExtractor.extractMessage(error);
+                    this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to change user user status');
+                    subject.error(errorMessage);
+                }
+            );
+        return subject;
+    }
+
 
     applyChangesInUserList(updatedUser: User) {
         let users = this.users.getValue();

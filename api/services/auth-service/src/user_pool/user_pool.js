@@ -103,6 +103,26 @@ module.exports.getCognitoUser = (userDetails) => {
     return new AWSCognito.CognitoUser(userData);
 };
 
+module.exports.disableUser = (username) => {
+    let cognito = new AWS.CognitoIdentityServiceProvider();
+    let params = UserPoolHelper.buildUserPoolAdminActionParams(username);
+    return new Promise((resolve, reject) => {
+        cognito.adminDisableUser(params, (error, data) => {
+            error ? reject(error) : resolve(data);
+        });
+    });
+};
+
+module.exports.enableUser = (username) => {
+    let cognito = new AWS.CognitoIdentityServiceProvider();
+    let params = UserPoolHelper.buildUserPoolAdminActionParams(username);
+    return new Promise((resolve, reject) => {
+        cognito.adminEnableUser(params, (error, data) => {
+            error ? reject(error) : resolve(data);
+        });
+    });
+};
+
 function initUserSession(cognitoUser, rejectCallback) {
     cognitoUser.getSession((err, session) => {
         if (err) {

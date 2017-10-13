@@ -24,7 +24,8 @@ function convertCognitoUserToPlainUser(cognitoUser) {
         id: userAttributes.sub,
         username: cognitoUser.Username,
         email: userAttributes.email,
-        isAdmin: userAttributes['custom:admin']
+        isAdmin: userAttributes['custom:admin'],
+        enabled: true
     });
 }
 

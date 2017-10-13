@@ -1,8 +1,13 @@
 'use strict';
 
+const USER_POOL_DETAILS = {
+    UserPoolId: process.env.USER_POOL_ID,
+    ClientId: process.env.USER_POOL_CLIENT_ID
+};
+
 module.exports.buildCreateUserParameters = (user) => {
     return {
-        UserPoolId: process.env.USER_POOL_ID,
+        UserPoolId: USER_POOL_DETAILS.UserPoolId,
         Username: user.email,
         DesiredDeliveryMediums: ['EMAIL'],
         UserAttributes: [
@@ -20,7 +25,7 @@ module.exports.buildCreateUserParameters = (user) => {
 
 module.exports.buildUpdateUserParameters = (user) => {
     return {
-        UserPoolId: process.env.USER_POOL_ID,
+        UserPoolId: USER_POOL_DETAILS.UserPoolId,
         Username: user.username,
         UserAttributes: [
             {
@@ -36,15 +41,12 @@ module.exports.buildUpdateUserParameters = (user) => {
 };
 
 module.exports.buildUserPoolData = () => {
-    return {
-        UserPoolId: process.env.USER_POOL_ID,
-        ClientId: process.env.USER_POOL_CLIENT_ID
-    };
+    return USER_POOL_DETAILS;
 };
 
-module.exports.buildAdminGetUserParams = (username) => {
+module.exports.buildUserPoolAdminActionParams = (username) => {
     return {
-        UserPoolId: process.env.USER_POOL_ID,
+        UserPoolId: USER_POOL_DETAILS.UserPoolId,
         Username: username
     };
 };
@@ -55,7 +57,7 @@ module.exports.buildRefreshTokenParameters = (refreshToken) => {
         AuthParameters: {
             REFRESH_TOKEN: refreshToken
         },
-        UserPoolId: process.env.USER_POOL_ID,
-        ClientId: process.env.USER_POOL_CLIENT_ID
+        UserPoolId: USER_POOL_DETAILS.UserPoolId,
+        ClientId: USER_POOL_DETAILS.ClientId
     }
 };

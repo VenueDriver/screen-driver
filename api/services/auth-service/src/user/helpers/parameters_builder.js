@@ -56,18 +56,26 @@ module.exports.buildDeleteRequestParameters = (user) => {
 };
 
 module.exports.buildChangeEmailRequestParameters = (user) => {
+    return buildUpdateSinglePropertyRequestParameters('email', user);
+};
+
+module.exports.buildUpdateUserStatusRequestParameters = (user) => {
+    return buildUpdateSinglePropertyRequestParameters('enabled', user);
+};
+
+function buildUpdateSinglePropertyRequestParameters(propertyName, user) {
     return {
         TableName: process.env.USERS_TABLE,
         Key: {
             id: user.id,
         },
         ExpressionAttributeValues: {
-            ':email': user.email,
+            ':value': user[propertyName],
         },
-        UpdateExpression: `SET email = :email`,
+        UpdateExpression: `SET ${propertyName} = :value`,
         ReturnValues: 'ALL_NEW',
     };
-};
+}
 
 function increaseRevision(user) {
     return ++user._rev;

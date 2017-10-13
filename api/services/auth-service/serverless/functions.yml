@@ -52,6 +52,15 @@ update_user:
         cors: true
         authorizer: ${self:custom.authorizer}
 
+update_user_status:
+  handler: src/user/update_status.handler
+  events:
+    - http:
+        path: api/auth/users/{id}/enabled
+        method: patch
+        cors: true
+        authorizer: ${self:custom.authorizer}
+
 edit_user_profile:
   handler: src/user/edit-profile.editProfile
   events:

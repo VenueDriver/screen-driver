@@ -4,8 +4,13 @@ require('./helpers/test_provider_configurator').configure();
 const DatabaseCleaner = require('./helpers/database_cleaner');
 const UserDataPreparationHelper = require('./helpers/user_data_preparation_helper');
 
+const UserPool = require('../src/user_pool/user_pool');
 const createFunction = require('../src/user/create.js');
 const mochaPlugin = require('serverless-mocha-plugin');
+
+const chai = require('chai');
+const spies = require('chai-spies');
+chai.use(spies);
 
 const expect = mochaPlugin.chai.expect;
 
@@ -13,9 +18,13 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
     .configure()
     .setCreateFunction(createFunction, 'create');
 
-const idLength = 36;
-
 describe('create_user', () => {
+
+    let congnitoUser = UserDataPreparationHelper.getCognitoUserWithAttributes();
+    UserPool.createUser = chai.spy(() => {
+        return new Promise((resolve, reject) => resolve(congnitoUser));
+    });
+
     before((done) => {
         DatabaseCleaner.cleanDatabase()
             .then(() => done());
@@ -30,10 +39,19 @@ describe('create_user', () => {
         let user = UserDataPreparationHelper.createDefaultUser();
 
         let expectations = (body) => {
-            expect(body).to.have.property('id').with.lengthOf(idLength);
             expect(body).to.have.property('email').that.equal(UserDataPreparationHelper.getDefaultEmail());
             expect(body).to.have.property('isAdmin').that.equal(false);
             expect(body).to.have.property('_rev').that.equal(0);
+        };
+
+        return MultiOperationHelper.performCreateTest(user, expectations);
+    });
+
+    it('Should create an user with id that equal to sub of Cognito user', () => {
+        let user = UserDataPreparationHelper.createDefaultUser();
+
+        let expectations = (body) => {
+            expect(body).to.have.property('id').that.equal('CognitoUserSub');
         };
 
         return MultiOperationHelper.performCreateTest(user, expectations);
