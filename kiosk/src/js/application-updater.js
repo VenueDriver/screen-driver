@@ -1,10 +1,11 @@
-const {autoUpdater} = require("electron-updater");
+const autoUpdater = require("electron-updater").autoUpdater;
 const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
 const NotificationListener = require('./notification-listener/notification_listener');
 const PropertiesLoader = require('./helpers/properties_load_helper');
 const UserInteractionsManager = require('./user-interactions-manager');
+const NetworkErrorsHandlingService = require('./services/error/network_errors_handling_service');
+const ConnectionStatusService = require('./services/network/connection_status_service');
 const Logger = require('./logger/logger');
-const log = require('electron-log');
 
 let instance = null;
 
@@ -24,6 +25,15 @@ class ApplicationUpdater {
     checkForUpdates() {
         autoUpdater.checkForUpdates();
     }
+
+    setDownloadingStatus(boolean) {
+        this.isUpdateDownloading = boolean;
+    }
+
+    getDownloadingStatus() {
+        return this.isUpdateDownloading;
+    }
+
 }
 
 function initPusherListener() {
@@ -41,13 +51,15 @@ function initAutoUpdaterEvents() {
 
     setFeedUrl();
 
-    autoUpdater.on('update-availabe', () => {
-        Logger.info('update available')
+    autoUpdater.on('update-available', () => {
+        new ApplicationUpdater().setDownloadingStatus(true);
+        runConnectionWatchers();
+        Logger.info('update available');
     });
 
     autoUpdater.on('error', () => {
         Logger.error('Auto update failed. Restart process...');
-        autoUpdater.checkForUpdates();
+        startAutoupdateOnConnectionEstablised()
     });
 
     autoUpdater.on('checking-for-update', () => {
@@ -62,6 +74,14 @@ function initAutoUpdaterEvents() {
         Logger.info(info);
         autoUpdater.quitAndInstall()
     });
+
+    autoUpdater.on('download-progress', (progressObj) => {
+        let log_message = "Download speed: " + progressObj.bytesPerSecond * 0.001 + " kB/s";
+        log_message = log_message + ' - Downloaded ' + progressObj.percent.toFixed(2) + '%';
+        log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+        Logger.info(log_message);
+    })
+
 }
 
 //here is an thrown error inside on autoUpdater, but it seems to work ok.
@@ -76,6 +96,28 @@ function setFeedUrl() {
     } catch (error) {
         Logger.info(error.message);
     }
+}
+
+
+function runConnectionWatchers() {
+    startAutoupdateOnConnectionEstablised();
+
+    NetworkErrorsHandlingService.getErrors().subscribe(() => {
+        if (new ApplicationUpdater().getDownloadingStatus()) {
+            startAutoupdateOnConnectionEstablised()
+        }
+    })
+
+}
+
+function startAutoupdateOnConnectionEstablised() {
+    ConnectionStatusService.connected.subscribe(connected => {
+        //if connection established (it can happens just if it was lost before)
+        if (connected) {
+            Logger.info('Connection established. Auto-update has been restarted');
+            new ApplicationUpdater().checkForUpdates();
+        }
+    });
 }
 
 module.exports = ApplicationUpdater;

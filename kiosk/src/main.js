@@ -18,10 +18,16 @@ const UserInteractionsManager = require('./js/user-interactions-manager');
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
 
+setupLogger();
+
+//should be declared at least once
+const UncaughtErrorsHandlingService = require('./js/services/error/uncaught_errors_handling_service');
+const GlobalErrorsHandlingService = require('./js/services/error/global_errors_handling_service');
+const NetworkErrorsHandlingService = require('./js/services/error/network_errors_handling_service');
+const ConnectionStatusService = require('./js/services/network/connection_status_service');
+
 let settingsLoadJob;
 let notificationListener;
-
-setupLogger();
 
 app.disableHardwareAcceleration();
 
@@ -78,6 +84,10 @@ function prepareContentWindowData(screenInformation) {
 function addListenerForErrors() {
     ipcMain.on('errorInWindow', function (event, data) {
         Logger.logGlobalError(data);
+    });
+
+    process.on('uncaughtException', function (error) {
+        UncaughtErrorsHandlingService.registerError(error);
     });
 }
 
