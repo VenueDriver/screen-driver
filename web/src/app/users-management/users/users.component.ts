@@ -43,4 +43,13 @@ export class UsersComponent implements OnInit, OnDestroy {
     getToggleHint(user: User): string {
         return this.isCurrentUser(user) ? 'You can\'t change the role of yourself' : '';
     }
+
+    changeUserStatus(user: User) {
+        this.usersService.changeUserStatus(user)
+            .subscribe(response => user.enabled = !user.enabled);
+    }
+
+    getChangeUserStatusHint(user) {
+        return `${user.enabled ? 'Lock' : 'Unlock'} user account`;
+    }
 }

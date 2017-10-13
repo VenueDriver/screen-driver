@@ -1,7 +1,8 @@
 <table class="table table-striped">
     <tr>
         <th>Email</th>
-        <th>Is admin</th>
+        <th><span class="pull-right">Is admin</span></th>
+        <th class="centered">Controls</th>
     </tr>
 
     <tr *ngFor="let user of users">
@@ -13,6 +14,14 @@
                            (changed)="changeUserRole(user)"
                            [attr.title]="getToggleHint(user)">
             </toggle-button>
+        </th>
+
+        <th class="controls">
+            <div *ngIf="!isCurrentUser(user)"
+                 [ngClass]="{locked: !user.enabled, unlocked: user.enabled}"
+                 (click)="changeUserStatus(user)"
+                 [title]="getChangeUserStatusHint(user)">
+            </div>
         </th>
     </tr>
 </table>
