@@ -1,4 +1,5 @@
 const Subject = require('rxjs').Subject;
+const Logger = require('./../../logger/logger');
 
 let instance = null;
 
@@ -12,6 +13,7 @@ class GlobalErrorsHandlingService {
     }
 
     registerError(error) {
+        Logger.warn('Global errors handler registered an error: ' + error.message);
         this.errors.next(error);
     }
 
