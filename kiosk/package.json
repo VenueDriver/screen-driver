@@ -25,6 +25,7 @@
     "electron-json-storage": "3.0.5",
     "electron-log": "2.2.6",
     "electron-updater": "2.10.1",
+    "is-online": "7.0.0",
     "jquery": "3.2.1",
     "lodash": "4.17.4",
     "node-cron": "1.2.0",
