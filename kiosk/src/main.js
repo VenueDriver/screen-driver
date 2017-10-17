@@ -6,6 +6,7 @@ const app = electron.app;
 const path = require('path');
 const url = require('url');
 const CurrentScreenSettingsManager = require('./js/current_screen_settings_manager');
+const DataSender = require('./js/data_sender');
 const WindowsHelper = require('./js/helpers/windows_helper');
 const CronJobsManager = require('./js/helpers/cron_jobs_helper');
 const Logger = require('./js/logger/logger');
@@ -45,6 +46,7 @@ function setupLogger() {
 }
 
 function ready() {
+    DataSender.sendApplicationVersion();
     new ApplicationUpdater().init();
     StorageManager.loadDataFromLocalStorage().then(() => {
         powerSaveBlocker.start('prevent-display-sleep');
