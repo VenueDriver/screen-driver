@@ -1,5 +1,4 @@
 const isOnline = require('is-online');
-const Subject = require('rxjs').Subject;
 const BehaviorSubject = require('rxjs').BehaviorSubject;
 const CronJob = require('cron').CronJob;
 const Logger = require('./../../logger/logger');
@@ -53,4 +52,4 @@ function _delayToConnectionEstablished(callback) {
 }
 
 exports.connected = connected;
-exports.runOnConnectionEstablished = runWhenPossible;
+exports.runWhenPossible = runWhenPossible;
