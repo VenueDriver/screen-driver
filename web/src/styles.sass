@@ -89,9 +89,21 @@ body
     &.btn-link:focus
       outline: none
 
+  @media screen and (min-width: $tablet-resolution + 1)
+    screen-driver-mobile-header
+      display: none
+
+  @media screen and (max-width: $tablet-resolution)
+    screen-driver-header
+      display: none
+
   .container-fluid
     display: flex !important
     justify-content: center !important
+
+    @media screen and (max-width: $tablet-resolution)
+      padding-right: 8px
+      padding-left: 10px
 
     .navbar-header
       width: 100%
