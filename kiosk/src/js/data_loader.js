@@ -1,6 +1,6 @@
 'use strict';
 
-const {net} = require('electron');
+const HttpClient = require('./helpers/http-client');
 const SettingMergeTool = require('./setting-merge-tool');
 const StorageManager = require('./helpers/storage_manager');
 const PropertiesLoader = require('./helpers/properties_load_helper');
@@ -47,50 +47,29 @@ class DataLoader {
 
     static loadVenues() {
         let venuesUrl = `${API_ENDPOINT}/api/venues`;
-        let request = net.request(venuesUrl);
-
-        return DataLoader.generatePromise(request);
+        return HttpClient.get(venuesUrl);
     }
 
     static loadContent() {
         let contentUrl = `${API_ENDPOINT}/api/content`;
-        let request = net.request(contentUrl);
-
-        return DataLoader.generatePromise(request);
+        return HttpClient.get(contentUrl);
     }
 
     static loadSettings() {
         let settingsUrl = `${API_ENDPOINT}/api/settings`;
-        let request = net.request(settingsUrl);
+        return HttpClient.get(settingsUrl);
 
-        return DataLoader.generatePromise(request);
+
     }
 
     static loadNotificationsConfig() {
         let notificationsConfigUrl = `${API_ENDPOINT}/api/screens/notification-config`;
-        let request = net.request(notificationsConfigUrl);
-
-        return DataLoader.generatePromise(request);
+        return HttpClient.get(notificationsConfigUrl);
     }
 
     static loadSchedules() {
         let settingsUrl = `${API_ENDPOINT}/api/schedules`;
-        let request = net.request(settingsUrl);
-
-        return DataLoader.generatePromise(request);
-    }
-
-    static generatePromise(request) {
-        return new Promise((resolve, reject) => DataLoader.performRequest(request, resolve, reject));
-    }
-
-    static performRequest(request, resolve, reject) {
-        request.on('response', response => {
-            response.on('data', data => resolve(data.toString('utf8')));
-            response.on('error', error => reject(error))
-        });
-        request.on('error', (error) => reject(error));
-        request.end();
+        return HttpClient.get(settingsUrl);
     }
 }
 
