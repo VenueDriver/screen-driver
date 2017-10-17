@@ -1,6 +1,6 @@
 'use strict';
 
-const HttpClient = require('./helpers/http-client');
+const HttpClient = require('./helpers/http_client');
 const SettingMergeTool = require('./setting-merge-tool');
 const StorageManager = require('./helpers/storage_manager');
 const PropertiesLoader = require('./helpers/properties_load_helper');
