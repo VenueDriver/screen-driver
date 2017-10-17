@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
 import {Subject, BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 
@@ -10,10 +9,6 @@ import {HttpClient} from "@angular/common/http";
 import {User} from "../common/entities/user";
 import {AuthTokenService} from "./auth-token.service";
 import {ErrorMessageExtractor} from "../common/error-message-extractor";
-
-const AUTH_API = `${environment.apiUrl}/api/auth/sign_in`;
-const TOKEN_REFRESH_API = `${environment.apiUrl}/api/auth/token/refresh`;
-const SIGN_OUT_API = `${environment.apiUrl}/api/auth/sign_out`;
 
 @Injectable()
 export class AuthService {
@@ -45,7 +40,7 @@ export class AuthService {
 
     signIn(userDetails) {
         let subject = new Subject();
-        this.httpClient.post(AUTH_API, userDetails)
+        this.httpClient.post(AuthConsts.SIGN_IN_API, userDetails)
             .subscribe(
                 response => {
                     this.saveTokensToLocalStorage(response);
@@ -156,7 +151,7 @@ export class AuthService {
     }
 
     private sendSignOutRequest(email: string) {
-        this.httpClient.post(SIGN_OUT_API, {email: email}).subscribe()
+        this.httpClient.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe()
     }
 
     clearLocalStorage() {
@@ -170,7 +165,7 @@ export class AuthService {
     refreshToken() {
         let subject = new Subject();
         let refreshToken = localStorage.getItem(AuthConsts.REFRESH_TOKEN_PARAM);
-        this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
+        this.httpClient.post(AuthConsts.TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
             (response) => {
                 localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
                 this.tokenService.tokenReceived.next(response['token']);
