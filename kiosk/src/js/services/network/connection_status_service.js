@@ -28,7 +28,7 @@ function _isStatusChanged(currentStatus) {
 }
 
 function handleConnectionStatusChange(online) {
-    Logger.info('Connection status changed: ' + online ? 'Connected' : 'Disconnected');
+    Logger.info('Connection status changed: ' + (online ? 'Connected' : 'Disconnected'));
     connected.next(online);
 }
 

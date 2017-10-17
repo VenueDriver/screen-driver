@@ -111,12 +111,9 @@ function runConnectionWatchers() {
 }
 
 function startAutoupdateOnConnectionEstablised() {
-    ConnectionStatusService.connected.subscribe(connected => {
-        //if connection established (it can happens just if it was lost before)
-        if (connected) {
-            Logger.info('Connection established. Auto-update has been restarted');
-            new ApplicationUpdater().checkForUpdates();
-        }
+    ConnectionStatusService.runOnConnectionEstablished(() => {
+        Logger.info('Connection established. Auto-update has been restarted');
+        new ApplicationUpdater().checkForUpdates();
     });
 }
 
