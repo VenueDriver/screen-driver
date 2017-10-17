@@ -1,0 +1,5 @@
+ScreenDriverScreenMaintenanceRestApiId:
+  Value:
+    Ref: ApiGatewayRestApi
+  Export:
+    Name: ScreenDriverScreenMaintenanceRestApiId-${opt:stage}
