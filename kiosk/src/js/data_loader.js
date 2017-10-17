@@ -58,8 +58,6 @@ class DataLoader {
     static loadSettings() {
         let settingsUrl = `${API_ENDPOINT}/api/settings`;
         return HttpClient.get(settingsUrl);
-
-
     }
 
     static loadNotificationsConfig() {

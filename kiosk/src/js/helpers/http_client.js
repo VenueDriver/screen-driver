@@ -8,19 +8,24 @@ class HttpClient {
         return httpRequest('GET', url);
     }
 
-    static post(url) {
-        return httpRequest('POST', url);
+    static post(url, data) {
+        return httpRequest('POST', url, data);
     }
 
 
 }
 
-function httpRequest(method, url) {
-    let request = net.request({
+function httpRequest(method, url, data) {
+    let requestOptions = {
         method: method,
-        url: url
-    });
+        url: url,
+    };
 
+    if (!!data) {
+        requestOptions.data = data;
+    }
+
+    let request = net.request(requestOptions);
     return generatePromise(request);
 }
 
