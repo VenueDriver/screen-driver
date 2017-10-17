@@ -12,17 +12,24 @@ export class CanActivateAdmin implements CanActivate {
     }
 
     canActivate() {
-        if (this.authService.isAdmin()) {
+        let authenticated = this.authService.authenticated();
+        let admin = this.authService.isAdmin();
+
+        if (authenticated && admin) {
             return true;
         }
 
-        if (this.authService.authenticated()) {
+        if (authenticated) {
             this.router.navigateByUrl(AuthConsts.CONTENT_URI);
             return true;
         }
 
+        this.navigateToAuthPage();
+        return false;
+    }
+
+    private navigateToAuthPage() {
         this.authService.saveCurrentUrlAsRollback();
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
-        return false;
     }
 }
