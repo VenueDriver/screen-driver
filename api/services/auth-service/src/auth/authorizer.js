@@ -9,6 +9,7 @@ const AccessProvider = require(ModulePathManager.getBasePath() + 'lib/auth/acces
 module.exports.handler = (event, context, callback) => {
 
     let idToken = getTokenFromHeader(event);
+    console.log('token', idToken);
     let decodedToken = TokenParser.decodeToken(idToken);
 
     KeysLoader.loadKeySet(decodedToken.payload.iss)

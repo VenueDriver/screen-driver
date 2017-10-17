@@ -44,7 +44,7 @@ export class AuthService {
         this.httpClient.post(AuthConsts.SIGN_IN_API, userDetails)
             .subscribe(
                 response => {
-                    LocalStorageService.saveAuthTokens(response);
+                    this.saveAuthTokens(response);
                     this.initCurrentUser(response['token']);
                     subject.next(response);
                     this.redirect();
@@ -163,6 +163,11 @@ export class AuthService {
                 subject.error(error);
             });
         return subject;
+    }
+
+    private saveAuthTokens(response: any) {
+        LocalStorageService.saveAuthTokens(response);
+        this.tokenService.setToken(response['token']);
     }
 
     getCurrentUserLogin(): string {
