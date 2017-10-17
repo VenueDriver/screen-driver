@@ -5,11 +5,12 @@ const CronJob = require('cron').CronJob;
 const Logger = require('./../../logger/logger');
 
 
-let connected = new BehaviorSubject(true);
+let connected = new BehaviorSubject();
 
 initListener();
 
 function initListener() {
+    checkConnectionStatus();
     new CronJob('*/5 * * * * *', checkConnectionStatus, null, true, 'UTC')
         .start();
 }
@@ -35,4 +36,21 @@ function isConnected() {
     return connected.getValue();
 }
 
+function runWhenPossible(callback) {
+    if (connected.getValue()) {
+        callback();
+    } else {
+        _delayToConnectionEstablished(callback);
+    }
+}
+
+function _delayToConnectionEstablished(callback) {
+    connected.subscribe(connected => {
+        if (connected) {
+            callback();
+        }
+    })
+}
+
 exports.connected = connected;
+exports.runOnConnectionEstablished = runWhenPossible;
