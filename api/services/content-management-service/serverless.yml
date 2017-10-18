@@ -24,7 +24,7 @@ custom:
   authorizer: ${file(./serverless/authorizer.yml)}
   authServiceEndpoint:
     Fn::ImportValue: ScreenDriverAuthServiceEndpoint-${opt:stage}
-  MaintenanceServiceEndpoint:
+  maintenanceServiceEndpoint:
     Fn::ImportValue: ScreenDriverMaintenanceServiceEndpoint-${opt:stage}
 
   dynamodb:
