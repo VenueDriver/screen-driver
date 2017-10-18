@@ -2,9 +2,3 @@
   Action:
     - dynamodb:*
   Resource: arn:aws:dynamodb:${opt:region, self:provider.region}:*
-
-- Effect: Allow
-  Action:
-    - lambda:InvokeAsync
-    - lambda:InvokeFunction
-  Resource: arn:aws:lambda:*
