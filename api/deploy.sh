@@ -6,8 +6,8 @@ stage="${2:-staging}"
 cd services/auth-service
 serverless deploy --verbose --region ${region} --stage ${stage}
 
-cd ../content-management-service
+cd ../maintenance-service
 serverless deploy --verbose --region ${region} --stage ${stage}
 
-cd ../maintenance-service
+cd ../content-management-service
 serverless deploy --verbose --region ${region} --stage ${stage}
