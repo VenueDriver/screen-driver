@@ -1,4 +1,6 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {
+    Component, OnInit, Input, Output, EventEmitter, Renderer2, OnDestroy
+} from '@angular/core';
 import {Setting} from "../entities/setting";
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 import {HeaderService} from "../../header/header.service";
@@ -10,16 +12,18 @@ import * as _ from 'lodash';
     templateUrl: 'settings-manager.component.html',
     styleUrls: ['settings-manager.component.sass']
 })
-export class SettingsManagerComponent implements OnInit {
+export class SettingsManagerComponent implements OnInit, OnDestroy {
 
     @Input() settings: Setting[];
     @Output() settingSelected: EventEmitter<Setting> = new EventEmitter();
 
     activeSetting: Setting;
     showSidebar = true;
+    sidebar;
 
     constructor(private headerService: HeaderService,
-                private settingStateHolderService: SettingStateHolderService) {
+                private settingStateHolderService: SettingStateHolderService,
+                private renderer: Renderer2) {
     }
 
     ngOnInit() {
@@ -28,6 +32,11 @@ export class SettingsManagerComponent implements OnInit {
         }
         this.subscribeOnSidebarToggle();
         this.subscribeOnCurrentSettingChange();
+        this.sidebar = document.getElementById('sidebar');
+    }
+
+    ngOnDestroy() {
+        this.enableScroll();
     }
 
     subscribeOnSidebarToggle() {
@@ -42,6 +51,35 @@ export class SettingsManagerComponent implements OnInit {
 
     toggle() {
         this.showSidebar = !this.showSidebar;
+        this.toggleDocumentScroll();
+        this.setClass();
+    }
+
+    private toggleDocumentScroll() {
+        if (this.showSidebar) {
+            this.disableScroll();
+        } else {
+            this.enableScroll();
+        }
+    }
+
+    private disableScroll() {
+        this.renderer.addClass(document.body, 'sidebar-open');
+    }
+
+    private enableScroll() {
+        this.renderer.removeClass(document.body, 'sidebar-open');
+    }
+
+    private setClass() {
+        if (!this.sidebar) {
+            return;
+        }
+        if (window.pageYOffset > 30) {
+            this.renderer.removeClass(this.sidebar, 'with-top-margin');
+        } else {
+            this.renderer.addClass(this.sidebar, 'with-top-margin');
+        }
     }
 
     onSettingSelection(setting: Setting) {
