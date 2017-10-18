@@ -6,15 +6,29 @@ services:
       dockerfile: ./docker/Dockerfile
     ports:
       - "4200:4200"
+    depends_on:
+      - api
+      - auth_api
     command: npm start
 
   api:
-    environment:
-      - AWS_ACCESS_KEY_ID=access
-      - AWS_SECRET_ACCESS_KEY=secret
+    env_file:
+      - development.env
     build:
       context: api
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker/content-management-service/Dockerfile
     ports:
       - "3000:3000"
-    command: sls offline start --host 0.0.0.0 --stage test --noEnvironment
+      - "8000:8000"
+    command: serverless offline start --host 0.0.0.0 --stage dev --noEnvironment
+
+  auth_api:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/auth-service/Dockerfile
+    ports:
+      - "3001:3001"
+      - "8001:8001"
+    command: serverless offline start --host 0.0.0.0 --stage dev --noEnvironment
