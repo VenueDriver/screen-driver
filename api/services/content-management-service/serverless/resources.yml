@@ -114,3 +114,52 @@ AuthProxyMethod:
         integration.request.path.proxy: method.request.path.proxy
         integration.request.header.Accept-Encoding: "'identity'"
       PassthroughBehavior: WHEN_NO_MATCH
+
+MaintenanceResource:
+  Type: AWS::ApiGateway::Resource
+  Properties:
+    ParentId:
+      Ref: ApiGatewayResourceApi
+    PathPart: 'screens'
+    RestApiId:
+      Ref: ApiGatewayRestApi
+
+MaintenanceProxyResource:
+  Type: AWS::ApiGateway::Resource
+  Properties:
+    ParentId:
+      Ref: MaintenanceResource
+    PathPart: '{proxy+}'
+    RestApiId:
+      Ref: ApiGatewayRestApi
+
+MaintenanceProxyMethod:
+  Type: AWS::ApiGateway::Method
+  Properties:
+    ResourceId:
+      Ref: MaintenanceProxyResource
+    RestApiId:
+      Ref: ApiGatewayRestApi
+    AuthorizationType: NONE
+    HttpMethod: ANY
+    MethodResponses:
+      - StatusCode: 200
+    RequestParameters:
+      method.request.path.proxy: true
+    Integration:
+      IntegrationHttpMethod: ANY
+      Type: HTTP_PROXY
+      Uri:
+        Fn::Join:
+          - ''
+          - - https://
+            - Fn::ImportValue: ScreenDriverMaintenanceRestApiId-${opt:stage}
+            - .execute-api.
+            - Ref: AWS::Region
+            - .amazonaws.com/${opt:stage}/api/screens/{proxy}
+      IntegrationResponses:
+        - StatusCode: 200
+      RequestParameters:
+        integration.request.path.proxy: method.request.path.proxy
+        integration.request.header.Accept-Encoding: "'identity'"
+      PassthroughBehavior: WHEN_NO_MATCH
