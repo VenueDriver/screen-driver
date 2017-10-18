@@ -9,6 +9,9 @@ $hover-color: #555
   display: inline-block
   padding: 15px
 
+  &.sign-out-button
+    padding-right: 8px
+
   &:focus
     outline: 0
 
@@ -24,7 +27,6 @@ $hover-color: #555
   &.active
     background-color: #e7e7e7
 
-
   a
     text-decoration: none
     color: #777
@@ -32,3 +34,17 @@ $hover-color: #555
 .control-panel
   float: right
   margin-right: 20px
+
+.pull-right
+  display: flex
+  align-items: center
+
+  .sign-out-block
+    display: flex
+    align-items: center
+
+    .sign-out
+      display: inline-block
+      height: 32px
+      margin-right: 20px
+      cursor: pointer

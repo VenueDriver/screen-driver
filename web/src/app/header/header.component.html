@@ -33,8 +33,11 @@
                     <a routerLinkActive="active">{{getUserLogin()}}</a>
                 </div>
 
-                <div class="link" [routerLinkActive]="['active']" (click)="signOut()">
-                    <a>Sign out</a>
+                <div class="sign-out-block" [routerLinkActive]="['active']" (click)="signOut()">
+                    <div class="link sign-out-button">
+                        <a>Sign out</a>
+                    </div>
+                    <div class="sign-out"></div>
                 </div>
             </div>
         </div>
