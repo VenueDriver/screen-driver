@@ -8,3 +8,6 @@ serverless deploy --verbose --region ${region} --stage ${stage}
 
 cd ../content-management-service
 serverless deploy --verbose --region ${region} --stage ${stage}
+
+cd ../maintenance-service
+serverless deploy --verbose --region ${region} --stage ${stage}
