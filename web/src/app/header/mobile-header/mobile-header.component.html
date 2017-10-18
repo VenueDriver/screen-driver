@@ -1,21 +1,23 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand">ScreenDriver</a>
+            <div id="pull-top" class="pull-top">
+                <a class="navbar-brand">ScreenDriver</a>
 
-            <div class="pull-right" *ngIf="!isAuthPage()">
-                <div routerLink="/profile"
-                     class="link"
-                     [routerLinkActive]="['active']">
-                    <a routerLinkActive="active">{{getUserLogin()}}</a>
-                </div>
+                <div class="pull-right" *ngIf="!isAuthPage()">
+                    <div routerLink="/profile"
+                         class="link"
+                         [routerLinkActive]="['active']">
+                        <a routerLinkActive="active">{{getUserLogin()}}</a>
+                    </div>
 
-                <div class="link" [routerLinkActive]="['active']" (click)="signOut()">
-                    <a>Sign out</a>
+                    <div class="link" [routerLinkActive]="['active']" (click)="signOut()">
+                        <a>Sign out</a>
+                    </div>
                 </div>
             </div>
 
-            <div class="bottom-pull">
+            <div class="pull-bottom">
                 <div class="router-links" *ngIf="isUserAdmin()">
                     <div routerLink="/content"
                          class="link"
