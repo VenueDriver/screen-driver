@@ -1,6 +1,15 @@
 authorizer:
   handler: src/auth/authorizer.handler
 
+get_pusher_config:
+  handler: src/notifier/notification_config.getConfig
+  environment: ${self:custom.properties.pusher}
+  events:
+    - http:
+        path: api/screens/notification-config
+        method: get
+        cors: true
+
 refresh_screens:
   handler: src/screen_notifications/refresh_screens.refresh
   environment: ${self:custom.properties.pusher}
