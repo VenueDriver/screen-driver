@@ -28,7 +28,7 @@ custom:
     migration:
       dir: migrations
   serverless-offline:
-      port: 3002
+    port: 3002
 
 functions: ${self:custom.functions}
 

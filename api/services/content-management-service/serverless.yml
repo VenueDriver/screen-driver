@@ -25,7 +25,7 @@ custom:
   authServiceEndpoint:
     Fn::ImportValue: ScreenDriverAuthServiceEndpoint-${opt:stage}
   MaintenanceServiceEndpoint:
-      Fn::ImportValue: ScreenDriverMaintenanceServiceEndpoint-${opt:stage}
+    Fn::ImportValue: ScreenDriverMaintenanceServiceEndpoint-${opt:stage}
 
   dynamodb:
     start:
