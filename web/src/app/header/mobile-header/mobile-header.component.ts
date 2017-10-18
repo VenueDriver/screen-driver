@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {HeaderService} from "../header.service";
 import {AuthService} from "../../auth/auth.service";
+import {HeaderComponent} from "../header.component";
 
 @Component({
     selector: 'screen-driver-mobile-header',
@@ -10,34 +11,13 @@ import {AuthService} from "../../auth/auth.service";
         'mobile-header.component.sass'
     ]
 })
-export class MobileHeaderComponent {
+export class MobileHeaderComponent extends HeaderComponent {
 
     constructor(
-        private headerService: HeaderService,
-        private authService: AuthService
-    ) { }
-
-    toggleSideBar() {
-        this.headerService.pushSidebarToggleEvent();
+        headerService: HeaderService,
+        authService: AuthService
+    ) {
+        super(headerService, authService);
     }
 
-    isUserAdmin(): boolean {
-        return this.authService.isAdmin();
-    }
-
-    isAuthPage(): boolean {
-        return !!this.authService.isAuthPage();
-    }
-
-    isSidebarDisplayed() {
-        return this.authService.isCurrentPath('/content');
-    }
-
-    getUserLogin() {
-        return this.authService.getCurrentUserLogin();
-    }
-
-    signOut() {
-        this.authService.signOut();
-    }
 }
