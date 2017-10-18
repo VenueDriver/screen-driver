@@ -1,0 +1,3 @@
+name: authorizer
+resultTtlInSeconds: 0
+identitySource: method.request.header.Authorization
