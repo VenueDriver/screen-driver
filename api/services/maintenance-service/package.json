@@ -1,5 +1,5 @@
 {
-  "name": "screen-driver-screen-maintaince-api",
+  "name": "screen-driver-maintaince-api",
   "version": "1.0.0",
   "description": "Serverless CRUD service exposing a REST HTTP interface",
   "scripts": {
