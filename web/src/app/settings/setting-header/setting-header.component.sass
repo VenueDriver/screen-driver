@@ -9,10 +9,6 @@
 .setting-form-container
   width: 800px
 
-  @media screen and (max-width: $tablet-resolution)
-    width: 100%
-    display: block
-
   .selected-setting-container
     padding-bottom: 20px
     min-height: 70px
@@ -38,3 +34,15 @@
 
   .disabled
     color: $gray-color
+
+@media screen and (max-width: $tablet-resolution)
+  .setting-form-container
+    width: 100%
+    display: block
+
+    .selected-setting-container
+      padding-bottom: 10px
+
+      .setting-header
+        .setting-title
+          font-size: 18px

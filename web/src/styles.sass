@@ -17,7 +17,7 @@ body
       overflow: hidden
 
     .app-container
-      margin-top: 95px !important
+      margin-top: 110px !important
 
     .navbar-brand
       margin-left: -15px
@@ -36,6 +36,13 @@ body
 
   .tree-children
     overflow: initial
+
+    @media screen and (max-width: $tablet-resolution)
+      padding-left: 11px
+
+      .tree-node-level-1
+        .tree-children
+          padding-left: 0
 
   tree-viewport
     overflow-y: initial !important
@@ -115,6 +122,9 @@ body
     font-size: 17px
     font-style: italic
     color: $gray-color
+
+    @media screen and (max-width: $tablet-resolution)
+      font-size: 15px
 
   .datepicker__input
     font-size: 18px !important
