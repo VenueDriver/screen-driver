@@ -23,7 +23,7 @@ function httpRequest(method, url, data) {
 
     let request = net.request(requestOptions);
     if (!!data) {
-        request.write(data);
+        request.write(JSON.stringify(data));
     }
     return generatePromise(request);
 }

@@ -46,7 +46,6 @@ function setupLogger() {
 }
 
 function ready() {
-    DataSender.sendApplicationVersion();
     new ApplicationUpdater().init();
     StorageManager.loadDataFromLocalStorage().then(() => {
         powerSaveBlocker.start('prevent-display-sleep');
@@ -61,6 +60,7 @@ function ready() {
         addHotKeyListeners();
         addEventListeners();
         settingsLoadJob = CronJobsManager.initSettingsLoadJob();
+        DataSender.sendApplicationVersion();
     });
 }
 
