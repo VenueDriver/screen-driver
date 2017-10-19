@@ -9,6 +9,7 @@ services:
     depends_on:
       - api
       - auth_api
+      - maintenance_api
     command: npm start
 
   serverless:
