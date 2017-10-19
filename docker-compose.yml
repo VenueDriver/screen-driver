@@ -47,3 +47,18 @@ services:
       - "3001:3001"
       - "8001:8001"
     command: npm start
+
+  maintenance_api:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.runtime
+      args:
+        SERVICE: maintenance-service
+    depends_on:
+      - serverless
+    ports:
+      - "3002:3002"
+      - "8002:8002"
+    command: npm start
