@@ -23,7 +23,7 @@ services:
       - development.env
     build:
       context: api
-      dockerfile: ./docker/Dockerfile.runtime
+      dockerfile: ./docker/Dockerfile.startup
       args:
         SERVICE: content-management-service
     depends_on:
@@ -38,7 +38,7 @@ services:
       - development.env
     build:
       context: api
-      dockerfile: ./docker/Dockerfile.runtime
+      dockerfile: ./docker/Dockerfile.startup
       args:
         SERVICE: auth-service
     depends_on:
@@ -53,7 +53,7 @@ services:
       - development.env
     build:
       context: api
-      dockerfile: ./docker/Dockerfile.runtime
+      dockerfile: ./docker/Dockerfile.startup
       args:
         SERVICE: maintenance-service
     depends_on:
