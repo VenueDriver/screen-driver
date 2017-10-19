@@ -3,6 +3,10 @@
     "target": "http://auth_api:3001",
     "secure": false
   },
+  "/api/screens": {
+    "target": "http://localhost:3002",
+    "secure": false
+  },
   "/api": {
     "target": "http://api:3000",
     "secure": false

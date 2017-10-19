@@ -1,0 +1,32 @@
+{
+  "name": "screen-driver-maintaince-api",
+  "version": "1.0.0",
+  "description": "Serverless CRUD service exposing a REST HTTP interface",
+  "scripts": {
+    "start": "sls offline start --stage dev",
+    "db": "sls dynamodb start --stage test",
+    "test": "sls invoke test --stage test",
+    "test-function": "sls invoke test --stage test --function",
+    "invoke": "sls invoke -f",
+    "deploy": "serverless deploy --stage staging",
+    "deploy-function": "serverless deploy --stage staging function --function"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "jsonwebtoken": "7.4.3",
+    "lodash": "4.17.4",
+    "jwk-to-pem": "1.2.6",
+    "node-cron": "1.2.1",
+    "pusher": "1.5.1",
+    "q": "1.5.0",
+    "request": "2.81.0",
+    "uuid": "2.0.3"
+  },
+  "devDependencies": {
+    "serverless-dynamodb-local": "0.2.24",
+    "serverless-export-env": "github:arabold/serverless-export-env",
+    "serverless-mocha-plugin": "1.5.1",
+    "serverless-offline": "3.15.3"
+  }
+}
