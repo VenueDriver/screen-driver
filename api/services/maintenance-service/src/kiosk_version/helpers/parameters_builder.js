@@ -5,7 +5,8 @@ module.exports.buildPutRequestParameters = (screenId, version) => {
         TableName: process.env.SCREENS_VERSIONS_TABLE,
         Item:{
             screenId: screenId,
-            version: version
+            version: version,
+            updatedAt: new Date()
         }
     };
 };
