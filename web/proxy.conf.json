@@ -4,7 +4,7 @@
     "secure": false
   },
   "/api/screens": {
-    "target": "http://localhost:3002",
+    "target": "http://maintenance_api:3002",
     "secure": false
   },
   "/api": {
