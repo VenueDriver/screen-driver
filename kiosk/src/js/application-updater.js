@@ -1,3 +1,4 @@
+const app = require('electron').app;
 const autoUpdater = require("electron-updater").autoUpdater;
 const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
 const NotificationListener = require('./notification-listener/notification_listener');
@@ -6,6 +7,9 @@ const UserInteractionsManager = require('./user-interactions-manager');
 const NetworkErrorsHandlingService = require('./services/error/network_errors_handling_service');
 const ConnectionStatusService = require('./services/network/connection_status_service');
 const Logger = require('./logger/logger');
+const DataSender = require('./data_sender');
+const LocalStorageManager = require('./helpers/local_storage_helper').LocalStorageManager;
+const appVersionStorageName = require('./helpers/local_storage_helper').StorageNames.APP_VERSION;
 
 let instance = null;
 
@@ -32,6 +36,23 @@ class ApplicationUpdater {
 
     getDownloadingStatus() {
         return this.isUpdateDownloading;
+    }
+
+    static syncAppVersionOnApi() {
+        let notify = (newVersion) => {
+            let screenId = CurrentScreenSettingsManager.getCurrentSetting().selectedScreenId;
+            let requestData = {screenId: screenId, version: newVersion || '0.0.0'};
+            if (!screenId) throw new Error('Couldn\'t send Kiosk version. Reason: missed screen id');
+            DataSender.sendApplicationVersion(requestData);
+        };
+
+        LocalStorageManager.getFromStorage(appVersionStorageName, (error, version) => {
+            let currentVersion = app.getVersion();
+            if (currentVersion != version) {
+                notify(currentVersion);
+                LocalStorageManager.putInStorage(appVersionStorageName, currentVersion)
+            }
+        })
     }
 
 }
