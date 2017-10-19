@@ -1,14 +1,14 @@
 {
   "/api/auth": {
-    "target": "http://auth_api:3001",
+    "target": "http://localhost:3001",
     "secure": false
   },
   "/api/screens": {
-    "target": "http://maintenance_api:3002",
+    "target": "http://localhost:3002",
     "secure": false
   },
   "/api": {
-    "target": "http://api:3000",
+    "target": "http://localhost:3000",
     "secure": false
   }
 }
