@@ -3,11 +3,11 @@ ScreensVersionsTable
   Properties:
     AttributeDefinitions:
       -
-        AttributeName: id
+        AttributeName: screenId
         AttributeType: S
     KeySchema:
       -
-        AttributeName: id
+        AttributeName: screenId
         KeyType: HASH
     ProvisionedThroughput:
       ReadCapacityUnits: 1
