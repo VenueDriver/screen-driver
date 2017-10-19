@@ -1,6 +1,6 @@
 'use strict';
 
-const {net} = require('electron');
+const net = require('electron').net;
 
 class HttpClient {
 
@@ -21,11 +21,10 @@ function httpRequest(method, url, data) {
         url: url,
     };
 
-    if (!!data) {
-        requestOptions.data = data;
-    }
-
     let request = net.request(requestOptions);
+    if (!!data) {
+        request.write(data);
+    }
     return generatePromise(request);
 }
 
