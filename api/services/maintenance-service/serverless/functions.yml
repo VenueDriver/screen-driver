@@ -29,3 +29,11 @@ update_clients_app:
         method: post
         cors: true
         authorizer: ${self:custom.authorizer}
+
+register_kiosk_version:
+  handler: src/kiosk_version/kiosk_version.register
+  events:
+    - http:
+        path: api/screens/version
+        method: post
+        cors: true
