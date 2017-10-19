@@ -1,0 +1,13 @@
+FROM screendriver_serverless
+
+ARG SERVICE
+
+WORKDIR ../app-src
+RUN mkdir $SERVICE
+ADD services/$SERVICE /app-src/$SERVICE
+ADD services/lib /app-src/lib
+WORKDIR $SERVICE
+
+RUN npm install
+
+CMD serverless deploy --verbose --region $AWS_REGION --stage $AWS_STAGE
