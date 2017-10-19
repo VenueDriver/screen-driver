@@ -16,15 +16,14 @@ services:
       - development.env
     build:
       context: api
-      dockerfile: ./docker/serverless/Dockerfile
+      dockerfile: ./docker/Dockerfile.serverless
 
   api:
     env_file:
       - development.env
-    image: serverless
     build:
       context: api
-      dockerfile: ./docker/content-management-service/Dockerfile
+      dockerfile: ./docker/Dockerfile.runtime
       args:
         SERVICE: content-management-service
     depends_on:
@@ -39,8 +38,12 @@ services:
       - development.env
     build:
       context: api
-      dockerfile: ./docker/auth-service/Dockerfile
+      dockerfile: ./docker/Dockerfile.runtime
+      args:
+        SERVICE: auth-service
+    depends_on:
+      - serverless
     ports:
       - "3001:3001"
       - "8001:8001"
-    command: serverless offline start --host 0.0.0.0 --stage dev --noEnvironment
+    command: npm start
