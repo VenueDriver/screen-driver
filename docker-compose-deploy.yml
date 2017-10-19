@@ -1,0 +1,48 @@
+version: '2.2'
+services:
+  web:
+    env_file:
+      - development.env
+    build:
+      context: web
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - ./web:/app-src/
+
+  deploy_web:
+    env_file:
+      - development.env
+    build:
+      context: web
+      dockerfile: ./docker/Dockerfile.deploy
+    volumes_from:
+      - web
+    depends_on:
+      - web
+
+  deploy_api:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.deploy
+      args:
+        SERVICE: content-management-service
+
+  deploy_auth_api:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.deploy
+      args:
+        SERVICE: auth-service
+
+  deploy_maintenance_api:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.deploy
+      args:
+        SERVICE: maintenance-service
