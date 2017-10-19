@@ -1,15 +1,15 @@
 const isOnline = require('is-online');
-const Subject = require('rxjs').Subject;
 const BehaviorSubject = require('rxjs').BehaviorSubject;
 const CronJob = require('cron').CronJob;
 const Logger = require('./../../logger/logger');
 
 
-let connected = new BehaviorSubject(true);
+let connected = new BehaviorSubject();
 
 initListener();
 
 function initListener() {
+    checkConnectionStatus();
     new CronJob('*/5 * * * * *', checkConnectionStatus, null, true, 'UTC')
         .start();
 }
@@ -27,7 +27,7 @@ function _isStatusChanged(currentStatus) {
 }
 
 function handleConnectionStatusChange(online) {
-    Logger.info('Connection status changed: ' + online ? 'Connected' : 'Disconnected');
+    Logger.info('Connection status changed: ' + (online ? 'Connected' : 'Disconnected'));
     connected.next(online);
 }
 
@@ -35,4 +35,21 @@ function isConnected() {
     return connected.getValue();
 }
 
+function runWhenPossible(callback) {
+    if (connected.getValue()) {
+        callback();
+    } else {
+        _delayToConnectionEstablished(callback);
+    }
+}
+
+function _delayToConnectionEstablished(callback) {
+    connected.subscribe(connected => {
+        if (connected) {
+            callback();
+        }
+    })
+}
+
 exports.connected = connected;
+exports.runWhenPossible = runWhenPossible;

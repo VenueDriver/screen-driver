@@ -59,6 +59,7 @@ function ready() {
         addHotKeyListeners();
         addEventListeners();
         settingsLoadJob = CronJobsManager.initSettingsLoadJob();
+        ApplicationUpdater.syncAppVersionOnApi();
     });
 }
 
