@@ -12,7 +12,6 @@ provider:
   iamRoleStatements: ${self:custom.roles}
 
 custom:
-  screensVersionsTableResource: ${file(./serverless/screens-versions-table-resource.yml)}
   properties: ${file(./serverless/properties.yml)}
   functions: ${file(./serverless/functions.yml)}
   resources: ${file(./serverless/resources.yml)}
