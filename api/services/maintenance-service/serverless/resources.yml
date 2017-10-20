@@ -1,4 +1,4 @@
-ScreensVersionsTable
+ScreensVersionsTable:
   Type: AWS::DynamoDB::Table
   Properties:
     AttributeDefinitions:
@@ -14,7 +14,7 @@ ScreensVersionsTable
       WriteCapacityUnits: 1
     TableName: ${self:provider.environment.SCREENS_VERSIONS_TABLE}
 
-ScreensMaintenanceTable
+ScreensUpdateSchedulesTable:
   Type: AWS::DynamoDB::Table
   Properties:
     AttributeDefinitions:
@@ -28,4 +28,4 @@ ScreensMaintenanceTable
     ProvisionedThroughput:
       ReadCapacityUnits: 1
       WriteCapacityUnits: 1
-    TableName: ${self:provider.environment.SCREENS_MAINTENANCE_TABLE}
+    TableName: ${self:provider.environment.SCREENS_UPDATE_SCHEDULES_TABLE}

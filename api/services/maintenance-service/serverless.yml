@@ -7,7 +7,7 @@ provider:
   runtime: nodejs6.10
   environment:
     SCREENS_VERSIONS_TABLE: ${self:service}-screens-versions-${opt:stage}
-    SCREENS_MAINTENANCE_TABLE: ${self:service}-screens-maintenance-${opt:stage}
+    SCREENS_UPDATE_SCHEDULES_TABLE: ${self:service}-screens-update-schedules-${opt:stage}
     STAGE: ${opt:stage, 'dev'}
     REGION: ${opt:region, 'us-east-1'}
   iamRoleStatements: ${self:custom.roles}
