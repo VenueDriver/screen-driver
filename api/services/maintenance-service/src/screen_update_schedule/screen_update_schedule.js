@@ -16,5 +16,17 @@ module.exports.getAll = (event, context, callback) => {
         .fail(error => {
             callback(null, responseHelper.createResponseWithError(500, error))
         });
+};
 
+module.exports.put = (event, context, callback) => {
+    const data = JSON.parse(event.body);
+    let screenUpdateSchedule = new ScreenUpdateSchedule(data);
+
+    screenUpdateSchedule.put()
+        .then(result => {
+            callback(null, responseHelper.createSuccessfulResponse(result));
+        })
+        .fail(error => {
+            callback(null, responseHelper.createResponseWithError(500, error))
+        });
 };
