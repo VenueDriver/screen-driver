@@ -2,12 +2,12 @@
 
 
 class ScreenUpdateSchedule {
-    constructor(scheduleUpdate) {
-        this.id = scheduleUpdate.id;
-        this.eventTime = scheduleUpdate.eventTime;
+    constructor(screenUpdateSchedule) {
+        this.id = screenUpdateSchedule.id;
+        this.eventTime = screenUpdateSchedule.eventTime;
 
-        this.isEnabled = scheduleUpdate.isEnabled != undefined ? 0 : scheduleUpdate.isEnabled;
-        this._rev = scheduleUpdate._rev != undefined ? 0 : scheduleUpdate._rev;
+        this.isEnabled = screenUpdateSchedule.isEnabled != undefined ? 0 : screenUpdateSchedule.isEnabled;
+        this._rev = screenUpdateSchedule._rev != undefined ? 0 : screenUpdateSchedule._rev;
     }
 
 }
