@@ -18,7 +18,7 @@ get_screen_update_schedules:
         method: get
         cors: true
 
-put_screen_update_schedules:
+put_update_schedules:
   handler: src/screen_update_schedule/screen_update_schedule.put
   events:
     - http:
