@@ -10,7 +10,7 @@ get_pusher_config:
         method: get
         cors: true
 
-get_screen_update_schedules:
+get_update_schedules:
   handler: src/screen_update_schedule/screen_update_schedule.getAll
   events:
     - http:
