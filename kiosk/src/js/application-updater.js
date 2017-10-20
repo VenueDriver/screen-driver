@@ -119,7 +119,7 @@ function initScheduleUpdateListener() {
 function scheduleAutoUpdate() {
     let venueId = CurrentScreenSettingsManager.getCurrentSetting().selectedVenueId;
     let schedules = DataStorage.getServerData().updateSchedules;
-    let scheduleForCurrentVenue = _.find(schedules, schedule => schedule.id == venueId);
+    let scheduleForCurrentVenue = _.find(schedules, schedule => schedule.id == venueId && schedule.isEnabled);
     if (_.isEmpty(scheduleForCurrentVenue)){
         return;
     }
