@@ -4,6 +4,7 @@ const HttpClient = require('./helpers/http_client');
 const SettingMergeTool = require('./setting-merge-tool');
 const StorageManager = require('./helpers/storage_manager');
 const PropertiesLoader = require('./helpers/properties_load_helper');
+const ServerDataWatcher = require('./services/data/server_data_watcher');
 
 const API_ENDPOINT = PropertiesLoader.getApiEndpoint();
 
@@ -14,13 +15,15 @@ class DataLoader {
             DataLoader.loadVenues(),
             DataLoader.loadContent(),
             DataLoader.loadSettings(),
-            DataLoader.loadSchedules()
+            DataLoader.loadSchedules(),
+            DataLoader.loadScreensUpdateSchedules()
         ];
 
         return Promise.all(promises)
             .then(values => {
                 let serverData = DataLoader.composeServerData(values);
                 StorageManager.saveServerData(serverData);
+                ServerDataWatcher.update(serverData);
                 return serverData;
             });
     }
@@ -34,6 +37,7 @@ class DataLoader {
         serverData.settings = this.mergeSettings(settings, serverData.priorityTypes);
         serverData.originalSettings = settings;
         serverData.schedules = JSON.parse(values[3]);
+        serverData.updateSchedules = JSON.parse(values[4]);
         return serverData;
     }
 
@@ -68,6 +72,11 @@ class DataLoader {
     static loadSchedules() {
         let settingsUrl = `${API_ENDPOINT}/api/schedules`;
         return HttpClient.get(settingsUrl);
+    }
+
+    static loadScreensUpdateSchedules() {
+        let screensUpdateSchedule = `${API_ENDPOINT}/api/screens/update-schedule`;
+        return HttpClient.get(screensUpdateSchedule);
     }
 }
 
