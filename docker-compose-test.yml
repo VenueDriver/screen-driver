@@ -1,0 +1,73 @@
+version: '2.2'
+services:
+
+  api_db:
+    env_file:
+      - development.env
+    ports:
+      - "8000:8000"
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.startup
+      args:
+        SERVICE: content-management-service
+    command: serverless dynamodb start --stage test
+
+  api_test:
+    env_file:
+      - development.env
+    network_mode: host
+    depends_on:
+      - api_db
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.startup
+      args:
+        SERVICE: content-management-service
+    command: npm test
+
+  auth_api_db:
+    env_file:
+      - development.env
+    ports:
+      - "8001:8001"
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.startup
+      args:
+        SERVICE: auth-service
+    command: serverless dynamodb start --stage test
+
+  auth_api_test:
+    env_file:
+      - development.env
+    network_mode: host
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.startup
+      args:
+        SERVICE: auth-service
+    command: npm test
+
+  maintenance_api_db:
+    env_file:
+      - development.env
+    ports:
+      - "8002:8002"
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.startup
+      args:
+        SERVICE: maintenance-service
+    command: serverless dynamodb start --stage test
+
+  maintenance_api_test:
+    env_file:
+      - development.env
+    network_mode: host
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.startup
+      args:
+        SERVICE: maintenance-service
+    command: npm test
