@@ -3,19 +3,6 @@
 body
   margin: 50px 25px 45px 0
 
-  @media screen and (max-width: 507px)
-    body
-      margin-top: 95px !important
-
-  @media screen and (max-width: 507px)
-    .app-container
-      margin-top: 95px !important
-
-
-  @media screen and (max-width: 507px)
-    body
-      margin-top: 95px !important
-
   @media (max-width: $sidebar-visibility-width)
     padding-left: 0
 
@@ -25,6 +12,12 @@ body
 
   @media screen and (max-width: $tablet-resolution)
     margin: 25px 5px 45px
+
+    &.sidebar-open
+      overflow: hidden
+
+    .app-container
+      margin-top: 110px !important
 
     .navbar-brand
       margin-left: -15px
@@ -43,6 +36,13 @@ body
 
   .tree-children
     overflow: initial
+
+    @media screen and (max-width: $tablet-resolution)
+      padding-left: 11px
+
+      .tree-node-level-1
+        .tree-children
+          padding-left: 0
 
   tree-viewport
     overflow-y: initial !important
@@ -89,9 +89,21 @@ body
     &.btn-link:focus
       outline: none
 
+  @media screen and (min-width: $tablet-resolution + 1)
+    screen-driver-mobile-header
+      display: none
+
+  @media screen and (max-width: $tablet-resolution)
+    screen-driver-header
+      display: none
+
   .container-fluid
     display: flex !important
     justify-content: center !important
+
+    @media screen and (max-width: $tablet-resolution)
+      padding-right: 8px
+      padding-left: 10px
 
     .navbar-header
       width: 100%
@@ -110,6 +122,9 @@ body
     font-size: 17px
     font-style: italic
     color: $gray-color
+
+    @media screen and (max-width: $tablet-resolution)
+      font-size: 15px
 
   .datepicker__input
     font-size: 18px !important
@@ -153,3 +168,6 @@ body
 
 .unlocked
   content: url('./assets/images/unlocked.png')
+
+.sign-out
+  content: url('./assets/images/sign-out.png')
