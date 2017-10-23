@@ -6,6 +6,7 @@ import {AuthComponent} from "./auth/auth-page/auth.component";
 import {CanActivateUser} from "./auth/auth-guards/can-acticate-user";
 import {CanActivateAdmin} from "./auth/auth-guards/can-acticate-admin";
 import {ProfileManagementComponent} from "./profile-management/profile-management.component";
+import {MaintenanceComponent} from "./maintenance/maintenance.component";
 
 const appRoutes: Routes = [
     {
@@ -34,6 +35,11 @@ const appRoutes: Routes = [
     {
         path: 'auth',
         component: AuthComponent,
+        data: {isSidebarDisplayed: false}
+    },
+    {
+        path: 'maintenance',
+        component: MaintenanceComponent,
         data: {isSidebarDisplayed: false}
     },
 ];
