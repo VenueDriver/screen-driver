@@ -4,6 +4,9 @@
   margin-top: 80px
   font-size: 16px
 
+  @media screen and (max-width: $tablet-resolution)
+    font-size: 14px
+
   input
     font-size: $input-font-size
 
@@ -21,3 +24,7 @@
 
   .change-password-button
     margin-top: -10px
+
+@media screen and (max-width: $tablet-resolution)
+  .col-md-8, .col-sm-8
+    padding-right: 4px !important

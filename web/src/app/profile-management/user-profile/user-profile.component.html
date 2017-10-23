@@ -8,11 +8,13 @@
     <table class="table">
         <tr>
             <td class="col-md-2">Email</td>
+
             <td class="col-md-4">
                 <span>
                     {{user.email}}
                 </span>
             </td>
+
             <td class="col-md-3">
                 <div *ngIf="!isEditEmailMode"
                      class="edit-button"
@@ -26,8 +28,7 @@
             <td>
                 {{getUserRole()}}
             </td>
-            <td>
-            </td>
+            <td></td>
         </tr>
     </table>
 </div>
