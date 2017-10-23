@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {environment} from "../../environments/environment";
 import {Subject, BehaviorSubject, Observable} from "rxjs";
 import {Router} from "@angular/router";
 
@@ -10,10 +9,7 @@ import {HttpClient} from "@angular/common/http";
 import {User} from "../common/entities/user";
 import {AuthTokenService} from "./auth-token.service";
 import {ErrorMessageExtractor} from "../common/error-message-extractor";
-
-const AUTH_API = `${environment.apiUrl}/api/auth/sign_in`;
-const TOKEN_REFRESH_API = `${environment.apiUrl}/api/auth/token/refresh`;
-const SIGN_OUT_API = `${environment.apiUrl}/api/auth/sign_out`;
+import {LocalStorageService} from "./local-storage.service";
 
 @Injectable()
 export class AuthService {
@@ -45,7 +41,7 @@ export class AuthService {
 
     signIn(userDetails) {
         let subject = new Subject();
-        this.httpClient.post(AUTH_API, userDetails)
+        this.httpClient.post(AuthConsts.SIGN_IN_API, userDetails)
             .subscribe(
                 response => {
                     this.saveAuthTokens(response);
@@ -63,14 +59,8 @@ export class AuthService {
 
     initCurrentUser(token: string) {
         let user = this.parseUserData(token);
-        this.saveUserInfoInLocalStorage(user);
+        LocalStorageService.saveUserDetails(user);
         this.currentUser.next(user);
-    }
-
-    private saveUserInfoInLocalStorage(user) {
-        localStorage.setItem(AuthConsts.USER_EMAIL, user.email);
-        localStorage.setItem(AuthConsts.USER_ID, user.id);
-        localStorage.setItem(AuthConsts.USER_IS_ADMIN, user.isAdmin.toString());
     }
 
     authenticated(): boolean {
@@ -93,7 +83,7 @@ export class AuthService {
         let origin = document.location.origin;
         let rollbackUrl = url.replace(origin, '');
         if (this.isNotExclusivePage()) {
-            localStorage.setItem(AuthConsts.ROLLBACK_URL_PARAM, rollbackUrl.slice(2));
+            LocalStorageService.setRollbackUrl(rollbackUrl.slice(2));
         }
     }
 
@@ -107,7 +97,7 @@ export class AuthService {
     }
 
     redirect() {
-        let callbackUrl = localStorage.getItem(AuthConsts.ROLLBACK_URL_PARAM);
+        let callbackUrl = LocalStorageService.getRollbackUrl();
         this.router.navigateByUrl(_.isEmpty(callbackUrl) ? '' : callbackUrl);
     }
 
@@ -131,18 +121,16 @@ export class AuthService {
     }
 
     getUserInfo(): User {
-        let email = localStorage.getItem(AuthConsts.USER_EMAIL);
-        let isAdmin = localStorage.getItem(AuthConsts.USER_IS_ADMIN);
-        let userId = localStorage.getItem(AuthConsts.USER_ID);
+        let userDetails = LocalStorageService.getUserDetails();
         let user = new User();
-        user.id = userId;
-        user.email = email;
-        user.isAdmin = JSON.parse(isAdmin);
-        return email || isAdmin ? user : null;
+        user.id = userDetails.userId;
+        user.email = userDetails.email;
+        user.isAdmin = JSON.parse(userDetails.isAdmin);
+        return userDetails.email || userDetails.isAdmin ? user : null;
     }
 
     signOut() {
-        this.clearLocalStorage();
+        LocalStorageService.clear();
         this.signOutUserOnServer();
         this.currentUser = new BehaviorSubject(null);
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
@@ -156,23 +144,15 @@ export class AuthService {
     }
 
     private sendSignOutRequest(email: string) {
-        this.httpClient.post(SIGN_OUT_API, {email: email}).subscribe()
-    }
-
-    clearLocalStorage() {
-        localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
-        localStorage.removeItem(AuthConsts.REFRESH_TOKEN_PARAM);
-        localStorage.removeItem(AuthConsts.USER_EMAIL);
-        localStorage.removeItem(AuthConsts.USER_ID);
-        localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
+        this.httpClient.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe()
     }
 
     refreshToken() {
         let subject = new Subject();
-        let refreshToken = localStorage.getItem(AuthConsts.REFRESH_TOKEN_PARAM);
-        this.httpClient.post(TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
+        let refreshToken = LocalStorageService.getRefreshToken();
+        this.httpClient.post(AuthConsts.TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
             (response) => {
-                localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
+                LocalStorageService.setIdToken(response['token']);
                 this.tokenService.tokenReceived.next(response['token']);
                 subject.next(response);
             },
@@ -186,8 +166,7 @@ export class AuthService {
     }
 
     private saveAuthTokens(response: any) {
-        localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
-        localStorage.setItem(AuthConsts.REFRESH_TOKEN_PARAM, response['refreshToken']);
+        LocalStorageService.saveAuthTokens(response);
         this.tokenService.setToken(response['token']);
     }
 
