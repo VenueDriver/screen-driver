@@ -4,17 +4,63 @@ services:
     build:
       context: web
       dockerfile: ./docker/Dockerfile
+    network_mode: host
     ports:
       - "4200:4200"
+    depends_on:
+      - api
+      - auth_api
+      - maintenance_api
     command: npm start
 
-  api:
-    environment:
-      - AWS_ACCESS_KEY_ID=access
-      - AWS_SECRET_ACCESS_KEY=secret
+  serverless:
+    env_file:
+      - development.env
     build:
       context: api
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker/Dockerfile.serverless
+
+  api:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.startup
+      args:
+        SERVICE: content-management-service
+    depends_on:
+      - serverless
     ports:
       - "3000:3000"
-    command: sls offline start --host 0.0.0.0 --stage test --noEnvironment
+      - "8000:8000"
+    command: npm start
+
+  auth_api:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.startup
+      args:
+        SERVICE: auth-service
+    depends_on:
+      - serverless
+    ports:
+      - "3001:3001"
+      - "8001:8001"
+    command: npm start
+
+  maintenance_api:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.startup
+      args:
+        SERVICE: maintenance-service
+    depends_on:
+      - serverless
+    ports:
+      - "3002:3002"
+      - "8002:8002"
+    command: npm start

@@ -48,7 +48,7 @@ export class AuthService {
         this.httpClient.post(AUTH_API, userDetails)
             .subscribe(
                 response => {
-                    this.saveTokensToLocalStorage(response);
+                    this.saveAuthTokens(response);
                     this.initCurrentUser(response['token']);
                     subject.next(response);
                     this.redirect();
@@ -185,9 +185,10 @@ export class AuthService {
         return subject;
     }
 
-    private saveTokensToLocalStorage(response: any) {
+    private saveAuthTokens(response: any) {
         localStorage.setItem(AuthConsts.ID_TOKEN_PARAM, response['token']);
         localStorage.setItem(AuthConsts.REFRESH_TOKEN_PARAM, response['refreshToken']);
+        this.tokenService.setToken(response['token']);
     }
 
     getCurrentUserLogin(): string {
