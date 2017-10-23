@@ -1,6 +1,13 @@
-.is-admin
-  display: inline-block
-  float: right
+@import "../../../styles/variables"
+
+.admin
+  toggle-button
+    display: inline-block
+    float: right
+
+.email
+  div
+    word-wrap: break-word
 
 .centered
   text-align: center
@@ -22,3 +29,35 @@
 
   div
     display: inline-block
+
+@media screen and (max-width: $tablet-resolution)
+  tr, th
+    display: block
+
+  th
+    padding: 10px 6px !important
+    max-height: 50px
+
+    &:last-of-type
+      border-bottom: 1px solid $border-color
+
+    div
+      float: right
+
+  .header
+    display: none
+
+  .email:before
+    content: 'Email'
+
+  .email
+
+  .admin:before
+    content: 'Is admin'
+
+  .controls:before
+    content: 'Controls'
+
+  .controls
+    text-align: left
+

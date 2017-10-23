@@ -1,6 +1,7 @@
 <div class="create-user-form">
     <div>
         <label for="email">Email address</label>
+
         <input id="email"
                class="form-control"
                [(ngModel)]="user.email"
@@ -10,10 +11,12 @@
                placeholder="Email"
                input-autofocus>
     </div>
+
     <label *ngIf="email.invalid"
            class="email error-message">
         {{getValidationMessage(email)}}
     </label>
+
     <div class="is-admin">
         <toggle-button [title]="'Has admin access?'"
                        (changed)="setUserRole($event)">

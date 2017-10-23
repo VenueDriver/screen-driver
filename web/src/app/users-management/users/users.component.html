@@ -1,15 +1,17 @@
 <table class="table table-striped">
-    <tr>
+    <tr class="header">
         <th>Email</th>
         <th><span class="pull-right">Is admin</span></th>
         <th class="centered">Controls</th>
     </tr>
 
     <tr *ngFor="let user of users">
-        <th>{{user.email}}</th>
-        <th>
-            <toggle-button class="is-admin"
-                           [checked]="user.isAdmin"
+        <th class="email">
+            <div>{{user.email}}</div>
+        </th>
+
+        <th class="admin">
+            <toggle-button [checked]="user.isAdmin"
                            [disabled]="isCurrentUser(user) || !user.enabled"
                            (changed)="changeUserRole(user)"
                            [attr.title]="getToggleHint(user)">
