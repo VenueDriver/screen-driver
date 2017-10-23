@@ -52,7 +52,7 @@ class WindowsHelper {
 
         browserWindow.webContents.on('did-fail-load', function (event, errorCode, errorDescription, validatedURL) {
             // -199 ... -100 - Connection related error codes (Chromium net errors)
-            if (errorCode != 0 ) {
+            if (errorCode < -100 &&  errorCode > -200) {
                 log.error(`Can not load url: ${validatedURL} ${errorCode} ${errorDescription}`);
                 setTimeout(() => {
                     try {

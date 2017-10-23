@@ -10,6 +10,23 @@ get_pusher_config:
         method: get
         cors: true
 
+get_update_schedules:
+  handler: src/screen_update_schedule/screen_update_schedule.getAll
+  events:
+    - http:
+        path: api/screens/update-schedule
+        method: get
+        cors: true
+
+put_update_schedules:
+  handler: src/screen_update_schedule/screen_update_schedule.put
+  events:
+    - http:
+        path: api/screens/update-schedule
+        method: put
+        cors: true
+        authorizer: ${self:custom.authorizer}
+
 refresh_screens:
   handler: src/screen_notifications/refresh_screens.refresh
   environment: ${self:custom.properties.pusher}
@@ -29,3 +46,11 @@ update_clients_app:
         method: post
         cors: true
         authorizer: ${self:custom.authorizer}
+
+register_kiosk_version:
+  handler: src/kiosk_version/kiosk_version.register
+  events:
+    - http:
+        path: api/screens/version
+        method: post
+        cors: true
