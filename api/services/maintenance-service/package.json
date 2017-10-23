@@ -1,7 +1,7 @@
 {
-  "name": "screen-driver-auth-api",
+  "name": "screen-driver-maintaince-api",
   "version": "1.0.0",
-  "description": "Serverless authentication service",
+  "description": "Serverless CRUD service exposing a REST HTTP interface",
   "scripts": {
     "start": "serverless offline start --host 0.0.0.0 --stage dev --dev",
     "db": "sls dynamodb start --stage test",
@@ -14,17 +14,16 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "amazon-cognito-identity-js": "1.19.0",
     "jsonwebtoken": "7.4.3",
-    "jwk-to-pem": "1.2.6",
     "lodash": "4.17.4",
+    "jwk-to-pem": "1.2.6",
+    "node-cron": "1.2.1",
+    "pusher": "1.5.1",
     "q": "1.5.0",
     "request": "2.81.0",
     "uuid": "2.0.3"
   },
   "devDependencies": {
-    "chai": "4.1.2",
-    "chai-spies": "0.7.1",
     "serverless-dynamodb-local": "0.2.24",
     "serverless-export-env": "github:arabold/serverless-export-env",
     "serverless-mocha-plugin": "1.5.1",

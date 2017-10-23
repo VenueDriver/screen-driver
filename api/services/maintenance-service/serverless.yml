@@ -1,0 +1,53 @@
+service: screen-driver-maintenance-api
+
+frameworkVersion: ">=1.20.1 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  environment:
+    SCREENS_VERSIONS_TABLE: ${self:service}-screens-versions-${opt:stage}
+    STAGE: ${opt:stage, 'dev'}
+    REGION: ${opt:region, 'us-east-1'}
+  iamRoleStatements: ${self:custom.roles}
+
+custom:
+  screensVersionsTableResource: ${file(./serverless/screens-versions-table-resource.yml)}
+  properties: ${file(./serverless/properties.yml)}
+  functions: ${file(./serverless/functions.yml)}
+  resources: ${file(./serverless/resources.yml)}
+  outputs: ${file(./serverless/outputs.yml)}
+  roles: ${file(./serverless/roles.yml)}
+  authorizer: ${file(./serverless/authorizer.yml)}
+
+  dynamodb:
+    start:
+      port: 8002
+      inMemory: true
+      migrate: true
+    migration:
+      dir: migrations
+  serverless-offline:
+    port: 3002
+
+functions: ${self:custom.functions}
+
+resources:
+  Resources: ${self:custom.resources}
+  Outputs: ${self:custom.outputs}
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-mocha-plugin
+  - serverless-export-env
+
+
+package:
+  include:
+    - ../lib/**
+  exclude:
+    - test/**
+    - serverless/**
+    - .*
+    - package*
