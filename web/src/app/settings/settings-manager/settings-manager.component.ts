@@ -52,7 +52,7 @@ export class SettingsManagerComponent implements OnInit, OnDestroy {
     toggle() {
         this.showSidebar = !this.showSidebar;
         this.toggleDocumentScroll();
-        this.setClass();
+        this.setTopDistance();
     }
 
     private toggleDocumentScroll() {
@@ -71,7 +71,7 @@ export class SettingsManagerComponent implements OnInit, OnDestroy {
         this.renderer.removeClass(document.body, 'sidebar-open');
     }
 
-    private setClass() {
+    private setTopDistance() {
         if (!this.sidebar) {
             return;
         }
