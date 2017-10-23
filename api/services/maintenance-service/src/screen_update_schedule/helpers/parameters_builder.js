@@ -6,6 +6,7 @@ module.exports.buildPutRequestParameters = (screenUpdateSchedule) => {
         Item:{
             id: screenUpdateSchedule.id,
             eventTime: screenUpdateSchedule.eventTime,
+            isEnabled: screenUpdateSchedule.isEnabled
         }
     };
 };

@@ -9,7 +9,7 @@ class ScreenUpdateSchedule {
         this.id = screenUpdateSchedule.id;
         this.eventTime = screenUpdateSchedule.eventTime;
 
-        this.isEnabled = screenUpdateSchedule.isEnabled != undefined ? true : screenUpdateSchedule.isEnabled;
+        this.isEnabled = screenUpdateSchedule.isEnabled == undefined ? true : screenUpdateSchedule.isEnabled;
         this._rev = screenUpdateSchedule._rev == undefined ? 0 : screenUpdateSchedule._rev;
     }
 
