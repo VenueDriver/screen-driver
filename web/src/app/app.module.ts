@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import {AlertModule} from "ngx-bootstrap";
 
 import {VenuesModule} from "./venues/venues.module";
-import {HeaderComponent} from "./header/header.component";
 import {NotificationModule} from "./notifications/notification.module";
 import {NotificationService} from "./notifications/notification.service";
 import {SettingsModule} from "./settings/settings.module";
@@ -22,11 +21,11 @@ import {AuthModule} from "./auth/auth.module";
 import {AuthHttpInterceptor} from "./auth/auth-http.interceptor";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ProfileManagementModule} from "./profile-management/profile-management.module";
+import {HeaderModule} from "./header/header.module";
 import {MaintenanceModule} from "./maintenance/maintenance.module";
 
 @NgModule({
     declarations: [
-        HeaderComponent,
         AppComponent,
         ContentManagementComponent,
     ],
@@ -45,6 +44,7 @@ import {MaintenanceModule} from "./maintenance/maintenance.module";
         UsersManagementModule,
         AuthModule,
         ProfileManagementModule,
+        HeaderModule,
         MaintenanceModule
     ],
     providers: [

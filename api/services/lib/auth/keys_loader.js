@@ -3,9 +3,11 @@
 const _ = require('lodash');
 const request = require('request');
 const jwkToPem = require('jwk-to-pem');
+const USER_POOL_ID = process.env.USER_POOL_ID;
+const REGION = process.env.REGION;
 
-module.exports.loadKeySet = (issuer) => {
-    let requestParams = buildDownloadKeysParams(issuer);
+module.exports.loadKeySet = () => {
+    let requestParams = buildDownloadKeysParams();
     return new Promise((resolve, reject) => {
         request(requestParams, (error, response, body) => {
             if (!error && response.statusCode === 200) {
@@ -17,9 +19,9 @@ module.exports.loadKeySet = (issuer) => {
     });
 };
 
-function buildDownloadKeysParams(issuer) {
+function buildDownloadKeysParams() {
     return {
-        url: `${issuer}/.well-known/jwks.json`,
+        url: `https://cognito-idp.${REGION}.amazonaws.com/${USER_POOL_ID}/.well-known/jwks.json`,
         json: true
     }
 }

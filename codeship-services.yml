@@ -9,12 +9,8 @@ services:
     encrypted_env_file: deployment.env.encrypted
     volumes:
       - ./web:/app-src
-    #command: ng build --prod --aot
 
   api:
-    #environment:
-      #- AWS_ACCESS_KEY_ID=access
-      #- AWS_SECRET_ACCESS_KEY=secret
     build:
       context: api
       dockerfile: docker/Dockerfile

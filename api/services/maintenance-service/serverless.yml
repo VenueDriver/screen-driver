@@ -10,6 +10,7 @@ provider:
     SCREENS_UPDATE_SCHEDULES_TABLE: ${self:service}-screens-update-schedules-${opt:stage}
     STAGE: ${opt:stage, 'dev'}
     REGION: ${opt:region, 'us-east-1'}
+    USER_POOL_ID: ${self:custom.userPoolId}
   iamRoleStatements: ${self:custom.roles}
 
 custom:
@@ -19,6 +20,8 @@ custom:
   outputs: ${file(./serverless/outputs.yml)}
   roles: ${file(./serverless/roles.yml)}
   authorizer: ${file(./serverless/authorizer.yml)}
+  userPoolId:
+    Fn::ImportValue: ScreenDriverUserPoolId-${opt:stage}
 
   dynamodb:
     start:

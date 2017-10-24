@@ -27,7 +27,7 @@
 1. Display messages when no items in a list of settings, schedule etc.
 1. Unsubscribe from each subscription on component destroy
 1. Fix remove schedule button position for mobile devices
-1. Decrease left border of tree view for mobile devices
+1. ~~Decrease left border of tree view for mobile devices~~
 1. Fix buttons position on tree view for mobile devices
 1. Get rid of deprecated `/deep/` selector
 1. Get rid of checking route to display the sidebar

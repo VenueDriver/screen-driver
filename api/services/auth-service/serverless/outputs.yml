@@ -3,3 +3,9 @@ ScreenDriverAuthRestApiId:
     Ref: ApiGatewayRestApi
   Export:
     Name: ScreenDriverAuthRestApiId-${opt:stage}
+
+ScreenDriverUserPoolId:
+  Value:
+    Ref: CognitoUserPool
+  Export:
+    Name: ScreenDriverUserPoolId-${opt:stage}
