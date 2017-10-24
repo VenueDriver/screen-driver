@@ -11,6 +11,9 @@ services:
       - api
       - auth_api
       - maintenance_api
+    volumes:
+      - ./web:/app-src
+      - /app-src/node_modules
     command: npm start
 
   serverless:
@@ -30,6 +33,8 @@ services:
         SERVICE: content-management-service
     depends_on:
       - serverless
+    volumes:
+      - ./api/service/content-management-service:/content-management-service
     ports:
       - "3000:3000"
       - "8000:8000"
@@ -45,6 +50,8 @@ services:
         SERVICE: auth-service
     depends_on:
       - serverless
+    volumes:
+      - ./api/service/auth-service:/auth-service
     ports:
       - "3001:3001"
       - "8001:8001"
@@ -60,6 +67,8 @@ services:
         SERVICE: maintenance-service
     depends_on:
       - serverless
+    volumes:
+        - ./api/service/maintenance-service:/maintenance-service
     ports:
       - "3002:3002"
       - "8002:8002"
