@@ -4,10 +4,14 @@ ARG SERVICE
 
 WORKDIR ../app-src
 RUN mkdir $SERVICE
-ADD services/$SERVICE /app-src/$SERVICE
-ADD services/lib /app-src/lib
+ADD services/$SERVICE/package.json /app-src/$SERVICE
+ADD services/$SERVICE/package-lock.json /app-src/$SERVICE
+
 WORKDIR $SERVICE
 
 RUN npm install
+
+ADD services/$SERVICE /app-src/$SERVICE
+ADD services/lib /app-src/lib
 
 CMD serverless deploy --verbose --region $AWS_REGION --stage $AWS_STAGE
