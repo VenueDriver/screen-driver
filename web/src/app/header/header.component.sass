@@ -2,16 +2,15 @@
 
 $hover-color: #555
 
-@media screen and (max-width: 507px)
-  .pull-right
-    float: left !important
-
 .router-links
   display: inline-block
 
 .link
   display: inline-block
   padding: 15px
+
+  &.sign-out-button
+    padding-right: 8px
 
   &:focus
     outline: 0
@@ -25,13 +24,8 @@ $hover-color: #555
     a
       color: $hover-color
 
-
-  @media screen and (max-width: 350px)
-    padding: 15px 5px
-
   &.active
     background-color: #e7e7e7
-
 
   a
     text-decoration: none
@@ -39,6 +33,18 @@ $hover-color: #555
 
 .control-panel
   float: right
+  margin-right: 20px
 
-  @media screen and (min-width: $sidebar-visibility-width)
-    margin-right: 20px
+.pull-right
+  display: flex
+  align-items: center
+
+  .sign-out-block
+    display: flex
+    align-items: center
+
+    .sign-out
+      display: inline-block
+      height: 20px
+      margin-right: 20px
+      cursor: pointer
