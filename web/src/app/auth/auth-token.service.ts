@@ -1,5 +1,7 @@
 import {Observable, BehaviorSubject, Subject} from "rxjs";
 import {Injectable} from "@angular/core";
+import {LocalStorageService} from "./local-storage.service";
+import * as _ from 'lodash';
 
 @Injectable()
 export class AuthTokenService {
@@ -23,6 +25,10 @@ export class AuthTokenService {
     }
 
     private getLastToken(): Observable<string> {
+        let token = LocalStorageService.getIdToken();
+        if (!_.isEmpty(token)) {
+            return new BehaviorSubject(token);
+        }
         return this.subject
             .filter(token => token !== null)
             .take(1);
