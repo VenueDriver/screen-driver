@@ -12,6 +12,7 @@ provider:
     VENUES_TABLE: ${self:service}-venues-${opt:stage}
     SETTINGS_TABLE: ${self:service}-settings-${opt:stage}
     SCHEDULES_TABLE: ${self:service}-schedules-${opt:stage}
+    USER_POOL_ID: ${self:custom.userPoolId}
   iamRoleStatements: ${self:custom.roles}
 
 functions: ${self:custom.functions}
@@ -22,10 +23,8 @@ custom:
   resources: ${file(./serverless/resources.yml)}
   roles: ${file(./serverless/roles.yml)}
   authorizer: ${file(./serverless/authorizer.yml)}
-  authServiceEndpoint:
-    Fn::ImportValue: ScreenDriverAuthServiceEndpoint-${opt:stage}
-  maintenanceServiceEndpoint:
-    Fn::ImportValue: ScreenDriverMaintenanceServiceEndpoint-${opt:stage}
+  userPoolId:
+    Fn::ImportValue: ScreenDriverUserPoolId-${opt:stage}
 
   dynamodb:
     start:
