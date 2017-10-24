@@ -9,6 +9,7 @@ import {SchedulesComponent} from "./schedules.component";
 import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
 import {CheckboxMultiselectorModule} from "../checkbox-multiselector/checkbox-multiselector.module";
 import { DaysOfWeekMultiselectorComponent } from './single-schedule/days-of-week-multiselector/days-of-week-multiselector.component';
+import {TimeSelectorModule} from "../time-selector/time-selector.module";
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import { DaysOfWeekMultiselectorComponent } from './single-schedule/days-of-week
         DatepickerModule,
         AutocompleteModule,
         ToggleButtonModule,
-        CheckboxMultiselectorModule
+        CheckboxMultiselectorModule,
+        TimeSelectorModule
     ],
     exports: [
         SchedulesComponent

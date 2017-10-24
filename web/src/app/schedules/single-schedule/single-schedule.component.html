@@ -81,43 +81,19 @@
         </div>
 
         <div class="time-selector-container">
-            <div class="title">
-                Start time:
-            </div>
-            <div class="time-selector">
-                <autocomplete
-                        class="time"
-                        [placeholder]="'Select time'"
-                        [editable]="true"
-                        [items]="timeItems"
-                        [value]="eventTime.startTime"
-                        (valueChanged)="setTime('startTime', $event)">
-                </autocomplete>
+            <time-selector [label]="'Start time:'"
+                           [defaultTime]="eventTime.startTime"
+                           [defaultTimePeriod]="eventTime.startTimePeriod"
+                           (timeChange)="setTime('startTime', $event)"
+                           (timePeriodChange)="changeTimePeriod('startTimePeriod')">
+            </time-selector>
 
-                <div class="period"
-                     (click)="changeTimePeriod('startTimePeriod')">
-                    {{eventTime.startTimePeriod}}
-                </div>
-            </div>
-
-            <div class="title">
-                End time:
-            </div>
-            <div class="time-selector">
-                <autocomplete
-                        class="time"
-                        [placeholder]="'Select time'"
-                        [editable]="true"
-                        [items]="timeItems"
-                        [value]="eventTime.endTime"
-                        (valueChanged)="setTime('endTime', $event)">
-                </autocomplete>
-
-                <div class="period"
-                     (click)="changeTimePeriod('endTimePeriod')">
-                    {{eventTime.endTimePeriod}}
-                </div>
-            </div>
+            <time-selector [label]="'End time:'"
+                           [defaultTime]="eventTime.endTime"
+                           [defaultTimePeriod]="eventTime.endTimePeriod"
+                           (timeChange)="setTime('endTime', $event)"
+                           (timePeriodChange)="changeTimePeriod('endTimePeriod')">
+            </time-selector>
         </div>
 
         <div *ngIf="!isCreationMode()"

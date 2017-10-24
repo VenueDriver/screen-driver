@@ -22,6 +22,7 @@ import {AuthHttpInterceptor} from "./auth/auth-http.interceptor";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ProfileManagementModule} from "./profile-management/profile-management.module";
 import {HeaderModule} from "./header/header.module";
+import {MaintenanceModule} from "./maintenance/maintenance.module";
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import {HeaderModule} from "./header/header.module";
         UsersManagementModule,
         AuthModule,
         ProfileManagementModule,
-        HeaderModule
+        HeaderModule,
+        MaintenanceModule
     ],
     providers: [
         NotificationService,
