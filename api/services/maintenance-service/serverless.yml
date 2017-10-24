@@ -7,13 +7,13 @@ provider:
   runtime: nodejs6.10
   environment:
     SCREENS_VERSIONS_TABLE: ${self:service}-screens-versions-${opt:stage}
+    SCREENS_UPDATE_SCHEDULES_TABLE: ${self:service}-screens-update-schedules-${opt:stage}
     STAGE: ${opt:stage, 'dev'}
     REGION: ${opt:region, 'us-east-1'}
     USER_POOL_ID: ${self:custom.userPoolId}
   iamRoleStatements: ${self:custom.roles}
 
 custom:
-  screensVersionsTableResource: ${file(./serverless/screens-versions-table-resource.yml)}
   properties: ${file(./serverless/properties.yml)}
   functions: ${file(./serverless/functions.yml)}
   resources: ${file(./serverless/resources.yml)}

@@ -20,11 +20,8 @@ const {ipcMain} = require('electron');
 
 setupLogger();
 
-//should be declared at least once
-const UncaughtErrorsHandlingService = require('./js/services/error/uncaught_errors_handling_service');
-const GlobalErrorsHandlingService = require('./js/services/error/global_errors_handling_service');
-const NetworkErrorsHandlingService = require('./js/services/error/network_errors_handling_service');
-const ConnectionStatusService = require('./js/services/network/connection_status_service');
+//should be called on application init
+require('./js/services/services_initialiser').init();
 
 let settingsLoadJob;
 let notificationListener;
@@ -45,7 +42,6 @@ function setupLogger() {
 }
 
 function ready() {
-    new ApplicationUpdater().init();
     StorageManager.loadDataFromLocalStorage().then(() => {
         powerSaveBlocker.start('prevent-display-sleep');
         notificationListener = new NotificationListener();
@@ -59,6 +55,8 @@ function ready() {
         addHotKeyListeners();
         addEventListeners();
         settingsLoadJob = CronJobsManager.initSettingsLoadJob();
+        ApplicationUpdater.syncAppVersionOnApi();
+        new ApplicationUpdater().init();
     });
 }
 

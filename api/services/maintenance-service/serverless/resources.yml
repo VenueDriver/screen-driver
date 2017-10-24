@@ -1,1 +1,31 @@
-UsersTable: ${self:custom.screensVersionsTableResource}
+ScreensVersionsTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    AttributeDefinitions:
+      -
+        AttributeName: screenId
+        AttributeType: S
+    KeySchema:
+      -
+        AttributeName: screenId
+        KeyType: HASH
+    ProvisionedThroughput:
+      ReadCapacityUnits: 1
+      WriteCapacityUnits: 1
+    TableName: ${self:provider.environment.SCREENS_VERSIONS_TABLE}
+
+ScreensUpdateSchedulesTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    AttributeDefinitions:
+      -
+        AttributeName: id
+        AttributeType: S
+    KeySchema:
+      -
+        AttributeName: id
+        KeyType: HASH
+    ProvisionedThroughput:
+      ReadCapacityUnits: 1
+      WriteCapacityUnits: 1
+    TableName: ${self:provider.environment.SCREENS_UPDATE_SCHEDULES_TABLE}

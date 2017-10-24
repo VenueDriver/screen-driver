@@ -1,9 +1,10 @@
 'use strict';
 
-const {net} = require('electron');
+const HttpClient = require('./helpers/http_client');
 const SettingMergeTool = require('./setting-merge-tool');
 const StorageManager = require('./helpers/storage_manager');
 const PropertiesLoader = require('./helpers/properties_load_helper');
+const ServerDataWatcher = require('./services/data/server_data_watcher');
 
 const API_ENDPOINT = PropertiesLoader.getApiEndpoint();
 
@@ -14,13 +15,15 @@ class DataLoader {
             DataLoader.loadVenues(),
             DataLoader.loadContent(),
             DataLoader.loadSettings(),
-            DataLoader.loadSchedules()
+            DataLoader.loadSchedules(),
+            DataLoader.loadScreensUpdateSchedules()
         ];
 
         return Promise.all(promises)
             .then(values => {
                 let serverData = DataLoader.composeServerData(values);
                 StorageManager.saveServerData(serverData);
+                ServerDataWatcher.update(serverData);
                 return serverData;
             });
     }
@@ -34,6 +37,7 @@ class DataLoader {
         serverData.settings = this.mergeSettings(settings, serverData.priorityTypes);
         serverData.originalSettings = settings;
         serverData.schedules = JSON.parse(values[3]);
+        serverData.updateSchedules = JSON.parse(values[4]);
         return serverData;
     }
 
@@ -47,50 +51,32 @@ class DataLoader {
 
     static loadVenues() {
         let venuesUrl = `${API_ENDPOINT}/api/venues`;
-        let request = net.request(venuesUrl);
-
-        return DataLoader.generatePromise(request);
+        return HttpClient.get(venuesUrl);
     }
 
     static loadContent() {
         let contentUrl = `${API_ENDPOINT}/api/content`;
-        let request = net.request(contentUrl);
-
-        return DataLoader.generatePromise(request);
+        return HttpClient.get(contentUrl);
     }
 
     static loadSettings() {
         let settingsUrl = `${API_ENDPOINT}/api/settings`;
-        let request = net.request(settingsUrl);
-
-        return DataLoader.generatePromise(request);
+        return HttpClient.get(settingsUrl);
     }
 
     static loadNotificationsConfig() {
         let notificationsConfigUrl = `${API_ENDPOINT}/api/screens/notification-config`;
-        let request = net.request(notificationsConfigUrl);
-
-        return DataLoader.generatePromise(request);
+        return HttpClient.get(notificationsConfigUrl);
     }
 
     static loadSchedules() {
         let settingsUrl = `${API_ENDPOINT}/api/schedules`;
-        let request = net.request(settingsUrl);
-
-        return DataLoader.generatePromise(request);
+        return HttpClient.get(settingsUrl);
     }
 
-    static generatePromise(request) {
-        return new Promise((resolve, reject) => DataLoader.performRequest(request, resolve, reject));
-    }
-
-    static performRequest(request, resolve, reject) {
-        request.on('response', response => {
-            response.on('data', data => resolve(data.toString('utf8')));
-            response.on('error', error => reject(error))
-        });
-        request.on('error', (error) => reject(error));
-        request.end();
+    static loadScreensUpdateSchedules() {
+        let screensUpdateSchedule = `${API_ENDPOINT}/api/screens/update-schedule`;
+        return HttpClient.get(screensUpdateSchedule);
     }
 }
 
