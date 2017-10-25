@@ -3,9 +3,15 @@
         <div class="col-md-4 col-sm-2 col-xs-1"></div>
         <div class="col-md-4 col-sm-8 col-xs-10">
             <div>
-                <venues [venues]="venues"></venues>
+                <div class="maintenance-title">Auto-update maintenance</div>
+                <div class="info-message">
+                    Config auto-update schedule or refresh screen!
+                </div>
+                <maintenance-venues-tree-view
+                        [venues]="venuesTree"
+                        (updateApplications)="updateClientsApps($event)">
+                </maintenance-venues-tree-view>
             </div>
-
         </div>
         <div class="col-md-4 col-sm-12 col-xs-1"></div>
     </div>

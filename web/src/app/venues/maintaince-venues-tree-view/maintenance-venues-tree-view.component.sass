@@ -1,0 +1,69 @@
+@import "../../../styles/variables"
+
+.node-content-wrapper
+  &:hover .update-client-button
+    display: block
+
+.single-node
+  display: flex
+  align-items: center
+  height: $tree-view-node-height
+  width: 100%
+
+  &.node-without-children
+    padding-left: 11px
+    cursor: auto
+
+    @media screen and (max-width: $tablet-resolution)
+      padding-left: 0
+
+    .node-info
+      cursor: default
+
+  &:hover .buttons-container .node-button
+    display: inline-block
+
+  .inputs-container
+    .node-name
+      font-size: $input-font-size
+
+  .buttons-container
+    margin-left: auto
+
+    .node-button
+      display: none
+      width: 25px
+      height: 25px
+      cursor: pointer
+      @media screen and (max-width: $tablet-resolution)
+        display: inline-block
+        margin: 5px 0
+
+    .update-client-button
+      margin-right: 8px
+
+    .refresh-button
+      padding: 3px
+      margin-right: 8px
+
+  .node-info
+
+    .node-level-name
+      font-weight: bold
+
+    .node-name
+      font-size: 18px
+      margin-bottom: 15px
+
+      @media screen and (max-width: $tablet-resolution)
+        font-size: 16px
+        margin-bottom: 8px
+
+    .content-info
+      font-size: 16px
+
+      .content-short-name
+        margin-right: 15px
+
+      .content-url
+        color: $gray-color

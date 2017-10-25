@@ -8,7 +8,6 @@ import * as _ from 'lodash';
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../settings/entities/setting";
 import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
-import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 @Component({
     selector: 'venues',
@@ -29,7 +28,6 @@ export class VenuesComponent implements OnInit {
     constructor(
             private venuesService: VenuesService,
             private contentService: ContentService,
-            private screensService: ScreensMessagingService,
             private settingStateHolderService: SettingStateHolderService
     ) {
     }
@@ -96,13 +94,6 @@ export class VenuesComponent implements OnInit {
     loadContent() {
         this.venuesService.loadContent()
             .subscribe(content => this.content = _.sortBy(content, 'short_name'));
-    }
-
-    updateClientsApps(screens: any) {
-        let screensIds = _.map(screens, 'id');
-        let body = { screens: screensIds };
-
-        this.screensService.updateClientApps(body);
     }
 
     showAddVenueForm() {
