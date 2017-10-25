@@ -8,6 +8,7 @@ import {KioskVersion} from "./entities/kiosk-version";
 import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 import * as _ from 'lodash';
+import {MaintenanceProperties} from "./entities/maintenance-properties";
 
 @Component({
     selector: 'maintenance',
@@ -34,11 +35,11 @@ export class MaintenanceComponent implements OnInit {
         this.maintenanceService.loadData().subscribe(data => this.handleResponse(data));
     }
 
-    handleResponse(data) {
-        this.venues = data[0];
-        this.schedules = data[1];
-        this.kioskVersions = data[2];
-        let venuesMaintenanceInfo = this.maintenanceService.mergeVenueWithSchedule(data);
+    handleResponse(maintenanceProperties: MaintenanceProperties) {
+        this.venues = maintenanceProperties.venues;
+        this.schedules = maintenanceProperties.autoupdateSchedules;
+        this.kioskVersions = maintenanceProperties.kioskVersions;
+        let venuesMaintenanceInfo = this.maintenanceService.mergeVenueWithSchedule(maintenanceProperties);
         this.venuesTree = this.venuesService.getVenuesForTree(venuesMaintenanceInfo);
     }
 

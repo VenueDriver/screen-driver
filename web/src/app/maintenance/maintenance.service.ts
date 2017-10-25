@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 import {KioskVersionService} from "./kiosk-version.service";
+import {MaintenanceProperties} from "./entities/maintenance-properties";
 
 @Injectable()
 export class MaintenanceService {
@@ -16,12 +17,20 @@ export class MaintenanceService {
                 private autoupdateScheduleService: AutoupdateScheduleService) {
     }
 
-    loadData(): Observable<any> {
+    loadData(): Observable<MaintenanceProperties> {
         return Observable.zip(
             this.loadVenues(),
             this.loadAutoupdateSchedules(),
             this.loadKioskVersions()
-        );
+        ).map(data => this.mapResponseFromServer(data));
+    }
+
+    private mapResponseFromServer(data): MaintenanceProperties {
+        return {
+            venues: data[0],
+            autoupdateSchedules: data[1],
+            kioskVersions: data[2]
+        }
     }
 
     loadAutoupdateSchedules(): Observable<any> {
@@ -36,9 +45,9 @@ export class MaintenanceService {
         return this.venuesService.loadVenues();
     }
 
-    mergeVenueWithSchedule(data: any): Array<VenueMaintenanceInfo> {
-        let venues = data[0];
-        let schedules = data[1];
+    mergeVenueWithSchedule(maintenanceProperties: MaintenanceProperties): Array<VenueMaintenanceInfo> {
+        let venues = maintenanceProperties.venues;
+        let schedules = maintenanceProperties.autoupdateSchedules;
         let schedulesMap = this.createSchedulesMap(schedules);
         _.each(venues, (v: VenueMaintenanceInfo) => this.setAutoupdateScheduleForVenue(schedulesMap, v));
         return venues;
