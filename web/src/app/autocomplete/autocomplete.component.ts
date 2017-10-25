@@ -50,18 +50,23 @@ export class AutocompleteComponent {
         this.isShowDropdown = false;
     }
 
-    handleTextSelection(event) {
-        event.stopPropagation();
+    handleTextSelection($event) {
+        $event.stopPropagation();
     }
 
     handleKeyUp(event: any) {
         this.showDropdown();
     }
 
-    onSelect(item: string) {
+    handleClick($event: any): void {
+        $event.stopPropagation();
+    }
+
+    onSelect(item: string, $event) {
         this.value = item;
         this.emitSelection();
         this.hideDropdown();
+        $event.stopPropagation()
     }
 
     emitSelection() {

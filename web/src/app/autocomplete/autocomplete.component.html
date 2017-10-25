@@ -5,6 +5,7 @@
            [disabled]="disabled"
            [placeholder]="placeholder"
            [value]="getValue()"
+           (click)="handleClick($event)"
            (focus)="showDropdown()"
            (clickOutside)="handleClickOutside($event)"
            [detectClickOutside]="isShowDropdown"
@@ -13,7 +14,7 @@
 
     <ul class="dropdown-menu" [class.shown]="isShowDropdown">
         <li *ngFor="let item of getItems()">
-            <a (click)="onSelect(item)" class="dropdown-item">
+            <a (click)="onSelect(item, $event)" class="dropdown-item">
                 {{item}}
             </a>
         </li>
