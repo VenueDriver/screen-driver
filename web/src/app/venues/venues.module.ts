@@ -25,14 +25,13 @@ import {MaintenanceVenuesTreeViewComponent} from "./maintaince-venues-tree-view/
     ],
     exports: [
         VenuesComponent,
-        MaintenanceVenuesTreeViewComponent
+        VenuesTreeViewComponent
     ],
     declarations: [
         VenuesComponent,
         VenuesTreeViewComponent,
         EditTreeViewNodeFormComponent,
-        ContentVenuesTreeViewComponent,
-        MaintenanceVenuesTreeViewComponent
+        ContentVenuesTreeViewComponent
     ],
     providers: [
         ContentService,
