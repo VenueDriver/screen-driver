@@ -1,9 +1,13 @@
 import {Component, OnInit} from '@angular/core';
+import {VenuesService} from "../venues/venues.service";
 import {Venue} from "../venues/entities/venue";
 import {MaintenanceService} from "./maintenance.service";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
 import {KioskVersion} from "./entities/kiosk-version";
+import {ScreensMessagingService} from "../messaging/screens-messaging.service";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'maintenance',
@@ -12,12 +16,14 @@ import {KioskVersion} from "./entities/kiosk-version";
 })
 export class MaintenanceComponent implements OnInit {
 
-    venues: Array<Venue>;
+    venues: Array<VenueMaintenanceInfo>;
+    venuesTree: Array<Venue>;
     schedules: Array<AutoupdateSchedule>;
     kioskVersions: Array<KioskVersion>;
-    venuesMaintenanceInfo: Array<VenueMaintenanceInfo>;
 
-    constructor(private maintenanceService: MaintenanceService) {
+    constructor(private maintenanceService: MaintenanceService,
+                private screensService: ScreensMessagingService,
+                private venuesService: VenuesService) {
     }
 
     ngOnInit() {
@@ -32,7 +38,14 @@ export class MaintenanceComponent implements OnInit {
         this.venues = data[0];
         this.schedules = data[1];
         this.kioskVersions = data[2];
-        this.venuesMaintenanceInfo = this.maintenanceService.mergeVenueWithSchedule(data);
+        let venuesMaintenanceInfo = this.maintenanceService.mergeVenueWithSchedule(data);
+        this.venuesTree = this.venuesService.getVenuesForTree(venuesMaintenanceInfo);
     }
 
+    updateClientsApps(screens: any) {
+        let screensIds = _.map(screens, 'id');
+        let body = { screens: screensIds };
+
+        this.screensService.updateClientApps(body);
+    }
 }

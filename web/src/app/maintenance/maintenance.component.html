@@ -2,18 +2,16 @@
     <div class="row">
         <div class="col-md-4 col-sm-2 col-xs-1"></div>
         <div class="col-md-4 col-sm-8 col-xs-10">
-            <div *ngFor="let venue of venues">
-                {{venue.name}}
+            <div>
+                <div class="maintenance-title">Auto-update maintenance</div>
+                <div class="info-message">
+                    Config auto-update schedule or refresh screen!
+                </div>
+                <maintenance-venues-tree-view
+                        [venues]="venuesTree"
+                        (updateApplications)="updateClientsApps($event)">
+                </maintenance-venues-tree-view>
             </div>
-
-            <div *ngFor="let schedule of schedules">
-                {{schedule.id}}
-            </div>
-
-            <div *ngFor="let version of kioskVersions">
-                {{version.version}}
-            </div>
-
         </div>
         <div class="col-md-4 col-sm-12 col-xs-1"></div>
     </div>
