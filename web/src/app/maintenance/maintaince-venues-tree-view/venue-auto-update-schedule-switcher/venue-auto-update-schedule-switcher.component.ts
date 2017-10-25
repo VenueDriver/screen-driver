@@ -8,18 +8,18 @@ import * as _ from 'lodash';
 })
 export class VenueAutoUpdateScheduleSwitcherComponent {
 
-    public defaultTime: { time: string, period: string } = {time: '08:00', period: 'AM'};
+    public autoUpdateTime: { time: string, period: string } = {time: '08:00', period: 'AM'};
 
     @Output() timeChange: EventEmitter<string> = new EventEmitter<string>();
 
     constructor(
     ) { }
 
-    onTimePeriodChange(val: any): void {
-        console.log(val);
+    onTimePeriodChange(period: string): void {
+        this.autoUpdateTime.period = period;
     }
 
-    onTimeChange(val: any): void {
-        console.log(val);
+    onTimeChange(time: string): void {
+        this.autoUpdateTime.time = time;
     }
 }

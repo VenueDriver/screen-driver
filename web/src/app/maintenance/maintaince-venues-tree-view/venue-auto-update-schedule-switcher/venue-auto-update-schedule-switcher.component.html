@@ -1,8 +1,8 @@
 <div class="auto-update-schedule-switcher">
     <time-selector [label]="''"
-                   [defaultTime]="defaultTime.time"
-                   [defaultTimePeriod]="defaultTime.period"
-                   (timeChange)="onTimeChange('startTime', $event)"
-                   (timePeriodChange)="onTimePeriodChange('startTimePeriod')">
+                   [defaultTime]="autoUpdateTime.time"
+                   [defaultTimePeriod]="autoUpdateTime.period"
+                   (timeChange)="onTimeChange($event)"
+                   (timePeriodChange)="onTimePeriodChange($event)">
     </time-selector>
 </div>
