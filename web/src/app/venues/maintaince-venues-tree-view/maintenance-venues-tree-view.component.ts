@@ -24,8 +24,6 @@ const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
 
     @Input() venues: Array<any>;
-    @Input() content: Array<Content>;
-    @Output() contentChange = new EventEmitter();
 
     @Output() updateApplications = new EventEmitter();
 
@@ -190,5 +188,10 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
     //++
     getPlaceholderForDefaultUrl(node: any): string {
         return this.treeViewService.getPlaceholderForDefaultUrl(node.level);
+    }
+
+    //++
+    hasCurrentNode(): boolean {
+        return !!this.currentNodeData;
     }
 }
