@@ -57,30 +57,9 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         return !!this.currentNodeData;
     }
 
-    //+
-    hasContentInfo(node: any): boolean {
-        return node.data.content;
+    isVenueNode(node: any): boolean {
+        return node && node.level == 1;
     }
-
-    //+
-    getContentShortName(node: any): string {
-        if (node.data.content) {
-            return node.data.content.short_name;
-        }
-    }
-
-    //+
-    getContentUrl(node: any): string {
-        if (node.data.content) {
-            return this.getShortUrl(node.data.content);
-        }
-    }
-
-    //+
-    getShortUrl(content: Content): string {
-        return Content.getShortUrl(content, MAX_DISPLAYING_URL_LENGTH);
-    }
-
 
     //+
     isCurrentNode(node: any) {

@@ -7,13 +7,15 @@
                     <span class="node-level-name">{{getNodeLevelName(node)}}</span>: {{node.data.name}}
                 </div>
 
-                <div *ngIf="hasContentInfo(node); else contentPlaceholder" class="content-info">
-                    <span class="content-short-name">{{ getContentShortName(node) }}</span>
-                    <span class="content-url">{{ getContentUrl(node) }}</span>
+                <div *ngIf="isVenueNode(node)" class="content-info">
+                    <span class="content-short-name">Test</span>
+                    <span class="content-url">Test!!</span>
                 </div>
-                <ng-template #contentPlaceholder>
-                    <div class="content-url-placeholder info-message">{{getPlaceholderForDefaultUrl(node)}}</div>
-                </ng-template>
+
+                <div *ngIf="!isVenueNode(node)" class="content-info">
+                    <span class="content-short-name">Current version</span>
+                    <span class="content-url">null</span>
+                </div>
             </div>
 
             <div class="buttons-container">
