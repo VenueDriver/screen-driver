@@ -7,6 +7,9 @@ import * as _ from 'lodash';
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
 import {KioskVersionService} from "./kiosk-version.service";
 import {MaintenanceProperties} from "./entities/maintenance-properties";
+import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
+import {KioskVersion} from "./entities/kiosk-version";
+import {Venue} from "../venues/entities/venue";
 
 @Injectable()
 export class MaintenanceService {
@@ -21,7 +24,7 @@ export class MaintenanceService {
             this.loadVenues(),
             this.loadAutoupdateSchedules(),
             this.loadKioskVersions()
-        ).map(data => this.mapResponseFromServer(data));
+        ).map(this.mapResponseFromServer);
     }
 
     private mapResponseFromServer(data): MaintenanceProperties {
@@ -32,27 +35,25 @@ export class MaintenanceService {
         }
     }
 
-    loadAutoupdateSchedules(): Observable<any> {
+    loadAutoupdateSchedules(): Observable<Array<AutoupdateSchedule>> {
         return this.autoupdateScheduleService.loadAutoupdateSchedule();
     }
 
-    loadKioskVersions(): Observable<any> {
+    loadKioskVersions(): Observable<Array<KioskVersion>> {
         return this.kioskVersionsService.loadKioskVersions();
     }
 
-    loadVenues() {
+    loadVenues(): Observable<Array<Venue>> {
         return this.venuesService.loadVenues();
     }
 
-    mergeVenueWithSchedule(maintenanceProperties: MaintenanceProperties): Array<VenueMaintenanceInfo> {
-        let venues = maintenanceProperties.venues;
-        let schedules = maintenanceProperties.autoupdateSchedules;
+    mergeVenueWithSchedule(venues: Array<VenueMaintenanceInfo>, schedules: Array<AutoupdateSchedule>): Array<VenueMaintenanceInfo> {
         let schedulesMap = this.autoupdateScheduleService.createSchedulesMap(schedules);
         _.each(venues, (v: VenueMaintenanceInfo) => this.setAutoupdateScheduleForVenue(schedulesMap, v));
         return venues;
     }
 
-    private setAutoupdateScheduleForVenue(schedulesMap, venue) {
+    private setAutoupdateScheduleForVenue(schedulesMap: any, venue: VenueMaintenanceInfo) {
         let schedule = schedulesMap[venue.id];
         if (_.isEmpty(schedule)) {
             schedule = this.autoupdateScheduleService.createDefaultAutoapdateSchedule();

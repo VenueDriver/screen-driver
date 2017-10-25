@@ -6,6 +6,8 @@ import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 
 import * as _ from 'lodash';
 
+const EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION = '0 0 1 * * * *';
+
 @Injectable()
 export class AutoupdateScheduleService {
 
@@ -19,7 +21,7 @@ export class AutoupdateScheduleService {
 
     createDefaultAutoapdateSchedule(): AutoupdateSchedule {
         let autoupdateSchedule = new AutoupdateSchedule();
-        autoupdateSchedule.eventTime = '0 0 1 * * * *';
+        autoupdateSchedule.eventTime = EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION;
         return autoupdateSchedule;
     }
 

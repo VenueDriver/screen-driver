@@ -36,10 +36,10 @@ export class MaintenanceComponent implements OnInit {
     }
 
     handleResponse(maintenanceProperties: MaintenanceProperties) {
-        this.venues = maintenanceProperties.venues;
-        this.schedules = maintenanceProperties.autoupdateSchedules;
+        this.venues = maintenanceProperties.venues as Array<VenueMaintenanceInfo>;
+        this.schedules = maintenanceProperties.autoupdateSchedules as Array<AutoupdateSchedule>;
         this.kioskVersions = maintenanceProperties.kioskVersions;
-        let venuesMaintenanceInfo = this.maintenanceService.mergeVenueWithSchedule(maintenanceProperties);
+        let venuesMaintenanceInfo = this.maintenanceService.mergeVenueWithSchedule(this.venues, this.schedules);
         this.venuesTree = this.venuesService.getVenuesForTree(venuesMaintenanceInfo);
     }
 
