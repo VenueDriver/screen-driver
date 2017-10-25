@@ -2,7 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {VenuesService} from "../venues/venues.service";
 import {Venue} from "../venues/entities/venue";
 import {MaintenanceService} from "./maintenance.service";
-import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
+import {ScreensMessagingService} from "../messaging/screens-messaging.service";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'maintenance',
@@ -10,28 +12,27 @@ import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
     styleUrls: ['./maintenance.component.sass']
 })
 export class MaintenanceComponent implements OnInit {
-    venues: Array<Venue>;
-    schedules: Array<AutoupdateSchedule>;
+    venuesTree: Array<Venue>;
 
     constructor(private venuesService: VenuesService,
+                private screensService: ScreensMessagingService,
                 private maintenanceService: MaintenanceService) {
     }
 
     ngOnInit() {
         this.loadVenues();
-        this.loadSchedules();
     }
 
     loadVenues() {
         this.venuesService.loadVenues().subscribe(venues => {
-            this.venues = venues;
+            this.venuesTree = this.venuesService.getVenuesForTree(venues);
         });
     }
 
-    loadSchedules() {
-        this.maintenanceService.getAutoupdateSchedules().subscribe(
-            data => this.schedules = data
-        )
-    };
+    updateClientsApps(screens: any) {
+        let screensIds = _.map(screens, 'id');
+        let body = { screens: screensIds };
 
+        this.screensService.updateClientApps(body);
+    }
 }

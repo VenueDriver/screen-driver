@@ -25,6 +25,7 @@ import {MaintenanceVenuesTreeViewComponent} from "./maintaince-venues-tree-view/
     ],
     exports: [
         VenuesComponent,
+        MaintenanceVenuesTreeViewComponent
     ],
     declarations: [
         VenuesComponent,
