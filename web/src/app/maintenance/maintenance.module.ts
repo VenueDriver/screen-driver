@@ -6,7 +6,7 @@ import {MaintenanceService} from "./maintenance.service";
 import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
 import {TimeSelectorModule} from "../time-selector/time-selector.module";
 import {VenuesModule} from "../venues/venues.module";
-import {MaintenanceVenuesTreeViewModule} from "../venues/maintaince-venues-tree-view/maintenance-venues-tree-view.module";
+import {MaintenanceVenuesTreeViewModule} from "./maintaince-venues-tree-view/maintenance-venues-tree-view.module";
 
 @NgModule({
     imports: [

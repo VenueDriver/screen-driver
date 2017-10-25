@@ -7,7 +7,7 @@ import {ContentAutocompleteModule} from "../../content-autocomplete/content-auto
 import {AutofocusModule} from "../../directives/autofocus/autofocus.module";
 import {SettingsModule} from "../../settings/settings.module";
 import {MaintenanceVenuesTreeViewComponent} from "./maintenance-venues-tree-view.component";
-import {VenuesModule} from "../venues.module";
+import {VenuesModule} from "../../venues/venues.module";
 
 @NgModule({
     imports: [
