@@ -1,33 +1,35 @@
 import {Injectable} from "@angular/core";
-import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
 import {AutoupdateScheduleService} from "./autoupdate-schedule.service";
 import {VenuesService} from "../venues/venues.service";
 
 import * as _ from 'lodash';
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
+import {KioskVersionService} from "./kiosk-version.service";
 
 @Injectable()
 export class MaintenanceService {
 
-    readonly screensApiPath = `${environment.apiUrl}/api/screens`;
-
-    constructor(private httpClient: HttpClient,
-                private venuesService: VenuesService,
+    constructor(private venuesService: VenuesService,
+                private kioskVersionsService: KioskVersionService,
                 private autoupdateScheduleService: AutoupdateScheduleService) {
     }
 
     loadData(): Observable<any> {
         return Observable.zip(
             this.loadVenues(),
-            this.loadAutoupdateSchedules()
+            this.loadAutoupdateSchedules(),
+            this.loadKioskVersions()
         );
     }
 
     loadAutoupdateSchedules(): Observable<any> {
         return this.autoupdateScheduleService.loadAutoupdateSchedule();
+    }
+
+    loadKioskVersions(): Observable<any> {
+        return this.kioskVersionsService.loadKioskVersions();
     }
 
     loadVenues() {

@@ -3,6 +3,7 @@ import {Venue} from "../venues/entities/venue";
 import {MaintenanceService} from "./maintenance.service";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
+import {KioskVersion} from "./entities/kiosk-version";
 
 @Component({
     selector: 'maintenance',
@@ -13,6 +14,7 @@ export class MaintenanceComponent implements OnInit {
 
     venues: Array<Venue>;
     schedules: Array<AutoupdateSchedule>;
+    kioskVersions: Array<KioskVersion>;
     venuesMaintenanceInfo: Array<VenueMaintenanceInfo>;
 
     constructor(private maintenanceService: MaintenanceService) {
@@ -29,6 +31,7 @@ export class MaintenanceComponent implements OnInit {
     handleResponse(data) {
         this.venues = data[0];
         this.schedules = data[1];
+        this.kioskVersions = data[2];
         this.venuesMaintenanceInfo = this.maintenanceService.mergeVenueWithSchedule(data);
     }
 

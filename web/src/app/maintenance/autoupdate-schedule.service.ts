@@ -6,7 +6,7 @@ import {Observable} from "rxjs/Observable";
 @Injectable()
 export class AutoupdateScheduleService {
 
-    readonly screensApiPath = `${environment.apiUrl}/api/screens`;
+    readonly apiPath = `${environment.apiUrl}/api/screens/update-schedule`;
 
 
     constructor(private httpClient: HttpClient) {
@@ -14,6 +14,6 @@ export class AutoupdateScheduleService {
     }
 
     loadAutoupdateSchedule(): Observable<any> {
-        return this.httpClient.get(this.screensApiPath + '/update-schedule')
+        return this.httpClient.get(this.apiPath);
     }
 }
