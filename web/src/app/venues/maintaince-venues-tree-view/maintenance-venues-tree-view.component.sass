@@ -1,10 +1,6 @@
 @import "../../../styles/variables"
 
 .node-content-wrapper
-
-  &:hover .plus-button
-    display: block
-
   &:hover .update-client-button
     display: block
 
@@ -23,9 +19,6 @@
 
     .node-info
       cursor: default
-
-  &.large-form-container
-    height: 180px
 
   &:hover .buttons-container .node-button
     display: inline-block
@@ -48,12 +41,6 @@
 
     .update-client-button
       margin-right: 8px
-
-    .edit-button
-      margin-right: 8px
-
-      &.disabled
-        cursor: not-allowed
 
     .refresh-button
       padding: 3px
@@ -80,6 +67,3 @@
 
       .content-url
         color: $gray-color
-
-  .edit-node-form
-    flex: 1
