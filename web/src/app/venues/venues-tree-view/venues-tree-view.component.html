@@ -1,61 +1,8 @@
 <div>
     <tree-root [focused]="true" [nodes]="venues" [options]="options">
-        <ng-template class="node-template" #treeNodeTemplate let-node let-index="index">
-            <div class="single-node"
-                 [ngClass]="{'node-without-children': !hasChildren(node), 'large-form-container': containsLargeForm(node)}">
-                <div *ngIf="!isCurrentNode(node)" class="node-info">
-                    <div class="node-name">
-                        <span class="node-level-name">{{getNodeLevelName(node)}}</span>: {{node.data.name}}
-                    </div>
-
-                    <div *ngIf="hasContentInfo(node); else contentPlaceholder" class="content-info">
-                        <span class="content-short-name">{{ getContentShortName(node) }}</span>
-                        <span class="content-url">{{ getContentUrl(node) }}</span>
-                    </div>
-                    <ng-template #contentPlaceholder>
-                        <div class="content-url-placeholder info-message">{{getPlaceholderForDefaultUrl(node)}}</div>
-                    </ng-template>
-                </div>
-
-                <div *ngIf="isCurrentNode(node)" class="edit-node-form">
-                    <edit-tree-view-node-form
-                            [currentSetting]="currentSetting"
-                            [settings]="settings"
-                            [venues]="venues"
-                            [content]="content"
-                            [currentNode]="node"
-                            [contentUrlPlaceholder]="getPlaceholderForDefaultUrl(node)"
-                            (cancel)="performCancel($event)"
-                            (createContent)="toggleCreateContentMode($event)">
-                    </edit-tree-view-node-form>
-                </div>
-
-                <div class="buttons-container">
-                    <div *ngIf="isAllowToRefreshScreenContent(node)"
-                         class="node-button refresh-button"
-                         (click)="refreshContent(node.data.id)"
-                         [title]="getRefreshButtonTitle(node)">
-                    </div>
-
-                    <div class="node-button update-client-button"
-                         *ngIf="isAllowToUpdateClientApp(node)"
-                         (click)="updateClientApps($event, node);"
-                         [title]="getUpdateClientButtonTitle(node)">
-                    </div>
-
-                    <div *ngIf="isAllowToEditNode()"
-                         class="node-button edit-button"
-                         (click)="editNode($event, node); validateForm(node)"
-                         [title]="getEditButtonTitle(node)">
-                    </div>
-
-                    <div *ngIf="isAllowToAddChild(node)"
-                         class="node-button plus-button"
-                         (click)="addNewNode($event, node)"
-                         [title]="getAddButtonTitle(node)">
-                    </div>
-                </div>
-            </div>
+        <ng-template class="node-template" #treeNodeTemplate let-node="node" let-index="index">
+            <ng-template [ngTemplateOutlet]="template"
+                         [ngTemplateOutletContext]="{node: node, index: index}"></ng-template>
         </ng-template>
     </tree-root>
 </div>
