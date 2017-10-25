@@ -54,3 +54,12 @@ register_kiosk_version:
         path: api/screens/version
         method: post
         cors: true
+
+get_kiosk_versions:
+  handler: src/kiosk_version/kiosk_version.getAll
+  events:
+    - http:
+        path: api/screens/versions
+        method: get
+        cors: true
+        authorizer: ${self:custom.authorizer}

@@ -1,21 +1,64 @@
 import {Injectable} from "@angular/core";
-import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {AutoupdateScheduleService} from "./autoupdate-schedule.service";
+import {VenuesService} from "../venues/venues.service";
+
+import * as _ from 'lodash';
+import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
+import {KioskVersionService} from "./kiosk-version.service";
+import {MaintenanceProperties} from "./entities/maintenance-properties";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
+import {KioskVersion} from "./entities/kiosk-version";
+import {Venue} from "../venues/entities/venue";
 
 @Injectable()
 export class MaintenanceService {
-    readonly screensApiPath = `${environment.apiUrl}/api/screens`;
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private venuesService: VenuesService,
+                private kioskVersionsService: KioskVersionService,
+                private autoupdateScheduleService: AutoupdateScheduleService) {
     }
 
-    getAutoupdateSchedules(): Observable<any> {
-        return this.httpClient.get(this.screensApiPath + '/update-schedule')
+    loadData(): Observable<MaintenanceProperties> {
+        return Observable.zip(
+            this.loadVenues(),
+            this.loadAutoupdateSchedules(),
+            this.loadKioskVersions()
+        ).map(this.mapResponseFromServer);
     }
 
-    putAutoupdateSchedules(schedule: AutoupdateSchedule): Observable<any> {
-        return this.httpClient.put(this.screensApiPath + '/update-schedule', schedule)
+    private mapResponseFromServer(data): MaintenanceProperties {
+        return {
+            venues: data[0],
+            autoupdateSchedules: data[1],
+            kioskVersions: data[2]
+        }
     }
+
+    loadAutoupdateSchedules(): Observable<Array<AutoupdateSchedule>> {
+        return this.autoupdateScheduleService.loadAutoupdateSchedule();
+    }
+
+    loadKioskVersions(): Observable<Array<KioskVersion>> {
+        return this.kioskVersionsService.loadKioskVersions();
+    }
+
+    loadVenues(): Observable<Array<Venue>> {
+        return this.venuesService.loadVenues();
+    }
+
+    mergeVenueWithSchedule(venues: Array<VenueMaintenanceInfo>, schedules: Array<AutoupdateSchedule>): Array<VenueMaintenanceInfo> {
+        let schedulesMap = this.autoupdateScheduleService.createSchedulesMap(schedules);
+        _.each(venues, (v: VenueMaintenanceInfo) => this.setAutoupdateScheduleForVenue(schedulesMap, v));
+        return venues;
+    }
+
+    private setAutoupdateScheduleForVenue(schedulesMap: any, venue: VenueMaintenanceInfo) {
+        let schedule = schedulesMap[venue.id];
+        if (_.isEmpty(schedule)) {
+            schedule = this.autoupdateScheduleService.createDefaultAutoapdateSchedule();
+        }
+        venue.autoupdateSchedule = schedule;
+    }
+
 }
