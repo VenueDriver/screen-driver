@@ -13,6 +13,8 @@ import {ScreensMessagingService} from "../../messaging/screens-messaging.service
 import {NotificationService} from "../../notifications/notification.service";
 import {VenuesTreeViewService} from "../../venues/venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../../venues/venues-tree-view/venues-tree-view.component";
+import {Venue} from "../../venues/entities/venue";
+import {KioskVersion} from "../entities/kiosk-version";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 
@@ -23,7 +25,8 @@ const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 })
 export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
 
-    @Input() venues: Array<any>;
+    @Input() venues: Array<Venue>;
+    @Input() kioskVersions: any;
 
     @Output() updateApplications = new EventEmitter();
 
@@ -59,6 +62,10 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
 
     isVenueNode(node: any): boolean {
         return node && node.level == 1;
+    }
+
+    isScreenNode(node: any): boolean {
+        return node && node.level == 3;
     }
 
     //+
@@ -172,5 +179,10 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
     //++
     hasCurrentNode(): boolean {
         return !!this.currentNodeData;
+    }
+
+    getVersionDetailsForScreen(node: any): KioskVersion {
+        let screenId = node.data.id;
+        return this.kioskVersions[screenId];
     }
 }

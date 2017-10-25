@@ -1,4 +1,5 @@
-import {Component} from "@angular/core";
+import {Component, Input} from "@angular/core";
+import {KioskVersion} from "../../entities/kiosk-version";
 
 @Component({
     selector: 'kiosk-version-details',
@@ -7,4 +8,5 @@ import {Component} from "@angular/core";
 })
 export class KioskVersionDetailsComponent {
 
+    @Input() versionDetails: KioskVersion;
 }
