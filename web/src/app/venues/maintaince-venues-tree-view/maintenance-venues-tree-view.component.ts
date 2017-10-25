@@ -55,6 +55,11 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
     }
 
     //+
+    hasSelectedNode(): boolean {
+        return !!this.currentNodeData;
+    }
+
+    //+
     hasContentInfo(node: any): boolean {
         return node.data.content;
     }

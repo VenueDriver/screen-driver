@@ -121,6 +121,10 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
         this.currentNodeData = {};
     }
 
+    hasSelectedNode(): boolean {
+        return !!this.currentNodeData;
+    }
+
     isCurrentNode(node: any) {
         return _.isEqual(this.currentNodeData, node.data);
     }

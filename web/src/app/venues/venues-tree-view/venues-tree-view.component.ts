@@ -15,9 +15,8 @@ import * as _ from 'lodash';
 export class VenuesTreeViewComponent implements OnInit, OnDestroy {
 
     @Input() venues: Array<any>;
-    @Input() currentNodeData: any;
+    @Input() hasSelectedNode: boolean = false;
     @Input() template: TemplateRef<any>;
-
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
@@ -36,7 +35,6 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.treeViewService.removeEditableNode();
     }
-
 
     updateTreeViewOptions() {
         this.actionMapping = this.getActionMapping();
@@ -62,7 +60,7 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
     }
 
     getMouseClickAction() {
-        return _.isEmpty(this.currentNodeData) ? TREE_ACTIONS.TOGGLE_EXPANDED : TREE_ACTIONS.DESELECT;
+        return _.isEmpty(this.hasSelectedNode) ? TREE_ACTIONS.TOGGLE_EXPANDED : TREE_ACTIONS.DESELECT;
     }
 
     createDefaultActionConfigForKeys() {
