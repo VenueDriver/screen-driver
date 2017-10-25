@@ -27,8 +27,6 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
     @Input() content: Array<Content>;
     @Output() contentChange = new EventEmitter();
 
-    @Output() updateApplications = new EventEmitter();
-
     @ViewChild(VenuesTreeViewComponent)
     private venuesTree: VenuesTreeViewComponent;
 
