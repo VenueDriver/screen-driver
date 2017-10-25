@@ -3,7 +3,7 @@
 const ParametersBuilder = require('../helpers/parameters_builder');
 const dbHelper = require('../../helpers/db_helper');
 
-class KioskVersionUtils {
+class KioskVersionRegister {
 
     static registerVersion(screenId, version) {
         let params = ParametersBuilder.buildPutRequestParameters(screenId, version);
@@ -11,4 +11,4 @@ class KioskVersionUtils {
     }
 }
 
-module.exports = KioskVersionUtils;
+module.exports = KioskVersionRegister;
