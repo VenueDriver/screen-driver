@@ -4,7 +4,6 @@ import {Venue} from "../venues/entities/venue";
 import {MaintenanceService} from "./maintenance.service";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
-import {KioskVersion} from "./entities/kiosk-version";
 import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 import * as _ from 'lodash';
@@ -20,7 +19,7 @@ export class MaintenanceComponent implements OnInit {
     venues: Array<VenueMaintenanceInfo>;
     venuesTree: Array<Venue>;
     schedules: Array<AutoupdateSchedule>;
-    kioskVersions: Array<KioskVersion>;
+    kioskVersions: any;
 
     constructor(private maintenanceService: MaintenanceService,
                 private screensService: ScreensMessagingService,
