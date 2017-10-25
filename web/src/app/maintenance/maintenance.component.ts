@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {VenuesService} from "../venues/venues.service";
 import {Venue} from "../venues/entities/venue";
 import {MaintenanceService} from "./maintenance.service";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
@@ -10,28 +9,23 @@ import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
     styleUrls: ['./maintenance.component.sass']
 })
 export class MaintenanceComponent implements OnInit {
+
     venues: Array<Venue>;
     schedules: Array<AutoupdateSchedule>;
 
-    constructor(private venuesService: VenuesService,
-                private maintenanceService: MaintenanceService) {
+    constructor(private maintenanceService: MaintenanceService) {
     }
 
     ngOnInit() {
-        this.loadVenues();
-        this.loadSchedules();
+        this.loadData();
     }
 
-    loadVenues() {
-        this.venuesService.loadVenues().subscribe(venues => {
-            this.venues = venues;
-        });
+    loadData() {
+        this.maintenanceService.loadData().subscribe(data => {
+            this.venues = data[0];
+            this.schedules = data[1];
+        })
     }
 
-    loadSchedules() {
-        this.maintenanceService.getAutoupdateSchedules().subscribe(
-            data => this.schedules = data
-        )
-    };
 
 }
