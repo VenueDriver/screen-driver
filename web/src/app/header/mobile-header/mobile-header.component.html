@@ -17,22 +17,11 @@
 
             <div class="pull-bottom">
                 <div class="router-links" *ngIf="isUserAdmin()">
-                    <div routerLink="/content"
-                         class="link"
+                    <div class="link"
+                         *ngFor="let link of routerLinks"
+                         routerLink="{{link.routerLink}}"
                          [routerLinkActive]="['active']">
-                        <a routerLinkActive="active">Content</a>
-                    </div>
-
-                    <div routerLink="/maintenance"
-                         class="link"
-                         [routerLinkActive]="['active']">
-                        <a routerLinkActive="active">Maintenance</a>
-                    </div>
-
-                    <div routerLink="/users"
-                         class="link"
-                         [routerLinkActive]="['active']">
-                        <a routerLinkActive="active">Users</a>
+                        <a routerLinkActive="active">{{link.title}}</a>
                     </div>
                 </div>
 

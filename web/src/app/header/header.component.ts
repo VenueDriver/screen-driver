@@ -9,6 +9,12 @@ import {AuthService} from "../auth/auth.service";
 })
 export class HeaderComponent {
 
+    public routerLinks: [{ title: string, routerLink: string }] = [
+        {title: 'Content', routerLink: '/content'},
+        {title: 'Maintenance', routerLink: '/maintenance'},
+        {title: 'Users', routerLink: '/users'}
+    ];
+
     constructor(
         private headerService: HeaderService,
         private authService: AuthService
