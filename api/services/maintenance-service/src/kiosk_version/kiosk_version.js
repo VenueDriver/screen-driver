@@ -1,14 +1,15 @@
 'use strict';
 
 const ModulePathManager = require('../module_path_manager');
-const KioskVersionUtils = require('./helpers/kiosk_version_utils');
+const KioskVersionRegister = require('./helpers/kiosk_version_register');
+const KioskVersionLoader = require('./helpers/kiosk_version_loader');
 
 const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
 
 module.exports.register = (event, context, callback) => {
     const data = JSON.parse(event.body);
 
-    KioskVersionUtils.registerVersion(data.screenId, data.version)
+    KioskVersionRegister.registerVersion(data.screenId, data.version)
         .then(result => {
             callback(null, responseHelper.createSuccessfulResponse({}));
         })
@@ -16,4 +17,14 @@ module.exports.register = (event, context, callback) => {
             callback(null, responseHelper.createResponseWithError(500, error))
         });
 
+};
+
+module.exports.getAll = (event, context, callback) => {
+    KioskVersionLoader.getAllVersions()
+        .then(result => {
+            callback(null, responseHelper.createSuccessfulResponse(result));
+        })
+        .fail(error => {
+            callback(null, responseHelper.createResponseWithError(500, error))
+        });
 };

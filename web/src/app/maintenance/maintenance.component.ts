@@ -2,9 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {VenuesService} from "../venues/venues.service";
 import {Venue} from "../venues/entities/venue";
 import {MaintenanceService} from "./maintenance.service";
+import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
+import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
+import {KioskVersion} from "./entities/kiosk-version";
 import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 import * as _ from 'lodash';
+import {MaintenanceProperties} from "./entities/maintenance-properties";
 
 @Component({
     selector: 'maintenance',
@@ -12,21 +16,31 @@ import * as _ from 'lodash';
     styleUrls: ['./maintenance.component.sass']
 })
 export class MaintenanceComponent implements OnInit {
-    venuesTree: Array<Venue>;
 
-    constructor(private venuesService: VenuesService,
+    venues: Array<VenueMaintenanceInfo>;
+    venuesTree: Array<Venue>;
+    schedules: Array<AutoupdateSchedule>;
+    kioskVersions: Array<KioskVersion>;
+
+    constructor(private maintenanceService: MaintenanceService,
                 private screensService: ScreensMessagingService,
-                private maintenanceService: MaintenanceService) {
+                private venuesService: VenuesService) {
     }
 
     ngOnInit() {
-        this.loadVenues();
+        this.loadData();
     }
 
-    loadVenues() {
-        this.venuesService.loadVenues().subscribe(venues => {
-            this.venuesTree = this.venuesService.getVenuesForTree(venues);
-        });
+    loadData() {
+        this.maintenanceService.loadData().subscribe(data => this.handleResponse(data));
+    }
+
+    handleResponse(maintenanceProperties: MaintenanceProperties) {
+        this.venues = maintenanceProperties.venues as Array<VenueMaintenanceInfo>;
+        this.schedules = maintenanceProperties.autoupdateSchedules as Array<AutoupdateSchedule>;
+        this.kioskVersions = maintenanceProperties.kioskVersions;
+        let venuesMaintenanceInfo = this.maintenanceService.mergeVenueWithSchedule(this.venues, this.schedules);
+        this.venuesTree = this.venuesService.getVenuesForTree(venuesMaintenanceInfo);
     }
 
     updateClientsApps(screens: any) {
