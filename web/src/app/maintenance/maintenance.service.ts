@@ -5,7 +5,6 @@ import {VenuesService} from "../venues/venues.service";
 
 import * as _ from 'lodash';
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
-import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 import {KioskVersionService} from "./kiosk-version.service";
 import {MaintenanceProperties} from "./entities/maintenance-properties";
 
@@ -48,28 +47,17 @@ export class MaintenanceService {
     mergeVenueWithSchedule(maintenanceProperties: MaintenanceProperties): Array<VenueMaintenanceInfo> {
         let venues = maintenanceProperties.venues;
         let schedules = maintenanceProperties.autoupdateSchedules;
-        let schedulesMap = this.createSchedulesMap(schedules);
+        let schedulesMap = this.autoupdateScheduleService.createSchedulesMap(schedules);
         _.each(venues, (v: VenueMaintenanceInfo) => this.setAutoupdateScheduleForVenue(schedulesMap, v));
         return venues;
-    }
-
-    private createSchedulesMap(schedules): any {
-        let schedulesMap = {};
-        _.each(schedules, s => schedulesMap[s.id] = s);
-        return schedulesMap;
     }
 
     private setAutoupdateScheduleForVenue(schedulesMap, venue) {
         let schedule = schedulesMap[venue.id];
         if (_.isEmpty(schedule)) {
-            schedule = this.createDefaultAutoapdateSchedule();
+            schedule = this.autoupdateScheduleService.createDefaultAutoapdateSchedule();
         }
         venue.autoupdateSchedule = schedule;
     }
 
-    private createDefaultAutoapdateSchedule(): AutoupdateSchedule {
-        let autoupdateSchedule = new AutoupdateSchedule();
-        autoupdateSchedule.eventTime = '0 0 1 * * * *';
-        return autoupdateSchedule;
-    }
 }
