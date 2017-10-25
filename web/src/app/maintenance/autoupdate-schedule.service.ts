@@ -15,7 +15,7 @@ export class AutoupdateScheduleService {
 
     constructor(private httpClient: HttpClient) { }
 
-    loadAutoupdateSchedule(): Observable<any> {
+    loadAutoupdateSchedule(): Observable<Array<AutoupdateSchedule>> {
         return this.httpClient.get(this.apiPath);
     }
 
