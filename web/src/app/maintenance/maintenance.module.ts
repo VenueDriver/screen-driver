@@ -7,6 +7,7 @@ import {MaintenanceService} from "./maintenance.service";
 import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
 import {TimeSelectorModule} from "../time-selector/time-selector.module";
 import {AutoupdateScheduleService} from "./autoupdate-schedule.service";
+import {KioskVersionService} from "./kiosk-version.service";
 
 @NgModule({
     imports: [
@@ -21,6 +22,7 @@ import {AutoupdateScheduleService} from "./autoupdate-schedule.service";
     providers: [
         VenuesService,
         MaintenanceService,
+        KioskVersionService,
         AutoupdateScheduleService
     ]
 })
