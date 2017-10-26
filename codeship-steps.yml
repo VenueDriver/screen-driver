@@ -15,7 +15,7 @@
 
 - service: web
   name: web_run_tests
-  command: bash -c "npm install && sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng test"
+  command: bash -c "npm install && sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng test --watch=false"
 
 - service: awsdeployment
   name: staging_deploy_web
