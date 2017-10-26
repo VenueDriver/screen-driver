@@ -8,7 +8,7 @@ fdescribe('CustomCronConverter', () => {
     describe('getPeriod()', () => {
         describe('when cron is 0 0 13 * * * *', () => {
             it('should return PM', () => {
-                let parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
+                const parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                 expect(parser.getPeriod()).toBe('PM');
             });
         });
@@ -17,7 +17,7 @@ fdescribe('CustomCronConverter', () => {
     describe('getMinutes()', () => {
         describe('when cron is 0 0 13 * * * *', () => {
             it('should return 00', () => {
-                let parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
+                const parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                 expect(parser.getMinutes()).toBe('00');
             });
         });
@@ -26,18 +26,18 @@ fdescribe('CustomCronConverter', () => {
     describe('getHours()', () => {
         describe('when cron is 0 0 13 * * * *', () => {
             it('should return 13', () => {
-                let parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
+                const parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                 expect(parser.getHours()).toBe('13');
             });
             describe('when cron is 0 0 13 * * * *', () => {
                 it('should return 13', () => {
-                    let parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
+                    const parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                     expect(parser.getHours()).toBe('13');
                 });
 
                 describe('when CronConvertStrategy is PERIOD_SENSITIVE', () => {
                     it('should return 1', () => {
-                        let parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.PERIOD_SENSITIVE);
+                        const parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.PERIOD_SENSITIVE);
                         expect(parser.getHours()).toBe('1');
                     });
                 });
@@ -48,8 +48,20 @@ fdescribe('CustomCronConverter', () => {
     describe('getTime()', () => {
         describe('when cron is 0 0 13 * * * *', () => {
             it('should return 13:00', () => {
-                let parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
+                const parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                 expect(parser.getTime()).toBe('13:00');
+            });
+        });
+    });
+
+    describe('result()', () => {
+        describe('when cron is 0 0 13 * * * *', () => {
+            it('should return structure {hours: 13, minutes: 00, period: PM}', () => {
+                const parser = new CustomCronConverter(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
+                const result = parser.result();
+                expect(result.hours).toBe('13');
+                expect(result.minutes).toBe('00');
+                expect(result.period).toBe('PM');
             });
         });
     });
