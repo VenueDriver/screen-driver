@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AutoupdateSchedule} from "../../entities/autoupdate-schedule";
-import {CronConvertStrategy, CustomCronConverter} from "../../../core/utils/custom-cron-parser";
+import {CronConvertStrategy, CustomCronParser} from "../../../core/utils/custom-cron-parser";
+import {CustomTimeCronConverter} from "../../../core/utils/custom-time-cron-converter";
 
 @Component({
     selector: 'auto-update-schedule-switcher',
@@ -21,7 +22,7 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
         return this._autoUpdateSchedule;
     }
 
-    public autoUpdateTime: { time: string, period: string } = {time: '08:00', period: 'AM'};
+    public autoUpdateTime: { hours: string, minutes: string, time: string, period: string } = {time: '08:00', hours: '8', minutes: '00', period: 'AM'};
 
     @Output() change: EventEmitter<AutoupdateSchedule> = new EventEmitter<AutoupdateSchedule>();
 
@@ -30,10 +31,9 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
 
     setUpAutoUpdateTime(): void {
         const cron = this._autoUpdateSchedule.eventTime;
-        let converter: CustomCronConverter = new CustomCronConverter(cron, CronConvertStrategy.PERIOD_SENSITIVE);
+        let converter: CustomCronParser = new CustomCronParser(cron, CronConvertStrategy.PERIOD_SENSITIVE);
 
-        this.autoUpdateTime.time = converter.getTime();
-        this.autoUpdateTime.period = converter.getPeriod();
+        this.autoUpdateTime = converter.result();
     }
 
     onTimePeriodChange(period: string): void {
@@ -47,7 +47,12 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     }
 
     notifyAutoUpdateConfigChanged(): void {
-        console.log(this.autoUpdateTime);
-        console.log(this._autoUpdateSchedule);
+        const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
+        newSchedule.eventTime = this.getTimeAsCron();
+        console.log(newSchedule);
+    }
+
+    private getTimeAsCron(): string {
+        return new CustomTimeCronConverter(this.autoUpdateTime).cron;
     }
 }
