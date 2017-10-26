@@ -9,6 +9,7 @@ import {SettingsModule} from "../../settings/settings.module";
 import {MaintenanceVenuesTreeViewComponent} from "./maintenance-venues-tree-view.component";
 import {VenuesModule} from "../../venues/venues.module";
 import {TimeSelectorModule} from "../../time-selector/time-selector.module";
+import {SharedModule} from "../../shared/shared.module";
 
 @NgModule({
     imports: [
@@ -19,7 +20,8 @@ import {TimeSelectorModule} from "../../time-selector/time-selector.module";
         AutofocusModule,
         SettingsModule,
         VenuesModule,
-        TimeSelectorModule
+        TimeSelectorModule,
+        SharedModule
     ],
     exports: [
         MaintenanceVenuesTreeViewComponent

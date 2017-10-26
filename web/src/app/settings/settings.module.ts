@@ -11,7 +11,7 @@ import {SettingsManagerComponent} from "./settings-manager/settings-manager.comp
 import {PriorityTypeTagComponent} from "./priority-type-tag/priority-type-tag.component";
 import {SettingHeaderComponent} from "./setting-header/setting-header.component";
 import {SettingsPriorityHelper} from "./settings-priority.helper";
-import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
+import {ToggleButtonModule} from "../shared/toggle-button/toggle-button.module";
 import { SettingsGroupComponent } from './settings-group/settings-group.component';
 import { SingleSettingComponent } from './single-setting/single-setting.component';
 
