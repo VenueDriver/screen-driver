@@ -22,8 +22,6 @@ export class CustomCronParser {
         this.convertStrategy = convertStrategy ? convertStrategy : CronConvertStrategy.DEFAULT;
 
         this.hours = CronToDatetimeConverter.getHoursFromCron(this.cron);
-        console.log(this.cron);
-        console.log(CronToDatetimeConverter.getMinutesFromCron(this.cron));
         this.minutes = CronToDatetimeConverter.getMinutesFromCron(this.cron);
 
         this.setPeriod(this.hours);
@@ -65,6 +63,6 @@ export class CustomCronParser {
     }
 
     private setPeriod(hours: number): void {
-        this.period = hours >= 12 ? 'PM' : 'AM';
+        this.period = hours > 12 ? 'PM' : 'AM';
     }
 }
