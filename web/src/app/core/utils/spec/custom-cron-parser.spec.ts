@@ -3,7 +3,7 @@
 
 import {CronConvertStrategy, CustomCronConverter} from "../custom-cron-parser";
 
-fdescribe('CustomCronParser', () => {
+describe('CustomCronParser', () => {
     const EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION = '0 0 13 * * * *';
 
     describe('getPeriod()', () => {
