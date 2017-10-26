@@ -10,7 +10,7 @@
 
         <maintenance-venues-tree-view
                 [venues]="venuesTree"
-                [kioskVersions]="kioskVersions"
+                (autoUpdateScheduleChange)="updateScheduleConfiguration($event)"
                 (updateApplications)="updateClientsApps($event)">
         </maintenance-venues-tree-view>
     </div>

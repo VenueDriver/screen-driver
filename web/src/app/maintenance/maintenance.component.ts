@@ -49,4 +49,13 @@ export class MaintenanceComponent implements OnInit {
 
         this.screensService.updateClientApps(body);
     }
+
+    updateScheduleConfiguration(autoUpdateSchedule: AutoupdateSchedule): void {
+        this.maintenanceService.updateVenueSchedule(autoUpdateSchedule)
+            .subscribe((ok) => {
+                console.log(ok);
+            }, (error) => {
+                console.error(error);
+            });
+    }
 }

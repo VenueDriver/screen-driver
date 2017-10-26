@@ -49,7 +49,8 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     notifyAutoUpdateConfigChanged(): void {
         const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
         newSchedule.eventTime = this.getTimeAsCron();
-        console.log(newSchedule);
+
+        this.change.next(newSchedule);
     }
 
     private getTimeAsCron(): string {

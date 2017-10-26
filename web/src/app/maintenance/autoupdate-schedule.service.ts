@@ -19,8 +19,16 @@ export class AutoupdateScheduleService {
         return this.httpClient.get(this.apiPath);
     }
 
+    create(schedule: AutoupdateSchedule): Observable<AutoupdateSchedule> {
+        return this.httpClient.post(this.apiPath, schedule);
+    }
+
+    update(schedule: AutoupdateSchedule): Observable<AutoupdateSchedule> {
+        return this.httpClient.put(this.apiPath, schedule);
+    }
+
     createDefaultAutoapdateSchedule(): AutoupdateSchedule {
-        let autoupdateSchedule = new AutoupdateSchedule();
+        let autoupdateSchedule = new AutoupdateSchedule(null);
         autoupdateSchedule.eventTime = EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION;
         return autoupdateSchedule;
     }
