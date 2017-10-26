@@ -10,14 +10,13 @@
                 <div *ngIf="isVenueNode(node)" class="content-info">
                     <auto-update-schedule-switcher
                             [autoUpdateSchedule]="node.data.autoupdateSchedule"
-                            (change)="autoUpdateScheduleChange.emit($event)">
+                            (autoUpdateChange)="autoUpdateScheduleChange.emit($event)">
                     </auto-update-schedule-switcher>
                 </div>
 
                 <div *ngIf="isScreenNode(node)" class="content-info">
                     <kiosk-version-details
                             [versionDetails]="getVersionDetailsForScreen(node)">
-
                     </kiosk-version-details>
                 </div>
             </div>

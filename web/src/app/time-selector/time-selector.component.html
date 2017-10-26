@@ -8,6 +8,7 @@
                 class="time"
                 [placeholder]="'Select time'"
                 [editable]="true"
+                [disabled]="disabled"
                 [items]="timeItems"
                 [value]="defaultTime"
                 (valueChanged)="setTime($event)">

@@ -9,6 +9,7 @@ export class TimeSelectorComponent implements OnInit {
     @Input() label: string;
     @Input() defaultTime: string = '12:00';
     @Input() defaultTimePeriod: string = 'AM';
+    @Input() disabled: boolean = false;
 
     @Output() timeChange = new EventEmitter();
     @Output() timePeriodChange = new EventEmitter();

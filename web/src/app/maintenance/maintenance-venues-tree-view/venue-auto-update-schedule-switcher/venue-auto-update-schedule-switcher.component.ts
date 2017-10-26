@@ -24,7 +24,7 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
 
     public autoUpdateTime: { hours: string, minutes: string, time: string, period: string } = {time: '08:00', hours: '8', minutes: '00', period: 'AM'};
 
-    @Output() change: EventEmitter<AutoupdateSchedule> = new EventEmitter<AutoupdateSchedule>();
+    @Output() autoUpdateChange: EventEmitter<AutoupdateSchedule> = new EventEmitter<AutoupdateSchedule>();
 
     constructor(
     ) { }
@@ -46,11 +46,26 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
         this.notifyAutoUpdateConfigChanged();
     }
 
+    onEnabledChange(isEnabled): void {
+        const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
+        newSchedule.isEnabled = isEnabled;
+        this._autoUpdateSchedule.isEnabled = isEnabled;
+        this.autoUpdateChange.next(newSchedule);
+    }
+
     notifyAutoUpdateConfigChanged(): void {
         const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
         newSchedule.eventTime = this.getTimeAsCron();
 
-        this.change.next(newSchedule);
+        this.autoUpdateChange.next(newSchedule);
+    }
+
+    get isEnabled(): boolean {
+        return this._autoUpdateSchedule.isEnabled;
+    }
+
+    get isTimeSelectDisabled(): boolean {
+        return !this.isEnabled;
     }
 
     private getTimeAsCron(): string {

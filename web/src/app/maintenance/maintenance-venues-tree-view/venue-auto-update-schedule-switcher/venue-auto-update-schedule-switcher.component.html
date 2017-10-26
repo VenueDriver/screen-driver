@@ -1,8 +1,13 @@
 <div class="auto-update-schedule-switcher">
     <time-selector [label]="''"
+                   [disabled]="isTimeSelectDisabled"
                    [defaultTime]="autoUpdateTime.time"
                    [defaultTimePeriod]="autoUpdateTime.period"
                    (timeChange)="onTimeChange($event)"
                    (timePeriodChange)="onTimePeriodChange($event)">
     </time-selector>
+    <toggle-button
+            [checked]="isEnabled"
+            (changed)="onEnabledChange($event)">
+    </toggle-button>
 </div>
