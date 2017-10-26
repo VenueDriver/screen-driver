@@ -27,7 +27,7 @@ const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
 
     @Input() venues: Array<Venue>;
-    @Input() kioskVersions: any;
+    @Input() kioskVersions: any = {};
 
     @Output() updateApplications = new EventEmitter();
     @Output() autoUpdateScheduleChange = new EventEmitter();
