@@ -2,7 +2,7 @@ import {Pipe, PipeTransform} from "@angular/core";
 import {format} from 'date-fns'
 
 @Pipe({
-    name: 'format'
+    name: 'formatDate'
 })
 export class DateFormatterPipe implements PipeTransform {
 
