@@ -15,7 +15,7 @@ export class KioskVersionService {
 
     loadKioskVersions(): Observable<KioskVersionDetailsMap> {
         return this.httpClient.get(this.apiPath)
-            .map((data: Array<KioskVersionDetails>) => this.createKioskVersionsMap(data));
+            .map(this.createKioskVersionsMap);
     }
 
     createKioskVersionsMap(kioskVersions: Array<KioskVersionDetails>): any {
