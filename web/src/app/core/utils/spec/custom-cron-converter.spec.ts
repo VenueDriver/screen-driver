@@ -1,6 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
-import {CronConvertStrategy, CustomCronConverter} from "./custom-cron-converter";
+
+import {CronConvertStrategy, CustomCronConverter} from "../custom-cron-converter";
 
 fdescribe('CustomCronConverter', () => {
     const EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION = '0 0 13 * * * *';
