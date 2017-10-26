@@ -3,7 +3,7 @@
         <div class="single-node"
              [ngClass]="{'node-without-children': !hasChildren(node)}">
             <div *ngIf="!isCurrentNode(node)" class="node-info">
-                <div class="node-name">
+                <div class="node-name" [class.screen-group-node]="isScreenGroupNode(node)">
                     <span class="node-level-name">{{getNodeLevelName(node)}}</span>: {{node.data.name}}
                 </div>
 
@@ -14,9 +14,11 @@
                     </auto-update-schedule-switcher>
                 </div>
 
-                <div *ngIf="!isVenueNode(node)" class="content-info">
-                    <span class="content-short-name">Current version</span>
-                    <span class="content-url">null</span>
+                <div *ngIf="isScreenNode(node)" class="content-info">
+                    <kiosk-version-details
+                            [versionDetails]="getVersionDetailsForScreen(node)">
+
+                    </kiosk-version-details>
                 </div>
             </div>
 

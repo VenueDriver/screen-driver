@@ -10,6 +10,8 @@ import {MaintenanceVenuesTreeViewComponent} from "./maintenance-venues-tree-view
 import {VenuesModule} from "../../venues/venues.module";
 import {TimeSelectorModule} from "../../time-selector/time-selector.module";
 import {SharedModule} from "../../shared/shared.module";
+import {KioskVersionDetailsComponent} from "./kiosk-version-details/kiosk-version-details.component";
+import {DateFormatterModule} from "../../../pipes/date-formatter/date-formatter.module";
 
 @NgModule({
     imports: [
@@ -21,14 +23,17 @@ import {SharedModule} from "../../shared/shared.module";
         SettingsModule,
         VenuesModule,
         TimeSelectorModule,
-        SharedModule
+        SharedModule,
+        TimeSelectorModule,
+        DateFormatterModule
     ],
     exports: [
         MaintenanceVenuesTreeViewComponent
     ],
     declarations: [
         MaintenanceVenuesTreeViewComponent,
-        VenueAutoUpdateScheduleSwitcherComponent
+        VenueAutoUpdateScheduleSwitcherComponent,
+        KioskVersionDetailsComponent
     ],
     providers: []
 })
