@@ -10,7 +10,11 @@ export class CustomTimeCronConverter {
     }
 
     get cron(): string {
-        return EVERY_DAY_CRONE_TEMPLATE(this.getHours(), this.input.minutes);
+        return EVERY_DAY_CRONE_TEMPLATE(this.getHours(), this.getMinutes());
+    }
+
+    private getMinutes(): string {
+        return this.input.minutes == '00' ? '0' : this.input.minutes;
     }
 
     private getHours(): string {
