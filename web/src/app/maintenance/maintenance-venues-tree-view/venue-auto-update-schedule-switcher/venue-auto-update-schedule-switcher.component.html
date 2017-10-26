@@ -5,5 +5,8 @@
                    (timeChange)="onTimeChange($event)"
                    (timePeriodChange)="onTimePeriodChange($event)">
     </time-selector>
-    <toggle-button></toggle-button>
+    <toggle-button
+            [checked]="isEnabled"
+            (changed)="onEnabledChange($event)">
+    </toggle-button>
 </div>

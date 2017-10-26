@@ -46,11 +46,22 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
         this.notifyAutoUpdateConfigChanged();
     }
 
+    onEnabledChange(isEnabled): void {
+        const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
+        newSchedule.isEnabled = isEnabled;
+
+        this.change.next(isEnabled);
+    }
+
     notifyAutoUpdateConfigChanged(): void {
         const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
         newSchedule.eventTime = this.getTimeAsCron();
 
         this.change.next(newSchedule);
+    }
+
+    get isEnabled(): boolean {
+        return this._autoUpdateSchedule.isEnabled;
     }
 
     private getTimeAsCron(): string {
