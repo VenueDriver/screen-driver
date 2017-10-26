@@ -9,6 +9,7 @@ export class TimeSelectorComponent implements OnInit {
     @Input() label: string;
     @Input() defaultTime: string = '12:00';
     @Input() defaultTimePeriod: string = 'AM';
+    @Input() disabled: boolean = false;
 
     @Output() timeChange = new EventEmitter();
     @Output() timePeriodChange = new EventEmitter();
@@ -31,15 +32,17 @@ export class TimeSelectorComponent implements OnInit {
         }
     }
 
-    changeTimePeriod() {
+    changeTimePeriod($event) {
         if (this.defaultTimePeriod === this.timePeriods[0]) {
             this.timePeriodChange.emit(this.timePeriods[1])
         } else {
             this.timePeriodChange.emit(this.timePeriods[0]);
         }
+        $event.stopPropagation();
     }
 
     setTime(time: string) {
         this.timeChange.emit(time);
+        event.stopPropagation();
     }
 }

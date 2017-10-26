@@ -1,0 +1,14 @@
+<div>
+    <div>
+        <span>Current version: </span>
+        <span>{{versionDetails.version}}</span>
+    </div>
+
+    <div *ngIf="versionDetails.updatedAt">
+        <span>
+            <span class="long-title">Last update time: </span>
+            <span class="short-title">LUT: </span>
+        </span>
+        <span>{{versionDetails.updatedAt | formatDate}}</span>
+    </div>
+</div>

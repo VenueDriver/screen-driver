@@ -27,12 +27,11 @@
             </div>
         </div>
 
-        <venues-tree-view
+        <content-venues-tree-view
                 [venues]="venuesTree"
                 [content]="content"
                 (update)="loadVenues()"
-                (updateApplications)="updateClientsApps($event)"
                 (contentChange)="loadContent()">
-        </venues-tree-view>
+        </content-venues-tree-view>
     </div>
 </div>

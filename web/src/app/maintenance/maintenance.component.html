@@ -1,12 +1,17 @@
 <div class="page-container">
-    <div class="row">
-        <div class="col-md-4 col-sm-2 col-xs-1"></div>
-        <div class="col-md-4 col-sm-8 col-xs-10">
-            <div>
-                <venues [venues]="venues"></venues>
-            </div>
+    <div class="venues-container">
+        <div class="maintenance-header">
+            <div class="maintenance-title">Auto-update maintenance</div>
 
+            <div class="info-message">
+                Config auto-update schedule or refresh screen!
+            </div>
         </div>
-        <div class="col-md-4 col-sm-12 col-xs-1"></div>
+
+        <maintenance-venues-tree-view
+                [venues]="venuesTree"
+                (autoUpdateScheduleChange)="updateScheduleConfiguration($event)"
+                (updateApplications)="updateClientsApps($event)">
+        </maintenance-venues-tree-view>
     </div>
 </div>

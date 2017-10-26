@@ -11,6 +11,7 @@ import {ContentAutocompleteModule} from "../content-autocomplete/content-autocom
 import {AutofocusModule} from "../directives/autofocus/autofocus.module";
 import {SettingsModule} from "../settings/settings.module";
 import {ScreensMessagingService} from "../messaging/screens-messaging.service";
+import {ContentVenuesTreeViewComponent} from "./content-venues-tree-view/contnet-venues-tree-view.component";
 
 @NgModule({
     imports: [
@@ -22,12 +23,14 @@ import {ScreensMessagingService} from "../messaging/screens-messaging.service";
         SettingsModule
     ],
     exports: [
-        VenuesComponent
+        VenuesComponent,
+        VenuesTreeViewComponent
     ],
     declarations: [
         VenuesComponent,
         VenuesTreeViewComponent,
         EditTreeViewNodeFormComponent,
+        ContentVenuesTreeViewComponent
     ],
     providers: [
         ContentService,

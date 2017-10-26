@@ -1,0 +1,40 @@
+<div>
+    <ng-template class="node-template" #template let-node="node" let-index="index">
+        <div class="single-node"
+             [ngClass]="{'node-without-children': !hasChildren(node)}">
+            <div *ngIf="!isCurrentNode(node)" class="node-info">
+                <div class="node-name" [class.screen-group-node]="isScreenGroupNode(node)">
+                    <span class="node-level-name">{{getNodeLevelName(node)}}</span>: {{node.data.name}}
+                </div>
+
+                <div *ngIf="isVenueNode(node)" class="content-info">
+                    <auto-update-schedule-switcher
+                            [autoUpdateSchedule]="node.data.autoupdateSchedule"
+                            (autoUpdateChange)="autoUpdateScheduleChange.emit($event)">
+                    </auto-update-schedule-switcher>
+                </div>
+
+                <div *ngIf="isScreenNode(node)" class="content-info">
+                    <kiosk-version-details
+                            [versionDetails]="getVersionDetailsForScreen(node)">
+                    </kiosk-version-details>
+                </div>
+            </div>
+
+            <div class="buttons-container">
+                <div *ngIf="isAllowToRefreshScreenContent(node)"
+                     class="node-button refresh-button"
+                     (click)="refreshContent(node.data.id)"
+                     [title]="getRefreshButtonTitle(node)">
+                </div>
+
+                <div class="node-button update-client-button"
+                     *ngIf="isAllowToUpdateClientApp(node)"
+                     (click)="updateClientApps($event, node);"
+                     [title]="getUpdateClientButtonTitle(node)">
+                </div>
+            </div>
+        </div>
+    </ng-template>
+    <venues-tree-view [venues]="venues" [template]="template" [hasSelectedNode]="hasCurrentNode()"></venues-tree-view>
+</div>
