@@ -64,8 +64,12 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         return node && node.level == 1;
     }
 
+    isScreenGroupNode(node: any): boolean {
+        return node && node.level == 2;
+    }
+
     isScreenNode(node: any): boolean {
-        return node && node.level == 3;
+        return node && node.level == 3; 
     }
 
     //+

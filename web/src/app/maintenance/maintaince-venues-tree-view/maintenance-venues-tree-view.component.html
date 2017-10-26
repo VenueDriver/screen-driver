@@ -3,7 +3,7 @@
         <div class="single-node"
              [ngClass]="{'node-without-children': !hasChildren(node)}">
             <div *ngIf="!isCurrentNode(node)" class="node-info">
-                <div class="node-name">
+                <div class="node-name" [class.screen-group-node]="isScreenGroupNode(node)">
                     <span class="node-level-name">{{getNodeLevelName(node)}}</span>: {{node.data.name}}
                 </div>
 
