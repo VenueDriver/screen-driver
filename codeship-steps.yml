@@ -13,6 +13,10 @@
   tag: staging
   command: bash -c "npm install && sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng build --prod --aot"
 
+- service: web
+  name: web_run_tests
+  command: bash -c "npm install && sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng test"
+
 - service: awsdeployment
   name: staging_deploy_web
   encrypted_env_file: deployment.env.encrypted
