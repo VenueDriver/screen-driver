@@ -10,6 +10,6 @@ export class DateFormatterPipe implements PipeTransform {
         if (typeof date === 'string' && isNaN(Date.parse(date))) {
             return "";
         }
-        return format(date, 'MMMM D, YYYY [at] hh:mm A');
+        return format(date, 'MMM D, YYYY [at] hh:mm A');
     }
 }
