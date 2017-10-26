@@ -3,3 +3,14 @@
 div
   span:first-child
     font-weight: bold
+
+  .long-title, .short-title
+    display: none
+
+  @media screen and (max-width: $tablet-resolution)
+    .short-title
+      display: inline-block
+
+  @media screen and (min-width: $tablet-resolution + 1)
+    .long-title
+      display: inline-block

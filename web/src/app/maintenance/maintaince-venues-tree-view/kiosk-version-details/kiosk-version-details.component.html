@@ -5,7 +5,10 @@
     </div>
 
     <div *ngIf="versionDetails.updatedAt">
-        <span>Last update time: </span>
+        <span>
+            <span class="long-title">Last update time: </span>
+            <span class="short-title">LUT: </span>
+        </span>
         <span>{{versionDetails.updatedAt | format}}</span>
     </div>
 </div>
