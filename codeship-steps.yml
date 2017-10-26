@@ -3,85 +3,93 @@
   exclude: ^(master|production|staging)
   command: bash -c "npm install && node_modules/.bin/ng build --prod --aot"
 
-- service: api
-  name: staging_deploy_serverless_api
-  tag: staging
-  command: sh deploy.sh us-east-1 staging
-
-- service: web
-  name: staging_add_api_endpoint
-  tag: staging
-  command: bash -c "npm install && sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng build --prod --aot"
-
 - service: web
   name: web_run_tests
   command: bash -c "npm install && sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng test --watch=false"
 
-- service: awsdeployment
-  name: staging_deploy_web
-  encrypted_env_file: deployment.env.encrypted
+- type: serial
+  name: staging_deployment
   tag: staging
-  command: bash -c "aws s3 sync /app-src/dist $AWS_S3_BUCKET_STAGING"
+  steps:
+    - service: api
+      name: staging_deploy_serverless_api
+      tag: staging
+      command: sh deploy.sh us-east-1 staging
 
-- service: kiosk
-  name: staging_build_kiosk_app_windows
-  tag: staging
-  command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
+    - service: web
+      name: staging_add_api_endpoint
+      tag: staging
+      command: bash -c "npm install && sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng build --prod --aot"
 
-- service: kiosk_deployment
-  name: staging_deploy_kiosk_app_windows
-  encrypted_env_file: deployment.env.encrypted
-  tag: staging
-  command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING/windows --exclude='*' --include='*.exe' --include='latest.yml'"
+    - service: awsdeployment
+      name: staging_deploy_web
+      encrypted_env_file: deployment.env.encrypted
+      tag: staging
+      command: bash -c "aws s3 sync /app-src/dist $AWS_S3_BUCKET_STAGING"
 
-- service: kiosk
-  name: staging_build_kiosk_app_linux
-  tag: staging
-  command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run linux-installer"
+    - service: kiosk
+      name: staging_build_kiosk_app_windows
+      tag: staging
+      command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
 
-- service: kiosk_deployment
-  name: staging_deploy_kiosk_app_linux
-  encrypted_env_file: deployment.env.encrypted
-  tag: staging
-  command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING/linux --exclude='*' --include='*.zip'"
+    - service: kiosk_deployment
+      name: staging_deploy_kiosk_app_windows
+      encrypted_env_file: deployment.env.encrypted
+      tag: staging
+      command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING/windows --exclude='*' --include='*.exe' --include='latest.yml'"
 
-- service: kiosk
-  name: staging_build_kiosk_app_mac
-  tag: staging
-  command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run mac-installer"
+    - service: kiosk
+      name: staging_build_kiosk_app_linux
+      tag: staging
+      command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run linux-installer"
 
-- service: kiosk_deployment
-  name: staging_deploy_kiosk_app_mac
-  encrypted_env_file: deployment.env.encrypted
-  tag: staging
-  command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING/mac --exclude='*' --include='*.tar.gz'"
+    - service: kiosk_deployment
+      name: staging_deploy_kiosk_app_linux
+      encrypted_env_file: deployment.env.encrypted
+      tag: staging
+      command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING/linux --exclude='*' --include='*.zip'"
 
-- service: api
-  name: serverless_api_production
-  tag: production
-  command: serverless deploy --verbose --region us-east-1 --stage production
+    - service: kiosk
+      name: staging_build_kiosk_app_mac
+      tag: staging
+      command: bash -c "sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' properties/app.properties && npm run mac-installer"
 
-- service: web
-  name: production_add_api_endpoint
-  tag: production
-  command: bash -c "npm install && sed -i 's@API_HOST@'"$PRODUCTION_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng build --prod --aot"
+    - service: kiosk_deployment
+      name: staging_deploy_kiosk_app_mac
+      encrypted_env_file: deployment.env.encrypted
+      tag: staging
+      command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_STAGING/mac --exclude='*' --include='*.tar.gz'"
 
-- service: awsdeployment
-  name: production_deploy_web
-  encrypted_env_file: deployment.env.encrypted
+- type: serial
+  name: production_deployment
   tag: master
-  command: bash -c "aws s3 sync /app-src/dist $AWS_S3_BUCKET_PRODUCTION"
+  steps:
+    - service: api
+      name: serverless_api_production
+      tag: master
+      command: serverless deploy --verbose --region us-east-1 --stage production
 
-- service: kiosk
-  name: production_build_kiosk_app
-  tag: production
-  command: bash -c "sed -i 's@API_HOST@'"$PRODUCTION_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
+    - service: web
+      name: production_add_api_endpoint
+      tag: master
+      command: bash -c "npm install && sed -i 's@API_HOST@'"$PRODUCTION_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng build --prod --aot"
 
-- service: kiosk_deployment
-  name: production_deploy_kiosk_app
-  encrypted_env_file: deployment.env.encrypted
-  tag: production
-  command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_PRODUCTION --exclude='win-unpacked/*'"
+    - service: awsdeployment
+      name: production_deploy_web
+      encrypted_env_file: deployment.env.encrypted
+      tag: master
+      command: bash -c "aws s3 sync /app-src/dist $AWS_S3_BUCKET_PRODUCTION"
+
+    - service: kiosk
+      name: production_build_kiosk_app
+      tag: master
+      command: bash -c "sed -i 's@API_HOST@'"$PRODUCTION_API_ENDPOINT"'@' properties/app.properties && npm run win-installer"
+
+    - service: kiosk_deployment
+      name: production_deploy_kiosk_app
+      encrypted_env_file: deployment.env.encrypted
+      tag: master
+      command: bash -c "aws s3 sync /app-src/dist/ $AWS_S3_BUCKET_KIOSK_PRODUCTION --exclude='win-unpacked/*'"
 
 
 # - service: kiosk
