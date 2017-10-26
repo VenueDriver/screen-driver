@@ -9,6 +9,7 @@ import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 import * as _ from 'lodash';
 import {MaintenanceProperties} from "./entities/maintenance-properties";
+import {AutoupdateScheduleService} from "./autoupdate-schedule.service";
 
 @Component({
     selector: 'maintenance',
@@ -51,6 +52,11 @@ export class MaintenanceComponent implements OnInit {
     }
 
     updateScheduleConfiguration(autoUpdateSchedule: AutoupdateSchedule): void {
-
+        this.maintenanceService.updateVenueSchedule(autoUpdateSchedule)
+            .subscribe((ok) => {
+                console.log(ok);
+            }, (error) => {
+                console.error(error);
+            });
     }
 }
