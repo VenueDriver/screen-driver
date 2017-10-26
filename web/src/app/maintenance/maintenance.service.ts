@@ -54,15 +54,14 @@ export class MaintenanceService {
     }
 
     updateVenueSchedule(schedule: AutoupdateSchedule): Observable<AutoupdateSchedule> {
-        return schedule.id
-            ? this.autoupdateScheduleService.update(schedule)
-            : this.autoupdateScheduleService.create(schedule);
+        return this.autoupdateScheduleService.upsert(schedule);
     }
 
     private setAutoupdateScheduleForVenue(schedulesMap: any, venue: VenueMaintenanceInfo) {
         let schedule = schedulesMap[venue.id];
         if (_.isEmpty(schedule)) {
             schedule = this.autoupdateScheduleService.createDefaultAutoapdateSchedule();
+            schedule.id = venue.id;
         }
         venue.autoupdateSchedule = schedule;
     }

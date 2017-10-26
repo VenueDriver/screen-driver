@@ -23,7 +23,7 @@ export class AutoupdateScheduleService {
         return this.httpClient.post(this.apiPath, schedule);
     }
 
-    update(schedule: AutoupdateSchedule): Observable<AutoupdateSchedule> {
+    upsert(schedule: AutoupdateSchedule): Observable<AutoupdateSchedule> {
         return this.httpClient.put(this.apiPath, schedule);
     }
 
