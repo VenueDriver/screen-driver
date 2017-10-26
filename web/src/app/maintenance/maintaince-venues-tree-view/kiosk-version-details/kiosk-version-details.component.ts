@@ -9,6 +9,11 @@ import {format} from 'date-fns'
 })
 export class KioskVersionDetailsComponent {
 
-    @Input() versionDetails: KioskVersion;
-    
+    @Input('versionDetails') set _versionDetails(versionDetails: KioskVersion) {
+        this.versionDetails.version = versionDetails && versionDetails.version ? versionDetails.version : 'N/A';
+        this.versionDetails.updatedAt = versionDetails ? versionDetails.updatedAt : undefined;
+    }
+
+    versionDetails: KioskVersion = new KioskVersion();
+
 }
