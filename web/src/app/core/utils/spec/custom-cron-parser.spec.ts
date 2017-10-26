@@ -30,17 +30,10 @@ describe('CustomCronParser', () => {
                 const parser = new CustomCronParser(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                 expect(parser.getHours()).toBe('13');
             });
-            describe('when cron is 0 0 13 * * * *', () => {
-                it('should return 13', () => {
-                    const parser = new CustomCronParser(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
-                    expect(parser.getHours()).toBe('13');
-                });
-
-                describe('when CronConvertStrategy is PERIOD_SENSITIVE', () => {
-                    it('should return 1', () => {
-                        const parser = new CustomCronParser(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.PERIOD_SENSITIVE);
-                        expect(parser.getHours()).toBe('1');
-                    });
+            describe('when CronConvertStrategy is PERIOD_SENSITIVE', () => {
+                it('should return 1', () => {
+                    const parser = new CustomCronParser(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.PERIOD_SENSITIVE);
+                    expect(parser.getHours()).toBe('1');
                 });
             });
         });
