@@ -49,7 +49,7 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     onEnabledChange(isEnabled): void {
         const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
         newSchedule.isEnabled = isEnabled;
-
+        this._autoUpdateSchedule.isEnabled = isEnabled;//temporary
         this.autoUpdateChange.next(newSchedule);
     }
 
@@ -62,6 +62,10 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
 
     get isEnabled(): boolean {
         return this._autoUpdateSchedule.isEnabled;
+    }
+
+    get isTimeSelectDisabled(): boolean {
+        return !this.isEnabled;
     }
 
     private getTimeAsCron(): string {
