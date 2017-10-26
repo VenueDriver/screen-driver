@@ -8,6 +8,7 @@ import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 import * as _ from 'lodash';
 import {MaintenanceProperties} from "./entities/maintenance-properties";
+import {NotificationService} from "../notifications/notification.service";
 import {KioskVersionDetailsMap} from "./entities/kiosk-version-details";
 
 @Component({
@@ -24,6 +25,7 @@ export class MaintenanceComponent implements OnInit {
 
     constructor(private maintenanceService: MaintenanceService,
                 private screensService: ScreensMessagingService,
+                private notificationService: NotificationService,
                 private venuesService: VenuesService) {
     }
 
@@ -53,9 +55,9 @@ export class MaintenanceComponent implements OnInit {
     updateScheduleConfiguration(autoUpdateSchedule: AutoupdateSchedule): void {
         this.maintenanceService.updateVenueSchedule(autoUpdateSchedule)
             .subscribe((ok) => {
-                console.log(ok);
+                this.notificationService.showSuccessNotificationBar('Configuration has been successfully updated')
             }, (error) => {
-                console.error(error);
+                this.notificationService.showErrorNotificationBar('Unable to update schedule configuration')
             });
     }
 }

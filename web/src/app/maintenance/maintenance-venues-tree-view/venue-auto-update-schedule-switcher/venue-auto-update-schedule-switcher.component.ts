@@ -54,6 +54,8 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     }
 
     private getTimeAsCron(): string {
+        this.autoUpdateTime.hours = this.autoUpdateTime.time.split(":")[0];
+        this.autoUpdateTime.minutes = this.autoUpdateTime.time.split(":")[1];
         return new CustomTimeCronConverter(this.autoUpdateTime).cron;
     }
 }
