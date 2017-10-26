@@ -9,8 +9,6 @@ export interface CronParseResult {
     time: string;
 }
 
-const HOURS_MAP = {24: 12, 23: 11, 22: 10, 21: 9, 20: 8, 19: 7, 18: 6, 17: 5, 16: 4, 15: 3, 14: 2, 13: 1};
-
 export class CustomCronParser {
     private hours: number;
     private minutes: string;
@@ -59,7 +57,7 @@ export class CustomCronParser {
     }
 
     private setPeriodSensitiveHours(): void {
-        this.periodSensitiveHours = this.hours > 12 ? HOURS_MAP[this.hours] : this.hours;
+        this.periodSensitiveHours = this.hours > 12 ? this.hours - 12 : this.hours;
     }
 
     private setPeriod(hours: number): void {
