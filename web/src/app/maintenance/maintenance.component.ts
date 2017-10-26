@@ -49,4 +49,8 @@ export class MaintenanceComponent implements OnInit {
 
         this.screensService.updateClientApps(body);
     }
+
+    updateScheduleConfiguration(autoUpdateSchedule: AutoupdateSchedule): void {
+
+    }
 }

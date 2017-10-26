@@ -13,6 +13,7 @@ import {ScreensMessagingService} from "../../messaging/screens-messaging.service
 import {NotificationService} from "../../notifications/notification.service";
 import {VenuesTreeViewService} from "../../venues/venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../../venues/venues-tree-view/venues-tree-view.component";
+import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 
@@ -26,6 +27,7 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
     @Input() venues: Array<any>;
 
     @Output() updateApplications = new EventEmitter();
+    @Output() autoUpdateScheduleChange = new EventEmitter();
 
     @ViewChild(VenuesTreeViewComponent)
     private venuesTree: VenuesTreeViewComponent;
