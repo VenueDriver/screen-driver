@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AutoupdateSchedule} from "../../entities/autoupdate-schedule";
-import {CronConvertStrategy, CustomCronConverter} from "../../../core/utils/custom-cron-parser";
+import {CronConvertStrategy, CustomCronParser} from "../../../core/utils/custom-cron-parser";
 
 @Component({
     selector: 'auto-update-schedule-switcher',
@@ -30,7 +30,7 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
 
     setUpAutoUpdateTime(): void {
         const cron = this._autoUpdateSchedule.eventTime;
-        let converter: CustomCronConverter = new CustomCronConverter(cron, CronConvertStrategy.PERIOD_SENSITIVE);
+        let converter: CustomCronParser = new CustomCronParser(cron, CronConvertStrategy.PERIOD_SENSITIVE);
 
         this.autoUpdateTime.time = converter.getTime();
         this.autoUpdateTime.period = converter.getPeriod();
@@ -47,7 +47,12 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     }
 
     notifyAutoUpdateConfigChanged(): void {
-        console.log(this.autoUpdateTime);
-        console.log(this._autoUpdateSchedule);
+        const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
+        newSchedule.eventTime = this.getTimeAsCron();
+        console.log(newSchedule);
+    }
+
+    private getTimeAsCron(): string {
+        const cronConverter = new CustomCronParser
     }
 }
