@@ -1,9 +1,9 @@
 import {AutoupdateSchedule} from "./autoupdate-schedule";
-import {KioskVersion} from "./kiosk-version";
 import {VenueMaintenanceInfo} from "./venue-maintenance-info";
+import {KioskVersionDetailsMap} from "./kiosk-version-details";
 
 export interface MaintenanceProperties {
     venues: Array<VenueMaintenanceInfo>;
     autoupdateSchedules: Array<AutoupdateSchedule>;
-    kioskVersions: Array<KioskVersion>;
+    kioskVersions: KioskVersionDetailsMap;
 }
