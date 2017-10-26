@@ -6,6 +6,7 @@ import {MaintenanceService} from "./maintenance.service";
 import {ToggleButtonModule} from "../toggle-button/toggle-button.module";
 import {TimeSelectorModule} from "../time-selector/time-selector.module";
 import {VenuesModule} from "../venues/venues.module";
+import {MaintenanceVenuesTreeViewModule} from "./maintenance-venues-tree-view/maintenance-venues-tree-view.module";
 import {AutoupdateScheduleService} from "./autoupdate-schedule.service";
 import {KioskVersionService} from "./kiosk-version.service";
 
@@ -14,7 +15,8 @@ import {KioskVersionService} from "./kiosk-version.service";
         CommonModule,
         ToggleButtonModule,
         TimeSelectorModule,
-        VenuesModule
+        VenuesModule,
+        MaintenanceVenuesTreeViewModule
     ],
     declarations: [
         MaintenanceComponent,

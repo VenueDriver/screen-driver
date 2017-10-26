@@ -12,7 +12,6 @@ import {AutofocusModule} from "../directives/autofocus/autofocus.module";
 import {SettingsModule} from "../settings/settings.module";
 import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 import {ContentVenuesTreeViewComponent} from "./content-venues-tree-view/contnet-venues-tree-view.component";
-import {MaintenanceVenuesTreeViewComponent} from "./maintaince-venues-tree-view/maintenance-venues-tree-view.component";
 
 @NgModule({
     imports: [
@@ -25,14 +24,13 @@ import {MaintenanceVenuesTreeViewComponent} from "./maintaince-venues-tree-view/
     ],
     exports: [
         VenuesComponent,
-        MaintenanceVenuesTreeViewComponent
+        VenuesTreeViewComponent
     ],
     declarations: [
         VenuesComponent,
         VenuesTreeViewComponent,
         EditTreeViewNodeFormComponent,
-        ContentVenuesTreeViewComponent,
-        MaintenanceVenuesTreeViewComponent
+        ContentVenuesTreeViewComponent
     ],
     providers: [
         ContentService,

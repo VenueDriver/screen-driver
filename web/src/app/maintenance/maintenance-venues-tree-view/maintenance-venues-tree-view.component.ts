@@ -4,15 +4,18 @@ import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/t
 import {KEYS} from "angular-tree-component/dist/constants/keys";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {Content} from "../../content/content";
-import {VenuesService} from "../venues.service";
+import {VenuesService} from "../../venues/venues.service";
 import {Setting} from "../../settings/entities/setting";
 
 import * as _ from 'lodash';
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 import {ScreensMessagingService} from "../../messaging/screens-messaging.service";
 import {NotificationService} from "../../notifications/notification.service";
-import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
-import {VenuesTreeViewComponent} from "../venues-tree-view/venues-tree-view.component";
+import {VenuesTreeViewService} from "../../venues/venues-tree-view/venues-tree-view.service";
+import {VenuesTreeViewComponent} from "../../venues/venues-tree-view/venues-tree-view.component";
+import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
+import {Venue} from "../../venues/entities/venue";
+import {KioskVersionDetails} from "../entities/kiosk-version-details";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 
@@ -23,9 +26,11 @@ const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 })
 export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
 
-    @Input() venues: Array<any>;
+    @Input() venues: Array<Venue>;
+    @Input() kioskVersions: any;
 
     @Output() updateApplications = new EventEmitter();
+    @Output() autoUpdateScheduleChange = new EventEmitter();
 
     @ViewChild(VenuesTreeViewComponent)
     private venuesTree: VenuesTreeViewComponent;
@@ -57,30 +62,21 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         return !!this.currentNodeData;
     }
 
-    //+
-    hasContentInfo(node: any): boolean {
-        return node.data.content;
+    isVenueNode(node: any): boolean {
+        return this.checkNodeLevel(node, 1);
     }
 
-    //+
-    getContentShortName(node: any): string {
-        if (node.data.content) {
-            return node.data.content.short_name;
-        }
+    isScreenGroupNode(node: any): boolean {
+        return this.checkNodeLevel(node, 2);
     }
 
-    //+
-    getContentUrl(node: any): string {
-        if (node.data.content) {
-            return this.getShortUrl(node.data.content);
-        }
+    isScreenNode(node: any): boolean {
+        return this.checkNodeLevel(node, 3);
     }
 
-    //+
-    getShortUrl(content: Content): string {
-        return Content.getShortUrl(content, MAX_DISPLAYING_URL_LENGTH);
+    private checkNodeLevel(node: any, level: number): boolean {
+        return node && node.level == level;
     }
-
 
     //+
     isCurrentNode(node: any) {
@@ -193,5 +189,10 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
     //++
     hasCurrentNode(): boolean {
         return !!this.currentNodeData;
+    }
+
+    getVersionDetailsForScreen(node: any): KioskVersionDetails {
+        let screenId = node.data.id;
+        return this.kioskVersions[screenId];
     }
 }

@@ -8,7 +8,7 @@ import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
 import {KioskVersionService} from "./kiosk-version.service";
 import {MaintenanceProperties} from "./entities/maintenance-properties";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
-import {KioskVersion} from "./entities/kiosk-version";
+import {KioskVersionDetails, KioskVersionDetailsMap} from "./entities/kiosk-version-details";
 import {Venue} from "../venues/entities/venue";
 
 @Injectable()
@@ -39,7 +39,7 @@ export class MaintenanceService {
         return this.autoupdateScheduleService.loadAutoupdateSchedule();
     }
 
-    loadKioskVersions(): Observable<Array<KioskVersion>> {
+    loadKioskVersions(): Observable<KioskVersionDetailsMap> {
         return this.kioskVersionsService.loadKioskVersions();
     }
 
@@ -53,10 +53,15 @@ export class MaintenanceService {
         return venues;
     }
 
+    updateVenueSchedule(schedule: AutoupdateSchedule): Observable<AutoupdateSchedule> {
+        return this.autoupdateScheduleService.upsert(schedule);
+    }
+
     private setAutoupdateScheduleForVenue(schedulesMap: any, venue: VenueMaintenanceInfo) {
         let schedule = schedulesMap[venue.id];
         if (_.isEmpty(schedule)) {
             schedule = this.autoupdateScheduleService.createDefaultAutoapdateSchedule();
+            schedule.id = venue.id;
         }
         venue.autoupdateSchedule = schedule;
     }
