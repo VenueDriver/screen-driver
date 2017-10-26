@@ -18,7 +18,7 @@ export class CustomTimeCronConverter {
     private getHours(): string {
         if (this.input.period.toLowerCase() == 'pm') {
             if (+this.input.hours < 13) {
-                return 12 + this.input.hours;
+                return `${12 + (+this.input.hours)}`;
             }
         }
         return this.input.hours;
