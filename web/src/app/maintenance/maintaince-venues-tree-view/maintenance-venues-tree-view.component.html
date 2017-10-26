@@ -8,7 +8,8 @@
                 </div>
 
                 <div *ngIf="isVenueNode(node)" class="content-info">
-                    <auto-update-schedule-switcher>
+                    <auto-update-schedule-switcher
+                            [autoUpdateSchedule]="node.data.autoupdateSchedule">
                     </auto-update-schedule-switcher>
                 </div>
 
