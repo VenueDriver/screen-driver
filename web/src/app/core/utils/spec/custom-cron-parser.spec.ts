@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
 
 
-import {CronConvertStrategy, CustomCronConverter} from "../custom-cron-converter";
+import {CronConvertStrategy, CustomCronConverter} from "../custom-cron-parser";
 
-fdescribe('CustomCronConverter', () => {
+fdescribe('CustomCronParser', () => {
     const EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION = '0 0 13 * * * *';
 
     describe('getPeriod()', () => {

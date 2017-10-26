@@ -2,7 +2,7 @@ import {CronToDatetimeConverter} from "../../datetime-cron-converter/cron-to-dat
 
 export enum CronConvertStrategy {DEFAULT, PERIOD_SENSITIVE}
 
-export interface CronConvertResult {
+export interface CronParseResult {
     hours: string;
     minutes: string;
     period: string;
@@ -48,7 +48,7 @@ export class CustomCronConverter {
         return `${this.getHours()}:${this.getMinutes()}`;
     }
 
-    public result(): CronConvertResult {
+    public result(): CronParseResult {
         return {
             hours: this.getHours(),
             minutes: this.getMinutes(),
