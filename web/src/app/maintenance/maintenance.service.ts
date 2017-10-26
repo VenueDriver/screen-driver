@@ -8,7 +8,7 @@ import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
 import {KioskVersionService} from "./kiosk-version.service";
 import {MaintenanceProperties} from "./entities/maintenance-properties";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
-import {KioskVersion} from "./entities/kiosk-version";
+import {KioskVersionDetails} from "./entities/kiosk-version-details";
 import {Venue} from "../venues/entities/venue";
 
 @Injectable()
@@ -39,7 +39,7 @@ export class MaintenanceService {
         return this.autoupdateScheduleService.loadAutoupdateSchedule();
     }
 
-    loadKioskVersions(): Observable<Array<KioskVersion>> {
+    loadKioskVersions(): Observable<Array<KioskVersionDetails>> {
         return this.kioskVersionsService.loadKioskVersions();
     }
 

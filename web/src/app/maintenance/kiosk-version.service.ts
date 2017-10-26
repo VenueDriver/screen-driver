@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
-import {KioskVersion} from "./entities/kiosk-version";
+import {KioskVersionDetails} from "./entities/kiosk-version-details";
 
 import * as _ from 'lodash';
 
@@ -15,10 +15,10 @@ export class KioskVersionService {
 
     loadKioskVersions(): Observable<any> {
         return this.httpClient.get(this.apiPath)
-            .map((data: Array<KioskVersion>) => this.createKioskVersionsMap(data));
+            .map((data: Array<KioskVersionDetails>) => this.createKioskVersionsMap(data));
     }
 
-    createKioskVersionsMap(kioskVersions: Array<KioskVersion>): any {
+    createKioskVersionsMap(kioskVersions: Array<KioskVersionDetails>): any {
         let versionsMap = {};
         _.each(kioskVersions, v => versionsMap[v.screenId] = v);
         return versionsMap;

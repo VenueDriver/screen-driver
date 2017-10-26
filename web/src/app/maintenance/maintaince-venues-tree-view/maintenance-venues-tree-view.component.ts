@@ -14,7 +14,7 @@ import {NotificationService} from "../../notifications/notification.service";
 import {VenuesTreeViewService} from "../../venues/venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../../venues/venues-tree-view/venues-tree-view.component";
 import {Venue} from "../../venues/entities/venue";
-import {KioskVersion} from "../entities/kiosk-version";
+import {KioskVersionDetails} from "../entities/kiosk-version-details";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
 
@@ -181,7 +181,7 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         return !!this.currentNodeData;
     }
 
-    getVersionDetailsForScreen(node: any): KioskVersion {
+    getVersionDetailsForScreen(node: any): KioskVersionDetails {
         let screenId = node.data.id;
         return this.kioskVersions[screenId];
     }

@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {KioskVersion} from "../../entities/kiosk-version";
+import {KioskVersionDetails} from "../../entities/kiosk-version-details";
 import {format} from 'date-fns'
 
 @Component({
@@ -9,11 +9,11 @@ import {format} from 'date-fns'
 })
 export class KioskVersionDetailsComponent {
 
-    @Input('versionDetails') set _versionDetails(versionDetails: KioskVersion) {
+    @Input('versionDetails') set _versionDetails(versionDetails: KioskVersionDetails) {
         this.versionDetails.version = versionDetails && versionDetails.version ? versionDetails.version : 'N/A';
         this.versionDetails.updatedAt = versionDetails ? versionDetails.updatedAt : undefined;
     }
 
-    versionDetails: KioskVersion = new KioskVersion();
+    versionDetails: KioskVersionDetails = new KioskVersionDetails();
 
 }
