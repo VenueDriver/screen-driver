@@ -63,6 +63,6 @@ export class CustomCronParser {
     }
 
     private setPeriod(hours: number): void {
-        this.period = hours > 12 ? 'PM' : 'AM';
+        this.period = hours > 12 && hours < 24 ? 'PM' : 'AM';
     }
 }
