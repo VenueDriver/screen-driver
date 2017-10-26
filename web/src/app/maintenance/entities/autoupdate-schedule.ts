@@ -4,7 +4,7 @@ export class AutoupdateSchedule {
     eventTime: string;
     _rev: number;
 
-    constructor(schedule: AutoupdateSchedule) {
+    constructor(schedule?: AutoupdateSchedule) {
         if (schedule) {
             this.id = schedule.id;
             this.isEnabled = schedule.isEnabled;
