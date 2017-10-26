@@ -8,6 +8,7 @@ import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 import * as _ from 'lodash';
 import {MaintenanceProperties} from "./entities/maintenance-properties";
+import {KioskVersionDetailsMap} from "./entities/kiosk-version-details";
 
 @Component({
     selector: 'maintenance',
@@ -19,7 +20,7 @@ export class MaintenanceComponent implements OnInit {
     venues: Array<VenueMaintenanceInfo>;
     venuesTree: Array<Venue>;
     schedules: Array<AutoupdateSchedule>;
-    kioskVersions: any;
+    kioskVersions: KioskVersionDetailsMap;
 
     constructor(private maintenanceService: MaintenanceService,
                 private screensService: ScreensMessagingService,
