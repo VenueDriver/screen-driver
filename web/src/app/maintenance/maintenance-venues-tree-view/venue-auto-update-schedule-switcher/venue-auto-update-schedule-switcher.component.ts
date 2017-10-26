@@ -49,7 +49,7 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     onEnabledChange(isEnabled): void {
         const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
         newSchedule.isEnabled = isEnabled;
-        this._autoUpdateSchedule.isEnabled = isEnabled;//temporary
+        this._autoUpdateSchedule.isEnabled = isEnabled;
         this.autoUpdateChange.next(newSchedule);
     }
 

@@ -47,7 +47,7 @@ export class MaintenanceComponent implements OnInit {
 
     updateClientsApps(screens: any) {
         let screensIds = _.map(screens, 'id');
-        let body = { screens: screensIds };
+        let body = {screens: screensIds};
 
         this.screensService.updateClientApps(body);
     }
@@ -55,7 +55,8 @@ export class MaintenanceComponent implements OnInit {
     updateScheduleConfiguration(autoUpdateSchedule: AutoupdateSchedule): void {
         this.maintenanceService.updateVenueSchedule(autoUpdateSchedule)
             .subscribe((ok) => {
-                this.notificationService.showSuccessNotificationBar('Configuration has been successfully updated')
+                this.loadData();
+                this.notificationService.showSuccessNotificationBar('Configuration has been successfully updated');
             }, (error) => {
                 this.notificationService.showErrorNotificationBar('Unable to update schedule configuration')
             });
