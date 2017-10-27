@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {Setting} from "./entities/setting";
 import {environment} from "../../environments/environment";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
-import {NotificationService} from "../notifications/notification.service";
+import {NotificationService} from "../shared/notifications/notification.service";
 import {HttpClient, HttpResponse} from "@angular/common/http";
 
 const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;

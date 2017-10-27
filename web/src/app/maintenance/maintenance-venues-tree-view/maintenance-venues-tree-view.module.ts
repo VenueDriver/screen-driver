@@ -3,15 +3,15 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from "@angular/forms";
 import {TreeModule} from "angular-tree-component/dist/angular-tree-component";
 import {VenueAutoUpdateScheduleSwitcherComponent} from "./venue-auto-update-schedule-switcher/venue-auto-update-schedule-switcher.component";
-import {ContentAutocompleteModule} from "../../content-autocomplete/content-autocomplete.module";
-import {AutofocusModule} from "../../directives/autofocus/autofocus.module";
+import {ContentAutocompleteModule} from "../../shared/content-autocomplete/content-autocomplete.module";
+import {AutofocusModule} from "../../shared/directives/autofocus/autofocus.module";
 import {SettingsModule} from "../../settings/settings.module";
 import {MaintenanceVenuesTreeViewComponent} from "./maintenance-venues-tree-view.component";
-import {VenuesModule} from "../../venues/venues.module";
-import {TimeSelectorModule} from "../../time-selector/time-selector.module";
-import {SharedModule} from "../../shared/shared.module";
+import {VenuesModule} from "../../content-management/venues/venues.module";
+import {TimeSelectorModule} from "../../shared/time-selector/time-selector.module";
 import {KioskVersionDetailsComponent} from "./kiosk-version-details/kiosk-version-details.component";
-import {DateFormatterModule} from "../../../pipes/date-formatter/date-formatter.module";
+import {DateFormatterModule} from "../../shared/pipes/date-formatter/date-formatter.module";
+import {ToggleButtonModule} from "../../shared/toggle-button/toggle-button.module";
 
 @NgModule({
     imports: [
@@ -23,7 +23,7 @@ import {DateFormatterModule} from "../../../pipes/date-formatter/date-formatter.
         SettingsModule,
         VenuesModule,
         TimeSelectorModule,
-        SharedModule,
+        ToggleButtonModule,
         TimeSelectorModule,
         DateFormatterModule
     ],

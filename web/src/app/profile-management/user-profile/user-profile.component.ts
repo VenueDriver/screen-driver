@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {User} from "../../common/entities/user";
+import {User} from "../../core/entities/user";
 
 import * as _ from 'lodash';
 

@@ -5,7 +5,7 @@ import {SettingsService} from "../settings.service";
 import {Notification} from "angular2-notifications/dist";
 
 import * as _ from 'lodash';
-import {NotificationService} from "../../notifications/notification.service";
+import {NotificationService} from "../../shared/notifications/notification.service";
 
 @Injectable()
 export class SettingStateHolderService {

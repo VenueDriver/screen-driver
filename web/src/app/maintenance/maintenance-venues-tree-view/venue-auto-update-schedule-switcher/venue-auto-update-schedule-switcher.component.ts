@@ -1,15 +1,16 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AutoupdateSchedule} from "../../entities/autoupdate-schedule";
-import {CronConvertStrategy, CustomCronParser} from "../../../core/utils/custom-cron-parser";
-import {CustomTimeCronConverter} from "../../../core/utils/custom-time-cron-converter";
+import {VenueAutoUpdateScheduleSwitcherService} from "./venue-auto-update-schedule-switcher.service";
+import {VenueScheduleTimeSelectorParams} from "./time-selector-params.interface";
 
 @Component({
     selector: 'auto-update-schedule-switcher',
     templateUrl: 'venue-auto-update-schedule-switcher.component.html',
-    styleUrls: ['./venue-auto-update-schedule-switcher.component.sass']
+    styleUrls: ['./venue-auto-update-schedule-switcher.component.sass'],
+    providers: [VenueAutoUpdateScheduleSwitcherService]
 })
 export class VenueAutoUpdateScheduleSwitcherComponent {
-
+    public autoUpdateTime: VenueScheduleTimeSelectorParams;
     private _autoUpdateSchedule: AutoupdateSchedule;
 
     @Input('autoUpdateSchedule')
@@ -22,18 +23,15 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
         return this._autoUpdateSchedule;
     }
 
-    public autoUpdateTime: { hours: string, minutes: string, time: string, period: string } = {time: '08:00', hours: '8', minutes: '00', period: 'AM'};
-
     @Output() autoUpdateChange: EventEmitter<AutoupdateSchedule> = new EventEmitter<AutoupdateSchedule>();
 
-    constructor(
-    ) { }
+    constructor(private service: VenueAutoUpdateScheduleSwitcherService) {
+        this.autoUpdateTime = this.service.getDefaultAutoUpdateTime();
+    }
 
     setUpAutoUpdateTime(): void {
         const cron = this._autoUpdateSchedule.eventTime;
-        let converter: CustomCronParser = new CustomCronParser(cron, CronConvertStrategy.PERIOD_SENSITIVE);
-
-        this.autoUpdateTime = converter.result();
+        this.autoUpdateTime = this.service.getTimeFromCron(cron);
     }
 
     onTimePeriodChange(period: string): void {
@@ -47,17 +45,16 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     }
 
     onEnabledChange(isEnabled): void {
-        const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
-        newSchedule.isEnabled = isEnabled;
         this._autoUpdateSchedule.isEnabled = isEnabled;
-        this.autoUpdateChange.next(newSchedule);
+        this.notifyAutoUpdateConfigChanged();
     }
 
     notifyAutoUpdateConfigChanged(): void {
-        const newSchedule = new AutoupdateSchedule(this._autoUpdateSchedule);
-        newSchedule.eventTime = this.getTimeAsCron();
+        this.autoUpdateChange.next(this.configToUpdate());
+    }
 
-        this.autoUpdateChange.next(newSchedule);
+    configToUpdate(): AutoupdateSchedule {
+        return this.service.getUpdatedConfig(this._autoUpdateSchedule, this.autoUpdateTime, this.isEnabled);
     }
 
     get isEnabled(): boolean {
@@ -66,11 +63,5 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
 
     get isTimeSelectDisabled(): boolean {
         return !this.isEnabled;
-    }
-
-    private getTimeAsCron(): string {
-        this.autoUpdateTime.hours = this.autoUpdateTime.time.split(":")[0];
-        this.autoUpdateTime.minutes = this.autoUpdateTime.time.split(":")[1];
-        return new CustomTimeCronConverter(this.autoUpdateTime).cron;
     }
 }

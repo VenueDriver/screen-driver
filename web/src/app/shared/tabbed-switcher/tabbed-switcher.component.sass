@@ -1,0 +1,19 @@
+@import "../../../styles/variables"
+
+.tabs-container
+  width: 800px
+
+  @media screen and (max-width: $tablet-resolution)
+    width: auto
+    max-width: 800px
+
+  .nav-tabs
+    li
+      font-size: 20px
+      width: 250px
+      cursor: pointer
+      text-align: center
+
+      @media screen and (max-width: $tablet-resolution)
+        width: 50%
+        font-size: 16px
