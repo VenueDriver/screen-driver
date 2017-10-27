@@ -1,9 +1,9 @@
 import {ValidationResult} from "./validation-result";
 import {Schedule} from "./schedule";
-import {CronToDatetimeConverter} from '../../datetime-cron-converter/cron-to-datetime.converter';
+import {CronToDatetimeConverter} from '../../core/utils/datetime-cron-converter/cron-to-datetime.converter';
 import {Periodicity} from '../../core/enums/periodicity';
 import {DaysOfWeek, getShortDay} from '../../core/enums/days-of-week';
-import {DatetimeToCronConverter} from "../../datetime-cron-converter/datetime-cron.converter";
+import {DatetimeToCronConverter} from "../../core/utils/datetime-cron-converter/datetime-cron.converter";
 
 import * as _ from 'lodash';
 

@@ -1,5 +1,3 @@
-import {getShortDay} from "../core/enums/days-of-week";
-
 export class DatetimeToCronConverter {
 
     static createCronForSpecificDate(date: Date): string {

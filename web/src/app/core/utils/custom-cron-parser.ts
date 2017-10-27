@@ -1,4 +1,4 @@
-import {CronToDatetimeConverter} from "../../datetime-cron-converter/cron-to-datetime.converter";
+import {CronToDatetimeConverter} from "./datetime-cron-converter/cron-to-datetime.converter";
 
 export enum CronConvertStrategy {DEFAULT, PERIOD_SENSITIVE}
 

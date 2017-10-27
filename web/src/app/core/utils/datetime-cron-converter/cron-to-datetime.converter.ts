@@ -1,5 +1,3 @@
-import {DaysOfWeek} from '../core/enums/days-of-week';
-
 export class CronToDatetimeConverter {
 
     static getDateFromCron(cron: string): Date {
