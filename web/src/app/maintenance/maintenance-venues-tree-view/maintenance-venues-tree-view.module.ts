@@ -10,7 +10,7 @@ import {MaintenanceVenuesTreeViewComponent} from "./maintenance-venues-tree-view
 import {VenuesModule} from "../../venues/venues.module";
 import {TimeSelectorModule} from "../../shared/time-selector/time-selector.module";
 import {KioskVersionDetailsComponent} from "./kiosk-version-details/kiosk-version-details.component";
-import {DateFormatterModule} from "../../../pipes/date-formatter/date-formatter.module";
+import {DateFormatterModule} from "../../shared/pipes/date-formatter/date-formatter.module";
 import {ToggleButtonModule} from "../../shared/toggle-button/toggle-button.module";
 
 @NgModule({
