@@ -1,12 +1,13 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AutoupdateSchedule} from "../../entities/autoupdate-schedule";
-import {CronConvertStrategy, CustomCronParser} from "../../../core/utils/custom-cron-parser";
 import {CustomTimeCronConverter} from "../../../core/utils/custom-time-cron-converter";
+import {VenueAutoUpdateScheduleSwitcherService} from "./venue-auto-update-schedule-switcher.service";
 
 @Component({
     selector: 'auto-update-schedule-switcher',
     templateUrl: 'venue-auto-update-schedule-switcher.component.html',
-    styleUrls: ['./venue-auto-update-schedule-switcher.component.sass']
+    styleUrls: ['./venue-auto-update-schedule-switcher.component.sass'],
+    providers: [VenueAutoUpdateScheduleSwitcherService]
 })
 export class VenueAutoUpdateScheduleSwitcherComponent {
 
@@ -26,14 +27,11 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
 
     @Output() autoUpdateChange: EventEmitter<AutoupdateSchedule> = new EventEmitter<AutoupdateSchedule>();
 
-    constructor(
-    ) { }
+    constructor(private service: VenueAutoUpdateScheduleSwitcherService) { }
 
     setUpAutoUpdateTime(): void {
         const cron = this._autoUpdateSchedule.eventTime;
-        let converter: CustomCronParser = new CustomCronParser(cron, CronConvertStrategy.PERIOD_SENSITIVE);
-
-        this.autoUpdateTime = converter.result();
+        this.autoUpdateTime = this.service.getTimeFromCron(cron);
     }
 
     onTimePeriodChange(period: string): void {
