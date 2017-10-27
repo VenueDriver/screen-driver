@@ -8,7 +8,7 @@ import {SettingStateHolderService} from "../settings/setting-state-manager/setti
 import {SchedulesComponent} from "./schedules.component";
 import {CheckboxMultiselectorModule} from "../checkbox-multiselector/checkbox-multiselector.module";
 import { DaysOfWeekMultiselectorComponent } from './single-schedule/days-of-week-multiselector/days-of-week-multiselector.component';
-import {TimeSelectorModule} from "../time-selector/time-selector.module";
+import {TimeSelectorModule} from "../shared/time-selector/time-selector.module";
 import {ToggleButtonModule} from "../shared/toggle-button/toggle-button.module";
 
 @NgModule({

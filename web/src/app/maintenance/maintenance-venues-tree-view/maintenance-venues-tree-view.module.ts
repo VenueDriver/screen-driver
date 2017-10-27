@@ -8,7 +8,7 @@ import {AutofocusModule} from "../../directives/autofocus/autofocus.module";
 import {SettingsModule} from "../../settings/settings.module";
 import {MaintenanceVenuesTreeViewComponent} from "./maintenance-venues-tree-view.component";
 import {VenuesModule} from "../../venues/venues.module";
-import {TimeSelectorModule} from "../../time-selector/time-selector.module";
+import {TimeSelectorModule} from "../../shared/time-selector/time-selector.module";
 import {KioskVersionDetailsComponent} from "./kiosk-version-details/kiosk-version-details.component";
 import {DateFormatterModule} from "../../../pipes/date-formatter/date-formatter.module";
 import {ToggleButtonModule} from "../../shared/toggle-button/toggle-button.module";
