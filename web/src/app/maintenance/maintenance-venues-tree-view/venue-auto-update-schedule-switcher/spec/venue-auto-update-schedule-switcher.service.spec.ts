@@ -34,4 +34,15 @@ describe('VenueAutoUpdateScheduleSwitcherService', () => {
             });
         });
     });
+
+    describe('getDefaultAutoUpdateTime()', () => {
+        it('should return {time: \'08:00\', hours: \'8\', minutes: \'00\', period: \'AM\'}', () => {
+            const service = new VenueAutoUpdateScheduleSwitcherService();
+            const result = service.getDefaultAutoUpdateTime();
+            expect(result.period).toBe('AM');
+            expect(result.hours).toBe('8');
+            expect(result.minutes).toBe('00');
+            expect(result.time).toBe('08:00');
+        });
+    });
 });

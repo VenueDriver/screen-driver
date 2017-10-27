@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AutoupdateSchedule} from "../../entities/autoupdate-schedule";
 import {CustomTimeCronConverter} from "../../../core/utils/custom-time-cron-converter";
 import {VenueAutoUpdateScheduleSwitcherService} from "./venue-auto-update-schedule-switcher.service";
+import {VenueScheduleTimeSelectorParams} from "./time-selector-params.interface";
 
 @Component({
     selector: 'auto-update-schedule-switcher',
@@ -10,7 +11,7 @@ import {VenueAutoUpdateScheduleSwitcherService} from "./venue-auto-update-schedu
     providers: [VenueAutoUpdateScheduleSwitcherService]
 })
 export class VenueAutoUpdateScheduleSwitcherComponent {
-
+    public autoUpdateTime: VenueScheduleTimeSelectorParams;
     private _autoUpdateSchedule: AutoupdateSchedule;
 
     @Input('autoUpdateSchedule')
@@ -23,11 +24,11 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
         return this._autoUpdateSchedule;
     }
 
-    public autoUpdateTime: { hours: string, minutes: string, time: string, period: string } = {time: '08:00', hours: '8', minutes: '00', period: 'AM'};
-
     @Output() autoUpdateChange: EventEmitter<AutoupdateSchedule> = new EventEmitter<AutoupdateSchedule>();
 
-    constructor(private service: VenueAutoUpdateScheduleSwitcherService) { }
+    constructor(private service: VenueAutoUpdateScheduleSwitcherService) {
+        this.autoUpdateTime = this.service.getDefaultAutoUpdateTime();
+    }
 
     setUpAutoUpdateTime(): void {
         const cron = this._autoUpdateSchedule.eventTime;
