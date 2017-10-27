@@ -8,7 +8,7 @@ import {Venue} from "../entities/venue";
 import {SettingsService} from "../../settings/settings.service";
 import {Setting} from "../../settings/entities/setting";
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
-import {NotificationService} from "../../notifications/notification.service";
+import {NotificationService} from "../../shared/notifications/notification.service";
 
 import * as _ from 'lodash';
 

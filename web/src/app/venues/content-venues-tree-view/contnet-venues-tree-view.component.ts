@@ -10,7 +10,7 @@ import {Setting} from "../../settings/entities/setting";
 import * as _ from 'lodash';
 import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 import {ScreensMessagingService} from "../../messaging/screens-messaging.service";
-import {NotificationService} from "../../notifications/notification.service";
+import {NotificationService} from "../../shared/notifications/notification.service";
 import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../venues-tree-view/venues-tree-view.component";
 

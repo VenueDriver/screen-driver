@@ -6,8 +6,8 @@ import { AppComponent } from './app.component';
 import {AlertModule} from "ngx-bootstrap";
 
 import {VenuesModule} from "./venues/venues.module";
-import {NotificationModule} from "./notifications/notification.module";
-import {NotificationService} from "./notifications/notification.service";
+import {NotificationModule} from "./shared/notifications/notification.module";
+import {NotificationService} from "./shared/notifications/notification.service";
 import {SettingsModule} from "./settings/settings.module";
 import {HeaderService} from "./header/header.service";
 import {TabbedSwitcherModule} from "./shared/tabbed-switcher/tabbed-switcher.module";

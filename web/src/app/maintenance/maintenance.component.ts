@@ -8,7 +8,7 @@ import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 import * as _ from 'lodash';
 import {MaintenanceProperties} from "./entities/maintenance-properties";
-import {NotificationService} from "../notifications/notification.service";
+import {NotificationService} from "../shared/notifications/notification.service";
 import {KioskVersionDetailsMap} from "./entities/kiosk-version-details";
 
 @Component({

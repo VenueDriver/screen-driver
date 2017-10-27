@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Setting} from "../entities/setting";
 import {SettingsService} from "../settings.service";
-import {NotificationService} from "../../notifications/notification.service";
+import {NotificationService} from "../../shared/notifications/notification.service";
 
 import * as _ from 'lodash';
 import {SchedulesService} from "../../schedules/schedules.service";

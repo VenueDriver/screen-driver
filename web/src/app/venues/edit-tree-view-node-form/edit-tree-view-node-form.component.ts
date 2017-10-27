@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Input, Output, OnDestroy} from '@angular/core';
 import {EditTreeViewNodeFormService} from "./edit-tree-view-node-form.service";
 import {Content} from "../../content/content";
-import {NotificationService} from "../../notifications/notification.service";
+import {NotificationService} from "../../shared/notifications/notification.service";
 
 import * as _ from 'lodash';
 import {Venue} from "../entities/venue";

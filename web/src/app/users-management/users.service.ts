@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {NotificationService} from "../notifications/notification.service";
+import {NotificationService} from "../shared/notifications/notification.service";
 import {User} from "../common/entities/user";
 import {environment} from "../../environments/environment";
 import {Subject, Observable, BehaviorSubject} from "rxjs";
