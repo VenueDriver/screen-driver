@@ -10,7 +10,7 @@ import {NotificationModule} from "./notifications/notification.module";
 import {NotificationService} from "./notifications/notification.service";
 import {SettingsModule} from "./settings/settings.module";
 import {HeaderService} from "./header/header.service";
-import {TabbedSwitcherModule} from "./tabbed-switcher/tabbed-switcher.module";
+import {TabbedSwitcherModule} from "./shared/tabbed-switcher/tabbed-switcher.module";
 import {ScreensMessagingModule} from "./messaging/screens-messaging.module";
 import {SchedulesModule} from "./schedules/schedules.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
