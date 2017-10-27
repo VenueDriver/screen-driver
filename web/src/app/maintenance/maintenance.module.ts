@@ -9,12 +9,11 @@ import {VenuesModule} from "../venues/venues.module";
 import {MaintenanceVenuesTreeViewModule} from "./maintenance-venues-tree-view/maintenance-venues-tree-view.module";
 import {AutoupdateScheduleService} from "./autoupdate-schedule.service";
 import {KioskVersionService} from "./kiosk-version.service";
-import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
     imports: [
         CommonModule,
-        SharedModule,
+        ToggleButtonModule,
         TimeSelectorModule,
         VenuesModule,
         MaintenanceVenuesTreeViewModule

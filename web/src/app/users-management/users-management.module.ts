@@ -6,13 +6,13 @@ import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {UsersService} from "./users.service";
 import {AutofocusModule} from "../directives/autofocus/autofocus.module";
-import {SharedModule} from "../shared/shared.module";
+import {ToggleButtonModule} from "../shared/toggle-button/toggle-button.module";
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
-        SharedModule,
+        ToggleButtonModule,
         AutofocusModule
     ],
     declarations: [

@@ -9,14 +9,14 @@ import {SchedulesComponent} from "./schedules.component";
 import {CheckboxMultiselectorModule} from "../checkbox-multiselector/checkbox-multiselector.module";
 import { DaysOfWeekMultiselectorComponent } from './single-schedule/days-of-week-multiselector/days-of-week-multiselector.component';
 import {TimeSelectorModule} from "../time-selector/time-selector.module";
-import {SharedModule} from "../shared/shared.module";
+import {ToggleButtonModule} from "../shared/toggle-button/toggle-button.module";
 
 @NgModule({
     imports: [
         BrowserModule,
         DatepickerModule,
         AutocompleteModule,
-        SharedModule,
+        ToggleButtonModule,
         CheckboxMultiselectorModule,
         TimeSelectorModule
     ],
