@@ -2,6 +2,7 @@
 
 
 import {VenueAutoUpdateScheduleSwitcherService} from "../venue-auto-update-schedule-switcher.service";
+import {AutoupdateSchedule} from "../../../entities/autoupdate-schedule";
 
 /**
  * Service is created without DI because it has not dependencies,
@@ -43,6 +44,18 @@ describe('VenueAutoUpdateScheduleSwitcherService', () => {
             expect(result.hours).toBe('8');
             expect(result.minutes).toBe('00');
             expect(result.time).toBe('08:00');
+        });
+    });
+
+    describe('getUpdatedConfig()', () => {
+        describe('when input params time is {hours: 12, minutes: 12, period: AM, time: 12:12} and isEnabled', () => {
+            it('should return {isEnabled: true, eventTime: 0 12 24 * * * *}', () => {
+                const service = new VenueAutoUpdateScheduleSwitcherService();
+                const oldObject: AutoupdateSchedule = new AutoupdateSchedule(null);
+                const result = service.getUpdatedConfig(oldObject, {hours: '12', minutes: '12', time: '12:12', period: 'AM'}, true);
+                expect(result.eventTime).toBe('0 12 24 * * * *');
+                expect(result.isEnabled).toBe(true);
+            });
         });
     });
 });
