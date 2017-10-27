@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {AutoupdateScheduleService} from "./autoupdate-schedule.service";
-import {VenuesService} from "../venues/venues.service";
+import {VenuesService} from "../content-management/venues/venues.service";
 
 import * as _ from 'lodash';
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
@@ -9,7 +9,7 @@ import {KioskVersionService} from "./kiosk-version.service";
 import {MaintenanceProperties} from "./entities/maintenance-properties";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 import {KioskVersionDetails, KioskVersionDetailsMap} from "./entities/kiosk-version-details";
-import {Venue} from "../venues/entities/venue";
+import {Venue} from "../content-management/venues/entities/venue";
 
 @Injectable()
 export class MaintenanceService {

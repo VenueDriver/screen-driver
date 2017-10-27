@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {VenuesService} from "../venues/venues.service";
-import {Venue} from "../venues/entities/venue";
+import {VenuesService} from "../content-management/venues/venues.service";
+import {Venue} from "../content-management/venues/entities/venue";
 import {MaintenanceService} from "./maintenance.service";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";

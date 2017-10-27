@@ -1,4 +1,4 @@
-import {Setting} from "../settings/entities/setting";
+import {Setting} from "../../settings/entities/setting";
 
 export class SettingMergeTool {
     private settings;

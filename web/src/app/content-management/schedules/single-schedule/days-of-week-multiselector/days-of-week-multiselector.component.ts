@@ -1,5 +1,5 @@
 import {Component, Input, EventEmitter, Output} from '@angular/core';
-import {DaysOfWeek} from '../../../core/enums/days-of-week';
+import {DaysOfWeek} from "../../../../core/enums/days-of-week";
 
 
 @Component({

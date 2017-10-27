@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import {Schedule} from "./entities/schedule";
 import {EventTime} from "./entities/event-time";
-import {environment} from "../../environments/environment";
-import {Setting} from "../settings/entities/setting";
-import {SettingsPriorityHelper} from "../settings/settings-priority.helper";
+import {environment} from "../../../environments/environment";
+import {Setting} from "../../settings/entities/setting";
+import {SettingsPriorityHelper} from "../../settings/settings-priority.helper";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
-import {getPropertyName} from '../core/enums/periodicity';
-import {NotificationService} from "../shared/notifications/notification.service";
+import {getPropertyName} from '../../core/enums/periodicity';
+import {NotificationService} from "../../shared/notifications/notification.service";
 import {HttpClient} from "@angular/common/http";
 
 const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;

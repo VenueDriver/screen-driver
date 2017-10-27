@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {SettingsService} from "./settings.service";
 import {SettingStateHolderService} from "./setting-state-manager/settings-state-holder.service";
 import {Setting} from "./entities/setting";
-import {Schedule} from "../schedules/entities/schedule";
+import {Schedule} from "../content-management/schedules/entities/schedule";
 import {Periodicity} from '../core/enums/periodicity';
 
 import * as _ from 'lodash';

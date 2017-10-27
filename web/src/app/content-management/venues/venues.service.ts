@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import {Venue} from "./entities/venue";
 import { Observable } from 'rxjs/Observable';
-import {Content} from "../content/content";
-import {ContentService} from "../content/content.service";
+import {Content} from "../../content/content";
+import {ContentService} from "../../content/content.service";
 
 import * as _ from 'lodash';
 import {Subject, BehaviorSubject} from "rxjs";

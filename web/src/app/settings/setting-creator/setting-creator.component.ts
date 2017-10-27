@@ -5,7 +5,7 @@ import {NotificationService} from "../../shared/notifications/notification.servi
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 
 import * as _ from 'lodash';
-import {SchedulesService} from "../../schedules/schedules.service";
+import {SchedulesService} from "../../content-management/schedules/schedules.service";
 
 @Component({
     selector: 'setting-creator',

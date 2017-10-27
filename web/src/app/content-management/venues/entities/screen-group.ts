@@ -1,4 +1,4 @@
-import {Content} from "../../content/content";
+import {Content} from "../../../content/content";
 import {Screen} from "./screen";
 
 export class ScreenGroup {

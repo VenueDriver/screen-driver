@@ -2,14 +2,14 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {SchedulesService} from "../schedules.service";
 import {Schedule} from "../entities/schedule";
 import {EventTime} from "../entities/event-time";
-import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
-import {Setting} from "../../settings/entities/setting";
+import {SettingStateHolderService} from "../../../settings/setting-state-manager/settings-state-holder.service";
+import {Setting} from "../../../settings/entities/setting";
 import {ValidationResult} from "../entities/validation-result";
-import {Periodicity} from '../../core/enums/periodicity';
-import {DaysOfWeek} from '../../core/enums/days-of-week';
+import {Periodicity} from '../../../core/enums/periodicity';
+import {DaysOfWeek} from '../../../core/enums/days-of-week';
 
 import * as _ from 'lodash';
-import {PriorityTypes} from "../../core/enums/priorty-types";
+import {PriorityTypes} from "../../../core/enums/priorty-types";
 
 @Component({
     selector: 'single-schedule',

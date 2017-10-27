@@ -1,11 +1,11 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {SchedulesService} from "./schedules.service";
 import {Schedule} from "./entities/schedule";
-import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
-import {Setting} from "../settings/entities/setting";
+import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
+import {Setting} from "../../settings/entities/setting";
 
 import * as _ from 'lodash';
-import {PriorityTypes} from "../core/enums/priorty-types";
+import {PriorityTypes} from "../../core/enums/priorty-types";
 
 @Component({
     selector: 'schedules',

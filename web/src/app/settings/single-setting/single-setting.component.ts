@@ -4,10 +4,10 @@ import {SettingsService} from "../settings.service";
 import {NotificationService} from "../../shared/notifications/notification.service";
 
 import * as _ from 'lodash';
-import {SchedulesService} from "../../schedules/schedules.service";
-import {Schedule} from "../../schedules/entities/schedule";
+import {SchedulesService} from "../../content-management/schedules/schedules.service";
+import {Schedule} from "../../content-management/schedules/entities/schedule";
 import {PriorityTypes} from "../../core/enums/priorty-types";
-import {VenuesTreeViewService} from "../../venues/venues-tree-view/venues-tree-view.service";
+import {VenuesTreeViewService} from "../../content-management/venues/venues-tree-view/venues-tree-view.service";
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 
 @Component({

@@ -7,7 +7,7 @@ import {ContentAutocompleteModule} from "../../shared/content-autocomplete/conte
 import {AutofocusModule} from "../../directives/autofocus/autofocus.module";
 import {SettingsModule} from "../../settings/settings.module";
 import {MaintenanceVenuesTreeViewComponent} from "./maintenance-venues-tree-view.component";
-import {VenuesModule} from "../../venues/venues.module";
+import {VenuesModule} from "../../content-management/venues/venues.module";
 import {TimeSelectorModule} from "../../shared/time-selector/time-selector.module";
 import {KioskVersionDetailsComponent} from "./kiosk-version-details/kiosk-version-details.component";
 import {DateFormatterModule} from "../../shared/pipes/date-formatter/date-formatter.module";
