@@ -6,7 +6,7 @@ import {SettingStateHolderService} from "./setting-state-manager/settings-state-
 import {AutofocusModule} from "../directives/autofocus/autofocus.module";
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
-import {DropdownModule} from "../dropdown/dropdown.module";
+import {DropdownModule} from "../shared/dropdown/dropdown.module";
 import {SettingsManagerComponent} from "./settings-manager/settings-manager.component";
 import {PriorityTypeTagComponent} from "./priority-type-tag/priority-type-tag.component";
 import {SettingHeaderComponent} from "./setting-header/setting-header.component";
