@@ -1,7 +1,5 @@
 <div class="profile-container">
-    <div class="row">
-        <div class="col-md-2 col-sm-2 col-xs-1"></div>
-        <div class="col-md-8 col-sm-8">
+        <div class="">
             <div class="profile-management">
                 <user-profile [user]="user">
                 </user-profile>
@@ -12,6 +10,7 @@
                                  (submit)="setChangePasswordMode(false)">
                 </change-password>
             </div>
+
             <button *ngIf="!isChangePasswordMode"
                     type="button"
                     class="btn btn-primary btn-block change-password-button"
@@ -20,6 +19,4 @@
             </button>
 
         </div>
-        <div class="col-md-2 col-sm-12 col-xs-1"></div>
-    </div>
 </div>
