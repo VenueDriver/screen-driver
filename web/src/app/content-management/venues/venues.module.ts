@@ -8,7 +8,7 @@ import {ContentService} from "../../content/content.service";
 import {EditTreeViewNodeFormComponent} from "./edit-tree-view-node-form/edit-tree-view-node-form.component";
 import {VenuesTreeViewService} from "./venues-tree-view/venues-tree-view.service";
 import {ContentAutocompleteModule} from "../../shared/content-autocomplete/content-autocomplete.module";
-import {AutofocusModule} from "../../directives/autofocus/autofocus.module";
+import {AutofocusModule} from "../../shared/directives/autofocus/autofocus.module";
 import {SettingsModule} from "../../settings/settings.module";
 import {ScreensMessagingService} from "../../messaging/screens-messaging.service";
 import {ContentVenuesTreeViewComponent} from "./content-venues-tree-view/contnet-venues-tree-view.component";

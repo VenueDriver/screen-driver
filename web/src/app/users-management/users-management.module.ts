@@ -5,7 +5,7 @@ import {UsersComponent} from "./users/users.component";
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {UsersService} from "./users.service";
-import {AutofocusModule} from "../directives/autofocus/autofocus.module";
+import {AutofocusModule} from "../shared/directives/autofocus/autofocus.module";
 import {ToggleButtonModule} from "../shared/toggle-button/toggle-button.module";
 
 @NgModule({
