@@ -6,9 +6,9 @@ import * as AuthConsts from "./auth-consts";
 import * as _ from 'lodash';
 import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
 import {HttpClient} from "@angular/common/http";
-import {User} from "../common/entities/user";
+import {User} from "../core/entities/user";
 import {AuthTokenService} from "./auth-token.service";
-import {ErrorMessageExtractor} from "../common/error-message-extractor";
+import {ErrorMessageExtractor} from "../core/error-message-extractor";
 import {LocalStorageService} from "./local-storage.service";
 
 @Injectable()

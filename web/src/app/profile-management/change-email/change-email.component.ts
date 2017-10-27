@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
 import {UsersService} from "../../users-management/users.service";
-import {User} from "../../common/entities/user";
+import {User} from "../../core/entities/user";
 
 import * as _ from 'lodash';
 import {AuthService} from "../../auth/auth.service";
