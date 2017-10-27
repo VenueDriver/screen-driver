@@ -7,7 +7,7 @@ import {ContentService} from "../content/content.service";
 import * as _ from 'lodash';
 import {SettingStateHolderService} from "../settings/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../settings/entities/setting";
-import {SettingMergeTool} from "../setting-merge-tool/setting-merge-tool";
+import {SettingMergeTool} from "./setting-merge-tool";
 
 @Component({
     selector: 'venues',
