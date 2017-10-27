@@ -33,6 +33,8 @@ export class TimeSelectorComponent implements OnInit {
     }
 
     changeTimePeriod($event) {
+        if (this.disabled) return;
+
         if (this.defaultTimePeriod === this.timePeriods[0]) {
             this.timePeriodChange.emit(this.timePeriods[1])
         } else {
