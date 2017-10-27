@@ -1,25 +1,25 @@
 <div class="create-user-form">
+    <form [formGroup]="userForm" (ngSubmit)="performSubmit()">
     <div>
         <label for="email">Email address</label>
 
         <input id="email"
+               formControlName="email"
                class="form-control"
-               [(ngModel)]="user.email"
-               (focusout)="validateEmail(email)"
-               #email="ngModel"
                type="email"
                placeholder="Email"
                input-autofocus>
     </div>
 
-    <label *ngIf="email.invalid"
+    <label *ngIf="formInvalid()"
            class="email error-message">
-        {{getValidationMessage(email)}}
+        {{getErrorMessage()}}
     </label>
 
     <div class="is-admin">
         <toggle-button [title]="'Has admin access?'"
-                       (changed)="setUserRole($event)">
+                       formControlName="isAdmin"
+                       ngDefaultControl>
         </toggle-button>
     </div>
 
@@ -32,8 +32,9 @@
         <button type="button"
                 class="btn btn-success"
                 (click)="performSubmit()"
-                [disabled]="email.invalid">
+                [disabled]="formInvalid()">
             Create
         </button>
     </div>
+</form>
 </div>
