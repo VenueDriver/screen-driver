@@ -5,7 +5,7 @@ import {environment} from "../../environments/environment";
 import {Setting} from "../settings/entities/setting";
 import {SettingsPriorityHelper} from "../settings/settings-priority.helper";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
-import {getPropertyName} from '../enums/periodicity';
+import {getPropertyName} from '../core/enums/periodicity';
 import {NotificationService} from "../notifications/notification.service";
 import {HttpClient} from "@angular/common/http";
 

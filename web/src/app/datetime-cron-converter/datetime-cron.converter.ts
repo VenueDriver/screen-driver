@@ -1,4 +1,4 @@
-import {getShortDay} from "../enums/days-of-week";
+import {getShortDay} from "../core/enums/days-of-week";
 
 export class DatetimeToCronConverter {
 

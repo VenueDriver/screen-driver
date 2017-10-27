@@ -6,7 +6,7 @@ import {NotificationService} from "../../notifications/notification.service";
 import * as _ from 'lodash';
 import {SchedulesService} from "../../schedules/schedules.service";
 import {Schedule} from "../../schedules/entities/schedule";
-import {PriorityTypes} from "../../enums/priorty-types";
+import {PriorityTypes} from "../../core/enums/priorty-types";
 import {VenuesTreeViewService} from "../../venues/venues-tree-view/venues-tree-view.service";
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 

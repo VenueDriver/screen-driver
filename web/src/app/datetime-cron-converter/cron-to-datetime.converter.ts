@@ -1,4 +1,4 @@
-import {DaysOfWeek} from '../enums/days-of-week';
+import {DaysOfWeek} from '../core/enums/days-of-week';
 
 export class CronToDatetimeConverter {
 

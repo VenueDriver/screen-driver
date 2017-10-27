@@ -5,7 +5,7 @@ import {SettingStateHolderService} from "../settings/setting-state-manager/setti
 import {Setting} from "../settings/entities/setting";
 
 import * as _ from 'lodash';
-import {PriorityTypes} from "../enums/priorty-types";
+import {PriorityTypes} from "../core/enums/priorty-types";
 
 @Component({
     selector: 'schedules',
