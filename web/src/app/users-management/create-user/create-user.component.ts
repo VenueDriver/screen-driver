@@ -59,7 +59,7 @@ export class CreateUserComponent implements OnInit {
     getErrorMessage(): string {
         let errors = this.userForm.controls.email.errors;
         if (errors['notUnique']) return 'This email is already in use';
-        if (!_.isEmpty(this.userForm.value.email)) return 'Invalid Email';
+        if (this.emailNotEmpty()) return 'Invalid Email';
     }
 
     performCancel() {
@@ -74,5 +74,9 @@ export class CreateUserComponent implements OnInit {
 
     formInvalid(): boolean {
         return this.userForm.status === 'INVALID';
+    }
+
+    emailNotEmpty(): boolean {
+        return !_.isEmpty(this.userForm.value.email);
     }
 }
