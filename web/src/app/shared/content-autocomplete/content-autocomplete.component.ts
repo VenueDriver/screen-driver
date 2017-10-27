@@ -1,5 +1,5 @@
 import {Component, Output, EventEmitter, Input} from '@angular/core';
-import {Content} from "../content/content";
+import {Content} from "../../content/content";
 
 import * as _ from 'lodash';
 
