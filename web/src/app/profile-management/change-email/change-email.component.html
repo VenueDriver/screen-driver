@@ -1,28 +1,32 @@
 <div class="change-email-container">
 
     <div class="form-group" [class.has-error]="errorMessage">
-    <label class="control-label" for="email">New email address</label>
-    <input type="text"
-           class="form-control"
-           [(ngModel)]="editedUser.email"
-           id="email"
-           input-autofocus>
-    <span *ngIf="errorMessage"
-          class="help-block">
-        {{errorMessage}}
-    </span>
+        <label class="control-label" for="email">New email address</label>
 
-    <div class="control-buttons">
-        <button type="button"
-                class="btn btn-success"
-                (click)="performSubmit()">
-            Save
-        </button>
-        <button type="button"
-                class="btn btn-link"
-                (click)="performCancel()">
-            Cancel
-        </button>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="editedUser.email"
+               id="email"
+               input-autofocus>
+
+        <span *ngIf="errorMessage"
+              class="help-block">
+            {{errorMessage}}
+        </span>
+
+        <div class="control-buttons">
+            <button type="button"
+                    class="btn btn-success"
+                    (click)="performSubmit()">
+                Save
+            </button>
+
+            <button type="button"
+                    class="btn btn-link"
+                    (click)="performCancel()">
+                Cancel
+            </button>
+        </div>
     </div>
-    </div>
+
 </div>
