@@ -3,6 +3,8 @@
 const {LocalStorageManager, StorageNames} = require('./local_storage_helper');
 const Storage = require('../storage/data_storage');
 
+const _ = require('lodash');
+
 class StorageManager {
 
     static getStorage() {
@@ -45,6 +47,15 @@ class StorageManager {
 
     static hasStorage(key, callback) {
         return LocalStorageManager.hasStorage(key, callback);
+    }
+
+    static saveAutoupdateSchedule(schedule) {
+        LocalStorageManager.getFromStorage(StorageNames.SERVER_DATA_STORAGE, (error, data) => {
+            let autoupdateSchedules = data.updateSchedules;
+            _.pullAllBy(autoupdateSchedules, [schedule], 'id');
+            autoupdateSchedules.push(schedule);
+            LocalStorageManager.putInStorage(StorageNames.SERVER_DATA_STORAGE, data);
+        });
     }
 }
 
