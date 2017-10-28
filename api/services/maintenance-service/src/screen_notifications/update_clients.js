@@ -1,8 +1,14 @@
 'use strict';
 
-const Notifier = require('../notifier/notifier');
+
 
 const ModulePathManager = require('../module_path_manager');
+const Notifier = require(ModulePathManager.getBasePath() + 'lib/notifier/notifier');
+const PusherChannels = require(ModulePathManager.getBasePath() + 'lib/notifier/pusher_channels').PusherChannels;
+
+const ScreensChannel = PusherChannels.screens;
+const ChannelEvent = ScreensChannel.events.update;
+
 const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
 
 module.exports.update = (event, context, callback) => {
@@ -19,5 +25,5 @@ module.exports.update = (event, context, callback) => {
 };
 
 function notifyAboutNewVersion(screens) {
-    Notifier.pushNotification('screens', 'update', {screens: screens});
+    Notifier.pushNotification(ScreensChannel.name, ChannelEvent, {screens: screens});
 }
