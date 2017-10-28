@@ -1,8 +1,8 @@
 'use strict';
 
 const ModulePathManager = require('../module_path_manager');
+const Pusher = require(ModulePathManager.getBasePath() + 'lib/notifier/pusher');
 const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
-const Pusher = require('./pusher');
 
 module.exports.getConfig = (event, context, callback) => {
     let config = Pusher.getPusherConfig();

@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {User} from "../../common/entities/user";
+import {User} from "../../core/entities/user";
 import {AuthService} from "../auth.service";
 import {NgModel} from "@angular/forms";
-import {ErrorMessageExtractor} from "../../common/error-message-extractor";
+import {ErrorMessageExtractor} from "../../core/error-message-extractor";
 
 import * as _ from 'lodash';
 

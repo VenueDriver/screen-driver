@@ -1,4 +1,4 @@
-import {CronToDatetimeConverter} from "../../datetime-cron-converter/cron-to-datetime.converter";
+import {CronToDatetimeConverter} from "./datetime-cron-converter/cron-to-datetime.converter";
 
 export enum CronConvertStrategy {DEFAULT, PERIOD_SENSITIVE}
 
@@ -61,6 +61,6 @@ export class CustomCronParser {
     }
 
     private setPeriod(hours: number): void {
-        this.period = hours > 12 && hours < 24 ? 'PM' : 'AM';
+        this.period = hours >= 12 && hours < 24 ? 'PM' : 'AM';
     }
 }

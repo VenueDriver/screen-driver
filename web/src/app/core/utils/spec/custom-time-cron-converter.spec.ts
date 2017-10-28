@@ -24,5 +24,33 @@ describe('CustomTimeCronConverter', () => {
                 expect(converter.cron).toBe('0 14 1 * * * *');
             });
         });
+
+        describe('when input is {hours: 12, minutes: 12, period: AM}', () => {
+            it('should return 0 14 1 * * * *', () => {
+                const input: CronParseResult = {time: '12:12', hours: '12', minutes: '12', period: 'AM'};
+                const converter = new CustomTimeCronConverter(input);
+
+                expect(converter.cron).toBe('0 12 24 * * * *');
+            });
+        });
+
+
+        describe('when input is {hours: 2, minutes: 12, period: PM}', () => {
+            it('should return 0 12 14 * * * *', () => {
+                const input: CronParseResult = {time: '2:12', hours: '2', minutes: '12', period: 'PM'};
+                const converter = new CustomTimeCronConverter(input);
+
+                expect(converter.cron).toBe('0 12 14 * * * *');
+            });
+        });
+
+        describe('when input is {hours: 2, minutes: 12, period: PM}', () => {
+            it('should return 0 12 24 * * * *', () => {
+                const input: CronParseResult = {time: '12:12', hours: '12', minutes: '12', period: 'PM'};
+                const converter = new CustomTimeCronConverter(input);
+
+                expect(converter.cron).toBe('0 12 12 * * * *');
+            });
+        });
     });
 });

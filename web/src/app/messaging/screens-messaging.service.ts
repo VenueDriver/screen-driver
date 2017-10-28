@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
-import {NotificationService} from "../notifications/notification.service";
+import {NotificationService} from "../shared/notifications/notification.service";
 
 @Injectable()
 export class ScreensMessagingService {

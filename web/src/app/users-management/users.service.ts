@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {NotificationService} from "../notifications/notification.service";
-import {User} from "../common/entities/user";
+import {NotificationService} from "../shared/notifications/notification.service";
+import {User} from "../core/entities/user";
 import {environment} from "../../environments/environment";
 import {Subject, Observable, BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 
 import * as _ from 'lodash';
-import {ErrorMessageExtractor} from "../common/error-message-extractor";
+import {ErrorMessageExtractor} from "../core/error-message-extractor";
 
 const USERS_API = `${environment.apiUrl}/api/auth/users`;
 const EDIT_PROFILE_API = `${environment.apiUrl}/api/auth/edit-profile`;

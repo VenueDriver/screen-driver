@@ -1,6 +1,6 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
-import {User} from "../common/entities/user";
+import {User} from "../core/entities/user";
 
 @Component({
     selector: 'profile-management',

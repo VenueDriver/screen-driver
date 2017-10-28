@@ -1,0 +1,23 @@
+<div class="time-selector-container">
+    <div *ngIf="label"
+         class="title">
+        {{label}}
+    </div>
+    <div class="time-selector">
+        <autocomplete
+                class="time"
+                [placeholder]="'Select time'"
+                [editable]="true"
+                [disabled]="disabled"
+                [items]="timeItems"
+                [value]="defaultTime"
+                (valueChanged)="setTime($event)">
+        </autocomplete>
+
+        <div class="period"
+             [class.disabled]="disabled"
+             (click)="changeTimePeriod($event)">
+            {{defaultTimePeriod}}
+        </div>
+    </div>
+</div>

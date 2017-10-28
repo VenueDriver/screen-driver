@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {VenuesService} from "../venues/venues.service";
-import {Venue} from "../venues/entities/venue";
+import {VenuesService} from "../content-management/venues/venues.service";
+import {Venue} from "../content-management/venues/entities/venue";
 import {MaintenanceService} from "./maintenance.service";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
@@ -8,7 +8,7 @@ import {ScreensMessagingService} from "../messaging/screens-messaging.service";
 
 import * as _ from 'lodash';
 import {MaintenanceProperties} from "./entities/maintenance-properties";
-import {NotificationService} from "../notifications/notification.service";
+import {NotificationService} from "../shared/notifications/notification.service";
 import {KioskVersionDetailsMap} from "./entities/kiosk-version-details";
 
 @Component({

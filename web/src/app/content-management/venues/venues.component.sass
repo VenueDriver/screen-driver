@@ -1,0 +1,52 @@
+@import "../../../styles/variables"
+@import "../../../styles/add-button"
+
+.page-container
+  display: flex
+  align-items: center
+  justify-content: center
+
+  .main-container
+    width: 100%
+
+  .disabled
+    color: $gray-color
+
+  .venues-container
+
+    .venues-header
+      border: none
+
+      .title
+        font-size: 21px
+        display: inline-block
+        padding-left: 8px
+
+    .buttons-container
+      display: inline-block
+
+      .edit-button
+        width: 25px
+        height: 25px
+        cursor: pointer
+        margin-left: 10px
+
+  .add-venue-form
+    margin-bottom: 20px
+    padding: 0 8px 0 34px
+    border-bottom: solid 1px $border-color
+
+    @media screen and (max-width: $small-resolution)
+      padding: 8px 0
+
+    .form-container
+      padding-bottom: 20px
+      margin-top: 20px
+
+    .form-title
+      font-size: 16px
+      margin: 10px 0 17px
+
+  .add-button
+    margin: 15px 0 15px auto
+    max-width: 145px

@@ -4,7 +4,8 @@ const EVERY_DAY_CRON_TEMPLATE = (hours, minutes) => `0 ${minutes} ${hours} * * *
 
 export class CustomTimeCronConverter {
 
-    constructor(private input: CronParseResult) {
+    //may be will be nice to throw exception if hours is > 12. Because we're working with 12 hours format.
+    constructor(private input: CronParseResult | {hours: string, minutes: string, period: string}) {
     }
 
     get cron(): string {
@@ -16,8 +17,12 @@ export class CustomTimeCronConverter {
     }
 
     private getHours(): string {
+        let is12AM = this.input.period.toLowerCase() == 'am' && +this.input.hours == 12;
+
+        if (is12AM) return '24';
+
         if (this.input.period.toLowerCase() == 'pm') {
-            if (+this.input.hours < 13) {
+            if (+this.input.hours < 12) {
                 return `${12 + (+this.input.hours)}`;
             }
         }
