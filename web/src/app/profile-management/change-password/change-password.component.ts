@@ -41,7 +41,7 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     private createNewPasswordControl(): FormControl {
-        new FormControl(this.user.newPassword, [
+        return new FormControl(this.user.newPassword, [
             Validators.required,
             Validators.pattern(PASSWORD_VALIDATION_PATTERN),
             this.validateLength()
