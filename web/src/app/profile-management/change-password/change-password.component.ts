@@ -29,11 +29,7 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     initFormGroup() {
-        let newPasswordControl = new FormControl(this.user.newPassword, [
-            Validators.required,
-            Validators.pattern(PASSWORD_VALIDATION_PATTERN),
-            this.validateLength()
-        ]);
+        let newPasswordControl = this.createNewPasswordControl();
         this.changePasswordForm = new FormGroup({
             'currentPassword': new FormControl(this.user.password, [Validators.required]),
             'newPassword': newPasswordControl,
@@ -42,6 +38,14 @@ export class ChangePasswordComponent implements OnInit {
                 this.validateConfirmedPassword(newPasswordControl)
             ])
         });
+    }
+
+    private createNewPasswordControl(): FormControl {
+        new FormControl(this.user.newPassword, [
+            Validators.required,
+            Validators.pattern(PASSWORD_VALIDATION_PATTERN),
+            this.validateLength()
+        ]);
     }
 
     validateConfirmedPassword(newPasswordControl: FormControl) {
