@@ -125,28 +125,26 @@ function scheduleAutoUpdate() {
 }
 
 function findScheduleForCurrentVenue() {
-    let venueId = CurrentScreenSettingsManager.getCurrentSetting().selectedVenueId;
+    let venueId = getCurrentVenueId();
     let schedules = DataStorage.getServerData().updateSchedules;
     return _.find(schedules, schedule => schedule.id === venueId && schedule.isEnabled);
 }
 
 function createBackgroundJobForUpdatesChecker(schedule) {
-    if (!_.isEmpty(autoUpdateCronJob)) {
-        destroyBackgroundJobForUpdatesChecker();
-    }
+    destroyBackgroundJobForUpdatesCheckerIfExists();
 
     autoUpdateCronJob = cron.schedule(
         schedule.eventTime,
         () => new ApplicationUpdater().checkForUpdates(),
         true
     ).start();
-
-    console.log(autoUpdateCronJob)
 }
 
-function destroyBackgroundJobForUpdatesChecker() {
-    autoUpdateCronJob.destroy();
-    autoUpdateCronJob = null;
+function destroyBackgroundJobForUpdatesCheckerIfExists() {
+    if (!_.isEmpty(autoUpdateCronJob)) {
+        autoUpdateCronJob.destroy();
+        autoUpdateCronJob = null;
+    }
 }
 
 function initUpdateScheduleConfigListener() {
@@ -155,14 +153,19 @@ function initUpdateScheduleConfigListener() {
 }
 
 function handleUpdateScheduleEvent(schedule) {
-    if (_.isEmpty(schedule)) {
+    let venueId = getCurrentVenueId();
+    if (_.isEmpty(schedule) || schedule.id !== venueId) {
         return;
     }
     if (!schedule.isEnabled) {
-        destroyBackgroundJobForUpdatesChecker();
+        destroyBackgroundJobForUpdatesCheckerIfExists();
         return;
     }
     createBackgroundJobForUpdatesChecker(schedule);
+}
+
+function getCurrentVenueId() {
+    return CurrentScreenSettingsManager.getCurrentSetting().selectedVenueId;
 }
 
 //here is an thrown error inside on autoUpdater, but it seems to work ok.
