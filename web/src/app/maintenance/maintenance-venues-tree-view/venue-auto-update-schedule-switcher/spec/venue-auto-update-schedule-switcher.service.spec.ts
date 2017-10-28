@@ -10,7 +10,7 @@ import {AutoupdateSchedule} from "../../../entities/autoupdate-schedule";
  */
 describe('VenueAutoUpdateScheduleSwitcherService', () => {
     const EVERY_DAY_AT_ONE_PM_CRON_EXPRESSION = '0 0 13 * * * *';
-    const EVERY_DAY_AT_TWENTY_TWENTY_AM_CRON_EXPRESSION = '0 12 24 * * * *';
+    const EVERY_DAY_AT_TWENTY_TWENTY_AM_CRON_EXPRESSION = '0 12 00 * * * *';
 
     describe('getTimeFromCron()', () => {
         describe('when cron is 0 0 13 * * * *', () => {
@@ -24,7 +24,7 @@ describe('VenueAutoUpdateScheduleSwitcherService', () => {
             });
         });
 
-        describe('when cron is 0 12 24 * * * *', () => {
+        describe('when cron is 0 12 00 * * * *', () => {
             it('should return {hours: 12, minutes: 12, period: AM, time: 12:12}', () => {
                 const service = new VenueAutoUpdateScheduleSwitcherService();
                 const result = service.getTimeFromCron(EVERY_DAY_AT_TWENTY_TWENTY_AM_CRON_EXPRESSION);
@@ -49,11 +49,11 @@ describe('VenueAutoUpdateScheduleSwitcherService', () => {
 
     describe('getUpdatedConfig()', () => {
         describe('when input params time is {hours: 12, minutes: 12, period: AM, time: 12:12} and isEnabled', () => {
-            it('should return {isEnabled: true, eventTime: 0 12 24 * * * *}', () => {
+            it('should return {isEnabled: true, eventTime: 0 12 00 * * * *}', () => {
                 const service = new VenueAutoUpdateScheduleSwitcherService();
                 const oldObject: AutoupdateSchedule = new AutoupdateSchedule(null);
                 const result = service.getUpdatedConfig(oldObject, {hours: '12', minutes: '12', time: '12:12', period: 'AM'}, true);
-                expect(result.eventTime).toBe('0 12 24 * * * *');
+                expect(result.eventTime).toBe('0 12 00 * * * *');
                 expect(result.isEnabled).toBe(true);
             });
         });
