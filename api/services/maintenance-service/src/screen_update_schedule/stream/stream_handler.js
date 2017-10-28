@@ -1,8 +1,7 @@
 'use strict';
 
-const ModulePathManager = require('../../module_path_manager');
-const Notifier = require(ModulePathManager.getBasePath() + 'lib/notifier/notifier');
-const PusherChannels = require(ModulePathManager.getBasePath() + 'lib/notifier/pusher_channels').PusherChannels;
+const Notifier = require('../../notifier/notifier');
+const PusherChannels = require('../../notifier/pusher_chanels').PusherChannels;
 
 const VenuesChannel = PusherChannels.venues;
 const ChannelEvent = VenuesChannel.events.auto_update_schedule_updated;
