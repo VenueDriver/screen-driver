@@ -18,11 +18,10 @@ export class CustomCronParser {
 
     constructor(private cron: string, convertStrategy: CronConvertStrategy) {
         this.convertStrategy = convertStrategy ? convertStrategy : CronConvertStrategy.DEFAULT;
-
-        this.hours = CronToDatetimeConverter.getHoursFromCron(this.cron);
+        let cronHours = CronToDatetimeConverter.getHoursFromCron(this.cron);
+        this.setPeriod(cronHours);
+        this.setHours(cronHours);
         this.minutes = CronToDatetimeConverter.getMinutesFromCron(this.cron);
-
-        this.setPeriod(this.hours);
         this.setPeriodSensitiveHours();
     }
 
@@ -56,11 +55,21 @@ export class CustomCronParser {
         }
     }
 
+    private setHours(cronHours: number): void {
+        let is12AM = cronHours == 0;
+        this.hours =  is12AM ? 12 : cronHours;
+    }
+
     private setPeriodSensitiveHours(): void {
         this.periodSensitiveHours = this.hours > 12 ? this.hours - 12 : this.hours;
     }
 
     private setPeriod(hours: number): void {
+        let is12AM = this.hours == 0;
+        if (is12AM) {
+            this.period = 'AM';
+            return;
+        }
         this.period = hours >= 12 && hours < 24 ? 'PM' : 'AM';
     }
 }

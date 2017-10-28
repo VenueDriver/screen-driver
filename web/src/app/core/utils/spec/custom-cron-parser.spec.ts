@@ -13,9 +13,17 @@ describe('CustomCronParser', () => {
                 expect(parser.getPeriod()).toBe('PM');
             });
         });
+
+        describe('when cron is 0 12 12 * * * *', () => {
+            it('should return PM', () => {
+                const EVERY_DAY_AT_ZERO_TWENTY_PM_CRON_EXPRESSION = '0 12 00 * * * *';
+                const parser = new CustomCronParser(EVERY_DAY_AT_ZERO_TWENTY_PM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
+                expect(parser.getPeriod()).toBe('AM');
+            });
+        });
     });
 
-    fdescribe('getPeriod()', () => {
+    describe('getPeriod()', () => {
         describe('when cron is 0 12 12 * * * *', () => {
             it('should return PM', () => {
                 const EVERY_DAY_AT_TWENTY_TWENTY_PM_CRON_EXPRESSION = '0 12 12 * * * *';
