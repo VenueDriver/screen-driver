@@ -12,6 +12,7 @@ const Logger = require('./logger/logger');
 const DataSender = require('./data_sender');
 const DataStorage = require('./storage/data_storage');
 const LocalStorageManager = require('./helpers/local_storage_helper').LocalStorageManager;
+const StorageManager = require('./helpers/storage_manager');
 const appVersionStorageName = require('./helpers/local_storage_helper').StorageNames.APP_VERSION;
 const _ = require('lodash');
 
@@ -157,11 +158,16 @@ function handleUpdateScheduleEvent(schedule) {
     if (_.isEmpty(schedule) || schedule.id !== venueId) {
         return;
     }
+    saveNewScheduleInStorage(schedule);
     if (!schedule.isEnabled) {
         destroyBackgroundJobForUpdatesCheckerIfExists();
         return;
     }
     createBackgroundJobForUpdatesChecker(schedule);
+}
+
+function saveNewScheduleInStorage(schedule) {
+    StorageManager.saveAutoupdateSchedule(schedule);
 }
 
 function getCurrentVenueId() {
