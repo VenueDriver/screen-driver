@@ -14,6 +14,7 @@ const {scheduledTaskManager} = require('./js/scheduled-task-manager');
 const WindowInstanceHolder = require('./js/window-instance-holder');
 const StorageManager = require('./js/helpers/storage_manager');
 const UserInteractionsManager = require('./js/user-interactions-manager');
+const UncaughtErrorsHandlingService = require('./js/services/error/uncaught_errors_handling_service');
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
