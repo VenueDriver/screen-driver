@@ -19,7 +19,7 @@ export class CustomTimeCronConverter {
     private getHours(): string {
         let is12AM = this.input.period.toLowerCase() == 'am' && +this.input.hours == 12;
 
-        if (is12AM) return '24';
+        if (is12AM) return '00';
 
         if (this.input.period.toLowerCase() == 'pm') {
             if (+this.input.hours < 12) {
