@@ -1,7 +1,7 @@
 const app = require('electron').app;
 const autoUpdater = require("electron-updater").autoUpdater;
 const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
-const CronJob = require('cron').CronJob;
+const cron = require('node-cron');
 const NotificationListener = require('./notification-listener/notification_listener');
 const PropertiesLoader = require('./helpers/properties_load_helper');
 const UserInteractionsManager = require('./user-interactions-manager');
@@ -30,6 +30,7 @@ class ApplicationUpdater {
         initAutoUpdaterEvents();
         initPusherListener();
         initScheduleUpdateListener();
+        initUpdateScheduleConfigListener();
         scheduleAutoUpdate();
     }
 
@@ -117,22 +118,51 @@ function initScheduleUpdateListener() {
 }
 
 function scheduleAutoUpdate() {
+    let scheduleForCurrentVenue = findScheduleForCurrentVenue();
+    if (!_.isEmpty(scheduleForCurrentVenue)) {
+        createBackgroundJobForUpdatesChecker(scheduleForCurrentVenue);
+    }
+}
+
+function findScheduleForCurrentVenue() {
     let venueId = CurrentScreenSettingsManager.getCurrentSetting().selectedVenueId;
     let schedules = DataStorage.getServerData().updateSchedules;
-    let scheduleForCurrentVenue = _.find(schedules, schedule => schedule.id == venueId && schedule.isEnabled);
-    if (_.isEmpty(scheduleForCurrentVenue)){
+    return _.find(schedules, schedule => schedule.id === venueId && schedule.isEnabled);
+}
+
+function createBackgroundJobForUpdatesChecker(schedule) {
+    if (!_.isEmpty(autoUpdateCronJob)) {
+        destroyBackgroundJobForUpdatesChecker();
+    }
+
+    autoUpdateCronJob = cron.schedule(
+        schedule.eventTime,
+        () => new ApplicationUpdater().checkForUpdates(),
+        true
+    ).start();
+
+    console.log(autoUpdateCronJob)
+}
+
+function destroyBackgroundJobForUpdatesChecker() {
+    autoUpdateCronJob.destroy();
+    autoUpdateCronJob = null;
+}
+
+function initUpdateScheduleConfigListener() {
+    let notificationListener = new NotificationListener();
+    notificationListener.subscribe('venues', 'auto_update_schedule_updated', (data) => handleUpdateScheduleEvent(data));
+}
+
+function handleUpdateScheduleEvent(schedule) {
+    if (_.isEmpty(schedule)) {
         return;
     }
-
-    if (!_.isEmpty(autoUpdateCronJob)) {
-        autoUpdateCronJob.stop().destroy();
-        autoUpdateCronJob = null;
+    if (!schedule.isEnabled) {
+        destroyBackgroundJobForUpdatesChecker();
+        return;
     }
-
-    autoUpdateCronJob = new CronJob(scheduleForCurrentVenue.eventTime, function () {
-        new ApplicationUpdater().checkForUpdates();
-    }).start()
-
+    createBackgroundJobForUpdatesChecker(schedule);
 }
 
 //here is an thrown error inside on autoUpdater, but it seems to work ok.
