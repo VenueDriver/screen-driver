@@ -1,8 +1,9 @@
 'use strict';
 
-const Notifier = require('../notifier/notifier');
 
 const ModulePathManager = require('../module_path_manager');
+const Notifier = require(ModulePathManager.getBasePath() + 'lib/notifier/notifier');
+
 const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
 
 

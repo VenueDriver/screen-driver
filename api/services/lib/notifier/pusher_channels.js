@@ -7,4 +7,4 @@ module.exports.PusherChannels = {
             auto_update_schedule_updated: 'auto_update_schedule_updated'
         }
     }
-}
+};
