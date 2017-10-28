@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {User} from "../../core/entities/user";
-import {NgModel} from "@angular/forms";
+import {PASSWORD_VALIDATION_PATTERN, User} from "../../core/entities/user";
+import {NgModel, Validators, FormGroup, FormControl, AbstractControl} from "@angular/forms";
 
 import * as _ from 'lodash';
 import {UsersService} from "../../users-management/users.service";
@@ -18,53 +18,62 @@ export class ChangePasswordComponent implements OnInit {
 
     isRequestPerforming: boolean = false;
     confirmedPassword: string = '';
-    failMessage: string;
+
+    changePasswordForm: FormGroup;
 
     constructor(private usersService: UsersService) {
     }
 
     ngOnInit() {
+        this.initFormGroup();
     }
 
-    validatePassword(passwordModel: NgModel) {
-        switch (passwordModel.name) {
-            case 'new-password':
-                this.validateNewPassword(passwordModel);
-                break;
-            case 'confirm-new-password':
-                this.validateConfirmedPassword(passwordModel);
+    initFormGroup() {
+        this.changePasswordForm = new FormGroup({
+            'currentPassword': new FormControl(this.user.password, [Validators.required]),
+            'newPassword': new FormControl(this.user.newPassword, [
+                Validators.required,
+                Validators.pattern(PASSWORD_VALIDATION_PATTERN),
+                this.validateLength()
+            ]),
+            'confirmedPassword': new FormControl(this.confirmedPassword, [
+                Validators.required,
+                this.validateConfirmedPassword()
+            ])
+        });
+    }
+
+    validateConfirmedPassword() {
+        return (control: AbstractControl): { [key: string]: any } => {
+            let validationResult = !_.isEqual(this.user.newPassword, this.confirmedPassword);
+            return validationResult ? null : {'confirmationFailed': {value: control.value}};
         }
     }
 
-    private validateNewPassword(passwordModel: NgModel) {
-        let passwordRegexp = /^(?=.*\d)(?=.*[a-zA-Z]).{8,}$/;
-        let errors = {};
-
-        if (this.user.newPassword.length < 8) errors['smallLength'] = true;
-        if (!passwordRegexp.test(this.user.newPassword)) errors['failRegExp'] = true;
-        passwordModel.control.setErrors(errors);
+    validateLength() {
+        return (control: AbstractControl): { [key: string]: any } => {
+            return this.user.newPassword.length < 8 ? null : {'smallLength': {value: control.value}};
+        }
     }
 
-    private validateConfirmedPassword(passwordModel: NgModel) {
-        let errors = {};
-        if (!_.isEqual(this.user.newPassword, this.confirmedPassword)) errors['confirmationFailed'] = true;
-        passwordModel.control.setErrors(errors);
+    formInvalid(): boolean {
+        return this.changePasswordForm.status === 'INVALID';
     }
 
-    getValidationMessage(passwordModel: NgModel): string {
-        if (passwordModel.control.hasError('required')) return 'Please fill out this field';
-        if (passwordModel.control.hasError('smallLength')) return 'Password is too short (minimum is 8 characters)';
-        if (passwordModel.control.hasError('failRegExp')) return 'Password needs at least one number and one letter';
-        if (passwordModel.control.hasError('confirmationFailed')) return 'Password doesn\'t match the confirmation';
-        if (passwordModel.control.hasError('notValid')) return 'Invalid password';
+    getValidationMessage(fieldName: string): string {
+        let errors = this.changePasswordForm.controls[fieldName].errors;
+        if (_.isEmpty(errors)) return '';
+        if (errors['notUnique']) return 'This email is already in use';
+        if (errors['required']) return 'Please fill out this field';
+        if (errors['smallLength']) return 'Password is too short (minimum is 8 characters)';
+        if (errors['pattern']) return 'Password needs at least one number and one letter';
+        if (errors['confirmationFailed']) return 'Password doesn\'t match the confirmation';
+        if (errors['notValid']) return 'Invalid password';
     }
 
-    shouldDisplaySubmitButton(models: NgModel[]): boolean {
-        return this.isModelsValid(models) && !this.isRequestPerforming;
-    }
-
-    isModelsValid(models: NgModel[]): boolean {
-        return !_.find(models, model => this.getValidationMessage(model));
+    hasError(fieldName: string): boolean {
+        let control =  this.changePasswordForm.controls[fieldName];
+        return !_.isEmpty(control.errors) && (!_.isEmpty(control.value) || control.touched);
     }
 
     changePassword() {
