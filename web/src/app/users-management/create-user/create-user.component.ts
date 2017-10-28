@@ -1,11 +1,9 @@
 import {Component, OnInit, EventEmitter, Output} from '@angular/core';
-import {User} from "../../core/entities/user";
+import {EMAIL_VALIDATION_PATTERN, User} from "../../core/entities/user";
 import {UsersService} from "../users.service";
 import {NgModel, Validators, FormGroup, FormControl, AbstractControl} from "@angular/forms";
 
 import * as _ from 'lodash';
-
-const EMAIL_VALIDATION_PATTERN = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 @Component({
     selector: 'create-user',
@@ -57,9 +55,13 @@ export class CreateUserComponent implements OnInit {
     }
 
     getErrorMessage(): string {
-        let errors = this.userForm.controls.email.errors;
+        let emailControl = this.userForm.controls.email;
+        let errors = emailControl.errors;
+        let displayError = this.emailNotEmpty() || emailControl.touched;
+
         if (errors['notUnique']) return 'This email is already in use';
-        if (this.emailNotEmpty()) return 'Invalid Email';
+        if (errors['required'] && displayError) return 'Please fill out this field';
+        if (displayError) return 'Invalid Email';
     }
 
     performCancel() {
@@ -74,6 +76,10 @@ export class CreateUserComponent implements OnInit {
 
     formInvalid(): boolean {
         return this.userForm.status === 'INVALID';
+    }
+
+    hasError(): boolean {
+        return (this.emailNotEmpty() || this.userForm.controls.email.touched) && this.formInvalid();
     }
 
     emailNotEmpty(): boolean {

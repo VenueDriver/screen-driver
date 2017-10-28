@@ -1,6 +1,6 @@
 <div class="create-user-form">
     <form [formGroup]="userForm" (ngSubmit)="performSubmit()">
-        <div class="form-group" [class.has-error]="emailNotEmpty() && formInvalid()">
+        <div class="form-group" [class.has-error]="hasError()">
             <label class="control-label" for="email">Email address</label>
 
             <input id="email"
