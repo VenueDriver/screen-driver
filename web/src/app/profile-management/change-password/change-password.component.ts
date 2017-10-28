@@ -29,30 +29,34 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     initFormGroup() {
+        let newPasswordControl = new FormControl(this.user.newPassword, [
+            Validators.required,
+            Validators.pattern(PASSWORD_VALIDATION_PATTERN),
+            this.validateLength()
+        ]);
         this.changePasswordForm = new FormGroup({
             'currentPassword': new FormControl(this.user.password, [Validators.required]),
-            'newPassword': new FormControl(this.user.newPassword, [
-                Validators.required,
-                Validators.pattern(PASSWORD_VALIDATION_PATTERN),
-                this.validateLength()
-            ]),
+            'newPassword': newPasswordControl,
             'confirmedPassword': new FormControl(this.confirmedPassword, [
                 Validators.required,
-                this.validateConfirmedPassword()
+                this.validateConfirmedPassword(newPasswordControl)
             ])
         });
     }
 
-    validateConfirmedPassword() {
+    validateConfirmedPassword(newPasswordControl: FormControl) {
         return (control: AbstractControl): { [key: string]: any } => {
-            let validationResult = !_.isEqual(this.user.newPassword, this.confirmedPassword);
-            return validationResult ? null : {'confirmationFailed': {value: control.value}};
+            let newPassword = newPasswordControl.value;
+            let confirmedPassword = control.value;
+            let passwordsEqual = _.isEqual(newPassword, confirmedPassword);
+            return passwordsEqual ? null : {'confirmationFailed': {value: control.value}};
         }
     }
 
     validateLength() {
         return (control: AbstractControl): { [key: string]: any } => {
-            return this.user.newPassword.length < 8 ? null : {'smallLength': {value: control.value}};
+            let password = control.value;
+            return password.length >= 8 ? null : {'smallLength': {value: control.value}};
         }
     }
 
@@ -63,8 +67,7 @@ export class ChangePasswordComponent implements OnInit {
     getValidationMessage(fieldName: string): string {
         let errors = this.changePasswordForm.controls[fieldName].errors;
         if (_.isEmpty(errors)) return '';
-        if (errors['notUnique']) return 'This email is already in use';
-        if (errors['required']) return 'Please fill out this field';
+        if (errors['required']) return 'Please, fill out this field';
         if (errors['smallLength']) return 'Password is too short (minimum is 8 characters)';
         if (errors['pattern']) return 'Password needs at least one number and one letter';
         if (errors['confirmationFailed']) return 'Password doesn\'t match the confirmation';
@@ -77,7 +80,9 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     changePassword() {
+        if (this.formInvalid()) return;
         this.setRequestPerforming(true);
+        this.setUserFields();
         this.usersService.editProfile(this.user).subscribe(
             () => {
                 this.setRequestPerforming(false);
@@ -85,6 +90,12 @@ export class ChangePasswordComponent implements OnInit {
             },
             () => this.setRequestPerforming(false)
         )
+    }
+
+    setUserFields() {
+        let newValues = this.changePasswordForm.value;
+        this.user.newPassword = newValues.newPassword;
+        this.user.password = newValues.currentPassword;
     }
 
     setRequestPerforming(flag: boolean) {
