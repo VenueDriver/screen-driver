@@ -87,7 +87,7 @@ function initAutoUpdaterEvents() {
 
     autoUpdater.on('error', () => {
         Logger.error('Auto update failed. Restart process...');
-        startAutoupdateOnConnectionEstablised()
+        startAutoupdateOnConnectionEstablished()
     });
 
     autoUpdater.on('checking-for-update', () => {
@@ -151,17 +151,17 @@ function setFeedUrl() {
 
 
 function runConnectionWatchers() {
-    startAutoupdateOnConnectionEstablised();
+    startAutoupdateOnConnectionEstablished();
 
     NetworkErrorsHandlingService.getErrors().subscribe(() => {
         if (new ApplicationUpdater().getDownloadingStatus()) {
-            startAutoupdateOnConnectionEstablised()
+            startAutoupdateOnConnectionEstablished()
         }
     })
 
 }
 
-function startAutoupdateOnConnectionEstablised() {
+function startAutoupdateOnConnectionEstablished() {
     ConnectionStatusService.runWhenPossible(() => {
         Logger.info('Connection established. Auto-update has been restarted');
         new ApplicationUpdater().checkForUpdates();
