@@ -7,9 +7,9 @@ const KioskVersionLoader = require('./helpers/kiosk_version_loader');
 const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
 
 module.exports.register = (event, context, callback) => {
-    const data = JSON.parse(event.body);
+    const versionDetails = JSON.parse(event.body);
 
-    KioskVersionRegister.registerVersion(data.screenId, data.version)
+    KioskVersionRegister.registerVersion(versionDetails)
         .then(result => {
             callback(null, responseHelper.createSuccessfulResponse({}));
         })

@@ -21,10 +21,10 @@ function isNotRemoveAction(action) {
 
 function scheduleConfigFromImage(newImage) {
     let id = newImage.id.S;
-    let enabled = newImage.enabled.BOOL;
+    let isEnabled = newImage.isEnabled.BOOL;
     let eventTime = newImage.eventTime.S;
 
-    return {id, enabled, eventTime};
+    return {id, isEnabled, eventTime};
 }
 
 

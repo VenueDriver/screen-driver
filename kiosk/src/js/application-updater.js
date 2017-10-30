@@ -1,7 +1,7 @@
 const app = require('electron').app;
 const autoUpdater = require("electron-updater").autoUpdater;
 const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
-const CronJob = require('cron').CronJob;
+const cron = require('node-cron');
 const NotificationListener = require('./notification-listener/notification_listener');
 const PropertiesLoader = require('./helpers/properties_load_helper');
 const UserInteractionsManager = require('./user-interactions-manager');
@@ -12,6 +12,7 @@ const Logger = require('./logger/logger');
 const DataSender = require('./data_sender');
 const DataStorage = require('./storage/data_storage');
 const LocalStorageManager = require('./helpers/local_storage_helper').LocalStorageManager;
+const StorageManager = require('./helpers/storage_manager');
 const appVersionStorageName = require('./helpers/local_storage_helper').StorageNames.APP_VERSION;
 const _ = require('lodash');
 
@@ -30,6 +31,7 @@ class ApplicationUpdater {
         initAutoUpdaterEvents();
         initPusherListener();
         initScheduleUpdateListener();
+        initUpdateScheduleConfigListener();
         scheduleAutoUpdate();
     }
 
@@ -47,15 +49,16 @@ class ApplicationUpdater {
 
     static syncAppVersionOnApi() {
         let notify = (newVersion) => {
-            let screenId = CurrentScreenSettingsManager.getCurrentSetting().selectedScreenId;
-            let requestData = {screenId: screenId, version: newVersion || '0.0.0'};
-            if (!screenId) throw new Error('Couldn\'t send Kiosk version. Reason: missed screen id');
-            DataSender.sendApplicationVersion(requestData);
+            let screenId = getCurrentScreenId();
+            if (_.isEmpty(screenId)) throw new Error('Couldn\'t send Kiosk version. Reason: missed screen id');
+            let version = newVersion || '0.0.0';
+            let updatedAt = new Date();
+            DataSender.sendApplicationVersion({screenId, version, updatedAt});
         };
 
         LocalStorageManager.getFromStorage(appVersionStorageName, (error, version) => {
             let currentVersion = app.getVersion();
-            if (currentVersion != version) {
+            if (currentVersion !== version) {
                 notify(currentVersion);
                 LocalStorageManager.putInStorage(appVersionStorageName, currentVersion)
             }
@@ -67,7 +70,7 @@ class ApplicationUpdater {
 function initPusherListener() {
     let notificationListener = new NotificationListener();
     notificationListener.subscribe('screens', 'update', (data) => {
-        let currentScreenId = CurrentScreenSettingsManager.getCurrentSetting().selectedScreenId;
+        let currentScreenId = getCurrentScreenId();
         if (data.screens.includes(currentScreenId)) {
             UserInteractionsManager.applyWhenScreenNotInterruptedByUser(new ApplicationUpdater().checkForUpdates);
         }
@@ -82,20 +85,20 @@ function initAutoUpdaterEvents() {
     autoUpdater.on('update-available', () => {
         new ApplicationUpdater().setDownloadingStatus(true);
         runConnectionWatchers();
-        Logger.info('update available');
+        Logger.info('Update available');
     });
 
     autoUpdater.on('error', () => {
         Logger.error('Auto update failed. Restart process...');
-        startAutoupdateOnConnectionEstablised()
+        startAutoupdateOnConnectionEstablished()
     });
 
     autoUpdater.on('checking-for-update', () => {
-        Logger.info('checking-for-update')
+        Logger.info('Checking for update ...')
     });
 
     autoUpdater.on('update-not-available', () => {
-        Logger.info('update-not-available')
+        Logger.info('Update not available')
     });
 
     autoUpdater.on('update-downloaded', (info) => {
@@ -117,22 +120,70 @@ function initScheduleUpdateListener() {
 }
 
 function scheduleAutoUpdate() {
-    let venueId = CurrentScreenSettingsManager.getCurrentSetting().selectedVenueId;
-    let schedules = DataStorage.getServerData().updateSchedules;
-    let scheduleForCurrentVenue = _.find(schedules, schedule => schedule.id == venueId && schedule.isEnabled);
-    if (_.isEmpty(scheduleForCurrentVenue)){
-        return;
+    let scheduleForCurrentVenue = findScheduleForCurrentVenue();
+    if (!_.isEmpty(scheduleForCurrentVenue)) {
+        createBackgroundJobForUpdatesChecker(scheduleForCurrentVenue);
     }
+}
 
+function findScheduleForCurrentVenue() {
+    let venueId = getCurrentVenueId();
+    let schedules = DataStorage.getServerData().updateSchedules;
+    return _.find(schedules, schedule => schedule.id === venueId && schedule.isEnabled);
+}
+
+function createBackgroundJobForUpdatesChecker(schedule) {
+    destroyBackgroundJobForUpdatesCheckerIfExists();
+
+    let immediateStart = true;
+    autoUpdateCronJob = cron.schedule(
+        schedule.eventTime,
+        () => new ApplicationUpdater().checkForUpdates(),
+        immediateStart
+    ).start();
+}
+
+function destroyBackgroundJobForUpdatesCheckerIfExists() {
     if (!_.isEmpty(autoUpdateCronJob)) {
-        autoUpdateCronJob.stop().destroy();
+        autoUpdateCronJob.destroy();
         autoUpdateCronJob = null;
     }
+}
 
-    autoUpdateCronJob = new CronJob(scheduleForCurrentVenue.eventTime, function () {
-        new ApplicationUpdater().checkForUpdates();
-    }).start()
+function initUpdateScheduleConfigListener() {
+    let notificationListener = new NotificationListener();
+    notificationListener.subscribe('venues', 'auto_update_schedule_updated', handleUpdateScheduleEvent);
+}
 
+function handleUpdateScheduleEvent(schedule) {
+    let venueId = getCurrentVenueId();
+    if (_.isEmpty(schedule) || schedule.id !== venueId) {
+        return;
+    }
+    saveNewScheduleInStorage(schedule);
+    if (!schedule.isEnabled) {
+        destroyBackgroundJobForUpdatesCheckerIfExists();
+        return;
+    }
+    createBackgroundJobForUpdatesChecker(schedule);
+}
+
+function saveNewScheduleInStorage(schedule) {
+    StorageManager.saveAutoupdateSchedule(schedule);
+}
+
+function getCurrentVenueId() {
+    let currentSetting = getCurrentSetting();
+    return _.isEmpty(currentSetting) ? '' : currentSetting.selectedVenueId;
+}
+
+function getCurrentScreenId() {
+    let currentSetting = getCurrentSetting();
+    return _.isEmpty(currentSetting) ? '' : currentSetting.selectedScreenId;
+}
+
+function getCurrentSetting() {
+    return CurrentScreenSettingsManager.getCurrentSetting();
 }
 
 //here is an thrown error inside on autoUpdater, but it seems to work ok.
@@ -145,23 +196,23 @@ function setFeedUrl() {
             url: url
         });
     } catch (error) {
-        Logger.info(error.message);
+        Logger.error(error.message);
     }
 }
 
 
 function runConnectionWatchers() {
-    startAutoupdateOnConnectionEstablised();
+    startAutoupdateOnConnectionEstablished();
 
     NetworkErrorsHandlingService.getErrors().subscribe(() => {
         if (new ApplicationUpdater().getDownloadingStatus()) {
-            startAutoupdateOnConnectionEstablised()
+            startAutoupdateOnConnectionEstablished()
         }
     })
 
 }
 
-function startAutoupdateOnConnectionEstablised() {
+function startAutoupdateOnConnectionEstablished() {
     ConnectionStatusService.runWhenPossible(() => {
         Logger.info('Connection established. Auto-update has been restarted');
         new ApplicationUpdater().checkForUpdates();
