@@ -21,6 +21,7 @@ import {ContentService} from "../../content/content.service";
 import {MaintenanceFixture} from "./fixtures/maintenance.fixture";
 import {AutoUpdateScheduleFixture} from "../entities/spec/auto-update-schedule.fixture";
 import {KioskVersionServiceFixture} from "./fixtures/kiosk-version-service.fixture";
+import {VenueMaintenanceInfo} from "../entities/venue-maintenance-info";
 
 describe('Service: AutoupdateScheduleService', () => {
     let maintenanceService: MaintenanceService;
@@ -117,6 +118,32 @@ describe('Service: AutoupdateScheduleService', () => {
 
             this.maintenanceService.loadAutoupdateSchedules()
                 .subscribe(() => expect(this.kioskVersionsService.loadKioskVersions).toHaveBeenCalled());
+        });
+    });
+
+    describe('mergeVenueWithSchedule()', () => {
+        it('should merge schedule config into the related venue', () => {
+            const venues: Array<VenueMaintenanceInfo> = MaintenanceFixture.venueMaintenanceInfo(2);
+            const schedules: Array<AutoupdateSchedule> = AutoupdateScheduleServiceFixture.schedules(2);
+
+            const mergedVenues: Array<VenueMaintenanceInfo> = this.maintenanceService.mergeVenueWithSchedule(venues, schedules);
+
+            expect(mergedVenues[0].autoupdateSchedule).toBe(schedules[0]);
+            expect(mergedVenues[1].autoupdateSchedule).toBe(schedules[1]);
+        });
+
+        describe('when there is not config for venue', () => {
+            it('should generate default config', () => {
+                const venues: Array<VenueMaintenanceInfo> = MaintenanceFixture.venueMaintenanceInfo(3);
+                const schedules: Array<AutoupdateSchedule> = AutoupdateScheduleServiceFixture.schedules(2);
+                const defaultSchedule = Object.assign(this.autoupdateScheduleService.createDefaultAutoapdateSchedule(), {id: venues[2].id});
+
+                const mergedVenues: Array<VenueMaintenanceInfo> = this.maintenanceService.mergeVenueWithSchedule(venues, schedules);
+
+                expect(mergedVenues[0].autoupdateSchedule).toBe(schedules[0]);
+                expect(mergedVenues[1].autoupdateSchedule).toBe(schedules[1]);
+                expect(mergedVenues[2].autoupdateSchedule).toEqual(jasmine.objectContaining(defaultSchedule));
+            });
         });
     });
 });
