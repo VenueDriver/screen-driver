@@ -8,6 +8,8 @@ import {MockBackend} from "@angular/http/testing";
 import {KioskVersionService} from "../kiosk-version.service";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {inject, TestBed} from "@angular/core/testing";
+import {KioskVersionServiceFixture} from "./kiosk-version-service.fixture";
+import {KioskVersionDetailsMap} from "../entities/kiosk-version-details";
 
 fdescribe('Service: KioskVersionService', () => {
     let kioskVersionService;
@@ -32,6 +34,19 @@ fdescribe('Service: KioskVersionService', () => {
     describe('apiPath', () => {
         it('should be "/api/screens/versions"', () => {
             expect(this.kioskVersionService.apiPath).toContain('/api/screens/versions')
+        });
+    });
+
+    describe('createKioskVersionsMap', () => {
+        it('should convert versions and return KioskVersionDetailsMap', () => {
+            const kioskVersions = KioskVersionServiceFixture.kioskVersions(2);
+            const map: KioskVersionDetailsMap = this.kioskVersionService.createKioskVersionsMap(kioskVersions);
+
+            const firstVersion = kioskVersions[0];
+            const secondVersion = kioskVersions[0];
+
+            expect(map[firstVersion.screenId]).toBe(firstVersion);
+            expect(map[secondVersion.screenId]).toBe(secondVersion);
         });
     });
 });
