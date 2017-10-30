@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {VenueMaintenanceInfo} from "../entities/venue-maintenance-info";
+import {VenueMaintenanceInfo} from "../../entities/venue-maintenance-info";
 
 export class MaintenanceFixture {
 

@@ -1,4 +1,4 @@
-import {KioskVersionDetails} from "../entities/kiosk-version-details";
+import {KioskVersionDetails} from "../../entities/kiosk-version-details";
 import * as _ from 'lodash';
 
 export class KioskVersionServiceFixture {

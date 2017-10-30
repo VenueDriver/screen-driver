@@ -5,7 +5,7 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {KioskVersionService} from "../kiosk-version.service";
 import {async, inject, TestBed} from "@angular/core/testing";
-import {KioskVersionServiceFixture} from "./kiosk-version-service.fixture";
+import {KioskVersionServiceFixture} from "./fixtures/kiosk-version-service.fixture";
 import {KioskVersionDetailsMap} from "../entities/kiosk-version-details";
 import {
     BaseRequestOptions, ConnectionBackend, RequestOptions

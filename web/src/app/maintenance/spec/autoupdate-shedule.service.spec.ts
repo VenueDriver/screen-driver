@@ -11,7 +11,7 @@ import {MockBackend} from "@angular/http/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {HttpClient, HttpClientModule, HttpParams, HttpRequest} from "@angular/common/http";
 import {AutoupdateScheduleService} from "../autoupdate-schedule.service";
-import {AutoupdateScheduleServiceFixture} from "./autoupdate-schedule-service.fixture";
+import {AutoupdateScheduleServiceFixture} from "./fixtures/autoupdate-schedule-service.fixture";
 import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
 
 describe('Service: AutoupdateScheduleService', () => {

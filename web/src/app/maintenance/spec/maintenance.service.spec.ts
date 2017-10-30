@@ -11,16 +11,16 @@ import {MockBackend} from "@angular/http/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {HttpClient, HttpClientModule, HttpParams, HttpRequest} from "@angular/common/http";
 import {AutoupdateScheduleService} from "../autoupdate-schedule.service";
-import {AutoupdateScheduleServiceFixture} from "./autoupdate-schedule-service.fixture";
+import {AutoupdateScheduleServiceFixture} from "./fixtures/autoupdate-schedule-service.fixture";
 import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
 import {VenuesService} from "../../content-management/venues/venues.service";
 import {KioskVersionService} from "../kiosk-version.service";
 import {MaintenanceService} from "../maintenance.service";
 import {MaintenanceProperties} from "../entities/maintenance-properties";
 import {ContentService} from "../../content/content.service";
-import {MaintenanceFixture} from "./maintenance.fixture";
+import {MaintenanceFixture} from "./fixtures/maintenance.fixture";
 import {AutoUpdateScheduleFixture} from "../entities/spec/auto-update-schedule.fixture";
-import {KioskVersionServiceFixture} from "./kiosk-version-service.fixture";
+import {KioskVersionServiceFixture} from "./fixtures/kiosk-version-service.fixture";
 
 describe('Service: AutoupdateScheduleService', () => {
     let maintenanceService: MaintenanceService;

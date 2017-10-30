@@ -1,6 +1,6 @@
-import {KioskVersionDetails} from "../entities/kiosk-version-details";
+import {KioskVersionDetails} from "../../entities/kiosk-version-details";
 import * as _ from 'lodash';
-import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
+import {AutoupdateSchedule} from "../../entities/autoupdate-schedule";
 
 export class AutoupdateScheduleServiceFixture {
 
