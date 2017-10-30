@@ -51,8 +51,9 @@ class ApplicationUpdater {
         let notify = (newVersion) => {
             let screenId = getCurrentScreenId();
             if (_.isEmpty(screenId)) throw new Error('Couldn\'t send Kiosk version. Reason: missed screen id');
-            let requestData = {screenId: screenId, version: newVersion || '0.0.0', updatedAt: new Date()};
-            DataSender.sendApplicationVersion(requestData);
+            let version = newVersion || '0.0.0';
+            let updatedAt = new Date();
+            DataSender.sendApplicationVersion({screenId, version, updatedAt});
         };
 
         LocalStorageManager.getFromStorage(appVersionStorageName, (error, version) => {
@@ -134,10 +135,11 @@ function findScheduleForCurrentVenue() {
 function createBackgroundJobForUpdatesChecker(schedule) {
     destroyBackgroundJobForUpdatesCheckerIfExists();
 
+    let immediateStart = true;
     autoUpdateCronJob = cron.schedule(
         schedule.eventTime,
         () => new ApplicationUpdater().checkForUpdates(),
-        true
+        immediateStart
     ).start();
 }
 
