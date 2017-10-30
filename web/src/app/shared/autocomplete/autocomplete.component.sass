@@ -10,14 +10,14 @@
       background-color: white
       cursor: pointer
 
-    &[readonly][disabled]
-      background-color: #eee
-      cursor: default
+      &[disabled]
+        background-color: #eee
+        cursor: default
 
-    &[readonly]:not([disabled])
-      &:hover, &:focus
-        background-color: $readonly-hover-color
-        transition: $transition-for-background
+      &:not([disabled])
+        &:hover, &:focus
+          background-color: $readonly-hover-color
+          transition: $transition-for-background
 
   .dropdown-menu
     max-height: 280px
