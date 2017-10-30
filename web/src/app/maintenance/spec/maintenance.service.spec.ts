@@ -146,4 +146,21 @@ describe('Service: AutoupdateScheduleService', () => {
             });
         });
     });
+
+    describe('updateVenueSchedule()', () => {
+
+        afterAll(() => {
+            this.venuesService.autoupdateScheduleService.and.callThrough();
+        });
+
+        it('should trigger venuesService.loadVenues()', () => {
+            const schedule = AutoUpdateScheduleFixture.schedule();
+
+            spyOn(this.autoupdateScheduleService, 'upsert').and.returnValue(Observable.of(schedule));
+
+            this.maintenanceService.updateVenueSchedule(schedule)
+                .subscribe(() => expect(this.autoupdateScheduleService.upsert).toHaveBeenCalledWith(schedule));
+
+        });
+    });
 });
