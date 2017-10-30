@@ -51,7 +51,7 @@ class ApplicationUpdater {
         let notify = (newVersion) => {
             let screenId = getCurrentScreenId();
             if (_.isEmpty(screenId)) throw new Error('Couldn\'t send Kiosk version. Reason: missed screen id');
-            let requestData = {screenId: screenId, version: newVersion || '0.0.0'};
+            let requestData = {screenId: screenId, version: newVersion || '0.0.0', updatedAt: new Date()};
             DataSender.sendApplicationVersion(requestData);
         };
 
