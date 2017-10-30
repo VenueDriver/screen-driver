@@ -14,7 +14,7 @@ import {AutoupdateScheduleService} from "../autoupdate-schedule.service";
 import {AutoupdateScheduleServiceFixture} from "./autoupdate-schedule-service.fixture";
 import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
 
-fdescribe('Service: AutoupdateScheduleService', () => {
+describe('Service: AutoupdateScheduleService', () => {
     let autoupdateScheduleService;
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -57,7 +57,7 @@ fdescribe('Service: AutoupdateScheduleService', () => {
         });
     });
 
-    fdescribe('upsert()', () => {
+    describe('upsert()', () => {
 
         it('should send UPDATE request and return updated schedule', async(inject([HttpClient, HttpTestingController],
             (http: HttpClient, backend: HttpTestingController) => {
@@ -71,6 +71,23 @@ fdescribe('Service: AutoupdateScheduleService', () => {
                     const checkForScheduleParams = () => req.body.id == schedule.id && req.body.eventTime == schedule.eventTime;
                     return req.url === '/api/screens/update-schedule' && req.method === 'PUT' && isRequestBodySchedule() && checkForScheduleParams();
                 }, `PUT to '/api/screens/update-schedule' with schedule object`).flush(schedule);
+
+            })));
+    });
+
+    describe('loadAutoupdateSchedule()', () => {
+
+        it('should send GET request to /api/screens/update-schedule and return fetched schedules', async(inject([HttpClient, HttpTestingController],
+            (http: HttpClient, backend: HttpTestingController) => {
+                const schedules: AutoupdateSchedule[] = AutoupdateScheduleServiceFixture.schedules(3);
+
+                this.autoupdateScheduleService.loadAutoupdateSchedule()
+                    .subscribe((schedules: AutoupdateSchedule[]) => expect(schedules.length).toBe(3));
+
+                backend.match({
+                    url: '/api/screens/update-schedule',
+                    method: 'GET'
+                })[0].flush(schedules)
 
             })));
     });
