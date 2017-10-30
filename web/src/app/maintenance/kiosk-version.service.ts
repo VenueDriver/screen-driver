@@ -18,7 +18,7 @@ export class KioskVersionService {
             .map(this.createKioskVersionsMap);
     }
 
-    createKioskVersionsMap(kioskVersions: Array<KioskVersionDetails>): any {
+    createKioskVersionsMap(kioskVersions: Array<KioskVersionDetails>): KioskVersionDetailsMap {
         let versionsMap = {};
         _.each(kioskVersions, v => versionsMap[v.screenId] = v);
         return versionsMap;
