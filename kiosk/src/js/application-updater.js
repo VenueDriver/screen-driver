@@ -84,7 +84,7 @@ function initAutoUpdaterEvents() {
     autoUpdater.on('update-available', () => {
         new ApplicationUpdater().setDownloadingStatus(true);
         runConnectionWatchers();
-        Logger.info('update available');
+        Logger.info('Update available');
     });
 
     autoUpdater.on('error', () => {
@@ -93,11 +93,11 @@ function initAutoUpdaterEvents() {
     });
 
     autoUpdater.on('checking-for-update', () => {
-        Logger.info('checking-for-update')
+        Logger.info('Checking for update ...')
     });
 
     autoUpdater.on('update-not-available', () => {
-        Logger.info('update-not-available')
+        Logger.info('Update not available')
     });
 
     autoUpdater.on('update-downloaded', (info) => {
