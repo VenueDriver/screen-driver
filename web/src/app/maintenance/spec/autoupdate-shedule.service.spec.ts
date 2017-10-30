@@ -38,7 +38,7 @@ describe('Service: AutoupdateScheduleService', () => {
     });
 
     describe('createSchedulesMap()', () => {
-        it('should convert versions and return to schedules map where map key is venue (schedule id)', () => {
+        it('should convert versions and return schedules map where map key is schedule id (eql to venue id)', () => {
             const schedules = AutoupdateScheduleServiceFixture.schedules(2);
             const map: any = this.autoupdateScheduleService.createSchedulesMap(schedules);
 
