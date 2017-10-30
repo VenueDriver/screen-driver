@@ -3,20 +3,22 @@
 
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
-import {BaseRequestOptions, ConnectionBackend, RequestOptions} from "@angular/http";
-import {MockBackend} from "@angular/http/testing";
 import {KioskVersionService} from "../kiosk-version.service";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {inject, TestBed} from "@angular/core/testing";
+import {async, inject, TestBed} from "@angular/core/testing";
 import {KioskVersionServiceFixture} from "./kiosk-version-service.fixture";
 import {KioskVersionDetailsMap} from "../entities/kiosk-version-details";
+import {
+    BaseRequestOptions, ConnectionBackend, RequestOptions
+} from "@angular/http";
+import {MockBackend} from "@angular/http/testing";
+import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 
 fdescribe('Service: KioskVersionService', () => {
     let kioskVersionService;
-    let backend;
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule],
+            imports: [HttpClientModule, HttpClientTestingModule],
             providers: [
                 KioskVersionService,
                 {provide: ConnectionBackend, useClass: MockBackend},
@@ -25,10 +27,8 @@ fdescribe('Service: KioskVersionService', () => {
         });
     });
 
-    beforeEach(inject([KioskVersionService, ConnectionBackend], (kioskVersionService, connectionBackend) => {
+    beforeEach(inject([KioskVersionService, ConnectionBackend], (kioskVersionService) => {
         this.kioskVersionService = kioskVersionService;
-        this.backend = connectionBackend;
-        this.backend.connections.subscribe((connection: any) => this.lastConnection = connection);
     }));
 
     describe('apiPath', () => {
@@ -48,5 +48,26 @@ fdescribe('Service: KioskVersionService', () => {
             expect(map[firstVersion.screenId]).toBe(firstVersion);
             expect(map[secondVersion.screenId]).toBe(secondVersion);
         });
+    });
+
+    describe('loadKioskVersions()', () => {
+
+        it(`should expect a GET /foo/bar`, async(inject([HttpClient, HttpTestingController],
+            (http: HttpClient, backend: HttpTestingController) => {
+                const kioskVersions = KioskVersionServiceFixture.kioskVersions(2);
+
+                this.kioskVersionService.loadKioskVersions().subscribe((kioskVersionDetailsMap: KioskVersionDetailsMap) => {
+                    const firstVersion = kioskVersions[0];
+                    const secondVersion = kioskVersions[0];
+
+                    expect(kioskVersionDetailsMap[firstVersion.screenId]).toBe(firstVersion);
+                    expect(kioskVersionDetailsMap[secondVersion.screenId]).toBe(secondVersion);
+                });
+
+                backend.match({
+                    url: '/api/screens/versions',
+                    method: 'GET'
+                })[0].flush(kioskVersions);
+            })));
     });
 });
