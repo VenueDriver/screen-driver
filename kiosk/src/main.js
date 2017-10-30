@@ -19,6 +19,8 @@ const UncaughtErrorsHandlingService = require('./js/services/error/uncaught_erro
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
 
+const _ = require('lodash');
+
 setupLogger();
 
 //should be called on application init
@@ -132,7 +134,11 @@ function openContentWindow(contentUrl) {
 function subscribeToScreenReloadNotification() {
     notificationListener.subscribe('screens', 'refresh', (data) => {
         let setting = CurrentScreenSettingsManager.getCurrentSetting();
-        if (data.screens.includes(setting.selectedScreenId) && !WindowsHelper.isAdminPanelOpened()) {
+        let ableToReload = !_.isEmpty(setting) &&
+                           data.screens.includes(setting.selectedScreenId) &&
+                           !WindowsHelper.isAdminPanelOpened();
+
+        if (ableToReload) {
             WindowInstanceHolder.getWindow().reload();
         }
     });
