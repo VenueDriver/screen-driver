@@ -24,6 +24,10 @@ import {KioskVersionServiceFixture} from "./fixtures/kiosk-version-service.fixtu
 
 describe('Service: AutoupdateScheduleService', () => {
     let maintenanceService: MaintenanceService;
+    let venuesService: VenuesService;
+    let autoupdateScheduleService: AutoupdateScheduleService;
+    let kioskVersionsService: AutoupdateScheduleService;
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientModule, HttpClientTestingModule],
@@ -39,8 +43,12 @@ describe('Service: AutoupdateScheduleService', () => {
         });
     });
 
-    beforeEach(inject([MaintenanceService, ConnectionBackend], (maintenanceService) => {
+    beforeEach(inject([MaintenanceService, VenuesService, AutoupdateScheduleService, KioskVersionService],
+        (maintenanceService, venuesService, autoupdateScheduleService, kioskVersionsService) => {
         this.maintenanceService = maintenanceService;
+        this.venuesService = venuesService;
+        this.autoupdateScheduleService = autoupdateScheduleService;
+        this.kioskVersionsService = kioskVersionsService;
     }));
 
     describe('loadData()', () => {
@@ -66,6 +74,49 @@ describe('Service: AutoupdateScheduleService', () => {
                     expect(properties.autoupdateSchedules.length).toBe(1);
                     expect(properties.kioskVersions.length).toBe(1);
                 });
+        });
+    });
+
+    describe('loadVenues()', () => {
+
+        afterAll(() => {
+            this.venuesService.loadVenues.and.callThrough();
+        });
+
+        it('should trigger venuesService.loadVenues()', () => {
+            spyOn(this.venuesService, 'loadVenues').and.returnValue(Observable.of([]));
+
+            this.maintenanceService.loadVenues()
+                .subscribe(() => expect(this.venuesService.loadVenues).toHaveBeenCalled());
+
+        });
+    });
+
+    describe('loadAutoupdateSchedules()', () => {
+
+        afterAll(() => {
+            this.autoupdateScheduleService.loadAutoupdateSchedule.and.callThrough();
+        });
+
+        it('should trigger autoupdateScheduleService.loadAutoupdateSchedule()', () => {
+            spyOn(this.autoupdateScheduleService, 'loadAutoupdateSchedule').and.returnValue(Observable.of([]));
+
+            this.maintenanceService.loadAutoupdateSchedules()
+                .subscribe(() => expect(this.autoupdateScheduleService.loadAutoupdateSchedule).toHaveBeenCalled());
+        });
+    });
+
+    describe('loadKioskVersions()', () => {
+
+        afterAll(() => {
+            this.kioskVersionsService.loadKioskVersions.and.callThrough();
+        });
+
+        it('should trigger kioskVersionsService.loadKioskVersions()', () => {
+            spyOn(this.kioskVersionsService, 'loadKioskVersions').and.returnValue(Observable.of([]));
+
+            this.maintenanceService.loadAutoupdateSchedules()
+                .subscribe(() => expect(this.kioskVersionsService.loadKioskVersions).toHaveBeenCalled());
         });
     });
 });
