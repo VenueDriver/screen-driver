@@ -13,6 +13,7 @@ class StorageManager {
 
     static loadDataFromLocalStorage() {
         return new Promise((resolve, reject) => StorageManager.getAllFromStorage((error, data) => {
+            if (_.isEmpty(data)) return;
             Storage.setServerData(data[StorageNames.SERVER_DATA_STORAGE]);
             Storage.setSelectedSetting(data[StorageNames.SELECTED_SETTING_STORAGE]);
             resolve(data);
