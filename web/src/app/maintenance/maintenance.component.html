@@ -9,6 +9,7 @@
         </div>
 
         <maintenance-venues-tree-view
+                [kioskVersions]="kioskVersions"
                 [venues]="venuesTree"
                 (autoUpdateScheduleChange)="updateScheduleConfiguration($event)"
                 (updateApplications)="updateClientsApps($event)">
