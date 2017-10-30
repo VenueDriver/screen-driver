@@ -5,8 +5,9 @@ const dbHelper = require('../../helpers/db_helper');
 
 class KioskVersionRegister {
 
-    static registerVersion(screenId, version) {
-        let params = ParametersBuilder.buildPutRequestParameters(screenId, version);
+    static registerVersion(versionDetails) {
+        versionDetails.updatedAt = new Date().toISOString();
+        let params = ParametersBuilder.buildPutRequestParameters(versionDetails);
         return dbHelper.putItem(params);
     }
 }

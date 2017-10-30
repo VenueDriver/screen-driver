@@ -9,7 +9,7 @@ const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/ht
 module.exports.register = (event, context, callback) => {
     const data = JSON.parse(event.body);
 
-    KioskVersionRegister.registerVersion(data.screenId, data.version)
+    KioskVersionRegister.registerVersion(data)
         .then(result => {
             callback(null, responseHelper.createSuccessfulResponse({}));
         })

@@ -1,12 +1,12 @@
 'use strict';
 
-module.exports.buildPutRequestParameters = (screenId, version) => {
+module.exports.buildPutRequestParameters = (versionDetails) => {
     return {
         TableName: process.env.SCREENS_VERSIONS_TABLE,
-        Item:{
-            screenId: screenId,
-            version: version,
-            updatedAt: new Date()
+        Item: {
+            screenId: versionDetails.screenId,
+            version: versionDetails.version,
+            updatedAt: versionDetails.updatedAt
         }
     };
 };
