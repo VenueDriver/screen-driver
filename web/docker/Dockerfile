@@ -1,12 +1,17 @@
+FROM node:6.10 AS deps
+
+ADD package.json .
+ADD package-lock.json .
+
+RUN npm install
+
+
 FROM node:6.10
 
 CMD cd ..
-RUN mkdir app-src
-ADD package.json /app-src
-ADD package-lock.json /app-src
 
 WORKDIR /app-src
-RUN npm install
+COPY --from=deps node_modules node_modules
 ENV PATH ./node_modules/.bin:$PATH
 
 ADD . /app-src/
