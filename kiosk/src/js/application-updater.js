@@ -69,7 +69,7 @@ class ApplicationUpdater {
 function initPusherListener() {
     let notificationListener = new NotificationListener();
     notificationListener.subscribe('screens', 'update', (data) => {
-        let currentScreenId = CurrentScreenSettingsManager.getCurrentSetting().selectedScreenId;
+        let currentScreenId = getCurrentScreenId();
         if (data.screens.includes(currentScreenId)) {
             UserInteractionsManager.applyWhenScreenNotInterruptedByUser(new ApplicationUpdater().checkForUpdates);
         }
@@ -150,7 +150,7 @@ function destroyBackgroundJobForUpdatesCheckerIfExists() {
 
 function initUpdateScheduleConfigListener() {
     let notificationListener = new NotificationListener();
-    notificationListener.subscribe('venues', 'auto_update_schedule_updated', (data) => handleUpdateScheduleEvent(data));
+    notificationListener.subscribe('venues', 'auto_update_schedule_updated', handleUpdateScheduleEvent);
 }
 
 function handleUpdateScheduleEvent(schedule) {
@@ -171,13 +171,17 @@ function saveNewScheduleInStorage(schedule) {
 }
 
 function getCurrentVenueId() {
-    let currentSetting = CurrentScreenSettingsManager.getCurrentSetting();
+    let currentSetting = getCurrentSetting();
     return _.isEmpty(currentSetting) ? '' : currentSetting.selectedVenueId;
 }
 
 function getCurrentScreenId() {
-    let currentSetting = CurrentScreenSettingsManager.getCurrentSetting();
+    let currentSetting = getCurrentSetting();
     return _.isEmpty(currentSetting) ? '' : currentSetting.selectedScreenId;
+}
+
+function getCurrentSetting() {
+    return CurrentScreenSettingsManager.getCurrentSetting();
 }
 
 //here is an thrown error inside on autoUpdater, but it seems to work ok.
