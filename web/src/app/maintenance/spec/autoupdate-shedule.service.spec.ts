@@ -4,16 +4,15 @@
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {async, inject, TestBed} from "@angular/core/testing";
-import {KioskVersionServiceFixture} from "./kiosk-version-service.fixture";
-import {KioskVersionDetailsMap} from "../entities/kiosk-version-details";
 import {
     BaseRequestOptions, ConnectionBackend, RequestOptions
 } from "@angular/http";
 import {MockBackend} from "@angular/http/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HttpClient, HttpClientModule, HttpParams, HttpRequest} from "@angular/common/http";
 import {AutoupdateScheduleService} from "../autoupdate-schedule.service";
 import {AutoupdateScheduleServiceFixture} from "./autoupdate-schedule-service.fixture";
+import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
 
 fdescribe('Service: AutoupdateScheduleService', () => {
     let autoupdateScheduleService;
@@ -38,7 +37,7 @@ fdescribe('Service: AutoupdateScheduleService', () => {
         });
     });
 
-    describe('createSchedulesMap', () => {
+    describe('createSchedulesMap()', () => {
         it('should convert versions and return to schedules map where map key is venue (schedule id)', () => {
             const schedules = AutoupdateScheduleServiceFixture.schedules(2);
             const map: any = this.autoupdateScheduleService.createSchedulesMap(schedules);
@@ -49,5 +48,30 @@ fdescribe('Service: AutoupdateScheduleService', () => {
             expect(map[firstVersion.id]).toBe(firstVersion);
             expect(map[secondVersion.id]).toBe(secondVersion);
         });
+    });
+
+    describe('createDefaultAutoapdateSchedule()', () => {
+        it('should create schedule with cron 0 0 1 * * * *', () => {
+            const schedule = this.autoupdateScheduleService.createDefaultAutoapdateSchedule();
+            expect(schedule.eventTime).toBe('0 0 1 * * * *');
+        });
+    });
+
+    fdescribe('upsert()', () => {
+
+        it('should send UPDATE request and return updated schedule', async(inject([HttpClient, HttpTestingController],
+            (http: HttpClient, backend: HttpTestingController) => {
+                const schedule: AutoupdateSchedule = AutoupdateScheduleServiceFixture.schedules(1)[0];
+
+                this.autoupdateScheduleService.upsert(schedule)
+                    .subscribe((updatedSchedule: AutoupdateSchedule) => expect(updatedSchedule).toBe(schedule));
+
+                backend.expectOne((req: HttpRequest<any>) => {
+                    const isRequestBodySchedule = () => req.body instanceof AutoupdateSchedule;
+                    const checkForScheduleParams = () => req.body.id == schedule.id && req.body.eventTime == schedule.eventTime;
+                    return req.url === '/api/screens/update-schedule' && req.method === 'PUT' && isRequestBodySchedule() && checkForScheduleParams();
+                }, `PUT to '/api/screens/update-schedule' with schedule object`).flush(schedule);
+
+            })));
     });
 });
