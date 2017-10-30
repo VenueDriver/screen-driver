@@ -14,7 +14,7 @@ import {MockBackend} from "@angular/http/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 
-fdescribe('Service: KioskVersionService', () => {
+describe('Service: KioskVersionService', () => {
     let kioskVersionService;
     beforeEach(() => {
         TestBed.configureTestingModule({
