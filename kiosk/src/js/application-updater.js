@@ -49,15 +49,15 @@ class ApplicationUpdater {
 
     static syncAppVersionOnApi() {
         let notify = (newVersion) => {
-            let screenId = CurrentScreenSettingsManager.getCurrentSetting().selectedScreenId;
+            let screenId = getCurrentScreenId();
+            if (_.isEmpty(screenId)) throw new Error('Couldn\'t send Kiosk version. Reason: missed screen id');
             let requestData = {screenId: screenId, version: newVersion || '0.0.0'};
-            if (!screenId) throw new Error('Couldn\'t send Kiosk version. Reason: missed screen id');
             DataSender.sendApplicationVersion(requestData);
         };
 
         LocalStorageManager.getFromStorage(appVersionStorageName, (error, version) => {
             let currentVersion = app.getVersion();
-            if (currentVersion != version) {
+            if (currentVersion !== version) {
                 notify(currentVersion);
                 LocalStorageManager.putInStorage(appVersionStorageName, currentVersion)
             }
@@ -171,7 +171,13 @@ function saveNewScheduleInStorage(schedule) {
 }
 
 function getCurrentVenueId() {
-    return CurrentScreenSettingsManager.getCurrentSetting().selectedVenueId;
+    let currentSetting = CurrentScreenSettingsManager.getCurrentSetting();
+    return _.isEmpty(currentSetting) ? '' : currentSetting.selectedVenueId;
+}
+
+function getCurrentScreenId() {
+    let currentSetting = CurrentScreenSettingsManager.getCurrentSetting();
+    return _.isEmpty(currentSetting) ? '' : currentSetting.selectedScreenId;
 }
 
 //here is an thrown error inside on autoUpdater, but it seems to work ok.
@@ -184,7 +190,7 @@ function setFeedUrl() {
             url: url
         });
     } catch (error) {
-        Logger.info(error.message);
+        Logger.error(error.message);
     }
 }
 
