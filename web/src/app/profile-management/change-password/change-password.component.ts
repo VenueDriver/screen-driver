@@ -17,7 +17,6 @@ export class ChangePasswordComponent implements OnInit {
     @Output() submit = new EventEmitter();
 
     isRequestPerforming: boolean = false;
-    confirmedPassword: string = '';
 
     changePasswordForm: FormGroup;
 
@@ -31,9 +30,9 @@ export class ChangePasswordComponent implements OnInit {
     initFormGroup() {
         let newPasswordControl = this.createNewPasswordControl();
         this.changePasswordForm = new FormGroup({
-            'currentPassword': new FormControl(this.user.password, [Validators.required]),
+            'currentPassword': new FormControl('', [Validators.required]),
             'newPassword': newPasswordControl,
-            'confirmedPassword': new FormControl(this.confirmedPassword, [
+            'confirmedPassword': new FormControl('', [
                 Validators.required,
                 this.validateConfirmedPassword(newPasswordControl)
             ])
@@ -41,7 +40,7 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     private createNewPasswordControl(): FormControl {
-        return new FormControl(this.user.newPassword, [
+        return new FormControl('', [
             Validators.required,
             Validators.pattern(PASSWORD_VALIDATION_PATTERN),
             this.validateLength()

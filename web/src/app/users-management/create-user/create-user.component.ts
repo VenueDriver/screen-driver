@@ -25,7 +25,7 @@ export class CreateUserComponent implements OnInit {
     ngOnInit() {
         this.usersService.getUsers().subscribe(users => this.setEmails(users));
         this.userForm = new FormGroup({
-            'email': new FormControl(this.user.email, [
+            'email': new FormControl('', [
                 Validators.required,
                 Validators.pattern(EMAIL_VALIDATION_PATTERN),
                 this.validateEmailUniqueness()
