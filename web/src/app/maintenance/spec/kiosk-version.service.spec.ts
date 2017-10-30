@@ -52,7 +52,7 @@ fdescribe('Service: KioskVersionService', () => {
 
     describe('loadKioskVersions()', () => {
 
-        it(`should expect a GET /foo/bar`, async(inject([HttpClient, HttpTestingController],
+        it('should loader kiosk versions as KioskVersionDetailsMap', async(inject([HttpClient, HttpTestingController],
             (http: HttpClient, backend: HttpTestingController) => {
                 const kioskVersions = KioskVersionServiceFixture.kioskVersions(2);
 
