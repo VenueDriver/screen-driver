@@ -12,7 +12,7 @@ export class AuthHttpInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return this.authTokenService
-            .token
+            .getLastToken()
             .map(token => this.injectAuthHeader(req, token))
             .concatMap(authReq => next.handle(authReq))
             .catch((err, restart) => {

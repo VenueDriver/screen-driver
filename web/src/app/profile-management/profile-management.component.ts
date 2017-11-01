@@ -16,7 +16,7 @@ export class ProfileManagementComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.user = this.authService.currentUser.getValue()
+        this.authService.currentUser.subscribe(user => this.user = user);
     }
 
     setChangePasswordMode(mode: boolean) {

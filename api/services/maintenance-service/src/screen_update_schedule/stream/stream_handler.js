@@ -1,8 +1,7 @@
 'use strict';
 
-const ModulePathManager = require('../../module_path_manager');
-const Notifier = require(ModulePathManager.getBasePath() + 'lib/notifier/notifier');
-const PusherChannels = require(ModulePathManager.getBasePath() + 'lib/notifier/pusher_channels').PusherChannels;
+const Notifier = require('../../notifier/notifier');
+const PusherChannels = require('../../notifier/pusher_chanels').PusherChannels;
 
 const VenuesChannel = PusherChannels.venues;
 const ChannelEvent = VenuesChannel.events.auto_update_schedule_updated;
@@ -22,10 +21,10 @@ function isNotRemoveAction(action) {
 
 function scheduleConfigFromImage(newImage) {
     let id = newImage.id.S;
-    let enabled = newImage.enabled.BOOL;
+    let isEnabled = newImage.isEnabled.BOOL;
     let eventTime = newImage.eventTime.S;
 
-    return {id, enabled, eventTime};
+    return {id, isEnabled, eventTime};
 }
 
 

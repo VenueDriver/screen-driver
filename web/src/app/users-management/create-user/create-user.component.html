@@ -1,39 +1,39 @@
 <div class="create-user-form">
-    <div>
-        <label for="email">Email address</label>
+    <form [formGroup]="userForm" (ngSubmit)="performSubmit()">
+        <div class="form-group" [class.has-error]="hasError()">
+            <label class="control-label" for="email">Email address</label>
 
-        <input id="email"
-               class="form-control"
-               [(ngModel)]="user.email"
-               (focusout)="validateEmail(email)"
-               #email="ngModel"
-               type="email"
-               placeholder="Email"
-               input-autofocus>
-    </div>
+            <input id="email"
+                   formControlName="email"
+                   class="form-control"
+                   type="email"
+                   placeholder="Email"
+                   input-autofocus>
 
-    <label *ngIf="email.invalid"
-           class="email error-message">
-        {{getValidationMessage(email)}}
-    </label>
+            <span *ngIf="formInvalid()"
+                   class="help-block">
+                {{getErrorMessage()}}
+            </span>
+        </div>
 
-    <div class="is-admin">
-        <toggle-button [title]="'Has admin access?'"
-                       (changed)="setUserRole($event)">
-        </toggle-button>
-    </div>
+        <div class="is-admin">
+            <toggle-button [title]="'Has admin access?'"
+                           formControlName="isAdmin"
+                           ngDefaultControl>
+            </toggle-button>
+        </div>
 
-    <div class="control-buttons">
-        <button type="button"
-                class="btn btn-link"
-                (click)="performCancel()">
-            Cancel
-        </button>
-        <button type="button"
-                class="btn btn-success"
-                (click)="performSubmit()"
-                [disabled]="email.invalid">
-            Create
-        </button>
-    </div>
+        <div class="control-buttons">
+            <button type="button"
+                    class="btn btn-link"
+                    (click)="performCancel()">
+                Cancel
+            </button>
+            <button type="submit"
+                    class="btn btn-success"
+                    [disabled]="formInvalid()">
+                Create
+            </button>
+        </div>
+    </form>
 </div>
