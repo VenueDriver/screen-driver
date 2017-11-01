@@ -1,0 +1,12 @@
+@mixin mozilla-icon-size($size)
+  &:before
+    width: $size
+    height: $size
+
+@mixin mozilla-icon($icon-name, $size: 25px)
+  @include mozilla-icon-size($size)
+  &:before
+    display: inline-block
+    content: ""
+    background: url('./assets/images/' + $icon-name) no-repeat 0 0
+    background-size: 100%
