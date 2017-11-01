@@ -45,7 +45,7 @@ export class AuthService {
             .subscribe(
                 response => {
                     this.saveAuthTokens(response);
-                    this.initCurrentUser(response['token']);
+                    this.setCurrentUserFromToken(response['token']);
                     subject.next(response);
                     this.redirect();
                 },
@@ -57,7 +57,7 @@ export class AuthService {
         return subject;
     }
 
-    initCurrentUser(token: string) {
+    setCurrentUserFromToken(token: string) {
         let user = this.parseUserData(token);
         LocalStorageService.saveUserDetails(user);
         this.currentUser.next(user);
@@ -154,6 +154,7 @@ export class AuthService {
             (response) => {
                 LocalStorageService.setIdToken(response['token']);
                 this.tokenService.tokenReceived.next(response['token']);
+                this.setCurrentUserFromToken(response['token']);
                 subject.next(response);
             },
             (error) => {
