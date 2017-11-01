@@ -24,7 +24,7 @@ export class AuthTokenService {
         this.subject.next(token);
     }
 
-    private getLastToken(): Observable<string> {
+    getLastToken(): Observable<string> {
         let token = LocalStorageService.getIdToken();
         if (!_.isEmpty(token)) {
             return new BehaviorSubject(token);
