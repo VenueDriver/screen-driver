@@ -8,7 +8,7 @@ import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
 import {KioskVersionService} from "./kiosk-version.service";
 import {MaintenanceProperties} from "./entities/maintenance-properties";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
-import {KioskVersionDetails, KioskVersionDetailsMap} from "./entities/kiosk-version-details";
+import {KioskVersionDetailsMap} from "./entities/kiosk-version-details";
 import {Venue} from "../core/entities/venue";
 
 @Injectable()

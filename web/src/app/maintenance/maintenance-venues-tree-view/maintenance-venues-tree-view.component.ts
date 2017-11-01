@@ -1,19 +1,11 @@
-import {Component, OnInit, Input, Output, ViewChild, EventEmitter, OnDestroy} from '@angular/core';
-import {ITreeOptions} from "angular-tree-component/dist/defs/api";
-import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
-import {KEYS} from "angular-tree-component/dist/constants/keys";
-import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
-import {Content} from "../../content/content";
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {VenuesService} from "../../content-management/venues/venues.service";
-import {Setting} from "../../settings/entities/setting";
 
 import * as _ from 'lodash';
-import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
 import {ScreensMessagingService} from "../../messaging/screens-messaging.service";
 import {NotificationService} from "../../shared/notifications/notification.service";
 import {VenuesTreeViewService} from "../../content-management/venues/venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../../content-management/venues/venues-tree-view/venues-tree-view.component";
-import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
 import {Venue} from "../../core/entities/venue";
 import {KioskVersionDetails} from "../entities/kiosk-version-details";
 
