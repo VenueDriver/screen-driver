@@ -49,7 +49,7 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         this.venuesTree.updateTreeViewOptions();
     }
 
-    //+
+    //Duplicated
     hasSelectedNode(): boolean {
         return !!this.currentNodeData;
     }
@@ -70,7 +70,7 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         return node && node.level == level;
     }
 
-    //+
+    //Duplicated
     isCurrentNode(node: any) {
         return _.isEqual(this.currentNodeData, node.data);
     }
@@ -79,17 +79,17 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         return node.level < 3 && this.isAllowToEditNode();
     }
 
-    //+
+    //Duplicated
     isAllowToUpdateClientApp(node: any) {
         return node.level <= 3 && this.isAllowToEditNode();
     }
 
-    //+
+    //Duplicated
     isAllowToRefreshScreenContent(node: any) {
         return node.level == 3 && _.isEmpty(this.currentNodeData);
     }
 
-    //+
+    //Duplicated
     isAllowToEditNode() {
         return _.isEmpty(this.currentNodeData);
     }
@@ -98,7 +98,7 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         this.updateTreeViewOptions();
     }
 
-    //+
+    //Duplicated
     updateClientApps(event: any, node: any) {
         this.stopClickPropagation(event);
 
@@ -108,7 +108,7 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         this.updateApplications.emit(screens);
     }
 
-    //+
+    //Duplicated
     getScreensFrom(node: any) {
         let screens = [];
         let data = node.data || node;
@@ -130,17 +130,17 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         return screens;
     }
 
-    //+
+    //Duplicated
     hasChildren(node: any): boolean {
         return node.level < 3 && node.children && node.children.length > 0;
     }
 
-    //+
+    //Duplicated
     stopClickPropagation(event: any) {
         event.stopPropagation();
     }
 
-    //+
+    //Duplicated
     refreshContent(id: string) {
         this.screensService.refreshScreen(id).subscribe(
             response => this.notificationService.showSuccessNotificationBar('Reload screen request was sent'),
@@ -153,7 +153,7 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         return node.level > 1 ? title : `${title} group`;
     }
 
-    //+
+    //Duplicated
     getUpdateClientButtonTitle(node: any): string {
         let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
 
@@ -162,23 +162,23 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
         return `Update client ${appAmountMessage} the ${nodeLevelName.toLowerCase()}`;
     }
 
-    //+
+    //Duplicated
     getRefreshButtonTitle(node: any): string {
         let nodeLevelName = this.treeViewService.getNodeLevelName(node.level);
         return `Refresh ${nodeLevelName.toLowerCase()} content`;
     }
 
-    //+
+    //Duplicated
     getNodeLevelName(node: any): string {
         return this.treeViewService.getNodeLevelName(node.level);
     }
 
-    //++
+    //Duplicated+
     getPlaceholderForDefaultUrl(node: any): string {
         return this.treeViewService.getPlaceholderForDefaultUrl(node.level);
     }
 
-    //++
+    //Duplicated+
     hasCurrentNode(): boolean {
         return !!this.currentNodeData;
     }
