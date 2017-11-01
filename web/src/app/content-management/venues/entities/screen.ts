@@ -4,5 +4,4 @@ export class Screen {
     id: string;
     name: string;
     content: Content;
-    content_id: string;
 }
