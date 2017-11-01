@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 
+import * as _ from 'lodash';
+
 @Injectable()
 export class VenuesTreeViewService {
-    private editedNodes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+
+    private editedNode: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
     constructor() { }
 
@@ -28,22 +31,16 @@ export class VenuesTreeViewService {
         return parentNodeLevelName.toLowerCase();
     }
 
-    addEditableNode(node: any) {
-        let nodes = this.editedNodes.getValue();
-        nodes.push(node);
-        this.editedNodes.next(nodes);
+    setEditableNode(node: any) {
+        this.editedNode.next(node);
     }
 
-    removeEditableNode(node?: any) {
-        if (!!node) {
-            let nodes = this.editedNodes.getValue().filter(n => n.id !== node.id);
-            this.editedNodes.next(nodes);
-        } else {
-            this.editedNodes.next([]);
-        }
+    removeEditableNode() {
+        this.editedNode.next({});
     }
 
     isTreeEdited(): boolean {
-        return this.editedNodes.getValue().length > 0;
+        let editedNode = this.editedNode.getValue();
+        return !_.isEmpty(editedNode);
     }
 }

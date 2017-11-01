@@ -1,9 +1,8 @@
-import {Component, OnInit, Input, Output, ViewChild, EventEmitter, OnDestroy, TemplateRef} from '@angular/core';
+import {Component, OnInit, Input, Output, ViewChild, EventEmitter, TemplateRef} from '@angular/core';
 import {ITreeOptions} from "angular-tree-component/dist/defs/api";
 import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
 import {KEYS} from "angular-tree-component/dist/constants/keys";
 import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
-import {VenuesTreeViewService} from "./venues-tree-view.service";
 
 import * as _ from 'lodash';
 
@@ -12,7 +11,7 @@ import * as _ from 'lodash';
     templateUrl: 'venues-tree-view.component.html',
     styleUrls: ['./venues-tree-view.component.sass']
 })
-export class VenuesTreeViewComponent implements OnInit, OnDestroy {
+export class VenuesTreeViewComponent implements OnInit {
 
     @Input() venues: Array<any>;
     @Input() hasSelectedNode: boolean = false;
@@ -24,16 +23,8 @@ export class VenuesTreeViewComponent implements OnInit, OnDestroy {
     options: any;
     actionMapping: any;
 
-    constructor(
-        private treeViewService: VenuesTreeViewService,
-    ) { }
-
     ngOnInit() {
         this.updateTreeViewOptions();
-    }
-
-    ngOnDestroy() {
-        this.treeViewService.removeEditableNode();
     }
 
     updateTreeViewOptions() {

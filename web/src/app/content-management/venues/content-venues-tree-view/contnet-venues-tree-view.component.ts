@@ -9,8 +9,6 @@ import {Setting} from "../../../settings/entities/setting";
 
 import * as _ from 'lodash';
 import {SettingStateHolderService} from "../../../settings/setting-state-manager/settings-state-holder.service";
-import {ScreensMessagingService} from "../../../messaging/screens-messaging.service";
-import {NotificationService} from "../../../shared/notifications/notification.service";
 import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../venues-tree-view/venues-tree-view.component";
 
@@ -51,7 +49,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.treeViewService.removeEditableNode();
+        this.removeEditableNode();
     }
 
     subscribeToCurrentSettingUpdate() {
@@ -141,7 +139,11 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
         this.isCreateContentMode = false;
-        this.treeViewService.removeEditableNode(node);
+        this.removeEditableNode();
+    }
+
+    private removeEditableNode() {
+        this.treeViewService.removeEditableNode();
     }
 
     dismissChanges(node: any) {
@@ -173,7 +175,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
 
     editNode(event: any, node: any) {
         if (this.currentSetting) {
-            this.treeViewService.addEditableNode(node);
+            this.treeViewService.setEditableNode(node);
         }
 
         this.stopClickPropagation(event);

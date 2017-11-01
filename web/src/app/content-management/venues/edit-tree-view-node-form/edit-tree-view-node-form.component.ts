@@ -55,7 +55,7 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.treeViewService.removeEditableNode(this.node);
+        this.removeEditableNode();
     }
 
     setUpComponentModel(node: any) {
@@ -164,13 +164,17 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
     }
 
     performCancel(event: any) {
-        this.treeViewService.removeEditableNode(this.node);
+        this.removeEditableNode();
         this.stopClickPropagation(event);
         this.cancel.emit(this.node);
     }
 
+    private removeEditableNode() {
+        this.treeViewService.removeEditableNode();
+    }
+
     performSubmit(event: any) {
-        this.treeViewService.removeEditableNode(this.node);
+        this.removeEditableNode();
         this.stopClickPropagation(event);
         if (this.createContentMode) {
             this.createContentBeforeUpdateVenue();
@@ -237,7 +241,7 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
     }
 
     disableEditMode() {
-        this.treeViewService.removeEditableNode(this.node);
+        this.removeEditableNode();
         this.editFormService.pushVenueUpdateEvent();
         this.createContentMode = false;
     }
@@ -297,7 +301,7 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
     }
 
     performRemoving(event: any) {
-        this.treeViewService.removeEditableNode(this.node);
+        this.removeEditableNode();
         this.stopClickPropagation(event);
         this.editFormService.deleteItem(this.node, this.currentSetting);
     }
