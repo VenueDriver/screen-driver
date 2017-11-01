@@ -6,7 +6,7 @@ import {NotificationService} from "../../../shared/notifications/notification.se
 import * as _ from 'lodash';
 import {Venue} from "../entities/venue";
 import {Setting} from "../../../settings/entities/setting";
-import {SettingStateHolderService} from "../../../settings/setting-state-manager/settings-state-holder.service";
+import {SettingStateHolderService} from "../../../core/setting-state-manager/settings-state-holder.service";
 
 @Component({
     selector: 'edit-tree-view-node-form',

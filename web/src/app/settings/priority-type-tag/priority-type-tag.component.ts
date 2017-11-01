@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Setting} from "../entities/setting";
-import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
+import {SettingStateHolderService} from "../../core/setting-state-manager/settings-state-holder.service";
 
 @Component({
     selector: 'priority-type-tag',

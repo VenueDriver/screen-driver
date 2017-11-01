@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Setting} from "../entities/setting";
+import {Setting} from "../../settings/entities/setting";
 import {Subject, Observable, BehaviorSubject} from "rxjs";
-import {SettingsService} from "../settings.service";
+import {SettingsService} from "../../settings/settings.service";
 import {Notification} from "angular2-notifications/dist";
 
 import * as _ from 'lodash';

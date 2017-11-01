@@ -7,7 +7,7 @@ import {ContentService} from "../../../content/content.service";
 import {Venue} from "../entities/venue";
 import {SettingsService} from "../../../settings/settings.service";
 import {Setting} from "../../../settings/entities/setting";
-import {SettingStateHolderService} from "../../../settings/setting-state-manager/settings-state-holder.service";
+import {SettingStateHolderService} from "../../../core/setting-state-manager/settings-state-holder.service";
 import {NotificationService} from "../../../shared/notifications/notification.service";
 
 import * as _ from 'lodash';

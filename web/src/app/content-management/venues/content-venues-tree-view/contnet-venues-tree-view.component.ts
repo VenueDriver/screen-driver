@@ -8,7 +8,7 @@ import {VenuesService} from "../venues.service";
 import {Setting} from "../../../settings/entities/setting";
 
 import * as _ from 'lodash';
-import {SettingStateHolderService} from "../../../settings/setting-state-manager/settings-state-holder.service";
+import {SettingStateHolderService} from "../../../core/setting-state-manager/settings-state-holder.service";
 import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../venues-tree-view/venues-tree-view.component";
 

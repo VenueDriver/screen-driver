@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import {SchedulesService} from "../../content-management/schedules/schedules.service";
 import {Schedule} from "../../content-management/schedules/entities/schedule";
 import {PriorityTypes} from "../../core/enums/priorty-types";
-import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
+import {SettingStateHolderService} from "../../core/setting-state-manager/settings-state-holder.service";
 
 @Component({
     selector: 'single-setting',

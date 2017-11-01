@@ -1,7 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {SchedulesService} from "./schedules.service";
 import {Schedule} from "./entities/schedule";
-import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
+import {SettingStateHolderService} from "../../core/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../../settings/entities/setting";
 
 import * as _ from 'lodash';

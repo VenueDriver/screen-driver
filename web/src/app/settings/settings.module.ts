@@ -2,7 +2,7 @@ import {NgModule} from "@angular/core";
 import {SettingsComponent} from "./settings.component";
 import {SettingCreatorComponent} from "./setting-creator/setting-creator.component";
 import {SettingsService} from "./settings.service";
-import {SettingStateHolderService} from "./setting-state-manager/settings-state-holder.service";
+import {SettingStateHolderService} from "../core/setting-state-manager/settings-state-holder.service";
 import {AutofocusModule} from "../shared/directives/autofocus/autofocus.module";
 import {FormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
