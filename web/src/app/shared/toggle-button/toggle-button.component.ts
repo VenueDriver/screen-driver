@@ -40,7 +40,7 @@ export class ToggleButtonComponent implements ControlValueAccessor {
 
     onClick() {
         this.changed.emit(!this.checked);
-        this.onChangeCallback(!this.checked);
+        !this.onChangeCallback || this.onChangeCallback(!this.checked);
     }
 
     writeValue(value: any) {
