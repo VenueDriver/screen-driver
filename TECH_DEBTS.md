@@ -31,7 +31,8 @@
 1. Fix buttons position on tree view for mobile devices
 1. Get rid of deprecated `/deep/` selector
 1. Get rid of checking route to display the sidebar
-1. Get rid of getting validation message on reset password validation 
+1. Get rid of getting validation message on reset password validation
+1. An error appears in the console if try to switch to the 'schedules' tab while tree view node is in edit mode 
 
 ##### Kiosk
 1. Create in memory local storage
