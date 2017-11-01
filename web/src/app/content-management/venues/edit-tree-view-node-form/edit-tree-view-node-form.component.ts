@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Input, Output, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, OnInit, Input, Output} from '@angular/core';
 import {EditTreeViewNodeFormService} from "./edit-tree-view-node-form.service";
 import {Content} from "../../../content/content";
 import {NotificationService} from "../../../shared/notifications/notification.service";
@@ -7,7 +7,6 @@ import * as _ from 'lodash';
 import {Venue} from "../entities/venue";
 import {Setting} from "../../../settings/entities/setting";
 import {SettingStateHolderService} from "../../../settings/setting-state-manager/settings-state-holder.service";
-import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 
 @Component({
     selector: 'edit-tree-view-node-form',
@@ -15,7 +14,7 @@ import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.servic
     styleUrls: ['edit-tree-view-node-form.component.sass'],
     providers: [EditTreeViewNodeFormService]
 })
-export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
+export class EditTreeViewNodeFormComponent implements OnInit {
 
     @Input() currentSetting: Setting;
     @Input() settings: Setting[];
@@ -44,7 +43,6 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
         private editFormService: EditTreeViewNodeFormService,
         private notificationService: NotificationService,
         private settingStateHolderService: SettingStateHolderService,
-        private treeViewService: VenuesTreeViewService,
     ) { }
 
     ngOnInit() {
@@ -52,10 +50,6 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
             configChangedSubscription.unsubscribe();
             this.cancel.emit(this.node);
         })
-    }
-
-    ngOnDestroy() {
-        this.removeEditableNode();
     }
 
     setUpComponentModel(node: any) {
@@ -170,11 +164,10 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
     }
 
     private removeEditableNode() {
-        this.treeViewService.removeEditableNode();
+        this.settingStateHolderService.disableCurrentSettingEditMode();
     }
 
     performSubmit(event: any) {
-        this.removeEditableNode();
         this.stopClickPropagation(event);
         if (this.createContentMode) {
             this.createContentBeforeUpdateVenue();

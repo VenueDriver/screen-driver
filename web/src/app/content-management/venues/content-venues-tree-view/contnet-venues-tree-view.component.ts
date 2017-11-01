@@ -122,7 +122,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
     }
 
     isCurrentNode(node: any) {
-        return _.isEqual(this.currentNodeData, node.data);
+        return _.isEqual(this.currentNodeData.id, node.data.id);
     }
 
     isAllowToAddChild(node: any) {
@@ -143,7 +143,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
     }
 
     private removeEditableNode() {
-        this.treeViewService.removeEditableNode();
+        this.settingStateHolderService.disableCurrentSettingEditMode();
     }
 
     dismissChanges(node: any) {
@@ -175,7 +175,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
 
     editNode(event: any, node: any) {
         if (this.currentSetting) {
-            this.treeViewService.setEditableNode(node);
+            this.settingStateHolderService.enableCurrentSettingEditMode();
         }
 
         this.stopClickPropagation(event);

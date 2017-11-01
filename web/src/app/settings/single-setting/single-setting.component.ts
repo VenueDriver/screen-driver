@@ -7,7 +7,6 @@ import * as _ from 'lodash';
 import {SchedulesService} from "../../content-management/schedules/schedules.service";
 import {Schedule} from "../../content-management/schedules/entities/schedule";
 import {PriorityTypes} from "../../core/enums/priorty-types";
-import {VenuesTreeViewService} from "../../content-management/venues/venues-tree-view/venues-tree-view.service";
 import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
 
 @Component({
@@ -21,16 +20,18 @@ export class SingleSettingComponent implements OnInit {
     @Output() update = new EventEmitter();
 
     private schedules: Schedule[];
+    private settingInEditMode: boolean;
 
     constructor(private settingsService: SettingsService,
                 private notificationService: NotificationService,
                 private schedulesService: SchedulesService,
-                private treeViewService: VenuesTreeViewService,
                 private settingStateHolderService: SettingStateHolderService,) {
     }
 
     ngOnInit() {
         this.schedulesService.schedules.subscribe(schedules => this.schedules = this.findSchedules(schedules));
+        this.settingStateHolderService.isSettingInEditMode()
+            .subscribe(value => this.settingInEditMode = value);
     }
 
     onToggleClick(event: any) {
@@ -104,7 +105,7 @@ export class SingleSettingComponent implements OnInit {
     }
 
     isSettingInEditMode(): boolean {
-        return this.treeViewService.isTreeEdited()
+        return this.settingInEditMode
             && !!this.activeSetting
             && this.setting.id === this.activeSetting.id;
     }

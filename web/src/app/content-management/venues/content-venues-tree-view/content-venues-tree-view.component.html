@@ -11,6 +11,7 @@
                     <span class="content-short-name">{{ getContentShortName(node) }}</span>
                     <span class="content-url">{{ getContentUrl(node) }}</span>
                 </div>
+
                 <ng-template #contentPlaceholder>
                     <div class="content-url-placeholder info-message">{{getPlaceholderForDefaultUrl(node)}}</div>
                 </ng-template>
@@ -44,5 +45,6 @@
             </div>
         </div>
     </ng-template>
+
     <venues-tree-view [venues]="venues" [template]="template" [hasSelectedNode]="hasSelectedNode()"></venues-tree-view>
 </div>
