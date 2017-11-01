@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 
-import * as _ from 'lodash';
-
 @Injectable()
 export class VenuesTreeViewService {
-
-    private editedNode: BehaviorSubject<any> = new BehaviorSubject<any>({});
 
     constructor() { }
 
@@ -31,16 +27,4 @@ export class VenuesTreeViewService {
         return parentNodeLevelName.toLowerCase();
     }
 
-    setEditableNode(node: any) {
-        this.editedNode.next(node);
-    }
-
-    removeEditableNode() {
-        this.editedNode.next({});
-    }
-
-    isTreeEdited(): boolean {
-        let editedNode = this.editedNode.getValue();
-        return !_.isEmpty(editedNode);
-    }
 }
