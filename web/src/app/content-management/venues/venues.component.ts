@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {VenuesService} from "./venues.service";
-import {Venue} from "./entities/venue";
+import {Venue} from "../../core/entities/venue";
 import {Content} from "../../content/content";
 import {ContentService} from "../../content/content.service";
 

@@ -37,7 +37,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     isCurrentUser(user: User): boolean {
-        return _.isEqual(user.email, this.currentUser.email);
+        return _.isEqual(user.id, this.currentUser.id);
     }
 
     getToggleHint(user: User): string {
