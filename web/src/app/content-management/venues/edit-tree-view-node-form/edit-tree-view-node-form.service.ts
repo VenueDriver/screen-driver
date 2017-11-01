@@ -4,7 +4,7 @@ import {VenuesService} from "../venues.service";
 import {Observable} from "rxjs";
 import {Content} from "../../../content/content";
 import {ContentService} from "../../../content/content.service";
-import {Venue} from "../entities/venue";
+import {Venue} from "../../../core/entities/venue";
 import {SettingsService} from "../../../settings/settings.service";
 import {Setting} from "../../../settings/entities/setting";
 import {SettingStateHolderService} from "../../../settings/setting-state-manager/settings-state-holder.service";

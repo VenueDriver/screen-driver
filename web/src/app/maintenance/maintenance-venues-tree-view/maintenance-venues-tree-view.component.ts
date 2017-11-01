@@ -14,7 +14,7 @@ import {NotificationService} from "../../shared/notifications/notification.servi
 import {VenuesTreeViewService} from "../../content-management/venues/venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../../content-management/venues/venues-tree-view/venues-tree-view.component";
 import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
-import {Venue} from "../../content-management/venues/entities/venue";
+import {Venue} from "../../core/entities/venue";
 import {KioskVersionDetails} from "../entities/kiosk-version-details";
 
 const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;

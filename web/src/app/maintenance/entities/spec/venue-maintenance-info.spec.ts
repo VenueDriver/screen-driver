@@ -2,7 +2,7 @@
 
 
 import {VenueMaintenanceInfo} from "../venue-maintenance-info";
-import {Venue} from "../../../content-management/venues/entities/venue";
+import {Venue} from "../../../core/entities/venue";
 
 describe('VenueMaintenanceInfo', () => {
 
