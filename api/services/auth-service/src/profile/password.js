@@ -12,12 +12,14 @@ module.exports.reset = (event, context, callback) => {
     let params = parametersBuilder.buildFindUserByEmailParameters(data.email);
 
     dbHelper.findByParams(params).then(users => {
+        if (users.length === 0) throw new Error('User does not exist');
         let username = users[0].username;
         return UserPool.resetPassword(username);
     }).then(response => {
         callback(null, responseHelper.createSuccessfulResponse(response));
     }).catch(error => {
-        callback(null, responseHelper.createResponseWithError(error));
+        console.log(error);
+        callback(null, responseHelper.createResponseWithError(500, error.message()));
     });
 };
 
