@@ -5,7 +5,7 @@
 
 - service: serverless
   name: serverless_deps
-  command: echo serverless
+  command: serverless dynamodb start --stage test
 
 - type: serial
   name: run_tests
