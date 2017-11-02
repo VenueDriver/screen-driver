@@ -1,9 +1,3 @@
-FROM screendriver_web AS build_dist
-
-RUN sh scripts/build.sh
-
-
 FROM codeship/aws-deployment
 
-COPY --from=build_dist app-src/dist dist
-CMD aws s3 sync dist ${CLIENT_HOST_S3_BUCKET}
+CMD aws s3 sync app-src/dist ${CLIENT_HOST_S3_BUCKET}

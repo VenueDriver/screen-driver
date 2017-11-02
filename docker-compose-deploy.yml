@@ -1,12 +1,24 @@
 version: '2.2'
 services:
 
+  build_web:
+    env_file:
+      - development.env
+    build:
+      context: web
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - ./web:/app-src
+      - /app-src/node_modules
+
   deploy_web:
     env_file:
       - development.env
     build:
       context: web
       dockerfile: ./docker/Dockerfile.deploy
+    volumes_from:
+      - build_web
 
   deploy_api:
     env_file:
