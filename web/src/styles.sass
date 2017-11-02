@@ -1,5 +1,5 @@
 @import "styles/variables"
-@import "styles/mozilla-icon"
+@import "styles/icon"
 
 body
   margin: 50px 25px 45px 0
@@ -141,45 +141,34 @@ body
     top: 36px !important
 
 .plus-button
-  content: url('./assets/images/plus.png')
-  @include mozilla-icon('plus.png', 30px)
+  @include icon('plus.png', 30px)
 
 .edit-button
-  content: url('./assets/images/edit.png')
-  @include mozilla-icon('edit.png')
+  @include icon('edit.png')
 
   &.disabled
-    content: url('./assets/images/edit-disabled.png')
-    @include mozilla-icon('edit-disabled.png')
+    @include icon('edit-disabled.png')
 
 .refresh-button
-  content: url('./assets/images/refresh.png')
-  @include mozilla-icon('refresh.png')
+  @include icon('refresh.png')
 
 .remove-button
-  content: url('./assets/images/dustbin.png')
-  @include mozilla-icon('dustbin.png')
+  @include icon('dustbin.png')
 
 .forced-enabled-button-on
-  content: url('./assets/images/flash-on.png')
-  @include mozilla-icon('flash-on.png')
+  @include icon('flash-on.png')
 
 .forced-enabled-button-off
-  content: url('./assets/images/flash-off.png')
-  @include mozilla-icon('flash-off.png')
+  @include icon('flash-off.png')
 
 .update-client-button
-  content: url('./assets/images/update-client.png')
-  @include mozilla-icon('update-client.png')
+  @include icon('update-client.png')
 
 .locked
-  content: url('./assets/images/locked.png')
-  @include mozilla-icon('locked.png')
+  @include icon('locked.png')
 
 .unlocked
-  content: url('./assets/images/unlocked.png')
-  @include mozilla-icon('unlocked.png')
+  @include icon('unlocked.png')
 
 .sign-out
-  content: url('./assets/images/sign-out.png')
-  @include mozilla-icon('sign-out.png')
+  @include icon('sign-out.png')
