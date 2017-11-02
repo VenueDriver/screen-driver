@@ -13,7 +13,7 @@ export class NotificationService {
         let notificationTitle = title ? title : 'An error has occurred';
         this.notificationsService.error(
             notificationTitle,
-            notificationMessage
+            this.extractErrorMessage(notificationMessage)
         );
     }
 
@@ -40,5 +40,9 @@ export class NotificationService {
 
     hide(id?: string) {
         this.notificationsService.remove(id);
+    }
+
+    private extractErrorMessage(notificationMessage: string) {
+        return typeof notificationMessage === 'string' ? notificationMessage : '';
     }
 }
