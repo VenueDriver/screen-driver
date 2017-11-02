@@ -1,4 +1,4 @@
-FROM joakimbeng/java-node
+FROM cdornbusch/docker-java-node:6.x
 
 CMD cd ..
 WORKDIR /app-src
