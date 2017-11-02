@@ -6,7 +6,7 @@ import {Subject, Observable, BehaviorSubject} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {NotificationService} from "../shared/notifications/notification.service";
 
-const EDIT_PROFILE_API = `${environment.apiUrl}/api/auth/edit-profile`;
+const EDIT_PROFILE_API = `${environment.apiUrl}/api/auth/profile`;
 
 @Injectable()
 export class ProfileManagementService {
@@ -18,7 +18,7 @@ export class ProfileManagementService {
 
     editProfile(user: User): Observable<User> {
         let subject = new Subject<any>();
-        this.httpClient.post(`${EDIT_PROFILE_API}`, user)
+        this.httpClient.put(`${EDIT_PROFILE_API}`, user)
             .subscribe(
                 response => {
                     subject.next(response);

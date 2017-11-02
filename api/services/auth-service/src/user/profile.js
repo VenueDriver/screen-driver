@@ -8,7 +8,7 @@ const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/au
 
 let User = require('./entities/user');
 
-module.exports.editProfile = (event, context, callback) => {
+module.exports.edit = (event, context, callback) => {
     const userDetails = JSON.parse(event.body);
     let currentUser = extractCurrentUserFromEvent(event);
     userDetails.username = currentUser.username;
@@ -37,7 +37,7 @@ function changeEmail(userDetails, callback) {
         callback(null, responseHelper.createSuccessfulResponse(updatedUser));
     })
         .fail(errorMessage => {
-            console.log(errorMessage);
+            console.error(errorMessage);
             callback(null, responseHelper.createResponseWithError(500, errorMessage));
         });
 }
