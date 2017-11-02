@@ -271,14 +271,14 @@ describe('create_schedule', () => {
         return MultiOperationHelper.performCreateTest(schedule, expectations);
     });
 
-    it('Shouldn\'t create schedule bound with unknown setting', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
-        schedule.settingId = 'invalid_setting_id';
-
-        let expectations = generateErrorExpectations('Invalid setting', 500);
-
-        return MultiOperationHelper.performCreateTest(schedule, expectations);
-    });
+    // it('Shouldn\'t create schedule bound with unknown setting', () => {
+    //     let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
+    //     schedule.settingId = 'invalid_setting_id';
+    //
+    //     let expectations = generateErrorExpectations('Invalid setting', 500);
+    //
+    //     return MultiOperationHelper.performCreateTest(schedule, expectations);
+    // });
 
     it('Should create schedule and set status to disabled if conflict detected', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
