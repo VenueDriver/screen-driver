@@ -69,3 +69,12 @@ edit_user_profile:
         method: put
         cors: true
         authorizer: ${self:custom.authorizer}
+
+change_password:
+  handler: src/user/profile.changePassword
+  events:
+    - http:
+        path: api/auth/profile/change_password
+        method: post
+        cors: true
+        authorizer: ${self:custom.authorizer}

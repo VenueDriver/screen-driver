@@ -85,20 +85,13 @@ export class ChangePasswordComponent implements OnInit {
     changePassword() {
         if (this.formInvalid()) return;
         this.setRequestPerforming(true);
-        this.setUserFields();
-        this.profileManagementService.editProfile(this.user).subscribe(
+        this.profileManagementService.changePassword(this.changePasswordForm.value).subscribe(
             () => {
                 this.setRequestPerforming(false);
                 this.submit.emit();
             },
             () => this.setRequestPerforming(false)
         )
-    }
-
-    setUserFields() {
-        let newValues = this.changePasswordForm.value;
-        this.user.newPassword = newValues.newPassword;
-        this.user.password = newValues.currentPassword;
     }
 
     setRequestPerforming(flag: boolean) {
