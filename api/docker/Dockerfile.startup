@@ -21,3 +21,6 @@ WORKDIR $SERVICE
 
 ADD services/$SERVICE /app-src/$SERVICE
 ADD services/lib /app-src/lib
+ADD scripts/run_tests.sh /app-src/$SERVICE
+
+CMD sh run_tests.sh
