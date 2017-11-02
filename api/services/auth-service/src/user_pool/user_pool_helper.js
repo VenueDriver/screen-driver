@@ -72,3 +72,12 @@ module.exports.buildResetPasswordParameters = (username) => {
         Username: username,
     }
 };
+
+module.exports.buildConfirmResetPasswordParameters = (username, confirmationCode, password) => {
+    return {
+        ClientId: USER_POOL_DETAILS.ClientId,
+        ConfirmationCode: confirmationCode,
+        Password: password,
+        Username: username,
+    }
+};

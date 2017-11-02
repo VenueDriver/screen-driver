@@ -13,7 +13,24 @@ module.exports.reset = (event, context, callback) => {
 
     dbHelper.findByParams(params).then(users => {
         let username = users[0].username;
-        UserPool.resetPassword(username);
-        callback(null, responseHelper.createSuccessfulResponse(users));
+        return UserPool.resetPassword(username);
+    }).then(response => {
+        callback(null, responseHelper.createSuccessfulResponse(response));
+    }).catch(error => {
+        callback(null, responseHelper.createResponseWithError(error));
+    });
+};
+
+module.exports.confirmReset = (event, context, callback) => {
+    const data = JSON.parse(event.body);
+    let params = parametersBuilder.buildFindUserByEmailParameters(data.email);
+
+    dbHelper.findByParams(params).then(users => {
+        let username = users[0].username;
+        return UserPool.confirmResetPassword(username, data.confirmationCode, data.password);
+    }).then((response) => {
+        callback(null, responseHelper.createSuccessfulResponse(response));
+    }).catch(error => {
+        callback(null, responseHelper.createResponseWithError(error));
     });
 };
