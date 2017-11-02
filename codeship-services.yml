@@ -17,6 +17,7 @@ services:
       dockerfile: docker/Dockerfile.serverless
     encrypted_env_file: deployment.env.encrypted
     cached: true
+    default_cache_branch: "staging"
 
   api:
     build:
