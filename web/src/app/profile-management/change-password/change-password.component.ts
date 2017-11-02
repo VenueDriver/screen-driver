@@ -14,7 +14,7 @@ export class ChangePasswordComponent implements OnInit {
     
     @Input() user: User = new User();
     @Output() cancel = new EventEmitter();
-    @Output() submit = new EventEmitter();
+    @Output() success = new EventEmitter();
 
     isRequestPerforming: boolean = false;
 
@@ -88,7 +88,7 @@ export class ChangePasswordComponent implements OnInit {
         this.profileManagementService.changePassword(this.changePasswordForm.value).subscribe(
             () => {
                 this.setRequestPerforming(false);
-                this.submit.emit();
+                this.success.emit();
             },
             () => this.setRequestPerforming(false)
         )
