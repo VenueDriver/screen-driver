@@ -19,7 +19,7 @@ module.exports.reset = (event, context, callback) => {
         callback(null, responseHelper.createSuccessfulResponse(response));
     }).catch(error => {
         console.log(error);
-        callback(null, responseHelper.createResponseWithError(500, error.message()));
+        callback(null, responseHelper.createResponseWithError(500, error.message));
     });
 };
 
@@ -33,6 +33,7 @@ module.exports.confirmReset = (event, context, callback) => {
     }).then((response) => {
         callback(null, responseHelper.createSuccessfulResponse(response));
     }).catch(error => {
-        callback(null, responseHelper.createResponseWithError(error));
+        console.log(error);
+        callback(null, responseHelper.createResponseWithError(500, error.message));
     });
 };
