@@ -39,9 +39,8 @@ function changePassword(userDetails, callback) {
 
 function changeEmail(userDetails, callback) {
     let user = new User(userDetails, dynamodb);
-    user.changeEmail().then(updatedUser => {
-        callback(null, responseHelper.createSuccessfulResponse(updatedUser));
-    })
+    user.changeEmail()
+        .then(updatedUser => callback(null, responseHelper.createSuccessfulResponse(updatedUser)))
         .fail(errorMessage => {
             console.error(errorMessage);
             callback(null, responseHelper.createResponseWithError(500, errorMessage));
