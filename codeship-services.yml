@@ -23,8 +23,6 @@ services:
     build:
       context: api
       dockerfile: docker/Dockerfile
-    links:
-      - serverless
     ports:
       - "3000:3000"
     encrypted_env_file: deployment.env.encrypted

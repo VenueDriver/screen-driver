@@ -1,18 +1,16 @@
-FROM codeship/screendriver_serverless:latest as deps
+FROM codeship/screendriver_serverless:latest
 
-CMD cd ..
-WORKDIR /app-src
+WORKDIR ..
 ADD . /app-src/
 
-COPY --from=deps deps/node_modules services/content-management-service/node_modules
-COPY --from=deps deps/node_modules services/auth-service/node_modules
-COPY --from=deps deps/node_modules services/maintenance-service/node_modules
-COPY --from=deps deps/node_modules services/node_modules
+RUN cp -r deps/node_modules app-src/services/content-management-service/
+RUN cp -r deps/node_modules app-src/services/auth-service/
+RUN cp -r deps/node_modules app-src/services/maintenance-service/
+RUN cp -r deps/node_modules app-src/services/
+
+WORKDIR /app-src
 
 RUN npm install -g serverless
-RUN cd $(npm root -g)/npm && \
-    npm install fs-extra && \
-    sed -i -e s/graceful-fs/fs-extra/ -e s/fs.rename/fs.move/ ./lib/utils/rename.js
 
 RUN cd services/content-management-service && npm install
 RUN cd services/auth-service && npm install
