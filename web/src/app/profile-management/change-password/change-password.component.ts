@@ -3,7 +3,7 @@ import {PASSWORD_VALIDATION_PATTERN, User} from "../../core/entities/user";
 import {NgModel, Validators, FormGroup, FormControl, AbstractControl} from "@angular/forms";
 
 import * as _ from 'lodash';
-import {UsersService} from "../../users-management/users.service";
+import {ProfileManagementService} from "../profile-management.service";
 
 @Component({
     selector: 'change-password',
@@ -20,7 +20,7 @@ export class ChangePasswordComponent implements OnInit {
 
     changePasswordForm: FormGroup;
 
-    constructor(private usersService: UsersService) {
+    constructor(private profileManagementService: ProfileManagementService) {
     }
 
     ngOnInit() {
@@ -86,7 +86,7 @@ export class ChangePasswordComponent implements OnInit {
         if (this.formInvalid()) return;
         this.setRequestPerforming(true);
         this.setUserFields();
-        this.usersService.editProfile(this.user).subscribe(
+        this.profileManagementService.editProfile(this.user).subscribe(
             () => {
                 this.setRequestPerforming(false);
                 this.submit.emit();

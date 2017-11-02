@@ -9,7 +9,6 @@ import * as _ from 'lodash';
 import {ErrorMessageExtractor} from "../core/error-message-extractor";
 
 const USERS_API = `${environment.apiUrl}/api/auth/users`;
-const EDIT_PROFILE_API = `${environment.apiUrl}/api/auth/edit-profile`;
 
 @Injectable()
 export class UsersService {
@@ -59,23 +58,6 @@ export class UsersService {
                 error => {
                     let errorMessage = ErrorMessageExtractor.extractMessage(error);
                     this.notificationService.showErrorNotificationBar('Unable to change user role: ' + errorMessage);
-                    subject.error(errorMessage);
-                }
-            );
-        return subject;
-    }
-
-    editProfile(user: User): Observable<User> {
-        let subject = new Subject<any>();
-        this.httpClient.post(`${EDIT_PROFILE_API}`, user)
-            .subscribe(
-                response => {
-                    subject.next(response);
-                    this.notificationService.showSuccessNotificationBar('Profile was edited successfully');
-                },
-                error => {
-                    let errorMessage = ErrorMessageExtractor.extractMessage(error);
-                    this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to edit user profile');
                     subject.error(errorMessage);
                 }
             );
