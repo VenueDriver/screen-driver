@@ -6,5 +6,5 @@ cd services/${service}
 
 npm run db &> /dev/null &
 
-sleep 3
+sleep 5
 sls invoke test --stage test
