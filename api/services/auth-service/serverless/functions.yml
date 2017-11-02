@@ -70,7 +70,7 @@ edit_user_profile:
         cors: true
         authorizer: ${self:custom.authorizer}
 
-forgot_password:
+reset_password:
   handler: src/profile/password.reset
   events:
     - http:
