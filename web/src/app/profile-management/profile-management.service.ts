@@ -47,7 +47,7 @@ export class ProfileManagementService {
 
     private handleErrorResponse(subject: Subject<any>, error: any, message: string) {
         let errorMessage = ErrorMessageExtractor.extractMessage(error);
-        this.notificationService.showErrorNotificationBar(errorMessage, message);
+        this.notificationService.showContinuousErrorNotification(errorMessage, message);
         subject.error(errorMessage);
     }
 

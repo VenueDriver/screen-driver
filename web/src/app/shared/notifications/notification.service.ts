@@ -17,6 +17,16 @@ export class NotificationService {
         );
     }
 
+    showContinuousErrorNotification(notificationMessage: string, title?: string) {
+        let notificationTitle = title ? title : 'An error has occurred';
+        let overrideOptions = {timeOut: 30 * 1000};
+        this.notificationsService.error(
+            notificationTitle,
+            this.extractErrorMessage(notificationMessage),
+            overrideOptions
+        );
+    }
+
     showSuccessNotificationBar(notificationMessage: string, title?: string) {
         let notificationTitle = title ? title : 'Success';
         this.notificationsService.success(

@@ -15,7 +15,6 @@ export class NotificationComponent {
         lastOnBottom: true,
         showProgressBar: false,
         pauseOnHover: true,
-        clickToClose: false,
         maxLength: 0
     };
 
