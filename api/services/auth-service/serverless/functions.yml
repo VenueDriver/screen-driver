@@ -69,3 +69,11 @@ edit_user_profile:
         method: post
         cors: true
         authorizer: ${self:custom.authorizer}
+
+forgot_password:
+  handler: src/profile/password.reset
+  events:
+    - http:
+        path: api/auth/profile/password/reset
+        method: post
+        cors: true

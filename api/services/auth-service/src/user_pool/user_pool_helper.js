@@ -65,3 +65,10 @@ module.exports.buildRefreshTokenParameters = (refreshToken) => {
         ClientId: USER_POOL_DETAILS.ClientId
     }
 };
+
+module.exports.buildResetPasswordParameters = (username) => {
+    return {
+        ClientId: USER_POOL_DETAILS.ClientId,
+        Username: username,
+    }
+};
