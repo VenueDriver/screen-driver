@@ -11,6 +11,9 @@ CognitoUserPool:
         RequireUppercase: false
     AdminCreateUserConfig:
       AllowAdminCreateUserOnly: true
+    AutoVerifiedAttributes:
+      - email
+
     Schema:
       - AttributeDataType: Boolean
         Mutable: true
