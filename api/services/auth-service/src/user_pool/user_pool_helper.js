@@ -39,7 +39,11 @@ module.exports.buildUpdateUserParameters = (user) => {
             {
                 Name: 'email',
                 Value: user.email
-            }
+            },
+            {
+                Name: 'email_verified',
+                Value: 'true'
+            },
         ]
     };
 };
