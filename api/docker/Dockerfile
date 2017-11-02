@@ -1,4 +1,4 @@
-FROM codeship_serverless as deps
+FROM codeship/screendriver_serverless as deps
 
 CMD cd ..
 WORKDIR /app-src
