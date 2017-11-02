@@ -20,7 +20,7 @@ export class SingleSettingComponent implements OnInit {
     @Output() update = new EventEmitter();
 
     private schedules: Schedule[];
-    private settingInEditMode: boolean;
+    private _isSettingInEditMode: boolean;
 
     constructor(private settingsService: SettingsService,
                 private notificationService: NotificationService,
@@ -31,7 +31,7 @@ export class SingleSettingComponent implements OnInit {
     ngOnInit() {
         this.schedulesService.schedules.subscribe(schedules => this.schedules = this.findSchedules(schedules));
         this.settingStateHolderService.isSettingInEditMode()
-            .subscribe(value => this.settingInEditMode = value);
+            .subscribe(value => this._isSettingInEditMode = value);
     }
 
     onToggleClick(event: any) {
@@ -105,7 +105,7 @@ export class SingleSettingComponent implements OnInit {
     }
 
     isSettingInEditMode(): boolean {
-        return this.settingInEditMode
+        return this._isSettingInEditMode
             && !!this.activeSetting
             && this.setting.id === this.activeSetting.id;
     }

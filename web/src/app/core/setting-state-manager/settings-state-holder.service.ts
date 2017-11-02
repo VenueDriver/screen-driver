@@ -12,7 +12,7 @@ export class SettingStateHolderService {
 
     private setting: Subject<Setting[]> = new Subject();
     private currentSetting: Subject<Setting> = new Subject();
-    private settingInEditMode: Subject<boolean> = new BehaviorSubject(false);
+    private _isSettingInEditMode: Subject<boolean> = new BehaviorSubject(false);
     private priorityTypes: Array<any>;
     private staticNotification: Notification;
 
@@ -67,11 +67,11 @@ export class SettingStateHolderService {
     }
 
     private toggleSettingEditMode(editMode: boolean) {
-        this.settingInEditMode.next(editMode);
+        this._isSettingInEditMode.next(editMode);
     }
 
     isSettingInEditMode(): Observable<boolean> {
-        return this.settingInEditMode.asObservable();
+        return this._isSettingInEditMode.asObservable();
     }
 
     getPriorityTypes(): any[] {
