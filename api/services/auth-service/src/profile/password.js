@@ -13,7 +13,7 @@ module.exports.reset = (event, context, callback) => {
     resetPassword(data.email).then(response => {
         callback(null, responseHelper.createSuccessfulResponse(response));
     }).catch(error => {
-        console.log(error);
+        console.error(error);
         callback(null, responseHelper.createResponseWithError(500, error.message));
     });
 };
@@ -38,7 +38,7 @@ module.exports.confirmReset = (event, context, callback) => {
     }).then((response) => {
         callback(null, responseHelper.createSuccessfulResponse(response));
     }).catch(error => {
-        console.log(error);
+        console.error(error);
         callback(null, responseHelper.createResponseWithError(500, error.message));
     });
 };
