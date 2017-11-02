@@ -1,4 +1,8 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, OnInit, Input, Output, ViewChild, EventEmitter, OnDestroy} from '@angular/core';
+import {ITreeOptions} from "angular-tree-component/dist/defs/api";
+import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
+import {KEYS} from "angular-tree-component/dist/constants/keys";
+import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {VenuesService} from "../../content-management/venues/venues.service";
 
 import * as _ from 'lodash';
@@ -9,14 +13,12 @@ import {VenuesTreeViewComponent} from "../../content-management/venues/venues-tr
 import {Venue} from "../../core/entities/venue";
 import {KioskVersionDetails} from "../entities/kiosk-version-details";
 
-const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
-
 @Component({
     selector: 'maintenance-venues-tree-view',
     templateUrl: 'maintenance-venues-tree-view.component.html',
     styleUrls: ['./maintenance-venues-tree-view.component.sass']
 })
-export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
+export class MaintenanceVenuesTreeViewComponent implements OnInit {
 
     @Input() venues: Array<Venue>;
     @Input() kioskVersions: any = {};
@@ -39,10 +41,6 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.venuesService.getVenueUpdateSubscription().subscribe(() => this.onVenueUpdate());
-    }
-
-    ngOnDestroy() {
-        this.treeViewService.removeEditableNode();
     }
 
     updateTreeViewOptions() {

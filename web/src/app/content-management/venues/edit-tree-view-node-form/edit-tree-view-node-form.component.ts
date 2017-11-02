@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Input, Output, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, OnInit, Input, Output} from '@angular/core';
 import {EditTreeViewNodeFormService} from "./edit-tree-view-node-form.service";
 import {Content} from "../../../content/content";
 import {NotificationService} from "../../../shared/notifications/notification.service";
@@ -6,8 +6,7 @@ import {NotificationService} from "../../../shared/notifications/notification.se
 import * as _ from 'lodash';
 import {Venue} from "../../../core/entities/venue";
 import {Setting} from "../../../settings/entities/setting";
-import {SettingStateHolderService} from "../../../settings/setting-state-manager/settings-state-holder.service";
-import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
+import {SettingStateHolderService} from "../../../core/setting-state-manager/settings-state-holder.service";
 
 @Component({
     selector: 'edit-tree-view-node-form',
@@ -15,7 +14,7 @@ import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.servic
     styleUrls: ['edit-tree-view-node-form.component.sass'],
     providers: [EditTreeViewNodeFormService]
 })
-export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
+export class EditTreeViewNodeFormComponent implements OnInit {
 
     @Input() currentSetting: Setting;
     @Input() settings: Setting[];
@@ -44,7 +43,6 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
         private editFormService: EditTreeViewNodeFormService,
         private notificationService: NotificationService,
         private settingStateHolderService: SettingStateHolderService,
-        private treeViewService: VenuesTreeViewService,
     ) { }
 
     ngOnInit() {
@@ -52,10 +50,6 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
             configChangedSubscription.unsubscribe();
             this.cancel.emit(this.node);
         })
-    }
-
-    ngOnDestroy() {
-        this.treeViewService.removeEditableNode(this.node);
     }
 
     setUpComponentModel(node: any) {
@@ -164,14 +158,18 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
     }
 
     performCancel(event: any) {
-        this.treeViewService.removeEditableNode(this.node);
+        this.removeEditableNode();
         this.stopClickPropagation(event);
         this.cancel.emit(this.node);
     }
 
+    private removeEditableNode() {
+        this.settingStateHolderService.disableCurrentSettingEditMode();
+    }
+
     performSubmit(event: any) {
-        this.treeViewService.removeEditableNode(this.node);
         this.stopClickPropagation(event);
+        if (!this.isFormValid) return;
         if (this.createContentMode) {
             this.createContentBeforeUpdateVenue();
         } else {
@@ -237,7 +235,7 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
     }
 
     disableEditMode() {
-        this.treeViewService.removeEditableNode(this.node);
+        this.removeEditableNode();
         this.editFormService.pushVenueUpdateEvent();
         this.createContentMode = false;
     }
@@ -297,7 +295,7 @@ export class EditTreeViewNodeFormComponent implements OnInit, OnDestroy {
     }
 
     performRemoving(event: any) {
-        this.treeViewService.removeEditableNode(this.node);
+        this.removeEditableNode();
         this.stopClickPropagation(event);
         this.editFormService.deleteItem(this.node, this.currentSetting);
     }

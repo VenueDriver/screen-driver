@@ -5,7 +5,7 @@ import {Content} from "../../content/content";
 import {ContentService} from "../../content/content.service";
 
 import * as _ from 'lodash';
-import {SettingStateHolderService} from "../../settings/setting-state-manager/settings-state-holder.service";
+import {SettingStateHolderService} from "../../core/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../../settings/entities/setting";
 import {SettingMergeTool} from "./setting-merge-tool";
 

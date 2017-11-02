@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {SettingStateHolderService} from "../setting-state-manager/settings-state-holder.service";
+import {SettingStateHolderService} from "../../core/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../entities/setting";
 import {SettingsService} from "../settings.service";
 

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Setting} from "../entities/setting";
-import {Subject, Observable} from "rxjs";
-import {SettingsService} from "../settings.service";
+import {Setting} from "../../settings/entities/setting";
+import {Subject, Observable, BehaviorSubject} from "rxjs";
+import {SettingsService} from "../../settings/settings.service";
 import {Notification} from "angular2-notifications/dist";
 
 import * as _ from 'lodash';
@@ -12,6 +12,7 @@ export class SettingStateHolderService {
 
     private setting: Subject<Setting[]> = new Subject();
     private currentSetting: Subject<Setting> = new Subject();
+    private _isSettingInEditMode: Subject<boolean> = new BehaviorSubject(false);
     private priorityTypes: Array<any>;
     private staticNotification: Notification;
 
@@ -55,6 +56,22 @@ export class SettingStateHolderService {
 
     getCurrentSetting(): Observable<Setting> {
         return this.currentSetting.asObservable();
+    }
+
+    enableCurrentSettingEditMode() {
+        this.toggleSettingEditMode(true);
+    }
+
+    disableCurrentSettingEditMode() {
+        this.toggleSettingEditMode(false);
+    }
+
+    private toggleSettingEditMode(editMode: boolean) {
+        this._isSettingInEditMode.next(editMode);
+    }
+
+    isSettingInEditMode(): Observable<boolean> {
+        return this._isSettingInEditMode.asObservable();
     }
 
     getPriorityTypes(): any[] {

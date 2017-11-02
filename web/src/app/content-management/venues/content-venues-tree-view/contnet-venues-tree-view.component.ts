@@ -8,9 +8,7 @@ import {VenuesService} from "../venues.service";
 import {Setting} from "../../../settings/entities/setting";
 
 import * as _ from 'lodash';
-import {SettingStateHolderService} from "../../../settings/setting-state-manager/settings-state-holder.service";
-import {ScreensMessagingService} from "../../../messaging/screens-messaging.service";
-import {NotificationService} from "../../../shared/notifications/notification.service";
+import {SettingStateHolderService} from "../../../core/setting-state-manager/settings-state-holder.service";
 import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../venues-tree-view/venues-tree-view.component";
 
@@ -51,7 +49,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.treeViewService.removeEditableNode();
+        this.removeEditableNode();
     }
 
     subscribeToCurrentSettingUpdate() {
@@ -124,7 +122,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
     }
 
     isCurrentNode(node: any) {
-        return _.isEqual(this.currentNodeData, node.data);
+        return _.isEqual(this.currentNodeData.id, node.data.id);
     }
 
     isAllowToAddChild(node: any) {
@@ -141,7 +139,11 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
         this.isCreateContentMode = false;
-        this.treeViewService.removeEditableNode(node);
+        this.removeEditableNode();
+    }
+
+    private removeEditableNode() {
+        this.settingStateHolderService.disableCurrentSettingEditMode();
     }
 
     dismissChanges(node: any) {
@@ -173,7 +175,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
 
     editNode(event: any, node: any) {
         if (this.currentSetting) {
-            this.treeViewService.addEditableNode(node);
+            this.settingStateHolderService.enableCurrentSettingEditMode();
         }
 
         this.stopClickPropagation(event);
