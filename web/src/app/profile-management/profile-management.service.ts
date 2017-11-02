@@ -24,13 +24,9 @@ export class ProfileManagementService {
             .subscribe(
                 response => {
                     subject.next(response);
-                    this.notificationService.showSuccessNotificationBar('Profile was edited successfully');
+                    this.notificationService.showSuccessNotificationBar('Profile has been updated successfully');
                 },
-                error => {
-                    let errorMessage = ErrorMessageExtractor.extractMessage(error);
-                    this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to edit user profile');
-                    subject.error(errorMessage);
-                }
+                (error) => this.handleErrorResponse(subject, error, 'Unable to update profile')
             );
         return subject;
     }
@@ -40,17 +36,19 @@ export class ProfileManagementService {
         let subject = new Subject<any>();
         this.httpClient.post(CHANGE_PASSWORD_API, passwordSet)
             .subscribe(
-                response => {
-                    subject.next(response);
-                    this.notificationService.showSuccessNotificationBar('Password was changed successfully');
+                () => {
+                    subject.next();
+                    this.notificationService.showSuccessNotificationBar('Password has been changed successfully');
                 },
-                error => {
-                    let errorMessage = ErrorMessageExtractor.extractMessage(error);
-                    this.notificationService.showErrorNotificationBar(errorMessage, 'Unable to change password');
-                    subject.error(errorMessage);
-                }
+                (error) => this.handleErrorResponse(subject, error, 'Unable to change password')
             );
         return subject;
+    }
+
+    private handleErrorResponse(subject: Subject<any>, error: any, message: string) {
+        let errorMessage = ErrorMessageExtractor.extractMessage(error);
+        this.notificationService.showErrorNotificationBar(errorMessage, message);
+        subject.error(errorMessage);
     }
 
 }
