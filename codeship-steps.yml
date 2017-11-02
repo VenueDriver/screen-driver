@@ -1,7 +1,7 @@
-#- service: web
-#  name: build_web_app
-#  exclude: ^(master|production|staging)
-#  command: bash -c "npm install && node_modules/.bin/ng build --prod --aot"
+- service: web
+  name: build_web_app
+  exclude: ^(master|production|staging)
+  command: bash -c "npm install && node_modules/.bin/ng build --prod --aot"
 
 - service: serverless
   name: serverless_deps
@@ -10,9 +10,9 @@
 - type: serial
   name: run_tests
   steps:
-#    - service: web
-#      name: web_run_tests
-#      command: bash -c "npm install && node_modules/.bin/ng test --watch=false"
+    - service: web
+      name: web_run_tests
+      command: bash -c "npm install && node_modules/.bin/ng test --watch=false"
 
     - service: api
       name: main_api_run_tests
