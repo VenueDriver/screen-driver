@@ -13,6 +13,8 @@ CognitoUserPool:
       AllowAdminCreateUserOnly: true
     AutoVerifiedAttributes:
       - email
+    EmailVerificationSubject: "[ScreenDriver] Your reset password verification code"
+    EmailVerificationMessage: "You recently requested for resetting the password. Use next verification code to verify your identity: {####}"
 
     Schema:
       - AttributeDataType: Boolean
