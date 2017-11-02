@@ -18,7 +18,11 @@ module.exports.buildCreateUserParameters = (user) => {
             {
                 Name: 'custom:admin',
                 Value: user.isAdmin.toString()
-            }
+            },
+            {
+                Name: 'email_verified',
+                Value: 'true'
+            },
         ]
     };
 };
