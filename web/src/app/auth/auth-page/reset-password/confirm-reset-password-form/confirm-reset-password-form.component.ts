@@ -7,11 +7,11 @@ import {AuthService} from "../../../auth.service";
 
 
 @Component({
-    selector: 'reset-password-confirm',
-    templateUrl: './reset-password-confirm.component.html',
-    styleUrls: ['./reset-password-confirm.component.sass']
+    selector: 'confirm-reset-password-form',
+    templateUrl: './confirm-reset-password-form.component.html',
+    styleUrls: ['./confirm-reset-password-form.component.sass']
 })
-export class ResetPasswordConfirmComponent implements OnInit {
+export class ConfirmResetPasswordFormComponent implements OnInit {
     @Input() email: string;
     @Output() cancel = new EventEmitter();
     @Output() success = new EventEmitter();

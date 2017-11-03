@@ -8,7 +8,8 @@ import {SignInComponent} from './auth-page/sign-in/sign-in.component';
 import {RouterModule} from "@angular/router";
 import {ResetPasswordComponent} from './auth-page/reset-password/reset-password.component';
 import { ResetPasswordRequestComponent } from './auth-page/reset-password/reset-password-request/reset-password-request.component';
-import { ResetPasswordConfirmComponent } from './auth-page/reset-password/reset-password-confirm/reset-password-confirm.component';
+import { ConfirmResetPasswordFormComponent } from './auth-page/reset-password/confirm-reset-password-form/confirm-reset-password-form.component';
+
 
 @NgModule({
     imports: [
@@ -22,7 +23,7 @@ import { ResetPasswordConfirmComponent } from './auth-page/reset-password/reset-
         SignInComponent,
         ResetPasswordComponent,
         ResetPasswordRequestComponent,
-        ResetPasswordConfirmComponent
+        ConfirmResetPasswordFormComponent
     ],
     providers: [
         AuthService,
