@@ -1,10 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {PASSWORD_VALIDATION_PATTERN} from "../../../../core/entities/user";
-
-import * as _ from 'lodash';
 import {AuthService} from "../../../auth.service";
+import {Router} from "@angular/router";
 
+import * as AuthConsts from "../../../auth-consts";
+import * as _ from 'lodash';
 
 @Component({
     selector: 'confirm-reset-password-form',
@@ -13,13 +14,13 @@ import {AuthService} from "../../../auth.service";
 })
 export class ConfirmResetPasswordFormComponent implements OnInit {
     @Input() email: string;
-    @Output() cancel = new EventEmitter();
     @Output() success = new EventEmitter();
 
     isRequestPerforming: boolean = false;
     changePasswordForm: FormGroup;
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService,
+                private router: Router) {
     }
 
     ngOnInit() {
@@ -89,6 +90,7 @@ export class ConfirmResetPasswordFormComponent implements OnInit {
             () => {
                 this.setRequestPerforming(false);
                 this.success.emit();
+                this.redirect()
             },
             () => this.setRequestPerforming(false)
         )
@@ -108,6 +110,10 @@ export class ConfirmResetPasswordFormComponent implements OnInit {
     }
 
     performCancel() {
-        this.cancel.emit();
+        this.redirect();
+    }
+
+    redirect() {
+        this.router.navigateByUrl(AuthConsts.AUTH_URI);
     }
 }
