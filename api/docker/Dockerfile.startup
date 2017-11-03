@@ -1,17 +1,26 @@
+FROM screendriver_serverless AS deps
+
+ARG SERVICE
+
+ADD services/$SERVICE/package.json .
+ADD services/$SERVICE/package-lock.json .
+
+RUN npm install
+
+
 FROM screendriver_serverless
 
 ARG SERVICE
 
 WORKDIR ../app-src
 RUN mkdir $SERVICE
-RUN cp -r ../deps/node_modules $SERVICE/node_modules
-RUN cp -r ../deps/node_modules node_modules
-ADD services/$SERVICE/package.json /app-src/$SERVICE
-ADD services/$SERVICE/package-lock.json /app-src/$SERVICE
+COPY --from=deps deps/node_modules $SERVICE/node_modules
+COPY --from=deps deps/node_modules node_modules
 
 WORKDIR $SERVICE
 
-RUN npm install
-
 ADD services/$SERVICE /app-src/$SERVICE
 ADD services/lib /app-src/lib
+ADD scripts/run_tests.sh /app-src/$SERVICE
+
+CMD sh run_tests.sh

@@ -34,7 +34,7 @@ services:
     depends_on:
       - serverless
     volumes:
-      - ./api/service/content-management-service:/content-management-service
+      - ./api/services/content-management-service:/content-management-service
     ports:
       - "3000:3000"
       - "8000:8000"
@@ -51,7 +51,7 @@ services:
     depends_on:
       - serverless
     volumes:
-      - ./api/service/auth-service:/auth-service
+      - ./api/services/auth-service:/auth-service
     ports:
       - "3001:3001"
       - "8001:8001"
@@ -68,7 +68,7 @@ services:
     depends_on:
       - serverless
     volumes:
-        - ./api/service/maintenance-service:/maintenance-service
+        - ./api/services/maintenance-service:/maintenance-service
     ports:
       - "3002:3002"
       - "8002:8002"
