@@ -28,20 +28,16 @@ export class SingleScheduleComponent implements OnInit {
     eventTime = new EventTime();
     originalEventTime: EventTime;
 
-    timeItems: Array<string> = [];
     timePeriods = ['AM', 'PM'];
 
     validationResult: ValidationResult = {isValid: true};
 
     scheduleTypes = Periodicity;
 
-    daysOfWeek = DaysOfWeek;
-
     constructor(
         private schedulesService: SchedulesService,
         private settingStateHolderService: SettingStateHolderService
     ) {
-        this.generateTimeItems();
     }
 
     ngOnInit() {
@@ -64,13 +60,6 @@ export class SingleScheduleComponent implements OnInit {
                     this.setScheduleType(Periodicity.ONE_TIME);
                     break;
             }
-        }
-    }
-
-    generateTimeItems() {
-        this.timeItems.push(`${12}:00`, `${12}:15`, `${12}:30`, `${12}:45`);
-        for (let i = 1; i < 12; i++) {
-            this.timeItems.push(`${i}:00`, `${i}:15`, `${i}:30`, `${i}:45`);
         }
     }
 
