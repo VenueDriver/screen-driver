@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Schedule} from "./models/schedule.model";
-import {EventTime} from "./models/event-time";
+import {EventTime} from "./models/event-time.model";
 import {environment} from "../../../environments/environment";
 import {Setting} from "../../settings/entities/setting";
 import {SettingsPriorityHelper} from "../../settings/settings-priority.helper";
