@@ -77,10 +77,10 @@ module.exports.buildResetPasswordParameters = (username) => {
     }
 };
 
-module.exports.buildConfirmResetPasswordParameters = (username, confirmationCode, password) => {
+module.exports.buildConfirmResetPasswordParameters = (username, verificationCode, password) => {
     return {
         ClientId: USER_POOL_DETAILS.ClientId,
-        ConfirmationCode: confirmationCode,
+        ConfirmationCode: verificationCode,
         Password: password,
         Username: username,
     }
