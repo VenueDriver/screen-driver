@@ -26,11 +26,11 @@ describe('CustomTimeCronConverter', () => {
         });
 
         describe('when input is {hours: 12, minutes: 12, period: AM}', () => {
-            it('should return 0 14 1 * * * *', () => {
+            it('should return 0 12 0 * * * *', () => {
                 const input: CronParseResult = {time: '12:12', hours: '12', minutes: '12', period: 'AM'};
                 const converter = new CustomTimeCronConverter(input);
 
-                expect(converter.cron).toBe('0 12 00 * * * *');
+                expect(converter.cron).toBe('0 12 0 * * * *');
             });
         });
 
@@ -44,8 +44,8 @@ describe('CustomTimeCronConverter', () => {
             });
         });
 
-        describe('when input is {hours: 2, minutes: 12, period: PM}', () => {
-            it('should return 0 12 00 * * * *', () => {
+        describe('when input is {hours: 12, minutes: 12, period: PM}', () => {
+            it('should return 0 12 12 * * * *', () => {
                 const input: CronParseResult = {time: '12:12', hours: '12', minutes: '12', period: 'PM'};
                 const converter = new CustomTimeCronConverter(input);
 
