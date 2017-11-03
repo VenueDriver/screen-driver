@@ -1,5 +1,5 @@
-import {ValidationResult} from "./validation-result";
-import {Schedule} from "./schedule";
+import {ValidationResult} from "./validation-result.model";
+import {Schedule} from "./schedule.model";
 import {CronToDatetimeConverter} from '../../../core/utils/datetime-cron-converter/cron-to-datetime.converter';
 import {Periodicity} from '../../../core/enums/periodicity';
 import {DaysOfWeek, getShortDay} from '../../../core/enums/days-of-week';

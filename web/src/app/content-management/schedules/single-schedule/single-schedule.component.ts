@@ -1,10 +1,10 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {SchedulesService} from "../schedules.service";
-import {Schedule} from "../entities/schedule";
-import {EventTime} from "../entities/event-time";
+import {Schedule} from "../models/schedule.model";
+import {EventTime} from "../models/event-time";
 import {SettingStateHolderService} from "../../../core/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../../../settings/entities/setting";
-import {ValidationResult} from "../entities/validation-result";
+import {ValidationResult} from "../models/validation-result.model";
 import {Periodicity} from '../../../core/enums/periodicity';
 import {DaysOfWeek} from '../../../core/enums/days-of-week';
 
