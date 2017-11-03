@@ -57,5 +57,15 @@ describe('VenueAutoUpdateScheduleSwitcherService', () => {
                 expect(result.isEnabled).toBe(true);
             });
         });
+
+        describe('when input params time is {hours: 12, minutes: 12, period: AM, time: 12:12} and isEnabled == false', () => {
+            it('should return {isEnabled: false, eventTime: 0 12 0 * * * *}', () => {
+                const service = new VenueAutoUpdateScheduleSwitcherService();
+                const oldObject: AutoupdateSchedule = new AutoupdateSchedule(null);
+                const result = service.getUpdatedConfig(oldObject, {hours: '12', minutes: '12', time: '12:12', period: 'AM'}, false);
+                expect(result.eventTime).toBe('0 12 0 * * * *');
+                expect(result.isEnabled).toBe(false);
+            });
+        });
     });
 });
