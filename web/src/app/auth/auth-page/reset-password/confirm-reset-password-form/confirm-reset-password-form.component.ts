@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 
 import * as AuthConsts from "../../../auth-consts";
 import * as _ from 'lodash';
+import {ErrorMessageExtractor} from "../../../../core/error-message-extractor";
 
 @Component({
     selector: 'confirm-reset-password-form',
@@ -18,6 +19,7 @@ export class ConfirmResetPasswordFormComponent implements OnInit {
 
     isRequestPerforming: boolean = false;
     changePasswordForm: FormGroup;
+    failMessage: string;
 
     constructor(private authService: AuthService,
                 private router: Router) {
@@ -92,7 +94,10 @@ export class ConfirmResetPasswordFormComponent implements OnInit {
                 this.success.emit();
                 this.redirect()
             },
-            () => this.setRequestPerforming(false)
+            (error) => {
+                this.setRequestPerforming(false);
+                this.failMessage = ErrorMessageExtractor.extractMessage(error);
+            }
         )
     }
 
