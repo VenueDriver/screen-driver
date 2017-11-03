@@ -13,4 +13,9 @@ export class ResetPasswordComponent {
     constructor() {
     }
 
+    handleSendingResetRequest(email: string) {
+        this.isRequested = true;
+        this.userEmail = email;
+    }
+
 }

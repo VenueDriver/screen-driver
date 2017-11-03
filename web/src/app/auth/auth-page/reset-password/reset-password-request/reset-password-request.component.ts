@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {AuthService} from "../../../auth.service";
 import {ResetPasswordRequestService} from "./reset-password-request.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
@@ -13,6 +13,8 @@ import * as _ from 'lodash';
     providers: [ResetPasswordRequestService]
 })
 export class ResetPasswordRequestComponent implements OnInit {
+
+    @Output() requested = new EventEmitter();
 
     isRequestPerforming = false;
     resetPasswordForm: FormGroup;
@@ -48,13 +50,9 @@ export class ResetPasswordRequestComponent implements OnInit {
         this.resetPasswordService.sendResetPasswordRequest(this.resetPasswordForm.value)
             .map(() => this.isRequestPerforming = false)
             .subscribe(
-                this.handleSuccessResponse,
+                () => this.requested.emit(this.resetPasswordForm.value.email),
                 (error) => this.failMessage = ErrorMessageExtractor.extractMessage(error)
             )
-    }
-
-    handleSuccessResponse(response) {
-        console.log(response)
     }
 
     hasError(): boolean {
