@@ -7,7 +7,7 @@ import {AuthTokenService} from "./auth-token.service";
 import {SignInComponent} from './auth-page/sign-in/sign-in.component';
 import {RouterModule} from "@angular/router";
 import {ResetPasswordComponent} from './auth-page/reset-password/reset-password.component';
-import { ResetPasswordRequestComponent } from './auth-page/reset-password/reset-password-request/reset-password-request.component';
+import { RequestResetPasswordFormComponent } from './auth-page/reset-password/request-reset-password-form/request-reset-password-form.component';
 import { ConfirmResetPasswordFormComponent } from './auth-page/reset-password/confirm-reset-password-form/confirm-reset-password-form.component';
 import {ResetPasswordService} from "./auth-page/reset-password/reset-password.service";
 
@@ -23,7 +23,7 @@ import {ResetPasswordService} from "./auth-page/reset-password/reset-password.se
         AuthComponent,
         SignInComponent,
         ResetPasswordComponent,
-        ResetPasswordRequestComponent,
+        RequestResetPasswordFormComponent,
         ConfirmResetPasswordFormComponent
     ],
     providers: [

@@ -7,12 +7,12 @@ import {ErrorMessageExtractor} from "../../../../core/error-message-extractor";
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'reset-password-request',
-    templateUrl: './reset-password-request.component.html',
+    selector: 'request-reset-password-form',
+    templateUrl: './request-reset-password-form.component.html',
     styleUrls: ['../../auth.component.sass'],
     providers: [ResetPasswordService]
 })
-export class ResetPasswordRequestComponent implements OnInit {
+export class RequestResetPasswordFormComponent implements OnInit {
 
     @Output() requested = new EventEmitter();
 
