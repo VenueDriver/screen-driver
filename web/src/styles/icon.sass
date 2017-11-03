@@ -1,0 +1,15 @@
+$path-to-icons: './assets/images/'
+
+@mixin icon-size($size)
+  &:before
+    width: $size
+    height: $size
+
+@mixin icon($icon-name, $size: 25px)
+  content: url($path-to-icons + $icon-name)
+  @include icon-size($size)
+  &:before
+    display: inline-block
+    content: ""
+    background: url($path-to-icons + $icon-name) no-repeat 0 0
+    background-size: 100%
