@@ -43,7 +43,7 @@ describe('Service: AutoupdateScheduleService', () => {
             const map: any = this.autoupdateScheduleService.createSchedulesMap(schedules);
 
             const firstVersion = schedules[0];
-            const secondVersion = schedules[0];
+            const secondVersion = schedules[1];
 
             expect(map[firstVersion.id]).toBe(firstVersion);
             expect(map[secondVersion.id]).toBe(secondVersion);

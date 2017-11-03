@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
 
-import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {KioskVersionService} from "../kiosk-version.service";
 import {async, inject, TestBed} from "@angular/core/testing";
@@ -15,7 +14,6 @@ import {HttpClientTestingModule, HttpTestingController} from "@angular/common/ht
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 
 describe('Service: KioskVersionService', () => {
-    let kioskVersionService;
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientModule, HttpClientTestingModule],
@@ -43,7 +41,7 @@ describe('Service: KioskVersionService', () => {
             const map: KioskVersionDetailsMap = this.kioskVersionService.createKioskVersionsMap(kioskVersions);
 
             const firstVersion = kioskVersions[0];
-            const secondVersion = kioskVersions[0];
+            const secondVersion = kioskVersions[1];
 
             expect(map[firstVersion.screenId]).toBe(firstVersion);
             expect(map[secondVersion.screenId]).toBe(secondVersion);
@@ -58,7 +56,7 @@ describe('Service: KioskVersionService', () => {
 
                 this.kioskVersionService.loadKioskVersions().subscribe((kioskVersionDetailsMap: KioskVersionDetailsMap) => {
                     const firstVersion = kioskVersions[0];
-                    const secondVersion = kioskVersions[0];
+                    const secondVersion = kioskVersions[1];
 
                     expect(kioskVersionDetailsMap[firstVersion.screenId]).toBe(firstVersion);
                     expect(kioskVersionDetailsMap[secondVersion.screenId]).toBe(secondVersion);
