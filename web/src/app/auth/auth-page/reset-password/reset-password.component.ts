@@ -6,8 +6,9 @@ import {Component} from '@angular/core';
     styleUrls: ['./reset-password.component.sass']
 })
 export class ResetPasswordComponent {
+
     isRequested: boolean = false;
-    requestedEmail: string;
+    userEmail: string;
 
     constructor() {
     }
