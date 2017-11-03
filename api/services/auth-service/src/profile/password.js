@@ -34,7 +34,7 @@ module.exports.confirmReset = (event, context, callback) => {
 
     dbHelper.findByParams(params).then(users => {
         let username = users[0].username;
-        return UserPool.confirmResetPassword(username, data.confirmationCode, data.password);
+        return UserPool.confirmResetPassword(username, data.verificationCode, data.password);
     }).then((response) => {
         callback(null, responseHelper.createSuccessfulResponse(response));
     }).catch(error => {
