@@ -75,7 +75,7 @@ export class AuthService {
     }
 
     isAuthPage(): boolean {
-        return _.isEqual(this.getCurrentPageUri(), AuthConsts.AUTH_URI);
+        return this.getCurrentPageUri().includes(AuthConsts.AUTH_URI);
     }
 
     saveCurrentUrlAsRollback() {
