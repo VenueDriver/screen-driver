@@ -1,12 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
 import {PASSWORD_VALIDATION_PATTERN} from "../../../../core/entities/user";
-import {AuthService} from "../../../auth.service";
 import {Router} from "@angular/router";
 
 import * as AuthConsts from "../../../auth-consts";
 import * as _ from 'lodash';
 import {ErrorMessageExtractor} from "../../../../core/error-message-extractor";
+import {ResetPasswordService} from "../reset-password.service";
 
 @Component({
     selector: 'confirm-reset-password-form',
@@ -21,7 +21,7 @@ export class ConfirmResetPasswordFormComponent implements OnInit {
     changePasswordForm: FormGroup;
     failMessage: string;
 
-    constructor(private authService: AuthService,
+    constructor(private resetPasswordService: ResetPasswordService,
                 private router: Router) {
     }
 
@@ -88,7 +88,7 @@ export class ConfirmResetPasswordFormComponent implements OnInit {
     changePassword() {
         if (this.formInvalid()) return;
         this.setRequestPerforming(true);
-        this.authService.confirmResetPassword(this.extractDataFromForm()).subscribe(
+        this.resetPasswordService.sendResetPasswordConfirmation(this.extractDataFromForm()).subscribe(
             () => {
                 this.setRequestPerforming(false);
                 this.success.emit();

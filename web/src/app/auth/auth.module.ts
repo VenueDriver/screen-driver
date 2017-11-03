@@ -9,6 +9,7 @@ import {RouterModule} from "@angular/router";
 import {ResetPasswordComponent} from './auth-page/reset-password/reset-password.component';
 import { ResetPasswordRequestComponent } from './auth-page/reset-password/reset-password-request/reset-password-request.component';
 import { ConfirmResetPasswordFormComponent } from './auth-page/reset-password/confirm-reset-password-form/confirm-reset-password-form.component';
+import {ResetPasswordService} from "./auth-page/reset-password/reset-password.service";
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { ConfirmResetPasswordFormComponent } from './auth-page/reset-password/co
     ],
     providers: [
         AuthService,
-        AuthTokenService
+        AuthTokenService,
+        ResetPasswordService
     ]
 })
 export class AuthModule {

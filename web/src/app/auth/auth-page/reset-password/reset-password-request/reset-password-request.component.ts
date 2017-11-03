@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {AuthService} from "../../../auth.service";
-import {ResetPasswordRequestService} from "./reset-password-request.service";
+import {ResetPasswordService} from "../reset-password.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {ErrorMessageExtractor} from "../../../../core/error-message-extractor";
 
@@ -10,7 +10,7 @@ import * as _ from 'lodash';
     selector: 'reset-password-request',
     templateUrl: './reset-password-request.component.html',
     styleUrls: ['../../auth.component.sass'],
-    providers: [ResetPasswordRequestService]
+    providers: [ResetPasswordService]
 })
 export class ResetPasswordRequestComponent implements OnInit {
 
@@ -21,7 +21,7 @@ export class ResetPasswordRequestComponent implements OnInit {
     failMessage: string;
 
     constructor(private authService: AuthService,
-                private resetPasswordService: ResetPasswordRequestService) {
+                private resetPasswordService: ResetPasswordService) {
     }
 
     ngOnInit() {

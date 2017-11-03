@@ -167,10 +167,6 @@ export class AuthService {
         return subject;
     }
 
-    confirmResetPassword(requestParams) {
-        return this.httpClient.post(AuthConsts.CONFIRM_RESET_PASSWORD_API, requestParams);
-    }
-
     private saveAuthTokens(response: any) {
         LocalStorageService.saveAuthTokens(response);
         this.tokenService.setToken(response['token']);
