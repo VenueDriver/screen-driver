@@ -19,3 +19,5 @@ const AUTH_API_ENDPOINT = `${environment.apiUrl}/api/auth/`;
 export const SIGN_IN_API = `${AUTH_API_ENDPOINT}sign_in`;
 export const SIGN_OUT_API = `${AUTH_API_ENDPOINT}sign_out`;
 export const TOKEN_REFRESH_API = `${AUTH_API_ENDPOINT}token/refresh`;
+export const RESET_PASSWORD_API = `${AUTH_API_ENDPOINT}profile/password/reset`;
+export const CONFIRM_RESET_PASSWORD_API = `${AUTH_API_ENDPOINT}profile/password/reset/confirm`;
