@@ -1,6 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../auth.service";
 import {ResetPasswordRequestService} from "./reset-password-request.service";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+
+import * as _ from 'lodash';
 
 @Component({
     selector: 'reset-password-request',
@@ -11,8 +14,7 @@ import {ResetPasswordRequestService} from "./reset-password-request.service";
 export class ResetPasswordRequestComponent implements OnInit {
 
     isRequestPerforming = false;
-
-    @Input() email: string;
+    resetPasswordForm: FormGroup;
 
     constructor(private authService: AuthService,
                 private resetPasswordService: ResetPasswordRequestService) {
@@ -20,12 +22,28 @@ export class ResetPasswordRequestComponent implements OnInit {
 
     ngOnInit() {
         this.authService.unauthorizedUserEmail.asObservable()
-            .subscribe(email => this.email = email)
+            .subscribe(email => this.initForm(email));
+    }
+
+    initForm(email: string) {
+        this.resetPasswordForm = new FormGroup({
+            'email': new FormControl(email, [
+                Validators.required,
+                Validators.email
+            ])
+        });
+    }
+
+    getValidationMessage(): string {
+        let errors = this.resetPasswordForm.controls.email.errors;
+        if (_.isEmpty(errors)) return '';
+        if (errors['required']) return 'Please, fill out this field';
+        return 'Invalid email';
     }
 
     submitRequest() {
         this.isRequestPerforming = true;
-        this.resetPasswordService.sendResetPasswordRequest(this.email)
+        this.resetPasswordService.sendResetPasswordRequest(this.resetPasswordForm.value)
             .map(() => this.isRequestPerforming = false)
             .subscribe(this.handleSuccessResponse, this.handleErrorResponse)
     }
@@ -36,6 +54,18 @@ export class ResetPasswordRequestComponent implements OnInit {
 
     handleErrorResponse(error) {
         console.log(error)
+    }
+
+    hasError(): boolean {
+        return (this.emailNotEmpty() || this.resetPasswordForm.controls.email.touched) && this.formInvalid();
+    }
+
+    emailNotEmpty(): boolean {
+        return !_.isEmpty(this.resetPasswordForm.value.email);
+    }
+
+    formInvalid(): boolean {
+        return this.resetPasswordForm.status === 'INVALID';
     }
 
 }

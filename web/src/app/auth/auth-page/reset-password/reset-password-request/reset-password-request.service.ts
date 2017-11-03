@@ -11,7 +11,7 @@ export class ResetPasswordRequestService {
 
     }
 
-    sendResetPasswordRequest(email: string): Observable<any> {
-        return this.httpClient.post(AuthConsts.RESET_PASSWORD_API, {email: email});
+    sendResetPasswordRequest(email: {email: string}): Observable<any> {
+        return this.httpClient.post(AuthConsts.RESET_PASSWORD_API, email);
     }
 }
