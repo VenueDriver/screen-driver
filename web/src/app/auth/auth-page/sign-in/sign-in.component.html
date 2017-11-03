@@ -83,14 +83,14 @@
 
         </div>
         <button type="submit"
-                class="btn btn-success btn-block sign-in-button"
+                class="btn btn-success btn-block"
                 [disabled]="isRequestPerforming">
             Sign in
         </button>
 
-        <div class="first-time-login-button-container">
+        <div class="option-button-container">
             <button type="button"
-                    class="btn btn-link first-time-login-button"
+                    class="btn btn-link"
                     (click)="changeFirstLoginMode()">
                 {{isFirstLoginMode ? 'Cancel' : 'First login?'}}
             </button>
