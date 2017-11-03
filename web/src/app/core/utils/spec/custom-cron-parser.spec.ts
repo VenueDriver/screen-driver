@@ -127,12 +127,13 @@ describe('CustomCronParser', () => {
 
     describe('result()', () => {
         describe('when cron is 0 0 13 * * * *', () => {
-            it('should return structure {hours: 13, minutes: 00, period: PM}', () => {
+            it('should return structure {hours: 13, minutes: 00, period: PM, time: 13:00}', () => {
                 const parser = new CustomCronParser(EVERY_DAY_AT_ONE_PM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                 const result = parser.result();
                 expect(result.hours).toBe('13');
                 expect(result.minutes).toBe('00');
                 expect(result.period).toBe('PM');
+                expect(result.time).toBe('13:00');
             });
         });
     });
