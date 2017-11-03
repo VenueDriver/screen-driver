@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {AuthService} from "../../../auth.service";
 
 @Component({
     selector: 'reset-password-request',
@@ -11,10 +12,12 @@ export class ResetPasswordRequestComponent implements OnInit {
 
     @Input() email: string;
 
-    constructor() {
+    constructor(private authService: AuthService) {
     }
 
     ngOnInit() {
+        this.authService.unauthorizedUserEmail.asObservable()
+            .subscribe(email => this.email = email)
     }
 
 }

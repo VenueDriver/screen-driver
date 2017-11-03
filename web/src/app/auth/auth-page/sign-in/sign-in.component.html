@@ -81,6 +81,7 @@
             <a *ngIf="!isFirstLoginMode"
                     type="button"
                     class="btn btn-link forgot-password-button"
+                    (click)="sendUnauthorizedUserEmail()"
                     routerLink="/auth/reset-password">
                 Forgot password?
             </a>

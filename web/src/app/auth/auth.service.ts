@@ -16,6 +16,7 @@ export class AuthService {
 
     private jwtHelper = new JwtHelper();
     currentUser: BehaviorSubject<User> = new BehaviorSubject(null);
+    unauthorizedUserEmail: Subject<string> = new BehaviorSubject(null);
 
     constructor(private httpClient: HttpClient,
                 private router: Router,

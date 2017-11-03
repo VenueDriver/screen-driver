@@ -69,4 +69,8 @@ export class SignInComponent implements OnInit {
         if (model.errors['required'])
             return 'This field is required';
     }
+
+    sendUnauthorizedUserEmail() {
+        this.authService.unauthorizedUserEmail.next(this.user.email);
+    }
 }
