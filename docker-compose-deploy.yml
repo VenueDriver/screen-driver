@@ -1,13 +1,15 @@
 version: '2.2'
 services:
-  web:
+
+  build_web:
     env_file:
       - development.env
     build:
       context: web
       dockerfile: ./docker/Dockerfile
     volumes:
-      - ./web:/app-src/
+      - ./web:/app-src
+      - /app-src/node_modules
 
   deploy_web:
     env_file:
@@ -16,9 +18,7 @@ services:
       context: web
       dockerfile: ./docker/Dockerfile.deploy
     volumes_from:
-      - web
-    depends_on:
-      - web
+      - build_web
 
   deploy_api:
     env_file:
@@ -53,3 +53,12 @@ services:
     build:
       context: api
       dockerfile: ./docker/Dockerfile.create_user
+
+  build_kiosk:
+    env_file:
+      - development.env
+    build:
+      context: kiosk
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - ./kiosk/dist:/app-src/dist

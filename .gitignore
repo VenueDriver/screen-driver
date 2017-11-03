@@ -2,5 +2,6 @@
 .idea
 .DS_Store
 /codeship.aes
-/deployment.env
+/deployment.env.decrypted
 /development.env
+npm-debug.log

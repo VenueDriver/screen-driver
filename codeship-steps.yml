@@ -3,9 +3,28 @@
   exclude: ^(master|production|staging)
   command: bash -c "npm install && node_modules/.bin/ng build --prod --aot"
 
-- service: web
-  name: web_run_tests
-  command: bash -c "npm install && sed -i 's@API_HOST@'"$STAGING_API_ENDPOINT"'@' src/environments/environment.prod.ts && node_modules/.bin/ng test --watch=false"
+- service: serverless
+  name: serverless_deps
+  command: echo serverless image is ready to use
+
+- type: serial
+  name: run_tests
+  steps:
+    - service: web
+      name: web_run_tests
+      command: bash -c "npm install && node_modules/.bin/ng test --watch=false"
+
+    - service: api
+      name: main_api_run_tests
+      command: sh scripts/run_tests.sh content-management-service
+
+    - service: api
+      name: auth_api_run_tests
+      command: sh scripts/run_tests.sh auth-service
+
+    - service: api
+      name: maintenance_api_run_tests
+      command: sh scripts/run_tests.sh maintenance-service
 
 - type: serial
   name: staging_deployment
@@ -14,7 +33,7 @@
     - service: api
       name: staging_deploy_serverless_api
       tag: staging
-      command: sh deploy.sh us-east-1 staging
+      command: sh scripts/deploy.sh us-east-1 staging
 
     - service: web
       name: staging_add_api_endpoint

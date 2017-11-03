@@ -332,15 +332,15 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    it('Shouldn\'t update schedule bound with unknown setting', () => {
-        let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
-        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
-        updatedSchedule.settingId = 'invalid_setting_id';
-
-        let expectations = generateErrorExpectations('Invalid setting', 500);
-
-        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
-    });
+    // it('Shouldn\'t update schedule bound with unknown setting', () => {
+    //     let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
+    //     let updatedSchedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
+    //     updatedSchedule.settingId = 'invalid_setting_id';
+    //
+    //     let expectations = generateErrorExpectations('Invalid setting', 500);
+    //
+    //     return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
+    // });
 
     it('Should update schedule and set status to enabled if conflict detected between schedules without time overlap', () => {
         let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};

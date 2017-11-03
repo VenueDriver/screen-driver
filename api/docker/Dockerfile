@@ -1,16 +1,17 @@
-FROM joakimbeng/java-node
+FROM codeship/screendriver_serverless:latest
 
-CMD cd ..
-WORKDIR /app-src
+WORKDIR ..
 ADD . /app-src/
 
+RUN cp -r deps/node_modules app-src/services/content-management-service/
+RUN cp -r deps/node_modules app-src/services/auth-service/
+RUN cp -r deps/node_modules app-src/services/maintenance-service/
+RUN cp -r deps/node_modules app-src/services/
+
+WORKDIR /app-src
+
 RUN npm install -g serverless
-RUN cd $(npm root -g)/npm &&  npm install fs-extra && sed -i -e s/graceful-fs/fs-extra/ -e s/fs.rename/fs.move/ ./lib/utils/rename.js
-RUN cd services/auth-service && npm install
+
 RUN cd services/content-management-service && npm install
+RUN cd services/auth-service && npm install
 RUN cd services/maintenance-service && npm install
-
-
-#RUN sls dynamodb install --stage test
-#ENV PATH ./node_modules/.bin:$PATH
-#CMD sls offline start --noEnvironment --host 0.0.0.0 --stage test

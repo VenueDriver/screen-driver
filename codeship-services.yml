@@ -7,8 +7,19 @@ services:
     ports:
       - "4200:4200"
     encrypted_env_file: deployment.env.encrypted
+    cached: true
+    default_cache_branch: "staging"
     volumes:
       - ./web:/app-src
+
+  serverless:
+    build:
+      image: codeship/screendriver_serverless
+      context: api
+      dockerfile: docker/Dockerfile.serverless
+    encrypted_env_file: deployment.env.encrypted
+    cached: true
+    default_cache_branch: "staging"
 
   api:
     build:
@@ -17,7 +28,6 @@ services:
     ports:
       - "3000:3000"
     encrypted_env_file: deployment.env.encrypted
-    command: sls offline start --host 0.0.0.0 --stage test --noEnvironment
 
   awsdeployment:
     image: codeship/aws-deployment
@@ -30,6 +40,8 @@ services:
       context: kiosk
       dockerfile: docker/Dockerfile
     encrypted_env_file: deployment.env.encrypted
+    cached: true
+    default_cache_branch: "staging"
     volumes:
       - ./kiosk:/app-src
       - /app-src/node_modules
