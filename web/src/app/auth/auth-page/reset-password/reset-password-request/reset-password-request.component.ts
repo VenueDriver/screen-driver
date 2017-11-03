@@ -7,6 +7,8 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class ResetPasswordRequestComponent implements OnInit {
 
+    isRequestPerforming: false;
+
     @Input() email: string;
 
     constructor() {
