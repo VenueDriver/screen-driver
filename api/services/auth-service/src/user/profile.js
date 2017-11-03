@@ -8,36 +8,41 @@ const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/au
 
 let User = require('./entities/user');
 
-module.exports.editProfile = (event, context, callback) => {
+module.exports.edit = (event, context, callback) => {
     const userDetails = JSON.parse(event.body);
     let currentUser = extractCurrentUserFromEvent(event);
     userDetails.username = currentUser.username;
     userDetails.isAdmin = currentUser.isAdmin;
-    let cognitoUser = UserPool.getCognitoUser(userDetails);
-
-    if (userDetails.newPassword) {
-        changePassword(userDetails, cognitoUser, callback);
-        return;
-    }
 
     changeEmail(userDetails, callback);
 };
 
-function changePassword(userDetails, cognitoUser, callback) {
+module.exports.changePassword = (event, context, callback) => {
+    const userDetails = JSON.parse(event.body);
+    let currentUser = extractCurrentUserFromEvent(event);
+    userDetails.username = currentUser.username;
+    userDetails.isAdmin = currentUser.isAdmin;
+    userDetails.email = currentUser.email;
+
+    changePassword(userDetails, callback);
+};
+
+function changePassword(userDetails, callback) {
+    let cognitoUser = UserPool.getCognitoUser(userDetails);
     UserPool.changePassword(cognitoUser, userDetails)
         .then(() => callback(null, responseHelper.createSuccessfulResponse()))
         .catch(errorMessage => {
+            console.error(errorMessage);
             callback(null, responseHelper.createResponseWithError(500, errorMessage))
         });
 }
 
 function changeEmail(userDetails, callback) {
     let user = new User(userDetails, dynamodb);
-    user.changeEmail().then(updatedUser => {
-        callback(null, responseHelper.createSuccessfulResponse(updatedUser));
-    })
+    user.changeEmail()
+        .then(updatedUser => callback(null, responseHelper.createSuccessfulResponse(updatedUser)))
         .fail(errorMessage => {
-            console.log(errorMessage);
+            console.error(errorMessage);
             callback(null, responseHelper.createResponseWithError(500, errorMessage));
         });
 }

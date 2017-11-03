@@ -62,10 +62,19 @@ update_user_status:
         authorizer: ${self:custom.authorizer}
 
 edit_user_profile:
-  handler: src/user/edit-profile.editProfile
+  handler: src/user/profile.edit
   events:
     - http:
-        path: api/auth/edit-profile
+        path: api/auth/profile
+        method: put
+        cors: true
+        authorizer: ${self:custom.authorizer}
+
+change_password:
+  handler: src/user/profile.changePassword
+  events:
+    - http:
+        path: api/auth/profile/change_password
         method: post
         cors: true
         authorizer: ${self:custom.authorizer}

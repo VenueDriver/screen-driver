@@ -13,7 +13,17 @@ export class NotificationService {
         let notificationTitle = title ? title : 'An error has occurred';
         this.notificationsService.error(
             notificationTitle,
-            notificationMessage
+            this.extractErrorMessage(notificationMessage)
+        );
+    }
+
+    showContinuousErrorNotification(notificationMessage: string, title?: string) {
+        let notificationTitle = title ? title : 'An error has occurred';
+        let overrideOptions = {timeOut: 30 * 1000};
+        this.notificationsService.error(
+            notificationTitle,
+            this.extractErrorMessage(notificationMessage),
+            overrideOptions
         );
     }
 
@@ -40,5 +50,9 @@ export class NotificationService {
 
     hide(id?: string) {
         this.notificationsService.remove(id);
+    }
+
+    private extractErrorMessage(notificationMessage: string) {
+        return typeof notificationMessage === 'string' ? notificationMessage : '';
     }
 }

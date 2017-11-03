@@ -6,6 +6,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {AutofocusModule} from "../shared/directives/autofocus/autofocus.module";
 import { ChangeEmailComponent } from './change-email/change-email.component';
+import {ProfileManagementService} from "./profile-management.service";
 
 @NgModule({
     imports: [
@@ -19,6 +20,9 @@ import { ChangeEmailComponent } from './change-email/change-email.component';
         UserProfileComponent,
         ChangePasswordComponent,
         ChangeEmailComponent
+    ],
+    providers: [
+        ProfileManagementService
     ]
 })
 export class ProfileManagementModule {

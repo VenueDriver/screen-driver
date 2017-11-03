@@ -3,7 +3,7 @@ import {PASSWORD_VALIDATION_PATTERN, User} from "../../core/entities/user";
 import {NgModel, Validators, FormGroup, FormControl, AbstractControl} from "@angular/forms";
 
 import * as _ from 'lodash';
-import {UsersService} from "../../users-management/users.service";
+import {ProfileManagementService} from "../profile-management.service";
 
 @Component({
     selector: 'change-password',
@@ -14,13 +14,13 @@ export class ChangePasswordComponent implements OnInit {
     
     @Input() user: User = new User();
     @Output() cancel = new EventEmitter();
-    @Output() submit = new EventEmitter();
+    @Output() success = new EventEmitter();
 
     isRequestPerforming: boolean = false;
 
     changePasswordForm: FormGroup;
 
-    constructor(private usersService: UsersService) {
+    constructor(private profileManagementService: ProfileManagementService) {
     }
 
     ngOnInit() {
@@ -85,20 +85,13 @@ export class ChangePasswordComponent implements OnInit {
     changePassword() {
         if (this.formInvalid()) return;
         this.setRequestPerforming(true);
-        this.setUserFields();
-        this.usersService.editProfile(this.user).subscribe(
+        this.profileManagementService.changePassword(this.changePasswordForm.value).subscribe(
             () => {
                 this.setRequestPerforming(false);
-                this.submit.emit();
+                this.success.emit();
             },
             () => this.setRequestPerforming(false)
         )
-    }
-
-    setUserFields() {
-        let newValues = this.changePasswordForm.value;
-        this.user.newPassword = newValues.newPassword;
-        this.user.password = newValues.currentPassword;
     }
 
     setRequestPerforming(flag: boolean) {

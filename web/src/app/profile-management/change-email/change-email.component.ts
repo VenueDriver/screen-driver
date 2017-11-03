@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, EventEmitter, Output} from '@angular/core';
-import {UsersService} from "../../users-management/users.service";
+import {ProfileManagementService} from "../profile-management.service";
 import {User} from "../../core/entities/user";
 
 import * as _ from 'lodash';
@@ -17,7 +17,7 @@ export class ChangeEmailComponent implements OnInit {
     editedUser: User;
     errorMessage: string;
 
-    constructor(private usersService: UsersService,
+    constructor(private profileManagementService: ProfileManagementService,
                 private authService: AuthService) {
     }
 
@@ -44,7 +44,7 @@ export class ChangeEmailComponent implements OnInit {
     }
 
     private changeEmail() {
-        this.usersService.editProfile(this.editedUser).subscribe(
+        this.profileManagementService.editProfile(this.editedUser).subscribe(
             response => {
                 this.handleEditProfileResponse(response);
             },
