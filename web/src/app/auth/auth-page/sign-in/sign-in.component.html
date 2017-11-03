@@ -1,10 +1,17 @@
 <div class="sign-in-container">
+
+    <div class="auth-page-title">
+        Please, sign in to ScreenDriver
+    </div>
+
     <form class="auth-form"
           (ngSubmit)="signIn()">
+
         <div *ngIf="failMessage"
              class="alert alert-danger">
             {{failMessage}}
         </div>
+
         <div class="inputs">
             <div>
                 <label for="email">Email address</label>
@@ -78,10 +85,10 @@
                 Forgot password?
             </button>
 
-
             <div class="error-message"></div>
 
         </div>
+
         <button type="submit"
                 class="btn btn-success btn-block"
                 [disabled]="isRequestPerforming">
