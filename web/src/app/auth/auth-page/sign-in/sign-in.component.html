@@ -51,7 +51,7 @@
                            required>
                     <span *ngIf="temporaryPassword.invalid && (temporaryPassword.dirty || temporaryPassword.touched)"
                           class="password error-message">
-                    {{getValidationMessage(temporaryPassword)}}
+                        {{getValidationMessage(temporaryPassword)}}
                     </span>
                 </div>
                 <div>
@@ -66,15 +66,16 @@
                            required>
                     <span *ngIf="newPassword.invalid && (newPassword.dirty || newPassword.touched)"
                           class="password error-message">
-                    {{getValidationMessage(newPassword)}}
+                        {{getValidationMessage(newPassword)}}
                     </span>
                 </div>
             </div>
 
-            <button type="button"
-                    class="btn btn-link first-time-login-button"
-                    (click)="changeFirstLoginMode()">
-                {{isFirstLoginMode ? 'Hide' : 'First login?'}}
+            <button *ngIf="!isFirstLoginMode"
+                    type="button"
+                    class="btn btn-link forgot-password-button"
+                    routerLink="/auth/reset-password">
+                Forgot password?
             </button>
 
 
@@ -86,5 +87,13 @@
                 [disabled]="isRequestPerforming">
             Sign in
         </button>
+
+        <div class="first-time-login-button-container">
+            <button type="button"
+                    class="btn btn-link first-time-login-button"
+                    (click)="changeFirstLoginMode()">
+                {{isFirstLoginMode ? 'Cancel' : 'First login?'}}
+            </button>
+        </div>
     </form>
 </div>
