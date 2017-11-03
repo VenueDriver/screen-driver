@@ -46,12 +46,17 @@ export class ResetPasswordRequestComponent implements OnInit {
     }
 
     submitRequest() {
-        this.isRequestPerforming = true;
+        this.setRequestPerforming(true);
         this.resetPasswordService.sendResetPasswordRequest(this.resetPasswordForm.value)
-            .map(() => this.isRequestPerforming = false)
             .subscribe(
-                () => this.requested.emit(this.resetPasswordForm.value.email),
-                (error) => this.failMessage = ErrorMessageExtractor.extractMessage(error)
+                () => {
+                    this.setRequestPerforming(false);
+                    this.requested.emit(this.resetPasswordForm.value.email)
+                },
+                (error) => {
+                    this.setRequestPerforming(false);
+                    this.failMessage = ErrorMessageExtractor.extractMessage(error)
+                }
             )
     }
 
@@ -65,6 +70,10 @@ export class ResetPasswordRequestComponent implements OnInit {
 
     formInvalid(): boolean {
         return this.resetPasswordForm.status === 'INVALID';
+    }
+
+    setRequestPerforming(flag: boolean) {
+        this.isRequestPerforming = flag;
     }
 
 }
