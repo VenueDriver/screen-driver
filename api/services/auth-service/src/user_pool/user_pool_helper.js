@@ -18,7 +18,11 @@ module.exports.buildCreateUserParameters = (user) => {
             {
                 Name: 'custom:admin',
                 Value: user.isAdmin.toString()
-            }
+            },
+            {
+                Name: 'email_verified',
+                Value: 'true'
+            },
         ]
     };
 };
@@ -35,7 +39,11 @@ module.exports.buildUpdateUserParameters = (user) => {
             {
                 Name: 'email',
                 Value: user.email
-            }
+            },
+            {
+                Name: 'email_verified',
+                Value: 'true'
+            },
         ]
     };
 };
@@ -59,5 +67,21 @@ module.exports.buildRefreshTokenParameters = (refreshToken) => {
         },
         UserPoolId: USER_POOL_DETAILS.UserPoolId,
         ClientId: USER_POOL_DETAILS.ClientId
+    }
+};
+
+module.exports.buildResetPasswordParameters = (username) => {
+    return {
+        ClientId: USER_POOL_DETAILS.ClientId,
+        Username: username,
+    }
+};
+
+module.exports.buildConfirmResetPasswordParameters = (username, confirmationCode, password) => {
+    return {
+        ClientId: USER_POOL_DETAILS.ClientId,
+        ConfirmationCode: confirmationCode,
+        Password: password,
+        Username: username,
     }
 };

@@ -3,4 +3,4 @@ FROM codeship/aws-deployment
 CMD aws cognito-idp admin-create-user \
         --user-pool-id $USER_POOL_ID \
         --username $FIRST_USER_EMAIL \
-        --user-attributes Name=email,Value=$FIRST_USER_EMAIL Name=custom:admin,Value=true
+        --user-attributes Name=email,Value=$FIRST_USER_EMAIL Name=custom:admin,Value=true Name=email_verified,Value=true
