@@ -11,7 +11,7 @@ import {ResetPasswordService} from "../reset-password.service";
 @Component({
     selector: 'confirm-reset-password-form',
     templateUrl: './confirm-reset-password-form.component.html',
-    styleUrls: ['./confirm-reset-password-form.component.sass']
+    styleUrls: ['../../auth.component.sass']
 })
 export class ConfirmResetPasswordFormComponent implements OnInit {
     @Input() email: string;
