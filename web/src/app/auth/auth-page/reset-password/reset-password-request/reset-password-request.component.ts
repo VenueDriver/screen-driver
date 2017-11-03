@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../auth.service";
 import {ResetPasswordRequestService} from "./reset-password-request.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {ErrorMessageExtractor} from "../../../../core/error-message-extractor";
 
 import * as _ from 'lodash';
 
@@ -15,6 +16,7 @@ export class ResetPasswordRequestComponent implements OnInit {
 
     isRequestPerforming = false;
     resetPasswordForm: FormGroup;
+    failMessage: string;
 
     constructor(private authService: AuthService,
                 private resetPasswordService: ResetPasswordRequestService) {
@@ -45,15 +47,14 @@ export class ResetPasswordRequestComponent implements OnInit {
         this.isRequestPerforming = true;
         this.resetPasswordService.sendResetPasswordRequest(this.resetPasswordForm.value)
             .map(() => this.isRequestPerforming = false)
-            .subscribe(this.handleSuccessResponse, this.handleErrorResponse)
+            .subscribe(
+                this.handleSuccessResponse,
+                (error) => this.failMessage = ErrorMessageExtractor.extractMessage(error)
+            )
     }
 
     handleSuccessResponse(response) {
         console.log(response)
-    }
-
-    handleErrorResponse(error) {
-        console.log(error)
     }
 
     hasError(): boolean {
