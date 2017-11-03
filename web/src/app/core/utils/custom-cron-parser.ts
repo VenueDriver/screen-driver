@@ -56,20 +56,18 @@ export class CustomCronParser {
     }
 
     private setHours(cronHours: number): void {
-        let is12AM = cronHours == 0;
-        this.hours =  is12AM ? 12 : cronHours;
+        this.hours =  cronHours;
     }
 
     private setPeriodSensitiveHours(): void {
+        if (this.hours == 0) {
+            this.periodSensitiveHours = 12;
+            return;
+        }
         this.periodSensitiveHours = this.hours > 12 ? this.hours - 12 : this.hours;
     }
 
     private setPeriod(hours: number): void {
-        let is12AM = this.hours == 0;
-        if (is12AM) {
-            this.period = 'AM';
-            return;
-        }
-        this.period = hours >= 12 && hours < 24 ? 'PM' : 'AM';
+        this.period = hours < 12 ? 'AM' : 'PM';
     }
 }
