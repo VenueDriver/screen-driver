@@ -56,7 +56,7 @@ export class CustomCronParser {
     }
 
     private setHours(cronHours: number): void {
-        this.hours =  cronHours;
+        this.hours = cronHours;
     }
 
     private setPeriodSensitiveHours(): void {
