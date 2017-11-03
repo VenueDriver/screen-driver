@@ -78,12 +78,12 @@
                 </div>
             </div>
 
-            <button *ngIf="!isFirstLoginMode"
+            <a *ngIf="!isFirstLoginMode"
                     type="button"
                     class="btn btn-link forgot-password-button"
                     routerLink="/auth/reset-password">
                 Forgot password?
-            </button>
+            </a>
 
             <div class="error-message"></div>
 
