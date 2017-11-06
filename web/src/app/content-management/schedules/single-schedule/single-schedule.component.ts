@@ -81,8 +81,13 @@ export class SingleScheduleComponent implements OnInit {
         }
     }
 
-    setTime(field: string, time: string) {
-        this.eventTimeHolder.setTime(field, time);
+    setStartTime(time: string) {
+        this.eventTimeHolder.setStartTime(time);
+        this.validate();
+    }
+
+    setEndTime(time: string) {
+        this.eventTimeHolder.setEndTime(time);
         this.validate();
     }
 
@@ -142,8 +147,14 @@ export class SingleScheduleComponent implements OnInit {
         this.schedulesService.updateSchedule(this.schedule);
     }
 
-    changeTimePeriod(field) {
-        this.eventTimeHolder.changeTimePeriod(field);
+    switchStartTimePeriod() {
+        this.eventTimeHolder.switchStartTimePeriod();
+        this.validate();
+    }
+
+    switchEndTimePeriod() {
+        this.eventTimeHolder.switchEndTimePeriod();
+        this.validate();
     }
 
     setRemovingMode(boolean: boolean) {

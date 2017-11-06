@@ -86,15 +86,15 @@
             <time-selector [label]="'Start time:'"
                            [defaultTime]="eventTimeHolder.value().startTime"
                            [defaultTimePeriod]="eventTimeHolder.value().startTimePeriod"
-                           (timeChange)="setTime('startTime', $event)"
-                           (timePeriodChange)="changeTimePeriod('startTimePeriod')">
+                           (timeChange)="setStartTime($event)"
+                           (timePeriodChange)="switchStartTimePeriod()">
             </time-selector>
 
             <time-selector [label]="'End time:'"
                            [defaultTime]="eventTimeHolder.value().endTime"
                            [defaultTimePeriod]="eventTimeHolder.value().endTimePeriod"
-                           (timeChange)="setTime('endTime', $event)"
-                           (timePeriodChange)="changeTimePeriod('endTimePeriod')">
+                           (timeChange)="setEndTime($event)"
+                           (timePeriodChange)="switchEndTimePeriod()">
             </time-selector>
         </div>
 
