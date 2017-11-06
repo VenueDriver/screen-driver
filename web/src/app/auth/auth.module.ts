@@ -10,6 +10,7 @@ import {ResetPasswordComponent} from './auth-page/reset-password/reset-password.
 import { RequestResetPasswordFormComponent } from './auth-page/reset-password/request-reset-password-form/request-reset-password-form.component';
 import { ConfirmResetPasswordFormComponent } from './auth-page/reset-password/confirm-reset-password-form/confirm-reset-password-form.component';
 import {ResetPasswordService} from "./auth-page/reset-password/reset-password.service";
+import {ResetPasswordFormModule} from "../shared/reset-password-form/reset-password-form.module";
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import {ResetPasswordService} from "./auth-page/reset-password/reset-password.se
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
+        ResetPasswordFormModule
     ],
     declarations: [
         AuthComponent,
