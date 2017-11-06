@@ -349,6 +349,24 @@ describe('EventTimeValidator', () => {
 
         });
 
+        describe('when input is event time with one time periodicity', () => {
+
+            describe('and the start date that is before the end date', () => {
+                const input = new EventTime();
+                input.periodicity = Periodicity.ONE_TIME;
+                input.startDate = EventDateUtils.getTomorrowDate();
+                input.endDate = new Date();
+
+                it('should return {isValid: false} with validation message', () => {
+                    let result = EventTimeValidator.validate(input);
+
+                    expect(result.isValid).toBeFalsy();
+                    expect(result.validationMessage).toBe(INVALID_EVENT_TIME_RANGE_ERROR_MESSAGE);
+                });
+            });
+
+        })
+
     });
 
 });

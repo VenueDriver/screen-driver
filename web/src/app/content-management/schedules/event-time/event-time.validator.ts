@@ -20,7 +20,7 @@ export class EventTimeValidator {
             return EventTimeValidator.generateValidationResultWithError(INVALID_DATE_ERROR_MESSAGE);
         }
 
-        if (EventTimeValidator.isOneDayEvent(eventTime) && EventTimeValidator.isEventTimeRangeInvalid(eventTime)) {
+        if (EventTimeValidator.isEventTimeRangeInvalid(eventTime)) {
             return EventTimeValidator.generateValidationResultWithError(INVALID_EVENT_TIME_RANGE_ERROR_MESSAGE);
         }
 
@@ -32,14 +32,9 @@ export class EventTimeValidator {
             && !(eventTime.startDate && eventTime.endDate);
     }
 
-    private static isOneDayEvent(eventTime: EventTime): boolean {
-        return eventTime.periodicity === Periodicity.REPEATABLE
-            || eventTime.startDate.getTime() === eventTime.endDate.getTime();
-    }
-
     private static isEventTimeRangeInvalid(eventTime: EventTime): boolean {
-        let startTime = EventDateUtils.convertTimeToDate(eventTime.startTime, eventTime.startTimePeriod);
-        let endTime = EventDateUtils.convertTimeToDate(eventTime.endTime, eventTime.endTimePeriod);
+        let startTime = EventDateUtils.convertTimeToDate(eventTime.startTime, eventTime.startTimePeriod, eventTime.startDate);
+        let endTime = EventDateUtils.convertTimeToDate(eventTime.endTime, eventTime.endTimePeriod, eventTime.endDate);
         return endTime <= startTime;
     }
 
