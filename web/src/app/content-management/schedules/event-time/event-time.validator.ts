@@ -5,20 +5,25 @@ import {EventDateUtils} from "./event-date.utils";
 
 import * as _ from 'lodash';
 
+export const EMPTY_WEEK_DAYS_ERROR_MESSAGE = 'You should choose at least one day of week';
+export const INVALID_DATE_ERROR_MESSAGE = 'The start and the end date should be specified';
+export const INVALID_EVENT_TIME_RANGE_ERROR_MESSAGE = 'The end of the event couldn\'t be before the start';
+
 export class EventTimeValidator {
 
     static validate(eventTime: EventTime): ValidationResult {
         if (_.isEmpty(eventTime.weekDays)) {
-            return {isValid: false, validationMessage: 'You should choose at least one day of week'};
+            return EventTimeValidator.generateValidationResultWithError(EMPTY_WEEK_DAYS_ERROR_MESSAGE);
         }
 
         if (!EventTimeValidator.isDateValid(eventTime)) {
-            return {isValid: false, validationMessage: 'The start and the end date should be specified'};
+            return EventTimeValidator.generateValidationResultWithError(INVALID_DATE_ERROR_MESSAGE);
         }
-        if (eventTime.startDate.getTime() === eventTime.endDate.getTime() || eventTime.periodicity !== Periodicity.ONE_TIME) {
-            let isTimeValid = EventTimeValidator.isTimeValid(eventTime);
-            return {isValid: isTimeValid, validationMessage: isTimeValid ? '' : 'The end of the event couldn\'t be before the start'};
+
+        if (EventTimeValidator.isOneDayEvent(eventTime) && !EventTimeValidator.isEventTimeRangeValid(eventTime)) {
+            return EventTimeValidator.generateValidationResultWithError(INVALID_EVENT_TIME_RANGE_ERROR_MESSAGE);
         }
+
         return {isValid: true};
     }
 
@@ -29,9 +34,18 @@ export class EventTimeValidator {
         return true;
     }
 
-    private static isTimeValid(eventTime: EventTime): boolean {
+    private static isOneDayEvent(eventTime: EventTime): boolean {
+        return eventTime.periodicity === Periodicity.REPEATABLE
+            || eventTime.startDate.getTime() === eventTime.endDate.getTime();
+    }
+
+    private static isEventTimeRangeValid(eventTime: EventTime): boolean {
         let startTime = EventDateUtils.convertTimeToDate(eventTime.startTime, eventTime.startTimePeriod);
         let endTime = EventDateUtils.convertTimeToDate(eventTime.endTime, eventTime.endTimePeriod);
         return endTime > startTime;
+    }
+
+    private static generateValidationResultWithError(validationMessage: string): ValidationResult {
+        return {isValid: false, validationMessage: validationMessage};
     }
 }

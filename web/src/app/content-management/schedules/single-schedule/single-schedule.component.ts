@@ -6,7 +6,7 @@ import {SettingStateHolderService} from "../../../core/setting-state-manager/set
 import {Setting} from "../../../settings/entities/setting";
 import {ValidationResult} from "../models/validation-result.model";
 import {Periodicity} from '../../../core/enums/periodicity';
-import {DaysOfWeek} from '../../../core/enums/days-of-week';
+import {WeekDays} from '../../../core/enums/days-of-week';
 
 import * as _ from 'lodash';
 import {PriorityTypes} from "../../../core/enums/priorty-types";
@@ -163,7 +163,7 @@ export class SingleScheduleComponent implements OnInit {
     }
 
     selectAllWeekDays() {
-       let allDays = Object.keys(DaysOfWeek);
+       let allDays = Object.keys(WeekDays);
        this.eventTimeHolder.setDaysOfWeek(allDays.join(','));
 
        this.validate();
@@ -176,8 +176,8 @@ export class SingleScheduleComponent implements OnInit {
     }
 
     isAllWeekDaysSelected() {
-        let week = Object.keys(DaysOfWeek);
-        let weekSelector = week.join(',');
+        let allDays = Object.keys(WeekDays);
+        let weekSelector = allDays.join(',');
 
         return this.eventTimeHolder.getWeekDays() == weekSelector
     }

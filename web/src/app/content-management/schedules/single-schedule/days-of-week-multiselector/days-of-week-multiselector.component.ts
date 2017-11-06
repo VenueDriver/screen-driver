@@ -1,5 +1,5 @@
 import {Component, Input, EventEmitter, Output} from '@angular/core';
-import {DaysOfWeek} from "../../../../core/enums/days-of-week";
+import {WeekDays} from "../../../../core/enums/days-of-week";
 
 
 @Component({
@@ -18,8 +18,8 @@ export class DaysOfWeekMultiselectorComponent {
     getDaysOfWeek(): Array<any> {
         let daysOfWeek = [];
 
-        for (let dayOfWeek in DaysOfWeek) {
-            daysOfWeek.push({title: DaysOfWeek[dayOfWeek].substring(0, 3), selected: this.isSelected(dayOfWeek)});
+        for (let dayOfWeek in WeekDays) {
+            daysOfWeek.push({title: WeekDays[dayOfWeek].substring(0, 3), selected: this.isSelected(dayOfWeek)});
         }
 
         return daysOfWeek;
