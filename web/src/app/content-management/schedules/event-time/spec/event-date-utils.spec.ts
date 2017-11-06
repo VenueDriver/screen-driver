@@ -18,7 +18,7 @@ describe('EventDateUtils', () => {
 
     describe('convertTimeToDate()', () => {
 
-        describe('when receive 8:00 AM', () => {
+        describe('when input is 8:00 AM', () => {
             let result = EventDateUtils.convertTimeToDate('8:00', 'AM');
 
             it('should return date for January 1, 2000 with time 8:00', () => {
@@ -31,7 +31,7 @@ describe('EventDateUtils', () => {
 
         });
 
-        describe('when receive 8:00 PM', () => {
+        describe('when input is 8:00 PM', () => {
             let result = EventDateUtils.convertTimeToDate('8:00', 'PM');
 
             it('should return date for January 1, 2000 with time 20:00', () => {
@@ -44,7 +44,7 @@ describe('EventDateUtils', () => {
 
         });
 
-        describe('when receive 12:30 AM', () => {
+        describe('when input is 12:30 AM', () => {
             let result = EventDateUtils.convertTimeToDate('12:30', 'AM');
 
             it('should return date for January 1, 2000 with time 0:30', () => {
@@ -57,11 +57,25 @@ describe('EventDateUtils', () => {
 
         });
 
+        describe('when input is 8:00 PM and date', () => {
+           let date = new Date();
+           let result = EventDateUtils.convertTimeToDate('8:00', 'PM', date);
+
+           it('should return the date with time 20:00', () => {
+               expect(result.getFullYear()).toBe(date.getFullYear());
+               expect(result.getMonth()).toBe(date.getMonth());
+               expect(result.getDate()).toBe(date.getDate());
+               expect(result.getHours()).toBe(20);
+               expect(result.getMinutes()).toBe(0);
+           });
+           
+        });
+
     });
 
     describe('getHours()', () => {
 
-        describe('when receive 12:00 AM', () => {
+        describe('when input is 12:00 AM', () => {
             let result = EventDateUtils.getHours('12:00', 'AM');
 
             it('should return 0', () => {
@@ -70,7 +84,7 @@ describe('EventDateUtils', () => {
 
         });
 
-        describe('when receive 12:00 PM', () => {
+        describe('when input is 12:00 PM', () => {
             let result = EventDateUtils.getHours('12:00', 'PM');
 
             it('should return 12', () => {
@@ -79,7 +93,7 @@ describe('EventDateUtils', () => {
 
         });
 
-        describe('when receive 1:00 AM', () => {
+        describe('when input is 1:00 AM', () => {
             let result = EventDateUtils.getHours('1:00', 'AM');
 
             it('should return 1', () => {
@@ -88,7 +102,7 @@ describe('EventDateUtils', () => {
 
         });
 
-        describe('when receive 1:00 PM', () => {
+        describe('when input is 1:00 PM', () => {
             let result = EventDateUtils.getHours('1:00', 'PM');
 
             it('should return 13', () => {
