@@ -38,8 +38,12 @@ export class EventTimeHolder {
         return _.isEqual(this.eventTime, this.copyOfEventTime)
     }
 
-    setTime(field: string, time: string) {
-        this.eventTime[field] = time;
+    setStartTime(time: string) {
+        this.eventTime.startTime = time;
+    }
+
+    setEndTime(time: string) {
+        this.eventTime.endTime = time;
     }
 
     setPeriodicity(periodicity: string) {
@@ -72,12 +76,14 @@ export class EventTimeHolder {
         }
     }
 
-    changeTimePeriod(field) {
-        if (this.eventTime[field] === TIME_PERIODS[0]) {
-            this.setTime(field, TIME_PERIODS[1])
-        } else {
-            this.setTime(field, TIME_PERIODS[0]);
-        }
+    switchStartTimePeriod() {
+        let period = this.eventTime.startTimePeriod;
+        this.eventTime.startTimePeriod = this.getOppositePeriod(period);
+    }
+
+    switchEndTimePeriod() {
+        let period = this.eventTime.endTimePeriod;
+        this.eventTime.endTimePeriod = this.getOppositePeriod(period);
     }
 
     setProperties(schedule: Schedule) {
@@ -110,6 +116,10 @@ export class EventTimeHolder {
 
     isRepeatableEvent(): boolean {
         return this.eventTime.periodicity === Periodicity.REPEATABLE;
+    }
+
+    private getOppositePeriod(period: string): string {
+        return period === TIME_PERIODS[0] ? TIME_PERIODS[1] : TIME_PERIODS[0];
     }
 
     private setPropertiesForOneTimeSchedule(schedule: Schedule) {
