@@ -4,7 +4,7 @@ import {EventTimeHolder} from "../event-time.holder";
 import {EventTime} from "../../models/event-time.model";
 import {getShortDay, WeekDays} from "../../../../core/enums/days-of-week";
 
-fdescribe('EventTimeHolder', () => {
+describe('EventTimeHolder', () => {
 
     describe('init()', () => {
         it('should return instance of EventTimeHolder', () => {
@@ -51,21 +51,26 @@ fdescribe('EventTimeHolder', () => {
 
     });
 
-    describe('setTime()', () => {
+    describe('setStartTime()', () => {
         let eventTimeHolder = EventTimeHolder.init();
 
-        describe('when input is \'startTime\' and \'9:30\'', () => {
+        describe('when input is \'9:30\'', () => {
             it('should set start time to 9:30', () => {
-                eventTimeHolder.setTime('startTime', '9:30');
+                eventTimeHolder.setStartTime('9:30');
                 let value = eventTimeHolder.value();
 
                 expect(value.startTime).toBe('9:30');
             });
         });
 
-        describe('when input is \'endTime\' and \'9:30\'', () => {
+    });
+
+    describe('setEndTime()', () => {
+        let eventTimeHolder = EventTimeHolder.init();
+
+        describe('when input is \'9:30\'', () => {
             it('should set end time to 9:30', () => {
-                eventTimeHolder.setTime('endTime', '9:30');
+                eventTimeHolder.setEndTime('9:30');
                 let value = eventTimeHolder.value();
 
                 expect(value.endTime).toBe('9:30');
@@ -142,6 +147,120 @@ fdescribe('EventTimeHolder', () => {
             eventTimeHolder.setWeekDays(weekDays);
 
             expect(eventTimeHolder.getWeekDaysArray()).toEqual(weekDays.split(','));
+        });
+
+    });
+
+    describe('setEndDateEqualToStartDate()', () => {
+        let eventTimeHolder = EventTimeHolder.init();
+        eventTimeHolder.value().startDate = new Date();
+        eventTimeHolder.value().endDate = EventDateUtils.getTomorrowDate();
+
+        it('should set end date equal to start date', () => {
+            eventTimeHolder.setEndDateEqualToStartDate();
+            let value = eventTimeHolder.value();
+
+            expect(value.endDate).toEqual(value.startDate);
+        });
+    });
+
+    describe('setStartDateToZeroIfItLargerThenEndDate()', () => {
+
+        describe('when start is larger then end date', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.value().startDate = EventDateUtils.getTomorrowDate();
+            eventTimeHolder.value().endDate = new Date();
+
+            it('should set start date to null', () => {
+                eventTimeHolder.setStartDateToZeroIfItLargerThenEndDate();
+                let value = eventTimeHolder.value();
+
+                expect(value.startDate).toBeNull();
+            });
+        });
+
+        describe('when start is smaller then end date', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            let date = new Date();
+            eventTimeHolder.value().startDate = date;
+            eventTimeHolder.value().endDate = EventDateUtils.getTomorrowDate();
+
+            it('should do nothing with start date', () => {
+                eventTimeHolder.setStartDateToZeroIfItLargerThenEndDate();
+                let value = eventTimeHolder.value();
+
+                expect(value.startDate).toBe(date);
+            });
+        });
+
+        describe('when start is equal end date', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            let date = new Date();
+            eventTimeHolder.value().startDate = date;
+            eventTimeHolder.value().endDate = date;
+
+            it('should do nothing with start date', () => {
+                eventTimeHolder.setStartDateToZeroIfItLargerThenEndDate();
+                let value = eventTimeHolder.value();
+
+                expect(value.startDate).toBe(date);
+                expect(value.endDate).toEqual(value.startDate);
+            });
+        });
+    });
+
+    describe('switchStartTimePeriod()', () => {
+
+        describe('when start time period is AM', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.value().startTimePeriod = 'AM';
+
+            it('should set startTimePeriod to PM', () => {
+                eventTimeHolder.switchStartTimePeriod();
+                let value = eventTimeHolder.value();
+
+                expect(value.startTimePeriod).toBe('PM');
+            });
+        });
+
+        describe('when start time period is PM', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.value().startTimePeriod = 'PM';
+
+            it('should set startTimePeriod to AM', () => {
+                eventTimeHolder.switchStartTimePeriod();
+                let value = eventTimeHolder.value();
+
+                expect(value.startTimePeriod).toBe('AM');
+            });
+        });
+
+    });
+
+    describe('switchEndTimePeriod()', () => {
+
+        describe('when end time period is AM', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.value().endTimePeriod = 'AM';
+
+            it('should set endTimePeriod to PM', () => {
+                eventTimeHolder.switchEndTimePeriod();
+                let value = eventTimeHolder.value();
+
+                expect(value.endTimePeriod).toBe('PM');
+            });
+        });
+
+        describe('when end time period is PM', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.value().endTimePeriod = 'PM';
+
+            it('should set endTimePeriod to AM', () => {
+                eventTimeHolder.switchEndTimePeriod();
+                let value = eventTimeHolder.value();
+
+                expect(value.endTimePeriod).toBe('AM');
+            });
         });
 
     });
