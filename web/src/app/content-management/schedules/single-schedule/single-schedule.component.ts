@@ -10,6 +10,8 @@ import {DaysOfWeek} from '../../../core/enums/days-of-week';
 
 import * as _ from 'lodash';
 import {PriorityTypes} from "../../../core/enums/priorty-types";
+import {EventTimeValidator} from "../event-time/event-time.validator";
+import {EventTimeHolder} from "../event-time/event-time.holder";
 
 @Component({
     selector: 'single-schedule',
@@ -26,13 +28,9 @@ export class SingleScheduleComponent implements OnInit {
 
     removingMode = false;
     eventTime = new EventTime();
-    originalEventTime: EventTime;
-
-    timePeriods = ['AM', 'PM'];
+    eventTimeHolder: EventTimeHolder;
 
     validationResult: ValidationResult = {isValid: true};
-
-    scheduleTypes = Periodicity;
 
     constructor(
         private schedulesService: SchedulesService,
@@ -73,38 +71,36 @@ export class SingleScheduleComponent implements OnInit {
 
     subscribeToScheduleListUpdate() {
         this.schedulesService.scheduleListUpdated
-            .subscribe(() => this.eventTime = new EventTime());
+            .subscribe(() => this.eventTimeHolder = EventTimeHolder.init());
     }
 
     setEventTimeProperties() {
         if (!_.isEmpty(this.schedule)) {
-            this.eventTime.setProperties(this.schedule);
-            this.originalEventTime = _.clone(this.eventTime);
+            this.eventTimeHolder.setProperties(this.schedule);
+            this.eventTimeHolder.saveCopyOfPropertiesState();
         }
     }
 
     setTime(field: string, time: string) {
-        this.eventTime[field] = time;
+        this.eventTimeHolder.setTime(field, time);
         this.validate();
     }
 
     validate() {
-        this.validationResult = this.eventTime.validate();
+        this.validationResult = EventTimeValidator.validate(this.eventTimeHolder.value());
     }
 
     performCreatingSubmit() {
-        this.schedulesService.createSchedule(this.currentSetting, this.eventTime);
+        this.schedulesService.createSchedule(this.currentSetting, this.eventTimeHolder);
     }
 
     onStartDateSelect() {
-        this.eventTime.endDate = this.eventTime.startDate;
+        this.eventTimeHolder.setEndDateEqualToStartDate();
         this.validate();
     }
 
     onEndDateSelect() {
-        if (this.eventTime.startDate > this.eventTime.endDate) {
-            this.eventTime.startDate = null;
-        }
+        this.eventTimeHolder.setStartDateToZeroIfItLargerThenEndDate();
         this.validate();
     }
 
@@ -115,29 +111,29 @@ export class SingleScheduleComponent implements OnInit {
     isEditMode(): boolean {
         return !this.isCreationMode()
             && !this.removingMode
-            && !_.isEqual(this.eventTime, this.originalEventTime);
+            && !this.eventTimeHolder.isCopyEqualToSource();
     }
 
     performUpdatingSubmit() {
-        this.schedulesService.updateSchedule(this.schedule, this.eventTime);
+        this.schedulesService.updateSchedule(this.schedule, this.eventTimeHolder);
     }
 
     performCancel() {
         if (this.isCreationMode()) {
             this.cancel.emit();
         } else {
-            this.eventTime = _.clone(this.originalEventTime);
+            this.eventTimeHolder.restorePropertiesState();
             this.validationResult = {isValid: true};
         }
     }
 
     setScheduleType(scheduleType?: string) {
-        this.eventTime.periodicity = scheduleType;
+        this.eventTimeHolder.setPeriodicity(scheduleType);
         this.validate();
     }
 
     setDaysOfWeek(daysOfWeek: Array<string>) {
-        this.eventTime.daysOfWeek = daysOfWeek.join(',');
+        this.eventTimeHolder.setDaysOfWeek(daysOfWeek.join(','));
         this.validate();
     }
 
@@ -147,11 +143,7 @@ export class SingleScheduleComponent implements OnInit {
     }
 
     changeTimePeriod(field) {
-        if (this.eventTime[field] === this.timePeriods[0]) {
-            this.setTime(field, this.timePeriods[1])
-        } else {
-            this.setTime(field, this.timePeriods[0]);
-        }
+        this.eventTimeHolder.changeTimePeriod(field);
     }
 
     setRemovingMode(boolean: boolean) {
@@ -163,7 +155,7 @@ export class SingleScheduleComponent implements OnInit {
     }
 
     getDaysOfWeek(): Array<string> {
-        return this.eventTime.daysOfWeek.split(',');
+        return this.eventTimeHolder.getWeekDaysArray();
     }
 
     toggleWeek() {
@@ -172,13 +164,13 @@ export class SingleScheduleComponent implements OnInit {
 
     selectAllWeekDays() {
        let allDays = Object.keys(DaysOfWeek);
-       this.eventTime.daysOfWeek = allDays.join(',');
+       this.eventTimeHolder.setDaysOfWeek(allDays.join(','));
 
        this.validate();
     }
 
     unSelectAllWeekDays() {
-        this.eventTime.daysOfWeek = "";
+        this.eventTimeHolder.setDaysOfWeek("");
 
         this.validate();
     }
@@ -187,6 +179,6 @@ export class SingleScheduleComponent implements OnInit {
         let week = Object.keys(DaysOfWeek);
         let weekSelector = week.join(',');
 
-        return this.eventTime.daysOfWeek == weekSelector
+        return this.eventTimeHolder.getWeekDays() == weekSelector
     }
 }

@@ -34,7 +34,7 @@
         </div>
 
 
-        <div *ngIf="eventTime.periodicity === scheduleTypes.REPEATABLE"
+        <div *ngIf="eventTimeHolder.isRepeatableEvent()"
              class="days-of-week-container">
 
             <div class="title">
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div *ngIf="eventTime.periodicity === scheduleTypes.ONE_TIME"
+        <div *ngIf="eventTimeHolder.isOneTimeEvent()"
              class="datepicker-container">
 
             <div class="title">
@@ -64,7 +64,7 @@
             </div>
             <material-datepicker
                     class="datepicker"
-                    [(date)]="eventTime.startDate"
+                    [(date)]="eventTimeHolder.value().startDate"
                     (onSelect)="onStartDateSelect()"
                     dateFormat="MM-DD-YYYY">
             </material-datepicker>
@@ -74,7 +74,7 @@
             </div>
             <material-datepicker
                     class="datepicker"
-                    [(date)]="eventTime.endDate"
+                    [(date)]="eventTimeHolder.value().endDate"
                     (onSelect)="onEndDateSelect()"
                     dateFormat="MM-DD-YYYY">
             </material-datepicker>
@@ -82,15 +82,15 @@
 
         <div class="time-selector-container">
             <time-selector [label]="'Start time:'"
-                           [defaultTime]="eventTime.startTime"
-                           [defaultTimePeriod]="eventTime.startTimePeriod"
+                           [defaultTime]="eventTimeHolder.value().startTime"
+                           [defaultTimePeriod]="eventTimeHolder.value().startTimePeriod"
                            (timeChange)="setTime('startTime', $event)"
                            (timePeriodChange)="changeTimePeriod('startTimePeriod')">
             </time-selector>
 
             <time-selector [label]="'End time:'"
-                           [defaultTime]="eventTime.endTime"
-                           [defaultTimePeriod]="eventTime.endTimePeriod"
+                           [defaultTime]="eventTimeHolder.value().endTime"
+                           [defaultTimePeriod]="eventTimeHolder.value().endTimePeriod"
                            (timeChange)="setTime('endTime', $event)"
                            (timePeriodChange)="changeTimePeriod('endTimePeriod')">
             </time-selector>
