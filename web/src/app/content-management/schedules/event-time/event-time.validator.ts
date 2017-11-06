@@ -16,22 +16,20 @@ export class EventTimeValidator {
             return EventTimeValidator.generateValidationResultWithError(EMPTY_WEEK_DAYS_ERROR_MESSAGE);
         }
 
-        if (!EventTimeValidator.isDateValid(eventTime)) {
+        if (EventTimeValidator.isDateInvalid(eventTime)) {
             return EventTimeValidator.generateValidationResultWithError(INVALID_DATE_ERROR_MESSAGE);
         }
 
-        if (EventTimeValidator.isOneDayEvent(eventTime) && !EventTimeValidator.isEventTimeRangeValid(eventTime)) {
+        if (EventTimeValidator.isOneDayEvent(eventTime) && EventTimeValidator.isEventTimeRangeInvalid(eventTime)) {
             return EventTimeValidator.generateValidationResultWithError(INVALID_EVENT_TIME_RANGE_ERROR_MESSAGE);
         }
 
         return {isValid: true};
     }
 
-    private static isDateValid(eventTime: EventTime): boolean {
-        if (eventTime.periodicity === Periodicity.ONE_TIME) {
-            return !!(eventTime.startDate && eventTime.endDate);
-        }
-        return true;
+    private static isDateInvalid(eventTime: EventTime): boolean {
+        return eventTime.periodicity === Periodicity.ONE_TIME
+            && !(eventTime.startDate && eventTime.endDate);
     }
 
     private static isOneDayEvent(eventTime: EventTime): boolean {
@@ -39,10 +37,10 @@ export class EventTimeValidator {
             || eventTime.startDate.getTime() === eventTime.endDate.getTime();
     }
 
-    private static isEventTimeRangeValid(eventTime: EventTime): boolean {
+    private static isEventTimeRangeInvalid(eventTime: EventTime): boolean {
         let startTime = EventDateUtils.convertTimeToDate(eventTime.startTime, eventTime.startTimePeriod);
         let endTime = EventDateUtils.convertTimeToDate(eventTime.endTime, eventTime.endTimePeriod);
-        return endTime > startTime;
+        return endTime <= startTime;
     }
 
     private static generateValidationResultWithError(validationMessage: string): ValidationResult {
