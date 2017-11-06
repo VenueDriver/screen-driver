@@ -5,7 +5,7 @@ import {EventDateUtils} from "../event-time/event-date.utils";
 export class EventTime {
 
     periodicity = Periodicity.ONE_TIME;
-    daysOfWeek = getShortDay(DaysOfWeek.SUN);
+    weekDays = getShortDay(DaysOfWeek.SUN);
     startDate: Date = EventDateUtils.getTomorrowDate();
     endDate = this.startDate;
     startTime = '8:00';

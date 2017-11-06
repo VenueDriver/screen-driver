@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 export class EventTimeValidator {
 
     static validate(eventTime: EventTime): ValidationResult {
-        if (_.isEmpty(eventTime.daysOfWeek)) {
+        if (_.isEmpty(eventTime.weekDays)) {
             return {isValid: false, validationMessage: 'You should choose at least one day of week'};
         }
 

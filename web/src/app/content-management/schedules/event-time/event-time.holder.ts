@@ -8,7 +8,6 @@ import {EventTime} from "../models/event-time.model";
 import * as _ from 'lodash';
 
 const TIME_PERIODS = ['AM', 'PM'];
-const PERIODICITY = Periodicity;
 
 export class EventTimeHolder {
 
@@ -48,11 +47,11 @@ export class EventTimeHolder {
     }
 
     setDaysOfWeek(daysOfWeek: string) {
-        this.eventTime.daysOfWeek = daysOfWeek;
+        this.eventTime.weekDays = daysOfWeek;
     }
 
     getWeekDays(): string {
-        return this.eventTime.daysOfWeek;
+        return this.eventTime.weekDays;
     }
 
     getWeekDaysArray(): Array<string> {
@@ -102,11 +101,11 @@ export class EventTimeHolder {
     }
 
     isOneTimeEvent(): boolean {
-        return this.eventTime.periodicity === PERIODICITY.ONE_TIME;
+        return this.eventTime.periodicity === Periodicity.ONE_TIME;
     }
 
     isRepeatableEvent(): boolean {
-        return this.eventTime.periodicity === PERIODICITY.REPEATABLE;
+        return this.eventTime.periodicity === Periodicity.REPEATABLE;
     }
 
     private setPropertiesForOneTimeSchedule(schedule: Schedule) {
@@ -118,7 +117,7 @@ export class EventTimeHolder {
     }
 
     private setPropertiesForRepeatableSchedule(schedule: Schedule) {
-        this.eventTime.daysOfWeek = CronToDatetimeConverter.getWeekDaysFromCron(schedule.eventCron);
+        this.eventTime.weekDays = CronToDatetimeConverter.getWeekDaysFromCron(schedule.eventCron);
 
         this.setStartTimeProperties(schedule.eventCron);
         this.setEndTimeProperties(schedule.endEventCron);
@@ -151,8 +150,8 @@ export class EventTimeHolder {
     }
 
     private setCronsForRepeatableSchedule(schedule: Schedule) {
-        schedule.eventCron = this.convertWeekDayAndTimeToCron(this.eventTime.daysOfWeek, this.eventTime.startTime, this.eventTime.startTimePeriod);
-        schedule.endEventCron = this.convertWeekDayAndTimeToCron(this.eventTime.daysOfWeek, this.eventTime.endTime, this.eventTime.endTimePeriod);
+        schedule.eventCron = this.convertWeekDayAndTimeToCron(this.eventTime.weekDays, this.eventTime.startTime, this.eventTime.startTimePeriod);
+        schedule.endEventCron = this.convertWeekDayAndTimeToCron(this.eventTime.weekDays, this.eventTime.endTime, this.eventTime.endTimePeriod);
     }
 
     private convertWeekDayAndTimeToCron(daysOfWeek: string, time: string, timePeriod: string) {
