@@ -136,9 +136,9 @@ module.exports.resetPassword = (username) => {
     });
 };
 
-module.exports.confirmResetPassword = (username, confirmationCode, password) => {
+module.exports.confirmResetPassword = (username, verificationCode, password) => {
     let cognito = new AWS.CognitoIdentityServiceProvider();
-    let params = UserPoolHelper.buildConfirmResetPasswordParameters(username, confirmationCode, password);
+    let params = UserPoolHelper.buildConfirmResetPasswordParameters(username, verificationCode, password);
 
     return new Promise((resolve, reject) => {
         cognito.confirmForgotPassword(params, (err, data) => {

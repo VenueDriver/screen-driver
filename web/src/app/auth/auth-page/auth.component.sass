@@ -1,29 +1,45 @@
+@import "../../../styles/variables"
+
 body
   background-color: #979797
 
-.auth-container
+.auth-page-container
   margin: 80px auto
   width: 300px
-  padding: 30px
+
+.auth-page-title
+  margin: 15px auto
+  font-size: 25px
+  font-weight: bold
+  text-align: center
+
+  @media screen and (max-width: $tablet-resolution)
+    font-size: 18px
+
+.inputs div label
+  margin-top: 10px
+
+/deep/ form
+  padding: 20px
   border: 1px solid rgb(216, 222, 226)
   border-radius: 5px
 
-  .inputs div label
-    margin-top: 10px
+  .error-message
+    color: red
 
-  .auth-form
-    width: 250px
+  [type="submit"]
+    margin-top: 20px
+    font-weight: bold
 
-    .error-message
-      color: red
-
-    .sign-in-button
-      margin-top: 15px
-
-  .first-time-login-button
+  .forgot-password-button
     float: right
     text-align: right
     margin-bottom: 15px
+    padding-right: 0
 
-  .alert
-    margin-bottom: 0
+  .option-button-container
+    text-align: center
+    margin-top: 8px
+
+.alert
+  margin-bottom: 0

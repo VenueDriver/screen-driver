@@ -5,7 +5,6 @@
             </user-profile>
 
             <change-password *ngIf="isChangePasswordMode"
-                             [user]="user"
                              (cancel)="setChangePasswordMode(false)"
                              (success)="setChangePasswordMode(false)">
             </change-password>

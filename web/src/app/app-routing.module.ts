@@ -7,6 +7,8 @@ import {CanActivateUser} from "./auth/auth-guards/can-acticate-user";
 import {CanActivateAdmin} from "./auth/auth-guards/can-acticate-admin";
 import {ProfileManagementComponent} from "./profile-management/profile-management.component";
 import {MaintenanceComponent} from "./maintenance/maintenance.component";
+import {SignInComponent} from "./auth/auth-page/sign-in/sign-in.component";
+import {ResetPasswordComponent} from "./auth/auth-page/reset-password/reset-password.component";
 
 const appRoutes: Routes = [
     {
@@ -35,7 +37,11 @@ const appRoutes: Routes = [
     {
         path: 'auth',
         component: AuthComponent,
-        data: {isSidebarDisplayed: false}
+        data: {isSidebarDisplayed: false},
+        children: [
+            {path: '', component: SignInComponent},
+            {path: 'reset-password', component: ResetPasswordComponent}
+        ]
     },
     {
         path: 'maintenance',

@@ -1,0 +1,107 @@
+<div class="sign-in-container">
+
+    <div class="auth-page-title">
+        Please, sign in to ScreenDriver
+    </div>
+
+    <form class="auth-form"
+          (ngSubmit)="signIn()">
+
+        <div *ngIf="failMessage"
+             class="alert alert-danger">
+            {{failMessage}}
+        </div>
+
+        <div class="inputs">
+            <div>
+                <label for="email">Email address</label>
+                <input [(ngModel)]="user.email"
+                       id="email"
+                       name="email"
+                       class="form-control"
+                       type="email"
+                       placeholder="Email"
+                       #email="ngModel"
+                       required>
+                <span *ngIf="email.invalid && (email.dirty || email.touched)"
+                      class="email error-message">
+                    {{getValidationMessage(email)}}
+                </span>
+            </div>
+
+            <div *ngIf="!isFirstLoginMode">
+                <label for="password">Password</label>
+                <input [(ngModel)]="user.password"
+                       id="password"
+                       name="password"
+                       class="form-control"
+                       type="password"
+                       placeholder="Password"
+                       #password="ngModel"
+                       required>
+                <span *ngIf="password.invalid && (password.dirty || password.touched)"
+                      class="password error-message">
+                    {{getValidationMessage(password)}}
+                </span>
+            </div>
+
+            <div *ngIf="isFirstLoginMode">
+                <div>
+                    <label for="temporary-password">Temporary password</label>
+                    <input [(ngModel)]="firstLoginPasswords.password"
+                           id="temporary-password"
+                           name="temporary-password"
+                           class="form-control"
+                           type="password"
+                           placeholder="Password"
+                           #temporaryPassword="ngModel"
+                           required>
+                    <span *ngIf="temporaryPassword.invalid && (temporaryPassword.dirty || temporaryPassword.touched)"
+                          class="password error-message">
+                        {{getValidationMessage(temporaryPassword)}}
+                    </span>
+                </div>
+                <div>
+                    <label for="new-password">New password</label>
+                    <input [(ngModel)]="firstLoginPasswords.newPassword"
+                           id="new-password"
+                           name="new-password"
+                           class="form-control"
+                           type="password"
+                           placeholder="Password"
+                           #newPassword="ngModel"
+                           required>
+                    <span *ngIf="newPassword.invalid && (newPassword.dirty || newPassword.touched)"
+                          class="password error-message">
+                        {{getValidationMessage(newPassword)}}
+                    </span>
+                </div>
+            </div>
+
+            <a *ngIf="!isFirstLoginMode"
+                    type="button"
+                    class="btn btn-link forgot-password-button"
+                    (click)="sendUnauthorizedUserEmail()"
+                    routerLink="/auth/reset-password">
+                Forgot password?
+            </a>
+
+            <div class="error-message"></div>
+
+        </div>
+
+        <button type="submit"
+                class="btn btn-success btn-block"
+                [disabled]="isRequestPerforming">
+            Sign in
+        </button>
+
+        <div class="option-button-container">
+            <button type="button"
+                    class="btn btn-link"
+                    (click)="changeFirstLoginMode()">
+                {{isFirstLoginMode ? 'Cancel' : 'First login?'}}
+            </button>
+        </div>
+    </form>
+</div>
