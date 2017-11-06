@@ -133,7 +133,7 @@ export class SingleScheduleComponent implements OnInit {
     }
 
     setDaysOfWeek(daysOfWeek: Array<string>) {
-        this.eventTimeHolder.setDaysOfWeek(daysOfWeek.join(','));
+        this.eventTimeHolder.setWeekDays(daysOfWeek.join(','));
         this.validate();
     }
 
@@ -164,13 +164,13 @@ export class SingleScheduleComponent implements OnInit {
 
     selectAllWeekDays() {
        let allDays = Object.keys(WeekDays);
-       this.eventTimeHolder.setDaysOfWeek(allDays.join(','));
+       this.eventTimeHolder.setWeekDays(allDays.join(','));
 
        this.validate();
     }
 
     unSelectAllWeekDays() {
-        this.eventTimeHolder.setDaysOfWeek("");
+        this.eventTimeHolder.setWeekDays("");
 
         this.validate();
     }

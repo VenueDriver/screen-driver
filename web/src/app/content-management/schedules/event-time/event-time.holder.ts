@@ -12,7 +12,7 @@ const TIME_PERIODS = ['AM', 'PM'];
 export class EventTimeHolder {
 
     private eventTime = new EventTime();
-    private originalEventTime: EventTime;
+    private copyOfEventTime: EventTime;
 
     static init() {
         return new EventTimeHolder();
@@ -22,16 +22,20 @@ export class EventTimeHolder {
         return this.eventTime;
     }
 
+    getCopyOfEventTime() {
+        return this.copyOfEventTime;
+    }
+
     saveCopyOfPropertiesState() {
-        this.originalEventTime = _.clone(this.eventTime);
+        this.copyOfEventTime = _.clone(this.eventTime);
     }
 
     restorePropertiesState() {
-        this.eventTime = _.clone(this.originalEventTime);
+        this.eventTime = _.clone(this.copyOfEventTime);
     }
 
     isCopyEqualToSource(): boolean {
-        return _.isEqual(this.eventTime, this.originalEventTime)
+        return _.isEqual(this.eventTime, this.copyOfEventTime)
     }
 
     setTime(field: string, time: string) {
@@ -46,8 +50,8 @@ export class EventTimeHolder {
         return this.eventTime.periodicity;
     }
 
-    setDaysOfWeek(daysOfWeek: string) {
-        this.eventTime.weekDays = daysOfWeek;
+    setWeekDays(weekDays: string) {
+        this.eventTime.weekDays = weekDays;
     }
 
     getWeekDays(): string {
