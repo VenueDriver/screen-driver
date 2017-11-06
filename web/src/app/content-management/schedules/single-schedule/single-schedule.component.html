@@ -43,9 +43,9 @@
 
             <div class="day-of-week">
                 <days-of-week-multiselector
-                                            [selectedDays]="getDaysOfWeek()"
-                                            [editMode]="true"
-                                            (select)="setDaysOfWeek($event)">
+                        [selectedDays]="getDaysOfWeek()"
+                        [editMode]="true"
+                        (select)="setDaysOfWeek($event)">
                 </days-of-week-multiselector>
 
                 <button (click)="toggleWeek()"
@@ -62,6 +62,7 @@
             <div class="title">
                 Start date:
             </div>
+
             <material-datepicker
                     class="datepicker"
                     [(date)]="eventTimeHolder.value().startDate"
@@ -72,6 +73,7 @@
             <div class="title">
                 End date:
             </div>
+
             <material-datepicker
                     class="datepicker"
                     [(date)]="eventTimeHolder.value().endDate"
