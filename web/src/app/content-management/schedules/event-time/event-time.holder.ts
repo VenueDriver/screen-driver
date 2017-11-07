@@ -4,6 +4,7 @@ import {CronToDatetimeConverter} from "../../../core/utils/datetime-cron-convert
 import {DatetimeToCronConverter} from "../../../core/utils/datetime-cron-converter/datetime-cron.converter";
 import {Schedule} from "../models/schedule.model";
 import {EventTime} from "../models/event-time.model";
+import {CronConvertStrategy, CronParseResult, CustomCronParser} from "../../../core/utils/custom-cron-parser";
 
 import * as _ from 'lodash';
 
@@ -87,9 +88,8 @@ export class EventTimeHolder {
     }
 
     setProperties(schedule: Schedule) {
-        let eventTime = new EventTime();
-        eventTime.periodicity = Periodicity[schedule.periodicity];
-        switch (eventTime.periodicity) {
+        this.eventTime.periodicity = schedule.periodicity;
+        switch (this.eventTime.periodicity) {
             case Periodicity.ONE_TIME:
                 this.setPropertiesForOneTimeSchedule(schedule);
                 break;
@@ -124,27 +124,27 @@ export class EventTimeHolder {
 
     private setPropertiesForOneTimeSchedule(schedule: Schedule) {
         this.eventTime.startDate = this.getDateFromCron(schedule.eventCron);
-        this.setStartTimeProperties(schedule.eventCron);
-
         this.eventTime.endDate = this.getDateFromCron(schedule.endEventCron);
-        this.setEndTimeProperties(schedule.endEventCron);
+        this.setEventTimeDetails(schedule);
     }
 
     private setPropertiesForRepeatableSchedule(schedule: Schedule) {
         this.eventTime.weekDays = CronToDatetimeConverter.getWeekDaysFromCron(schedule.eventCron);
-
-        this.setStartTimeProperties(schedule.eventCron);
-        this.setEndTimeProperties(schedule.endEventCron);
+        this.setEventTimeDetails(schedule);
     }
 
-    private setStartTimeProperties(cron: string) {
-        this.eventTime.startTimePeriod = this.getTimePeriodFromCron(cron);
-        this.eventTime.startTime = this.getTimeFromCron(cron);
+    private setEventTimeDetails(schedule: Schedule) {
+        let eventStartDetails = this.getEventDetailsFromCron(schedule.eventCron);
+        this.eventTime.startTime = eventStartDetails.time;
+        this.eventTime.startTimePeriod = eventStartDetails.period;
+
+        let eventEndDetails = this.getEventDetailsFromCron(schedule.endEventCron);
+        this.eventTime.endTime = eventEndDetails.time;
+        this.eventTime.endTimePeriod = eventEndDetails.period;
     }
 
-    private setEndTimeProperties(cron: string) {
-        this.eventTime.endTimePeriod = this.getTimePeriodFromCron(cron);
-        this.eventTime.endTime = this.getTimeFromCron(cron);
+    private getEventDetailsFromCron(cron: string): CronParseResult {
+        return new CustomCronParser(cron, CronConvertStrategy.PERIOD_SENSITIVE).result();
     }
 
     private setCronsForOneTimeSchedule(schedule: Schedule) {
@@ -173,32 +173,6 @@ export class EventTimeHolder {
         let hours = EventDateUtils.getHours(time, timePeriod);
         let minutes = +time.split(':')[1];
         return DatetimeToCronConverter.setTimeForCron(cron, hours, minutes);
-    }
-
-    private setCronsForDailySchedule(schedule: Schedule) {
-        schedule.eventCron = this.convertTimeToCron(this.eventTime.startTime, this.eventTime.startTimePeriod);
-        schedule.endEventCron = this.convertTimeToCron(this.eventTime.endTime, this.eventTime.endTimePeriod);
-    }
-
-    private convertTimeToCron(time: string, timePeriod: string) {
-        let hours = EventDateUtils.getHours(time, timePeriod);
-        let minutes = +time.split(':')[1];
-        return DatetimeToCronConverter.createCronForDailyAction(hours, minutes);
-    }
-
-    private getTimePeriodFromCron(cron: string): string {
-        let hours = CronToDatetimeConverter.getHoursFromCron(cron);
-        return hours >= 12 ? 'PM' : 'AM';
-    }
-
-    private getTimeFromCron(cron: string): string {
-        let hours = CronToDatetimeConverter.getHoursFromCron(cron);
-        let minutes = CronToDatetimeConverter.getMinutesFromCron(cron);
-
-        if (hours == 12) {
-            return `${12}:${minutes}`;
-        }
-        return `${hours % 12}:${minutes}`;
     }
 
 }
