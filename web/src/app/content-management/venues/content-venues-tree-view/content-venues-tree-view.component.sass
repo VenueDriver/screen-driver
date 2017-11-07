@@ -11,6 +11,9 @@
   height: $tree-view-node-height
   width: 100%
 
+  @media screen and (max-width: $small-resolution)
+    height: $tree-view-node-height-small-screen
+
   &.node-without-children
     padding-left: 11px
     cursor: auto

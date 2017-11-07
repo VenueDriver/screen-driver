@@ -6,6 +6,24 @@
   align-items: center
   width: 100%
 
+  @media screen and (max-width: $small-resolution)
+    -webkit-flex-direction: column /* Safari */
+    flex-direction: column !important
+
+    .inputs-container, .buttons-container
+      width: 100% !important
+
+    .buttons-container
+      margin-top: 15px
+      -webkit-justify-content: flex-start /* Safari */
+      justify-content:         flex-start
+
+      div > div, button
+        height: 33px !important
+
+  @media screen and (max-width: $small-resolution)
+    flex-direction: row
+
   .inputs-container
     width: $inputs-width
     margin-right: 10px
@@ -37,8 +55,14 @@
     align-items: center
     margin-left: auto
 
+    div
+      display: flex
+
+      @media screen and (max-width: $small-resolution)
+        flex-direction: row
+
     .cancel-button
-      padding: 12px
+      //padding: 12px
 
     .remove-button
       display: inline-block
