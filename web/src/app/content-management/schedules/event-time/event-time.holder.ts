@@ -169,7 +169,7 @@ export class EventTimeHolder {
     }
 
     private convertWeekDayAndTimeToCron(daysOfWeek: string, time: string, timePeriod: string) {
-        let cron = DatetimeToCronConverter.createCronForDaysOfWeek(daysOfWeek);
+        let cron = DatetimeToCronConverter.createCronForWeekDays(daysOfWeek);
         let hours = EventDateUtils.getHours(time, timePeriod);
         let minutes = +time.split(':')[1];
         return DatetimeToCronConverter.setTimeForCron(cron, hours, minutes);
