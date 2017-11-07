@@ -348,6 +348,78 @@ describe('EventTimeHolder', () => {
         });
     });
 
+    describe('setCronsForSchedule()', () => {
+
+        describe('when event time periodicity is One time', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.value().periodicity = Periodicity.ONE_TIME;
+
+            describe('start time is 8:20 AM and start date is Oct 6, 2017', () => {
+                eventTimeHolder.setStartTime('8:20');
+                eventTimeHolder.value().startTimePeriod = 'AM';
+                eventTimeHolder.value().startDate = new Date('OCT 6, 2017');
+
+                it('should set eventCron of schedule to \'0 20 8 6 OCT * 2017\'', () => {
+                    let schedule = new Schedule();
+                    eventTimeHolder.setCronsForSchedule(schedule);
+
+                    expect(schedule.eventCron).toBe('0 20 8 6 OCT * 2017');
+                });
+
+            });
+
+            describe('end time is 9:40 PM and end date is Nov 16, 2017', () => {
+                eventTimeHolder.setEndTime('9:40');
+                eventTimeHolder.value().endTimePeriod = 'PM';
+                eventTimeHolder.value().endDate = new Date('NOV 16, 2017');
+
+                it('should set endEventCron of schedule to \'0 40 21 16 NOV * 2017\'', () => {
+                    let schedule = new Schedule();
+                    eventTimeHolder.setCronsForSchedule(schedule);
+
+                    expect(schedule.endEventCron).toBe('0 40 21 16 NOV * 2017');
+                });
+
+            });
+
+        });
+
+        describe('when event time periodicity is Repeatable', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.value().periodicity = Periodicity.REPEATABLE;
+
+            describe('start time is 8:20 AM and weekdays are SUN,MON,TUE', () => {
+                eventTimeHolder.setStartTime('8:20');
+                eventTimeHolder.value().startTimePeriod = 'AM';
+                eventTimeHolder.value().weekDays = 'SUN,MON,TUE';
+
+                it('should set eventCron of schedule to \'0 20 8 * * SUN,MON,TUE\'', () => {
+                    let schedule = new Schedule();
+                    eventTimeHolder.setCronsForSchedule(schedule);
+
+                    expect(schedule.eventCron).toBe('0 20 8 * * SUN,MON,TUE');
+                });
+
+            });
+
+            describe('end time is 10:50 PM and end weekdays are SUN,MON,TUE', () => {
+                eventTimeHolder.setEndTime('10:50');
+                eventTimeHolder.value().endTimePeriod = 'PM';
+                eventTimeHolder.value().weekDays = 'SUN,MON,TUE';
+
+                it('should set endEventCron of schedule to \'0 50 22 * * SUN,MON,TUE\'', () => {
+                    let schedule = new Schedule();
+                    eventTimeHolder.setCronsForSchedule(schedule);
+
+                    expect(schedule.endEventCron).toBe('0 50 22 * * SUN,MON,TUE');
+                });
+
+            });
+
+        });
+
+    });
+
 });
 
 function getDefaultEventTime() {
