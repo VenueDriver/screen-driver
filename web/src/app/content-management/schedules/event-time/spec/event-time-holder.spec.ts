@@ -3,6 +3,7 @@ import {EventDateUtils} from "../event-date.utils";
 import {EventTimeHolder} from "../event-time.holder";
 import {EventTime} from "../../models/event-time.model";
 import {getShortDay, WeekDays} from "../../../../core/enums/days-of-week";
+import {Schedule} from "../../models/schedule.model";
 
 describe('EventTimeHolder', () => {
 
@@ -263,6 +264,88 @@ describe('EventTimeHolder', () => {
             });
         });
 
+    });
+
+    describe('setProperties()', () => {
+
+        describe('when input is one time schedule', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            let oneTimeSchedule = new Schedule();
+            oneTimeSchedule.periodicity = Periodicity.ONE_TIME;
+
+            it('should create event time with One time periodicity', () => {
+                eventTimeHolder.setProperties(oneTimeSchedule);
+                let value = eventTimeHolder.value();
+
+                expect(value.periodicity).toBe(Periodicity.ONE_TIME);
+            });
+
+
+            describe('when input is schedule which event time is \'0 0 8 26 OCT * 2017\'', () => {
+                oneTimeSchedule.eventCron = '0 0 8 26 OCT * 2017';
+
+                it('should create event time which start time is 8:00 AM and start date is Oct 26, 2017', () => {
+                    eventTimeHolder.setProperties(oneTimeSchedule);
+                    let value = eventTimeHolder.value();
+
+                    expect(value.startDate).toEqual(new Date('26 OCT, 2017'));
+                    expect(value.startTime).toBe('8:00');
+                    expect(value.startTimePeriod).toBe('AM');
+                });
+            });
+
+            describe('when input is schedule which end event time is \'0 30 20 27 OCT * 2017\'', () => {
+                oneTimeSchedule.endEventCron = '0 30 20 27 OCT * 2017';
+
+                it('should create event time which end time is 8:30 PM and end date is Oct 27, 2017', () => {
+                    eventTimeHolder.setProperties(oneTimeSchedule);
+                    let value = eventTimeHolder.value();
+
+                    expect(value.endDate).toEqual(new Date('27 OCT, 2017'));
+                    expect(value.endTime).toBe('8:30');
+                    expect(value.endTimePeriod).toBe('PM');
+                });
+            });
+        });
+
+        describe('when input is repeatable schedule', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            let oneTimeSchedule = new Schedule();
+            oneTimeSchedule.periodicity = Periodicity.REPEATABLE;
+
+            it('should create event time with Repeatable periodicity', () => {
+                eventTimeHolder.setProperties(oneTimeSchedule);
+                let value = eventTimeHolder.value();
+
+                expect(value.periodicity).toBe(Periodicity.REPEATABLE);
+            });
+
+            describe('when input is schedule which event time is \'0 0 13 * * MON,TUE,WED,THU,FRI\'', () => {
+                oneTimeSchedule.eventCron = '0 0 13 * * MON,TUE,WED,THU,FRI';
+
+                it('should create event time which start time is 1:00 PM and weekdays are MON,TUE,WED,THU,FRI', () => {
+                    eventTimeHolder.setProperties(oneTimeSchedule);
+                    let value = eventTimeHolder.value();
+
+                    expect(value.weekDays).toBe('MON,TUE,WED,THU,FRI');
+                    expect(value.startTime).toBe('1:00');
+                    expect(value.startTimePeriod).toBe('PM');
+                });
+            });
+
+            describe('when input is schedule which end event time is \'0 30 7 * * MON,TUE,WED,THU,FRI\'', () => {
+                oneTimeSchedule.endEventCron = '0 30 7 * * MON,TUE,WED,THU,FRI';
+
+                it('should create event time which end time is 7:30 AM and end weekdays are MON,TUE,WED,THU,FRI', () => {
+                    eventTimeHolder.setProperties(oneTimeSchedule);
+                    let value = eventTimeHolder.value();
+
+                    expect(value.weekDays).toBe('MON,TUE,WED,THU,FRI');
+                    expect(value.endTime).toBe('7:30');
+                    expect(value.endTimePeriod).toBe('AM');
+                });
+            });
+        });
     });
 
 });
