@@ -33,6 +33,12 @@
 
   .buttons-container
     margin-left: auto
+    display: flex;
+
+    @media screen and (max-width: $small-resolution)
+      display: flex
+      -webkit-flex-direction: column /* Safari */
+      flex-direction: column
 
     .node-button
       display: none
