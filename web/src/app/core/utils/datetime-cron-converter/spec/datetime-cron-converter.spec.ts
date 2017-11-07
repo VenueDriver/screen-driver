@@ -1,6 +1,6 @@
 import {DatetimeToCronConverter} from "../datetime-cron.converter";
 
-fdescribe('DatetimeToCronConverter', () => {
+describe('DatetimeToCronConverter', () => {
 
     describe('createCronForSpecificDate()', () => {
 
