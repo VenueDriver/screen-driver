@@ -420,6 +420,126 @@ describe('EventTimeHolder', () => {
 
     });
 
+    describe('restorePropertiesState()', () => {
+        let eventTimeHolder = EventTimeHolder.init();
+
+        it('should restore properties of event time copy', () => {
+            eventTimeHolder.setProperties(getOneTimeSchedule());
+            eventTimeHolder.saveCopyOfPropertiesState();
+            eventTimeHolder.setProperties(getRepeatableSchedule());
+            eventTimeHolder.restorePropertiesState();
+            let value = eventTimeHolder.value();
+
+            expect(value.periodicity).toBe(Periodicity.ONE_TIME);
+            expect(value.startDate).toEqual(new Date('AUG 6, 2016'));
+            expect(value.startTimePeriod).toBe('AM');
+            expect(value.startTime).toBe('8:30');
+            expect(value.endDate).toEqual(new Date('SEP 21, 2016'));
+            expect(value.endTimePeriod).toBe('AM');
+            expect(value.endTime).toBe('9:45');
+        });
+
+    });
+
+    describe('isCopyEqualToSource()', () => {
+
+        describe('when eventTime is equal to copyOfEventTime', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+
+            it('should return true', () => {
+                eventTimeHolder.setProperties(getOneTimeSchedule());
+                eventTimeHolder.saveCopyOfPropertiesState();
+                let result = eventTimeHolder.isCopyEqualToSource();
+
+                expect(result).toBeTruthy();
+            });
+        });
+
+        describe('when eventTime is not equal to copyOfEventTime', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+
+            it('should return false', () => {
+                eventTimeHolder.saveCopyOfPropertiesState();
+                eventTimeHolder.setProperties(getOneTimeSchedule());
+                let result = eventTimeHolder.isCopyEqualToSource();
+
+                expect(result).toBeFalsy();
+            });
+        });
+
+        describe('when copyOfEventTime is empty', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+
+            it('should return false', () => {
+                let result = eventTimeHolder.isCopyEqualToSource();
+                expect(result).toBeFalsy();
+            });
+        });
+
+        describe('when eventTime is restored from copyOfEventTime', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+
+            it('should return true', () => {
+                eventTimeHolder.setProperties(getOneTimeSchedule());
+                eventTimeHolder.saveCopyOfPropertiesState();
+                eventTimeHolder.setProperties(getRepeatableSchedule());
+                eventTimeHolder.restorePropertiesState();
+                let result = eventTimeHolder.isCopyEqualToSource();
+
+                expect(result).toBeTruthy();
+            });
+        });
+
+    });
+
+    describe('isOneTimeEvent()', () => {
+
+        describe('when periodicity is One time', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.setPeriodicity(Periodicity.ONE_TIME);
+
+            it('should return true', () => {
+                let result = eventTimeHolder.isOneTimeEvent();
+                expect(result).toBeTruthy();
+            });
+        });
+
+        describe('when periodicity is not One time', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.setPeriodicity(Periodicity.REPEATABLE);
+
+            it('should return false', () => {
+                let result = eventTimeHolder.isOneTimeEvent();
+                expect(result).toBeFalsy();
+            });
+        });
+
+    });
+
+    describe('isRepeatableEvent()', () => {
+
+        describe('when periodicity is Repeatable', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.setPeriodicity(Periodicity.REPEATABLE);
+
+            it('should return true', () => {
+                let result = eventTimeHolder.isRepeatableEvent();
+                expect(result).toBeTruthy();
+            });
+        });
+
+        describe('when periodicity is not Repeatable', () => {
+            let eventTimeHolder = EventTimeHolder.init();
+            eventTimeHolder.setPeriodicity(Periodicity.ONE_TIME);
+
+            it('should return false', () => {
+                let result = eventTimeHolder.isRepeatableEvent();
+                expect(result).toBeFalsy();
+            });
+        });
+
+    });
+
 });
 
 function getDefaultEventTime() {
@@ -435,3 +555,18 @@ function getDefaultEventTime() {
     return eventTime;
 }
 
+function getOneTimeSchedule() {
+    let schedule = new Schedule();
+    schedule.periodicity = Periodicity.ONE_TIME;
+    schedule.eventCron = '0 30 8 6 AUG * 2016';
+    schedule.endEventCron = '0 45 9 21 SEP * 2016';
+    return schedule;
+}
+
+function getRepeatableSchedule() {
+    let schedule = new Schedule();
+    schedule.periodicity = Periodicity.REPEATABLE;
+    schedule.eventCron = '0 50 19 * * MON,TUE,WED,THU,FRI';
+    schedule.endEventCron = '0 0 22 * * MON,TUE,WED,THU,FRI';
+    return schedule;
+}
