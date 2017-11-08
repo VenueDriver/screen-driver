@@ -1,4 +1,4 @@
-export const DaysOfWeek = {
+export const WeekDays = {
     SUN: 'Sunday',
     MON: 'Monday',
     TUE: 'Tuesday',
@@ -8,6 +8,10 @@ export const DaysOfWeek = {
     SAT: 'Saturday'
 };
 
-export const getShortDay = (daysOfWeek: string): string => {
-    return daysOfWeek.substr(0, 3).toUpperCase();
+export const getShortDay = (weekDays: string): string => {
+    return weekDays.substr(0, 3).toUpperCase();
+};
+
+export const getAllDaysString = (): any => {
+    return Object.keys(WeekDays);
 };
