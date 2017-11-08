@@ -27,7 +27,6 @@ export class SingleScheduleComponent implements OnInit {
     @Output() cancel = new EventEmitter();
 
     removingMode = false;
-    eventTime = new EventTime();
     eventTimeHolder: EventTimeHolder;
 
     validationResult: ValidationResult = {isValid: true};
