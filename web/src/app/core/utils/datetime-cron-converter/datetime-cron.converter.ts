@@ -26,7 +26,7 @@ export class DatetimeToCronConverter {
     }
 
     static _validateWeekDays(weekDays: string) {
-        if (!_.includes(WEEKDAYS, weekDays)) {
+        if (!_.includes(WEEKDAYS, ...weekDays.split(','))) {
             throw new Error('Invalid weekday set');
         }
     }

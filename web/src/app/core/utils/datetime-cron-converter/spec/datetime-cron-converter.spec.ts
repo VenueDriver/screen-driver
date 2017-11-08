@@ -36,6 +36,13 @@ describe('DatetimeToCronConverter', () => {
             });
         });
 
+        describe('when input is MON,TUE,THU,FRI', () => {
+            it('should return * * * * * MON,TUE,THU,FRI', () => {
+                let result = DatetimeToCronConverter.createCronForWeekDays('MON,TUE,THU,FRI');
+                expect(result).toBe('* * * * * MON,TUE,THU,FRI');
+            });
+        });
+
         describe('when input is MON,TUE,WD', () => {
             it('should throw an error', () => {
                 expect(DatetimeToCronConverter.createCronForWeekDays.bind('MON,TUE,WD')).toThrowError();

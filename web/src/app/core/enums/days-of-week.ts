@@ -12,6 +12,6 @@ export const getShortDay = (weekDays: string): string => {
     return weekDays.substr(0, 3).toUpperCase();
 };
 
-export const getAllDaysString = (): string => {
-    return Object.keys(WeekDays).join(',');
+export const getAllDaysString = (): any => {
+    return Object.keys(WeekDays);
 };
