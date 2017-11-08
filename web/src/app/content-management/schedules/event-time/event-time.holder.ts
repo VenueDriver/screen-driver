@@ -88,7 +88,7 @@ export class EventTimeHolder {
     }
 
     setProperties(schedule: Schedule) {
-        this.eventTime.periodicity = schedule.periodicity;
+        this.eventTime.periodicity = Periodicity[schedule.periodicity];
         switch (this.eventTime.periodicity) {
             case Periodicity.ONE_TIME:
                 this.setPropertiesForOneTimeSchedule(schedule);

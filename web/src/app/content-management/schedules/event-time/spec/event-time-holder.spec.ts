@@ -1,4 +1,4 @@
-import {Periodicity} from "../../../../core/enums/periodicity";
+import {getPropertyName, Periodicity} from "../../../../core/enums/periodicity";
 import {EventDateUtils} from "../event-date.utils";
 import {EventTimeHolder} from "../event-time.holder";
 import {EventTime} from "../../models/event-time.model";
@@ -271,7 +271,7 @@ describe('EventTimeHolder', () => {
         describe('when input is one time schedule', () => {
             let eventTimeHolder = EventTimeHolder.init();
             let oneTimeSchedule = new Schedule();
-            oneTimeSchedule.periodicity = Periodicity.ONE_TIME;
+            oneTimeSchedule.periodicity = getPropertyName(Periodicity.ONE_TIME);
 
             it('should create event time with One time periodicity', () => {
                 eventTimeHolder.setProperties(oneTimeSchedule);
@@ -311,7 +311,7 @@ describe('EventTimeHolder', () => {
         describe('when input is repeatable schedule', () => {
             let eventTimeHolder = EventTimeHolder.init();
             let oneTimeSchedule = new Schedule();
-            oneTimeSchedule.periodicity = Periodicity.REPEATABLE;
+            oneTimeSchedule.periodicity = getPropertyName(Periodicity.REPEATABLE);
 
             it('should create event time with Repeatable periodicity', () => {
                 eventTimeHolder.setProperties(oneTimeSchedule);
@@ -557,7 +557,7 @@ function getDefaultEventTime() {
 
 function getOneTimeSchedule() {
     let schedule = new Schedule();
-    schedule.periodicity = Periodicity.ONE_TIME;
+    schedule.periodicity = getPropertyName(Periodicity.ONE_TIME);
     schedule.eventCron = '0 30 8 6 AUG * 2016';
     schedule.endEventCron = '0 45 9 21 SEP * 2016';
     return schedule;
@@ -565,7 +565,7 @@ function getOneTimeSchedule() {
 
 function getRepeatableSchedule() {
     let schedule = new Schedule();
-    schedule.periodicity = Periodicity.REPEATABLE;
+    schedule.periodicity = getPropertyName(Periodicity.REPEATABLE);
     schedule.eventCron = '0 50 19 * * MON,TUE,WED,THU,FRI';
     schedule.endEventCron = '0 0 22 * * MON,TUE,WED,THU,FRI';
     return schedule;
