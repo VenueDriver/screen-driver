@@ -38,7 +38,15 @@
              class="days-of-week-container">
 
             <div class="title">
-                Days of week:
+              <div>Days of week:</div>
+
+              <div>
+                <button (click)="toggleWeek()"
+                        class="btn btn-sm"
+                        [ngClass]="{'active': isAllWeekDaysSelected()}">
+                      All
+                </button>
+              </div>
             </div>
 
             <div class="day-of-week">
@@ -47,12 +55,6 @@
                                             [editMode]="true"
                                             (select)="setDaysOfWeek($event)">
                 </days-of-week-multiselector>
-
-                <button (click)="toggleWeek()"
-                        class="btn btn-sm"
-                        [ngClass]="{'active': isAllWeekDaysSelected()}">
-                    All
-                </button>
             </div>
         </div>
 

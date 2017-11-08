@@ -1,5 +1,27 @@
 @import "../../../../styles/variables"
 
+$tablet-schedule-form-resolution: 530px
+
+.days-of-week-container
+  .title
+    display: flex
+    justify-content: space-between
+    -webkit-flex-direction: row /* Safari */
+    flex-direction: row
+    margin-bottom: 10px
+
+    .active
+      background-color: #337ecb
+      color: white
+
+  @media screen and (max-width: $iphone5-resolution)
+    .title
+      max-width: 100%
+
+  @media screen and (max-width: $tablet-resolution)
+    .title
+      width: 280px
+
 .day-of-week
   display: inline
 
@@ -37,7 +59,7 @@
     justify-content: center
     margin-bottom: 50px
 
-    @media screen and (max-width: $tablet-resolution)
+    @media screen and (max-width: $tablet-schedule-form-resolution)
       flex-direction: column
       padding-bottom: 15px
 
@@ -96,12 +118,12 @@
         padding-right: 10px
 
 .remove-schedule-container
-  @media screen and (min-width: $tablet-resolution)
+  @media screen and (min-width: $tablet-schedule-form-resolution + 1px)
     &.large-screen
       margin: auto 0 auto
 
 
-  @media screen and (max-width: $tablet-resolution)
+  @media screen and (max-width: $tablet-schedule-form-resolution)
     &.small-screen
       display: inline-block
 
@@ -122,12 +144,12 @@
     margin-bottom: -10px
 
 .small-screen
-  @media screen and (min-width: $tablet-resolution)
+  @media screen and (min-width: $tablet-schedule-form-resolution + 1px)
     display: none
 
 
 .large-screen
-  @media screen and (max-width: $tablet-resolution)
+  @media screen and (max-width: $tablet-schedule-form-resolution)
     display: none
 
 .control-buttons
