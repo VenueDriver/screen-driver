@@ -1,6 +1,6 @@
 service: screen-driver-api
 
-frameworkVersion: ">=1.20.1 <2.0.0"
+frameworkVersion: ">=1.24.1 <2.0.0"
 
 provider:
   name: aws
