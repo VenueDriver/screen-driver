@@ -17,16 +17,6 @@ export class SpinnerService {
         });
     }
 
-    isShown(spinnerName: string): boolean {
-        this.spinnerCache.forEach(spinner => {
-            if (spinner.name === spinnerName) {
-                return spinner.show;
-            }
-        });
-
-        return false;
-    }
-
     show(spinnerName: string): void {
         this.spinnerCache.forEach(spinner => {
             if (spinner.name === spinnerName) {

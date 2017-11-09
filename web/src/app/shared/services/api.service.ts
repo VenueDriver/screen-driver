@@ -31,12 +31,15 @@ export class ApiService {
         if (requestConfig.spinner) {
             let spinnerTitle = requestConfig.spinner.name;
 
-            let spinnerStatus = this.spinnerService.isShown(spinnerTitle);
-            if (spinnerStatus) {
-                this.spinnerService.hide(spinnerTitle)
-            } else {
-                this.spinnerService.show(spinnerTitle)
-            }
+            this.spinnerService.show(spinnerTitle)
+        }
+    }
+
+    private disableRequestConfigs(requestConfig: RequestConfig) {
+        if (requestConfig.spinner) {
+            let spinnerTitle = requestConfig.spinner.name;
+
+            this.spinnerService.hide(spinnerTitle)
         }
     }
 
@@ -49,7 +52,7 @@ export class ApiService {
         this.applyRequestConfigs(requestConfig);
 
         return this.http.put(`${environment.apiUrl}${path}`, JSON.stringify(body), { headers: this.setHeaders() })
-            .map(() => this.applyRequestConfigs(requestConfig))
+            .map(() => this.disableRequestConfigs(requestConfig))
             .catch(this.formatErrors);
     }
 
@@ -57,19 +60,19 @@ export class ApiService {
         this.applyRequestConfigs(requestConfig);
 
         return this.http.patch(`${environment.apiUrl}${path}`, JSON.stringify(body), { headers: this.setHeaders() })
-            .map(() => this.applyRequestConfigs(requestConfig))
+            .map(() => this.disableRequestConfigs(requestConfig))
             .catch(this.formatErrors);
     }
 
     post(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
         return this.http.post(`${environment.apiUrl}${path}`, JSON.stringify(body), { headers: this.setHeaders() })
-            .map(() => this.applyRequestConfigs(requestConfig))
+            .map(() => this.disableRequestConfigs(requestConfig))
             .catch(this.formatErrors);
     }
 
     delete(path, requestConfig: RequestConfig = {}): Observable<any> {
         return this.http.delete(`${environment.apiUrl}${path}`, { headers: this.setHeaders() })
-            .map(() => this.applyRequestConfigs(requestConfig))
+            .map(() => this.disableRequestConfigs(requestConfig))
             .catch(this.formatErrors);
     }
 }

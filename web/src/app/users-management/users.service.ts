@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import {ErrorMessageExtractor} from "../core/error-message-extractor";
 import {ApiService} from "../shared/services/api.service";
 import {RequestConfig} from "../shared/services/configs/request-config";
+import {SpinnerName} from "../shared/spinner/uniq-entity-spinner/spinner-name";
 
 const USERS_API = `/api/auth/users`;
 
@@ -66,7 +67,7 @@ export class UsersService {
 
     changeUserStatus(user: User): Observable<any> {
         let subject = new Subject<any>();
-        let requestSettings: RequestConfig = {spinner: {name: 'user-block-spinner'}};
+        let requestSettings: RequestConfig = {spinner: {name: SpinnerName.getName(user, "users")}};
 
         this.httpClient.patch(`${USERS_API}/${user.id}/enabled`, user, requestSettings)
             .subscribe(
