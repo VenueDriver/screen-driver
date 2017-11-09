@@ -5,6 +5,7 @@ import {Subscription} from "rxjs";
 import {AuthService} from "../../auth/auth.service";
 
 import * as _ from 'lodash';
+import {SpinnerService} from "../../shared/spinner/spinner.service";
 
 @Component({
     selector: 'users',
@@ -17,7 +18,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     users: User[] = [];
 
     constructor(private usersService: UsersService,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private spinnerService: SpinnerService) {
     }
 
     ngOnInit() {
@@ -45,8 +47,12 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     changeUserStatus(user: User) {
+        this.spinnerService.show('mySpinner');
         this.usersService.changeUserStatus(user)
-            .subscribe(response => user.enabled = !user.enabled);
+            .subscribe(response => {
+                user.enabled = !user.enabled;
+                this.spinnerService.hide('mySpinner');
+            })
     }
 
     getChangeUserStatusHint(user) {

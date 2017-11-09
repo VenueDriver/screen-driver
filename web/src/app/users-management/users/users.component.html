@@ -23,7 +23,9 @@
                  [ngClass]="{locked: !user.enabled, unlocked: user.enabled}"
                  (click)="changeUserStatus(user)"
                  [title]="getChangeUserStatusHint(user)">
+
             </div>
+            <span *ngIf="!isCurrentUser(user)"> <spinner name="mySpinner"></spinner></span>
         </th>
     </tr>
 </table>
