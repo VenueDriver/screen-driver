@@ -1,8 +1,19 @@
 authorizer:
   handler: src/auth/authorizer.handler
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+
+send_custom_message:
+  handler: src/auth/message_customizer.handler
 
 authenticate:
   handler: src/auth/authenticator.handler
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/sign_in
@@ -11,6 +22,11 @@ authenticate:
 
 sign_out:
   handler: src/auth/sign_out.handler
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/sign_out
@@ -19,6 +35,11 @@ sign_out:
 
 refresh_token:
   handler: src/auth_token/auth_token.refresh
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/token/refresh
@@ -27,6 +48,11 @@ refresh_token:
 
 create_user:
   handler: src/user/create.create
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/users
@@ -45,6 +71,11 @@ get_users_list:
 
 update_user:
   handler: src/user/update.update
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/users/{id}
@@ -54,6 +85,11 @@ update_user:
 
 update_user_status:
   handler: src/user/update_status.handler
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/users/{id}/enabled
@@ -63,6 +99,11 @@ update_user_status:
 
 edit_user_profile:
   handler: src/user/profile.edit
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/profile
@@ -72,6 +113,11 @@ edit_user_profile:
 
 change_password:
   handler: src/user/profile.changePassword
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/profile/change_password
@@ -81,6 +127,11 @@ change_password:
 
 reset_password:
   handler: src/profile/password.reset
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/profile/password/reset
@@ -89,6 +140,11 @@ reset_password:
 
 confirm_reset_password:
   handler: src/profile/password.confirmReset
+  envitonment:
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   events:
     - http:
         path: api/auth/profile/password/reset/confirm
