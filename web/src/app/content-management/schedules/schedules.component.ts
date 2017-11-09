@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {SchedulesService} from "./schedules.service";
-import {Schedule} from "./entities/schedule";
+import {Schedule} from "./models/schedule.model";
 import {SettingStateHolderService} from "../../core/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../../settings/entities/setting";
 

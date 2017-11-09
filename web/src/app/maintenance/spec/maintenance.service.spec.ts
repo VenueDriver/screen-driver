@@ -3,13 +3,13 @@
 
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
-import {async, inject, TestBed} from "@angular/core/testing";
+import {inject, TestBed} from "@angular/core/testing";
 import {
     BaseRequestOptions, ConnectionBackend, RequestOptions
 } from "@angular/http";
 import {MockBackend} from "@angular/http/testing";
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {HttpClient, HttpClientModule, HttpParams, HttpRequest} from "@angular/common/http";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {HttpClientModule} from "@angular/common/http";
 import {AutoupdateScheduleService} from "../autoupdate-schedule.service";
 import {AutoupdateScheduleServiceFixture} from "./fixtures/autoupdate-schedule-service.fixture";
 import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
@@ -23,11 +23,7 @@ import {AutoUpdateScheduleFixture} from "../entities/spec/auto-update-schedule.f
 import {KioskVersionServiceFixture} from "./fixtures/kiosk-version-service.fixture";
 import {VenueMaintenanceInfo} from "../entities/venue-maintenance-info";
 
-describe('Service: AutoupdateScheduleService', () => {
-    let maintenanceService: MaintenanceService;
-    let venuesService: VenuesService;
-    let autoupdateScheduleService: AutoupdateScheduleService;
-    let kioskVersionsService: AutoupdateScheduleService;
+describe('Service: MaintenanceService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({

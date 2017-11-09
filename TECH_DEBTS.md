@@ -15,6 +15,7 @@
 1. Refactor tests for `update_setting` function
 1. Refactor conflicts identifier class
 1. Add tests on setting and schedule type accordance
+1. Add check on weekdays coincidence between cron expressions in repeatable schedule
 1. Add check for invalid cron pair in schedule
 1. ~~Upgrade serverless framework version~~
 1. Export DDB request parameters builder functions for create and delete requests to db helper
