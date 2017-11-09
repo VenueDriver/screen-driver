@@ -11,15 +11,26 @@ CognitoUserPool:
         RequireUppercase: false
     AdminCreateUserConfig:
       AllowAdminCreateUserOnly: true
+      InviteMessageTemplate:
+        EmailSubject: "[ScreenDriver] Welcome to ScreenDriver"
+        EmailMessage: "Your ID is {username} and temporary password is {####}."
+    AliasAttributes:
+      - email
     AutoVerifiedAttributes:
       - email
     EmailVerificationSubject: "[ScreenDriver] Your password reset verification code"
     EmailVerificationMessage: "You recently requested for resetting the password. Use the following code to verify your identity: {####}"
-
+    LambdaConfig:
+      CustomMessage:
+        Fn::GetAtt:
+          - SendUnderscorecustomUnderscoremessageLambdaFunction
+          - Arn
     Schema:
-      - AttributeDataType: Boolean
+      - Name: admin
+        AttributeDataType: Boolean
         Mutable: true
-        Name: admin
+      - Name: email
+        Required: true
 
 CognitoAppClient:
   Type: AWS::Cognito::UserPoolClient
