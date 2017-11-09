@@ -25,7 +25,7 @@
                  [title]="getChangeUserStatusHint(user)">
 
             </div>
-            <span *ngIf="!isCurrentUser(user)"> <spinner name="user-block-spinner"></spinner></span>
+            <span *ngIf="!isCurrentUser(user)"> <uniq-entity-spinner [entity]="user" prefix="users"></uniq-entity-spinner> </span>
         </th>
     </tr>
 </table>
