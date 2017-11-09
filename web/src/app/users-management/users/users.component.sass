@@ -24,11 +24,17 @@
 .unlocked
   @extend .locked
 
+uniq-entity-spinner
+  position: absolute
+  margin-top: 7px !important
+
 .controls
   text-align: center
 
   div
-    display: inline-block
+    display: flex
+    height: 25px
+    justify-content: center
 
 @media screen and (max-width: $tablet-resolution)
   tr, th
