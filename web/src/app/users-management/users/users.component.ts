@@ -47,11 +47,9 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     changeUserStatus(user: User) {
-        this.spinnerService.show('mySpinner');
         this.usersService.changeUserStatus(user)
             .subscribe(response => {
                 user.enabled = !user.enabled;
-                this.spinnerService.hide('mySpinner');
             })
     }
 

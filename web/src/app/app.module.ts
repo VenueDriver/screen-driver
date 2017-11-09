@@ -23,6 +23,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ProfileManagementModule} from "./profile-management/profile-management.module";
 import {HeaderModule} from "./header/header.module";
 import {MaintenanceModule} from "./maintenance/maintenance.module";
+import {ApiService} from "./shared/services/api.service";
 
 @NgModule({
     declarations: [
@@ -49,6 +50,7 @@ import {MaintenanceModule} from "./maintenance/maintenance.module";
     ],
     providers: [
         NotificationService,
+        ApiService,
         HeaderService,
         {
             provide: HTTP_INTERCEPTORS,
