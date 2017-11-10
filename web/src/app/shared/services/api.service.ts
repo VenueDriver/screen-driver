@@ -90,7 +90,7 @@ export class ApiService {
         }
     }
 
-    private getRequestUrl(path:string) {
+    private getRequestUrl(path: string) {
         return `${environment.apiUrl}${path}`
     }
 }

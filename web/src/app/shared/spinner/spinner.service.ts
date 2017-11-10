@@ -17,7 +17,7 @@ export class SpinnerService {
     }
 
     isShown(spinnerName: string): boolean {
-        let spinner = Array.from(this.spinnerCache).filter((s: SpinnerComponent) => s.name == spinnerName)[0];
+        let spinner = _.find(Array.from(this.spinnerCache), (s: SpinnerComponent) => s.name == spinnerName);
 
         return spinner ? spinner.show : false;
     }
