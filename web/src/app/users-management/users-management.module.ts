@@ -7,6 +7,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {UsersService} from "./users.service";
 import {AutofocusModule} from "../shared/directives/autofocus/autofocus.module";
 import {ToggleButtonModule} from "../shared/toggle-button/toggle-button.module";
+import {SpinnerModule} from "../shared/spinner/spinner.module";
 
 @NgModule({
     imports: [
@@ -14,7 +15,8 @@ import {ToggleButtonModule} from "../shared/toggle-button/toggle-button.module";
         FormsModule,
         ReactiveFormsModule,
         ToggleButtonModule,
-        AutofocusModule
+        AutofocusModule,
+        SpinnerModule
     ],
     declarations: [
         UsersManagementComponent,
