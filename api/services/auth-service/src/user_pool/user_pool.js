@@ -123,11 +123,11 @@ module.exports.enableUser = (username) => {
     });
 };
 
-module.exports.resetPassword = (username) => {
+module.exports.resetPassword = (email) => {
     let cognito = new AWS.CognitoIdentityServiceProvider();
 
     return new Promise((resolve, reject) => {
-        cognito.forgotPassword(UserPoolHelper.buildResetPasswordParameters(username), (err, data) => {
+        cognito.forgotPassword(UserPoolHelper.buildResetPasswordParameters(email), (err, data) => {
             if (err) {
                 reject(err);
             }
