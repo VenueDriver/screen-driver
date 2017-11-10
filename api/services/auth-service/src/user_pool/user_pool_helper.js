@@ -59,6 +59,13 @@ module.exports.buildUserPoolAdminActionParams = (username) => {
     };
 };
 
+module.exports.buildSearchUserByEmailParams = (userEmail) => {
+    return {
+        UserPoolId: USER_POOL_DETAILS.UserPoolId,
+        Filter: `email = \"${userEmail}\"`
+    }
+};
+
 module.exports.buildRefreshTokenParameters = (refreshToken) => {
     return {
         AuthFlow: 'REFRESH_TOKEN_AUTH',
