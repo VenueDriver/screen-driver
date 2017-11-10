@@ -8,10 +8,13 @@ provider:
   environment:
     STAGE: ${opt:stage, 'dev'}
     REGION: ${opt:region, 'us-east-1'}
-    USERS_TABLE: ${self:service}-users-${opt:stage}
+    USERS_TABLE: ${self:service}-users-${opt:stage, 'dev'}
     USER_POOL: ScreenDriverUserPool-${opt:stage}
-    USER_POOL_CLIENT: ${self:service}-appclient-${opt:stage}
-
+    USER_POOL_CLIENT: ${self:service}-appclient-${opt:stage, 'dev'}
+    USER_POOL_ID:
+      Ref: CognitoUserPool
+    USER_POOL_CLIENT_ID:
+      Ref: CognitoAppClient
   iamRoleStatements: ${self:custom.roles}
 
 custom:

@@ -25,6 +25,8 @@ custom:
   authorizer: ${file(./serverless/authorizer.yml)}
   userPoolId:
     Fn::ImportValue: ScreenDriverUserPoolId-${opt:stage}
+  userPoolArn:
+    Fn::ImportValue: ScreenDriverUserPoolArn-${opt:stage}
 
   dynamodb:
     start:
@@ -53,6 +55,13 @@ resources:
         Ref: ApiGatewayResourceApi
       Export:
         Name: ScreenDriverRootApiResource-${opt:stage}
+    ScreenDriverCustomizeCognitoMessageFunction:
+      Value:
+        Fn::GetAtt:
+          - CustomizeUnderscorecognitoUnderscoremessageLambdaFunction
+          - Arn
+      Export:
+        Name: ScreenDriverCustomizeCognitoMessageFunction-${opt:stage}
 
 package:
   include:

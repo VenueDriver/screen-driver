@@ -2,17 +2,3 @@ CognitoUserPool: ${self:custom.cognitoResources.CognitoUserPool}
 CognitoAppClient: ${self:custom.cognitoResources.CognitoAppClient}
 
 UsersTable: ${self:custom.usersTableResource}
-
-SendCustomInvitationMessagePermission:
-  Type: AWS::Lambda::Permission
-  Properties:
-    Action: lambda:InvokeFunction
-    FunctionName:
-      Fn::GetAtt:
-        - SendUnderscorecustomUnderscoremessageLambdaFunction
-        - Arn
-    Principal: cognito-idp.amazonaws.com
-    SourceArn:
-      Fn::GetAtt:
-        - CognitoUserPool
-        - Arn

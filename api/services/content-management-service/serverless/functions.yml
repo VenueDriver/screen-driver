@@ -1,6 +1,9 @@
 authorizer:
   handler: src/auth/authorizer.handler
 
+customize_cognito_message:
+  handler: src/auth/message_customizer.handler
+
 get_venues_list:
   handler: src/venues/list.list
   events:

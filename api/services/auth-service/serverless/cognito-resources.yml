@@ -22,9 +22,7 @@ CognitoUserPool:
     EmailVerificationMessage: "You recently requested for resetting the password. Use the following code to verify your identity: {####}"
     LambdaConfig:
       CustomMessage:
-        Fn::GetAtt:
-          - SendUnderscorecustomUnderscoremessageLambdaFunction
-          - Arn
+        Fn::ImportValue: ScreenDriverCustomizeCognitoMessageFunction-${opt:stage, 'dev'}
     Schema:
       - Name: admin
         AttributeDataType: Boolean
