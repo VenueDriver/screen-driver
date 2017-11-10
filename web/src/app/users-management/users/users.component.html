@@ -19,15 +19,14 @@
         </th>
 
         <th class="controls">
-
-                <div *ngIf="!isCurrentUser(user)">
-                    <div *ngIf="!spinner.enabled"
-                         [ngClass]="{locked: !user.enabled, unlocked: user.enabled}"
-                         (click)="changeUserStatus(user)"
-                         [title]="getChangeUserStatusHint(user)">
-                    </div>
-                    <uniq-entity-spinner #spinner [entity]="user" prefix="users"></uniq-entity-spinner>
+            <div *ngIf="!isCurrentUser(user)">
+                <div *ngIf="!spinner.enabled"
+                     [ngClass]="{locked: !user.enabled, unlocked: user.enabled}"
+                     (click)="changeUserStatus(user)"
+                     [title]="getChangeUserStatusHint(user)">
                 </div>
+                <uniq-entity-spinner #spinner [entity]="user" prefix="users"></uniq-entity-spinner>
+            </div>
         </th>
     </tr>
 </table>
