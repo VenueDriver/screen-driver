@@ -12,6 +12,8 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from "@angula
 export class SpinnerComponent implements OnInit, OnDestroy {
     @Input() name: string;
 
+    isShowing = false;
+
     @Input()
     get show(): boolean {
         return this.isShowing;
@@ -19,12 +21,9 @@ export class SpinnerComponent implements OnInit, OnDestroy {
 
     set show(val: boolean) {
         this.isShowing = val;
-        this.showChange.emit(this.isShowing);
     }
 
     @Output() showChange = new EventEmitter();
-
-    private isShowing = false;
 
     constructor(private spinnerService: SpinnerService) { }
 

@@ -11,7 +11,7 @@ export class UniqEntitySpinnerComponent implements OnInit {
     @Input() prefix: string = '';
     @Input() entity: UniqEntity;
 
-    private uniqName: string = '';
+    uniqName: string = '';
 
     constructor(private spinnerService: SpinnerService) { }
 
