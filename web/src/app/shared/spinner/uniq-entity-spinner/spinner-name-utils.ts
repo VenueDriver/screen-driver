@@ -1,6 +1,6 @@
 const DEFAULT_NAME = 'spinner';
 
-export class SpinnerName {
+export class SpinnerNameUtils {
 
     static getName(entity: any = {}, spinnerPrefix: string = '') {
         if (!entity || !entity.id) return DEFAULT_NAME;

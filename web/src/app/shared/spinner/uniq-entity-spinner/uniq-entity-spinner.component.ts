@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {UniqEntity} from './uniq-entity.interface';
-import {SpinnerName} from './spinner-name';
+import {SpinnerNameUtils} from './spinner-name-utils';
 import {SpinnerService} from '../spinner.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class UniqEntitySpinnerComponent implements OnInit {
     constructor(private spinnerService: SpinnerService) { }
 
     ngOnInit(): void {
-        this.uniqName = SpinnerName.getName(this.entity, this.prefix)
+        this.uniqName = SpinnerNameUtils.getName(this.entity, this.prefix)
     }
 
     get enabled(): boolean {
