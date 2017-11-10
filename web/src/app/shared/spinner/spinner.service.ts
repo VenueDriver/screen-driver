@@ -1,5 +1,5 @@
-import {SpinnerComponent} from "./spinner.component";
-import {Injectable} from "@angular/core";
+import {SpinnerComponent} from './spinner.component';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class SpinnerService {
@@ -15,6 +15,12 @@ export class SpinnerService {
                 this.spinnerCache.delete(spinner);
             }
         });
+    }
+
+    isShown(spinnerName: string): boolean {
+        let spinner = Array.from(this.spinnerCache).filter((s: SpinnerComponent) => s.name == spinnerName)[0];
+
+        return spinner ? spinner.show : false;
     }
 
     show(spinnerName: string): void {

@@ -1,11 +1,10 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {UsersService} from "../users.service";
-import {User} from "../../core/entities/user";
-import {Subscription} from "rxjs";
-import {AuthService} from "../../auth/auth.service";
+import {UsersService} from '../users.service';
+import {User} from '../../core/entities/user';
+import {Subscription} from 'rxjs';
+import {AuthService} from '../../auth/auth.service';
 
 import * as _ from 'lodash';
-import {SpinnerService} from "../../shared/spinner/spinner.service";
 
 @Component({
     selector: 'users',
@@ -18,8 +17,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     users: User[] = [];
 
     constructor(private usersService: UsersService,
-                private authService: AuthService,
-                private spinnerService: SpinnerService) {
+                private authService: AuthService) {
     }
 
     ngOnInit() {
