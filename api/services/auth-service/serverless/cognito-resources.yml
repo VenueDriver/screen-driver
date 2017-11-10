@@ -6,9 +6,9 @@ CognitoUserPool:
       PasswordPolicy:
         MinimumLength: 8
         RequireLowercase: true
+        RequireUppercase: true
         RequireNumbers: true
         RequireSymbols: false
-        RequireUppercase: false
     AdminCreateUserConfig:
       AllowAdminCreateUserOnly: true
       InviteMessageTemplate:
