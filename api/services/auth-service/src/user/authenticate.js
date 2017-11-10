@@ -8,7 +8,6 @@ const UserSaver = require('../user/helpers/user_saver');
 module.exports.authenticate = (userDetails) => {
     return loadUser(userDetails)
         .then(userDetails => UserPool.authenticate(userDetails))
-        .catch(error => console.log(error))
 };
 
 function loadUser(userDetails) {
