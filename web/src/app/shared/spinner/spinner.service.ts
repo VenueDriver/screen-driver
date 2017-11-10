@@ -1,6 +1,8 @@
 import {SpinnerComponent} from './spinner.component';
 import {Injectable} from '@angular/core';
 
+import * as _ from "lodash";
+
 @Injectable()
 export class SpinnerService {
     private spinnerCache = new Set<SpinnerComponent>();
@@ -10,11 +12,8 @@ export class SpinnerService {
     }
 
     _unregister(spinnerToRemove: SpinnerComponent): void {
-        this.spinnerCache.forEach(spinner => {
-            if (spinner === spinnerToRemove) {
-                this.spinnerCache.delete(spinner);
-            }
-        });
+        let spinner = _.find(Array.from(this.spinnerCache), (s: SpinnerComponent) => s === spinnerToRemove);
+        if (spinner) this.spinnerCache.delete(spinner);
     }
 
     isShown(spinnerName: string): boolean {
@@ -24,18 +23,12 @@ export class SpinnerService {
     }
 
     show(spinnerName: string): void {
-        this.spinnerCache.forEach(spinner => {
-            if (spinner.name === spinnerName) {
-                spinner.show = true;
-            }
-        });
+        let spinner = _.find(Array.from(this.spinnerCache), (s: SpinnerComponent) => s.name == spinnerName);
+        if (spinner) spinner.show = true;
     }
 
     hide(spinnerName: string): void {
-        this.spinnerCache.forEach(spinner => {
-            if (spinner.name === spinnerName) {
-                spinner.show = false;
-            }
-        });
+        let spinner = _.find(Array.from(this.spinnerCache), (s: SpinnerComponent) => s.name == spinnerName);
+        if (spinner) spinner.show = false;
     }
 }

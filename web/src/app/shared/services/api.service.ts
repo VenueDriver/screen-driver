@@ -14,17 +14,64 @@ export class ApiService {
         private spinnerService: SpinnerService
     ) {}
 
-    private setHeaders(): HttpHeaders {
-      const headersConfig = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      };
+    get(path: string, params: HttpParams = new HttpParams(), requestConfig: RequestConfig = {}): Observable<any> {
+        this.applyRequestConfigs(requestConfig);
 
-      return new HttpHeaders(headersConfig);
+         let request = this.http.get(this.getRequestUrl(path), { headers: this.setHeaders(), params: params });
+
+         return this.handleRequest(request, requestConfig);
+    }
+
+    put(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
+        this.applyRequestConfigs(requestConfig);
+
+        let request = this.http.put(this.getRequestUrl(path), JSON.stringify(body), { headers: this.setHeaders() });
+
+        return this.handleRequest(request, requestConfig);
+    }
+
+    patch(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
+        this.applyRequestConfigs(requestConfig);
+
+        let request = this.http.patch(this.getRequestUrl(path), JSON.stringify(body), { headers: this.setHeaders() });
+
+        return this.handleRequest(request, requestConfig);
+    }
+
+    post(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
+        this.applyRequestConfigs(requestConfig);
+
+        let request = this.http.post(this.getRequestUrl(path), JSON.stringify(body), { headers: this.setHeaders() });
+
+        return this.handleRequest(request, requestConfig);
+    }
+
+    delete(path, requestConfig: RequestConfig = {}): Observable<any> {
+        this.applyRequestConfigs(requestConfig);
+
+        let request = this.http.delete(this.getRequestUrl(path), { headers: this.setHeaders() });
+
+        return this.handleRequest(request, requestConfig);            
+    }
+
+    private setHeaders(): HttpHeaders {
+        const headersConfig = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        };
+
+        return new HttpHeaders(headersConfig);
     }
 
     private formatErrors(error: any) {
         return Observable.throw(error);
+    }
+    
+    private handleRequest(req: Observable<any>, requestConfig: RequestConfig) {
+       return req.map(response => {
+           this.disableRequestConfigs(requestConfig);
+           return response
+       }).catch(this.formatErrors);
     }
 
     private applyRequestConfigs(requestConfig: RequestConfig) {
@@ -43,36 +90,7 @@ export class ApiService {
         }
     }
 
-    get(path: string, params: HttpParams = new HttpParams()): Observable<any> {
-        return this.http.get(`${environment.apiUrl}${path}`, { headers: this.setHeaders(), params: params })
-            .catch(this.formatErrors);
-    }
-
-    put(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
-        this.applyRequestConfigs(requestConfig);
-
-        return this.http.put(`${environment.apiUrl}${path}`, JSON.stringify(body), { headers: this.setHeaders() })
-            .map(() => this.disableRequestConfigs(requestConfig))
-            .catch(this.formatErrors);
-    }
-
-    patch(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
-        this.applyRequestConfigs(requestConfig);
-
-        return this.http.patch(`${environment.apiUrl}${path}`, JSON.stringify(body), { headers: this.setHeaders() })
-            .map(() => this.disableRequestConfigs(requestConfig))
-            .catch(this.formatErrors);
-    }
-
-    post(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
-        return this.http.post(`${environment.apiUrl}${path}`, JSON.stringify(body), { headers: this.setHeaders() })
-            .map(() => this.disableRequestConfigs(requestConfig))
-            .catch(this.formatErrors);
-    }
-
-    delete(path, requestConfig: RequestConfig = {}): Observable<any> {
-        return this.http.delete(`${environment.apiUrl}${path}`, { headers: this.setHeaders() })
-            .map(() => this.disableRequestConfigs(requestConfig))
-            .catch(this.formatErrors);
+    private getRequestUrl(path:string) {
+        return `${environment.apiUrl}${path}`
     }
 }
