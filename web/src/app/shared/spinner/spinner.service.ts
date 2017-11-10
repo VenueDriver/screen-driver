@@ -12,23 +12,29 @@ export class SpinnerService {
     }
 
     _unregister(spinnerToRemove: SpinnerComponent): void {
-        let spinner = _.find(Array.from(this.spinnerCache), (s: SpinnerComponent) => s === spinnerToRemove);
+        let spinnerName = spinnerToRemove.name;
+        let spinner = this.findSpinnerByName(spinnerName);
+
         if (spinner) this.spinnerCache.delete(spinner);
     }
 
     isShown(spinnerName: string): boolean {
-        let spinner = _.find(Array.from(this.spinnerCache), (s: SpinnerComponent) => s.name == spinnerName);
+        let spinner = this.findSpinnerByName(spinnerName);
 
         return spinner ? spinner.show : false;
     }
 
     show(spinnerName: string): void {
-        let spinner = _.find(Array.from(this.spinnerCache), (s: SpinnerComponent) => s.name == spinnerName);
+        let spinner = this.findSpinnerByName(spinnerName);
         if (spinner) spinner.show = true;
     }
 
     hide(spinnerName: string): void {
-        let spinner = _.find(Array.from(this.spinnerCache), (s: SpinnerComponent) => s.name == spinnerName);
+        let spinner = this.findSpinnerByName(spinnerName);
         if (spinner) spinner.show = false;
+    }
+
+    private findSpinnerByName(spinnerName: string): SpinnerComponent {
+        return _.find(Array.from(this.spinnerCache), (s: SpinnerComponent) => s.name == spinnerName);
     }
 }
