@@ -45,11 +45,20 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     changeUserStatus(user: User) {
-        this.usersService.changeUserStatus(user)
-            .subscribe(response => { user.enabled = !user.enabled })
+        let updatedUser = this.toggleUserEnableStatus(user);
+
+        this.usersService.changeUserStatus(updatedUser)
+            .subscribe(r => { user.enabled = !user.enabled });
     }
 
     getChangeUserStatusHint(user) {
         return `${user.enabled ? 'Lock' : 'Unlock'} user account`;
+    }
+
+    private toggleUserEnableStatus(user: User) {
+        let updatedUser = _.clone(user);
+        updatedUser.enabled = !updatedUser.enabled
+
+        return updatedUser;
     }
 }
