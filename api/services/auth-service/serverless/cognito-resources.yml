@@ -27,8 +27,6 @@ CognitoUserPool:
       - Name: admin
         AttributeDataType: Boolean
         Mutable: true
-      - Name: email
-        Required: true
 
 CognitoAppClient:
   Type: AWS::Cognito::UserPoolClient
