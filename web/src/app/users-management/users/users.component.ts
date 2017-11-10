@@ -46,9 +46,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     changeUserStatus(user: User) {
         this.usersService.changeUserStatus(user)
-            .subscribe(response => {
-                user.enabled = !user.enabled;
-            })
+            .subscribe(response => { user.enabled = !user.enabled })
     }
 
     getChangeUserStatusHint(user) {
