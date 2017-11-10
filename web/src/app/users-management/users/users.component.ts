@@ -1,8 +1,8 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {UsersService} from "../users.service";
-import {User} from "../../core/entities/user";
-import {Subscription} from "rxjs";
-import {AuthService} from "../../auth/auth.service";
+import {UsersService} from '../users.service';
+import {User} from '../../core/entities/user';
+import {Subscription} from 'rxjs';
+import {AuthService} from '../../auth/auth.service';
 
 import * as _ from 'lodash';
 
@@ -45,11 +45,20 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     changeUserStatus(user: User) {
-        this.usersService.changeUserStatus(user)
-            .subscribe(response => user.enabled = !user.enabled);
+        let updatedUser = this.toggleUserEnableStatus(user);
+
+        this.usersService.changeUserStatus(updatedUser)
+            .subscribe(r => { user.enabled = !user.enabled });
     }
 
     getChangeUserStatusHint(user) {
         return `${user.enabled ? 'Lock' : 'Unlock'} user account`;
+    }
+
+    private toggleUserEnableStatus(user: User) {
+        let updatedUser = _.clone(user);
+        updatedUser.enabled = !updatedUser.enabled
+
+        return updatedUser;
     }
 }

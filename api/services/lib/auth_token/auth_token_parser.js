@@ -11,7 +11,7 @@ module.exports.decodeToken = (token) => {
 };
 
 module.exports.getCurrentUserDetails = (request) => {
-    let authToken = request.headers['Authorization'];
+    let authToken = request.headers['Authorization'] || request.headers['authorization'];
     let token = authToken.replace('Bearer ', '');
     let decodedToken = this.decodeToken(token);
     return {

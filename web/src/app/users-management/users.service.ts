@@ -1,21 +1,22 @@
 import {Injectable} from '@angular/core';
 import {NotificationService} from "../shared/notifications/notification.service";
 import {User} from "../core/entities/user";
-import {environment} from "../../environments/environment";
 import {Subject, Observable, BehaviorSubject} from "rxjs";
-import {HttpClient} from "@angular/common/http";
 
 import * as _ from 'lodash';
 import {ErrorMessageExtractor} from "../core/error-message-extractor";
+import {ApiService} from "../shared/services/api.service";
+import {RequestConfig} from "../shared/services/configs/request-config";
+import {SpinnerNameUtils} from "../shared/spinner/uniq-entity-spinner/spinner-name-utils";
 
-const USERS_API = `${environment.apiUrl}/api/auth/users`;
+const USERS_API = `/api/auth/users`;
 
 @Injectable()
 export class UsersService {
     private users: BehaviorSubject<Array<User>> = new BehaviorSubject<Array<User>>([]);
     createUserEvent: Subject<User> = new Subject();
 
-    constructor(private httpClient: HttpClient,
+    constructor(private httpClient: ApiService,
                 private notificationService: NotificationService,) {
     }
 
@@ -66,7 +67,9 @@ export class UsersService {
 
     changeUserStatus(user: User): Observable<any> {
         let subject = new Subject<any>();
-        this.httpClient.patch(`${USERS_API}/${user.id}/enabled`, user)
+        let requestSettings: RequestConfig = {spinner: {name: SpinnerNameUtils.getName(user, "users")}};
+
+        this.httpClient.patch(`${USERS_API}/${user.id}/enabled`, user, requestSettings)
             .subscribe(
                 response => {
                     subject.next(response);
