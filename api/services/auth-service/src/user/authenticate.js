@@ -8,6 +8,7 @@ const UserSaver = require('../user/helpers/user_saver');
 module.exports.authenticate = (userDetails) => {
     return loadUser(userDetails)
         .then(userDetails => UserPool.authenticate(userDetails))
+        .catch(error => console.log(error))
 };
 
 function loadUser(userDetails) {
@@ -22,10 +23,9 @@ function loadUser(userDetails) {
 }
 
 function syncUserProfile(userDetails) {
-    userDetails.username = userDetails.email;
     return new Promise((resolve, reject) => {
-        UserDetailsLoader.loadUserByUsername(userDetails.username)
-            .then(cognitoUser => UserSaver.saveExistentCognitoUser(cognitoUser))
+        UserDetailsLoader.loadUserByEmail(userDetails.email)
+            .then(cognitoUsers => UserSaver.saveExistentCognitoUser(cognitoUsers.Users[0]))
             .then(result => resolve(userDetails))
             .catch(error => reject(error));
     });

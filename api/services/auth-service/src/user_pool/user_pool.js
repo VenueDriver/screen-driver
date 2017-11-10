@@ -97,7 +97,7 @@ module.exports.changePassword = (cognitoUser, userDetails) => {
 module.exports.getCognitoUser = (userDetails) => {
     let userPool = getUserPool();
     let userData = {
-        Username: userDetails.username,
+        Username: userDetails.email,
         Pool: userPool
     };
     return new AWSCognito.CognitoUser(userData);
@@ -160,7 +160,7 @@ function initUserSession(cognitoUser, rejectCallback) {
 
 function getAuthenticationDetails(userDetails) {
     let authenticationData = {
-        Username: userDetails.username,
+        Username: userDetails.email,
         Password: userDetails.password,
     };
     return new AWSCognito.AuthenticationDetails(authenticationData);
