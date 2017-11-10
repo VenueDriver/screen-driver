@@ -8,7 +8,7 @@ const USER_POOL_DETAILS = {
 module.exports.buildCreateUserParameters = (user) => {
     return {
         UserPoolId: USER_POOL_DETAILS.UserPoolId,
-        Username: user.email,
+        Username: user.username,
         DesiredDeliveryMediums: ['EMAIL'],
         UserAttributes: [
             {
