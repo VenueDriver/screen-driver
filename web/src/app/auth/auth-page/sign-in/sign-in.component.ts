@@ -65,7 +65,7 @@ export class SignInComponent implements OnInit {
         }
     }
 
-     getValidationMessage(model: NgModel) {
+    getValidationMessage(model: NgModel) {
         if (model.errors['required'])
             return 'This field is required';
     }
