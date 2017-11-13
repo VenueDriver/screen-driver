@@ -2,5 +2,5 @@
 
 module.exports.getBasePath = () => {
     let stage = process.env.STAGE;
-    return stage === 'dev' || stage === 'test' ? '../../../' : '../../';
+    return process.env.IS_OFFLINE || stage === 'test' ? '../../../' : '../../';
 };
