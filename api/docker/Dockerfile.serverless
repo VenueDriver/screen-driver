@@ -1,6 +1,6 @@
 FROM cdornbusch/docker-java-node:6.x
 
-RUN npm install -g serverless
+RUN npm install -g serverless@1.24.1
 
 WORKDIR ../../deps
 ADD services/content-management-service/serverless.yml .
