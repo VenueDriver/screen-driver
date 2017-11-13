@@ -24,6 +24,13 @@
   &.large-form-container
     height: 180px
 
+    @media screen and (max-width: $small-resolution)
+      height: 220px !important
+
+  &.edit-single-node
+    @media screen and (max-width: $small-resolution)
+      height: 130px
+
   &:hover .buttons-container .node-button
     display: inline-block
 
@@ -33,6 +40,12 @@
 
   .buttons-container
     margin-left: auto
+    display: flex
+
+    @media screen and (max-width: $small-resolution)
+      display: flex
+      -webkit-flex-direction: column /* Safari */
+      flex-direction: column
 
     .node-button
       display: none

@@ -35,6 +35,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
     originalNodeData: any;
     isFormValid = false;
     isCreateContentMode = false;
+    isEditContentMode = false;
 
     constructor(
         private venuesService: VenuesService,
@@ -139,6 +140,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
         this.isCreateContentMode = false;
+        this.isEditContentMode = false;
         this.removeEditableNode();
     }
 
@@ -177,6 +179,8 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
         if (this.currentSetting) {
             this.settingStateHolderService.enableCurrentSettingEditMode();
         }
+
+        this.isEditContentMode = true;
 
         this.stopClickPropagation(event);
         this.currentNodeData = node.data;
