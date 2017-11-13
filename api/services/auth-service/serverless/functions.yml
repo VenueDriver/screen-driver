@@ -1,8 +1,8 @@
 authorizer:
   handler: src/auth/authorizer.handler
 
-authenticate:
-  handler: src/auth/authenticator.handler
+sign_in:
+  handler: src/auth/sign_in.handler
   events:
     - http:
         path: api/auth/sign_in

@@ -23,8 +23,8 @@ function resetPassword(email) {
 
     return dbHelper.findByParams(params).then(users => {
         if (users.length === 0) throw new Error('User does not exist');
-        let username = users[0].username;
-        return UserPool.resetPassword(username);
+        let email = users[0].email;
+        return UserPool.resetPassword(email);
     })
 }
 
