@@ -19,42 +19,42 @@ const appRoutes: Routes = [
     {
         path: 'content',
         component: ContentManagementComponent,
-        data: {isSidebarDisplayed: true, title: 'Content | Screen-Driver'},
+        data: {isSidebarDisplayed: true, title: 'Content'},
         canActivate: [CanActivateUser]
     },
     {
         path: 'profile',
         component: ProfileManagementComponent,
-        data: {isSidebarDisplayed: false, title: 'Profile | Screen-Driver'},
+        data: {isSidebarDisplayed: false, title: 'Profile'},
         canActivate: [CanActivateUser]
     },
     {
         path: 'users',
         component: UsersManagementComponent,
-        data: {isSidebarDisplayed: false, title: 'Users | Screen-Driver'},
+        data: {isSidebarDisplayed: false, title: 'Users'},
         canActivate: [CanActivateAdmin]
     },
     {
         path: 'auth',
         component: AuthComponent,
-        data: {isSidebarDisplayed: false, title: 'Authentication | Screen-Driver'},
+        data: {isSidebarDisplayed: false, title: 'Authentication'},
         children: [
             {
                 path: '',
                 component: SignInComponent,
-                data: {title: 'Sign in | Screen-Driver'}
+                data: {title: 'Sign in'}
             },
             {
                 path: 'reset-password',
                 component: ResetPasswordComponent,
-                data: {title: 'Reset Password | Screen-Driver'}
+                data: {title: 'Reset Password'}
             }
         ]
     },
     {
         path: 'maintenance',
         component: MaintenanceComponent,
-        data: {isSidebarDisplayed: false, title: 'Maintenance | Screen-Driver'}
+        data: {isSidebarDisplayed: false, title: 'Maintenance'}
     },
 ];
 
