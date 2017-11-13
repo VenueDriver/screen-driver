@@ -24,6 +24,7 @@ import {ProfileManagementModule} from "./profile-management/profile-management.m
 import {HeaderModule} from "./header/header.module";
 import {MaintenanceModule} from "./maintenance/maintenance.module";
 import {ApiService} from "./shared/services/api.service";
+import {TitleService} from "./shared/services/title.service";
 
 @NgModule({
     declarations: [
@@ -56,7 +57,8 @@ import {ApiService} from "./shared/services/api.service";
             provide: HTTP_INTERCEPTORS,
             useClass: AuthHttpInterceptor,
             multi: true
-        }
+        },
+        TitleService
     ],
     bootstrap: [AppComponent]
 })
