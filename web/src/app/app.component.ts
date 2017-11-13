@@ -20,20 +20,24 @@ export class AppComponent {
                 private titleService: TitleService) { }
 
     ngOnInit() {
-        this.router.events
-            .filter((event) => event instanceof NavigationEnd)
-            .map(() => this.activatedRoute)
-            .map((route) => {
-                while (route.firstChild) route = route.firstChild;
-                return route;
-            })
-            .filter((route) => route.outlet === 'primary')
-            .mergeMap((route) => route.data)
-            .subscribe((event) => this.titleService.setTitle(this.document, event['title']));
+        this.setPageTitle();
     }
 
     isSidebarDisplayed(): boolean {
         return this.authService.isCurrentPath('/content');
     }
 
+    private setPageTitle() {
+        this.router.events
+            .filter((event) => event instanceof NavigationEnd)
+            .map(() => this.getChildRoute(this.activatedRoute))
+            .filter((route) => route.outlet === 'primary')
+            .mergeMap((route) => route.data)
+            .subscribe((event) => this.titleService.setTitle(this.document, event['title']));
+    }
+
+    private getChildRoute(route: ActivatedRoute) {
+        while (route.firstChild) route = route.firstChild;
+        return route;
+    }
 }
