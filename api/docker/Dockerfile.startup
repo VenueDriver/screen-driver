@@ -2,8 +2,7 @@ FROM screendriver_serverless AS deps
 
 ARG SERVICE
 
-ADD services/$SERVICE/package.json .
-ADD services/$SERVICE/package-lock.json .
+ADD services/$SERVICE/package*.json ./
 
 RUN npm install
 

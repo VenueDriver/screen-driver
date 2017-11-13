@@ -4,8 +4,7 @@ ARG SERVICE
 
 WORKDIR ../app-src
 RUN mkdir $SERVICE
-ADD services/$SERVICE/package.json /app-src/$SERVICE
-ADD services/$SERVICE/package-lock.json /app-src/$SERVICE
+ADD services/$SERVICE/package*.json /app-src/$SERVICE/
 
 WORKDIR $SERVICE
 
