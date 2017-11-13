@@ -20,6 +20,15 @@ services:
     volumes_from:
       - build_web
 
+  deploy_shared_resources:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.deploy
+      args:
+        SERVICE: shared-resources-service
+
   deploy_api:
     env_file:
       - development.env
