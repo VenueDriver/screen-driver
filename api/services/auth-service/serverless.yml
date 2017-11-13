@@ -9,16 +9,13 @@ provider:
     STAGE: ${opt:stage, 'dev'}
     REGION: ${opt:region, 'us-east-1'}
     USERS_TABLE: ${self:service}-users-${opt:stage, 'dev'}
-    USER_POOL: ScreenDriverUserPool-${opt:stage}
-    USER_POOL_CLIENT: ${self:service}-appclient-${opt:stage, 'dev'}
     USER_POOL_ID:
-      Ref: CognitoUserPool
+      Fn::ImportValue: ScreenDriverCognitoUserPoolId-${opt:stage, 'dev'}
     USER_POOL_CLIENT_ID:
-      Ref: CognitoAppClient
+      Fn::ImportValue: ScreenDriverCognitoAppClientId-${opt:stage, 'dev'}
   iamRoleStatements: ${self:custom.roles}
 
 custom:
-  cognitoResources: ${file(./serverless/cognito-resources.yml)}
   usersTableResource: ${file(./serverless/users-table-resource.yml)}
   functions: ${file(./serverless/functions.yml)}
   resources: ${file(./serverless/resources.yml)}

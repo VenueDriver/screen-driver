@@ -1,0 +1,11 @@
+ScreenDriverUserPoolId:
+  Value:
+    Ref: CognitoUserPool
+  Export:
+    Name: ScreenDriverCognitoUserPoolId-${opt:stage, 'dev'}
+
+ScreenDriverCognitoAppClient:
+  Value:
+    Ref: CognitoAppClient
+  Export:
+    Name: ScreenDriverCognitoAppClientId-${opt:stage, 'dev'}

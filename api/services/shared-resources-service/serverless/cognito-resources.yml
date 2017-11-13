@@ -1,7 +1,7 @@
 CognitoUserPool:
   Type: AWS::Cognito::UserPool
   Properties:
-    UserPoolName: ${self:provider.environment.USER_POOL}
+    UserPoolName: ScreenDriverUserPool-${opt:stage, 'dev'}
     Policies:
       PasswordPolicy:
         MinimumLength: 8
@@ -22,7 +22,9 @@ CognitoUserPool:
     EmailVerificationMessage: "You recently requested for resetting the password. Use the following code to verify your identity: {####}"
     LambdaConfig:
       CustomMessage:
-        Fn::ImportValue: ScreenDriverCustomizeCognitoMessageFunction-${opt:stage, 'dev'}
+        Fn::GetAtt:
+          - CustomizeCognitoMessageLambdaFunction
+          - Arn
     Schema:
       - Name: admin
         AttributeDataType: Boolean
@@ -31,7 +33,7 @@ CognitoUserPool:
 CognitoAppClient:
   Type: AWS::Cognito::UserPoolClient
   Properties:
-    ClientName: ${self:provider.environment.USER_POOL_CLIENT}
+    ClientName: ScreenDriverAppClient-${opt:stage, 'dev'}
     RefreshTokenValidity: 1
     UserPoolId:
       Ref: CognitoUserPool

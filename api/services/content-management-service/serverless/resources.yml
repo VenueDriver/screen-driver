@@ -66,17 +66,6 @@ SchedulesTable:
     StreamSpecification:
       StreamViewType: NEW_AND_OLD_IMAGES
 
-CustomizeCognitoMessagePermission:
-  Type: AWS::Lambda::Permission
-  Properties:
-    Action: lambda:InvokeFunction
-    FunctionName:
-      Fn::GetAtt:
-        - CustomizeUnderscorecognitoUnderscoremessageLambdaFunction
-        - Arn
-    Principal: cognito-idp.amazonaws.com
-    SourceArn: ${self:custom.userPoolArn}
-
 AuthResource:
   Type: AWS::ApiGateway::Resource
   Properties:
