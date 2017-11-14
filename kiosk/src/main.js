@@ -60,6 +60,9 @@ function ready() {
         settingsLoadJob = CronJobsManager.initSettingsLoadJob();
         ApplicationUpdater.syncAppVersionOnApi();
         new ApplicationUpdater().init();
+    }).catch(e => {
+        Logger.info(e);
+        openAdminPanel();
     });
 }
 
