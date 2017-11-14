@@ -1,0 +1,21 @@
+service: screen-driver-shared
+
+frameworkVersion: ">=1.24.1 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+
+custom:
+  cognitoResources: ${file(./serverless/cognito-resources.yml)}
+  customizeCognitoMessagePermission: ${file(./serverless/customize_cognito_message_permission.yml)}
+  resources: ${file(./serverless/resources.yml)}
+  outputs: ${file(./serverless/outputs.yml)}
+
+functions:
+  customizeCognitoMessage:
+    handler: src/message_customizer.handler
+
+resources:
+  Resources: ${self:custom.resources}
+  Outputs: ${self:custom.outputs}

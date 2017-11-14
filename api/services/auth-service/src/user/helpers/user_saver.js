@@ -19,7 +19,7 @@ module.exports.saveExistentCognitoUser = (cognitoUser) => {
 
 function convertCognitoUserToPlainUser(cognitoUser) {
     let userAttributes = {};
-    _.each(cognitoUser.UserAttributes, a => userAttributes[a.Name] = a.Value);
+    _.each(cognitoUser.Attributes, a => userAttributes[a.Name] = a.Value);
     return new User({
         id: userAttributes.sub,
         username: cognitoUser.Username,

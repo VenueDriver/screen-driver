@@ -1,30 +1,39 @@
 CognitoUserPool:
   Type: AWS::Cognito::UserPool
   Properties:
-    UserPoolName: ${self:provider.environment.USER_POOL}
+    UserPoolName: ScreenDriverUserPool-${opt:stage, 'dev'}
     Policies:
       PasswordPolicy:
         MinimumLength: 8
         RequireLowercase: true
+        RequireUppercase: true
         RequireNumbers: true
         RequireSymbols: false
-        RequireUppercase: false
     AdminCreateUserConfig:
       AllowAdminCreateUserOnly: true
+      InviteMessageTemplate:
+        EmailSubject: "[ScreenDriver] Welcome to ScreenDriver"
+        EmailMessage: "Your ID is {username} and temporary password is {####}."
+    AliasAttributes:
+      - email
     AutoVerifiedAttributes:
       - email
     EmailVerificationSubject: "[ScreenDriver] Your password reset verification code"
     EmailVerificationMessage: "You recently requested for resetting the password. Use the following code to verify your identity: {####}"
-
+    LambdaConfig:
+      CustomMessage:
+        Fn::GetAtt:
+          - CustomizeCognitoMessageLambdaFunction
+          - Arn
     Schema:
-      - AttributeDataType: Boolean
+      - Name: admin
+        AttributeDataType: Boolean
         Mutable: true
-        Name: admin
 
 CognitoAppClient:
   Type: AWS::Cognito::UserPoolClient
   Properties:
-    ClientName: ${self:provider.environment.USER_POOL_CLIENT}
+    ClientName: ScreenDriverAppClient-${opt:stage, 'dev'}
     RefreshTokenValidity: 1
     UserPoolId:
       Ref: CognitoUserPool

@@ -9,5 +9,8 @@ module.exports.handler = (event, context, callback) => {
 
     authenticate.authenticate(userDetails)
         .then(result => callback(null, ResponseHelper.createSuccessfulResponse(result)))
-        .catch(err => callback(null, ResponseHelper.createResponseWithError(401, err)));
+        .catch(err => {
+            console.error(err);
+            callback(null, ResponseHelper.createResponseWithError(401, err));
+        });
 };

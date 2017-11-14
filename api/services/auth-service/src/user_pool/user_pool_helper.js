@@ -8,7 +8,7 @@ const USER_POOL_DETAILS = {
 module.exports.buildCreateUserParameters = (user) => {
     return {
         UserPoolId: USER_POOL_DETAILS.UserPoolId,
-        Username: user.email,
+        Username: user.username,
         DesiredDeliveryMediums: ['EMAIL'],
         UserAttributes: [
             {
@@ -57,6 +57,13 @@ module.exports.buildUserPoolAdminActionParams = (username) => {
         UserPoolId: USER_POOL_DETAILS.UserPoolId,
         Username: username
     };
+};
+
+module.exports.buildSearchUserByEmailParams = (userEmail) => {
+    return {
+        UserPoolId: USER_POOL_DETAILS.UserPoolId,
+        Filter: `email = \"${userEmail}\"`
+    }
 };
 
 module.exports.buildRefreshTokenParameters = (refreshToken) => {

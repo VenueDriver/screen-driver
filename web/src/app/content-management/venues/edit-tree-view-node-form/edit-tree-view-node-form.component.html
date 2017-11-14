@@ -63,11 +63,6 @@
     </div>
 
     <div class="buttons-container">
-        <div *ngIf="!!nodeData.id && !removingMode"
-             class="remove-button"
-             (click)="enableRemovingMode($event)">
-        </div>
-
         <div class="remove-item-block"
              *ngIf="removingMode">
             <button type="button"
@@ -84,6 +79,11 @@
         </div>
 
         <div *ngIf="!removingMode">
+            <div *ngIf="!!nodeData.id"
+                 class="remove-button"
+                 (click)="enableRemovingMode($event)">
+            </div>
+
             <button type="button"
                     class="btn btn-success"
                     [disabled]="!isFormValid"

@@ -21,7 +21,7 @@ custom:
   roles: ${file(./serverless/roles.yml)}
   authorizer: ${file(./serverless/authorizer.yml)}
   userPoolId:
-    Fn::ImportValue: ScreenDriverUserPoolId-${opt:stage}
+    Fn::ImportValue: ScreenDriverCognitoUserPoolId-${opt:stage, 'dev'}
 
   dynamodb:
     start:

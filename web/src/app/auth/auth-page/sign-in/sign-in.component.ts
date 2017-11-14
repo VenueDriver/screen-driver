@@ -70,6 +70,10 @@ export class SignInComponent implements OnInit {
             return 'This field is required';
     }
 
+    hasError(model: NgModel): boolean {
+        return model.errors && model.touched;
+    }
+
     sendUnauthorizedUserEmail() {
         this.authService.unauthorizedUserEmail.next(this.user.email);
     }

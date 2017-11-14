@@ -1,0 +1,4 @@
+CustomizeCognitoMessagePermission: ${self:custom.customizeCognitoMessagePermission.CustomizeCognitoMessagePermission}
+
+CognitoUserPool: ${self:custom.cognitoResources.CognitoUserPool}
+CognitoAppClient: ${self:custom.cognitoResources.CognitoAppClient}

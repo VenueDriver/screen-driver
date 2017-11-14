@@ -1,0 +1,19 @@
+{
+  "name": "screendriver-shared-resources",
+  "version": "1.0.0",
+  "description": "Serverless service with shared resources",
+  "scripts": {
+    "start": "serverless offline start --host 0.0.0.0 --stage dev --dev",
+    "invoke": "sls invoke -f",
+    "deploy": "serverless deploy --stage staging",
+    "deploy-function": "serverless deploy --stage staging function --function"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+
+  },
+  "devDependencies": {
+
+  }
+}
