@@ -13,7 +13,7 @@ Stage should be specified in the `development.env` file (`AWS_STAGE` variable).
 
 ### Run project offline
 
-To run project just perform `docker-compose up`.
+To run project just perform `docker-compose up` from root folder of the project.
 
 All serverless services and the web app will be ran. Services will be ran with stage `dev`.
 
@@ -47,18 +47,19 @@ To run tests just perform `docker-compose -f docker-compose-test.yml up`.
 1. `npm install -g serverless` 
 1. Java Runtime Engine (JRE) version 6.x or newer should be installed 
 ([serverless-dynamodb-local](https://www.npmjs.com/package/serverless-dynamodb-local#this-plugin-requires) plugin requirement)
+1. Set up environment variables:
+    * `AWS_ACCESS_KEY_ID=any_key`
+    * `AWS_SECRET_ACCESS_KEY=any_secret_key`
+    * `PUSHER_APP_ID=<Pusher app ID>`
+    * `PUSHER_KEY=<Pusher key>`
+    * `PUSHER_SECRET=<Pusher secret>`
+    * `PUSHER_CLUSTER=<Pusher cluster>`
 1. Make next steps for each service in `services/` directory (excluding `lib/`):
     * `npm install`
     * Setup serverless-dynamodb-local plugin before start: `sls dynamodb install --stage dev`
-    * Set up environment variables:
-      * `AWS_ACCESS_KEY_ID=any_key`
-      * `AWS_SECRET_ACCESS_KEY=any_secret_key`
-      * `PUSHER_APP_ID=<Pusher app ID>`
-      * `PUSHER_KEY=<Pusher key>`
-      * `PUSHER_SECRET=<Pusher secret>`
-      * `PUSHER_CLUSTER=<Pusher cluster>`
     * Use `serverless export-env --stage <stage>` to export environment variables from AWS to `.env` file automatically 
     (need for offline work).
+1. Copy `node_modules` from `content-management-service` to the `services` folder (need for imports inside `lib` folder).    
 
 ### Run project offline
 
@@ -102,7 +103,7 @@ To run unit tests separately from lambda functions install mocha by `npm i -g mo
 ## Services info
 
 | Service name       | Local port | DynamoDB port |
-| -------------------|:----------:| -------------:|
+| -------------------|:----------:|:-------------:|
 | Content management | 3000       | 8000          |
 | Auth               | 3001       | 8001          |
 | Maintenance        | 3002       | 8002          |
