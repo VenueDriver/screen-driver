@@ -26,7 +26,7 @@ You can skip deployment of the web app if you going to deploy it by another way.
 
 **Note.** For the first time the order of the services deployment to the stage is important. 
 First of all the `shared resources` service should be deployed. The `content-management-service` should be deployed last. 
-Rest of the service can be deployed without an order.
+The rest of the services can be deployed without an order.
 
 After first deployment, all services could be deployed without an order.
 
