@@ -11,7 +11,7 @@
 Remove it after deploy a serverless part of the app 
 
 
-The following environment variables are setup for CI/CD:
+The following environment variables are set up for CI/CD in `deployment.env` file:
 #### AWS
 * AWS_REGION=
 * AWS_SECRET_ACCESS_KEY=
