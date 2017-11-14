@@ -22,7 +22,7 @@ All serverless services and the web app will be ran. Services will be ran with s
 To deploy the project just perform `docker-compose -f docker-compose-deployment.yml up`. 
 Do not forget to specify correct AWS and Pusher credentials as well as region and stage in the `development.env` file.
 
-You can skip deployment of the web app if you going to deploy it by another way.
+You can skip deployment of the web app if you are going to deploy it by another way.
 
 **Note.** For the first time the order of the services deployment to the stage is important. 
 First of all the `shared resources` service should be deployed. The `content-management-service` should be deployed last. 
