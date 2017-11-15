@@ -59,7 +59,7 @@
     </div>
 
     <div class="warning-message" *ngIf="removingMode">
-        Are you sure you want to remove <b>{{getNodeName()}}</b>?
+        Remove <b>{{getNodeName()}}</b>?
     </div>
 
     <div class="buttons-container">
@@ -78,24 +78,26 @@
             </button>
         </div>
 
-        <div *ngIf="!removingMode">
+        <div *ngIf="!removingMode" class="edit-form-buttons">
             <div *ngIf="!!nodeData.id"
                  class="remove-button"
                  (click)="enableRemovingMode($event)">
             </div>
 
-            <button type="button"
-                    class="btn btn-success"
-                    [disabled]="!isFormValid"
-                    (click)="performSubmit($event)">
-                Save
-            </button>
+            <div>
+                <button type="button"
+                        class="btn btn-success"
+                        [disabled]="!isFormValid"
+                        (click)="performSubmit($event)">
+                    Save
+                </button>
 
-            <button type="button"
-                    class="btn btn-link cancel-button"
-                    (click)="performCancel($event)">
-                Cancel
-            </button>
+                <button type="button"
+                        class="btn btn-link"
+                        (click)="performCancel($event)">
+                    Cancel
+                </button>
+            </div>
         </div>
     </div>
 </div>
