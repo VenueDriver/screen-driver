@@ -58,9 +58,11 @@ export class ContentAutocompleteComponent {
         this.selectedValue = content.short_name;
     }
 
-    emitAddNewEvent(event: any) {
+    emitAddNewEvent(event?: any) {
         this.add.emit({short_name: this.filter});
-        this.click.emit(event);
+        if (event) {
+            this.click.emit(event);
+        }
     }
 
     showDropdown() {
