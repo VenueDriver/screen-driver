@@ -20,3 +20,8 @@ $readonly-hover-color: #f5f5f5
 
 $transition-for-background: background-color ease-in-out .1s
 $inner-shadow-for-input: inset 0 1px 1px rgba(0, 0, 0, .075)
+
+@mixin responsive-font-size
+  font-size: $input-font-size
+  @media screen and (max-width: $tablet-resolution)
+    font-size: $input-small-font-size
