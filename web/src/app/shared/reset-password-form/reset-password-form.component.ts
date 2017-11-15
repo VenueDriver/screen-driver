@@ -13,7 +13,11 @@ import {ResetPassword} from "./reset-password";
 export class ResetPasswordFormComponent implements OnInit {
 
     @Input() identityVerificationFieldLabel: string;
-    @Output() passwordChange = new EventEmitter<ResetPassword>();
+    @Input() failMessage: string;
+    @Input() submitButton = 'Change';
+    @Input() allowCancel = true;
+
+    @Output() save = new EventEmitter<ResetPassword>();
     @Output() cancel = new EventEmitter();
 
     changePasswordForm: FormGroup;
@@ -28,7 +32,7 @@ export class ResetPasswordFormComponent implements OnInit {
     initFormGroup() {
         let newPasswordControl = this.createNewPasswordControl();
         this.changePasswordForm = new FormGroup({
-            'identityVerificationCode': new FormControl('', [Validators.required]),
+            'identityVerificationCode': new FormControl('', this.identityVerificationFieldLabel ? [Validators.required] : []),
             'newPassword': newPasswordControl,
             'confirmedPassword': new FormControl('', [
                 Validators.required,
@@ -82,7 +86,7 @@ export class ResetPasswordFormComponent implements OnInit {
 
     changePassword() {
         if (this.formInvalid()) return;
-        this.passwordChange.emit(this.extractDataFromForm());
+        this.save.emit(this.extractDataFromForm());
     }
 
     extractDataFromForm(): ResetPassword {
