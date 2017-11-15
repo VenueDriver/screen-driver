@@ -14,8 +14,6 @@ import * as _ from 'lodash';
 export class SignInComponent implements OnInit {
     user: User = new User();
     isRequestPerforming: boolean = false;
-    isFirstLoginMode: boolean = false;
-    firstLoginPasswords = {password: '', newPassword: ''};
     failMessage: string;
 
     constructor(private authService: AuthService) {
@@ -24,16 +22,8 @@ export class SignInComponent implements OnInit {
     ngOnInit() {
     }
 
-    changeFirstLoginMode() {
-        this.isFirstLoginMode = !this.isFirstLoginMode
-    }
-
     signIn() {
         let userDetails = {email: this.user.email, password: this.user.password};
-        if (this.isFirstLoginMode) {
-            userDetails['password'] = this.firstLoginPasswords.password;
-            userDetails['newPassword'] = this.firstLoginPasswords.newPassword;
-        }
         this.setRequestPerforming(true);
         this.authService.signIn(userDetails)
             .subscribe(
