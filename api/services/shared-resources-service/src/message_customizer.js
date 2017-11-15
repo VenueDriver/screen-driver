@@ -9,24 +9,28 @@ module.exports.handler = (event, context, callback) => {
 
 function customizeInvitationEmail(event) {
     let userDetails = event.request.userAttributes;
+    let clientAppUrl = getSignUpUrl();
     event.response.emailSubject = "[ScreenDriver] Welcome to ScreenDriver!";
-    event.response.emailMessage = getMessageTemplate(userDetails.email);
+    event.response.emailMessage = getMessageTemplate(userDetails.email, clientAppUrl);
 }
 
-function getMessageTemplate(userEmail) {
+function getSignUpUrl(userEmail) {
+    let clientAppUrl = process.env.STAGE === 'production' ? process.env.CLIENT_APP_URL : process.env.CLIENT_APP_STAGING_URL;
+    return `${clientAppUrl}/#/auth?email=${userEmail}&temporaryPassword=`
+}
+
+function getMessageTemplate(userEmail, clientAppUrl) {
     return `
         <div>
             Hello,
             <br><br>
             You've been invited to the ScreenDriver application.
             <br><br>
-            Your username is ${userEmail}. Your temporary password to the first login is:
+            Your username is ${userEmail}. To complete registration follow the link and enter your password:
             <br><br>
-            <b>{####}</b>
+            ${clientAppUrl}{####}
             <br><br>
-            This password is for one time usage. Please, set a new one while the first login.
-            <br><br>
-            Please contact your system administrator in case of any issues with login.
+            Please, contact your system administrator in case of any issues with login.
             <br><br>
             Thank you!
         </div>
