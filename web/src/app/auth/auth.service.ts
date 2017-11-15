@@ -174,7 +174,11 @@ export class AuthService {
 
     getCurrentUserLogin(): string {
         let user = this.currentUser.getValue();
-        return _.isEmpty(user) ? '' : user.email.substr(0, user.email.indexOf('@'));
+        return _.isEmpty(user) ? '' : this.getUsernameFromEmail(user.email);
+    }
+
+    getUsernameFromEmail(email: string) {
+        return email.substr(0, email.indexOf('@'));
     }
 
 }
