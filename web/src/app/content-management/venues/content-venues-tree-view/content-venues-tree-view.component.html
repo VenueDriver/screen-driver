@@ -1,7 +1,7 @@
 <div>
     <ng-template class="node-template" #template let-node="node" let-index="index">
         <div class="single-node"
-             [ngClass]="{'edit-single-node': isEditContentMode,
+             [ngClass]="{'edit-single-node': isTreeViewEditMode && isCurrentNode(node),
                          'node-without-children': !hasChildren(node),
                          'large-form-container': containsLargeForm(node)}">
             <div *ngIf="!isCurrentNode(node)" class="node-info">
