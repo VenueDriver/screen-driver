@@ -1,0 +1,13 @@
+<div class="sign-in-container">
+
+    <div class="auth-page-title">
+        Hello {{getUsername()}}, sign in to ScreenDriver
+    </div>
+
+    <reset-password-form [failMessage]="failMessage"
+                         [allowCancel]="false"
+                         [submitButton]="'Sign in'"
+                         (save)="performSubmit($event)">
+    </reset-password-form>
+
+</div>

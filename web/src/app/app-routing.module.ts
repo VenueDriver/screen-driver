@@ -9,6 +9,7 @@ import {ProfileManagementComponent} from "./profile-management/profile-managemen
 import {MaintenanceComponent} from "./maintenance/maintenance.component";
 import {SignInComponent} from "./auth/auth-page/sign-in/sign-in.component";
 import {ResetPasswordComponent} from "./auth/auth-page/reset-password/reset-password.component";
+import {FirstSignInComponent} from "./auth/auth-page/first-sign-in/first-sign-in.component";
 
 const appRoutes: Routes = [
     {
@@ -42,6 +43,11 @@ const appRoutes: Routes = [
             {
                 path: '',
                 component: SignInComponent,
+                data: {title: 'Sign in'}
+            },
+            {
+                path: 'first',
+                component: FirstSignInComponent,
                 data: {title: 'Sign in'}
             },
             {
