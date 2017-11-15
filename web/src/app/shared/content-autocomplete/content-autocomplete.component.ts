@@ -21,6 +21,7 @@ export class ContentAutocompleteComponent {
 
     @Output() select = new EventEmitter<Content>();
     @Output() add = new EventEmitter();
+    @Output() click = new EventEmitter<any>();
 
     content: Array<Content>;
     data: Array<Content>;
@@ -57,8 +58,9 @@ export class ContentAutocompleteComponent {
         this.selectedValue = content.short_name;
     }
 
-    emitAddNewEvent() {
+    emitAddNewEvent(event: any) {
         this.add.emit({short_name: this.filter});
+        this.click.emit(event);
     }
 
     showDropdown() {

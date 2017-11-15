@@ -11,6 +11,7 @@
                    [placeholder]="getNameInputPlaceholder()"
                    [(ngModel)]="nodeData.name"
                    (ngModelChange)="validateForm()"
+                   (click)="stopClickPropagation($event)"
                    class="form-control node-name"
                    input-autofocus>
         </div>
@@ -26,6 +27,7 @@
                        [placeholder]="'Content short name'"
                        [(ngModel)]="nodeData.content.short_name"
                        (ngModelChange)="validateForm()"
+                       (click)="stopClickPropagation($event)"
                        class="form-control node-name content-input"
                        input-autofocus>
             </div>
@@ -40,6 +42,7 @@
                        [placeholder]="'Content URL'"
                        [(ngModel)]="nodeData.content.url"
                        (ngModelChange)="validateForm()"
+                       (click)="stopClickPropagation($event)"
                        class="form-control node-name content-input">
             </div>
         </div>
@@ -49,6 +52,7 @@
                     [value]="getDropdownValue()"
                     [content]="content"
                     (select)="setNodeContent($event)"
+                    (click)="stopClickPropagation($event)"
                     (add)="enableCreateContentMode($event)">
             </content-autocomplete>
         </div>
