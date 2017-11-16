@@ -73,8 +73,8 @@ module.exports.refreshToken = (refreshToken) => {
             if (error) {
                 reject(error);
             } else {
-                let token = `Bearer ${data.AuthenticationResult.IdToken}`;
-                resolve({token: token});
+                let tokens = buildRefreshTokenResponse(data.AuthenticationResult);
+                resolve(tokens);
             }
         });
     });
@@ -174,8 +174,19 @@ function getUserPool() {
 function buildResponseWithTokens(tokenSet) {
     let token = `Bearer ${tokenSet.idToken.jwtToken}`;
     let refreshToken = tokenSet.refreshToken.token;
+    let accessToken = tokenSet.accessToken.jwtToken;
     return {
         token: token,
-        refreshToken: refreshToken
+        refreshToken: refreshToken,
+        accessToken: accessToken
+    };
+}
+
+function buildRefreshTokenResponse(authenticationResult) {
+    let token = `Bearer ${authenticationResult.IdToken}`;
+    let accessToken = authenticationResult.AccessToken;
+    return {
+        token: token,
+        accessToken: accessToken
     };
 }

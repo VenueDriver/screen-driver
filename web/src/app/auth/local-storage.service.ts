@@ -11,6 +11,7 @@ export class LocalStorageService {
     public static clear() {
         localStorage.removeItem(AuthConsts.ID_TOKEN_PARAM);
         localStorage.removeItem(AuthConsts.REFRESH_TOKEN_PARAM);
+        localStorage.removeItem(AuthConsts.ACCESS_TOKEN_PARAM);
         localStorage.removeItem(AuthConsts.USER_EMAIL);
         localStorage.removeItem(AuthConsts.USER_ID);
         localStorage.removeItem(AuthConsts.USER_IS_ADMIN);
@@ -19,6 +20,7 @@ export class LocalStorageService {
     public static saveAuthTokens(tokens: any) {
         LocalStorageService.setIdToken(tokens['token']);
         LocalStorageService.setRefreshToken(tokens['refreshToken']);
+        LocalStorageService.setAccessToken(tokens['accessToken']);
     }
 
     public static getUserDetails(): any {
@@ -43,6 +45,14 @@ export class LocalStorageService {
 
     public static setRefreshToken(refreshToken) {
         return LocalStorageService.setItem(AuthConsts.REFRESH_TOKEN_PARAM, refreshToken);
+    }
+
+    public static getAccessToken(): string {
+        return LocalStorageService.getItem(AuthConsts.ACCESS_TOKEN_PARAM);
+    }
+
+    public static setAccessToken(accessToken:string) {
+        LocalStorageService.setItem(AuthConsts.ACCESS_TOKEN_PARAM, accessToken);
     }
 
     public static setRollbackUrl(rollbackUrl) {
