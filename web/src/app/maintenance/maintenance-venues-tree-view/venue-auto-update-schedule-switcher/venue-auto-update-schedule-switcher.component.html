@@ -6,8 +6,24 @@
                    (timeChange)="onTimeChange($event)"
                    (timePeriodChange)="onTimePeriodChange($event)">
     </time-selector>
+
     <toggle-button
+            *ngIf="!_timeChanged"
             [checked]="isEnabled"
             (changed)="onEnabledChange($event)">
     </toggle-button>
+
+    <div *ngIf="_timeChanged" class="buttons-block">
+        <button type="button"
+                class="btn btn-success"
+                (click)="performSubmit($event)">
+            Save
+        </button>
+
+        <button type="button"
+                class="btn btn-link cancel-button"
+                (click)="performCancel($event)">
+            Cancel
+        </button>
+    </div>
 </div>
