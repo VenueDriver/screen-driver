@@ -1,10 +1,11 @@
 <div class="sign-in-container">
 
     <div class="auth-page-title">
-        Hello {{getUsername()}}, sign in to ScreenDriver
+        Please, sign in to ScreenDriver using your temporary password
     </div>
 
-    <reset-password-form [failMessage]="failMessage"
+    <reset-password-form [identityVerificationFieldLabel]="'Email'"
+                         [failMessage]="failMessage"
                          [allowCancel]="false"
                          [submitButton]="'Sign in'"
                          (save)="performSubmit($event)">

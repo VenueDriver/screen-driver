@@ -15,7 +15,6 @@ import {ResetPassword} from "../../../shared/reset-password-form/reset-password"
 })
 export class FirstSignInComponent implements OnInit {
 
-    userEmail: string;
     temporaryPassword: string;
     isRequestPerforming: boolean = false;
     failMessage: string;
@@ -27,9 +26,7 @@ export class FirstSignInComponent implements OnInit {
 
     ngOnInit() {
         this.activatedRoute.queryParams.subscribe(params => {
-            this.userEmail = params['email'];
-            this.temporaryPassword = params['temporaryPassword'];
-            console.log(params)
+            this.temporaryPassword = params['token'];
         });
     }
 
@@ -48,7 +45,7 @@ export class FirstSignInComponent implements OnInit {
 
     extractDataFromForm(formData: ResetPassword) {
         return {
-            email: this.userEmail,
+            email: formData.identityVerificationCode,
             password: this.temporaryPassword,
             newPassword: formData.password
         };
@@ -56,10 +53,6 @@ export class FirstSignInComponent implements OnInit {
 
     setRequestPerforming(flag: boolean) {
         this.isRequestPerforming = flag;
-    }
-
-    getUsername() {
-        return this.authService.getUsernameFromEmail(this.userEmail);
     }
 
 }
