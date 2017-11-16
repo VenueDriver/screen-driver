@@ -73,24 +73,21 @@ module.exports.refreshToken = (refreshToken) => {
             if (error) {
                 reject(error);
             } else {
-                let token = `Bearer ${data.AuthenticationResult.IdToken}`;
-                resolve({token: token});
+                let tokens = buildRefreshTokenResponse(data.AuthenticationResult);
+                resolve(tokens);
             }
         });
     });
 };
 
-module.exports.changePassword = (cognitoUser, userDetails) => {
+module.exports.changePassword = (changePasswordDetails) => {
     return new Promise((resolve, reject) => {
-        initUserSession(cognitoUser, reject);
+        let cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+        let params = buildChangePasswordRequestParams(changePasswordDetails);
+        cognitoIdentityServiceProvider.changePassword(params, (err, data) => {
+            err ? reject(err) : resolve(data);
+        })
 
-        cognitoUser.changePassword(userDetails.password, userDetails.newPassword, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result);
-            }
-        });
     });
 };
 
@@ -150,14 +147,6 @@ module.exports.confirmResetPassword = (username, verificationCode, password) => 
     });
 };
 
-function initUserSession(cognitoUser, rejectCallback) {
-    cognitoUser.getSession((err, session) => {
-        if (err) {
-            rejectCallback(err);
-        }
-    });
-}
-
 function getAuthenticationDetails(userDetails) {
     let authenticationData = {
         Username: userDetails.email,
@@ -174,8 +163,27 @@ function getUserPool() {
 function buildResponseWithTokens(tokenSet) {
     let token = `Bearer ${tokenSet.idToken.jwtToken}`;
     let refreshToken = tokenSet.refreshToken.token;
+    let accessToken = tokenSet.accessToken.jwtToken;
     return {
         token: token,
-        refreshToken: refreshToken
+        refreshToken: refreshToken,
+        accessToken: accessToken
     };
+}
+
+function buildRefreshTokenResponse(authenticationResult) {
+    let token = `Bearer ${authenticationResult.IdToken}`;
+    let accessToken = authenticationResult.AccessToken;
+    return {
+        token: token,
+        accessToken: accessToken
+    };
+}
+
+function buildChangePasswordRequestParams(changePasswordDetails) {
+    return {
+        AccessToken: changePasswordDetails.accessToken,
+        PreviousPassword: changePasswordDetails.password,
+        ProposedPassword: changePasswordDetails.newPassword
+    }
 }

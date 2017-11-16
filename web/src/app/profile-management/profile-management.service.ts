@@ -2,10 +2,11 @@ import {Injectable} from '@angular/core';
 import {User} from "../core/entities/user";
 import {ErrorMessageExtractor} from "../core/error-message-extractor";
 import {environment} from "../../environments/environment";
-import {Subject, Observable, BehaviorSubject} from "rxjs";
+import {Subject, Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {NotificationService} from "../shared/notifications/notification.service";
 import {PasswordSet} from "./model/password.model";
+import {LocalStorageService} from "../auth/local-storage.service";
 
 const EDIT_PROFILE_API = `${environment.apiUrl}/api/auth/profile`;
 const CHANGE_PASSWORD_API = `${environment.apiUrl}/api/auth/profile/change_password`;
@@ -33,6 +34,7 @@ export class ProfileManagementService {
 
     changePassword(passwords: any): Observable<any> {
         let passwordSet: PasswordSet = {password: passwords.currentPassword, newPassword: passwords.newPassword};
+        passwordSet.accessToken = LocalStorageService.getAccessToken();
         let subject = new Subject<any>();
         this.httpClient.post(CHANGE_PASSWORD_API, passwordSet)
             .subscribe(

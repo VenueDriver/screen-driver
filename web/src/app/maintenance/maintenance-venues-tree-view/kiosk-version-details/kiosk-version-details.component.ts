@@ -1,6 +1,5 @@
 import {Component, Input} from "@angular/core";
 import {KioskVersionDetails} from "../../entities/kiosk-version-details";
-import {format} from 'date-fns'
 
 @Component({
     selector: 'kiosk-version-details',

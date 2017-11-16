@@ -18,18 +18,12 @@ module.exports.edit = (event, context, callback) => {
 };
 
 module.exports.changePassword = (event, context, callback) => {
-    const userDetails = JSON.parse(event.body);
-    let currentUser = extractCurrentUserFromEvent(event);
-    userDetails.username = currentUser.username;
-    userDetails.isAdmin = currentUser.isAdmin;
-    userDetails.email = currentUser.email;
-
-    changePassword(userDetails, callback);
+    const changePasswordDetails = JSON.parse(event.body);
+    changePassword(changePasswordDetails, callback);
 };
 
-function changePassword(userDetails, callback) {
-    let cognitoUser = UserPool.getCognitoUser(userDetails);
-    UserPool.changePassword(cognitoUser, userDetails)
+function changePassword(changePasswordDetails, callback) {
+    UserPool.changePassword(changePasswordDetails)
         .then(() => callback(null, responseHelper.createSuccessfulResponse()))
         .catch(errorMessage => {
             console.error(errorMessage);
