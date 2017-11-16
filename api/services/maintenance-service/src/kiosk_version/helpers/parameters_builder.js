@@ -6,7 +6,8 @@ module.exports.buildPutRequestParameters = (versionDetails) => {
         Item: {
             screenId: versionDetails.screenId,
             version: versionDetails.version,
-            updatedAt: versionDetails.updatedAt
+            updatedAt: versionDetails.updatedAt,
+            timezone: versionDetails.timezone
         }
     };
 };

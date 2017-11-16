@@ -37,6 +37,9 @@
 1. ~~An error appears in the console if try to switch to the 'schedules' tab while tree view node is in edit mode~~ 
 1. Refactor tabbed switcher. Title of a tab should be received from inner tab component instead of setting it in app component
 1. Rework `reset-password-form` as it used not only for password resetting
+1. Use variables instead of media query screen
+1. Create directive for stopping propagation by clicking on element
+
 
 ##### Kiosk
 1. ~~Create in memory local storage~~
