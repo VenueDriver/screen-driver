@@ -18,7 +18,7 @@ describe('DateFormatterPipe', () => {
                 });
             });
 
-            describe('when original time in GMT +1', () => {
+            describe('when original time in UTC +1', () => {
                 let formattedDate = new DateFormatterPipe().transform(defaultUtcDate, 1);
 
                 it('Should add 1 hour', () => {
@@ -26,11 +26,19 @@ describe('DateFormatterPipe', () => {
                 });
             });
 
-            describe('when original time in GMT +2', () => {
+            describe('when original time in UTC +2', () => {
                 let formattedDate = new DateFormatterPipe().transform(defaultUtcDate, 2);
 
                 it('Should add 2 hours', () => {
                     expect(formattedDate).toBe('Nov 15, 2017 at 07:00 PM')
+                });
+            });
+
+            describe('when original time in UTC -2', () => {
+                let formattedDate = new DateFormatterPipe().transform(defaultUtcDate, -2);
+
+                it('Should add 2 hours', () => {
+                    expect(formattedDate).toBe('Nov 15, 2017 at 03:00 PM')
                 });
             });
 
@@ -62,7 +70,7 @@ describe('DateFormatterPipe', () => {
                 });
             });
 
-            describe('when original time in GMT +1', () => {
+            describe('when original time in UTC +1', () => {
                 let formattedDate = new DateFormatterPipe().transform(defaultIsoDate, 1);
 
                 it('Should add 1 hour', () => {
@@ -70,11 +78,19 @@ describe('DateFormatterPipe', () => {
                 });
             });
 
-            describe('when original time in GMT +2', () => {
+            describe('when original time in UTC +2', () => {
                 let formattedDate = new DateFormatterPipe().transform(defaultIsoDate, 2);
 
                 it('Should add 2 hours', () => {
                     expect(formattedDate).toBe('Nov 15, 2017 at 07:00 PM')
+                });
+            });
+
+            describe('when original time in UTC -2', () => {
+                let formattedDate = new DateFormatterPipe().transform(defaultIsoDate, -2);
+
+                it('Should add 2 hours', () => {
+                    expect(formattedDate).toBe('Nov 15, 2017 at 03:00 PM')
                 });
             });
 
