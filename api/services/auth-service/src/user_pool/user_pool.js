@@ -80,17 +80,14 @@ module.exports.refreshToken = (refreshToken) => {
     });
 };
 
-module.exports.changePassword = (cognitoUser, userDetails) => {
+module.exports.changePassword = (changePasswordDetails) => {
     return new Promise((resolve, reject) => {
-        initUserSession(cognitoUser, reject);
+        let cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+        let params = buildChangePasswordRequestParams(changePasswordDetails);
+        cognitoIdentityServiceProvider.changePassword(params, (err, data) => {
+            err ? reject(err) : resolve(data);
+        })
 
-        cognitoUser.changePassword(userDetails.password, userDetails.newPassword, (err, result) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result);
-            }
-        });
     });
 };
 
@@ -150,14 +147,6 @@ module.exports.confirmResetPassword = (username, verificationCode, password) => 
     });
 };
 
-function initUserSession(cognitoUser, rejectCallback) {
-    cognitoUser.getSession((err, session) => {
-        if (err) {
-            rejectCallback(err);
-        }
-    });
-}
-
 function getAuthenticationDetails(userDetails) {
     let authenticationData = {
         Username: userDetails.email,
@@ -189,4 +178,12 @@ function buildRefreshTokenResponse(authenticationResult) {
         token: token,
         accessToken: accessToken
     };
+}
+
+function buildChangePasswordRequestParams(changePasswordDetails) {
+    return {
+        AccessToken: changePasswordDetails.accessToken,
+        PreviousPassword: changePasswordDetails.password,
+        ProposedPassword: changePasswordDetails.newPassword
+    }
 }
