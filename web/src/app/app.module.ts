@@ -11,7 +11,7 @@ import {NotificationService} from "./shared/notifications/notification.service";
 import {SettingsModule} from "./settings/settings.module";
 import {HeaderService} from "./header/header.service";
 import {TabbedSwitcherModule} from "./shared/tabbed-switcher/tabbed-switcher.module";
-import {ScreensMessagingModule} from "./messaging/screens-messaging.module";
+import {ScreensMessagingModule} from "./shared/services/messaging/screens-messaging.module";
 import {SchedulesModule} from "./content-management/schedules/schedules.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { ContentManagementComponent } from './content-management/content-management.component';
