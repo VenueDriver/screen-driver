@@ -6,4 +6,5 @@ CMD aws configure set region $AWS_REGION && \
     aws cognito-idp admin-create-user \
         --user-pool-id $USER_POOL_ID \
         --username $(uuidgen) \
+        --temporary-password $(date +%s%N | md5sum | cut -d " " -f1)
         --user-attributes Name=email,Value=$FIRST_USER_EMAIL Name=custom:admin,Value=true Name=email_verified,Value=true
