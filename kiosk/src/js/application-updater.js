@@ -52,8 +52,9 @@ class ApplicationUpdater {
             let screenId = getCurrentScreenId();
             if (_.isEmpty(screenId)) throw new Error('Couldn\'t send Kiosk version. Reason: missed screen id');
             let version = newVersion || '0.0.0';
-            let updatedAt = new Date().toString();
-            DataSender.sendApplicationVersion({screenId, version, updatedAt});
+            let updatedAt = new Date().toUTCString();
+            let timezone = new Date().getTimezoneOffset() / 60 * -1;
+            DataSender.sendApplicationVersion({screenId, version, updatedAt, timezone});
         };
 
         LocalStorageManager.getFromStorage(appVersionStorageName, (error, version) => {
