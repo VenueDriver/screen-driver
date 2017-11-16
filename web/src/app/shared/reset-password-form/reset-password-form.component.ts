@@ -13,6 +13,7 @@ import {ResetPassword} from "./reset-password";
 export class ResetPasswordFormComponent implements OnInit {
 
     @Input() identityVerificationFieldLabel: string;
+    @Input() requireEmail = false;
     @Input() failMessage: string;
     @Input() submitButton = 'Change';
     @Input() allowCancel = true;
@@ -32,7 +33,7 @@ export class ResetPasswordFormComponent implements OnInit {
     initFormGroup() {
         let newPasswordControl = this.createNewPasswordControl();
         this.changePasswordForm = new FormGroup({
-            'identityVerificationCode': new FormControl('', this.identityVerificationFieldLabel ? [Validators.required] : []),
+            'identityVerificationCode': new FormControl('', [Validators.required]),
             'newPassword': newPasswordControl,
             'confirmedPassword': new FormControl('', [
                 Validators.required,
