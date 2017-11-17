@@ -25,7 +25,7 @@ export class AppComponent {
     ngOnInit() {
         this.setPageTitle();
         this.dataLoadingMonitorService.requestsPerformingStateObservable.subscribe(isRequestPerforming => {
-            if (!isRequestPerforming) this.isSpinnerShown = false;
+            this.isSpinnerShown = isRequestPerforming;
         })
     }
 
