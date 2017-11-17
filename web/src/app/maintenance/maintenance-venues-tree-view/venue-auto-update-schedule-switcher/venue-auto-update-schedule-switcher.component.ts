@@ -16,7 +16,7 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     public autoUpdateTimeSchedule: VenueScheduleTimeSelectorParams;
     private _originalAutoUpdateSchedule: VenueScheduleTimeSelectorParams;
     private _autoUpdateSchedule: AutoupdateSchedule;
-    private _scheduleChanged = false;
+    public _scheduleChanged = false;
 
     @Input('autoUpdateSchedule')
     set autoUpdateSchedule(value: AutoupdateSchedule) {
