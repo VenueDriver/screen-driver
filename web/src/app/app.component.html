@@ -3,10 +3,11 @@
 <notification></notification>
 <settings *ngIf="isSidebarDisplayed()"></settings>
 
-<div class="app-container" waitForLoading>
 <spinner [name]="'app'"
          [show]="isSpinnerShown">
 </spinner>
+
+<div class="app-container" waitForLoading>
     <router-outlet></router-outlet>
 
 </div>
