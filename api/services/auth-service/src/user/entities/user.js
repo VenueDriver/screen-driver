@@ -10,6 +10,7 @@ const Q = require('q');
 let db;
 
 const UserPool = require('../../user_pool/user_pool');
+const UserDetailsLoader = require('../../user_pool/user_details_loader');
 
 //General Email Regex (RFC 5322 Official Standard)
 const emailValidationRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
@@ -104,8 +105,18 @@ class User {
             return deferred.promise;
         }
 
-        UserPool.updateUser(this)
-            .then(data => dbHelper.updateItem(params, deferred));
+        UserDetailsLoader.loadUserByEmail(this.email)
+            .then((response) => {
+                if (response.Users.length !== 0) {
+                    throw new Error('This email already taken by someone else');
+                }
+
+                return UserPool.updateUser(this);
+            })
+            .then(data => dbHelper.updateItem(params, deferred))
+            .catch(error => {
+                deferred.reject(error.message);
+            });
 
         return deferred.promise;
     }
