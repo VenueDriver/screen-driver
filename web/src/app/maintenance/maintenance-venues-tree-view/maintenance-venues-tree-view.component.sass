@@ -30,6 +30,10 @@
   .buttons-container
     margin-left: auto
 
+    &.hidden-block
+      @media screen and (max-width: $small-resolution)
+        display: none
+
     .node-button
       display: none
       width: 25px
