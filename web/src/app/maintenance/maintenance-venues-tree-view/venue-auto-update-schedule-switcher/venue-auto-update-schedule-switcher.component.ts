@@ -13,15 +13,15 @@ import * as _ from 'lodash';
 })
 export class VenueAutoUpdateScheduleSwitcherComponent {
 
-    public autoUpdateTime: VenueScheduleTimeSelectorParams;
-    private _originalAutoUpdateTime: VenueScheduleTimeSelectorParams;
+    public autoUpdateTimeSchedule: VenueScheduleTimeSelectorParams;
+    private _originalAutoUpdateSchedule: VenueScheduleTimeSelectorParams;
     private _autoUpdateSchedule: AutoupdateSchedule;
-    private _timeChanged = false;
+    private _scheduleChanged = false;
 
     @Input('autoUpdateSchedule')
     set autoUpdateSchedule(value: AutoupdateSchedule) {
         this._autoUpdateSchedule = value;
-        this.setUpAutoUpdateTime();
+        this.setUpAutoUpdateTimeSchedule();
     }
 
     get autoUpdateSchedule(): AutoupdateSchedule {
@@ -35,38 +35,42 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     scheduleUpdate: EventEmitter<AutoupdateSchedule> = new EventEmitter<AutoupdateSchedule>();
 
     constructor(private service: VenueAutoUpdateScheduleSwitcherService) {
-        this.autoUpdateTime = this.service.getDefaultAutoUpdateTime();
+        this.autoUpdateTimeSchedule = this.service.getDefaultAutoUpdateTime();
     }
 
-    setUpAutoUpdateTime(): void {
+    setUpAutoUpdateTimeSchedule(): void {
         const cron = this._autoUpdateSchedule.eventTime;
-        this.autoUpdateTime = this.service.getTimeFromCron(cron);
-        this._originalAutoUpdateTime = _.cloneDeep(this.autoUpdateTime);
+        this.autoUpdateTimeSchedule = this.service.getTimeFromCron(cron);
+        this.saveCopyOfAutoUpdateSchedule();
     }
 
     onTimePeriodChange(period: string): void {
-        this.autoUpdateTime.period = period;
-        this.isCopyEqualToSource();
-        this.scheduleChange.emit(this._timeChanged);
+        this.autoUpdateTimeSchedule.period = period;
+        this.compareAutoUpdateTimeWithSource();
+        this.notifyScheduleConfigChanged();
     }
 
     onTimeChange(time: string): void {
-        this.autoUpdateTime.time = time;
-        this.isCopyEqualToSource();
-        this.scheduleChange.emit(this._timeChanged);
+        this.autoUpdateTimeSchedule.time = time;
+        this.compareAutoUpdateTimeWithSource();
+        this.notifyScheduleConfigChanged();
     }
 
     onEnabledChange(isEnabled): void {
         this._autoUpdateSchedule.isEnabled = isEnabled;
-        this.notifyAutoUpdateConfigChanged();
+        this.notifyScheduleConfigUpdated();
     }
 
-    notifyAutoUpdateConfigChanged(): void {
+    notifyScheduleConfigUpdated(): void {
         this.scheduleUpdate.next(this.configToUpdate());
     }
 
+    notifyScheduleConfigChanged(): void {
+        this.scheduleChange.next(this._scheduleChanged);
+    }
+
     configToUpdate(): AutoupdateSchedule {
-        return this.service.getUpdatedConfig(this._autoUpdateSchedule, this.autoUpdateTime, this.isEnabled);
+        return this.service.getUpdatedConfig(this._autoUpdateSchedule, this.autoUpdateTimeSchedule, this.isEnabled);
     }
 
     get isEnabled(): boolean {
@@ -77,22 +81,30 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
         return !this.isEnabled;
     }
 
-    performSubmit() {
+    performSubmit(event: any) {
         event.stopPropagation();
-        this._timeChanged = false;
-        this.notifyAutoUpdateConfigChanged();
-        this.scheduleChange.emit(false);
+        this.notifyScheduleConfigUpdated();
+        this._scheduleChanged = false;
+        this.notifyScheduleConfigChanged();
     }
 
     performCancel(event: any) {
         event.stopPropagation();
-        this.autoUpdateTime = _.cloneDeep(this._originalAutoUpdateTime);
-        this._timeChanged = false;
-        this.scheduleChange.emit(false);
+        this.discardChanges();
+        this._scheduleChanged = false;
+        this.notifyScheduleConfigChanged();
     }
 
-    isCopyEqualToSource() {
-        this._timeChanged = !_.isEqual(this.autoUpdateTime, this._originalAutoUpdateTime);
+    compareAutoUpdateTimeWithSource() {
+        this._scheduleChanged = !_.isEqual(this.autoUpdateTimeSchedule, this._originalAutoUpdateSchedule);
+    }
+
+    saveCopyOfAutoUpdateSchedule() {
+        this._originalAutoUpdateSchedule = _.cloneDeep(this.autoUpdateTimeSchedule);
+    }
+
+    discardChanges() {
+        this.autoUpdateTimeSchedule = _.cloneDeep(this._originalAutoUpdateSchedule);
     }
 
 }
