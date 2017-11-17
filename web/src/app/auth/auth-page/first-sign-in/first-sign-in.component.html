@@ -1,0 +1,14 @@
+<div class="sign-in-container">
+
+    <div class="auth-page-title">
+        Please, sign in to ScreenDriver using your temporary password
+    </div>
+
+    <reset-password-form [identityVerificationFieldLabel]="'Email'"
+                         [failMessage]="failMessage"
+                         [allowCancel]="false"
+                         [submitButton]="'Sign in'"
+                         (save)="performSubmit($event)">
+    </reset-password-form>
+
+</div>

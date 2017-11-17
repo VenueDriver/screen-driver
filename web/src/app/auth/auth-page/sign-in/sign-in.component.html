@@ -29,7 +29,7 @@
                 </span>
             </div>
 
-            <div [class.has-error]="hasError(password)" *ngIf="!isFirstLoginMode">
+            <div [class.has-error]="hasError(password)">
                 <label class="control-label" for="password">Password</label>
                 <input [(ngModel)]="user.password"
                        id="password"
@@ -45,41 +45,7 @@
                 </span>
             </div>
 
-            <div *ngIf="isFirstLoginMode">
-                <div [class.has-error]="hasError(temporaryPassword)">
-                    <label class="control-label" for="temporary-password">Temporary password</label>
-                    <input class="control-label" [(ngModel)]="firstLoginPasswords.password"
-                           id="temporary-password"
-                           name="temporary-password"
-                           class="form-control"
-                           type="password"
-                           placeholder="Password"
-                           #temporaryPassword="ngModel"
-                           required>
-                    <span *ngIf="temporaryPassword.invalid && (temporaryPassword.dirty || temporaryPassword.touched)"
-                          class="password help-block">
-                        {{getValidationMessage(temporaryPassword)}}
-                    </span>
-                </div>
-                <div [class.has-error]="hasError(newPassword)">
-                    <label class="control-label" for="new-password">New password</label>
-                    <input [(ngModel)]="firstLoginPasswords.newPassword"
-                           id="new-password"
-                           name="new-password"
-                           class="form-control"
-                           type="password"
-                           placeholder="Password"
-                           #newPassword="ngModel"
-                           required>
-                    <span *ngIf="newPassword.invalid && (newPassword.dirty || newPassword.touched)"
-                          class="password help-block">
-                        {{getValidationMessage(newPassword)}}
-                    </span>
-                </div>
-            </div>
-
-            <a *ngIf="!isFirstLoginMode"
-                    type="button"
+            <a type="button"
                     class="btn btn-link forgot-password-button"
                     (click)="sendUnauthorizedUserEmail()"
                     routerLink="/auth/reset-password">
@@ -96,12 +62,5 @@
             Sign in
         </button>
 
-        <div class="option-button-container">
-            <button type="button"
-                    class="btn btn-link"
-                    (click)="changeFirstLoginMode()">
-                {{isFirstLoginMode ? 'Cancel' : 'First login?'}}
-            </button>
-        </div>
     </form>
 </div>

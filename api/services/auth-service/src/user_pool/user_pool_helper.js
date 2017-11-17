@@ -10,6 +10,7 @@ module.exports.buildCreateUserParameters = (user) => {
         UserPoolId: USER_POOL_DETAILS.UserPoolId,
         Username: user.username,
         DesiredDeliveryMediums: ['EMAIL'],
+        TemporaryPassword: user.password,
         UserAttributes: [
             {
                 Name: 'email',

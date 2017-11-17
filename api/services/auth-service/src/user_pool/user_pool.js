@@ -3,22 +3,22 @@
 const AWS = require('aws-sdk');
 AWS.config.update({region: process.env.REGION});
 
+const PasswordGenerator = require('../helpers/password_generator');
 const AWSCognito = require('amazon-cognito-identity-js');
-
 const UserPoolHelper = require('./user_pool_helper');
 
 module.exports.createUser = (userData) => {
     let cognito = new AWS.CognitoIdentityServiceProvider();
 
-    let userPoolParams = UserPoolHelper.buildCreateUserParameters(userData);
     return new Promise((resolve, reject) => {
-        cognito.adminCreateUser(userPoolParams, (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(data.User);
-            }
-        });
+        PasswordGenerator.generate()
+            .then(password => {
+                userData.password = password;
+                let userPoolParams = UserPoolHelper.buildCreateUserParameters(userData);
+                cognito.adminCreateUser(userPoolParams, (err, data) => {
+                    err ? reject(err) : resolve(data.User);
+                });
+            }).catch(error => reject(error));
     });
 };
 
