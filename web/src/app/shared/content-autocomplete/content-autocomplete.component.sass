@@ -7,7 +7,7 @@ $dropdown-width: inherit
 
   input
     width: $dropdown-width
-    font-size: $input-font-size
+    @include responsive-font-size
 
   .dropdown-menu
     width: $dropdown-width
@@ -15,7 +15,7 @@ $dropdown-width: inherit
     overflow-y: auto
 
     @media screen and (max-width: $tablet-resolution)
-      width: auto
+      width: 100%
 
     &.shown
       display: block
@@ -26,7 +26,7 @@ $dropdown-width: inherit
         padding: 5px 12px
         min-height: 40px
         line-height: 30px
-        font-size: $input-font-size
+        @include responsive-font-size
         overflow: hidden
 
         .item-desc
@@ -45,6 +45,7 @@ $dropdown-width: inherit
       border-radius: 0
       background-color: #f9f9f9
       width: 100%
+      @include responsive-font-size
 
       &:hover
         background-color: #ededed
@@ -53,7 +54,7 @@ $dropdown-width: inherit
     cursor: default
 
     .nodata-warning
-      font-size: $input-font-size
+      @include responsive-font-size
       height: 50px
       padding-top: 11px
       text-align: center
