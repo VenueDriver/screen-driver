@@ -29,7 +29,10 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     }
 
     @Output()
-    autoUpdateChange: EventEmitter<AutoupdateSchedule> = new EventEmitter<AutoupdateSchedule>();
+    scheduleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+    @Output()
+    scheduleUpdate: EventEmitter<AutoupdateSchedule> = new EventEmitter<AutoupdateSchedule>();
 
     constructor(private service: VenueAutoUpdateScheduleSwitcherService) {
         this.autoUpdateTime = this.service.getDefaultAutoUpdateTime();
@@ -44,11 +47,13 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     onTimePeriodChange(period: string): void {
         this.autoUpdateTime.period = period;
         this.isCopyEqualToSource();
+        this.scheduleChange.emit(this._timeChanged);
     }
 
     onTimeChange(time: string): void {
         this.autoUpdateTime.time = time;
         this.isCopyEqualToSource();
+        this.scheduleChange.emit(this._timeChanged);
     }
 
     onEnabledChange(isEnabled): void {
@@ -57,7 +62,7 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
     }
 
     notifyAutoUpdateConfigChanged(): void {
-        this.autoUpdateChange.next(this.configToUpdate());
+        this.scheduleUpdate.next(this.configToUpdate());
     }
 
     configToUpdate(): AutoupdateSchedule {
@@ -76,12 +81,14 @@ export class VenueAutoUpdateScheduleSwitcherComponent {
         event.stopPropagation();
         this._timeChanged = false;
         this.notifyAutoUpdateConfigChanged();
+        this.scheduleChange.emit(false);
     }
 
     performCancel(event: any) {
         event.stopPropagation();
         this.autoUpdateTime = _.cloneDeep(this._originalAutoUpdateTime);
         this._timeChanged = false;
+        this.scheduleChange.emit(false);
     }
 
     isCopyEqualToSource() {
