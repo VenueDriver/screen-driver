@@ -4,7 +4,7 @@ service="${1}"
 
 cd services/${service}
 
-npm run db &> /dev/null &
+serverless dynamodb start --stage test &> /dev/null &
 
 sleep 5
-sls invoke test --stage test
+serverless invoke test --stage test
