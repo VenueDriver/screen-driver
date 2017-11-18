@@ -10,10 +10,9 @@ RUN cp -r dynamodb/node_modules app-src/services/content-management-service/ && 
 WORKDIR /app-src
 
 RUN cd services/content-management-service && npm install
-RUN cp -r services/lib services/content-management-service/node_modules/lib
-
 RUN cd services/auth-service && npm install
-RUN cp -r services/lib services/auth-service/node_modules/lib
-
 RUN cd services/maintenance-service && npm install
-RUN cp -r services/lib services/maintenance-service/node_modules/lib
+
+RUN cp -r services/lib services/content-management-service/node_modules/lib && \
+    cp -r services/lib services/auth-service/node_modules/lib && \
+    cp -r services/lib services/maintenance-service/node_modules/lib
