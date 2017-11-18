@@ -13,8 +13,8 @@ ARG SERVICE
 
 WORKDIR ../app-src
 RUN mkdir $SERVICE
-COPY --from=deps deps/node_modules $SERVICE/node_modules
-COPY --from=deps deps/node_modules node_modules
+COPY --from=deps dynamodb/node_modules $SERVICE/node_modules
+COPY --from=deps dynamodb/node_modules node_modules
 
 WORKDIR $SERVICE
 
