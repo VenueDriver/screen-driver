@@ -2,6 +2,7 @@
   "name": "dynamodb",
   "description": "dynamodb local instance",
   "license": "MIT",
+  "repository": {},
   "devDependencies": {
     "serverless-dynamodb-local": "0.2.24"
   }
