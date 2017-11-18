@@ -157,7 +157,6 @@ function getAuthenticationDetails(userDetails) {
 
 function getUserPool() {
     let poolData = UserPoolHelper.buildUserPoolData();
-    console.log('user pool data', poolData)
     return new AWSCognito.CognitoUserPool(poolData);
 }
 
