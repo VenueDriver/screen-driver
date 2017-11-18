@@ -1,10 +1,9 @@
 'use strict';
 
-const ModulePathManager = require('../module_path_manager');
 const KioskVersionRegister = require('./helpers/kiosk_version_register');
 const KioskVersionLoader = require('./helpers/kiosk_version_loader');
 
-const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
+const responseHelper = require('lib/helpers/http_response_helper');
 
 module.exports.register = (event, context, callback) => {
     const versionDetails = JSON.parse(event.body);

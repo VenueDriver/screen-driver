@@ -12,8 +12,7 @@ FROM screendriver_serverless
 ARG SERVICE
 
 WORKDIR ../app-src
-RUN mkdir $SERVICE
-COPY --from=deps dynamodb/node_modules $SERVICE/node_modules
+
 COPY --from=deps dynamodb/node_modules node_modules
 
 WORKDIR $SERVICE
@@ -21,5 +20,7 @@ WORKDIR $SERVICE
 ADD services/$SERVICE /app-src/$SERVICE
 ADD services/lib /app-src/lib
 ADD scripts/run_tests.sh /app-src/$SERVICE
+
+RUN ln -s ../lib ../node_modules/lib
 
 CMD sh run_tests.sh
