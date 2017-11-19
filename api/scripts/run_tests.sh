@@ -8,7 +8,7 @@ fi
 
 npm run db &
 
-sleep 5
+sleep 3
 output="$(serverless invoke test --stage test --color=always)"
 echo "${output}"
 
@@ -18,7 +18,7 @@ passing=$?
 echo "${output}" | grep 'failing'
 failing=$?
 
-if [ $passing -eq 0 ] && [ $failing -ne 0 ]; then
+if [ ${passing} -eq 0 ] && [ ${failing} -ne 0 ]; then
     exit 0
 else
     exit 1
