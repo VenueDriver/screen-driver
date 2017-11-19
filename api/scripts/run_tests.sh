@@ -2,7 +2,9 @@
 
 service_name="${1}"
 
-cd services/${service_name}
+if [ -d "services/${service_name}" ]; then
+  cd services/${service_name}
+fi
 
 npm run db &
 
