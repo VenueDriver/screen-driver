@@ -25,7 +25,7 @@ export class AppComponent {
     ngOnInit() {
         this.setPageTitle();
         this.dataLoadingMonitorService.requestsPerformingStateObservable.subscribe(isRequestPerforming => {
-            /* This asyncronius code prevents from ExpressionChangedAfterItHasBeenCheckedError
+            /* This asynchronous code prevents from ExpressionChangedAfterItHasBeenCheckedError
              * The problem is in Angular and it should be fixed soon
              * https://github.com/angular/angular/pull/18352 */
             setTimeout(() => this.isRequestsPerforming = isRequestPerforming)
