@@ -6,7 +6,7 @@ const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/ht
 const UserPool = require('../user_pool/user_pool');
 const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/auth_token_parser');
 
-let User = require('./entities/user');
+let User = require('../user/entities/user');
 
 module.exports.edit = (event, context, callback) => {
     const userDetails = JSON.parse(event.body);
