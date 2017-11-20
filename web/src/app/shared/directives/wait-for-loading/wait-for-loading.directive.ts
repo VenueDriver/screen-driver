@@ -1,4 +1,4 @@
-import {Directive, HostBinding, Input, OnInit} from '@angular/core';
+import {Directive, HostBinding, OnInit} from '@angular/core';
 import {DomSanitizer} from "@angular/platform-browser";
 import {DataLoadingMonitorService} from "../../services/data-loading-monitor/data-loading-monitor.service";
 
@@ -13,13 +13,17 @@ export class WaitForLoadingDirective implements OnInit {
 
     ngOnInit() {
         this.dataLoadingMonitorService.requestsPerformingStateObservable
-            .subscribe(isRequestPerforming => {
+            .subscribe((isRequestPerforming: boolean) => {
                 let blur = this.sanitizer.bypassSecurityTrustStyle("blur(1px)");
                 this.safeBlur = isRequestPerforming ? blur : 'none';
+                this.pointerEvents = isRequestPerforming ? 'none' : 'inherit';
             })
     }
 
     @HostBinding('style.filter')
     safeBlur;
+
+    @HostBinding('style.pointer-events')
+    pointerEvents;
 
 }
