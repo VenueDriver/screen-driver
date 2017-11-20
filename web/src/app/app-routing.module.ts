@@ -60,7 +60,8 @@ const appRoutes: Routes = [
     {
         path: 'maintenance',
         component: MaintenanceComponent,
-        data: {isSidebarDisplayed: false, title: 'Maintenance'}
+        data: {isSidebarDisplayed: false, title: 'Maintenance'},
+        canActivate: [CanActivateUser]
     },
 ];
 
