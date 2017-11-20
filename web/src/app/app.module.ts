@@ -27,7 +27,7 @@ import {ApiService} from "./shared/services/api.service";
 import {TitleService} from "./shared/services/title.service";
 import {WaitForLoadingModule} from "./shared/directives/wait-for-loading/wait-for-loading.module";
 import {DataLoadingMonitorService} from "./shared/services/data-loading-monitor/data-loading-monitor.service";
-import {SpinnerModule} from "./shared/spinner/spinner.module";
+import {FullSizeSpinnerModule} from "./shared/full-size-spinner/full-size-spinner.module";
 
 @NgModule({
     declarations: [
@@ -52,7 +52,7 @@ import {SpinnerModule} from "./shared/spinner/spinner.module";
         HeaderModule,
         MaintenanceModule,
         WaitForLoadingModule,
-        SpinnerModule
+        FullSizeSpinnerModule,
     ],
     providers: [
         NotificationService,

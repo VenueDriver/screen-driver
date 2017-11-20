@@ -13,7 +13,7 @@ import {DataLoadingMonitorService} from "./shared/services/data-loading-monitor/
 export class AppComponent {
 
     title = 'app';
-    isSpinnerShown: boolean = true;
+    isRequestsPerforming: boolean = true;
 
     constructor(private router: Router,
                 private activatedRoute: ActivatedRoute,
@@ -25,7 +25,10 @@ export class AppComponent {
     ngOnInit() {
         this.setPageTitle();
         this.dataLoadingMonitorService.requestsPerformingStateObservable.subscribe(isRequestPerforming => {
-            this.isSpinnerShown = isRequestPerforming;
+            /* This asyncronius code prevents from ExpressionChangedAfterItHasBeenCheckedError
+             * The problem is in Angular and it should be fixed soon
+             * https://github.com/angular/angular/pull/18352 */
+            setTimeout(() => this.isRequestsPerforming = isRequestPerforming)
         })
     }
 

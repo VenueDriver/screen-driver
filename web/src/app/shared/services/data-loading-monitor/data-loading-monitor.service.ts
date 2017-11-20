@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
-import {Subject} from "rxjs/Subject";
 
 import * as _ from 'lodash';
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class DataLoadingMonitorService {
     private requests = [];
-    private requestsPerforming = new Subject<boolean>();
+    private requestsPerforming = new BehaviorSubject<boolean>(null);
     public requestsPerformingStateObservable: Observable<boolean> = this.requestsPerforming.asObservable();
 
     constructor() {
