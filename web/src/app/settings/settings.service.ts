@@ -6,7 +6,7 @@ import {NotificationService} from "../shared/notifications/notification.service"
 import {HttpResponse} from "@angular/common/http";
 import {ApiService} from "../shared/services/api.service";
 
-const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;
+const SETTINGS_API_URL = '/api/settings';
 
 @Injectable()
 export class SettingsService {
