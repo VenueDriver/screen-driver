@@ -9,7 +9,7 @@ import {ApiService} from "../shared/services/api.service";
 @Injectable()
 export class ContentService {
 
-    readonly contentApiPath = `${environment.apiUrl}/api/content`;
+    readonly contentApiPath = '/api/content';
 
     private contentUpdate: Subject<any> = new BehaviorSubject({});
 

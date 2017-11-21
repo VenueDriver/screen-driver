@@ -11,7 +11,7 @@ import {ApiService} from "../../shared/services/api.service";
 
 @Injectable()
 export class VenuesService {
-    readonly venuesApiPath = `${environment.apiUrl}/api/venues`;
+    readonly venuesApiPath = '/api/venues';
 
     private venueUpdate: Subject<any> = new BehaviorSubject({});
 
