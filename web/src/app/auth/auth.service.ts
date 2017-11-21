@@ -10,6 +10,9 @@ import {User} from "../core/entities/user";
 import {AuthTokenService} from "./auth-token.service";
 import {ErrorMessageExtractor} from "../core/error-message-extractor";
 import {LocalStorageService} from "./local-storage.service";
+import {RequestConfig} from "../shared/services/configs/request-config";
+import {SpinnerNameUtils} from "../shared/spinner/uniq-entity-spinner/spinner-name-utils";
+import {ApiService} from "../shared/services/api.service";
 
 @Injectable()
 export class AuthService {
@@ -18,7 +21,7 @@ export class AuthService {
     currentUser: BehaviorSubject<User> = new BehaviorSubject(null);
     unauthorizedUserEmail: Subject<string> = new BehaviorSubject(null);
 
-    constructor(private httpClient: HttpClient,
+    constructor(private httpClient: ApiService,
                 private router: Router,
                 private tokenService: AuthTokenService) {
 
@@ -42,7 +45,9 @@ export class AuthService {
 
     signIn(userDetails) {
         let subject = new Subject();
-        this.httpClient.post(AuthConsts.SIGN_IN_API, userDetails)
+        let requestSettings: RequestConfig = {spinner: {name: 'sign_in'}};
+
+        this.httpClient.post(AuthConsts.SIGN_IN_API, userDetails, requestSettings)
             .subscribe(
                 response => {
                     this.saveAuthTokens(response);
