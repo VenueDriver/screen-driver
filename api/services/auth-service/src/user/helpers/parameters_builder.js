@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports.buildUpdateRequestParameters = (user) => {
-    let params = {
+    return {
         TableName: process.env.USERS_TABLE,
         Key: {
             id: user.id,
@@ -10,32 +10,17 @@ module.exports.buildUpdateRequestParameters = (user) => {
             '#rev': '_rev',
         },
         ExpressionAttributeValues: {
-            ':email': user.email,
-            ':password': user.password,
             ':isAdmin': user.isAdmin,
             ':rev': user._rev,
             ':new_rev': increaseRevision(user),
         },
         UpdateExpression: `SET 
-                ${_getPasswordUpdateExpression()} 
                 isAdmin = :isAdmin, 
-                email = :email, 
                 #rev = :new_rev
             `,
         ConditionExpression: "#rev = :rev",
         ReturnValues: 'ALL_NEW',
     };
-
-    if (user.password) {
-        params.ExpressionAttributeValues[':password'] = user.password;
-
-    }
-
-    return params;
-
-    function _getPasswordUpdateExpression() {
-        return user.password ? 'password = :password,' : '';
-    }
 
 };
 

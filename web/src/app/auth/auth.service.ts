@@ -80,17 +80,14 @@ export class AuthService {
     }
 
     saveCurrentUrlAsRollback() {
-        let url = document.location.href;
-        let origin = document.location.origin;
-        let rollbackUrl = url.replace(origin, '');
-        if (this.isNotExclusivePage()) {
-            LocalStorageService.setRollbackUrl(rollbackUrl.slice(2));
+        let rollbackUrl = this.getCurrentPageUri();
+        if (this.isNotExclusivePage(rollbackUrl)) {
+            LocalStorageService.setRollbackUrl(rollbackUrl);
         }
     }
 
-    isNotExclusivePage(): boolean {
-        let path = this.getCurrentPageUri();
-        return !AuthConsts.EXCLUSIVE_URLS.includes(path.substr(1));
+    isNotExclusivePage(path: string): boolean {
+        return !_.find(AuthConsts.EXCLUSIVE_URLS, url => path.includes(url));
     }
 
     getCurrentPageUri() {
@@ -134,6 +131,7 @@ export class AuthService {
         LocalStorageService.clear();
         this.signOutUserOnServer();
         this.currentUser = new BehaviorSubject(null);
+        this.saveMainPageAsRollback();
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
     }
 
@@ -146,6 +144,10 @@ export class AuthService {
 
     private sendSignOutRequest(email: string) {
         this.httpClient.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe()
+    }
+
+    private saveMainPageAsRollback() {
+        LocalStorageService.setRollbackUrl('/content');
     }
 
     refreshToken() {
