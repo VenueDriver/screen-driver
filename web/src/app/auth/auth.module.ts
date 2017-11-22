@@ -22,8 +22,7 @@ import {ApiService} from "../shared/services/api.service";
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
-        ResetPasswordFormModule,
-        SpinnerModule
+        ResetPasswordFormModule
     ],
     declarations: [
         AuthComponent,

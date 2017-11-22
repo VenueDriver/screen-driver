@@ -5,13 +5,10 @@ import {Router} from "@angular/router";
 import * as AuthConsts from "./auth-consts";
 import * as _ from 'lodash';
 import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
-import {HttpClient} from "@angular/common/http";
 import {User} from "../core/entities/user";
 import {AuthTokenService} from "./auth-token.service";
 import {ErrorMessageExtractor} from "../core/error-message-extractor";
 import {LocalStorageService} from "./local-storage.service";
-import {RequestConfig} from "../shared/services/configs/request-config";
-import {SpinnerNameUtils} from "../shared/spinner/uniq-entity-spinner/spinner-name-utils";
 import {ApiService} from "../shared/services/api.service";
 
 @Injectable()
@@ -45,9 +42,8 @@ export class AuthService {
 
     signIn(userDetails) {
         let subject = new Subject();
-        let requestSettings: RequestConfig = {spinner: {name: 'sign_in'}};
 
-        this.httpClient.post(AuthConsts.SIGN_IN_API, userDetails, requestSettings)
+        this.httpClient.post(AuthConsts.SIGN_IN_API, userDetails)
             .subscribe(
                 response => {
                     this.saveAuthTokens(response);
