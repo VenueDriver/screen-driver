@@ -6,18 +6,21 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import {SpinnerService} from "../spinner/spinner.service";
 import {RequestConfig} from "./configs/request-config";
+import {DataLoadingMonitorService} from "./data-loading-monitor/data-loading-monitor.service";
 
 @Injectable()
 export class ApiService {
     constructor(
         private http: HttpClient,
-        private spinnerService: SpinnerService
+        private spinnerService: SpinnerService,
+        private dataLoadingMonitorService: DataLoadingMonitorService
     ) {}
 
     get(path: string, params: HttpParams = new HttpParams(), requestConfig: RequestConfig = {}): Observable<any> {
         this.applyRequestConfigs(requestConfig);
 
          let request = this.http.get(this.getRequestUrl(path), { headers: this.setHeaders(), params: params });
+         this.dataLoadingMonitorService.registerRequest(request);
 
          return this.handleRequest(request, requestConfig);
     }
@@ -70,8 +73,13 @@ export class ApiService {
     private handleRequest(req: Observable<any>, requestConfig: RequestConfig) {
        return req.map(response => {
            this.disableRequestConfigs(requestConfig);
+           this.dataLoadingMonitorService.registerRequestEnding(req);
            return response
-       }).catch(this.formatErrors);
+       }).catch(errors => {
+           this.disableRequestConfigs(requestConfig);
+           this.dataLoadingMonitorService.registerRequestEnding(req);
+           return this.formatErrors(errors)
+       });
     }
 
     private applyRequestConfigs(requestConfig: RequestConfig) {

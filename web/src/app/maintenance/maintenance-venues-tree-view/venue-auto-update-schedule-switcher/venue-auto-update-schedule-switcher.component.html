@@ -1,13 +1,29 @@
 <div class="auto-update-schedule-switcher">
     <time-selector [label]="''"
                    [disabled]="isTimeSelectDisabled"
-                   [defaultTime]="autoUpdateTime.time"
-                   [defaultTimePeriod]="autoUpdateTime.period"
+                   [defaultTime]="autoUpdateTimeSchedule.time"
+                   [defaultTimePeriod]="autoUpdateTimeSchedule.period"
                    (timeChange)="onTimeChange($event)"
                    (timePeriodChange)="onTimePeriodChange($event)">
     </time-selector>
+
     <toggle-button
+            *ngIf="!_scheduleChanged"
             [checked]="isEnabled"
             (changed)="onEnabledChange($event)">
     </toggle-button>
+
+    <div *ngIf="_scheduleChanged" class="buttons-block">
+        <button type="button"
+                class="btn btn-success"
+                (click)="performSubmit($event)">
+            Save
+        </button>
+
+        <button type="button"
+                class="btn btn-link cancel-button"
+                (click)="performCancel($event)">
+            Cancel
+        </button>
+    </div>
 </div>

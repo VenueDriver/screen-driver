@@ -66,4 +66,12 @@ module.exports = class UserDataPreparationHelper {
             ]
         }
     }
+
+    static getCognitoUserWithSpecificId(id) {
+        return {
+            Attributes: [
+                {Name: 'sub', Value: id}
+            ]
+        }
+    }
 };

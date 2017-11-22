@@ -22,6 +22,9 @@ import {MaintenanceFixture} from "./fixtures/maintenance.fixture";
 import {AutoUpdateScheduleFixture} from "../entities/spec/auto-update-schedule.fixture";
 import {KioskVersionServiceFixture} from "./fixtures/kiosk-version-service.fixture";
 import {VenueMaintenanceInfo} from "../entities/venue-maintenance-info";
+import {ApiService} from "../../shared/services/api.service";
+import {SpinnerService} from "../../shared/spinner/spinner.service";
+import {DataLoadingMonitorService} from "../../shared/services/data-loading-monitor/data-loading-monitor.service";
 
 describe('Service: MaintenanceService', () => {
 
@@ -34,18 +37,24 @@ describe('Service: MaintenanceService', () => {
                 KioskVersionService,
                 AutoupdateScheduleService,
                 MaintenanceService,
+                ApiService,
+                SpinnerService,
+                DataLoadingMonitorService,
                 {provide: ConnectionBackend, useClass: MockBackend},
                 {provide: RequestOptions, useClass: BaseRequestOptions},
             ]
         });
     });
 
-    beforeEach(inject([MaintenanceService, VenuesService, AutoupdateScheduleService, KioskVersionService],
-        (maintenanceService, venuesService, autoupdateScheduleService, kioskVersionsService) => {
+    beforeEach(inject([MaintenanceService, VenuesService, AutoupdateScheduleService, KioskVersionService, ApiService, SpinnerService, DataLoadingMonitorService],
+        (maintenanceService, venuesService, autoupdateScheduleService, kioskVersionsService, apiService, spinnerService, dataLoadingMonitorService) => {
         this.maintenanceService = maintenanceService;
         this.venuesService = venuesService;
         this.autoupdateScheduleService = autoupdateScheduleService;
         this.kioskVersionsService = kioskVersionsService;
+        this.apiService = apiService;
+        this.spinnerService = spinnerService;
+        this.dataLoadingMonitorService = dataLoadingMonitorService;
     }));
 
     describe('loadData()', () => {

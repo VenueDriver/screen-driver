@@ -5,11 +5,14 @@ import {SpinnerService} from '../spinner.service';
 
 @Component({
     selector: 'uniq-entity-spinner',
-    template: `<spinner [name]='this.uniqName'></spinner>`
+    templateUrl: './uniq-entity-spinner.component.html',
+    styleUrls: ['./uniq-entity-spinner.component.scss']
 })
 export class UniqEntitySpinnerComponent implements OnInit {
     @Input() prefix: string = '';
     @Input() entity: UniqEntity;
+
+    @Input() message?: string;
 
     uniqName: string = '';
 

@@ -14,7 +14,6 @@ const UserDetailsLoader = require('../../user_pool/user_details_loader');
 
 //General Email Regex (RFC 5322 Official Standard)
 const emailValidationRegExp = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-const tableName = process.env.USERS_TABLE;
 
 class User {
     constructor(user, database) {
@@ -37,7 +36,6 @@ class User {
         this.enabled = true;
         this.username = uuid.v1();
         this.validate(deferred.reject);
-        this.validateEmailUniqueness(deferred.reject);
         if (deferred.promise.inspect().state === 'rejected') {
             return deferred.promise;
         }
@@ -54,7 +52,6 @@ class User {
      */
     update(user) {
         let deferred = Q.defer();
-        let params = ParametersBuilder.buildUpdateRequestParameters(this);
 
         this.validateRoleChanges(deferred.reject, user);
         this.validate(deferred.reject);
@@ -62,8 +59,10 @@ class User {
             return deferred.promise;
         }
 
+        let params = ParametersBuilder.buildUpdateRequestParameters(this);
         UserPool.updateUser(this)
-            .then(data => dbHelper.updateItem(params, deferred));
+            .then(() => dbHelper.updateItem(params, deferred))
+            .catch(error => deferred.reject(error));
 
         return deferred.promise;
     }
@@ -85,15 +84,6 @@ class User {
         if (errorMessage) {
             errorCallback(errorMessage);
         }
-    }
-
-    validateEmailUniqueness(errorCallback) {
-        dbHelper.hasUniqueName(tableName, this.email, 'email')
-            .then(result => {
-                if (!result) {
-                    errorCallback('User with such email already exists');
-                }
-            })
     }
 
     changeEmail() {

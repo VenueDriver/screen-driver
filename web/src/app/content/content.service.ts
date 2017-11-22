@@ -4,27 +4,27 @@ import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {Content} from "./content";
 
 import 'rxjs/add/operator/map';
-import {HttpClient} from "@angular/common/http";
+import {ApiService} from "../shared/services/api.service";
 
 @Injectable()
 export class ContentService {
 
-    readonly contentApiPath = `${environment.apiUrl}/api/content`;
+    readonly contentApiPath = '/api/content';
 
     private contentUpdate: Subject<any> = new BehaviorSubject({});
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(private apiService: ApiService) { }
 
     getContent(): Observable<Array<Content>> {
-        return this.httpClient.get(this.contentApiPath)
+        return this.apiService.get(this.contentApiPath)
     }
 
     createContent(content: Content): Observable<Content> {
-        return this.httpClient.post(this.contentApiPath, content)
+        return this.apiService.post(this.contentApiPath, content)
     }
 
     updateContent(content: Content): Observable<Content> {
-        return this.httpClient.put(`${this.contentApiPath}/${content.id}`, content)
+        return this.apiService.put(`${this.contentApiPath}/${content.id}`, content)
     }
 
     pushContentUpdateEvent() {
