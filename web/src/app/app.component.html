@@ -3,8 +3,9 @@
 <notification></notification>
 <settings *ngIf="isSidebarDisplayed()"></settings>
 
-<div class="app-container">
+<full-size-spinner [displayed]="isRequestsPerforming"></full-size-spinner>
 
+<div class="app-container" waitForLoading>
     <router-outlet></router-outlet>
 
 </div>

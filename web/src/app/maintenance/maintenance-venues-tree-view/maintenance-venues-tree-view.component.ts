@@ -31,6 +31,7 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit {
 
     options: any;
     currentNodeData: any;
+    scheduleChanged = false;
 
     constructor(
         private venuesService: VenuesService,

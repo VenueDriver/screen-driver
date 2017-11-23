@@ -10,7 +10,8 @@
                 <div *ngIf="isVenueNode(node)" class="content-info">
                     <auto-update-schedule-switcher
                             [autoUpdateSchedule]="node.data.autoupdateSchedule"
-                            (autoUpdateChange)="autoUpdateScheduleChange.emit($event)">
+                            (scheduleChange)="scheduleChanged = $event"
+                            (scheduleUpdate)="autoUpdateScheduleChange.emit($event)">
                     </auto-update-schedule-switcher>
                 </div>
 
@@ -21,7 +22,7 @@
                 </div>
             </div>
 
-            <div class="buttons-container">
+            <div class="buttons-container" [class.hidden-block]="scheduleChanged">
                 <div *ngIf="isAllowToRefreshScreenContent(node)"
                      class="node-button refresh-button"
                      (click)="refreshContent(node.data.id)"

@@ -62,7 +62,7 @@ update_user_status:
         authorizer: ${self:custom.authorizer}
 
 edit_user_profile:
-  handler: src/user/profile.edit
+  handler: src/profile/profile.edit
   events:
     - http:
         path: api/auth/profile
@@ -71,7 +71,7 @@ edit_user_profile:
         authorizer: ${self:custom.authorizer}
 
 change_password:
-  handler: src/user/profile.changePassword
+  handler: src/profile/profile.changePassword
   events:
     - http:
         path: api/auth/profile/change_password
