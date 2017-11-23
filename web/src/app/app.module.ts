@@ -11,7 +11,7 @@ import {NotificationService} from "./shared/notifications/notification.service";
 import {SettingsModule} from "./settings/settings.module";
 import {HeaderService} from "./header/header.service";
 import {TabbedSwitcherModule} from "./shared/tabbed-switcher/tabbed-switcher.module";
-import {ScreensMessagingModule} from "./messaging/screens-messaging.module";
+import {ScreensMessagingModule} from "./shared/services/messaging/screens-messaging.module";
 import {SchedulesModule} from "./content-management/schedules/schedules.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { ContentManagementComponent } from './content-management/content-management.component';
@@ -25,6 +25,9 @@ import {HeaderModule} from "./header/header.module";
 import {MaintenanceModule} from "./maintenance/maintenance.module";
 import {ApiService} from "./shared/services/api.service";
 import {TitleService} from "./shared/services/title.service";
+import {WaitForLoadingModule} from "./shared/directives/wait-for-loading/wait-for-loading.module";
+import {DataLoadingMonitorService} from "./shared/services/data-loading-monitor/data-loading-monitor.service";
+import {FullSizeSpinnerModule} from "./shared/full-size-spinner/full-size-spinner.module";
 
 @NgModule({
     declarations: [
@@ -47,7 +50,9 @@ import {TitleService} from "./shared/services/title.service";
         AuthModule,
         ProfileManagementModule,
         HeaderModule,
-        MaintenanceModule
+        MaintenanceModule,
+        WaitForLoadingModule,
+        FullSizeSpinnerModule,
     ],
     providers: [
         NotificationService,
@@ -58,7 +63,8 @@ import {TitleService} from "./shared/services/title.service";
             useClass: AuthHttpInterceptor,
             multi: true
         },
-        TitleService
+        TitleService,
+        DataLoadingMonitorService
     ],
     bootstrap: [AppComponent]
 })

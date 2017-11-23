@@ -11,6 +11,7 @@ import { RequestResetPasswordFormComponent } from './auth-page/reset-password/re
 import { ConfirmResetPasswordFormComponent } from './auth-page/reset-password/confirm-reset-password-form/confirm-reset-password-form.component';
 import {ResetPasswordService} from "./auth-page/reset-password/reset-password.service";
 import {ResetPasswordFormModule} from "../shared/reset-password-form/reset-password-form.module";
+import {FirstSignInComponent} from "./auth-page/first-sign-in/first-sign-in.component";
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import {ResetPasswordFormModule} from "../shared/reset-password-form/reset-passw
     declarations: [
         AuthComponent,
         SignInComponent,
+        FirstSignInComponent,
         ResetPasswordComponent,
         RequestResetPasswordFormComponent,
         ConfirmResetPasswordFormComponent

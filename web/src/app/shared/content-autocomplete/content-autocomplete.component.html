@@ -5,10 +5,11 @@
                 [value]="getValue()"
                 (focus)="showDropdown()"
                 (clickOutside)="handleClickOutside($event)"
+                (click)="click.emit($event)"
                 (select)="handleTextSelection($event)"
                 (keyup)="handleKeyUp($event)">
 
-        <ul class="dropdown-menu" [class.shown]="isShowDropdown">
+        <ul class="dropdown-menu" [class.shown]="isShowDropdown" (click)="click.emit($event)">
             <li *ngFor="let item of data; let last = last">
                 <a (click)="onSelect(item)" class="dropdown-item">
                     <div class="item-value">{{item.short_name}}</div>
@@ -26,7 +27,7 @@
                 <div class="dropdown-footer">
                     <button class="btn btn-block btn-lg add-button"
                             (keyup.enter)="emitAddNewEvent()"
-                            (click)="emitAddNewEvent()">
+                            (click)="emitAddNewEvent($event)">
                         Add new content URL
                     </button>
                 </div>

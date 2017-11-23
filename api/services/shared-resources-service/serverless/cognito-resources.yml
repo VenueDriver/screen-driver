@@ -6,11 +6,12 @@ CognitoUserPool:
       PasswordPolicy:
         MinimumLength: 8
         RequireLowercase: true
-        RequireUppercase: true
+        RequireUppercase: false
         RequireNumbers: true
         RequireSymbols: false
     AdminCreateUserConfig:
       AllowAdminCreateUserOnly: true
+      UnusedAccountValidityDays: 1
       InviteMessageTemplate:
         EmailSubject: "[ScreenDriver] Welcome to ScreenDriver"
         EmailMessage: "Your ID is {username} and temporary password is {####}."

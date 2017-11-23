@@ -31,3 +31,7 @@ The following environment variables are set up for CI/CD in `deployment.env` fil
 * PUSHER_KEY=
 * PUSHER_SECRET=
 * PUSHER_CLUSTER=
+
+#### Client app URL
+* CLIENT_APP_URL=
+* CLIENT_APP_STAGING_URL=

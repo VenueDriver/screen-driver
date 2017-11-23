@@ -11,7 +11,7 @@ const _ = require('lodash');
 module.exports = class ConflictsIdentifier {
 
     static findConflicts(setting, schedules) {
-        if (!setting.enabled) {
+        if (_.isEmpty(setting) || !setting.enabled) {
             return new Promise((resolve, reject) => resolve([]));
         }
         switch (setting.priority) {

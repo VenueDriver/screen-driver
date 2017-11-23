@@ -9,7 +9,7 @@
   align-items: center
   width: 100%
 
-  @media screen and (max-width: $small-resolution)
+  @media screen and (max-width: $tablet-resolution)
     -webkit-flex-direction: column /* Safari */
     flex-direction: column !important
 
@@ -24,25 +24,14 @@
       div > div, button
         height: 33px !important
 
-  @media screen and (max-width: $small-resolution)
-    flex-direction: row
-
   .inputs-container
     width: $inputs-width
-    margin-right: 10px
-
-    @media screen and (max-width: $small-resolution)
-      width: 150%
-      float: right
 
     .input-block
       margin-top: 25px
 
     input
-      font-size: $input-font-size
-
-      @media screen and (max-width: $small-resolution)
-        font-size: $input-small-font-size
+      @include responsive-font-size
 
     .validation-error
       margin-top: -16px
@@ -61,11 +50,8 @@
     div
       display: flex
 
-      @media screen and (max-width: $small-resolution)
+      @media screen and (max-width: $tablet-resolution)
         flex-direction: row
-
-    .cancel-button
-      //padding: 12px
 
     .remove-button
       display: inline-block
@@ -73,15 +59,23 @@
       margin-right: 10px
       cursor: pointer
 
+    .edit-form-buttons
+      width: 100%
+      display: flex
+      justify-content: space-between
+
+      @media screen and (max-width: $tablet-resolution)
+        .btn-link
+          min-width: 0
+          padding-right: 0
+
+        .btn-success
+          margin-right: 10px
+
     .remove-item-block
+      margin: auto
       .btn
         margin-right: 10px
 
-        @media screen and (max-width: $tablet-resolution)
-          margin-right: 0
-
-          &:first-of-type
-            margin-bottom: 10px
-
   .warning-message
-    font-size: 18px
+    @include responsive-font-size

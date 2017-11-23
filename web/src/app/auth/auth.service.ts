@@ -80,17 +80,14 @@ export class AuthService {
     }
 
     saveCurrentUrlAsRollback() {
-        let url = document.location.href;
-        let origin = document.location.origin;
-        let rollbackUrl = url.replace(origin, '');
-        if (this.isNotExclusivePage()) {
-            LocalStorageService.setRollbackUrl(rollbackUrl.slice(2));
+        let rollbackUrl = this.getCurrentPageUri();
+        if (this.isNotExclusivePage(rollbackUrl)) {
+            LocalStorageService.setRollbackUrl(rollbackUrl);
         }
     }
 
-    isNotExclusivePage(): boolean {
-        let path = this.getCurrentPageUri();
-        return !AuthConsts.EXCLUSIVE_URLS.includes(path.substr(1));
+    isNotExclusivePage(path: string): boolean {
+        return !_.find(AuthConsts.EXCLUSIVE_URLS, url => path.includes(url));
     }
 
     getCurrentPageUri() {
@@ -134,6 +131,7 @@ export class AuthService {
         LocalStorageService.clear();
         this.signOutUserOnServer();
         this.currentUser = new BehaviorSubject(null);
+        this.saveMainPageAsRollback();
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
     }
 
@@ -148,12 +146,17 @@ export class AuthService {
         this.httpClient.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe()
     }
 
+    private saveMainPageAsRollback() {
+        LocalStorageService.setRollbackUrl('/content');
+    }
+
     refreshToken() {
         let subject = new Subject();
         let refreshToken = LocalStorageService.getRefreshToken();
         this.httpClient.post(AuthConsts.TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
             (response) => {
                 LocalStorageService.setIdToken(response['token']);
+                LocalStorageService.setAccessToken(response['accessToken']);
                 this.tokenService.tokenReceived.next(response['token']);
                 this.setCurrentUserFromToken(response['token']);
                 subject.next(response);
@@ -174,7 +177,11 @@ export class AuthService {
 
     getCurrentUserLogin(): string {
         let user = this.currentUser.getValue();
-        return _.isEmpty(user) ? '' : user.email.substr(0, user.email.indexOf('@'));
+        return _.isEmpty(user) ? '' : this.getUsernameFromEmail(user.email);
+    }
+
+    getUsernameFromEmail(email: string) {
+        return email.substr(0, email.indexOf('@'));
     }
 
 }

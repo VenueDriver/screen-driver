@@ -1,8 +1,8 @@
 'use strict';
 
 const dbHelper = require('./../helpers/db_helper');
-const ModulePathManager = require('../module_path_manager');
-const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
+
+const responseHelper = require('lib/helpers/http_response_helper');
 const User = require('./entities/user');
 
 module.exports.list = (event, context, callback) => {

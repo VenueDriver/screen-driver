@@ -11,6 +11,7 @@
                    [placeholder]="getNameInputPlaceholder()"
                    [(ngModel)]="nodeData.name"
                    (ngModelChange)="validateForm()"
+                   (click)="stopClickPropagation($event)"
                    class="form-control node-name"
                    input-autofocus>
         </div>
@@ -26,6 +27,7 @@
                        [placeholder]="'Content short name'"
                        [(ngModel)]="nodeData.content.short_name"
                        (ngModelChange)="validateForm()"
+                       (click)="stopClickPropagation($event)"
                        class="form-control node-name content-input"
                        input-autofocus>
             </div>
@@ -40,6 +42,7 @@
                        [placeholder]="'Content URL'"
                        [(ngModel)]="nodeData.content.url"
                        (ngModelChange)="validateForm()"
+                       (click)="stopClickPropagation($event)"
                        class="form-control node-name content-input">
             </div>
         </div>
@@ -49,6 +52,7 @@
                     [value]="getDropdownValue()"
                     [content]="content"
                     (select)="setNodeContent($event)"
+                    (click)="stopClickPropagation($event)"
                     (add)="enableCreateContentMode($event)">
             </content-autocomplete>
         </div>
@@ -59,7 +63,7 @@
     </div>
 
     <div class="warning-message" *ngIf="removingMode">
-        Are you sure you want to remove <b>{{getNodeName()}}</b>?
+        Remove <b>{{getNodeName()}}</b>?
     </div>
 
     <div class="buttons-container">
@@ -78,24 +82,28 @@
             </button>
         </div>
 
-        <div *ngIf="!removingMode">
+        <div *ngIf="!removingMode" class="edit-form-buttons">
             <div *ngIf="!!nodeData.id"
                  class="remove-button"
                  (click)="enableRemovingMode($event)">
             </div>
 
-            <button type="button"
-                    class="btn btn-success"
-                    [disabled]="!isFormValid"
-                    (click)="performSubmit($event)">
-                Save
-            </button>
+            <div></div>
+            
+            <div>
+                <button type="button"
+                        class="btn btn-success"
+                        [disabled]="!isFormValid"
+                        (click)="performSubmit($event)">
+                    Save
+                </button>
 
-            <button type="button"
-                    class="btn btn-link cancel-button"
-                    (click)="performCancel($event)">
-                Cancel
-            </button>
+                <button type="button"
+                        class="btn btn-link"
+                        (click)="performCancel($event)">
+                    Cancel
+                </button>
+            </div>
         </div>
     </div>
 </div>

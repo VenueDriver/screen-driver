@@ -4,7 +4,7 @@ import {Venue} from "../core/entities/venue";
 import {MaintenanceService} from "./maintenance.service";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 import {VenueMaintenanceInfo} from "./entities/venue-maintenance-info";
-import {ScreensMessagingService} from "../messaging/screens-messaging.service";
+import {ScreensMessagingService} from "../shared/services/messaging/screens-messaging.service";
 
 import * as _ from 'lodash';
 import {MaintenanceProperties} from "./entities/maintenance-properties";

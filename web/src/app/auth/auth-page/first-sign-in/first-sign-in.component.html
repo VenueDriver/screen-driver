@@ -1,0 +1,15 @@
+<div class="sign-in-container">
+
+    <div class="auth-page-title">
+        Please, set your password to sign in to ScreenDriver
+    </div>
+
+    <reset-password-form [identityVerificationFieldLabel]="'Email'"
+                         [requireEmail]="true"
+                         [failMessage]="failMessage"
+                         [allowCancel]="false"
+                         [submitButton]="'Sign in'"
+                         (save)="performSubmit($event)">
+    </reset-password-form>
+
+</div>

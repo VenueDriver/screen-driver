@@ -1,7 +1,6 @@
 'use strict';
 
-const ModulePathManager = require('../module_path_manager');
-const ResponseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
+const ResponseHelper = require('lib/helpers/http_response_helper');
 const authenticate = require('../user/authenticate');
 
 module.exports.handler = (event, context, callback) => {

@@ -20,11 +20,6 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 
 describe('create_user', () => {
 
-    let congnitoUser = UserDataPreparationHelper.getCognitoUserWithAttributes();
-    UserPool.createUser = chai.spy(() => {
-        return new Promise((resolve, reject) => resolve(congnitoUser));
-    });
-
     before((done) => {
         DatabaseCleaner.cleanDatabase()
             .then(() => done());
@@ -35,121 +30,241 @@ describe('create_user', () => {
             .then(() => done());
     });
 
-    it('Should create an operator user with all fields, id and revision number', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
+    describe('When user is valid', () => {
 
-        let expectations = (body) => {
-            expect(body).to.have.property('email').that.equal(UserDataPreparationHelper.getDefaultEmail());
-            expect(body).to.have.property('isAdmin').that.equal(false);
-            expect(body).to.have.property('_rev').that.equal(0);
-        };
+        before(() => createSpyForCreateUserInCognitoFunction());
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
+        it('should create a user with all email, id and revision number', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+
+            let expectations = (body) => {
+                expect(body.id).to.not.be.null;
+                expect(body.email).to.equal(UserDataPreparationHelper.getDefaultEmail());
+                expect(body._rev).to.equal(0);
+            };
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
+        it('should create a user with id that is equal to sub of Cognito user', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+
+            let expectations = (body) => {
+                expect(body.id).to.equal('CognitoUserSub');
+            };
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
+        it('should create a user with generated uuid username', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+
+            let expectations = (body) => {
+                expect(body.username.split('-').length).to.equal(5);
+            };
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
+        it('should create a user without password', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+
+            let expectations = (body) => {
+                expect(body).to.not.have.property('password');
+            };
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
+        it('should create enabled user ', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+
+            let expectations = (body) => {
+                expect(body.enabled).to.be.true;
+            };
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
     });
 
-    it('Should create an user with id that equal to sub of Cognito user', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
+    describe('When a user is admin', () => {
 
-        let expectations = (body) => {
-            expect(body).to.have.property('id').that.equal('CognitoUserSub');
-        };
+        before(() => createSpyForCreateUserInCognitoFunction());
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
+        it('should create a user with isAdmin = true', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.isAdmin = true;
+
+            let expectations = (body) => {
+                expect(body.isAdmin).to.be.true;
+            };
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
     });
 
-    it('Should create an admin user', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.isAdmin = true;
+    describe('When a user is not admin', () => {
 
-        let expectations = (body) => {
-            expect(body).to.have.property('isAdmin').that.equal(true);
-        };
+        before(() => createSpyForCreateUserInCognitoFunction());
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
+        it('should create a user with isAdmin = false', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.isAdmin = false;
+
+            let expectations = (body) => {
+                expect(body.isAdmin).to.be.false;
+            };
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
     });
 
-    // it('Shouldn\'t create a user with existing email', () => {
-    //     let user = UserDataPreparationHelper.createDefaultUser();
-    //
-    //     let expectations = generateErrorExpectations('User with such email already exists', 500);
-    //
-    //     return MultiOperationHelper.create(user)
-    //         .then(() => MultiOperationHelper.performCreateTest(user, expectations));
-    // });
+    describe('When a user without isAdmin flag', () => {
 
-    it('Shouldn\'t create a user without email', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.email = null;
+        before(() => createSpyForCreateUserInCognitoFunction());
 
-        let expectations = generateErrorExpectations('Invalid email', 500);
+        it('should create user with isAdmin = false', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.isAdmin = null;
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
+            let expectations = (body) => {
+                expect(body.isAdmin).to.be.false;
+            };
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
     });
 
-    it('Shouldn\'t create a user with email without @ symbol', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.email = UserDataPreparationHelper.getEmailWithoutAtSymbol();
+    describe('When a user has isAdmin flag that is not boolean value', () => {
 
-        let expectations = generateErrorExpectations('Invalid email', 500);
+        before(() => createSpyForCreateUserInCognitoFunction());
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
+        it('should return an error', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.isAdmin = 'true';
+
+            let expectations = generateErrorExpectations('User couldn\'t be without isAdmin flag', 500);
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
     });
 
-    it('Shouldn\'t create a user with email with tld started with dot', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.email = UserDataPreparationHelper.getEmailWithTldStartedWithDot();
+    describe('When email of a new user is already exists', () => {
 
-        let expectations = generateErrorExpectations('Invalid email', 500);
+        before(() => {
+            createSpyForCreateUserInCognitoFunctionReturnedError('User with such email already exists');
+        });
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
+        it('should return an error', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+
+            let expectations = generateErrorExpectations('User with such email already exists', 500);
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
     });
 
-    it('Shouldn\'t create a user with email with no symbols before @', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.email = UserDataPreparationHelper.getEmailWithoutCharactersBeforeAtSymbol();
+    describe('When user without email', () => {
 
-        let expectations = generateErrorExpectations('Invalid email', 500);
+        it('should return an error', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.email = null;
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
+            let expectations = generateErrorExpectations('Invalid email', 500);
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
     });
 
-    it('Shouldn\'t create a user with email with invalid tld', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.email = UserDataPreparationHelper.getEmailWithNotValidTld();
+    describe('When user email is invalid', () => {
 
-        let expectations = generateErrorExpectations('Invalid email', 500);
+        it('Shouldn\'t create a user with email without @ symbol', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.email = UserDataPreparationHelper.getEmailWithoutAtSymbol();
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
-    });
+            let expectations = generateErrorExpectations('Invalid email', 500);
 
-    it('Shouldn\'t create a user with email started with dot', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.email = UserDataPreparationHelper.getEmailStartedWithDot();
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
 
-        let expectations = generateErrorExpectations('Invalid email', 500);
+        it('Shouldn\'t create a user with email with tld started with dot', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.email = UserDataPreparationHelper.getEmailWithTldStartedWithDot();
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
-    });
+            let expectations = generateErrorExpectations('Invalid email', 500);
 
-    it('Shouldn\'t create a user with email with unexpected symbols', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.email = UserDataPreparationHelper.getEmailWithUnexpectedSymbols();
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
 
-        let expectations = generateErrorExpectations('Invalid email', 500);
+        it('Shouldn\'t create a user with email with no symbols before @', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.email = UserDataPreparationHelper.getEmailWithoutCharactersBeforeAtSymbol();
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
-    });
+            let expectations = generateErrorExpectations('Invalid email', 500);
 
-    it('Shouldn\'t create a user with email with double dots', () => {
-        let user = UserDataPreparationHelper.createDefaultUser();
-        user.email = UserDataPreparationHelper.getEmailWithDoubleDots();
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
 
-        let expectations = generateErrorExpectations('Invalid email', 500);
+        it('Shouldn\'t create a user with email with invalid tld', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.email = UserDataPreparationHelper.getEmailWithNotValidTld();
 
-        return MultiOperationHelper.performCreateTest(user, expectations);
+            let expectations = generateErrorExpectations('Invalid email', 500);
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
+        it('Shouldn\'t create a user with email started with dot', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.email = UserDataPreparationHelper.getEmailStartedWithDot();
+
+            let expectations = generateErrorExpectations('Invalid email', 500);
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
+        it('Shouldn\'t create a user with email with unexpected symbols', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.email = UserDataPreparationHelper.getEmailWithUnexpectedSymbols();
+
+            let expectations = generateErrorExpectations('Invalid email', 500);
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
+        it('Shouldn\'t create a user with email with double dots', () => {
+            let user = UserDataPreparationHelper.createDefaultUser();
+            user.email = UserDataPreparationHelper.getEmailWithDoubleDots();
+
+            let expectations = generateErrorExpectations('Invalid email', 500);
+
+            return MultiOperationHelper.performCreateTest(user, expectations);
+        });
+
     });
 
 });
+
+function createSpyForCreateUserInCognitoFunction() {
+    let congnitoUser = UserDataPreparationHelper.getCognitoUserWithAttributes();
+    UserPool.createUser = chai.spy(() => {
+        return new Promise((resolve, reject) => resolve(congnitoUser));
+    });
+}
+
+function createSpyForCreateUserInCognitoFunctionReturnedError(expectedError) {
+
+    UserPool.createUser = chai.spy(() => {
+        return new Promise((resolve, reject) => reject(expectedError));
+    });
+}
 
 function generateErrorExpectations(message, statusCode) {
     return (body, response) => {

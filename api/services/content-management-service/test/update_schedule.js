@@ -11,6 +11,8 @@ const createFunction = require('../src/schedule/create');
 const updateFunction = require('../src/schedule/update');
 const mochaPlugin = require('serverless-mocha-plugin');
 
+const _ = require('lodash');
+
 const expect = mochaPlugin.chai.expect;
 
 const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
@@ -20,7 +22,7 @@ const MultiOperationHelper = require('./helpers/multi_operation_test_helper')
 
 const idLength = 36;
 
-describe('update_setting', () => {
+describe('update_schedule', () => {
 
     before((done) => {
         DatabaseCleaner.cleanDatabase()
@@ -332,46 +334,14 @@ describe('update_setting', () => {
         return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
-    // it('Shouldn\'t update schedule bound with unknown setting', () => {
-    //     let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
-    //     let updatedSchedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
-    //     updatedSchedule.settingId = 'invalid_setting_id';
-    //
-    //     let expectations = generateErrorExpectations('Invalid setting', 500);
-    //
-    //     return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
-    // });
+    it('Shouldn\'t update schedule bound with unknown setting', () => {
+        let schedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
+        let updatedSchedule = ScheduleDataPreparationHelper.createDefaultRepeatableSchedule();
+        updatedSchedule.settingId = 'invalid_setting_id';
 
-    it('Should update schedule and set status to enabled if conflict detected between schedules without time overlap', () => {
-        let config = {screen_id: 'content_id', screen_id_2: 'content_id_2'};
-        let existingSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning', config);
+        let expectations = generateErrorExpectations('Invalid setting', 500);
 
-        let conflictedConfig = {screen_id: 'content_id_2'};
-        let scheduledSetting = SettingDataPreparationHelper.getPeriodicalSetting('Morning2', conflictedConfig);
-
-        return TestDataSever.saveSetting(existingSetting)
-            .then(setting => {
-                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * MON', '0 0 10 * * MON', setting.id);
-                return TestDataSever.saveSchedule(schedule);
-            })
-            .then(() => TestDataSever.saveSetting(scheduledSetting))
-            .then(setting => {
-                let schedule = ScheduleDataPreparationHelper.createRepeatableSchedule('0 0 8 * * TUE', '0 0 10 * * TUE', setting.id);
-                return TestDataSever.saveSchedule(schedule);
-            })
-            .then(schedule => {
-                schedule.eventCron = '0 0 8 * * WED';
-                schedule.endEventCron = '0 0 10 * * WED';
-                return MultiOperationHelper.update({body: JSON.stringify(schedule)}, schedule);
-            })
-            .then(schedule => {
-                let expectations = (body, response) => {
-                    expect(body).to.have.property('_rev').that.equal(1);
-                    expect(body).to.have.property('enabled').that.equal(true);
-                    expect(response).to.have.property('statusCode').that.equal(200);
-                };
-                return MultiOperationHelper.test(schedule, expectations);
-            });
+        return MultiOperationHelper.performUpdateTest(schedule, updatedSchedule, expectations);
     });
 
     it('Should update schedule and set status to disabled if conflict detected between schedules', () => {

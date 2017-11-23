@@ -1,8 +1,4 @@
 import {Component, OnInit, Input, Output, ViewChild, EventEmitter, OnDestroy} from '@angular/core';
-import {ITreeOptions} from "angular-tree-component/dist/defs/api";
-import {IActionMapping, TREE_ACTIONS} from "angular-tree-component/dist/models/tree-options.model";
-import {KEYS} from "angular-tree-component/dist/constants/keys";
-import {TreeComponent} from "angular-tree-component/dist/angular-tree-component";
 import {Content} from "../../../content/content";
 import {VenuesService} from "../venues.service";
 import {Setting} from "../../../settings/entities/setting";
@@ -35,7 +31,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
     originalNodeData: any;
     isFormValid = false;
     isCreateContentMode = false;
-    isEditContentMode = false;
+    isTreeViewEditMode = false;
 
     constructor(
         private venuesService: VenuesService,
@@ -95,6 +91,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
     }
 
     addNewNode(event, node) {
+        this.isTreeViewEditMode = true;
         this.expandIfCollapsed(event, node);
         if (!node.data.children) {
             node.data.children = [];
@@ -140,7 +137,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
         this.clearCurrentNodeDataField();
         this.updateTreeViewOptions();
         this.isCreateContentMode = false;
-        this.isEditContentMode = false;
+        this.isTreeViewEditMode = false;
         this.removeEditableNode();
     }
 
@@ -180,7 +177,7 @@ export class ContentVenuesTreeViewComponent implements OnInit, OnDestroy {
             this.settingStateHolderService.enableCurrentSettingEditMode();
         }
 
-        this.isEditContentMode = true;
+        this.isTreeViewEditMode = true;
 
         this.stopClickPropagation(event);
         this.currentNodeData = node.data;

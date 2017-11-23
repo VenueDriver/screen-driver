@@ -6,7 +6,7 @@ import {TreeComponent} from "angular-tree-component/dist/angular-tree-component"
 import {VenuesService} from "../../content-management/venues/venues.service";
 
 import * as _ from 'lodash';
-import {ScreensMessagingService} from "../../messaging/screens-messaging.service";
+import {ScreensMessagingService} from "../../shared/services/messaging/screens-messaging.service";
 import {NotificationService} from "../../shared/notifications/notification.service";
 import {VenuesTreeViewService} from "../../content-management/venues/venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../../content-management/venues/venues-tree-view/venues-tree-view.component";
@@ -31,6 +31,7 @@ export class MaintenanceVenuesTreeViewComponent implements OnInit {
 
     options: any;
     currentNodeData: any;
+    scheduleChanged = false;
 
     constructor(
         private venuesService: VenuesService,
