@@ -1,11 +1,10 @@
 'use strict';
 
-const ModulePathManager = require('../module_path_manager');
 const uuid = require('uuid');
 const Q = require('q');
 const dynamoDb = require('../dynamodb/dynamodb');
 const DbHelper = require('../helpers/db_helper');
-const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
+const responseHelper = require('lib/helpers/http_response_helper');
 const validator = require('./content_validator');
 
 module.exports.create = (event, context, callback) => {

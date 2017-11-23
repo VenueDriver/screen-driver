@@ -6,7 +6,7 @@ const DatabaseCleaner = require('./helpers/database_cleaner');
 const UserDataPreparationHelper = require('./helpers/user_data_preparation_helper');
 
 const UserPool = require('../src/user_pool/user_pool');
-const TokenParser = require('../../lib/auth_token/auth_token_parser');
+const TokenParser = require('lib/auth_token/auth_token_parser');
 
 const _ = require('lodash');
 

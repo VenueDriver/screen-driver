@@ -28,6 +28,8 @@ services:
       dockerfile: ./docker/Dockerfile.deploy
       args:
         SERVICE: shared-resources-service
+    volumes:
+      - ./api/services/shared-resources-service/.serverless:/app-src/shared-resources-service/.serverless
 
   deploy_api:
     env_file:
@@ -37,6 +39,8 @@ services:
       dockerfile: ./docker/Dockerfile.deploy
       args:
         SERVICE: content-management-service
+    volumes:
+      - ./api/services/content-management-service/.serverless:/app-src/content-management-service/.serverless
 
   deploy_auth_api:
     env_file:
@@ -46,6 +50,8 @@ services:
       dockerfile: ./docker/Dockerfile.deploy
       args:
         SERVICE: auth-service
+    volumes:
+      - ./api/services/auth-service/.serverless:/app-src/auth-service/.serverless
 
   deploy_maintenance_api:
     env_file:
@@ -55,6 +61,8 @@ services:
       dockerfile: ./docker/Dockerfile.deploy
       args:
         SERVICE: maintenance-service
+    volumes:
+      - ./api/services/maintenance-service/.serverless:/app-src/maintenance-service/.serverless
 
   api_create_user:
     env_file:

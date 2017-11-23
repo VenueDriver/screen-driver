@@ -3,6 +3,8 @@
 region="${1:-us-east-1}"
 stage="${2:-staging}"
 
+echo Deploying to stage ${stage} and ${region} region ...
+
 cd services/shared-resources-service
 serverless deploy --verbose --region ${region} --stage ${stage}
 
