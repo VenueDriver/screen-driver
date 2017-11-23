@@ -75,7 +75,11 @@ export class ApiService {
            this.disableRequestConfigs(requestConfig);
            this.dataLoadingMonitorService.registerRequestEnding(req);
            return response
-       }).catch(this.formatErrors);
+       }).catch(errors => {
+           this.disableRequestConfigs(requestConfig);
+           this.dataLoadingMonitorService.registerRequestEnding(req);
+           return this.formatErrors(errors)
+       });
     }
 
     private applyRequestConfigs(requestConfig: RequestConfig) {
