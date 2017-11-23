@@ -54,17 +54,11 @@ To run tests just perform `docker-compose -f docker-compose-test.yml up`.
     * `PUSHER_KEY=<Pusher key>`
     * `PUSHER_SECRET=<Pusher secret>`
     * `PUSHER_CLUSTER=<Pusher cluster>`
-1. Make next steps for each service in `services/` directory (excluding `lib/`):
-    * `npm install`
-    * Install serverless-dynamodb-local plugin: `serverless dynamodb install --stage dev`
-    * Use `serverless export-env --stage <stage>` to export environment variables from AWS to `.env` file automatically 
-    (need for offline work).
-    * Create a symbolic link to the `lib` folder, for example `ln -s lib auth-service/node_modules/lib`.
-1. Copy `node_modules` from `content-management-service` to the `services` folder (need for imports inside `lib` folder).
+1. Perform  `./scripts/install_dependencies.sh` from `api/` folder to install npm modules, Dynamodb local, and to create symbolic links to shared code in `api/services/lib`
 
 ### Run project offline
 
-Use `npm start` command to run a single service locally.
+1. Perform  `./scripts/run.sh` from `api/` folder to start all services locally.
 
 ### Deployment
 #### Before:
