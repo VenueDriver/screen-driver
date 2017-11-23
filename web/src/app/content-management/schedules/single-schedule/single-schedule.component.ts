@@ -70,7 +70,14 @@ export class SingleScheduleComponent implements OnInit {
 
     subscribeToScheduleListUpdate() {
         this.schedulesService.scheduleListUpdated
-            .subscribe(() => this.eventTimeHolder = EventTimeHolder.init());
+            .subscribe(() => {
+                this.eventTimeHolder = EventTimeHolder.init();
+                this.setEventTimeHolderBy(this.schedule)
+            });
+    }
+
+    private setEventTimeHolderBy(schedule: Schedule) {
+        this.eventTimeHolder.setProperties(schedule);
     }
 
     setEventTimeProperties() {
