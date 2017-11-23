@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
 
-import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {async, inject, TestBed} from "@angular/core/testing";
 import {
