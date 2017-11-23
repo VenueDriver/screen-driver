@@ -32,13 +32,13 @@
     "moment": "2.17.1",
     "ngx-bootstrap": "1.7.1",
     "postcss-url": "^7.1.1",
-    "rxjs": "^5.1.0",
+    "rxjs": "^5.5.2",
     "zone.js": "0.8.12"
   },
   "devDependencies": {
-    "@angular/cli": "1.5.0",
-    "@angular/compiler-cli": "5.0.1",
-    "@angular/language-service": "5.0.1",
+    "@angular/cli": "1.5.4",
+    "@angular/compiler-cli": "5.0.3",
+    "@angular/language-service": "5.0.3",
     "@types/jasmine": "2.5.45",
     "@types/node": "~6.0.60",
     "codelyzer": "~3.0.1",
