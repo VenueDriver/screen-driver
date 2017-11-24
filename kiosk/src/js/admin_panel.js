@@ -19,6 +19,7 @@ let contentUrl;
 
 let screenSetting;
 let serverData;
+let currentShownSetting;
 
 $(function () {
     showApplicationVersion();
@@ -58,9 +59,17 @@ $(function () {
     });
 
     $("#venue").change(function () {
-        loadValues($(this), $('#screen-group'));
+        let venueSelectorElement = $(this);
+        loadValues(venueSelectorElement, $('#screen-group'));
+        if(!isVenueSelected(venueSelectorElement[0])) currentShownSetting = undefined;
+
+        showCurrentSetting();
         clearLastSelector();
     });
+
+    function isVenueSelected(venueSelectorElement) {
+        return venueSelectorElement.value != 'none';
+    }
 
     $("#screen-group").change(function () {
         loadValues($(this), $('#screen-id'));
@@ -109,8 +118,34 @@ function loadData() {
             loadCurrentSettings();
             verifySaveButtonState();
             verifyCancelButtonState();
+            let setting = CurrentScreenSettingsManager.getCurrentSetting();
+
+            currentShownSetting = findScreenSettings(setting, serverData)[0];
+            showCurrentSetting();
         })
-        .catch(error => showError('Couldn\'t load settings'));
+        .catch(error => {
+            showError('Couldn\'t load settings');
+            showCurrentSetting();
+        });
+}
+
+function findScreenSettings(setting, serverData) {
+    let originalSettings = serverData.originalSettings;
+
+    let screensSettings = originalSettings.filter(originalSetting => isShownConfig(setting, originalSetting.config[setting.selectedScreenId]));
+    return screensSettings ? screensSettings : [];
+}
+
+function isShownConfig(setting, originalSettingsValue) {
+    let currentSettingsConfig = serverData.settings.config;
+    let currentSettingsValue = currentSettingsConfig[setting.selectedScreenId];
+
+    return currentSettingsValue == originalSettingsValue;
+}
+
+function updateCurrentSetting() {
+    let setting = CurrentScreenSettingsManager.getCurrentSetting();
+    currentShownSetting = findScreenSettings(setting, serverData)[0];
 }
 
 function loadCurrentSettings() {
@@ -266,4 +301,19 @@ function hideCancelButton() {
 
 function showApplicationVersion() {
     $('#version').text('v' + app.getVersion());
+}
+
+function showCurrentSetting() {
+    if (!!currentShownSetting) {
+        $('.current-setting-container').show();
+        $('#current-setting').html(formatSetting(currentShownSetting));
+    } else {
+        $('.current-setting-container').hide();
+    }
+}
+
+function formatSetting() {
+    forciblyEnabledElement = currentShownSetting.forciblyEnabled ? '<span class="badge forcibly">forcibly</span>' : '';
+
+    return currentShownSetting.name + forciblyEnabledElement;
 }
