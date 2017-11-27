@@ -34,7 +34,8 @@ services:
     depends_on:
       - serverless
     volumes:
-      - ./api/services/content-management-service:/content-management-service
+      - ./api/services/content-management-service:/app-src/content-management-service
+      - ./api/services/content-management-service/node_modules:/app-src/content-management-service/node_modules
     ports:
       - "3000:3000"
       - "8000:8000"
@@ -51,7 +52,8 @@ services:
     depends_on:
       - serverless
     volumes:
-      - ./api/services/auth-service:/auth-service
+      - ./api/services/auth-service:/app-src/auth-service
+      - ./api/services/auth-service/node_modules:/app-src/auth-service/node_modules
     ports:
       - "3001:3001"
       - "8001:8001"
@@ -68,7 +70,8 @@ services:
     depends_on:
       - serverless
     volumes:
-        - ./api/services/maintenance-service:/maintenance-service
+        - ./api/services/maintenance-service:/app-src/maintenance-service
+        - ./api/services/maintenance-service/node_modules:/app-src/maintenance-service/node_modules
     ports:
       - "3002:3002"
       - "8002:8002"

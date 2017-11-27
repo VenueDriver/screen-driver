@@ -1,10 +1,9 @@
 'use strict';
 
-const ModulePathManager = require('../module_path_manager');
 const dbHelper = require('../helpers/db_helper');
 const ScreenUpdateSchedule = require('./entities/screen_update_schedule');
 
-const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
+const responseHelper = require('lib/helpers/http_response_helper');
 
 module.exports.getAll = (event, context, callback) => {
 

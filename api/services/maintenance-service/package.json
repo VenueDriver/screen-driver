@@ -13,6 +13,7 @@
   },
   "author": "",
   "license": "MIT",
+  "repository": {},
   "dependencies": {
     "jsonwebtoken": "7.4.3",
     "lodash": "4.17.4",

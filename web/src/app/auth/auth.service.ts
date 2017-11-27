@@ -5,11 +5,11 @@ import {Router} from "@angular/router";
 import * as AuthConsts from "./auth-consts";
 import * as _ from 'lodash';
 import {JwtHelper, tokenNotExpired} from 'angular2-jwt';
-import {HttpClient} from "@angular/common/http";
 import {User} from "../core/entities/user";
 import {AuthTokenService} from "./auth-token.service";
 import {ErrorMessageExtractor} from "../core/error-message-extractor";
 import {LocalStorageService} from "./local-storage.service";
+import {ApiService} from "../shared/services/api.service";
 
 @Injectable()
 export class AuthService {
@@ -18,7 +18,7 @@ export class AuthService {
     currentUser: BehaviorSubject<User> = new BehaviorSubject(null);
     unauthorizedUserEmail: Subject<string> = new BehaviorSubject(null);
 
-    constructor(private httpClient: HttpClient,
+    constructor(private httpClient: ApiService,
                 private router: Router,
                 private tokenService: AuthTokenService) {
 
@@ -42,6 +42,7 @@ export class AuthService {
 
     signIn(userDetails) {
         let subject = new Subject();
+
         this.httpClient.post(AuthConsts.SIGN_IN_API, userDetails)
             .subscribe(
                 response => {

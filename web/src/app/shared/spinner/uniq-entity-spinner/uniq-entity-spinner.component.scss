@@ -1,0 +1,10 @@
+@import "../../../../styles/variables";
+
+:host {
+  display: flex;
+  flex-direction: row;
+
+  .message {
+    color: $gray-color
+  }
+}

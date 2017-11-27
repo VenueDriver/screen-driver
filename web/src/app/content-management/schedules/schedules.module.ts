@@ -10,6 +10,7 @@ import {CheckboxMultiselectorModule} from "../../shared/checkbox-multiselector/c
 import { DaysOfWeekMultiselectorComponent } from './single-schedule/days-of-week-multiselector/days-of-week-multiselector.component';
 import {TimeSelectorModule} from "../../shared/time-selector/time-selector.module";
 import {ToggleButtonModule} from "../../shared/toggle-button/toggle-button.module";
+import {SpinnerModule} from "../../shared/spinner/spinner.module";
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import {ToggleButtonModule} from "../../shared/toggle-button/toggle-button.modul
         AutocompleteModule,
         ToggleButtonModule,
         CheckboxMultiselectorModule,
-        TimeSelectorModule
+        TimeSelectorModule,
+        SpinnerModule
     ],
     exports: [
         SchedulesComponent

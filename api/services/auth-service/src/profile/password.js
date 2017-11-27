@@ -1,10 +1,8 @@
 'use strict';
 
-const ModulePathManager = require('../module_path_manager');
-
 const dbHelper = require('./../helpers/db_helper');
 const UserPool = require('../user_pool/user_pool');
-const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
+const responseHelper = require('lib/helpers/http_response_helper');
 const parametersBuilder = require('./helpers/parameters_builder');
 
 module.exports.reset = (event, context, callback) => {

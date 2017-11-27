@@ -17,6 +17,7 @@ export class ResetPasswordFormComponent implements OnInit {
     @Input() failMessage: string;
     @Input() submitButton = 'Change';
     @Input() allowCancel = true;
+    @Input() isRequestPerforming: boolean = false;
 
     @Output() save = new EventEmitter<ResetPassword>();
     @Output() cancel = new EventEmitter();
@@ -68,6 +69,10 @@ export class ResetPasswordFormComponent implements OnInit {
 
     formInvalid(): boolean {
         return this.changePasswordForm.status === 'INVALID';
+    }
+
+    isRequestSending(): boolean {
+      return this.isRequestPerforming
     }
 
     getValidationMessage(fieldName: string): string {
