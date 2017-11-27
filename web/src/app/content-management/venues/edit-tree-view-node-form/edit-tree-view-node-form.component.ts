@@ -93,6 +93,11 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         return `${nodeLevelName} ${this.originalNodeData.name}`;
     }
 
+    private formatContentUrl() {
+        let url = this.nodeData.content.url;
+        this.nodeData.content.url = this.getFormattedUrl(url);
+    }
+
     validateForm() {
         this.nodeData.name = this.nodeData.name.trim();
         this.isFormValid = this.isNodeNameValid() && this.isContentShortNameValid() && this.isContentUrlValid();
@@ -182,6 +187,8 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     }
 
     createContentBeforeUpdateVenue() {
+        this.formatContentUrl();
+
         this.editFormService.saveNewContent(this.nodeData.content)
             .subscribe(
                 content => this.handleCreateContentResponse(content),
@@ -298,5 +305,17 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         this.removeEditableNode();
         this.stopClickPropagation(event);
         this.editFormService.deleteItem(this.node, this.currentSetting);
+    }
+
+    private getFormattedUrl(url) {
+        let httpMarker = "http://";
+        if (!this.hasURLProtocolMarker(url)) return httpMarker + url;
+        return url;
+    }
+
+    private hasURLProtocolMarker(url): boolean {
+        let httpUrlTemplate = /http(.+?)\/\//;
+
+        return !!url.match(httpUrlTemplate);
     }
 }
