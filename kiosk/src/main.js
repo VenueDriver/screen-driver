@@ -45,19 +45,19 @@ function setupLogger() {
 }
 
 function ready() {
+    powerSaveBlocker.start('prevent-display-sleep');
+    notificationListener = new NotificationListener();
+    subscribeToScreenReloadNotification();
+    subscribeToScheduleUpdate();
+    bindSettingChanges();
+
+    registerHotKeys();
+    addHotKeyListeners();
+    addEventListeners();
+    settingsLoadJob = CronJobsManager.initSettingsLoadJob();
+
     StorageManager.loadDataFromLocalStorage().then(() => {
-        powerSaveBlocker.start('prevent-display-sleep');
-        notificationListener = new NotificationListener();
         openWindow();
-
-        subscribeToScreenReloadNotification();
-        subscribeToScheduleUpdate();
-        bindSettingChanges();
-
-        registerHotKeys();
-        addHotKeyListeners();
-        addEventListeners();
-        settingsLoadJob = CronJobsManager.initSettingsLoadJob();
         ApplicationUpdater.syncAppVersionOnApi();
         new ApplicationUpdater().init();
     }).catch(e => {
