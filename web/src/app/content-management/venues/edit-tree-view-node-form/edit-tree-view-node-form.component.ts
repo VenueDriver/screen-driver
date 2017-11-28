@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {EditTreeViewNodeFormService} from "./edit-tree-view-node-form.service";
 import {Content} from "../../../content/content";
 import {NotificationService} from "../../../shared/notifications/notification.service";
@@ -95,7 +95,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     private formatContentUrl() {
         let url = this.nodeData.content.url;
-        this.nodeData.content.url = this.getFormattedUrl(url);
+        this.nodeData.content.url = this.getUrlWithProtocol(url);
     }
 
     validateForm() {
@@ -307,10 +307,9 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         this.editFormService.deleteItem(this.node, this.currentSetting);
     }
 
-    private getFormattedUrl(url) {
+    private getUrlWithProtocol(url) {
         let httpMarker = "http://";
-        if (!this.hasURLProtocolMarker(url)) return httpMarker + url;
-        return url;
+        return this.hasURLProtocolMarker(url) ? httpMarker + url : url;
     }
 
     private hasURLProtocolMarker(url): boolean {
