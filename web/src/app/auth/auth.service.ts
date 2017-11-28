@@ -18,7 +18,7 @@ export class AuthService {
     currentUser: BehaviorSubject<User> = new BehaviorSubject(null);
     unauthorizedUserEmail: Subject<string> = new BehaviorSubject(null);
 
-    constructor(private httpClient: ApiService,
+    constructor(private apiService: ApiService,
                 private router: Router,
                 private tokenService: AuthTokenService) {
 
@@ -43,7 +43,7 @@ export class AuthService {
     signIn(userDetails) {
         let subject = new Subject();
 
-        this.httpClient.post(AuthConsts.SIGN_IN_API, userDetails)
+        this.apiService.post(AuthConsts.SIGN_IN_API, userDetails)
             .subscribe(
                 response => {
                     this.saveAuthTokens(response);
@@ -144,7 +144,7 @@ export class AuthService {
     }
 
     private sendSignOutRequest(email: string) {
-        this.httpClient.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe()
+        this.apiService.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe()
     }
 
     private saveMainPageAsRollback() {
@@ -154,7 +154,7 @@ export class AuthService {
     refreshToken() {
         let subject = new Subject();
         let refreshToken = LocalStorageService.getRefreshToken();
-        this.httpClient.post(AuthConsts.TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
+        this.apiService.post(AuthConsts.TOKEN_REFRESH_API, {refreshToken: refreshToken}).subscribe(
             (response) => {
                 LocalStorageService.setIdToken(response['token']);
                 LocalStorageService.setAccessToken(response['accessToken']);

@@ -12,7 +12,7 @@ import {ApiService} from "../../shared/services/api.service";
 import {RequestConfig} from "../../shared/services/configs/request-config";
 import {SpinnerNameUtils} from "../../shared/spinner/uniq-entity-spinner/spinner-name-utils";
 
-const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;
+const SCHEDULES_API = `/api/schedules`;
 
 @Injectable()
 export class SchedulesService {
@@ -21,13 +21,13 @@ export class SchedulesService {
     schedules: BehaviorSubject<Array<Schedule>> = new BehaviorSubject<Array<Schedule>>([]);
 
     constructor(
-        private httpClient: ApiService,
+        private apiService: ApiService,
         private settingPriorityHelper: SettingsPriorityHelper,
         private notificationService: NotificationService) {
     }
 
     loadSchedules(): Observable<Array<Schedule>> {
-        return this.httpClient.get(SCHEDULES_API)
+        return this.apiService.get(SCHEDULES_API)
             .map((response: Array<Schedule>) => {
                 this.schedules.next(response);
                 return response;
@@ -43,7 +43,7 @@ export class SchedulesService {
     }
 
     save(schedule: Schedule, setting: Setting) {
-        this.httpClient.post(SCHEDULES_API, schedule, this.requestConfigFor(schedule)).subscribe(
+        this.apiService.post(SCHEDULES_API, schedule, this.requestConfigFor(schedule)).subscribe(
             response => this.handleSaveResponse(response, setting),
             error => {
                 let errorMessage = this.getCreateErrorMessage(error);
@@ -66,7 +66,7 @@ export class SchedulesService {
             schedule.periodicity = getPropertyName(eventTimeHolder.getPeriodicity());
         }
 
-        let request = this.httpClient.put(`${SCHEDULES_API}/${schedule.id}`, schedule, this.requestConfigFor(schedule));
+        let request = this.apiService.put(`${SCHEDULES_API}/${schedule.id}`, schedule, this.requestConfigFor(schedule));
 
         request.subscribe(
             response => {
@@ -92,7 +92,7 @@ export class SchedulesService {
     }
 
     removeSchedule(schedule: Schedule) {
-        this.httpClient.delete(`${SCHEDULES_API}/${schedule.id}`).subscribe(
+        this.apiService.delete(`${SCHEDULES_API}/${schedule.id}`).subscribe(
             response => this.scheduleListUpdated.next(response),
             error => this.notificationService.showErrorNotificationBar('Unable to perform the remove schedule operation')
         );
