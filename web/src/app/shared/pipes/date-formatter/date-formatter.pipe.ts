@@ -8,14 +8,14 @@ import * as _ from 'lodash';
 })
 export class DateFormatterPipe implements PipeTransform {
 
-    transform(date: Date|string, gmtTimezone?: number): string {
+    transform(date: Date|string, timezone?: number): string {
         if (typeof date === 'string' && isNaN(Date.parse(date))) {
             return "";
         }
 
         //format() perform a new Date() out of the box, but this date will have current timezone.
         //We should get rid of this timezone using getDateForOriginalTimezone(), if we want to have date for specific timezone;
-        let dateToTransform = _.isEmpty(gmtTimezone) ? this.getDateForOriginalTimezone(date, gmtTimezone) : date;
+        let dateToTransform = _.isEmpty(timezone) ? this.getDateForOriginalTimezone(date, timezone) : date;
         return format(dateToTransform, 'MMM D, YYYY [at] hh:mm A');
     }
 
