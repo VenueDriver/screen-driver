@@ -11,6 +11,7 @@ export class KioskVersionDetailsComponent {
     @Input('versionDetails') set _versionDetails(versionDetails: KioskVersionDetails) {
         this.versionDetails.version = versionDetails && versionDetails.version ? versionDetails.version : 'N/A';
         this.versionDetails.updatedAt = versionDetails ? versionDetails.updatedAt : undefined;
+        this.versionDetails.timezone = versionDetails ? versionDetails.timezone : undefined;
     }
 
     versionDetails: KioskVersionDetails = new KioskVersionDetails();
