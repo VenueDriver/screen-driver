@@ -15,6 +15,7 @@ const WindowInstanceHolder = require('./js/window-instance-holder');
 const StorageManager = require('./js/helpers/storage_manager');
 const UserInteractionsManager = require('./js/user-interactions-manager');
 const UncaughtErrorsHandlingService = require('./js/services/error/uncaught_errors_handling_service');
+const ServicesInitialiser = require('./js/services/services_initialiser');
 
 const hotkey = require('electron-hotkey');
 const {ipcMain} = require('electron');
@@ -22,9 +23,7 @@ const {ipcMain} = require('electron');
 const _ = require('lodash');
 
 setupLogger();
-
-//should be called on application init
-require('./js/services/services_initialiser').init();
+ServicesInitialiser.initBaseServices();
 
 let settingsLoadJob;
 let notificationListener;
@@ -47,9 +46,7 @@ function setupLogger() {
 function ready() {
     powerSaveBlocker.start('prevent-display-sleep');
     notificationListener = new NotificationListener();
-    subscribeToScreenReloadNotification();
-    subscribeToScheduleUpdate();
-    bindSettingChanges();
+    ServicesInitialiser.initBehaviourServices();
 
     registerHotKeys();
     addHotKeyListeners();
@@ -132,37 +129,6 @@ function openContentWindow(contentUrl) {
         }
     });
     hideCursor(WindowInstanceHolder.getWindow());
-}
-
-function subscribeToScreenReloadNotification() {
-    notificationListener.subscribe('screens', 'refresh', (data) => {
-        let setting = CurrentScreenSettingsManager.getCurrentSetting();
-        let ableToReload = !_.isEmpty(setting) &&
-                           data.screens.includes(setting.selectedScreenId) &&
-                           !WindowsHelper.isAdminPanelOpened();
-
-        if (ableToReload) {
-            WindowInstanceHolder.getWindow().reload();
-        }
-    });
-}
-
-function subscribeToScheduleUpdate() {
-    notificationListener.subscribe('screens', 'schedule_updated', (event) => {
-        CurrentScreenSettingsManager.changeScreenConfiguration();
-    });
-}
-
-
-function initScheduling() {
-    let screenInformation = CurrentScreenSettingsManager.getCurrentSetting();
-    scheduledTaskManager.initSchedulingForScreen(screenInformation);
-}
-
-function bindSettingChanges() {
-    notificationListener.subscribe('screens', 'setting_updated', (data) => {
-        CurrentScreenSettingsManager.changeScreenConfiguration();
-    })
 }
 
 function hideCursor(window) {
