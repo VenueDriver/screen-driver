@@ -14,6 +14,7 @@ class GlobalErrorsHandlingService {
 
     registerError(error) {
         Logger.warn('Global errors handler registered an error: ' + error.message);
+        Logger.warn(error.stack);
         this.errors.next(error);
     }
 
