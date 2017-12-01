@@ -317,7 +317,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
 
     private getUrlWithProtocol(url) {
         let httpMarker = "http://";
-        return this.hasURLProtocolMarker(url) ? httpMarker + url : url;
+        return this.hasURLProtocolMarker(url) ? url : httpMarker + url;
     }
 
     private hasURLProtocolMarker(url): boolean {
