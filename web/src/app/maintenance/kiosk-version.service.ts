@@ -1,20 +1,19 @@
 import {Injectable} from "@angular/core";
-import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {KioskVersionDetails, KioskVersionDetailsMap} from "./entities/kiosk-version-details";
 
 import * as _ from 'lodash';
+import {ApiService} from "../shared/services/api.service";
 
 @Injectable()
 export class KioskVersionService {
 
-    readonly apiPath = `${environment.apiUrl}/api/screens/versions`;
+    readonly apiPath = `/api/screens/versions`;
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(private apiService: ApiService) { }
 
     loadKioskVersions(): Observable<KioskVersionDetailsMap> {
-        return this.httpClient.get(this.apiPath)
+        return this.apiService.get(this.apiPath)
             .map(this.createKioskVersionsMap);
     }
 

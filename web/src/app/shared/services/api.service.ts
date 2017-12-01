@@ -27,8 +27,7 @@ export class ApiService {
 
     put(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
         this.applyRequestConfigs(requestConfig);
-
-        let request = this.http.put(this.getRequestUrl(path), JSON.stringify(body), { headers: this.setHeaders() });
+        let request = this.http.put(this.getRequestUrl(path), body, { headers: this.setHeaders() });
 
         return this.handleRequest(request, requestConfig);
     }
@@ -36,7 +35,7 @@ export class ApiService {
     patch(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
         this.applyRequestConfigs(requestConfig);
 
-        let request = this.http.patch(this.getRequestUrl(path), JSON.stringify(body), { headers: this.setHeaders() });
+        let request = this.http.patch(this.getRequestUrl(path), body, { headers: this.setHeaders() });
 
         return this.handleRequest(request, requestConfig);
     }
@@ -44,7 +43,7 @@ export class ApiService {
     post(path: string, body: Object = {}, requestConfig: RequestConfig = {}): Observable<any> {
         this.applyRequestConfigs(requestConfig);
 
-        let request = this.http.post(this.getRequestUrl(path), JSON.stringify(body), { headers: this.setHeaders() });
+        let request = this.http.post(this.getRequestUrl(path), body, { headers: this.setHeaders() });
 
         return this.handleRequest(request, requestConfig);
     }
