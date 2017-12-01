@@ -38,6 +38,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     contentChanged = false;
     currentVenueId: string;
     updatedVenue: Venue;
+    isRequestPerforming: boolean = false;
 
     constructor(
         private editFormService: EditTreeViewNodeFormService,
@@ -203,6 +204,7 @@ export class EditTreeViewNodeFormComponent implements OnInit {
     }
 
     updateVenues() {
+        this.isRequestPerforming = true;
         if (this.currentVenueId && this.wasNodeChanged()) {
             this.updateSingleVenue();
         } else if (!this.currentVenueId) {
@@ -230,8 +232,14 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         let venueToUpdate = _.find(this.venues, venue => venue.id === this.currentVenueId);
         this.editFormService.updateVenue(venueToUpdate)
             .subscribe(
-                venue => this.handleVenueListUpdateResponse(venue),
-                error => this.handleError('Unable to update setting')
+                venue => {
+                    this.handleVenueListUpdateResponse(venue);
+                    this.isRequestPerforming = false;
+                    },
+                error => {
+                    this.handleError('Unable to update setting');
+                    this.isRequestPerforming = false;
+                }
             );
     }
 
@@ -316,5 +324,9 @@ export class EditTreeViewNodeFormComponent implements OnInit {
         let httpUrlTemplate = /http(.+?)\/\//;
 
         return !!url.match(httpUrlTemplate);
+    }
+
+    getSpinnerLoadingText() {
+        return `Saving ${this.editFormService.getNodeLevelName(this.node).toLowerCase()}...`;
     }
 }
