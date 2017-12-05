@@ -4,7 +4,7 @@ const electron = require('electron');
 const path = require('path');
 const url = require('url');
 const BrowserWindow = electron.BrowserWindow;
-const WindowInstanceHolder = require('./../window-instance-holder');
+const WindowInstanceHolder = require('../window_instance_holder');
 
 
 const isDev = require('electron-is-dev');

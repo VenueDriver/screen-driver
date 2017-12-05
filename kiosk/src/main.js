@@ -1,6 +1,6 @@
 const electron = require('electron');
 const {powerSaveBlocker} = require('electron');
-const ApplicationUpdater = require('./js/application-updater');
+const ApplicationUpdater = require('./js/application_updater');
 const app = electron.app;
 
 const CurrentScreenSettingsManager = require('./js/current_screen_settings_manager');

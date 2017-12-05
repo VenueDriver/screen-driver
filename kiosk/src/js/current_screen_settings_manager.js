@@ -1,12 +1,12 @@
 'use strict';
 
 const {LocalStorageManager} = require('./helpers/local_storage_helper');
-const {scheduledTaskManager, isScheduled} = require('./scheduled-task-manager');
-const UserInteractionsManager = require('./user-interactions-manager');
+const {scheduledTaskManager, isScheduled} = require('./scheduled_task_manager');
+const UserInteractionsManager = require('./user_interactions_manager');
 const StorageManager = require('./helpers/storage_manager');
 const SettingsHelper = require('./helpers/settings_helper');
 const DataLoader = require('./data_loader');
-const WindowInstanceHolder = require('./window-instance-holder');
+const WindowInstanceHolder = require('./window_instance_holder');
 
 const _ = require('lodash');
 
