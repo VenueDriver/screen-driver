@@ -19,8 +19,4 @@ export class ResetPasswordComponent implements OnInit {
         });
     }
 
-    handleSendingResetRequest(email: string) {
-        this.userEmail = email;
-    }
-
 }
