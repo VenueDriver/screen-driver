@@ -13,4 +13,4 @@ class ClientUrlUtils {
     }
 }
 
-module.expotrs = ClientUrlUtils;
+module.exports = ClientUrlUtils;
