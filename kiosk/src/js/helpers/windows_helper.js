@@ -1,6 +1,7 @@
 'use strict';
 
 const electron = require('electron');
+const path = require('path');
 const BrowserWindow = electron.BrowserWindow;
 const WindowInstanceHolder = require('./../window-instance-holder');
 
@@ -9,6 +10,15 @@ const isDev = require('electron-is-dev');
 const log = require('electron-log');
 
 class WindowsHelper {
+
+    static openContentWindow(contentUrl) {
+        WindowsHelper.createWindow(contentUrl, {
+            webPreferences: {
+                preload: path.join(__dirname, './../preload/remote_content_preload.js')
+            }
+        });
+        WindowsHelper.hideCursor(WindowInstanceHolder.getWindow());
+    }
 
     static createWindow(url, windowOptions = {}) {
         WindowsHelper.addDefaultOptions(windowOptions);
@@ -45,6 +55,12 @@ class WindowsHelper {
         if (isDev) {
             window.webContents.openDevTools();
         }
+    }
+
+    static hideCursor(window) {
+        window.webContents.on('did-finish-load', function () {
+            window.webContents.insertCSS('*{ cursor: none !important; user-select: none;}')
+        });
     }
 
     static loadUrl(browserWindow, url) {

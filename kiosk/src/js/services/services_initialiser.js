@@ -14,6 +14,7 @@ class ServicesInitialiser {
     //should be called AFTER application was initialized and ready event was called
     static initBehaviourServices() {
         require('./external-event-listeners/api_events_handler_service').init();
+        require('./events/renderer_events_handler');
     }
 }
 

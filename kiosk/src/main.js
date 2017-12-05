@@ -11,14 +11,11 @@ const CronJobsManager = require('./js/helpers/cron_jobs_helper');
 const Logger = require('./js/logger/logger');
 const NotificationListener = require('./js/notification-listener/notification_listener');
 const {scheduledTaskManager} = require('./js/scheduled-task-manager');
-const WindowInstanceHolder = require('./js/window-instance-holder');
 const StorageManager = require('./js/helpers/storage_manager');
-const UserInteractionsManager = require('./js/user-interactions-manager');
 const UncaughtErrorsHandlingService = require('./js/services/error/uncaught_errors_handling_service');
 const ServicesInitialiser = require('./js/services/services_initialiser');
 
 const hotkey = require('electron-hotkey');
-const {ipcMain} = require('electron');
 
 const _ = require('lodash');
 
@@ -50,7 +47,7 @@ function ready() {
 
     registerHotKeys();
     addHotKeyListeners();
-    addEventListeners();
+
     settingsLoadJob = CronJobsManager.initSettingsLoadJob();
 
     StorageManager.loadDataFromLocalStorage().then(() => {
@@ -74,19 +71,15 @@ function openWindow() {
 
 function prepareContentWindowData(screenInformation) {
     try {
-        openContentWindow(screenInformation.contentUrl);
+        WindowsHelper.openContentWindow(screenInformation.contentUrl);
         CurrentScreenSettingsManager.changeScreenConfiguration();
     } catch (error) {
         Logger.error('Failed to load config. Used old config. Message:', error);
-        openContentWindow(screenInformation.contentUrl);
+        WindowsHelper.openContentWindow(screenInformation.contentUrl);
     }
 }
 
 function addListenerForErrors() {
-    ipcMain.on('errorInWindow', function (event, data) {
-        Logger.logGlobalError(data);
-    });
-
     process.on('uncaughtException', function (error) {
         UncaughtErrorsHandlingService.registerError(error);
     });
@@ -106,35 +99,10 @@ function addHotKeyListeners() {
     });
 }
 
-function addEventListeners() {
-    ipcMain.on('open-content-window', (event, contentUrl) => {
-        openContentWindow(contentUrl);
-        CurrentScreenSettingsManager.changeScreenConfiguration();
-    });
-
-    ipcMain.on('user-interacted', function (event) {
-        UserInteractionsManager.handleUserInteraction();
-    });
-}
 
 function openAdminPanel() {
     let filePath = getAdminPanelUrl();
     WindowsHelper.createWindow(filePath);
-}
-
-function openContentWindow(contentUrl) {
-    WindowsHelper.createWindow(contentUrl, {
-        webPreferences: {
-            preload: path.join(__dirname, 'js/preload/remote_content_preload.js')
-        }
-    });
-    hideCursor(WindowInstanceHolder.getWindow());
-}
-
-function hideCursor(window) {
-    window.webContents.on('did-finish-load', function () {
-        window.webContents.insertCSS('*{ cursor: none !important; user-select: none;}')
-    });
 }
 
 function getAdminPanelUrl() {
