@@ -1,5 +1,5 @@
 const GlobalErrorsHandlingService = require('./global_errors_handling_service');
-const Logger = require('./../../logger/logger');
+const Logger = require('../logger/logger');
 
 process.on('uncaughtException', function (error) {
     UncaughtErrorsHandlingService.registerError(error);

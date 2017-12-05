@@ -1,5 +1,5 @@
 const Subject = require('rxjs').Subject;
-const Logger = require('./../../logger/logger');
+const Logger = require('../logger/logger');
 
 let instance = null;
 

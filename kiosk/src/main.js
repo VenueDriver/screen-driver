@@ -6,7 +6,7 @@ const app = electron.app;
 const CurrentScreenSettingsManager = require('./js/current_screen_settings_manager');
 const WindowsHelper = require('./js/helpers/windows_helper');
 const SettingsLoadJobManager = require('./js/helpers/settings_load_job_manager');
-const Logger = require('./js/logger/logger');
+const Logger = require('./js/services/logger/logger');
 const StorageManager = require('./js/helpers/storage_manager');
 const ServicesInitialiser = require('./js/services/services_initialiser');
 

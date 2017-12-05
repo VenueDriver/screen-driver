@@ -2,7 +2,7 @@
 
 const CurrentScreenSettingsManager = require('./../current_screen_settings_manager');
 const CronJob = require('cron').CronJob;
-const Logger = require('./../logger/logger');
+const Logger = require('../services/logger/logger');
 const _ = require('lodash');
 
 let settingsLoadJob;

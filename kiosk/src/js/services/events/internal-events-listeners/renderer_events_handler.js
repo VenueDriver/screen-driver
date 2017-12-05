@@ -1,7 +1,7 @@
 const {ipcMain} = require('electron');
 
 const CurrentScreenSettingsManager = require('../../../current_screen_settings_manager');
-const Logger = require('../../../logger/logger');
+const Logger = require('../../logger/logger');
 const UserInteractionsManager = require('../../../user_interactions_manager');
 const WindowsHelper = require('../../../helpers/windows_helper');
 
