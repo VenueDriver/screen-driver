@@ -20,6 +20,8 @@ class InvitationEmailCustomizer {
                 <br><br>
                 ${clientAppUrl}{####}
                 <br><br>
+                The link will expire within 1 day. 
+                <br><br>
                 Please contact your system administrator in case of any issues with login.
                 <br><br>
                 Thank you!

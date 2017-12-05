@@ -16,9 +16,11 @@ class ForgotPasswordEmailCustomizer {
                 <br><br>
                 You've recently requested for resetting the password.
                 <br><br>
-                Use the following link to proceed reset password operation:
+                Use the following link to reset your password:
                 <br><br>
                 ${clientAppUrl}{####}
+                <br><br>
+                The link will expire within 1 hour. 
                 <br><br>
                 Please contact your system administrator in case of any issues with password reset.
                 <br><br>
