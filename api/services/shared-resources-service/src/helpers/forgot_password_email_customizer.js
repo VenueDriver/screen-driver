@@ -1,14 +1,11 @@
+const ClientUrlUtils = require('./client_url_utils');
+
 class ForgotPasswordEmailCustomizer {
 
     static customize(event) {
-        let clientAppUrl = ForgotPasswordEmailCustomizer._getSignUpUrl();
+        let clientAppUrl = ClientUrlUtils.getResetPasswordFormUrl();
         event.response.emailSubject = "[ScreenDriver] Your password reset verification code";
         event.response.emailMessage = ForgotPasswordEmailCustomizer._getMessageTemplate(clientAppUrl);
-    }
-
-    static _getSignUpUrl() {
-        let clientAppUrl = process.env.STAGE === 'production' ? process.env.CLIENT_APP_URL : process.env.CLIENT_APP_STAGING_URL;
-        return `${clientAppUrl}/#/auth/reset-password/?token=`;
     }
 
     static _getMessageTemplate(clientAppUrl) {
