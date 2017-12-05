@@ -15,7 +15,7 @@ class WindowsHelper {
     static openContentWindow(contentUrl) {
         WindowsHelper.createWindow(contentUrl, {
             webPreferences: {
-                preload: path.join(__dirname, './../preload/remote_content_preload.js')
+                preload: path.join(__dirname, './../renderer/remote_content_preload.js')
             }
         });
         WindowsHelper.hideCursor(WindowInstanceHolder.getWindow());
