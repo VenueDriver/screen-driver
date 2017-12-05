@@ -4,8 +4,8 @@ class ClientUrlUtils {
         return `${ClientUrlUtils._getClientAppUrl()}/#/auth/first/?token=`;
     }
 
-    static getResetPasswordFormUrl() {
-        return `${ClientUrlUtils._getClientAppUrl()}/#/auth/reset-password/?token=`;
+    static getResetPasswordFormUrl(email) {
+        return `${ClientUrlUtils._getClientAppUrl()}/#/auth/reset-password/?email=${email}&token=`;
     }
 
     static _getClientAppUrl() {

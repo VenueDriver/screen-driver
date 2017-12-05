@@ -3,7 +3,8 @@ const ClientUrlUtils = require('./client_url_utils');
 class ForgotPasswordEmailCustomizer {
 
     static customize(event) {
-        let clientAppUrl = ClientUrlUtils.getResetPasswordFormUrl();
+        let userDetails = event.request.userAttributes;
+        let clientAppUrl = ClientUrlUtils.getResetPasswordFormUrl(userDetails.email);
         event.response.emailSubject = "[ScreenDriver] Your password reset verification code";
         event.response.emailMessage = ForgotPasswordEmailCustomizer._getMessageTemplate(clientAppUrl);
     }
