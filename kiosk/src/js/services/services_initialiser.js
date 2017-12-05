@@ -16,6 +16,7 @@ class ServicesInitialiser {
     static initBehaviourServices() {
         require('./external-event-listeners/api_events_handler_service').init();
         require('./events/renderer_events_handler');
+        require('./events/hotkeys_events_handler');
     }
 }
 

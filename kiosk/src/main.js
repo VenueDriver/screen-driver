@@ -3,14 +3,10 @@ const {powerSaveBlocker} = require('electron');
 const ApplicationUpdater = require('./js/application-updater');
 const app = electron.app;
 
-const path = require('path');
-const url = require('url');
 const CurrentScreenSettingsManager = require('./js/current_screen_settings_manager');
 const WindowsHelper = require('./js/helpers/windows_helper');
-const CronJobsManager = require('./js/helpers/cron_jobs_helper');
+const SettingsLoadJobManager = require('./js/helpers/settings_load_job_manager');
 const Logger = require('./js/logger/logger');
-const NotificationListener = require('./js/notification-listener/notification_listener');
-const {scheduledTaskManager} = require('./js/scheduled-task-manager');
 const StorageManager = require('./js/helpers/storage_manager');
 const ServicesInitialiser = require('./js/services/services_initialiser');
 
@@ -19,9 +15,6 @@ const hotkey = require('electron-hotkey');
 const _ = require('lodash');
 
 ServicesInitialiser.initBaseServices();
-
-let settingsLoadJob;
-let notificationListener;
 
 app.disableHardwareAcceleration();
 
@@ -36,13 +29,9 @@ app.on('window-all-closed', function () {
 
 function ready() {
     powerSaveBlocker.start('prevent-display-sleep');
-    notificationListener = new NotificationListener();
     ServicesInitialiser.initBehaviourServices();
-
     registerHotKeys();
-    addHotKeyListeners();
-
-    settingsLoadJob = CronJobsManager.initSettingsLoadJob();
+    SettingsLoadJobManager.startJob();
 
     StorageManager.loadDataFromLocalStorage().then(() => {
         openWindow();
@@ -50,7 +39,7 @@ function ready() {
         new ApplicationUpdater().init();
     }).catch(e => {
         Logger.info(e);
-        openAdminPanel();
+        WindowsHelper.openAdminPanel();
     });
 }
 
@@ -59,7 +48,7 @@ function openWindow() {
     if (setting && setting.contentUrl) {
         prepareContentWindowData(setting);
     } else {
-        openAdminPanel();
+        WindowsHelper.openAdminPanel();
     }
 }
 
@@ -76,27 +65,3 @@ function prepareContentWindowData(screenInformation) {
 function registerHotKeys() {
     hotkey.register('global', 'Control+A', 'open-admin-panel');
 }
-
-function addHotKeyListeners() {
-    app.on('shortcut-pressed', (event) => {
-        if (event === 'open-admin-panel') {
-            CronJobsManager.stopJob(settingsLoadJob);
-            scheduledTaskManager.clearAllSchedules();
-            openAdminPanel();
-        }
-    });
-}
-
-function openAdminPanel() {
-    let filePath = getAdminPanelUrl();
-    WindowsHelper.createWindow(filePath);
-}
-
-function getAdminPanelUrl() {
-    return url.format({
-        pathname: path.join(__dirname, 'admin_panel.html'),
-        protocol: 'file:',
-        slashes: true
-    });
-}
-

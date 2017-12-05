@@ -2,6 +2,7 @@
 
 const electron = require('electron');
 const path = require('path');
+const url = require('url');
 const BrowserWindow = electron.BrowserWindow;
 const WindowInstanceHolder = require('./../window-instance-holder');
 
@@ -85,6 +86,19 @@ class WindowsHelper {
     static isAdminPanelOpened() {
         return WindowInstanceHolder.getWindow().webContents.getURL().startsWith('file:///');
     }
+
+    static openAdminPanel() {
+        let filePath = getAdminPanelUrl();
+        WindowsHelper.createWindow(filePath);
+    }
+}
+
+function getAdminPanelUrl() {
+    return url.format({
+        pathname: path.join(__dirname, '/../../admin_panel.html'),
+        protocol: 'file:',
+        slashes: true
+    });
 }
 
 module.exports = WindowsHelper;
