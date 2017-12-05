@@ -12,14 +12,12 @@ const Logger = require('./js/logger/logger');
 const NotificationListener = require('./js/notification-listener/notification_listener');
 const {scheduledTaskManager} = require('./js/scheduled-task-manager');
 const StorageManager = require('./js/helpers/storage_manager');
-const UncaughtErrorsHandlingService = require('./js/services/error/uncaught_errors_handling_service');
 const ServicesInitialiser = require('./js/services/services_initialiser');
 
 const hotkey = require('electron-hotkey');
 
 const _ = require('lodash');
 
-setupLogger();
 ServicesInitialiser.initBaseServices();
 
 let settingsLoadJob;
@@ -35,10 +33,6 @@ app.on('window-all-closed', function () {
     }
 });
 
-function setupLogger() {
-    Logger.setupLoggerProperties();
-    addListenerForErrors();
-}
 
 function ready() {
     powerSaveBlocker.start('prevent-display-sleep');
@@ -79,12 +73,6 @@ function prepareContentWindowData(screenInformation) {
     }
 }
 
-function addListenerForErrors() {
-    process.on('uncaughtException', function (error) {
-        UncaughtErrorsHandlingService.registerError(error);
-    });
-}
-
 function registerHotKeys() {
     hotkey.register('global', 'Control+A', 'open-admin-panel');
 }
@@ -98,7 +86,6 @@ function addHotKeyListeners() {
         }
     });
 }
-
 
 function openAdminPanel() {
     let filePath = getAdminPanelUrl();
