@@ -1,6 +1,6 @@
 const electron = require('electron');
 const app = electron.app;
-const CronJobsManager = require('../../../helpers/settings_load_job_manager');
+const ServerDataLoadJob = require('../../../helpers/server_data_load_job');
 const {scheduledTaskManager} = require('../../../scheduled_task_manager');
 const WindowsHelper = require('../../windows/windows_helper');
 
@@ -11,7 +11,7 @@ const WindowsHelper = require('../../windows/windows_helper');
 
 app.on('shortcut-pressed', (event) => {
     if (event === 'open-admin-panel') {
-        CronJobsManager.stopJob();
+        ServerDataLoadJob.stopJob();
         scheduledTaskManager.clearAllSchedules();
         WindowsHelper.openAdminPanel();
     }

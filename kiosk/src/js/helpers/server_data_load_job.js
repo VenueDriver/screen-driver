@@ -7,10 +7,10 @@ const _ = require('lodash');
 
 let settingsLoadJob;
 
-class SettingsLoadJobManager {
+class ServerDataLoadJob {
 
     static startJob() {
-        SettingsLoadJobManager.stopJob();
+        ServerDataLoadJob.stopJob();
         settingsLoadJob = new CronJob('*/5 * * * *', function () {
             try {
                 CurrentScreenSettingsManager.changeScreenConfiguration();
@@ -29,4 +29,4 @@ class SettingsLoadJobManager {
 
 }
 
-module.exports = SettingsLoadJobManager;
+module.exports = ServerDataLoadJob;
