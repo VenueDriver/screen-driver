@@ -1,15 +1,14 @@
 import {Injectable} from '@angular/core';
 import {User} from "../core/entities/user";
 import {ErrorMessageExtractor} from "../core/error-message-extractor";
-import {environment} from "../../environments/environment";
 import {Subject, Observable} from "rxjs";
 import {NotificationService} from "../shared/notifications/notification.service";
 import {PasswordSet} from "./model/password.model";
 import {LocalStorageService} from "../auth/local-storage.service";
 import {ApiService} from "../shared/services/api.service";
 
-const EDIT_PROFILE_API = `${environment.apiUrl}/api/auth/profile`;
-const CHANGE_PASSWORD_API = `${environment.apiUrl}/api/auth/profile/change_password`;
+const EDIT_PROFILE_API = '/api/auth/profile';
+const CHANGE_PASSWORD_API = '/api/auth/profile/change_password';
 
 @Injectable()
 export class ProfileManagementService {

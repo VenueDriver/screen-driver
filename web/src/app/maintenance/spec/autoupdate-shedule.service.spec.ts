@@ -17,7 +17,7 @@ import {SpinnerService} from "../../shared/spinner/spinner.service";
 import {DataLoadingMonitorService} from "../../shared/services/data-loading-monitor/data-loading-monitor.service";
 
 describe('Service: AutoupdateScheduleService', () => {
-    let autoupdateScheduleService;
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientModule, HttpClientTestingModule],
