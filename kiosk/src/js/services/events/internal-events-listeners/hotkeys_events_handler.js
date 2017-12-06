@@ -2,7 +2,7 @@ const electron = require('electron');
 const app = electron.app;
 const CronJobsManager = require('../../../helpers/settings_load_job_manager');
 const {scheduledTaskManager} = require('../../../scheduled_task_manager');
-const WindowsHelper = require('../../../helpers/windows_helper');
+const WindowsHelper = require('../../windows/windows_helper');
 
 
 /**
