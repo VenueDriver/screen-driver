@@ -1,7 +1,7 @@
 'use strict';
 
 let Pusher = require('pusher-client');
-let DataLoader = require('../data_loader');
+let DataLoader = require('../../data_loader');
 const CronJob = require('cron').CronJob;
 
 class NotificationListener {

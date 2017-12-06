@@ -1,4 +1,4 @@
-const NotificationListener = require('../../../helpers/notification_listener');
+const NotificationListener = require('../../network/notification_listener');
 
 let notificationListener = new NotificationListener();
 
