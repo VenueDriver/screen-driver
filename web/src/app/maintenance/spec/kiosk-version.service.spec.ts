@@ -23,7 +23,6 @@ describe('Service: KioskVersionService', () => {
             providers: [
                 KioskVersionService,
                 ApiService,
-                ApiService,
                 SpinnerService,
                 DataLoadingMonitorService,
                 {provide: ConnectionBackend, useClass: MockBackend},
