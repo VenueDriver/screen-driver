@@ -32,7 +32,7 @@ After first deployment, all services could be deployed without an order.
 
 ### Add first user
 After first deployment a user should be added to the Cognito User Pool.
-For doing it perform `docker-compose -f docker-compose-deployment.yml api_create_user up`.
+For doing it perform `docker-compose -f docker-compose-deploy.yml api_create_user up`.
 
 User pool ID and email of the user should be specified in the `development.env` file.
 
