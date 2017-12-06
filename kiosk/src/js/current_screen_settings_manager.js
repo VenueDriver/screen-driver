@@ -5,7 +5,7 @@ const {scheduledTaskManager, isScheduled} = require('./scheduled_task_manager');
 const UserInteractionsManager = require('./services/windows/user_interactions_manager');
 const StorageManager = require('./helpers/storage_manager');
 const SettingsHelper = require('./helpers/settings_helper');
-const DataLoader = require('./data_loader');
+const DataLoader = require('./services/data/data_loader');
 const WindowInstanceHolder = require('./services/windows/window_instance_holder');
 
 const _ = require('lodash');
