@@ -15,7 +15,7 @@ class WindowsHelper {
     static openContentWindow(contentUrl) {
         WindowsHelper.createWindow(contentUrl, {
             webPreferences: {
-                preload: path.join(__dirname, './../renderer/remote_content_preload.js')
+                preload: path.join(__dirname, './../../renderer/remote_content_preload.js')
             }
         });
         WindowsHelper.hideCursor(WindowInstanceHolder.getWindow());
@@ -95,7 +95,7 @@ class WindowsHelper {
 
 function getAdminPanelUrl() {
     return url.format({
-        pathname: path.join(__dirname, '/../../admin_panel.html'),
+        pathname: path.join(__dirname, '/../../../admin_panel.html'),
         protocol: 'file:',
         slashes: true
     });

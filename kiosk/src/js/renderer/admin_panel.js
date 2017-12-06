@@ -2,9 +2,9 @@ const {app} = require('electron').remote;
 const remote = require('electron').remote;
 const {ipcRenderer} = require('electron');
 const CurrentScreenSettingsManager = remote.require(__dirname + '/js/current_screen_settings_manager');
-const DataLoader = remote.require(__dirname + '/js/data_loader');
+const DataLoader = remote.require(__dirname + '/js/services/data/data_loader');
 const SettingsHelper = remote.require(__dirname + '/js/helpers/settings_helper');
-const Logger = remote.require(__dirname + '/js/logger/logger');
+const Logger = remote.require(__dirname + '/js/services/logger/logger');
 const FileReader = remote.require(__dirname + '/js/helpers/file_reader');
 
 const _ = require('lodash');
