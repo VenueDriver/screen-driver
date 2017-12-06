@@ -17,6 +17,7 @@ class ServicesInitialiser {
         require('./events/external-event-listeners/api_events_handler_service').init();
         require('./events/internal-events-listeners/renderer_events_handler');
         require('./events/internal-events-listeners/hotkeys_events_handler');
+        require('./data/server_data_load_job').startJob();
     }
 }
 

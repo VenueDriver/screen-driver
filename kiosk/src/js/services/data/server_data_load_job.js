@@ -1,8 +1,8 @@
 'use strict';
 
-const CurrentScreenSettingsManager = require('./../current_screen_settings_manager');
+const CurrentScreenSettingsManager = require('../../current_screen_settings_manager');
 const CronJob = require('cron').CronJob;
-const Logger = require('../services/logger/logger');
+const Logger = require('../logger/logger');
 const _ = require('lodash');
 
 let settingsLoadJob;
