@@ -46,6 +46,6 @@
 1. Use RxJS
 1. Remove `cron` dependency
 1. Create separate module for managing background tasks
-1. Remove Pusher channel listener from `main.js`
+1. ~~Remove Pusher channel listener from `main.js`~~
 1. Remove `Not selected` item from drop-downs
 1. Add validation messages on admin panel (to describe why `Show presentation` button is disabled)

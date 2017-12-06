@@ -1,6 +1,8 @@
 'use strict';
 
 const electron = require('electron');
+const path = require('path');
+const url = require('url');
 const BrowserWindow = electron.BrowserWindow;
 const WindowInstanceHolder = require('./../window-instance-holder');
 
@@ -9,6 +11,15 @@ const isDev = require('electron-is-dev');
 const log = require('electron-log');
 
 class WindowsHelper {
+
+    static openContentWindow(contentUrl) {
+        WindowsHelper.createWindow(contentUrl, {
+            webPreferences: {
+                preload: path.join(__dirname, './../preload/remote_content_preload.js')
+            }
+        });
+        WindowsHelper.hideCursor(WindowInstanceHolder.getWindow());
+    }
 
     static createWindow(url, windowOptions = {}) {
         WindowsHelper.addDefaultOptions(windowOptions);
@@ -47,6 +58,12 @@ class WindowsHelper {
         }
     }
 
+    static hideCursor(window) {
+        window.webContents.on('did-finish-load', function () {
+            window.webContents.insertCSS('*{ cursor: none !important; user-select: none;}')
+        });
+    }
+
     static loadUrl(browserWindow, url) {
         browserWindow.loadURL(url);
 
@@ -69,6 +86,19 @@ class WindowsHelper {
     static isAdminPanelOpened() {
         return WindowInstanceHolder.getWindow().webContents.getURL().startsWith('file:///');
     }
+
+    static openAdminPanel() {
+        let filePath = getAdminPanelUrl();
+        WindowsHelper.createWindow(filePath);
+    }
+}
+
+function getAdminPanelUrl() {
+    return url.format({
+        pathname: path.join(__dirname, '/../../admin_panel.html'),
+        protocol: 'file:',
+        slashes: true
+    });
 }
 
 module.exports = WindowsHelper;
