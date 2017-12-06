@@ -39,6 +39,7 @@ plugins:
   - serverless-offline
   - serverless-mocha-plugin
   - serverless-export-env
+  - serverless-plugin-browserifier
 
 resources:
   Resources: ${self:custom.resources}
@@ -55,8 +56,7 @@ resources:
         Name: ScreenDriverRootApiResource-${opt:stage}
 
 package:
-  include:
-    - ../lib/**
+  individually: true
   exclude:
     - test/**
     - serverless/**

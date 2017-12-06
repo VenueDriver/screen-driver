@@ -43,10 +43,10 @@ plugins:
   - serverless-offline
   - serverless-mocha-plugin
   - serverless-export-env
+  - serverless-plugin-browserifier
 
 package:
-  include:
-    - ../lib/**
+  individually: true
   exclude:
     - serverless/**
     - test/**
