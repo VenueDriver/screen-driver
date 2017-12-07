@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {Schedule} from "./models/schedule.model";
-import {environment} from "../../../environments/environment";
 import {Setting} from "../../settings/entities/setting";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {getPropertyName} from '../../core/enums/periodicity';
