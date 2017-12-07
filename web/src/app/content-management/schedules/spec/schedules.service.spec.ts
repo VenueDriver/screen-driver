@@ -20,7 +20,7 @@ import {getPropertyName, Periodicity} from "../../../core/enums/periodicity";
 import {EventTimeHolderFixture} from "./fixtures/event-time-holder.fixture";
 import {Observable} from "rxjs";
 
-describe('Service: SchedulesService', () => {
+fdescribe('Service: SchedulesService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -226,8 +226,7 @@ describe('Service: SchedulesService', () => {
 
         describe('when response with error status received', () => {
             it('should call showErrorNotificationBar method with error message', () => {
-                const schedule = SchedulesFixture.getOneTimeSchedule();
-                schedule.id = 'scheduleID';
+                const schedule = SchedulesFixture.getOneTimeSchedule('scheduleID');
                 spyOn(this.apiService, 'put').and.returnValue(Observable.throw({status: 403}));
                 spyOn(this.notificationService, 'showErrorNotificationBar');
 
@@ -290,6 +289,44 @@ describe('Service: SchedulesService', () => {
                 this.schedulesService.updateSchedule(SchedulesFixture.getOneTimeSchedule('scheduleID'), eventTimeHolder);
 
                 expect(this.apiService.put).toHaveBeenCalledWith('/api/schedules/scheduleID', expectedSchedule, {spinner: {name: 'schedules-spinner-scheduleID'}});
+            });
+        });
+
+    });
+
+    describe('removeSchedule()', () => {
+
+        describe('when called', () => {
+            it('should call DELETE /api/schedules/{id}', () => {
+                const schedule = SchedulesFixture.getOneTimeSchedule('scheduleID');
+                spyOn(this.apiService, 'delete').and.returnValue(Observable.of({}));
+
+                this.schedulesService.removeSchedule(schedule);
+
+                expect(this.apiService.delete).toHaveBeenCalledWith('/api/schedules/scheduleID');
+            });
+        });
+
+        describe('when response with error status received', () => {
+
+            const schedule = SchedulesFixture.getOneTimeSchedule('scheduleID');
+
+            it('should call showErrorNotificationBar method with error message', () => {
+                spyOn(this.apiService, 'delete').and.returnValue(Observable.throw({status: 403}));
+                spyOn(this.notificationService, 'showErrorNotificationBar');
+
+                this.schedulesService.removeSchedule(schedule);
+
+                expect(this.notificationService.showErrorNotificationBar).toHaveBeenCalledWith('Unable to perform the remove schedule operation');
+            });
+
+            it('should call handleResponseWithSchedule method', () => {
+                spyOn(this.apiService, 'delete').and.returnValue(Observable.of({}));
+                spyOn(this.schedulesService, 'handleResponseWithSchedule');
+
+                this.schedulesService.removeSchedule(schedule);
+
+                expect(this.schedulesService.handleResponseWithSchedule).toHaveBeenCalledWith({});
             });
         });
 
