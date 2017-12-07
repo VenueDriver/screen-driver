@@ -82,10 +82,8 @@ export class SchedulesService {
         }
     }
 
-    private requestConfigFor(schedule: Schedule) {
-        let requestSettings: RequestConfig = {spinner: {name: SpinnerNameUtils.getName(schedule, "schedules")}};
-
-        return requestSettings
+    private requestConfigFor(schedule: Schedule): RequestConfig {
+        return {spinner: {name: SpinnerNameUtils.getName(schedule, "schedules")}}
     }
 
     removeSchedule(schedule: Schedule) {
