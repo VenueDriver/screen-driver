@@ -20,7 +20,7 @@ import {getPropertyName, Periodicity} from "../../../core/enums/periodicity";
 import {EventTimeHolderFixture} from "./fixtures/event-time-holder.fixture";
 import {Observable} from "rxjs";
 
-fdescribe('Service: SchedulesService', () => {
+describe('Service: SchedulesService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
