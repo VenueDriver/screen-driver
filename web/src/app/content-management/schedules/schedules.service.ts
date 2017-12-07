@@ -48,7 +48,7 @@ export class SchedulesService {
 
     removeSchedule(schedule: Schedule) {
         this.apiService.delete(`${SCHEDULES_API}/${schedule.id}`).subscribe(
-            response => this.scheduleListUpdated.next(response),
+            response => this.handleResponseWithSchedule(response),
             error => this.notificationService.showErrorNotificationBar('Unable to perform the remove schedule operation')
         );
     }
