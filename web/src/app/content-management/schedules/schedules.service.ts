@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {Schedule} from "./models/schedule.model";
 import {environment} from "../../../environments/environment";
 import {Setting} from "../../settings/entities/setting";
-import {SettingsPriorityHelper} from "../../settings/settings-priority.helper";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {getPropertyName} from '../../core/enums/periodicity';
 import {NotificationService} from "../../shared/notifications/notification.service";
@@ -22,7 +21,6 @@ export class SchedulesService {
 
     constructor(
         private apiService: ApiService,
-        private settingPriorityHelper: SettingsPriorityHelper,
         private notificationService: NotificationService) {
     }
 
@@ -39,28 +37,27 @@ export class SchedulesService {
         eventTimeHolder.setCronsForSchedule(schedule);
         schedule.settingId = setting ? setting.id : '';
         schedule.periodicity = getPropertyName(eventTimeHolder.getPeriodicity());
-        this.save(schedule, setting);
+        this.save(schedule);
     }
 
-    save(schedule: Schedule, setting: Setting) {
+    save(schedule: Schedule) {
         this.apiService.post(SCHEDULES_API, schedule, this.requestConfigFor(schedule)).subscribe(
-            response => this.handleSaveResponse(response, setting),
+            response => this.handleSaveResponse(response),
             error => {
                 let errorMessage = this.getCreateErrorMessage(error);
                 this.notificationService.showErrorNotificationBar(errorMessage);
                 if (error.status === 409) {
-                    this.handleSaveResponse(error._body, setting);
+                    this.handleSaveResponse(error._body);
                 }
             }
         );
     }
 
-    handleSaveResponse(schedule: any, setting: Setting) {
+    handleSaveResponse(schedule: any) {
         this.scheduleListUpdated.next(schedule);
-        this.settingPriorityHelper.setPriorityType(setting, schedule);
     }
 
-    updateSchedule(schedule: Schedule, eventTimeHolder?: EventTimeHolder){
+    updateSchedule(schedule: Schedule, eventTimeHolder?: EventTimeHolder) {
         if (eventTimeHolder) {
             eventTimeHolder.setCronsForSchedule(schedule);
             schedule.periodicity = getPropertyName(eventTimeHolder.getPeriodicity());
