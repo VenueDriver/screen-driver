@@ -11,8 +11,9 @@ export class SchedulesFixture {
         });
     }
 
-    static getOneTimeSchedule(): Schedule {
+    static getOneTimeSchedule(scheduleId?: string): Schedule {
         let schedule = new Schedule();
+        if (scheduleId) schedule.id = scheduleId;
         schedule.settingId = '';
         schedule.eventCron = '0 0 8 1 JAN * 2017';
         schedule.endEventCron = '0 0 13 1 JAN * 2017';
@@ -20,8 +21,9 @@ export class SchedulesFixture {
         return schedule;
     }
 
-    static getRepeatableqSchedule(): Schedule {
+    static getRepeatableSchedule(scheduleId?: string): Schedule {
         let schedule = new Schedule();
+        if (scheduleId) schedule.id = scheduleId;
         schedule.settingId = '';
         schedule.eventCron = '0 0 8 * * SUN';
         schedule.endEventCron = '0 0 13 * * SUN';
