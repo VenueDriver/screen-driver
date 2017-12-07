@@ -18,6 +18,7 @@ import {SchedulesFixture} from "./fixtures/schedules.fixture";
 import {SettingsFixture} from "./fixtures/settings.fixture";
 import {getPropertyName, Periodicity} from "../../../core/enums/periodicity";
 import {EventTimeHolderFixture} from "./fixtures/event-time-holder.fixture";
+import {Observable} from "rxjs";
 
 describe('Service: SchedulesService', () => {
 
@@ -66,7 +67,6 @@ describe('Service: SchedulesService', () => {
                     url: '/api/schedules',
                     method: 'GET'
                 })[0].flush(schedules);
-
         })));
 
     });
@@ -134,6 +134,67 @@ describe('Service: SchedulesService', () => {
                 this.schedulesService.createSchedule(setting, eventTimeHolder);
 
                 expect(this.schedulesService.save).toHaveBeenCalledWith(expectedSchedule);
+            });
+        });
+
+    });
+
+    describe('save()', () => {
+
+        describe('when called', () => {
+            it('should call POST /api/schedules', () => {
+                const schedule = SchedulesFixture.getOneTimeSchedule();
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(schedule));
+
+                this.schedulesService.save(schedule);
+
+                expect(this.apiService.post).toHaveBeenCalledWith('/api/schedules', schedule, {spinner: {name: 'spinner'}});
+            });
+        });
+
+        describe('when response with success status received', () => {
+           it('should call handleSaveResponse method', () => {
+               const schedule = SchedulesFixture.getOneTimeSchedule();
+               spyOn(this.apiService, 'post').and.returnValue(Observable.of(schedule));
+               spyOn(this.schedulesService, 'handleSaveResponse');
+
+               this.schedulesService.save(schedule);
+
+               expect(this.schedulesService.handleSaveResponse).toHaveBeenCalledWith(schedule);
+           });
+        });
+
+        describe('when response with error status received', () => {
+            it('should call showErrorNotificationBar method with error message', () => {
+                const schedule = SchedulesFixture.getOneTimeSchedule();
+                spyOn(this.apiService, 'post').and.returnValue(Observable.throw({status: 403}));
+                spyOn(this.notificationService, 'showErrorNotificationBar');
+
+                this.schedulesService.save(schedule);
+
+                expect(this.notificationService.showErrorNotificationBar).toHaveBeenCalledWith('Unable to perform the create schedule operation');
+            });
+        });
+
+        describe('when response with 409 status received', () => {
+            it('should call showErrorNotificationBar method with error message', () => {
+                const schedule = SchedulesFixture.getOneTimeSchedule();
+                spyOn(this.apiService, 'post').and.returnValue(Observable.throw({status: 409}));
+                spyOn(this.notificationService, 'showErrorNotificationBar');
+
+                this.schedulesService.save(schedule);
+
+                expect(this.notificationService.showErrorNotificationBar).toHaveBeenCalledWith('Conflict between schedules has been detected. Schedule saved as disabled now');
+            });
+
+            it('should call handleSaveResponse method with error message', () => {
+                const schedule = SchedulesFixture.getOneTimeSchedule();
+                spyOn(this.apiService, 'post').and.returnValue(Observable.throw({status: 409, _body: schedule}));
+                spyOn(this.schedulesService, 'handleSaveResponse');
+
+                this.schedulesService.save(schedule);
+
+                expect(this.schedulesService.handleSaveResponse).toHaveBeenCalledWith(schedule);
             });
         });
 
