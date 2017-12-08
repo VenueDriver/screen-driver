@@ -22,7 +22,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         let loadUserSubscription = this.usersService.getUsers().subscribe(users => this.setUsers(users));
-        let createUserSubscription = this.usersService.createUserEvent.subscribe(user => this.setUsers([user]));
+        let createUserSubscription = this.usersService.createUserEvent.subscribe(user => this.addUser(user));
         this.subscriptions.push(loadUserSubscription, createUserSubscription);
         this.currentUser = this.authService.currentUser.getValue();
     }
@@ -56,7 +56,12 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     private setUsers(users: User[]) {
-        this.users = this.users.concat(users);
+        this.users = users;
+        this.sortUsersBy('email');
+    }
+
+    private addUser(user: User) {
+        this.users.push(user);
         this.sortUsersBy('email');
     }
 
