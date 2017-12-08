@@ -73,3 +73,29 @@ services:
       - "3002:3002"
       - "8002:8002"
     command: npm start
+
+  apply_api_data:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.apply_data
+    network_mode: host
+    environment:
+      FILE: content-management-service-data.json
+      PORT: 8000
+    depends_on:
+      - api
+
+  apply_maintenance_api_data:
+    env_file:
+      - development.env
+    build:
+      context: api
+      dockerfile: ./docker/Dockerfile.apply_data
+    network_mode: host
+    environment:
+      FILE: maintenance-service-data.json
+      PORT: 8002
+    depends_on:
+      - maintenance_api
