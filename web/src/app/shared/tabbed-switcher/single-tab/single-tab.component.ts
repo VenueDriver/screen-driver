@@ -10,12 +10,12 @@ export class SingleTabComponent {
     @Input() title: string;
     @Input() set disabled(disabled: boolean) {
         this._disabled = disabled;
-        if (this.disabled) this.show = false;
+        if (this.disabled) this.active = false;
         this.changed.next();
     }
 
     changed = new Subject();
-    show = false;
+    active = false;
 
     private _disabled = false;
 

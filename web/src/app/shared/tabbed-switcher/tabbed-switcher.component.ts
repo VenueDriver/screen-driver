@@ -25,18 +25,18 @@ export class TabbedSwitcherComponent implements AfterViewInit {
 
     activateFirstTab() {
         if (this.activeTabIndex == 0) {
-            this.tabs.first.show = true;
+            this.tabs.first.active = true;
         }
     }
 
     switchTab(tabIndex: number) {
         this.tabs.forEach((tab: SingleTabComponent, index) => {
             if (tab.disabled) return;
-            if (tab.show && index != tabIndex) {
-                tab.show = false;
+            if (tab.active && index != tabIndex) {
+                tab.active = false;
             }
             if (index == tabIndex) {
-                tab.show = true;
+                tab.active = true;
                 this.activeTabIndex = index;
             }
         })
@@ -47,11 +47,11 @@ export class TabbedSwitcherComponent implements AfterViewInit {
     }
 
     handleTabStateChanges() {
-        let activeTab = this.tabs.find(tab => tab.show);
+        let activeTab = this.tabs.find(tab => tab.active);
         if (!activeTab) {
             this.tabs.forEach((tab: SingleTabComponent, index) => {
-                if (!tab.disabled && !tab.show && this.activeTabIndex !== 0) {
-                    tab.show = true;
+                if (!tab.disabled && !tab.active && this.activeTabIndex !== 0) {
+                    tab.active = true;
                     this.activeTabIndex = index;
                     return;
                 }
