@@ -1,5 +1,6 @@
 import {Component, ContentChildren, QueryList, Input, AfterViewInit, NgZone} from '@angular/core';
 import {SingleTabComponent} from "./single-tab/single-tab.component";
+import {Observable} from "rxjs/Observable";
 
 @Component({
     selector: 'tabbed-switcher',
@@ -12,10 +13,14 @@ export class TabbedSwitcherComponent implements AfterViewInit {
 
     activeTabIndex = 0;
 
-    constructor(private zone : NgZone) { }
+    constructor(private zone: NgZone) { }
 
     ngAfterViewInit() {
         this.zone.onMicrotaskEmpty.subscribe(() => this.activateFirstTab());
+        let observables = [];
+        this.tabs.forEach(tab => observables.push(tab.changed.asObservable()));
+        Observable.merge(...observables)
+            .subscribe(() => this.handleTabStateChanges());
     }
 
     activateFirstTab() {
@@ -39,5 +44,18 @@ export class TabbedSwitcherComponent implements AfterViewInit {
 
     isTabActive(tabIndex: number): boolean {
         return this.activeTabIndex == tabIndex;
+    }
+
+    handleTabStateChanges() {
+        let activeTab = this.tabs.find(tab => tab.show);
+        if (!activeTab) {
+            this.tabs.forEach((tab: SingleTabComponent, index) => {
+                if (!tab.disabled && !tab.show && this.activeTabIndex !== 0) {
+                    tab.show = true;
+                    this.activeTabIndex = index;
+                    return;
+                }
+            });
+        }
     }
 }
