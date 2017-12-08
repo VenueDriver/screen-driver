@@ -38,19 +38,16 @@ describe('Service: SchedulesService', () => {
                 {provide: RequestOptions, useClass: BaseRequestOptions},
             ]
         });
-    });
 
-    beforeEach(inject([SchedulesService, ApiService, NotificationService],
-        (schedulesService, apiService, notificationService) => {
-            this.schedulesService = schedulesService;
-            this.apiService = apiService;
-            this.notificationService = notificationService;
-    }));
+        this.schedulesService = TestBed.get(SchedulesService);
+        this.apiService = TestBed.get(ApiService);
+        this.notificationService = TestBed.get(NotificationService);
+    });
 
     describe('loadSchedules()', () => {
 
-        it('should load schedules', async(inject([ApiService, HttpTestingController],
-            (http: ApiService, backend: HttpTestingController) => {
+        it('should load schedules', async(inject([HttpTestingController],
+            (backend: HttpTestingController) => {
                 const schedules: Array<Schedule> = SchedulesFixture.getSchedulesInfo(3);
 
                 this.schedulesService.loadSchedules().subscribe((response: Array<Schedule>) => {
