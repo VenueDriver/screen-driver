@@ -6,7 +6,7 @@
             <venues></venues>
         </single-tab>
 
-        <single-tab title="Schedules">
+        <single-tab title="Schedules" [disabled]="isSchedulesTabDisabled()">
             <schedules></schedules>
         </single-tab>
     </tabbed-switcher>
