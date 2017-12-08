@@ -4,6 +4,7 @@ import {ResetPasswordFormComponent} from "./reset-password-form.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BrowserModule} from "@angular/platform-browser";
 import {AutofocusModule} from "../directives/autofocus/autofocus.module";
+import {ConfirmPasswordFieldsModule} from "../confirm-password-fields/confirm-password-fields.module";
 
 @NgModule({
     imports: [
@@ -11,7 +12,8 @@ import {AutofocusModule} from "../directives/autofocus/autofocus.module";
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        AutofocusModule
+        AutofocusModule,
+        ConfirmPasswordFieldsModule
     ],
     declarations: [
         ResetPasswordFormComponent
