@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
 
-import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import {async, inject, TestBed} from "@angular/core/testing";
 import {
@@ -9,31 +8,41 @@ import {
 } from "@angular/http";
 import {MockBackend} from "@angular/http/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {HttpClient, HttpClientModule, HttpParams, HttpRequest} from "@angular/common/http";
+import {HttpClientModule, HttpRequest} from "@angular/common/http";
 import {AutoupdateScheduleService} from "../autoupdate-schedule.service";
 import {AutoupdateScheduleServiceFixture} from "./fixtures/autoupdate-schedule-service.fixture";
 import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
+import {ApiService} from "../../shared/services/api.service";
+import {SpinnerService} from "../../shared/spinner/spinner.service";
+import {DataLoadingMonitorService} from "../../shared/services/data-loading-monitor/data-loading-monitor.service";
 
 describe('Service: AutoupdateScheduleService', () => {
-    let autoupdateScheduleService;
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientModule, HttpClientTestingModule],
             providers: [
                 AutoupdateScheduleService,
+                ApiService,
+                SpinnerService,
+                DataLoadingMonitorService,
                 {provide: ConnectionBackend, useClass: MockBackend},
                 {provide: RequestOptions, useClass: BaseRequestOptions},
             ]
         });
     });
 
-    beforeEach(inject([AutoupdateScheduleService, ConnectionBackend], (autoupdateScheduleService) => {
+    beforeEach(inject([AutoupdateScheduleService, ApiService, SpinnerService, DataLoadingMonitorService, ConnectionBackend],
+        (autoupdateScheduleService, apiService, spinnerService, dataLoadingMonitorService) => {
         this.autoupdateScheduleService = autoupdateScheduleService;
+        this.apiService = apiService;
+        this.spinnerService = spinnerService;
+        this.dataLoadingMonitorService = dataLoadingMonitorService;
     }));
 
-    describe('apiPath', () => {
+    describe('servicePath', () => {
         it('should be "/api/screens/versions"', () => {
-            expect(this.autoupdateScheduleService.apiPath).toContain('/api/screens/update-schedule')
+            expect(this.autoupdateScheduleService.servicePath).toContain('/api/screens/update-schedule')
         });
     });
 
@@ -59,8 +68,8 @@ describe('Service: AutoupdateScheduleService', () => {
 
     describe('upsert()', () => {
 
-        it('should send UPDATE request and return updated schedule', async(inject([HttpClient, HttpTestingController],
-            (http: HttpClient, backend: HttpTestingController) => {
+        it('should send UPDATE request and return updated schedule', async(inject([ApiService, HttpTestingController],
+            (http: ApiService, backend: HttpTestingController) => {
                 const schedule: AutoupdateSchedule = AutoupdateScheduleServiceFixture.schedules(1)[0];
 
                 this.autoupdateScheduleService.upsert(schedule)
@@ -77,8 +86,8 @@ describe('Service: AutoupdateScheduleService', () => {
 
     describe('loadAutoupdateSchedule()', () => {
 
-        it('should send GET request to /api/screens/update-schedule and return fetched schedules', async(inject([HttpClient, HttpTestingController],
-            (http: HttpClient, backend: HttpTestingController) => {
+        it('should send GET request to /api/screens/update-schedule and return fetched schedules', async(inject([ApiService, HttpTestingController],
+            (http: ApiService, backend: HttpTestingController) => {
                 const schedules: AutoupdateSchedule[] = AutoupdateScheduleServiceFixture.schedules(3);
 
                 this.autoupdateScheduleService.loadAutoupdateSchedule()

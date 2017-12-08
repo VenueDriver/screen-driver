@@ -1,32 +1,31 @@
 import { Injectable } from '@angular/core';
 import {Setting} from "./entities/setting";
-import {environment} from "../../environments/environment";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {NotificationService} from "../shared/notifications/notification.service";
-import {HttpClient, HttpResponse} from "@angular/common/http";
+import {ApiService} from "../shared/services/api.service";
 
-const SETTINGS_API_URL = `${environment.apiUrl}/api/settings`;
+const SETTINGS_API_URL = '/api/settings';
 
 @Injectable()
 export class SettingsService {
 
     private createSettingEvent: BehaviorSubject<any> = new BehaviorSubject({});
 
-    constructor(private httpClient: HttpClient,
+    constructor(private apiService: ApiService,
                 private notificationService: NotificationService) {
     }
 
     loadSettings(): Observable<any> {
-        return this.httpClient.get(SETTINGS_API_URL)
+        return this.apiService.get(SETTINGS_API_URL)
     }
 
     createSetting(setting: Setting): Observable<Setting> {
-        return this.httpClient.post(SETTINGS_API_URL, setting)
+        return this.apiService.post(SETTINGS_API_URL, setting)
     }
 
     updateSetting(setting: Setting, successMessage?: string, errorMessage?: string): Observable<Setting> {
         let subject = new Subject();
-        this.httpClient.put(`${SETTINGS_API_URL}/${setting.id}`, setting)
+        this.apiService.put(`${SETTINGS_API_URL}/${setting.id}`, setting)
             .subscribe(response => {
                 let message = successMessage ? successMessage : 'Setting was updated successfully';
                 this.notificationService.showSuccessNotificationBar(message);
@@ -46,8 +45,8 @@ export class SettingsService {
         return errorMessage ? errorMessage : 'Unable to update setting';
     }
 
-    removeSetting(id: string): Observable<HttpResponse<any>> {
-        return this.httpClient.delete(`${SETTINGS_API_URL}/${id}`)
+    removeSetting(id: string): Observable<any> {
+        return this.apiService.delete(`${SETTINGS_API_URL}/${id}`)
     }
 
     getCreateSettingEventSubscription(): Observable<any> {

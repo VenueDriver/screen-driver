@@ -1,7 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {SchedulesService} from "../schedules.service";
 import {Schedule} from "../models/schedule.model";
-import {EventTime} from "../models/event-time.model";
 import {SettingStateHolderService} from "../../../core/setting-state-manager/settings-state-holder.service";
 import {Setting} from "../../../settings/entities/setting";
 import {ValidationResult} from "../models/validation-result.model";
@@ -70,7 +69,16 @@ export class SingleScheduleComponent implements OnInit {
 
     subscribeToScheduleListUpdate() {
         this.schedulesService.scheduleListUpdated
-            .subscribe(() => this.eventTimeHolder = EventTimeHolder.init());
+            .subscribe(() => {
+                this.eventTimeHolder = EventTimeHolder.init();
+                this.setEventTimeHolderBy(this.schedule)
+            });
+    }
+
+    private setEventTimeHolderBy(schedule: Schedule) {
+        if (!_.isEmpty(schedule)) {
+            this.eventTimeHolder.setProperties(schedule);
+        }
     }
 
     setEventTimeProperties() {

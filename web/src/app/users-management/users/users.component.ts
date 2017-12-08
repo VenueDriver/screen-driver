@@ -21,8 +21,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        let loadUserSubscription = this.usersService.getUsers().subscribe(users => this.users = users);
-        let createUserSubscription = this.usersService.createUserEvent.subscribe(user => this.users.push(user));
+        let loadUserSubscription = this.usersService.getUsers().subscribe(users => this.setUsers(users));
+        let createUserSubscription = this.usersService.createUserEvent.subscribe(user => this.addUser(user));
         this.subscriptions.push(loadUserSubscription, createUserSubscription);
         this.currentUser = this.authService.currentUser.getValue();
     }
@@ -55,9 +55,23 @@ export class UsersComponent implements OnInit, OnDestroy {
         return `${user.enabled ? 'Lock' : 'Unlock'} user account`;
     }
 
+    private setUsers(users: User[]) {
+        this.users = users;
+        this.sortUsersBy('email');
+    }
+
+    private addUser(user: User) {
+        this.users.push(user);
+        this.sortUsersBy('email');
+    }
+
+    private sortUsersBy(field: string) {
+        this.users = _.orderBy(this.users, [user => user[field].toLowerCase()]);
+    }
+
     private toggleUserEnableStatus(user: User) {
         let updatedUser = _.clone(user);
-        updatedUser.enabled = !updatedUser.enabled
+        updatedUser.enabled = !updatedUser.enabled;
 
         return updatedUser;
     }

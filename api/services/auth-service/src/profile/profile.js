@@ -1,12 +1,11 @@
 'use strict';
 
-const ModulePathManager = require('../module_path_manager');
 const dynamodb = require('../dynamodb/dynamodb');
-const responseHelper = require(ModulePathManager.getBasePath() + 'lib/helpers/http_response_helper');
+const responseHelper = require('lib/helpers/http_response_helper');
 const UserPool = require('../user_pool/user_pool');
-const TokenParser = require(ModulePathManager.getBasePath() + 'lib/auth_token/auth_token_parser');
+const TokenParser = require('lib/auth_token/auth_token_parser');
 
-let User = require('./entities/user');
+let User = require('../user/entities/user');
 
 module.exports.edit = (event, context, callback) => {
     const userDetails = JSON.parse(event.body);

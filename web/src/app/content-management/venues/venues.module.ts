@@ -12,6 +12,8 @@ import {AutofocusModule} from "../../shared/directives/autofocus/autofocus.modul
 import {SettingsModule} from "../../settings/settings.module";
 import {ScreensMessagingService} from "../../shared/services/messaging/screens-messaging.service";
 import {ContentVenuesTreeViewComponent} from "./content-venues-tree-view/contnet-venues-tree-view.component";
+import {WaitForLoadingModule} from "../../shared/directives/wait-for-loading/wait-for-loading.module";
+import {SpinnerModule} from "../../shared/spinner/spinner.module";
 
 @NgModule({
     imports: [
@@ -20,7 +22,9 @@ import {ContentVenuesTreeViewComponent} from "./content-venues-tree-view/contnet
         ContentAutocompleteModule,
         TreeModule,
         AutofocusModule,
-        SettingsModule
+        SettingsModule,
+        WaitForLoadingModule,
+        SpinnerModule
     ],
     exports: [
         VenuesComponent,

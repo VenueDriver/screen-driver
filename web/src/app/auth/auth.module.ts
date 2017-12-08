@@ -12,6 +12,8 @@ import { ConfirmResetPasswordFormComponent } from './auth-page/reset-password/co
 import {ResetPasswordService} from "./auth-page/reset-password/reset-password.service";
 import {ResetPasswordFormModule} from "../shared/reset-password-form/reset-password-form.module";
 import {FirstSignInComponent} from "./auth-page/first-sign-in/first-sign-in.component";
+import {SpinnerModule} from "../shared/spinner/spinner.module";
+import {ApiService} from "../shared/services/api.service";
 
 
 @NgModule({
@@ -33,7 +35,8 @@ import {FirstSignInComponent} from "./auth-page/first-sign-in/first-sign-in.comp
     providers: [
         AuthService,
         AuthTokenService,
-        ResetPasswordService
+        ResetPasswordService,
+        ApiService
     ]
 })
 export class AuthModule {

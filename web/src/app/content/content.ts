@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-const URL_VALIDATION_PATTERN = /^https?:\/\/[\w\.-]*\.[a-z]{2,3}[\w.,@?^=%&amp;:/~+#\{\}\[\]-]*$/;
+const URL_VALIDATION_PATTERN = /[\w\.-]*\.[a-z]{2,3}[\w.,@?^=%&amp;:/~+#\{\}\[\]-]*$/;
 
 export class Content {
 

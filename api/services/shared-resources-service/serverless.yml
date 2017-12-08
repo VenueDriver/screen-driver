@@ -23,3 +23,8 @@ functions:
 resources:
   Resources: ${self:custom.resources}
   Outputs: ${self:custom.outputs}
+
+package:
+  exclude:
+    - node_modules/**
+    - package.json

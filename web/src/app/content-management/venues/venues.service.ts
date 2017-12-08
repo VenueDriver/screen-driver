@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import {Venue} from "../../core/entities/venue";
 import { Observable } from 'rxjs/Observable';
 import {Content} from "../../content/content";
@@ -7,21 +6,22 @@ import {ContentService} from "../../content/content.service";
 
 import * as _ from 'lodash';
 import {Subject, BehaviorSubject} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {ApiService} from "../../shared/services/api.service";
+import {SpinnerNameUtils} from "../../shared/spinner/uniq-entity-spinner/spinner-name-utils";
 
 @Injectable()
 export class VenuesService {
-    readonly venuesApiPath = `${environment.apiUrl}/api/venues`;
+    readonly venuesApiPath = '/api/venues';
 
     private venueUpdate: Subject<any> = new BehaviorSubject({});
 
     constructor(
-        private httpClient: HttpClient,
+        private apiService: ApiService,
         private contentService: ContentService
     ) { }
 
     loadVenues(): Observable<Array<Venue>> {
-        return this.httpClient.get(this.venuesApiPath);
+        return this.apiService.get(this.venuesApiPath);
     }
 
     loadContent(): Observable<Content[]> {
@@ -35,7 +35,7 @@ export class VenuesService {
     }
 
     saveVenue(venue: Venue): Observable<Venue> {
-        return this.httpClient.post(this.venuesApiPath, venue);
+        return this.apiService.post(this.venuesApiPath, venue);
     }
 
     private convertToTree(items: Array<any>) {
@@ -59,7 +59,7 @@ export class VenuesService {
 
     updateVenue(venueNode: any): Observable<Venue> {
         let venue = this.prepareVenuesToUpdate(venueNode);
-        return this.httpClient.put(`${this.venuesApiPath}/${venueNode.id}`, venue);
+        return this.apiService.put(`${this.venuesApiPath}/${venueNode.id}`, venue,  VenuesService.requestConfigFor(venueNode));
     }
 
     private prepareVenuesToUpdate(venueNode: any): Venue {
@@ -90,15 +90,15 @@ export class VenuesService {
     }
 
     deleteVenue(venueId: any): Observable<any> {
-        return this.httpClient.delete(`${this.venuesApiPath}/${venueId}`);
+        return this.apiService.delete(`${this.venuesApiPath}/${venueId}`);
     }
 
     deleteScreenGroup(venueId: string, screenGroupId: string) {
-        return this.httpClient.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}`);
+        return this.apiService.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}`);
     }
 
     deleteScreen(venueId: string, screenGroupId: string, screenId: string) {
-        return this.httpClient.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}/screens/${screenId}`);
+        return this.apiService.delete(`${this.venuesApiPath}/${venueId}/screen_groups/${screenGroupId}/screens/${screenId}`);
     }
 
     getVenueId(node: any) {
@@ -108,5 +108,9 @@ export class VenuesService {
             case 2: return parentNode.data.id;
             default: return parentNode.parent.data.id;
         }
+    }
+
+    private static requestConfigFor(venueNode: any) {
+        return {spinner: {name: SpinnerNameUtils.getName(venueNode, "venueNode")}}
     }
 }

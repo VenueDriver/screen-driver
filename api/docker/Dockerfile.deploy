@@ -13,5 +13,7 @@ RUN npm install
 ADD services/$SERVICE /app-src/$SERVICE
 ADD services/lib /app-src/lib
 
+RUN mkdir -p node_modules && ln -s /app-src/lib /app-src/$SERVICE/node_modules/lib
+
 CMD echo ***DEPLOY OPTIONS***: region is $AWS_REGION, stage is $AWS_STAGE && \
     serverless deploy --verbose --region $AWS_REGION --stage $AWS_STAGE
