@@ -7,6 +7,7 @@ import {Component, Input} from '@angular/core';
 export class SingleTabComponent {
 
     @Input() title: string;
+    @Input() disabled = false;
 
     show = false;
 
