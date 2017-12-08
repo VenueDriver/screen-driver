@@ -17,6 +17,10 @@ export class TabbedSwitcherComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.zone.onMicrotaskEmpty.subscribe(() => this.activateFirstTab());
+        this.subscribeOnChangesInTabs();
+    }
+
+    subscribeOnChangesInTabs() {
         let observables = [];
         this.tabs.forEach(tab => observables.push(tab.changed.asObservable()));
         Observable.merge(...observables)
@@ -32,14 +36,14 @@ export class TabbedSwitcherComponent implements AfterViewInit {
     switchTab(tabIndex: number) {
         this.tabs.forEach((tab: SingleTabComponent, index) => {
             if (tab.disabled) return;
-            if (tab.active && index != tabIndex) {
-                tab.active = false;
-            }
-            if (index == tabIndex) {
-                tab.active = true;
-                this.activeTabIndex = index;
-            }
+            if (index == tabIndex) this.activateTab(tab, index);
+            if (tab.active && tabIndex != index) tab.active = false;
         })
+    }
+
+    private activateTab(tab: SingleTabComponent, index) {
+        tab.active = true;
+        this.activeTabIndex = index;
     }
 
     isTabActive(tabIndex: number): boolean {
@@ -49,13 +53,16 @@ export class TabbedSwitcherComponent implements AfterViewInit {
     handleTabStateChanges() {
         let activeTab = this.tabs.find(tab => tab.active);
         if (!activeTab) {
-            this.tabs.forEach((tab: SingleTabComponent, index) => {
-                if (!tab.disabled && !tab.active && this.activeTabIndex !== 0) {
-                    tab.active = true;
-                    this.activeTabIndex = index;
-                    return;
-                }
-            });
+            this.activateFirstEnabledTab();
         }
+    }
+
+    private activateFirstEnabledTab() {
+        this.tabs.forEach((tab: SingleTabComponent, index) => {
+            if (!tab.disabled && !tab.active && this.activeTabIndex !== 0) {
+                this.activateTab(tab, index);
+                return;
+            }
+        });
     }
 }
