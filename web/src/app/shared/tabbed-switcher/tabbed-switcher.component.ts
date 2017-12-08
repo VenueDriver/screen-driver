@@ -26,6 +26,7 @@ export class TabbedSwitcherComponent implements AfterViewInit {
 
     switchTab(tabIndex: number) {
         this.tabs.forEach((tab: SingleTabComponent, index) => {
+            if (tab.disabled) return;
             if (tab.show && index != tabIndex) {
                 tab.show = false;
             }
