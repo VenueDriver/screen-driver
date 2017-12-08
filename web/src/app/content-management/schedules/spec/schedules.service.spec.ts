@@ -20,7 +20,7 @@ import {getPropertyName, Periodicity} from "../../../core/enums/periodicity";
 import {EventTimeHolderFixture} from "./fixtures/event-time-holder.fixture";
 import {Observable} from "rxjs";
 
-fdescribe('Service: SchedulesService', () => {
+describe('Service: SchedulesService', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -40,14 +40,11 @@ fdescribe('Service: SchedulesService', () => {
         });
     });
 
-    beforeEach(inject([SchedulesService, ApiService, SettingsService, SettingStateHolderService, NotificationService, NotificationsService],
-        (schedulesService, apiService, settingsService, settingStateHolderService, notificationService, notificationsService) => {
+    beforeEach(inject([SchedulesService, ApiService, NotificationService],
+        (schedulesService, apiService, notificationService) => {
             this.schedulesService = schedulesService;
             this.apiService = apiService;
-            this.settingsService = settingsService;
-            this.settingStateHolderService = settingStateHolderService;
             this.notificationService = notificationService;
-            this.notificationsService = notificationsService;
     }));
 
     describe('loadSchedules()', () => {
