@@ -1,4 +1,5 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Subject} from "rxjs/Subject";
 
 @Component({
     selector: 'single-tab',
@@ -7,8 +8,18 @@ import {Component, Input} from '@angular/core';
 export class SingleTabComponent {
 
     @Input() title: string;
-    @Input() disabled = false;
+    @Input() set disabled(disabled: boolean) {
+        this._disabled = disabled;
+        if (this.disabled) this.show = false;
+        this.changed.next();
+    }
 
+    changed = new Subject();
     show = false;
 
+    private _disabled = false;
+
+    get disabled() {
+        return this._disabled;
+    }
 }
