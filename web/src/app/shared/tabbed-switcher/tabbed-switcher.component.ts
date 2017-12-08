@@ -41,11 +41,6 @@ export class TabbedSwitcherComponent implements AfterViewInit {
         })
     }
 
-    private activateTab(tab: SingleTabComponent, index) {
-        tab.active = true;
-        this.activeTabIndex = index;
-    }
-
     isTabActive(tabIndex: number): boolean {
         return this.activeTabIndex == tabIndex;
     }
@@ -64,5 +59,10 @@ export class TabbedSwitcherComponent implements AfterViewInit {
                 return;
             }
         });
+    }
+
+    private activateTab(tab: SingleTabComponent, index) {
+        tab.active = true;
+        this.activeTabIndex = index;
     }
 }
