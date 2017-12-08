@@ -62,14 +62,22 @@ describe('Service: SettingsService', () => {
 
            expect(this.apiService.post).toHaveBeenCalledWith('/api/settings', setting);
         });
+
+        it('should return observable with created setting', () => {
+            const setting = SettingsFixture.getSetting();
+            spyOn(this.apiService, 'post').and.returnValue(Observable.of(setting));
+
+            this.settingsService.createSetting(setting).subscribe(response => {
+                expect(response).toEqual(setting);
+            });
+        });
     });
 
     describe('updateSetting()', () => {
 
+        const setting = SettingsFixture.getSetting('settingId');
+
         describe('when called with setting', () => {
-
-            const setting = SettingsFixture.getSetting('settingId');
-
             it('should call put method with /api/settings/settingId and setting instance', () => {
                 spyOn(this.apiService, 'put').and.returnValue(Observable.of(setting));
 
@@ -78,7 +86,7 @@ describe('Service: SettingsService', () => {
                 expect(this.apiService.put).toHaveBeenCalledWith('/api/settings/settingId', setting);
             });
 
-            it('should call showSuccessNotificationBar with \'Setting was updated successfully\' message', () => {
+            it('should call showSuccessNotificationBar method with \'Setting was updated successfully\' message', () => {
                 spyOn(this.apiService, 'put').and.returnValue(Observable.of(setting));
                 spyOn(this.notificationService, 'showSuccessNotificationBar');
 
@@ -90,11 +98,99 @@ describe('Service: SettingsService', () => {
             it('should return observable with setting instance', () => {
                 spyOn(this.apiService, 'put').and.returnValue(Observable.of(setting));
 
-                this.settingsService.updateSetting(setting).subscribe(receiveSetting => {
-                    expect(receiveSetting).toEqual(setting)
+                this.settingsService.updateSetting(setting).subscribe(receivedSetting => {
+                    expect(receivedSetting).toEqual(setting)
                 });
             });
         });
+
+        describe('when called with setting and successMessage', () => {
+            it('should call showSuccessNotificationBar method with received message', () => {
+                spyOn(this.apiService, 'put').and.returnValue(Observable.of(setting));
+                spyOn(this.notificationService, 'showSuccessNotificationBar');
+
+                this.settingsService.updateSetting(setting, 'Update was successful');
+
+                expect(this.notificationService.showSuccessNotificationBar).toHaveBeenCalledWith('Update was successful');
+            });
+        });
+
+        describe('when called with setting and the server respond with an error', () => {
+            it('should call showErrorNotificationBar method with \'Unable to update setting\' message', () => {
+                spyOn(this.apiService, 'put').and.returnValue(Observable.throw({status: 403}));
+                spyOn(this.notificationService, 'showErrorNotificationBar');
+
+                this.settingsService.updateSetting(setting);
+
+                expect(this.notificationService.showErrorNotificationBar).toHaveBeenCalledWith('Unable to update setting');
+            });
+
+            it('should return observable with error', () => {
+                spyOn(this.apiService, 'put').and.returnValue(Observable.throw({status: 403, error: 'Error'}));
+
+                this.settingsService.updateSetting(setting).subscribe(
+                    () => {},
+                    (error) => {
+                        expect(error).toEqual({status: 403, error: 'Error'})
+                    }
+                );
+            });
+        });
+
+        describe('when called with setting and the server respond with a conflict error', () => {
+            it('should call showErrorNotificationBar method with \'Conflict between settings has been detected. Setting is disabled now\' message', () => {
+                spyOn(this.apiService, 'put').and.returnValue(Observable.throw({status: 409}));
+                spyOn(this.notificationService, 'showErrorNotificationBar');
+
+                this.settingsService.updateSetting(setting);
+
+                expect(this.notificationService.showErrorNotificationBar).toHaveBeenCalledWith('Conflict between settings has been detected. Setting is disabled now');
+            });
+        });
+
+        describe('when called with setting, successMessage and errorMessage, and the server respond with an error', () => {
+            it('should call showErrorNotificationBar method with received error message', () => {
+                spyOn(this.apiService, 'put').and.returnValue(Observable.throw({status: 403}));
+                spyOn(this.notificationService, 'showErrorNotificationBar');
+
+                this.settingsService.updateSetting(setting, 'Update was successful', 'Update was unsuccessful');
+
+                expect(this.notificationService.showErrorNotificationBar).toHaveBeenCalledWith('Update was unsuccessful');
+            });
+        });
+
+        describe('when called with setting, successMessage and errorMessage, and the server respond with a conflict error', () => {
+            it('should call showErrorNotificationBar method with \'Conflict between settings has been detected. Setting is disabled now\' message', () => {
+                spyOn(this.apiService, 'put').and.returnValue(Observable.throw({status: 409}));
+                spyOn(this.notificationService, 'showErrorNotificationBar');
+
+                this.settingsService.updateSetting(setting, 'Update was successful', 'Update was unsuccessful');
+
+                expect(this.notificationService.showErrorNotificationBar).toHaveBeenCalledWith('Conflict between settings has been detected. Setting is disabled now');
+            });
+        });
+
+    });
+
+    describe('removeSetting()', () => {
+
+       describe('when called with settingId', () => {
+          it('should call delete method with /api/settings/settingId', () => {
+              spyOn(this.apiService, 'delete').and.returnValue(Observable.of({}));
+
+              this.settingsService.removeSetting('settingId');
+
+              expect(this.apiService.delete).toHaveBeenCalledWith('/api/settings/settingId');
+          });
+
+           it('should return observable with response', () => {
+               spyOn(this.apiService, 'delete').and.returnValue(Observable.of({status: 200}));
+
+               this.settingsService.removeSetting('settingId').subscribe(response => {
+                   expect(response).toEqual({status: 200});
+               });
+           });
+       });
 
     });
 });
