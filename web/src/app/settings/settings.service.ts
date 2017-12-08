@@ -38,13 +38,6 @@ export class SettingsService {
         return subject;
     }
 
-    getUpdateErrorMessage(error, errorMessage: string) {
-        if (error.status === 409) {
-            return 'Conflict between settings has been detected. Setting is disabled now';
-        }
-        return errorMessage ? errorMessage : 'Unable to update setting';
-    }
-
     removeSetting(id: string): Observable<any> {
         return this.apiService.delete(`${SETTINGS_API_URL}/${id}`)
     }
@@ -59,5 +52,12 @@ export class SettingsService {
 
     emitCreateSettingEvent(isEnabled: boolean, priorityType?: Object) {
         this.createSettingEvent.next({isEnabled: isEnabled, priorityType: priorityType});
+    }
+
+    private getUpdateErrorMessage(error, errorMessage: string) {
+        if (error.status === 409) {
+            return 'Conflict between settings has been detected. Setting is disabled now';
+        }
+        return errorMessage ? errorMessage : 'Unable to update setting';
     }
 }
