@@ -1,0 +1,48 @@
+AuthResource:
+  Type: AWS::ApiGateway::Resource
+  Properties:
+    ParentId:
+      Ref: ApiGatewayResourceApi
+    PathPart: 'auth'
+    RestApiId:
+      Ref: ApiGatewayRestApi
+
+AuthProxyResource:
+  Type: AWS::ApiGateway::Resource
+  Properties:
+    ParentId:
+      Ref: AuthResource
+    PathPart: '{proxy+}'
+    RestApiId:
+      Ref: ApiGatewayRestApi
+
+AuthProxyMethod:
+  Type: AWS::ApiGateway::Method
+  Properties:
+    ResourceId:
+      Ref: AuthProxyResource
+    RestApiId:
+      Ref: ApiGatewayRestApi
+    AuthorizationType: NONE
+    HttpMethod: ANY
+    MethodResponses:
+      - StatusCode: 200
+    RequestParameters:
+      method.request.path.proxy: true
+    Integration:
+      IntegrationHttpMethod: ANY
+      Type: HTTP_PROXY
+      Uri:
+        Fn::Join:
+          - ''
+          - - https://
+            - Fn::ImportValue: ScreenDriverAuthRestApiId-${opt:stage}
+            - .execute-api.
+            - Ref: AWS::Region
+            - .amazonaws.com/${opt:stage}/api/auth/{proxy}
+      IntegrationResponses:
+        - StatusCode: 200
+      RequestParameters:
+        integration.request.path.proxy: method.request.path.proxy
+        integration.request.header.Accept-Encoding: "'identity'"
+      PassthroughBehavior: WHEN_NO_MATCH
