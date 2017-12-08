@@ -10,8 +10,6 @@ export class TabbedSwitcherComponent implements AfterViewInit {
 
     @ContentChildren(SingleTabComponent) tabs: QueryList<SingleTabComponent>;
 
-    @Input() tabTitles: Array<string>;
-
     activeTabIndex = 0;
 
     constructor(private zone : NgZone) { }
