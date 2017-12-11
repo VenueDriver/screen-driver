@@ -3,27 +3,23 @@
 const uuid = require('uuid');
 
 class Screen {
-    constructor(group) {
-        if (group) {
-            this.id = group.id;
-            this.name = group.name;
-            return;
+    constructor(screen) {
+        if (screen) {
+            this.id = screen.id;
+            this.name = screen.name;
         }
-        this.screens = [];
     }
 
     validate() {
         if (!this.name) {
             throw Error("Screen couldn\'t be without name")
         }
-
     };
 
     generateId() {
         if (!this.id)
             this.id = uuid.v1();
     };
-
 }
 
 
