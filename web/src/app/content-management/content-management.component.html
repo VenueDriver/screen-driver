@@ -1,12 +1,12 @@
 <div class="content-management-container">
     <setting-header></setting-header>
 
-    <tabbed-switcher [tabTitles]="['Venues', 'Schedules']" [class.hidden]="isCreateSettingMode">
-        <single-tab>
+    <tabbed-switcher [class.hidden]="isCreateSettingMode">
+        <single-tab title="Venues">
             <venues></venues>
         </single-tab>
 
-        <single-tab>
+        <single-tab title="Schedules" [disabled]="isSchedulesTabDisabled()">
             <schedules></schedules>
         </single-tab>
     </tabbed-switcher>

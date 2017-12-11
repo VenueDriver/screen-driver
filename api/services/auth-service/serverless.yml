@@ -43,24 +43,12 @@ plugins:
   - serverless-offline
   - serverless-mocha-plugin
   - serverless-export-env
+  - serverless-plugin-browserifier
 
 package:
-  include:
-    - ../lib/**
+  individually: true
   exclude:
     - serverless/**
     - test/**
     - .*
     - package*
-
-    #exclude aws-sdk dependency as it exists in AWS Lambda runtime
-    - node_modules/aws-sdk/**
-    - node_modules/buffer/**
-    - node_modules/crypto-browserify/**
-    - node_modules/events/**
-    - node_modules/jmespath/**
-    - node_modules/querystring/**
-    - node_modules/url/**
-    - node_modules/sax/**
-    - node_modules/xml2js/**
-    - node_modules/xmlbuilder/**
