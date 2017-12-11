@@ -1,7 +1,7 @@
 const isOnline = require('is-online');
 const BehaviorSubject = require('rxjs').BehaviorSubject;
 const CronJob = require('cron').CronJob;
-const Logger = require('./../../logger/logger');
+const Logger = require('../logger/logger');
 
 
 let connected = new BehaviorSubject();
