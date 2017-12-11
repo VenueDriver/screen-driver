@@ -12,8 +12,8 @@ import { ConfirmResetPasswordFormComponent } from './auth-page/reset-password/co
 import {ResetPasswordService} from "./auth-page/reset-password/reset-password.service";
 import {ResetPasswordFormModule} from "../shared/reset-password-form/reset-password-form.module";
 import {FirstSignInComponent} from "./auth-page/first-sign-in/first-sign-in.component";
-import {SpinnerModule} from "../shared/spinner/spinner.module";
 import {ApiService} from "../shared/services/api.service";
+import {ConfirmPasswordFieldsModule} from "../shared/confirm-password-fields/confirm-password-fields.module";
 
 
 @NgModule({
@@ -22,7 +22,8 @@ import {ApiService} from "../shared/services/api.service";
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
-        ResetPasswordFormModule
+        ResetPasswordFormModule,
+        ConfirmPasswordFieldsModule
     ],
     declarations: [
         AuthComponent,
