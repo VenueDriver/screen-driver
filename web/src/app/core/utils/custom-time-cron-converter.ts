@@ -1,5 +1,5 @@
 import {CronParseResult} from "./custom-cron-parser";
-import {EventDateUtils} from "../../content-management/schedules/event-time/event-date.utils";
+import {EventDateUtils} from "./event-date.utils";
 
 const EVERY_DAY_CRON_TEMPLATE = (hours, minutes) => `0 ${minutes} ${hours} * * * *`;
 

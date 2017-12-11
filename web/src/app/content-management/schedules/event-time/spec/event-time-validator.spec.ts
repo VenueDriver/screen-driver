@@ -4,7 +4,7 @@ import {
     INVALID_EVENT_TIME_RANGE_ERROR_MESSAGE
 } from "../event-time.validator";
 import {Periodicity} from "../../../../core/enums/periodicity";
-import {EventDateUtils} from "../event-date.utils";
+import {EventDateUtils} from "../../../../core/utils/event-date.utils";
 
 describe('EventTimeValidator', () => {
 

@@ -1,6 +1,6 @@
 import {Periodicity} from '../../../core/enums/periodicity';
 import {WeekDays, getShortDay} from '../../../core/enums/days-of-week';
-import {EventDateUtils} from "../event-time/event-date.utils";
+import {EventDateUtils} from "../../../core/utils/event-date.utils";
 
 export class EventTime {
 
