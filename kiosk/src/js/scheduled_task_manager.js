@@ -1,8 +1,8 @@
 const cron = require('node-cron');
-const ScheduleMergeTool = require('./schedule-merge-tool');
-const UserInteractionsManager = require('./user-interactions-manager');
+const ScheduleMergeTool = require('./helpers/schedule_merge_tool');
+const UserInteractionsManager = require('./services/browser-windows/user_interactions_manager');
 const SettingsHelper = require('./helpers/settings_helper');
-const WindowInstanceHolder = require('./window-instance-holder');
+const WindowInstanceHolder = require('./services/browser-windows/window_instance_holder');
 const StorageManager = require('./helpers/storage_manager');
 const CronParser = require('./helpers/cron_parser');
 

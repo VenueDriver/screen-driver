@@ -1,12 +1,12 @@
 const electron = require('electron');
 const {powerSaveBlocker} = require('electron');
-const ApplicationUpdater = require('./js/application-updater');
+const ApplicationUpdater = require('./js/application_updater');
 const app = electron.app;
 
 const CurrentScreenSettingsManager = require('./js/current_screen_settings_manager');
-const WindowsHelper = require('./js/helpers/windows_helper');
-const SettingsLoadJobManager = require('./js/helpers/settings_load_job_manager');
-const Logger = require('./js/logger/logger');
+const WindowsHelper = require('./js/services/browser-windows/windows_helper');
+const SettingsLoadJobManager = require('./js/services/data/server_data_load_job');
+const Logger = require('./js/services/logger/logger');
 const StorageManager = require('./js/helpers/storage_manager');
 const ServicesInitialiser = require('./js/services/services_initialiser');
 
@@ -31,7 +31,6 @@ function ready() {
     powerSaveBlocker.start('prevent-display-sleep');
     ServicesInitialiser.initBehaviourServices();
     registerHotKeys();
-    SettingsLoadJobManager.startJob();
 
     StorageManager.loadDataFromLocalStorage().then(() => {
         openWindow();

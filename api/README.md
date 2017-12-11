@@ -30,6 +30,16 @@ The rest of the services can be deployed without an order.
 
 After first deployment, all services could be deployed without an order.
 
+### Import items to DB tables
+To import items to the DB tables on project startup add the following files to the `db_items` directory:
+    * `content-management-service-items.json`
+    * `maintenance-service-items.json`
+File name corresponds to a service name to which items will be imported. Those file names are specified in `data_import` 
+service in `docker-compose.yml`. The files format should be equal to the one described in 
+[the documentation](http://docs.aws.amazon.com/cli/latest/reference/dynamodb/batch-write-item.html#options)
+
+> Those files are not required.
+
 ### Add first user
 After first deployment a user should be added to the Cognito User Pool.
 For doing it perform `docker-compose -f docker-compose-deploy.yml up api_create_user`.

@@ -1,9 +1,9 @@
 const {ipcMain} = require('electron');
 
-const CurrentScreenSettingsManager = require('../../current_screen_settings_manager');
+const CurrentScreenSettingsManager = require('../../../current_screen_settings_manager');
 const Logger = require('../../logger/logger');
-const UserInteractionsManager = require('../../user-interactions-manager');
-const WindowsHelper = require('./../../helpers/windows_helper');
+const UserInteractionsManager = require('../../browser-windows/user_interactions_manager');
+const WindowsHelper = require('../../browser-windows/windows_helper');
 
 /**
  * Should be used after application's 'ready' event was triggered

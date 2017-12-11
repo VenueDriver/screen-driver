@@ -70,9 +70,22 @@ services:
     depends_on:
       - serverless
     volumes:
-        - ./api/services/maintenance-service:/app-src/maintenance-service
-        - ./api/services/maintenance-service/node_modules:/app-src/maintenance-service/node_modules
+      - ./api/services/maintenance-service:/app-src/maintenance-service
+      - ./api/services/maintenance-service/node_modules:/app-src/maintenance-service/node_modules
     ports:
       - "3002:3002"
       - "8002:8002"
     command: npm start
+
+  data_import:
+    image: codeship/aws-deployment
+    env_file:
+      - development.env
+    network_mode: host
+    depends_on:
+      - api
+      - maintenance_api
+    command: bash -c ". scripts/import_items_to_db.sh content-management-service-items.json 8000 && . scripts/import_items_to_db.sh maintenance-service-items.json 8002"
+    volumes:
+      - ./api/db_items:/db_items
+      - ./api/scripts:/scripts
