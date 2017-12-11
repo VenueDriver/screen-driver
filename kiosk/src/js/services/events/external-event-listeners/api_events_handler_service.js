@@ -1,7 +1,7 @@
 const ApiEventsListenerService = require('./api_events_listener_service');
 const CurrentScreenSettingsManager = require('../../../current_screen_settings_manager');
-const WindowsHelper = require('../../windows/windows_helper');
-const WindowInstanceHolder = require('../../windows/window_instance_holder');
+const WindowsHelper = require('../../browser-windows/windows_helper');
+const WindowInstanceHolder = require('../../browser-windows/window_instance_holder');
 
 const _ = require('lodash');
 
