@@ -1,7 +1,9 @@
 <div class="tabs-container">
     <ul class="nav nav-tabs">
-        <li *ngFor="let title of tabTitles; let index = index" [class.active]="isTabActive(index)">
-            <a (mousedown)="switchTab(index)">{{title}}</a>
+        <li *ngFor="let tab of tabs; let index = index"
+            [class.active]="isTabActive(index)"
+            [class.disabled]="tab.disabled">
+            <a (mousedown)="switchTab(index)">{{tab.title}}</a>
         </li>
     </ul>
 
