@@ -24,7 +24,7 @@ export class ResetPasswordFormComponent implements OnInit {
 
     changePasswordForm: FormGroup;
 
-    constructor(private _fb: FormBuilder) {
+    constructor(private formBuilder: FormBuilder) {
     }
 
     ngOnInit() {
@@ -32,9 +32,9 @@ export class ResetPasswordFormComponent implements OnInit {
     }
 
     initFormGroup() {
-        this.changePasswordForm = this._fb.group({
+        this.changePasswordForm = this.formBuilder.group({
             'identityVerificationCode': new FormControl('', this.getValidatorsForIdentityVerificationCode()),
-            'passwords': this._fb.array([])
+            'passwords': this.formBuilder.array([])
         });
     }
 
