@@ -1,4 +1,5 @@
 import {CronParseResult} from "./custom-cron-parser";
+import {EventDateUtils} from "./event-date.utils";
 
 const EVERY_DAY_CRON_TEMPLATE = (hours, minutes) => `0 ${minutes} ${hours} * * * *`;
 
@@ -13,20 +14,14 @@ export class CustomTimeCronConverter {
     }
 
     private getMinutes(): string {
-        return this.input.minutes == '00' ? '0' : this.input.minutes;
+        let minutes = this.input.minutes;
+        if (minutes === '0') return minutes;
+        return minutes.startsWith('0') ? minutes.slice(1) : minutes;
     }
 
-    private getHours(): string {
-        let is12AM = this.input.period.toLowerCase() == 'am' && +this.input.hours == 12;
-
-        if (is12AM) return '0';
-
-        if (this.input.period.toLowerCase() == 'pm') {
-            if (+this.input.hours < 12) {
-                return `${12 + (+this.input.hours)}`;
-            }
-        }
-        return this.input.hours;
+    private getHours(): number {
+        let time = `${this.input.hours}:${this.input.minutes}`;
+        return EventDateUtils.getHours(time, this.input.period);
     }
 }
 

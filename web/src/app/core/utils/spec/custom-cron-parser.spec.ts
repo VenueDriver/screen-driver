@@ -26,7 +26,7 @@ describe('CustomCronParser', () => {
         });
 
         describe('when cron is 0 12 0 * * * *', () => {
-            it('should return PM', () => {
+            it('should return AM', () => {
                 const EVERY_DAY_AT_ZERO_TWENTY_AM_CRON_EXPRESSION = '0 12 0 * * * *';
                 const parser = new CustomCronParser(EVERY_DAY_AT_ZERO_TWENTY_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                 expect(parser.getPeriod()).toBe('AM');
@@ -34,7 +34,7 @@ describe('CustomCronParser', () => {
         });
 
         describe('when cron is 0 0 1 * * * *', () => {
-            it('should return PM', () => {
+            it('should return AM', () => {
                 const parser = new CustomCronParser(EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                 expect(parser.getPeriod()).toBe('AM');
             });
@@ -50,7 +50,7 @@ describe('CustomCronParser', () => {
         });
 
         describe('when cron is 0 30 13 * * * *', () => {
-            it('should return 0', () => {
+            it('should return 30', () => {
                 const EVERY_DAY_AT_HALF_PAST_ONE_PM_CRON_EXPRESSION = '0 30 13 * * * *';
                 const parser = new CustomCronParser(EVERY_DAY_AT_HALF_PAST_ONE_PM_CRON_EXPRESSION, CronConvertStrategy.DEFAULT);
                 expect(parser.getMinutes()).toBe('30');
