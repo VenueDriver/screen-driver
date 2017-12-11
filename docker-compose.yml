@@ -77,28 +77,15 @@ services:
       - "8002:8002"
     command: npm start
 
-  apply_api_data:
+  data_import:
+    image: codeship/aws-deployment
     env_file:
       - development.env
-    build:
-      context: api
-      dockerfile: ./docker/Dockerfile.apply_data
     network_mode: host
-    environment:
-      FILE: content-management-service-data.json
-      PORT: 8000
     depends_on:
       - api
-
-  apply_maintenance_api_data:
-    env_file:
-      - development.env
-    build:
-      context: api
-      dockerfile: ./docker/Dockerfile.apply_data
-    network_mode: host
-    environment:
-      FILE: maintenance-service-data.json
-      PORT: 8002
-    depends_on:
       - maintenance_api
+    command: bash -c ". scripts/import_items_to_db.sh content-management-service-items.json 8000 && . scripts/import_items_to_db.sh maintenance-service-items.json 8002"
+    volumes:
+      - ./api/db_items:/db_items
+      - ./api/scripts:/scripts
