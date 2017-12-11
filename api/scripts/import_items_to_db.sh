@@ -7,9 +7,9 @@ if [ -e ${file_with_items} ]; then
     aws configure set region us-east-1
     sleep 10
 
-    echo Importing items from ${file_with_items} file to data base on port ${db_port} ...
+    echo Importing items from ${file_with_items} file into database on port ${db_port} ...
 
     aws dynamodb batch-write-item --request-items file://${file_with_items} --endpoint-url http://localhost:${db_port}
 else
-    echo Skip items importing to data base on port ${db_port}
+    echo Skipping import of items into database on port ${db_port}
 fi
