@@ -1,4 +1,5 @@
 'use strict';
+const Screen = require('./screen');
 
 const uuid = require('uuid');
 
@@ -7,27 +8,29 @@ class ScreenGroup {
         if (group) {
             this.id = group.id;
             this.name = group.name;
-            this.screens = group.screens ? group.screens : [];
+            this.screens = this.extractScreensInstances(group.screens);
             return;
         }
         this.screens = [];
-        this._rev = 0;
+    }
+
+    extractScreensInstances(screens) {
+        if (!screens) return [];
+        return screens.map(screen => new Screen(screen));
     }
 
     validate() {
-        if (!this.name || this.name == '') throw new Error('Screen group couldn\'t be without name');
+        if (!this.name || this.name === '') throw new Error('Screen group couldn\'t be without name');
 
         this.screens.forEach(screen => {
+            screen.validate();
             validateScreenNamesUniqueness(this.screens, screen);
-            if (!screen.name) {
-                throw Error("Screen couldn\'t be without name")
-            }
         });
 
         function validateScreenNamesUniqueness(allScreeens, screen) {
             let matches = 0;
             allScreeens.forEach(element => {
-                if (screen.name == element.name) matches++;
+                if (screen.name === element.name) matches++;
             });
             if (matches > 1) {
                 throw new Error('Screens should have unique names');
@@ -42,7 +45,7 @@ class ScreenGroup {
 
     generateIdForScreens() {
         this.screens.forEach(screen => {
-            if (!screen.id) screen.id = uuid.v1()
+            if (!screen.id) screen.generateId();
         });
     };
 }

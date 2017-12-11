@@ -134,21 +134,6 @@ describe('create_venue', () => {
         return MultiOperationHelper.performCreateTest(venue, expectations);
     });
 
-    it('Should create screen with content id', () => {
-        let venue = {
-            name: "Hakkasan",
-            screen_groups: [{name: "Touch", screens: [{name: "A", content_id: "710b962e-041c-11e1-9234-0123456789ab"}]}]
-        };
-
-        let expectations = (body, response) => {
-            assert(response.statusCode == 200);
-            assert(body.screen_groups[0].screens[0].name === "A");
-            assert(body.screen_groups[0].screens[0].content_id === "710b962e-041c-11e1-9234-0123456789ab");
-        };
-
-        return MultiOperationHelper.performCreateTest(venue, expectations);
-    });
-
     it('Shouldn\'t create venue without name', () => {
         let venue = {};
 
