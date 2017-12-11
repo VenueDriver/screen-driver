@@ -14,7 +14,7 @@ import * as _ from 'lodash';
 })
 export class RequestResetPasswordFormComponent implements OnInit {
 
-    @Output() requested = new EventEmitter();
+    requestPerformed = false;
 
     isRequestPerforming = false;
     resetPasswordForm: FormGroup;
@@ -51,7 +51,7 @@ export class RequestResetPasswordFormComponent implements OnInit {
             .subscribe(
                 () => {
                     this.setRequestPerforming(false);
-                    this.requested.emit(this.resetPasswordForm.value.email)
+                    this.requestPerformed = true;
                 },
                 (error) => {
                     this.setRequestPerforming(false);

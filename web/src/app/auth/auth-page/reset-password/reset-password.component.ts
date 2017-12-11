@@ -1,20 +1,23 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Router, ActivatedRoute, NavigationEnd} from "@angular/router";
 
 @Component({
     selector: 'reset-password',
     templateUrl: './reset-password.component.html',
 })
-export class ResetPasswordComponent {
+export class ResetPasswordComponent implements OnInit {
 
-    isRequested: boolean = false;
     userEmail: string;
+    verificationCode: string;
 
-    constructor() {
+    constructor(private activatedRoute: ActivatedRoute) {
     }
 
-    handleSendingResetRequest(email: string) {
-        this.isRequested = true;
-        this.userEmail = email;
+    ngOnInit() {
+        this.activatedRoute.queryParams.subscribe(params => {
+            this.verificationCode = params['token'];
+            this.userEmail = params['email']
+        });
     }
 
 }
