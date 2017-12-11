@@ -1,8 +1,0 @@
-FROM codeship/aws-deployment
-
-ADD data_backup/$FILE .
-
-CMD aws configure set region $AWS_REGION && \
-    sleep 10 && \
-    echo Apply data from $FILE file to data base on port $PORT && \
-    aws dynamodb batch-write-item --request-items file://$FILE --endpoint-url http://localhost:$PORT
