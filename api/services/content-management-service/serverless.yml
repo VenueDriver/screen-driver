@@ -43,14 +43,14 @@ plugins:
   - serverless-offline
   - serverless-mocha-plugin
   - serverless-export-env
+  - serverless-plugin-browserifier
 
 resources:
   Resources: ${self:custom.resources}
   Outputs: ${self:custom.outputs}
 
 package:
-  include:
-    - ../lib/**
+  individually: true
   exclude:
     - test/**
     - serverless/**
