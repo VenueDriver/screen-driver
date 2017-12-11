@@ -25,7 +25,7 @@ To build app for Windows desktop: `npm run win-build` or follow [this instructio
 
 To create Windows installer: `npm run win-installer`. Installer will be placed in `dist` folder.
 
-You can use Docker to build installer for Windows. Perform `docker-compose -f docker-compose-deploy.yml up build_kiosk`.
+You can use Docker to build installer for Windows. Perform `docker-compose -f docker-compose-kiosk.yml up`.
 
 > After installation logs will be located in `C:\Users\<user name>\AppData\Roaming\ScreenDriver\info.log` file. 
 >

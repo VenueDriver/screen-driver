@@ -70,12 +70,3 @@ services:
     build:
       context: api
       dockerfile: ./docker/Dockerfile.create_user
-
-  build_kiosk:
-    env_file:
-      - development.env
-    build:
-      context: kiosk
-      dockerfile: ./docker/Dockerfile
-    volumes:
-      - ./kiosk/dist:/app-src/dist

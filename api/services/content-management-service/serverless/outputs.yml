@@ -1,0 +1,10 @@
+ScreenDriverRestApi:
+  Value:
+    Ref: ApiGatewayRestApi
+  Export:
+    Name: ScreenDriverRestApi-${opt:stage}
+ScreenDriverRootResource:
+  Value:
+    Ref: ApiGatewayResourceApi
+  Export:
+    Name: ScreenDriverRootApiResource-${opt:stage}

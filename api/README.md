@@ -19,7 +19,7 @@ All serverless services and the web app will be ran. Services will be ran with s
 
 ### Deployment
 
-To deploy the project just perform `docker-compose -f docker-compose-deployment.yml up`. 
+To deploy the project just perform `docker-compose -f docker-compose-deploy.yml up`. 
 Do not forget to specify correct AWS and Pusher credentials as well as region and stage in the `development.env` file.
 
 You can skip deployment of the web app if you are going to deploy it by another way.
@@ -30,9 +30,19 @@ The rest of the services can be deployed without an order.
 
 After first deployment, all services could be deployed without an order.
 
+### Import items to DB tables
+To import items to the DB tables on project startup add the following files to the `db_items` directory:
+    * `content-management-service-items.json`
+    * `maintenance-service-items.json`
+File name corresponds to a service name to which items will be imported. Those file names are specified in `data_import` 
+service in `docker-compose.yml`. The files format should be equal to the one described in 
+[the documentation](http://docs.aws.amazon.com/cli/latest/reference/dynamodb/batch-write-item.html#options)
+
+> Those files are not required.
+
 ### Add first user
 After first deployment a user should be added to the Cognito User Pool.
-For doing it perform `docker-compose -f docker-compose-deployment.yml api_create_user up`.
+For doing it perform `docker-compose -f docker-compose-deploy.yml up api_create_user`.
 
 User pool ID and email of the user should be specified in the `development.env` file.
 
@@ -112,3 +122,4 @@ Used plugins:
 * [serverless-dynamodb-client](https://github.com/99xt/serverless-dynamodb-client)
 * [serverless-mocha-plugin](https://github.com/SC5/serverless-mocha-plugin)
 * [serverless-export-env](https://github.com/arabold/serverless-export-env)
+* [serverless-plugin-browserifier](https://github.com/digitalmaas/serverless-plugin-browserifier)
