@@ -72,10 +72,11 @@ class CurrentScreenSettingsManager {
 
             scheduledTaskManager.initSchedulingForScreen(screenInformation);
 
-            if (!isScheduled() && currentUrl != newUrl) {
+            if (!isScheduled() && currentUrl !== newUrl) {
                 CurrentScreenSettingsManager._applyNewUrl(screenInformation, newUrl);
             }
         })
+        .catch(error => console.error('Caught', error));
     }
 
     static _applyNewUrl(screenInformation, newUrl) {
@@ -97,7 +98,7 @@ class CurrentScreenSettingsManager {
     }
 
     static _cutSlashAtTheEndOfUrl(url) {
-        return url.lastIndexOf('/') == url.length - 1 ? url.slice(0, -1) : url;
+        return url.lastIndexOf('/') === url.length - 1 ? url.slice(0, -1) : url;
     }
 }
 
