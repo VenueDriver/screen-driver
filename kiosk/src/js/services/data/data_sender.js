@@ -1,8 +1,8 @@
 'use strict';
-const CurrentScreenSettingsManager = require('./current_screen_settings_manager');
-const HttpClient = require('./helpers/http_client');
-const PropertiesLoader = require('./helpers/properties_load_helper');
-const ConnectionStatusService = require('./services/network/connection_status_service');
+const CurrentScreenSettingsManager = require('../../current_screen_settings_manager');
+const HttpClient = require('../../helpers/http_client');
+const PropertiesLoader = require('../../helpers/properties_load_helper');
+const ConnectionStatusService = require('../network/connection_status_service');
 
 const API_ENDPOINT = PropertiesLoader.getApiEndpoint();
 

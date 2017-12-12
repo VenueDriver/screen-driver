@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {environment} from "../../environments/environment";
 import {Observable} from "rxjs/Observable";
 import {AutoupdateSchedule} from "./entities/autoupdate-schedule";
 
@@ -11,16 +10,16 @@ const EVERY_DAY_AT_ONE_AM_CRON_EXPRESSION = '0 0 1 * * * *';
 @Injectable()
 export class AutoupdateScheduleService {
 
-    readonly apiPath = `${environment.apiUrl}/api/screens/update-schedule`;
+    readonly servicePath = `/api/screens/update-schedule`;
 
     constructor(private apiService: ApiService) { }
 
     loadAutoupdateSchedule(): Observable<Array<AutoupdateSchedule>> {
-        return this.apiService.get(this.apiPath);
+        return this.apiService.get(this.servicePath);
     }
 
     upsert(schedule: AutoupdateSchedule): Observable<AutoupdateSchedule> {
-        return this.apiService.put(this.apiPath, schedule);
+        return this.apiService.put(this.servicePath, schedule);
     }
 
     createDefaultAutoapdateSchedule(): AutoupdateSchedule {

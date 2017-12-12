@@ -9,6 +9,7 @@ import {VenuesModule} from "../content-management/venues/venues.module";
 import {MaintenanceVenuesTreeViewModule} from "./maintenance-venues-tree-view/maintenance-venues-tree-view.module";
 import {AutoupdateScheduleService} from "./autoupdate-schedule.service";
 import {KioskVersionService} from "./kiosk-version.service";
+import {ApiService} from "../shared/services/api.service";
 
 @NgModule({
     imports: [
@@ -25,7 +26,8 @@ import {KioskVersionService} from "./kiosk-version.service";
         VenuesService,
         MaintenanceService,
         KioskVersionService,
-        AutoupdateScheduleService
+        AutoupdateScheduleService,
+        ApiService
     ]
 })
 export class MaintenanceModule {

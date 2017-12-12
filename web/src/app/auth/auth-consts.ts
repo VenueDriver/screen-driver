@@ -16,7 +16,7 @@ export const EXCLUSIVE_URLS = [
     'auth',
 ];
 
-const AUTH_API_ENDPOINT = `${environment.apiUrl}/api/auth/`;
+const AUTH_API_ENDPOINT = `/api/auth/`;
 export const SIGN_IN_API = `${AUTH_API_ENDPOINT}sign_in`;
 export const SIGN_OUT_API = `${AUTH_API_ENDPOINT}sign_out`;
 export const TOKEN_REFRESH_API = `${AUTH_API_ENDPOINT}token/refresh`;

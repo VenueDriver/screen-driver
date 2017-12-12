@@ -1,0 +1,11 @@
+version: '2.2'
+
+services:
+  build_kiosk:
+    env_file:
+      - development.env
+    build:
+      context: kiosk
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - ./kiosk/dist:/app-src/dist

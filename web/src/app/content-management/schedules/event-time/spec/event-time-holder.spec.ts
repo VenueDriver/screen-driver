@@ -1,5 +1,5 @@
 import {getPropertyName, Periodicity} from "../../../../core/enums/periodicity";
-import {EventDateUtils} from "../event-date.utils";
+import {EventDateUtils} from "../../../../core/utils/event-date.utils";
 import {EventTimeHolder} from "../event-time.holder";
 import {EventTime} from "../../models/event-time.model";
 import {getShortDay, WeekDays} from "../../../../core/enums/days-of-week";

@@ -1,5 +1,5 @@
-const SettingMergeTool = require('./setting-merge-tool');
-const SettingsHelper = require('./helpers/settings_helper');
+const SettingMergeTool = require('./setting_merge_tool');
+const SettingsHelper = require('./settings_helper');
 const _ = require('lodash');
 
 class ScheduleMergeTool {

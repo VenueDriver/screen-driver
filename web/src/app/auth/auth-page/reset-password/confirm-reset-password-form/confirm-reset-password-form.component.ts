@@ -12,7 +12,10 @@ import {ResetPassword} from "../../../../shared/reset-password-form/reset-passwo
     styleUrls: ['../../auth.component.sass']
 })
 export class ConfirmResetPasswordFormComponent {
+
     @Input() email: string;
+    @Input() verificationCode: string;
+
     @Output() success = new EventEmitter();
 
     isRequestPerforming: boolean = false;
@@ -41,7 +44,7 @@ export class ConfirmResetPasswordFormComponent {
     extractDataFromForm(formData: ResetPassword) {
         return {
             email: this.email,
-            verificationCode: formData.identityVerificationCode,
+            verificationCode: this.verificationCode,
             password: formData.password
         };
     }

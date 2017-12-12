@@ -13,6 +13,7 @@ import {SettingsModule} from "../../settings/settings.module";
 import {ScreensMessagingService} from "../../shared/services/messaging/screens-messaging.service";
 import {ContentVenuesTreeViewComponent} from "./content-venues-tree-view/contnet-venues-tree-view.component";
 import {WaitForLoadingModule} from "../../shared/directives/wait-for-loading/wait-for-loading.module";
+import {SpinnerModule} from "../../shared/spinner/spinner.module";
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import {WaitForLoadingModule} from "../../shared/directives/wait-for-loading/wai
         TreeModule,
         AutofocusModule,
         SettingsModule,
-        WaitForLoadingModule
+        WaitForLoadingModule,
+        SpinnerModule
     ],
     exports: [
         VenuesComponent,

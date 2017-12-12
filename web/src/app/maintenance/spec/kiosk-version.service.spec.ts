@@ -11,7 +11,10 @@ import {
 } from "@angular/http";
 import {MockBackend} from "@angular/http/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HttpClientModule} from "@angular/common/http";
+import {ApiService} from "../../shared/services/api.service";
+import {DataLoadingMonitorService} from "../../shared/services/data-loading-monitor/data-loading-monitor.service";
+import {SpinnerService} from "../../shared/spinner/spinner.service";
 
 describe('Service: KioskVersionService', () => {
     beforeEach(() => {
@@ -19,14 +22,21 @@ describe('Service: KioskVersionService', () => {
             imports: [HttpClientModule, HttpClientTestingModule],
             providers: [
                 KioskVersionService,
+                ApiService,
+                SpinnerService,
+                DataLoadingMonitorService,
                 {provide: ConnectionBackend, useClass: MockBackend},
                 {provide: RequestOptions, useClass: BaseRequestOptions},
             ]
         });
     });
 
-    beforeEach(inject([KioskVersionService, ConnectionBackend], (kioskVersionService) => {
+    beforeEach(inject([KioskVersionService, ApiService, SpinnerService, DataLoadingMonitorService, ConnectionBackend],
+        (kioskVersionService, apiService, spinnerService, dataLoadingMonitorService) => {
         this.kioskVersionService = kioskVersionService;
+        this.apiService = apiService;
+        this.spinnerService = spinnerService;
+        this.dataLoadingMonitorService = dataLoadingMonitorService;
     }));
 
     describe('apiPath', () => {
@@ -50,8 +60,8 @@ describe('Service: KioskVersionService', () => {
 
     describe('loadKioskVersions()', () => {
 
-        it('should loader kiosk versions as KioskVersionDetailsMap', async(inject([HttpClient, HttpTestingController],
-            (http: HttpClient, backend: HttpTestingController) => {
+        it('should loader kiosk versions as KioskVersionDetailsMap', async(inject([ApiService, HttpTestingController],
+            (http: ApiService, backend: HttpTestingController) => {
                 const kioskVersions = KioskVersionServiceFixture.kioskVersions(2);
 
                 this.kioskVersionService.loadKioskVersions().subscribe((kioskVersionDetailsMap: KioskVersionDetailsMap) => {

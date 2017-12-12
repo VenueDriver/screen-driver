@@ -21,6 +21,10 @@ custom:
   properties: ${file(./serverless/properties.yml)}
   functions: ${file(./serverless/functions.yml)}
   resources: ${file(./serverless/resources.yml)}
+  tableResources: ${file(./serverless/table-resources.yml)}
+  authApiProxyResources: ${file(./serverless/auth-api-proxy-resources.yml)}
+  maintenanceApiProxyResources: ${file(./serverless/maintenance-api-proxy-resources.yml)}
+  outputs: ${file(./serverless/outputs.yml)}
   roles: ${file(./serverless/roles.yml)}
   authorizer: ${file(./serverless/authorizer.yml)}
   userPoolId:
@@ -39,24 +43,14 @@ plugins:
   - serverless-offline
   - serverless-mocha-plugin
   - serverless-export-env
+  - serverless-plugin-browserifier
 
 resources:
   Resources: ${self:custom.resources}
-  Outputs:
-    ScreenDriverRestApi:
-      Value:
-        Ref: ApiGatewayRestApi
-      Export:
-        Name: ScreenDriverRestApi-${opt:stage}
-    ScreenDriverRootResource:
-      Value:
-        Ref: ApiGatewayResourceApi
-      Export:
-        Name: ScreenDriverRootApiResource-${opt:stage}
+  Outputs: ${self:custom.outputs}
 
 package:
-  include:
-    - ../lib/**
+  individually: true
   exclude:
     - test/**
     - serverless/**

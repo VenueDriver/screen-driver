@@ -1,5 +1,5 @@
 import {Periodicity} from "../../../core/enums/periodicity";
-import {EventDateUtils} from "./event-date.utils";
+import {EventDateUtils} from "../../../core/utils/event-date.utils";
 import {CronToDatetimeConverter} from "../../../core/utils/datetime-cron-converter/cron-to-datetime.converter";
 import {DatetimeToCronConverter} from "../../../core/utils/datetime-cron-converter/datetime-cron.converter";
 import {Schedule} from "../models/schedule.model";

@@ -9,6 +9,10 @@ export class ErrorMessageExtractor {
             return ErrorMessageExtractor.extractMessage(error.message);
         }
 
+        if (typeof error != 'string') {
+            return "An error occurred. Please, contact the system administrator";
+        }
+
         return error;
     }
 }

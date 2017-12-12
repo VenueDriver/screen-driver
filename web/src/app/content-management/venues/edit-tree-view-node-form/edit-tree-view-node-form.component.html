@@ -83,7 +83,7 @@
         </div>
 
         <div *ngIf="!removingMode" class="edit-form-buttons">
-            <div *ngIf="!!nodeData.id"
+            <div *ngIf="!!nodeData.id && !isRequestPerforming"
                  class="remove-button"
                  (click)="enableRemovingMode($event)">
             </div>
@@ -91,14 +91,21 @@
             <div></div>
             
             <div>
-                <button type="button"
+                <uniq-entity-spinner #spinner
+                                     [entity]="{id: currentVenueId}"
+                                     [message]="getSpinnerLoadingText()"
+                                     prefix="venueNode">
+                </uniq-entity-spinner>
+                <button *ngIf="!isRequestPerforming"
+                        type="button"
                         class="btn btn-success"
                         [disabled]="!isFormValid"
                         (click)="performSubmit($event)">
                     Save
                 </button>
 
-                <button type="button"
+                <button *ngIf="!isRequestPerforming"
+                        type="button"
                         class="btn btn-link"
                         (click)="performCancel($event)">
                     Cancel

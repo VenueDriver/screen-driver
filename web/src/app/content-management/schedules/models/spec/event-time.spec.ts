@@ -1,7 +1,7 @@
 
 import {EventTime} from "../event-time.model";
 import {Periodicity} from "../../../../core/enums/periodicity";
-import {EventDateUtils} from "../../event-time/event-date.utils";
+import {EventDateUtils} from "../../../../core/utils/event-date.utils";
 
 describe('Model: EventTime', () => {
 

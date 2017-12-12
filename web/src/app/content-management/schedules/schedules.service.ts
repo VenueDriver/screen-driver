@@ -1,31 +1,31 @@
 import { Injectable } from '@angular/core';
 import {Schedule} from "./models/schedule.model";
-import {environment} from "../../../environments/environment";
 import {Setting} from "../../settings/entities/setting";
-import {SettingsPriorityHelper} from "../../settings/settings-priority.helper";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {getPropertyName} from '../../core/enums/periodicity';
 import {NotificationService} from "../../shared/notifications/notification.service";
-import {HttpClient} from "@angular/common/http";
 import {EventTimeHolder} from "./event-time/event-time.holder";
+import {ApiService} from "../../shared/services/api.service";
 
-const SCHEDULES_API = `${environment.apiUrl}/api/schedules`;
+import {RequestConfig} from "../../shared/services/configs/request-config";
+import {SpinnerNameUtils} from "../../shared/spinner/uniq-entity-spinner/spinner-name-utils";
+
+const SCHEDULES_API = `/api/schedules`;
+const CONFLICT_IN_SETTINGS_STATUS = 409;
 
 @Injectable()
 export class SchedulesService {
 
     scheduleListUpdated: Subject<any> = new BehaviorSubject<any>({});
-    schedules: BehaviorSubject<Array<Schedule>> = new BehaviorSubject<Array<Schedule>>([]);
+    schedules: Subject<Array<Schedule>> = new BehaviorSubject<Array<Schedule>>([]);
 
     constructor(
-        private httpClient: HttpClient,
-        private settingPriorityHelper: SettingsPriorityHelper,
-        private notificationService: NotificationService,
-    ) {
+        private apiService: ApiService,
+        private notificationService: NotificationService) {
     }
 
     loadSchedules(): Observable<Array<Schedule>> {
-        return this.httpClient.get(SCHEDULES_API)
+        return this.apiService.get(SCHEDULES_API)
             .map((response: Array<Schedule>) => {
                 this.schedules.next(response);
                 return response;
@@ -34,63 +34,77 @@ export class SchedulesService {
 
     createSchedule(setting: Setting, eventTimeHolder: EventTimeHolder) {
         let schedule = new Schedule();
-        eventTimeHolder.setCronsForSchedule(schedule);
         schedule.settingId = setting ? setting.id : '';
-        schedule.periodicity = getPropertyName(eventTimeHolder.getPeriodicity());
-        this.save(schedule, setting);
-    }
-
-    save(schedule: Schedule, setting: Setting) {
-        this.httpClient.post(SCHEDULES_API, schedule).subscribe(
-            response => this.handleSaveResponse(response, setting),
-            error => {
-                let errorMessage = this.getCreateErrorMessage(error);
-                this.notificationService.showErrorNotificationBar(errorMessage);
-                if (error.status === 409) {
-                    this.handleSaveResponse(error._body, setting);
-                }
-            }
-        );
-    }
-
-    handleSaveResponse(schedule: any, setting: Setting) {
-        this.scheduleListUpdated.next(schedule);
-        this.settingPriorityHelper.setPriorityType(setting, schedule);
+        this.updateEventProperties(eventTimeHolder, schedule);
+        this.save(schedule);
     }
 
     updateSchedule(schedule: Schedule, eventTimeHolder?: EventTimeHolder) {
         if (eventTimeHolder) {
-            eventTimeHolder.setCronsForSchedule(schedule);
-            schedule.periodicity = getPropertyName(eventTimeHolder.getPeriodicity());
+            this.updateEventProperties(eventTimeHolder, schedule);
         }
-        this.httpClient.put(`${SCHEDULES_API}/${schedule.id}`, schedule).subscribe(
-            response => this.scheduleListUpdated.next(response),
+        this.performUpdate(schedule);
+    }
+
+    removeSchedule(schedule: Schedule) {
+        this.apiService.delete(`${SCHEDULES_API}/${schedule.id}`).subscribe(
+            response => this.handleResponseWithSchedule(response),
+            error => this.notificationService.showErrorNotificationBar('Unable to perform the remove schedule operation')
+        );
+    }
+
+    private save(schedule: Schedule) {
+        this.apiService.post(SCHEDULES_API, schedule, this.requestConfigFor(schedule)).subscribe(
+            response => this.handleResponseWithSchedule(response),
             error => {
-                let errorMessage = this.getUpdateErrorMessage(error);
+                let errorMessage = this.getCreateErrorMessage(error);
                 this.notificationService.showErrorNotificationBar(errorMessage);
-                if (error.status === 409) {
-                    this.scheduleListUpdated.next(error.body);
+                if (error.status === CONFLICT_IN_SETTINGS_STATUS) {
+                    this.handleResponseWithSchedule(error._body);
                 }
             }
         );
     }
 
-    removeSchedule(schedule: Schedule) {
-        this.httpClient.delete(`${SCHEDULES_API}/${schedule.id}`).subscribe(
-            response => this.scheduleListUpdated.next(response),
-            error => this.notificationService.showErrorNotificationBar('Unable to perform the remove schedule operation')
+    private handleResponseWithSchedule(schedule: any) {
+        this.scheduleListUpdated.next(schedule);
+    }
+
+    private updateEventProperties(eventTimeHolder: EventTimeHolder, schedule: Schedule) {
+        eventTimeHolder.setCronsForSchedule(schedule);
+        schedule.periodicity = getPropertyName(eventTimeHolder.getPeriodicity());
+    }
+
+    private performUpdate(schedule: Schedule) {
+        let request = this.apiService.put(`${SCHEDULES_API}/${schedule.id}`, schedule, this.requestConfigFor(schedule));
+
+        request.subscribe(
+            response => this.handleResponseWithSchedule(response),
+            error => this.handleErrors(error)
         );
     }
 
-    getUpdateErrorMessage(error) {
-        if (error.status === 409) {
+    private handleErrors(errors) {
+        let errorMessage = this.getUpdateErrorMessage(errors);
+        this.notificationService.showErrorNotificationBar(errorMessage);
+        if (errors.status === CONFLICT_IN_SETTINGS_STATUS) {
+            this.handleResponseWithSchedule(errors.body);
+        }
+    }
+
+    private requestConfigFor(schedule: Schedule): RequestConfig {
+        return {spinner: {name: SpinnerNameUtils.getName(schedule, "schedules")}};
+    }
+
+    private getUpdateErrorMessage(error) {
+        if (error.status === CONFLICT_IN_SETTINGS_STATUS) {
             return 'Conflict between schedules has been detected. Schedule is disabled now';
         }
         return 'Unable to perform the update schedule operation';
     }
 
-    getCreateErrorMessage(error) {
-        if (error.status === 409) {
+    private getCreateErrorMessage(error) {
+        if (error.status === CONFLICT_IN_SETTINGS_STATUS) {
             return 'Conflict between schedules has been detected. Schedule saved as disabled now';
         }
         return 'Unable to perform the create schedule operation';

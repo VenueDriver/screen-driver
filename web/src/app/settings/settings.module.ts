@@ -10,7 +10,6 @@ import {DropdownModule} from "../shared/dropdown/dropdown.module";
 import {SettingsManagerComponent} from "./settings-manager/settings-manager.component";
 import {PriorityTypeTagComponent} from "./priority-type-tag/priority-type-tag.component";
 import {SettingHeaderComponent} from "./setting-header/setting-header.component";
-import {SettingsPriorityHelper} from "./settings-priority.helper";
 import {ToggleButtonModule} from "../shared/toggle-button/toggle-button.module";
 import {SettingsGroupComponent} from './settings-group/settings-group.component';
 import {SingleSettingComponent} from './single-setting/single-setting.component';
@@ -43,7 +42,6 @@ import {WaitForLoadingModule} from "../shared/directives/wait-for-loading/wait-f
     providers: [
         SettingsService,
         SettingStateHolderService,
-        SettingsPriorityHelper
     ]
 })
 export class SettingsModule {

@@ -24,7 +24,12 @@ function loadUser(userDetails) {
 function syncUserProfile(userDetails) {
     return new Promise((resolve, reject) => {
         UserDetailsLoader.loadUserByEmail(userDetails.email)
-            .then(cognitoUsers => UserSaver.saveExistentCognitoUser(cognitoUsers.Users[0]))
+            .then(cognitoUsers => {
+                if (cognitoUsers.Users.length === 0) {
+                    return reject('User with such email does not exist. Make sure you used the correct email');
+                }
+                UserSaver.saveExistentCognitoUser(cognitoUsers.Users[0])
+            })
             .then(result => resolve(userDetails))
             .catch(error => reject(error));
     });

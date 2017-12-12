@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Setting} from "./entities/setting";
-import {environment} from "../../environments/environment";
 import {Observable, Subject, BehaviorSubject} from "rxjs";
 import {NotificationService} from "../shared/notifications/notification.service";
-import {HttpResponse} from "@angular/common/http";
 import {ApiService} from "../shared/services/api.service";
 
 const SETTINGS_API_URL = '/api/settings';
@@ -40,14 +38,7 @@ export class SettingsService {
         return subject;
     }
 
-    getUpdateErrorMessage(error, errorMessage: string) {
-        if (error.status === 409) {
-            return 'Conflict between settings has been detected. Setting is disabled now';
-        }
-        return errorMessage ? errorMessage : 'Unable to update setting';
-    }
-
-    removeSetting(id: string): Observable<HttpResponse<any>> {
+    removeSetting(id: string): Observable<any> {
         return this.apiService.delete(`${SETTINGS_API_URL}/${id}`)
     }
 
@@ -61,5 +52,12 @@ export class SettingsService {
 
     emitCreateSettingEvent(isEnabled: boolean, priorityType?: Object) {
         this.createSettingEvent.next({isEnabled: isEnabled, priorityType: priorityType});
+    }
+
+    private getUpdateErrorMessage(error, errorMessage: string) {
+        if (error.status === 409) {
+            return 'Conflict between settings has been detected. Setting is disabled now';
+        }
+        return errorMessage ? errorMessage : 'Unable to update setting';
     }
 }

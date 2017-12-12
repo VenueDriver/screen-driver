@@ -13,10 +13,12 @@ import {ResetPassword} from "./reset-password";
 export class ResetPasswordFormComponent implements OnInit {
 
     @Input() identityVerificationFieldLabel: string;
+    @Input() identityVerificationCodeRequired = true;
     @Input() requireEmail = false;
     @Input() failMessage: string;
     @Input() submitButton = 'Change';
     @Input() allowCancel = true;
+    @Input() isRequestPerforming: boolean = false;
 
     @Output() save = new EventEmitter<ResetPassword>();
     @Output() cancel = new EventEmitter();
@@ -33,13 +35,17 @@ export class ResetPasswordFormComponent implements OnInit {
     initFormGroup() {
         let newPasswordControl = this.createNewPasswordControl();
         this.changePasswordForm = new FormGroup({
-            'identityVerificationCode': new FormControl('', [Validators.required]),
+            'identityVerificationCode': new FormControl('', this.getValidatorsForIdentityVerificationCode()),
             'newPassword': newPasswordControl,
             'confirmedPassword': new FormControl('', [
                 Validators.required,
                 this.validateConfirmedPassword(newPasswordControl)
             ])
         });
+    }
+
+    private getValidatorsForIdentityVerificationCode(): Array<any> {
+        return this.identityVerificationCodeRequired ? [Validators.required] : [];
     }
 
     private createNewPasswordControl(): FormControl {
@@ -68,6 +74,10 @@ export class ResetPasswordFormComponent implements OnInit {
 
     formInvalid(): boolean {
         return this.changePasswordForm.status === 'INVALID';
+    }
+
+    isRequestSending(): boolean {
+      return this.isRequestPerforming
     }
 
     getValidationMessage(fieldName: string): string {

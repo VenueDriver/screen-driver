@@ -1,7 +1,7 @@
 import {Periodicity} from "../../../core/enums/periodicity";
 import {ValidationResult} from "../models/validation-result.model";
 import {EventTime} from "../models/event-time.model";
-import {EventDateUtils} from "./event-date.utils";
+import {EventDateUtils} from "../../../core/utils/event-date.utils";
 
 import * as _ from 'lodash';
 
