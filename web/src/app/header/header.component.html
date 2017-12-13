@@ -19,7 +19,7 @@
                          routerLink="{{link.routerLink}}"
                          [routerLinkActive]="['active']"
                          class="link">
-                    <a *ngIf="isAbleToShowRoute(link)"
+                    <a *ngIf="headerService.isAbleToShowRoute(link)"
                             routerLinkActive="active">
                         {{link.title}}
                     </a>

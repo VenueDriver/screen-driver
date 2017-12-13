@@ -26,10 +26,6 @@ export class HeaderComponent {
         this.headerService.pushSidebarToggleEvent();
     }
 
-    isUserAdmin(): boolean {
-        return this.authService.isAdmin();
-    }
-
     isNotAuthPage(): boolean {
         return !this.authService.isAuthPage();
     }
@@ -46,10 +42,4 @@ export class HeaderComponent {
         this.authService.signOut();
     }
 
-    isAbleToShowRoute(link: NavBarLink): boolean {
-        if (link.permittedFor === UserRole.ALL || UserRole.OPERATOR) {
-            return true;
-        }
-        return link.permittedFor === UserRole.ADMIN && this.isUserAdmin();
-    }
 }
