@@ -21,7 +21,7 @@
             <div class="small-screen">
                 <div hideOnScroll class="pull-top">
                     <ng-container *ngTemplateOutlet="logo"></ng-container>
-                    <div class="pull-right">
+                    <div *ngIf="isNotAuthPage()" class="pull-right">
                         <ng-container *ngTemplateOutlet="navBarProfileLink"></ng-container>
                         <div class="sign-out" [routerLinkActive]="['active']" (click)="signOut()"></div>
                     </div>
