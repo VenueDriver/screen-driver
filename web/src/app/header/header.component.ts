@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {HeaderService} from "./header.service";
 import {AuthService} from "../auth/auth.service";
+import {NavBarLink} from "./nav-bar-link.interface";
+import {UserRole} from "../auth/user-roles";
 
 @Component({
     selector: 'screen-driver-header',
@@ -9,10 +11,10 @@ import {AuthService} from "../auth/auth.service";
 })
 export class HeaderComponent {
 
-    public routerLinks: [{ title: string, routerLink: string }] = [
-        {title: 'Content', routerLink: '/content'},
-        {title: 'Maintenance', routerLink: '/maintenance'},
-        {title: 'Users', routerLink: '/users'}
+    public routerLinks: Array<NavBarLink> = [
+        {title: 'Content', routerLink: '/content', permittedFor: UserRole.ALL},
+        {title: 'Maintenance', routerLink: '/maintenance', permittedFor: UserRole.ALL},
+        {title: 'Users', routerLink: '/users', permittedFor: UserRole.ADMIN}
     ];
 
     constructor(
@@ -28,8 +30,8 @@ export class HeaderComponent {
         return this.authService.isAdmin();
     }
 
-    isAuthPage(): boolean {
-        return !!this.authService.isAuthPage();
+    isNotAuthPage(): boolean {
+        return !this.authService.isAuthPage();
     }
 
     isSidebarDisplayed() {
@@ -42,5 +44,12 @@ export class HeaderComponent {
 
     signOut() {
         this.authService.signOut();
+    }
+
+    isAbleToShowRoute(link: NavBarLink): boolean {
+        if (link.permittedFor === UserRole.ALL || UserRole.OPERATOR) {
+            return true;
+        }
+        return link.permittedFor === UserRole.ADMIN && this.isUserAdmin();
     }
 }

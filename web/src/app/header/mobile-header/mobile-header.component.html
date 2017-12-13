@@ -4,7 +4,7 @@
             <div id="pull-top" class="pull-top">
                 <a class="navbar-brand">ScreenDriver</a>
 
-                <div class="pull-right" *ngIf="!isAuthPage()">
+                <div class="pull-right" *ngIf="isNotAuthPage()">
                     <div routerLink="/profile"
                          class="link"
                          [routerLinkActive]="['active']">

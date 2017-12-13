@@ -12,16 +12,22 @@
 
             <a class="navbar-brand" routerLink="/">ScreenDriver</a>
 
-            <div class="router-links" *ngIf="isUserAdmin()">
-                <div class="link"
-                     *ngFor="let link of routerLinks"
-                     routerLink="{{link.routerLink}}"
-                     [routerLinkActive]="['active']">
-                    <a routerLinkActive="active">{{link.title}}</a>
+            <div *ngIf="isNotAuthPage()"
+                    class="router-links">
+
+                <div *ngFor="let link of routerLinks"
+                         routerLink="{{link.routerLink}}"
+                         [routerLinkActive]="['active']"
+                         class="link">
+                    <a *ngIf="isAbleToShowRoute(link)"
+                            routerLinkActive="active">
+                        {{link.title}}
+                    </a>
                 </div>
+
             </div>
 
-            <div class="pull-right" *ngIf="!isAuthPage()">
+            <div class="pull-right" *ngIf="isNotAuthPage()">
                 <div routerLink="/profile"
                      class="link"
                      [routerLinkActive]="['active']">
