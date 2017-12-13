@@ -10,6 +10,7 @@ import {MaintenanceComponent} from "./maintenance/maintenance.component";
 import {SignInComponent} from "./auth/auth-page/sign-in/sign-in.component";
 import {ResetPasswordComponent} from "./auth/auth-page/reset-password/reset-password.component";
 import {FirstSignInComponent} from "./auth/auth-page/first-sign-in/first-sign-in.component";
+import {ContentListComponent} from "./content/content-list.component";
 
 const appRoutes: Routes = [
     {
@@ -21,6 +22,12 @@ const appRoutes: Routes = [
         path: 'content',
         component: ContentManagementComponent,
         data: {isSidebarDisplayed: true, title: 'Content'},
+        canActivate: [CanActivateUser]
+    },
+    {
+        path: 'content-list',
+        component: ContentListComponent,
+        data: {isSidebarDisplayed: false, title: 'Content List'},
         canActivate: [CanActivateUser]
     },
     {
