@@ -7,7 +7,7 @@ const StorageManager = require('./helpers/storage_manager');
 const SettingsHelper = require('./helpers/settings_helper');
 const DataLoader = require('./services/data/data_loader');
 const WindowInstanceHolder = require('./services/browser-windows/window_instance_holder');
-
+const Logger = require('./services/logger/logger');
 const _ = require('lodash');
 
 class CurrentScreenSettingsManager {
@@ -72,10 +72,11 @@ class CurrentScreenSettingsManager {
 
             scheduledTaskManager.initSchedulingForScreen(screenInformation);
 
-            if (!isScheduled() && currentUrl != newUrl) {
+            if (!isScheduled() && currentUrl !== newUrl) {
                 CurrentScreenSettingsManager._applyNewUrl(screenInformation, newUrl);
             }
         })
+        .catch(error => Logger.error(error.message));
     }
 
     static _applyNewUrl(screenInformation, newUrl) {
@@ -97,7 +98,7 @@ class CurrentScreenSettingsManager {
     }
 
     static _cutSlashAtTheEndOfUrl(url) {
-        return url.lastIndexOf('/') == url.length - 1 ? url.slice(0, -1) : url;
+        return url.lastIndexOf('/') === url.length - 1 ? url.slice(0, -1) : url;
     }
 }
 
