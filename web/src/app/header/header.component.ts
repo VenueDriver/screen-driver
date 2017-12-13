@@ -13,6 +13,7 @@ export class HeaderComponent {
 
     public routerLinks: Array<NavBarLink> = [
         {title: 'Content', routerLink: '/content', permittedFor: UserRole.ALL},
+        {title: 'Content List', routerLink: '/content-list', permittedFor: UserRole.ALL},
         {title: 'Maintenance', routerLink: '/maintenance', permittedFor: UserRole.ALL},
         {title: 'Users', routerLink: '/users', permittedFor: UserRole.ADMIN}
     ];
