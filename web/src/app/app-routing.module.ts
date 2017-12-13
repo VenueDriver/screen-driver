@@ -43,7 +43,8 @@ const appRoutes: Routes = [
             {
                 path: '',
                 component: SignInComponent,
-                data: {title: 'Sign in'}
+                data: {title: 'Sign in'},
+                pathMatch: 'full'
             },
             {
                 path: 'first',
