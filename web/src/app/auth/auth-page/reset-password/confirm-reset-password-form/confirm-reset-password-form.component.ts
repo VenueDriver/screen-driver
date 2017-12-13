@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import * as AuthConsts from "../../../auth-consts";
 import {ErrorMessageExtractor} from "../../../../core/error-message-extractor";
 import {ResetPasswordService} from "../reset-password.service";
-import {ResetPassword} from "../../../../shared/reset-password-form/reset-password";
+import {FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'confirm-reset-password-form',
@@ -20,15 +20,19 @@ export class ConfirmResetPasswordFormComponent {
 
     isRequestPerforming: boolean = false;
     failMessage: string;
+    confirmPasswordForm: FormGroup;
 
     constructor(private resetPasswordService: ResetPasswordService,
                 private router: Router) {
     }
 
+    initPasswords(formGroup: FormGroup) {
+        this.confirmPasswordForm = formGroup;
+    }
 
-    changePassword(formData: ResetPassword) {
+    changePassword() {
         this.setRequestPerforming(true);
-        this.resetPasswordService.sendResetPasswordConfirmation(this.extractDataFromForm(formData)).subscribe(
+        this.resetPasswordService.sendResetPasswordConfirmation(this.extractDataFromForm(this.confirmPasswordForm)).subscribe(
             () => {
                 this.setRequestPerforming(false);
                 this.success.emit();
@@ -41,11 +45,11 @@ export class ConfirmResetPasswordFormComponent {
         )
     }
 
-    extractDataFromForm(formData: ResetPassword) {
+    extractDataFromForm(formData: FormGroup) {
         return {
             email: this.email,
             verificationCode: this.verificationCode,
-            password: formData.password
+            password: formData.value.confirmedPassword
         };
     }
 
@@ -59,5 +63,9 @@ export class ConfirmResetPasswordFormComponent {
 
     redirect() {
         this.router.navigateByUrl(AuthConsts.AUTH_URI);
+    }
+
+    isFormValid() {
+        return this.confirmPasswordForm.valid;
     }
 }
