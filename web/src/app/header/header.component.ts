@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import {HeaderService} from "./header.service";
 import {AuthService} from "../auth/auth.service";
 import {NavBarLink} from "./nav-bar-link.interface";
@@ -9,7 +9,7 @@ import {UserRole} from "../auth/user-roles";
     templateUrl: 'header.component.html',
     styleUrls: ['header.component.sass']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
     public routerLinks: Array<NavBarLink> = [
         {title: 'Content', routerLink: '/content', permittedFor: UserRole.ALL},
@@ -17,10 +17,21 @@ export class HeaderComponent {
         {title: 'Users', routerLink: '/users', permittedFor: UserRole.ADMIN}
     ];
 
+    private topHeader;
+
     constructor(
         private headerService: HeaderService,
         private authService: AuthService
     ) { }
+
+    ngOnInit() {
+        this.topHeader = document.getElementById('pull-top');
+    }
+
+    @HostListener('window:scroll')
+    onScroll() {
+        this.topHeader.style.display = window.pageYOffset > 30 ? 'none' : 'block';
+    }
 
     toggleSideBar() {
         this.headerService.pushSidebarToggleEvent();

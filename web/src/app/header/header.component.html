@@ -1,46 +1,77 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button *ngIf="isSidebarDisplayed()"
-                    type="button"
-                    class="navbar-toggle"
-                    (click)="toggleSideBar()">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+            <div class="large-screen">
+                <ng-container *ngTemplateOutlet="sideBarToggle"></ng-container>
+                <ng-container *ngTemplateOutlet="logo"></ng-container>
+                <ng-container *ngTemplateOutlet="navBarLinks"></ng-container>
 
-            <a class="navbar-brand" routerLink="/">ScreenDriver</a>
+                <div class="pull-right" *ngIf="isNotAuthPage()">
+                    <ng-container *ngTemplateOutlet="navBarProfileLink"></ng-container>
 
-            <div *ngIf="isNotAuthPage()"
-                    class="router-links">
-
-                <div *ngFor="let link of routerLinks"
-                         routerLink="{{link.routerLink}}"
-                         [routerLinkActive]="['active']"
-                         class="link">
-                    <a *ngIf="headerService.isAbleToShowRoute(link)"
-                            routerLinkActive="active">
-                        {{link.title}}
-                    </a>
+                    <div class="sign-out-block" [routerLinkActive]="['active']" (click)="signOut()">
+                        <div class="link sign-out-button">
+                            <a>Sign out</a>
+                        </div>
+                        <div class="sign-out"></div>
+                    </div>
                 </div>
-
             </div>
 
-            <div class="pull-right" *ngIf="isNotAuthPage()">
-                <div routerLink="/profile"
-                     class="link"
-                     [routerLinkActive]="['active']">
-                    <a routerLinkActive="active">{{getUserLogin()}}</a>
+            <div class="small-screen">
+                <div id="pull-top" class="pull-top">
+                    <ng-container *ngTemplateOutlet="logo"></ng-container>
+                    <div class="pull-right">
+                        <ng-container *ngTemplateOutlet="navBarProfileLink"></ng-container>
+                        <div class="sign-out" [routerLinkActive]="['active']" (click)="signOut()"></div>
+                    </div>
                 </div>
 
-                <div class="sign-out-block" [routerLinkActive]="['active']" (click)="signOut()">
-                    <div class="link sign-out-button">
-                        <a>Sign out</a>
-                    </div>
-                    <div class="sign-out"></div>
+                <div class="pull-bottom">
+                    <ng-container *ngTemplateOutlet="navBarLinks"></ng-container>
+                    <ng-container *ngTemplateOutlet="sideBarToggle"></ng-container>
                 </div>
             </div>
         </div>
     </div>
 </nav>
+
+<ng-template #navBarLinks>
+    <div *ngIf="isNotAuthPage()"
+         class="router-links">
+
+        <div *ngFor="let link of routerLinks"
+             routerLink="{{link.routerLink}}"
+             [routerLinkActive]="['active']"
+             class="link">
+            <a *ngIf="headerService.isAbleToShowRoute(link)"
+               routerLinkActive="active">
+                {{link.title}}
+            </a>
+        </div>
+
+    </div>
+</ng-template>
+
+<ng-template #sideBarToggle>
+    <button *ngIf="isSidebarDisplayed()"
+            type="button"
+            class="navbar-toggle"
+            (click)="toggleSideBar()">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+</ng-template>
+
+<ng-template #navBarProfileLink>
+    <div routerLink="/profile"
+             [routerLinkActive]="['active']"
+             class="link">
+        <a routerLinkActive="active">{{getUserLogin()}}</a>
+    </div>
+</ng-template>
+
+<ng-template #logo>
+    <a class="navbar-brand" routerLink="/">ScreenDriver</a>
+</ng-template>
