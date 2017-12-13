@@ -7,7 +7,7 @@ const StorageManager = require('./helpers/storage_manager');
 const SettingsHelper = require('./helpers/settings_helper');
 const DataLoader = require('./services/data/data_loader');
 const WindowInstanceHolder = require('./services/browser-windows/window_instance_holder');
-
+const Logger = require('./services/logger/logger');
 const _ = require('lodash');
 
 class CurrentScreenSettingsManager {
@@ -76,7 +76,7 @@ class CurrentScreenSettingsManager {
                 CurrentScreenSettingsManager._applyNewUrl(screenInformation, newUrl);
             }
         })
-        .catch(error => console.error('Caught', error));
+        .catch(error => Logger.error(error.message));
     }
 
     static _applyNewUrl(screenInformation, newUrl) {
