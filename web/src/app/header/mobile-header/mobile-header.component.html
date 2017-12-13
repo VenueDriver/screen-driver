@@ -16,7 +16,7 @@
             </div>
 
             <div class="pull-bottom">
-                <div class="router-links" *ngIf="isUserAdmin()">
+                <div class="router-links" *ngIf="isNotAuthPage()">
                     <div class="link"
                          *ngFor="let link of routerLinks"
                          routerLink="{{link.routerLink}}"
