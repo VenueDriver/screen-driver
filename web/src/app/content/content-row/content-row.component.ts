@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Content} from "../content";
 
 @Component({
@@ -6,11 +6,8 @@ import {Content} from "../content";
     templateUrl: './content-row.component.html',
     styleUrls: ['./content-row.component.sass']
 })
-export class ContentRowComponent implements OnInit {
+export class ContentRowComponent  {
+
     @Input() content: Content;
-
-    ngOnInit() {
-
-    }
-
+    
 }
