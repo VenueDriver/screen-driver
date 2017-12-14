@@ -10,17 +10,24 @@ import {MaintenanceComponent} from "./maintenance/maintenance.component";
 import {SignInComponent} from "./auth/auth-page/sign-in/sign-in.component";
 import {ResetPasswordComponent} from "./auth/auth-page/reset-password/reset-password.component";
 import {FirstSignInComponent} from "./auth/auth-page/first-sign-in/first-sign-in.component";
+import {ContentListComponent} from "./content/content-list.component";
 
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/content',
+        redirectTo: '/settings',
         pathMatch: 'full'
     },
     {
-        path: 'content',
+        path: 'settings',
         component: ContentManagementComponent,
-        data: {isSidebarDisplayed: true, title: 'Content'},
+        data: {isSidebarDisplayed: true, title: 'Venue Screens\' Settings'},
+        canActivate: [CanActivateUser]
+    },
+    {
+        path: 'content-list',
+        component: ContentListComponent,
+        data: {isSidebarDisplayed: false, title: 'Content'},
         canActivate: [CanActivateUser]
     },
     {
@@ -63,6 +70,11 @@ const appRoutes: Routes = [
         component: MaintenanceComponent,
         data: {isSidebarDisplayed: false, title: 'Maintenance'},
         canActivate: [CanActivateUser]
+    },
+    {
+        path: '**',
+        redirectTo: '/settings',
+        pathMatch: 'full'
     },
 ];
 

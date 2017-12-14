@@ -12,7 +12,8 @@ import {UserRole} from "../auth/user-roles";
 export class HeaderComponent {
 
     public routerLinks: Array<NavBarLink> = [
-        {title: 'Content', routerLink: '/content', permittedFor: UserRole.ALL},
+        {title: 'Settings', routerLink: '/settings', permittedFor: UserRole.ALL},
+        {title: 'Content', routerLink: '/content-list', permittedFor: UserRole.ALL},
         {title: 'Maintenance', routerLink: '/maintenance', permittedFor: UserRole.ALL},
         {title: 'Users', routerLink: '/users', permittedFor: UserRole.ADMIN}
     ];
@@ -31,7 +32,7 @@ export class HeaderComponent {
     }
 
     isSidebarDisplayed() {
-        return this.authService.isCurrentPath('/content');
+        return this.authService.isCurrentPath('/settings');
     }
 
     getUserLogin() {

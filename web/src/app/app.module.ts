@@ -28,6 +28,7 @@ import {TitleService} from "./shared/services/title.service";
 import {WaitForLoadingModule} from "./shared/directives/wait-for-loading/wait-for-loading.module";
 import {DataLoadingMonitorService} from "./shared/services/data-loading-monitor/data-loading-monitor.service";
 import {FullSizeSpinnerModule} from "./shared/full-size-spinner/full-size-spinner.module";
+import {ContentListModule} from "./content/content-list.module";
 
 @NgModule({
     declarations: [
@@ -42,6 +43,7 @@ import {FullSizeSpinnerModule} from "./shared/full-size-spinner/full-size-spinne
         AlertModule.forRoot(),
         NotificationModule,
         VenuesModule,
+        ContentListModule,
         SettingsModule,
         TabbedSwitcherModule,
         ScreensMessagingModule,

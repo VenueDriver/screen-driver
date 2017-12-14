@@ -20,7 +20,7 @@ export class CanActivateAdmin implements CanActivate {
         }
 
         if (authenticated) {
-            this.router.navigateByUrl(AuthConsts.CONTENT_URI);
+            this.router.navigateByUrl('/');
             return true;
         }
 
