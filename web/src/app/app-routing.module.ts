@@ -71,6 +71,11 @@ const appRoutes: Routes = [
         data: {isSidebarDisplayed: false, title: 'Maintenance'},
         canActivate: [CanActivateUser]
     },
+    {
+        path: '**',
+        redirectTo: '/settings',
+        pathMatch: 'full'
+    },
 ];
 
 @NgModule({
