@@ -1,4 +1,4 @@
-##### API
+#### API
 1. ~~Rework project structure (create `src` directory)~~
 1. Rework priority type enum implementation
 1. Write tests on removing functionality
@@ -22,7 +22,7 @@
 1. ~~Take out `dynamodb.js` and `db_helper.js` from services to `lib` folder~~
 1. Insert user ID or generated token to the reset password URL instead of user email
 
-##### Web
+#### Web
 1. Resolve warnings occurred during build process
 1. Disable submit buttons when request to API is performing
 1. Use two way data binding in custom components
@@ -50,7 +50,7 @@
 1. Create component for page titles
 1. Fit URLs' width to device screen size
 
-##### Kiosk
+#### Kiosk
 1. ~~Create in memory local storage~~
 1. Use RxJS
 1. Remove `cron` dependency
@@ -59,7 +59,7 @@
 1. Remove `Not selected` item from drop-downs
 1. Add validation messages on admin panel (to describe why `Show presentation` button is disabled)
 
-##### Docker
+#### Docker
 1. Use existing image with DynamoDB
 1. Use existing image with Serverless Framework
 1. Get rid of separated files for local run and local deployment of serverless app
