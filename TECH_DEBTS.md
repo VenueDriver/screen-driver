@@ -43,7 +43,8 @@
 1. Refactor style sheets: 
     * Use variables instead of media query screen
     * Create separate file for mixins
-    * Use mixins for responsive design ()
+    * Refactor `responsive-font-size` mixin; create base one and use it for a special mixins such as `responsive-title-font-size`
+    * Use mixins for responsive design (by example of `responsive-font-size` mixin)
     * Divide styles.sass into several files
 1. Create sidebar component that will wrap settings manager
 1. Create component for page titles
