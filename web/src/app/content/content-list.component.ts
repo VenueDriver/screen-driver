@@ -6,6 +6,7 @@ import {ContentService} from "./content.service";
 @Component({
     selector: 'content-list',
     templateUrl: 'content-list.component.html',
+    styleUrls: ['./content-list.component.sass']
 })
 export class ContentListComponent implements OnInit {
 

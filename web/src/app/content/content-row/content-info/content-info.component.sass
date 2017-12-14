@@ -1,14 +1,14 @@
-$background-color: #f3f3f3
+@import "../../../../styles/variables"
 
-.item-row
-  padding: 10px 0  10px 10px
-  font-size: 18px
+.content-info-container
+  padding: 10px 5px
+  width: 100%
+  @include responsive-font-size
 
   &:hover
-    background-color: $background-color
-    cursor: pointer
+    background-color: $item-selection-color
 
   .url
     margin-top: 5px
-    color: #999999
+    color: $gray-color
     word-wrap: break-word
