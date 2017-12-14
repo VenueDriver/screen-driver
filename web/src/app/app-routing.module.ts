@@ -15,19 +15,19 @@ import {ContentListComponent} from "./content/content-list.component";
 const appRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/content',
+        redirectTo: '/settings',
         pathMatch: 'full'
     },
     {
-        path: 'content',
+        path: 'settings',
         component: ContentManagementComponent,
-        data: {isSidebarDisplayed: true, title: 'Content'},
+        data: {isSidebarDisplayed: true, title: 'Venue Screens\' Settings'},
         canActivate: [CanActivateUser]
     },
     {
         path: 'content-list',
         component: ContentListComponent,
-        data: {isSidebarDisplayed: false, title: 'Content List'},
+        data: {isSidebarDisplayed: false, title: 'Content'},
         canActivate: [CanActivateUser]
     },
     {
