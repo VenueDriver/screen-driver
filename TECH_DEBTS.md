@@ -30,17 +30,24 @@
 1. Unsubscribe from each subscription on component destroy
 1. ~~Fix remove schedule button position for mobile devices~~
 1. ~~Decrease left border of tree view for mobile devices~~
-1. Fix buttons position on tree view for mobile devices
+1. ~~Fix buttons position on tree view for mobile devices~~
 1. Get rid of deprecated `/deep/` selector
 1. Get rid of checking route to display the sidebar
 1. ~~Get rid of getting validation message on reset password validation~~
 1. Rework all forms to use FormGroups
 1. ~~An error appears in the console if try to switch to the 'schedules' tab while tree view node is in edit mode~~ 
-1. Refactor tabbed switcher. Title of a tab should be received from inner tab component instead of setting it in app component
-1. Rework `reset-password-form` as it used not only for password resetting
-1. Use variables instead of media query screen
+1. ~~Refactor tabbed switcher. Title of a tab should be received from inner tab component instead of setting it in app component~~
+1. ~~Rework `reset-password-form` as it used not only for password resetting~~
 1. Create directive for stopping propagation by clicking on element
-
+1. Create first login form and reset password form instead of using universal one
+1. Refactor style sheets: 
+    * Use variables instead of media query screen
+    * Create separate file for mixins
+    * Use mixins for responsive design ()
+    * Divide styles.sass into several files
+1. Create sidebar component that will wrap settings manager
+1. Create component for page titles
+1. Fit URLs' width to device screen size
 
 ##### Kiosk
 1. ~~Create in memory local storage~~
@@ -50,3 +57,8 @@
 1. ~~Remove Pusher channel listener from `main.js`~~
 1. Remove `Not selected` item from drop-downs
 1. Add validation messages on admin panel (to describe why `Show presentation` button is disabled)
+
+##### Docker
+1. Use existing image with DynamoDB
+1. Use existing image with Serverless Framework
+1. Get rid of separated files for local run and local deployment of serverless app
