@@ -8,7 +8,7 @@ import {
 } from "@angular/http";
 import {MockBackend} from "@angular/http/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {HttpClient, HttpClientModule, HttpRequest} from "@angular/common/http";
+import {HttpClientModule, HttpRequest} from "@angular/common/http";
 import {AutoupdateScheduleService} from "../autoupdate-schedule.service";
 import {AutoupdateScheduleServiceFixture} from "./fixtures/autoupdate-schedule-service.fixture";
 import {AutoupdateSchedule} from "../entities/autoupdate-schedule";
