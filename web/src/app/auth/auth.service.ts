@@ -41,7 +41,7 @@ export class AuthService {
     }
 
     signIn(userDetails): Observable<any> {
-        let subject = new Subject();
+        let subject = new BehaviorSubject(null);
 
         this.apiService.post(AuthConsts.SIGN_IN_API, userDetails)
             .subscribe(
