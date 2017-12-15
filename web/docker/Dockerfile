@@ -2,8 +2,6 @@ FROM node:6.10
 
 WORKDIR /app-src
 
-RUN npm install --global @angular/cli@1.5.0
-
 ADD package.json .
 ADD package-lock.json .
 
