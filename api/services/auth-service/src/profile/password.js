@@ -28,11 +28,8 @@ function resetPassword(email) {
 
 module.exports.confirmReset = (event, context, callback) => {
     const data = JSON.parse(event.body);
-    let params = parametersBuilder.buildFindUserByEmailParameters(data.email);
-
-    dbHelper.findByParams(params).then(users => {
-        let username = users[0].username;
-        return UserPool.confirmResetPassword(username, data.verificationCode, data.password);
+    dbHelper.findOne(process.env.USERS_TABLE, data.userId).then(user => {
+        return UserPool.confirmResetPassword(user.username, data.verificationCode, data.password);
     }).then((response) => {
         callback(null, responseHelper.createSuccessfulResponse(response));
     }).catch(error => {
