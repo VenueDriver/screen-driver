@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 import {SpinnerService} from "../spinner/spinner.service";
 import {RequestConfig} from "./configs/request-config";
 import {DataLoadingMonitorService} from "./data-loading-monitor/data-loading-monitor.service";

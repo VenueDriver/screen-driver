@@ -1,6 +1,7 @@
 import {Component, ContentChildren, QueryList, Input, AfterViewInit, NgZone} from '@angular/core';
 import {SingleTabComponent} from "./single-tab/single-tab.component";
 import {Observable} from "rxjs/Observable";
+import 'rxjs/add/observable/merge';
 
 @Component({
     selector: 'tabbed-switcher',

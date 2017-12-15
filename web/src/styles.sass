@@ -1,5 +1,6 @@
 @import "styles/variables"
 @import "styles/icon"
+@import "../node_modules/angular-tree-component/dist/angular-tree-component.css"
 
 body
   margin: 50px 25px 45px 0
@@ -55,7 +56,7 @@ body
     overflow-y: initial !important
     overflow-x: initial !important
 
-  .tree
+  .angular-tree-component
 
     .node-wrapper
       padding-left: 5px !important
@@ -76,7 +77,6 @@ body
           box-shadow: none !important
 
   .toggle-children-wrapper
-    height: $tree-view-node-height
     display: flex
     align-items: center
     padding-top: 5px !important

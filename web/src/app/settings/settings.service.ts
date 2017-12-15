@@ -24,7 +24,7 @@ export class SettingsService {
     }
 
     updateSetting(setting: Setting, successMessage?: string, errorMessage?: string): Observable<Setting> {
-        let subject = new Subject();
+        let subject: Subject<Setting> = new Subject();
         this.apiService.put(`${SETTINGS_API_URL}/${setting.id}`, setting)
             .subscribe(response => {
                 let message = successMessage ? successMessage : 'Setting was updated successfully';
