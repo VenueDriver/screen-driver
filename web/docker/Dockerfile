@@ -1,4 +1,4 @@
-FROM node:6.10
+FROM alexsuch/angular-cli:1.2.7
 
 WORKDIR /app-src
 
