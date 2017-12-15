@@ -30,7 +30,7 @@ export class AuthService {
         this.checkSessionExpiration();
     }
 
-    checkSessionExpiration() {
+    private checkSessionExpiration() {
         return Observable
             .interval(3 * 1000)
             .subscribe(() => {
@@ -49,7 +49,7 @@ export class AuthService {
                     this.saveAuthTokens(response);
                     this.setCurrentUserFromToken(response['token']);
                     subject.next(response);
-                    this.redirect();
+                    this.redirectToSavedUrl();
                 },
                 error => {
                     let errorMessage = ErrorMessageExtractor.extractMessage(error);
@@ -59,7 +59,7 @@ export class AuthService {
         return subject;
     }
 
-    setCurrentUserFromToken(token: string) {
+    private setCurrentUserFromToken(token: string) {
         let user = this.parseUserData(token);
         LocalStorageService.saveUserDetails(user);
         this.currentUser.next(user);
@@ -87,15 +87,15 @@ export class AuthService {
         }
     }
 
-    isNotExclusivePage(path: string): boolean {
+    private isNotExclusivePage(path: string): boolean {
         return !_.find(AuthConsts.EXCLUSIVE_URLS, url => path.includes(url));
     }
 
-    getCurrentPageUri() {
+    private getCurrentPageUri() {
         return document.location.hash.replace('#', '');
     }
 
-    redirect() {
+    private redirectToSavedUrl() {
         let callbackUrl = LocalStorageService.getRollbackUrl();
         this.router.navigateByUrl(_.isEmpty(callbackUrl) ? '' : callbackUrl);
     }
@@ -119,7 +119,7 @@ export class AuthService {
         return user;
     }
 
-    getUserInfo(): User {
+    private getUserInfo(): User {
         let userDetails = LocalStorageService.getUserDetails();
         let user = new User();
         user.id = userDetails.userId;
@@ -181,7 +181,7 @@ export class AuthService {
         return _.isEmpty(user) ? '' : this.getUsernameFromEmail(user.email);
     }
 
-    getUsernameFromEmail(email: string) {
+    private getUsernameFromEmail(email: string) {
         return email.substr(0, email.indexOf('@'));
     }
 
