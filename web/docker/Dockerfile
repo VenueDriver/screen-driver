@@ -1,5 +1,7 @@
 FROM node:6.10
 
+RUN npm install --global @angular/cli@1.2.6
+
 WORKDIR /app-src
 
 ADD package.json .

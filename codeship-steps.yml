@@ -1,7 +1,7 @@
 - service: web
   name: build_web_app
   exclude: ^(master|production|staging)
-  command: bash -c "npm install && node_modules/.bin/ng build --prod --aot"
+  command: bash -c "ng build --prod --aot --no-sourcemap"
 
 - service: serverless
   name: serverless_deps
@@ -12,7 +12,7 @@
   steps:
     - service: web
       name: web_run_tests
-      command: bash -c "npm install && node_modules/.bin/ng test --watch=false"
+      command: bash -c "ng test --watch=false"
 
     - service: api
       name: main_api_run_tests
