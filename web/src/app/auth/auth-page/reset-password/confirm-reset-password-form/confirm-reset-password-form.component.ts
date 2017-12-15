@@ -13,7 +13,7 @@ import {FormGroup} from "@angular/forms";
 })
 export class ConfirmResetPasswordFormComponent {
 
-    @Input() email: string;
+    @Input() userId: string;
     @Input() verificationCode: string;
 
     @Output() success = new EventEmitter();
@@ -47,7 +47,7 @@ export class ConfirmResetPasswordFormComponent {
 
     extractDataFromForm(formData: FormGroup) {
         return {
-            email: this.email,
+            userId: this.userId,
             verificationCode: this.verificationCode,
             password: formData.value.confirmedPassword
         };
