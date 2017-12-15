@@ -4,6 +4,7 @@ import {TitleService} from "./shared/services/title.service";
 import {Router, ActivatedRoute, NavigationEnd} from "@angular/router";
 import {DOCUMENT} from "@angular/common";
 import {DataLoadingMonitorService} from "./shared/services/data-loading-monitor/data-loading-monitor.service";
+import 'rxjs/add/operator/filter';
 
 @Component({
     selector: 'app-root',
