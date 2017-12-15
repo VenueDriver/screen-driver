@@ -26,6 +26,8 @@ services:
       context: api
       dockerfile: docker/Dockerfile
     encrypted_env_file: deployment.env.encrypted
+    cached: true
+    default_cache_branch: "staging"
 
   awsdeployment:
     image: codeship/aws-deployment
