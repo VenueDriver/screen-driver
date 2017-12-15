@@ -7,7 +7,7 @@ import {Router, ActivatedRoute, NavigationEnd} from "@angular/router";
 })
 export class ResetPasswordComponent implements OnInit {
 
-    userEmail: string;
+    userId: string;
     verificationCode: string;
 
     constructor(private activatedRoute: ActivatedRoute) {
@@ -15,8 +15,8 @@ export class ResetPasswordComponent implements OnInit {
 
     ngOnInit() {
         this.activatedRoute.queryParams.subscribe(params => {
-            this.verificationCode = params['token'];
-            this.userEmail = params['email']
+            this.verificationCode = params['code'];
+            this.userId = params['token']
         });
     }
 

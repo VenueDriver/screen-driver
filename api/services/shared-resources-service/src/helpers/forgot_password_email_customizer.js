@@ -4,7 +4,7 @@ class ForgotPasswordEmailCustomizer {
 
     static customize(event) {
         let userDetails = event.request.userAttributes;
-        let clientAppUrl = ClientUrlUtils.getResetPasswordFormUrl(userDetails.email);
+        let clientAppUrl = ClientUrlUtils.getResetPasswordFormUrl(userDetails.sub);
         event.response.emailSubject = "[ScreenDriver] Your password reset verification code";
         event.response.emailMessage = ForgotPasswordEmailCustomizer._getMessageTemplate(clientAppUrl);
     }

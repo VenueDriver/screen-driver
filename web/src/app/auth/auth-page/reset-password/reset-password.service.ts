@@ -15,7 +15,7 @@ export class ResetPasswordService {
         return this.apiService.post(AuthConsts.RESET_PASSWORD_API, email);
     }
 
-    sendResetPasswordConfirmation(requestParams: {email: string, verificationCode: string, password: string}) {
+    sendResetPasswordConfirmation(requestParams: {userId: string, verificationCode: string, password: string}) {
         return this.apiService.post(AuthConsts.CONFIRM_RESET_PASSWORD_API, requestParams);
     }
 }
