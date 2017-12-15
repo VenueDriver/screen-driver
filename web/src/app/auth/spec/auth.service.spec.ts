@@ -27,7 +27,9 @@ import {Router} from "@angular/router";
 const ID_TOKEN = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1MTIwODY0MDAsImV4cCI6MTUxMjA4NjQ2MCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoidXNlcklkIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwidXNlcklkIjoidXNlcklkIiwiY3VzdG9tOmFkbWluIjoidHJ1ZSJ9.wOtrdPsTC1tcSk65kDEBLuR9w6B5fg8CoMDBDjlODDM';
 
 class MockRouter {
-    navigateByUrl(url: string) { return url; }
+    navigateByUrl(url: string) {
+        return url;
+    }
 }
 
 describe('Service: AuthService', () => {
@@ -58,9 +60,9 @@ describe('Service: AuthService', () => {
 
     describe('signIn()', () => {
 
-        const userDetails = {email: 'user@example.com', password: 'password1'};
-
         describe('when email and password entered', () => {
+
+            const userDetails = {email: 'user@example.com', password: 'password1'};
 
             it('should call POST /api/auth/sign_in with user details specified', () => {
                 spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
@@ -98,6 +100,43 @@ describe('Service: AuthService', () => {
                 this.authService.signIn(userDetails);
 
                 expect(this.router.navigateByUrl).toHaveBeenCalledWith('');
+            });
+
+            it('should return observable of response with tokens', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+
+                this.authService.signIn(userDetails).subscribe((response) => {
+                    expect(response).toEqual({token: ID_TOKEN});
+                });
+            });
+        });
+
+        describe('when email, user password and temporary password entered', () => {
+
+            const userDetails = {email: 'user@example.com', password: 'password1', temporaryPassword: 'tempoPassword'};
+
+            it('should call POST /api/auth/sign_in with user details specified', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+
+                this.authService.signIn(userDetails);
+
+                expect(this.apiService.post).toHaveBeenCalledWith('/api/auth/sign_in', userDetails);
+            });
+
+        });
+
+        describe('when server respond with an error', () => {
+
+            const userDetails = {email: 'user@example.com', password: 'password1'};
+
+            it('should return observable of received error', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.throw({error: 'ERROR'}));
+
+                this.authService.signIn(userDetails).subscribe(
+                    () => {},
+                    (error) => {
+                        expect(error).toEqual('ERROR');
+                    });
             });
 
         });
