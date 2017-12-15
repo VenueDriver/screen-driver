@@ -40,7 +40,7 @@ export class AuthService {
             });
     }
 
-    signIn(userDetails) {
+    signIn(userDetails): Observable<any> {
         let subject = new Subject();
 
         this.apiService.post(AuthConsts.SIGN_IN_API, userDetails)
