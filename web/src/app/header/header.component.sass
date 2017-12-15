@@ -2,6 +2,9 @@
 
 $hover-color: #555
 
+.small-screen
+  display: none
+
 .router-links
   display: inline-block
 
@@ -31,10 +34,6 @@ $hover-color: #555
     text-decoration: none
     color: #777
 
-.control-panel
-  float: right
-  margin-right: 20px
-
 .pull-right
   display: flex
   align-items: center
@@ -48,3 +47,33 @@ $hover-color: #555
       height: 20px
       margin-right: 20px
       cursor: pointer
+
+      &:before
+        height: 20px
+        width: 20px
+
+@media screen and (max-width: $tablet-resolution)
+  .large-screen
+    display: none
+
+  .small-screen
+    display: block
+
+    .navbar-brand
+      font-size: 16px
+
+    .link
+      padding: 15px 5px
+
+    .pull-bottom
+      display: flex
+      justify-content: space-between
+
+    .navbar-toggle
+      margin-right: 3px
+
+    .sign-out
+      display: inline-block
+      height: 32px
+      padding-left: 8px
+      padding-right: 3px

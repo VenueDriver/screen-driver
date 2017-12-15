@@ -148,7 +148,7 @@ export class AuthService {
     }
 
     private saveMainPageAsRollback() {
-        LocalStorageService.setRollbackUrl('/content');
+        LocalStorageService.setRollbackUrl('/');
     }
 
     refreshToken() {

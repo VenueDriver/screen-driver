@@ -2,9 +2,10 @@ import {Component, Output, EventEmitter, Input} from '@angular/core';
 import {Content} from "../../content/content";
 
 import * as _ from 'lodash';
+import {DeviceSizeChecker} from "../utils/device-size-checker";
 
 const DROPDOWN_ITEM_CLASS = 'dropdown-item';
-const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 50 : 25;
+const MAX_DISPLAYING_URL_LENGTH = DeviceSizeChecker.isTablet() ? 40 : 50;
 
 @Component({
     selector: 'content-autocomplete',

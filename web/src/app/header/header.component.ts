@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {HeaderService} from "./header.service";
 import {AuthService} from "../auth/auth.service";
+import {NavBarLink} from "./nav-bar-link.interface";
+import {UserRole} from "../auth/user-roles";
 
 @Component({
     selector: 'screen-driver-header',
@@ -9,10 +11,11 @@ import {AuthService} from "../auth/auth.service";
 })
 export class HeaderComponent {
 
-    public routerLinks: [{ title: string, routerLink: string }] = [
-        {title: 'Content', routerLink: '/content'},
-        {title: 'Maintenance', routerLink: '/maintenance'},
-        {title: 'Users', routerLink: '/users'}
+    public routerLinks: Array<NavBarLink> = [
+        {title: 'Settings', routerLink: '/settings', permittedFor: UserRole.ALL},
+        {title: 'Content', routerLink: '/content-list', permittedFor: UserRole.ALL},
+        {title: 'Maintenance', routerLink: '/maintenance', permittedFor: UserRole.ALL},
+        {title: 'Users', routerLink: '/users', permittedFor: UserRole.ADMIN}
     ];
 
     constructor(
@@ -24,16 +27,12 @@ export class HeaderComponent {
         this.headerService.pushSidebarToggleEvent();
     }
 
-    isUserAdmin(): boolean {
-        return this.authService.isAdmin();
-    }
-
-    isAuthPage(): boolean {
-        return !!this.authService.isAuthPage();
+    isNotAuthPage(): boolean {
+        return !this.authService.isAuthPage();
     }
 
     isSidebarDisplayed() {
-        return this.authService.isCurrentPath('/content');
+        return this.authService.isCurrentPath('/settings');
     }
 
     getUserLogin() {
@@ -43,4 +42,5 @@ export class HeaderComponent {
     signOut() {
         this.authService.signOut();
     }
+
 }

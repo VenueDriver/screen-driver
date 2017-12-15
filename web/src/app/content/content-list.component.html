@@ -1,0 +1,13 @@
+<div class="page-container">
+    <div class="content-list-container">
+        <div class="header">
+            <div class="page-title">
+                Content list
+            </div>
+        </div>
+
+        <div *ngFor="let contentItem of content">
+            <content-row [content]="contentItem"></content-row>
+        </div>
+    </div>
+</div>

@@ -3,9 +3,6 @@ import {NgModel} from "@angular/forms";
 import {Router, ActivatedRoute, NavigationEnd} from "@angular/router";
 import {ErrorMessageExtractor} from "../../../core/error-message-extractor";
 import {AuthService} from "../../auth.service";
-import {User} from "../../../core/entities/user";
-
-import * as _ from 'lodash';
 import {ResetPassword} from "../../../shared/reset-password-form/reset-password";
 
 @Component({

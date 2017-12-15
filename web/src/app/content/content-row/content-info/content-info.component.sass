@@ -1,0 +1,17 @@
+@import "../../../../styles/variables"
+
+.content-info-container
+  padding: 10px 5px
+  width: 100%
+  @include responsive-font-size
+
+  @media screen and (min-width: $tablet-resolution + 1)
+    padding: 12px 8px
+
+  &:hover
+    background-color: $item-selection-color
+
+  .url
+    margin-top: 5px
+    color: $gray-color
+    word-wrap: break-word

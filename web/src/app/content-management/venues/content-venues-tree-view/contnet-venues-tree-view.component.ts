@@ -7,8 +7,9 @@ import * as _ from 'lodash';
 import {SettingStateHolderService} from "../../../core/setting-state-manager/settings-state-holder.service";
 import {VenuesTreeViewService} from "../venues-tree-view/venues-tree-view.service";
 import {VenuesTreeViewComponent} from "../venues-tree-view/venues-tree-view.component";
+import {DeviceSizeChecker} from "../../../shared/utils/device-size-checker";
 
-const MAX_DISPLAYING_URL_LENGTH = window.innerWidth > 768 ? 60 : 23;
+const MAX_DISPLAYING_URL_LENGTH = DeviceSizeChecker.isTablet() ? 23 : 60;
 
 @Component({
     selector: 'content-venues-tree-view',

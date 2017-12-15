@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from "@angular/forms";
-import {PASSWORD_VALIDATION_PATTERN} from "../../core/entities/user";
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 import * as _ from 'lodash';
 import {ResetPassword} from "./reset-password";
@@ -25,7 +24,7 @@ export class ResetPasswordFormComponent implements OnInit {
 
     changePasswordForm: FormGroup;
 
-    constructor() {
+    constructor(private formBuilder: FormBuilder) {
     }
 
     ngOnInit() {
@@ -33,43 +32,19 @@ export class ResetPasswordFormComponent implements OnInit {
     }
 
     initFormGroup() {
-        let newPasswordControl = this.createNewPasswordControl();
-        this.changePasswordForm = new FormGroup({
+        this.changePasswordForm = this.formBuilder.group({
             'identityVerificationCode': new FormControl('', this.getValidatorsForIdentityVerificationCode()),
-            'newPassword': newPasswordControl,
-            'confirmedPassword': new FormControl('', [
-                Validators.required,
-                this.validateConfirmedPassword(newPasswordControl)
-            ])
+            'passwords': this.formBuilder.array([])
         });
+    }
+
+    initPasswords(formGroup: FormGroup) {
+        let controls = <FormArray>this.changePasswordForm.controls['passwords'];
+        controls.push(formGroup);
     }
 
     private getValidatorsForIdentityVerificationCode(): Array<any> {
         return this.identityVerificationCodeRequired ? [Validators.required] : [];
-    }
-
-    private createNewPasswordControl(): FormControl {
-        return new FormControl('', [
-            Validators.required,
-            Validators.pattern(PASSWORD_VALIDATION_PATTERN),
-            this.validateLength()
-        ]);
-    }
-
-    validateConfirmedPassword(newPasswordControl: FormControl) {
-        return (control: AbstractControl): { [key: string]: any } => {
-            let newPassword = newPasswordControl.value;
-            let confirmedPassword = control.value;
-            let passwordsEqual = _.isEqual(newPassword, confirmedPassword);
-            return passwordsEqual ? null : {'confirmationFailed': {value: control.value}};
-        }
-    }
-
-    validateLength() {
-        return (control: AbstractControl): { [key: string]: any } => {
-            let password = control.value;
-            return password.length >= 8 ? null : {'smallLength': {value: control.value}};
-        }
     }
 
     formInvalid(): boolean {
@@ -77,21 +52,17 @@ export class ResetPasswordFormComponent implements OnInit {
     }
 
     isRequestSending(): boolean {
-      return this.isRequestPerforming
+        return this.isRequestPerforming
     }
 
-    getValidationMessage(fieldName: string): string {
-        let errors = this.changePasswordForm.controls[fieldName].errors;
+    getValidationMessage(): string {
+        let errors = this.changePasswordForm.controls.identityVerificationCode.errors;
         if (_.isEmpty(errors)) return '';
         if (errors['required']) return 'Please, fill out this field';
-        if (errors['smallLength']) return 'Password is too short (minimum is 8 characters)';
-        if (errors['pattern']) return 'Password needs at least one number and one letter';
-        if (errors['confirmationFailed']) return 'Password doesn\'t match the confirmation';
-        if (errors['notValid']) return 'Invalid password';
     }
 
-    hasError(fieldName: string): boolean {
-        let control = this.changePasswordForm.controls[fieldName];
+    hasError(): boolean {
+        let control = this.changePasswordForm.controls.identityVerificationCode;
         return !_.isEmpty(control.errors) && (!_.isEmpty(control.value) || control.touched);
     }
 
@@ -104,7 +75,7 @@ export class ResetPasswordFormComponent implements OnInit {
         let formData = this.changePasswordForm.value;
         return {
             identityVerificationCode: formData.identityVerificationCode,
-            password: formData.newPassword
+            password: formData.passwords[0].confirmedPassword
         };
     }
 
