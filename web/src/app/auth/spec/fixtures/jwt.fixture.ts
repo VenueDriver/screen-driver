@@ -22,6 +22,24 @@ export class JwtFixture {
         Payload of the token contains the following claims:
         {
             "iss": "Online JWT Builder",
+            "iat": 1483228800, // 2017-01-01T01:00:00.100Z
+            "exp": 1483232400, // 2017-01-01T02:00:00.100Z
+            "aud": "www.example.com",
+            "sub": "userId",
+            "userId": "userId",
+            "email": "user@example.com",
+            "custom:admin": "true",
+            "token_use": "id"
+        }
+    */
+    static getUpdatedIdTokenForAdmin(): string {
+        return 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE0ODMyMzI0MDAsImV4cCI6MTQ4MzIzNjAwMCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoidXNlcklkIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiY3VzdG9tOmFkbWluIjoidHJ1ZSIsInRva2VuX3VzZSI6ImlkIiwidXNlcklkIjoidXNlcklkIn0.PqAYNFzkHLJ5pNYks01cF4cFwKiRpi1frBEp2pGw3Q8';
+    }
+
+    /*
+        Payload of the token contains the following claims:
+        {
+            "iss": "Online JWT Builder",
             "iat": 1483228800, // 2017-01-01T00:00:00.100Z
             "exp": 1483232400, // 2017-01-01T01:00:00.100Z
             "aud": "www.example.com",
@@ -49,6 +67,21 @@ export class JwtFixture {
      */
     static getAccessToken(): string {
         return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE0ODMyMjg4MDAsImV4cCI6MTQ4MzIzMjQwMCwiYXVkIjoiIiwic3ViIjoidXNlcklkIiwidG9rZW5fdXNlIjoiYWNjZXNzIn0.b8bixTkVCKS5Qye0atL4FDk8NdN26Sw9AEi6ylsgDls';
+    }
+
+    /*
+        Payload of the token contains the following claims:
+        {
+            "iss": "Online JWT Builder",
+            "iat": 1483228800, // 2017-01-01T01:00:00.100Z
+            "exp": 1483232400, // 2017-01-01T02:00:00.100Z
+            "aud": "",
+            "sub": "userId",
+            "token_use": "access"
+        }
+     */
+    static getUpdateAccessToken(): string {
+        return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE0ODMyMzI0MDAsImV4cCI6MTQ4MzIzNjAwMCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoidXNlcklkIiwidG9rZW5fdXNlIjoiYWNjZXNzIn0.iJxZv6W6MwIDDswWm6D2GpQrysWPoSn8R1y9PjFc91g'
     }
 
     static getRefreshToken(): string {

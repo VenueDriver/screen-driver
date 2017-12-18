@@ -99,7 +99,7 @@ describe('Service: AuthService', () => {
                 expect(localStorage.getItem('refresh_token')).toBe(REFRESH_TOKEN);
             });
 
-            it('should save admin user details', () => {
+            it('should save admin user details in observable', () => {
                 spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenAdminSignedIn));
 
                 this.authService.signIn(userDetails);
@@ -110,7 +110,17 @@ describe('Service: AuthService', () => {
                 expect(savedUser.isAdmin).toBe(true);
             });
 
-            it('should save operator user details', () => {
+            it('should save admin user details in local storage', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenAdminSignedIn));
+
+                this.authService.signIn(userDetails);
+
+                expect(localStorage.getItem('user_id')).toBe('userId');
+                expect(localStorage.getItem('user_email')).toBe('user@example.com');
+                expect(localStorage.getItem('user_is_admin')).toBe('true');
+            });
+
+            it('should save operator user details in observable', () => {
                 spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenOperatorSignedIn));
 
                 this.authService.signIn(userDetails);
@@ -119,6 +129,16 @@ describe('Service: AuthService', () => {
                 expect(savedUser.id).toBe('operatorId');
                 expect(savedUser.email).toBe('operator@example.com');
                 expect(savedUser.isAdmin).toBe(false);
+            });
+
+            it('should save operator user details in local storage', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenOperatorSignedIn));
+
+                this.authService.signIn(userDetails);
+
+                expect(localStorage.getItem('user_id')).toBe('operatorId');
+                expect(localStorage.getItem('user_email')).toBe('operator@example.com');
+                expect(localStorage.getItem('user_is_admin')).toBe('false');
             });
 
             it('should navigate user to the main page', () => {
@@ -420,6 +440,119 @@ describe('Service: AuthService', () => {
                 this.authService.signOut();
 
                 expect(this.apiService.post).toHaveBeenCalledTimes(0);
+            });
+        });
+
+    });
+
+    describe('refreshToken()', () => {
+
+        beforeEach(() => {
+            localStorage.setItem('id_token', ID_TOKEN_FOR_ADMIN);
+            localStorage.setItem('access_token', ACCESS_TOKEN);
+            localStorage.setItem('refresh_token', REFRESH_TOKEN);
+        });
+
+        const responseWithUpdatedTokens = {
+            token: JwtFixture.getUpdatedIdTokenForAdmin(),
+            accessToken: JwtFixture.getUpdateAccessToken()
+        };
+
+        describe('when called', () => {
+            it('should call POST /api/auth/token/refresh with refresh token', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(responseWithUpdatedTokens));
+
+                this.authService.refreshToken();
+
+                expect(this.apiService.post).toHaveBeenCalledWith('/api/auth/token/refresh', {refreshToken: REFRESH_TOKEN});
+            });
+
+            it('should save updated id and access tokens in local storage', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(responseWithUpdatedTokens));
+
+                this.authService.refreshToken();
+
+                expect(localStorage.getItem('id_token')).toBe(JwtFixture.getUpdatedIdTokenForAdmin());
+                expect(localStorage.getItem('access_token')).toBe(JwtFixture.getUpdateAccessToken());
+            });
+
+            it('should save ID token in token service', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(responseWithUpdatedTokens));
+
+                this.authService.refreshToken();
+
+                this.tokenService.getLastToken().subscribe(token => {
+                    expect(token).toBe(JwtFixture.getUpdatedIdTokenForAdmin());
+                });
+            });
+
+            it('should save user details in observable', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(responseWithUpdatedTokens));
+
+                this.authService.refreshToken();
+
+                let savedUser = this.authService.currentUser.getValue();
+                expect(savedUser.id).toBe('userId');
+                expect(savedUser.email).toBe('user@example.com');
+                expect(savedUser.isAdmin).toBe(true);
+            });
+
+            it('should save user details in local storage', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(responseWithUpdatedTokens));
+
+                this.authService.refreshToken();
+
+                expect(localStorage.getItem('user_id')).toBe('userId');
+                expect(localStorage.getItem('user_email')).toBe('user@example.com');
+                expect(localStorage.getItem('user_is_admin')).toBe('true');
+            });
+
+            it('should return observable of response with updated tokens', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(responseWithUpdatedTokens));
+
+                this.authService.refreshToken().subscribe((response) => {
+                    expect(response).toEqual(responseWithUpdatedTokens);
+                });
+            });
+        });
+
+        describe('when server respond with a server error', () => {
+            it('should return observable with received error message', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.throw({status: 501, error: 'ERROR'}));
+
+                this.authService.refreshToken().subscribe(
+                    () => {},
+                    (error) => expect(error).toEqual({status: 501, error: 'ERROR'})
+                );
+            });
+
+            it('should not sign out user', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.throw({status: 501, error: 'ERROR'}));
+                spyOn(this.authService, 'signOut');
+
+                this.authService.refreshToken();
+
+                expect(this.authService.signOut).toHaveBeenCalledTimes(0);
+            });
+        });
+
+        describe('when server respond with 401 error', () => {
+            it('should return observable with received error', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.throw({status: 401, error: 'ERROR'}));
+
+                this.authService.refreshToken().subscribe(
+                    () => {},
+                    (error) => expect(error).toEqual({status: 401, error: 'ERROR'})
+                );
+            });
+
+            it('should sign out user', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.throw({status: 401, error: 'ERROR'}));
+                spyOn(this.authService, 'signOut');
+
+                this.authService.refreshToken();
+
+                expect(this.authService.signOut).toHaveBeenCalled();
             });
         });
 
