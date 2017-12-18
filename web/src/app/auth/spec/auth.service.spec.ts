@@ -207,6 +207,97 @@ describe('Service: AuthService', () => {
         });
     });
 
+    describe('authenticated()', () => {
+
+        afterAll(() => {
+            jasmine.clock().mockDate(new Date());
+        });
+
+        describe('when user signed in and id token expired', () => {
+
+            localStorage.setItem('id_token', ID_TOKEN_FOR_ADMIN);
+            const currentUser = UsersFixture.getUserWithAdminRights();
+
+            it('should return false', () => {
+                this.authService.currentUser.next(currentUser);
+
+                let result = this.authService.authenticated();
+
+                expect(result).toBeFalsy();
+            });
+
+            it('should not get user details from local storage', () => {
+                this.authService.currentUser.next(currentUser);
+                spyOn(localStorage, 'getItem');
+
+                this.authService.authenticated();
+
+                expect(localStorage.getItem).toHaveBeenCalledTimes(1);
+            });
+        });
+
+        describe('when current user details exists in local storage only and id token expired', () => {
+
+            localStorage.setItem('id_token', ID_TOKEN_FOR_ADMIN);
+            const currentUser = UsersFixture.getUserWithAdminRights();
+
+            it('should return false', () => {
+                spyOn(LocalStorageService, 'getUserDetails').and.returnValue(currentUser);
+
+                let result = this.authService.authenticated();
+
+                expect(result).toBeFalsy();
+            });
+        });
+
+        describe('when user signed in and id token is not expired', () => {
+
+            localStorage.setItem('id_token', ID_TOKEN_FOR_ADMIN);
+            const currentUser = UsersFixture.getUserWithAdminRights();
+
+            it('should return true', () => {
+                this.authService.currentUser.next(currentUser);
+                jasmine.clock().mockDate(new Date(2017, 0, 1, 0, 30));
+
+                let result = this.authService.authenticated();
+
+                expect(result).toBeTruthy();
+            });
+        });
+
+        describe('when user signed out and id token is not expired', () => {
+
+            LocalStorageService.clear();
+            localStorage.setItem('id_token', ID_TOKEN_FOR_ADMIN);
+
+            it('should return true', () => {
+                this.authService.currentUser.next(null);
+                spyOn(this.authService, 'getUserInfoFromLocalStorage').and.returnValue(null);
+                jasmine.clock().mockDate(new Date(2017, 0, 1, 0, 30));
+
+                let result = this.authService.authenticated();
+
+                expect(result).toBeFalsy();
+            });
+        });
+
+        describe('when current user details exists in local storage only and id token is not expired', () => {
+
+            localStorage.setItem('id_token', ID_TOKEN_FOR_ADMIN);
+            const currentUser = UsersFixture.getUserWithAdminRights();
+
+            it('should return false', () => {
+                spyOn(LocalStorageService, 'getUserDetails').and.returnValue(currentUser);
+                jasmine.clock().mockDate(new Date(2017, 0, 1, 0, 30));
+
+                let result = this.authService.authenticated();
+
+                expect(result).toBeTruthy();
+            });
+        });
+
+    });
+
     describe('isAdmin()', () => {
 
         describe('when user signed in', () => {
