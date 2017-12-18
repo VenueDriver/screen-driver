@@ -12,23 +12,14 @@ import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {UsersFixture} from "./fixtures/users.fixture";
 import {LocalStorageService} from "../local-storage.service";
+import {JwtFixture} from "./fixtures/jwt.fixture";
 
 import * as AuthConsts from "../auth-consts";
 
-/*
-    Payload of the token contains the following claims:
-    {
-        "iss": "Online JWT Builder",
-        "iat": 1512086400,
-        "exp": 1512086460,
-        "aud": "www.example.com",
-        "sub": "userId",
-        "email": "user@example.com",
-        "userId": "userId",
-        "isAdmin": "true"
-    }
- */
-const ID_TOKEN = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE1MTIwODY0MDAsImV4cCI6MTUxMjA4NjQ2MCwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoidXNlcklkIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwidXNlcklkIjoidXNlcklkIiwiY3VzdG9tOmFkbWluIjoidHJ1ZSJ9.wOtrdPsTC1tcSk65kDEBLuR9w6B5fg8CoMDBDjlODDM';
+const ID_TOKEN_FOR_ADMIN = JwtFixture.getIdTokenForAdmin();
+const ID_TOKEN_FOR_OPERATOR = JwtFixture.getIdTokenForOperator();
+const ACCESS_TOKEN = JwtFixture.getAccessToken();
+const REFRESH_TOKEN = JwtFixture.getRefreshToken();
 
 class MockRouter {
     navigateByUrl(url: string) {
@@ -69,9 +60,19 @@ describe('Service: AuthService', () => {
         describe('when email and password entered', () => {
 
             const userDetails = {email: 'user@example.com', password: 'password1'};
+            const serverResponseWhenAdminSignedIn = {
+                token: ID_TOKEN_FOR_ADMIN,
+                accessToken: ACCESS_TOKEN,
+                refreshToken: REFRESH_TOKEN
+            };
+            const serverResponseWhenOperatorSignedIn = {
+                token: ID_TOKEN_FOR_OPERATOR,
+                accessToken: ACCESS_TOKEN,
+                refreshToken: REFRESH_TOKEN
+            };
 
             it('should call POST /api/auth/sign_in with user details specified', () => {
-                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenAdminSignedIn));
 
                 this.authService.signIn(userDetails);
 
@@ -79,17 +80,27 @@ describe('Service: AuthService', () => {
             });
 
             it('should save ID token in token service', () => {
-                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenAdminSignedIn));
 
                 this.authService.signIn(userDetails);
 
                 this.tokenService.getLastToken().subscribe(token => {
-                    expect(token).toBe(ID_TOKEN);
+                    expect(token).toBe(ID_TOKEN_FOR_ADMIN);
                 });
             });
 
-            it('should save user details', () => {
-                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+            it('should save id, access and refresh tokens in local storage', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenAdminSignedIn));
+
+                this.authService.signIn(userDetails);
+
+                expect(localStorage.getItem('id_token')).toBe(ID_TOKEN_FOR_ADMIN);
+                expect(localStorage.getItem('access_token')).toBe(ACCESS_TOKEN);
+                expect(localStorage.getItem('refresh_token')).toBe(REFRESH_TOKEN);
+            });
+
+            it('should save admin user details', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenAdminSignedIn));
 
                 this.authService.signIn(userDetails);
 
@@ -99,8 +110,19 @@ describe('Service: AuthService', () => {
                 expect(savedUser.isAdmin).toBe(true);
             });
 
+            it('should save operator user details', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenOperatorSignedIn));
+
+                this.authService.signIn(userDetails);
+
+                let savedUser = this.authService.currentUser.getValue();
+                expect(savedUser.id).toBe('operatorId');
+                expect(savedUser.email).toBe('operator@example.com');
+                expect(savedUser.isAdmin).toBe(false);
+            });
+
             it('should navigate user to the main page', () => {
-                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenAdminSignedIn));
                 spyOn(this.router, 'navigateByUrl');
 
                 this.authService.signIn(userDetails);
@@ -109,10 +131,10 @@ describe('Service: AuthService', () => {
             });
 
             it('should return observable of response with tokens', () => {
-                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of(serverResponseWhenAdminSignedIn));
 
                 this.authService.signIn(userDetails).subscribe((response) => {
-                    expect(response).toEqual({token: ID_TOKEN});
+                    expect(response).toEqual(serverResponseWhenAdminSignedIn);
                 });
             });
         });
@@ -123,7 +145,7 @@ describe('Service: AuthService', () => {
                 {email: 'user@example.com', password: 'password1', temporaryPassword: 'tempoPassword'};
 
             it('should call POST /api/auth/sign_in with user details specified', () => {
-                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN_FOR_ADMIN}));
 
                 this.authService.signIn(userDetailsWithTemporaryPassword);
 
@@ -138,7 +160,7 @@ describe('Service: AuthService', () => {
             const userDetails = {email: 'user@example.com', password: 'password1'};
 
             it('should navigate user to \'/settings\' page', () => {
-                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN_FOR_ADMIN}));
                 spyOn(this.router, 'navigateByUrl');
                 LocalStorageService.setRollbackUrl('/settings');
 
