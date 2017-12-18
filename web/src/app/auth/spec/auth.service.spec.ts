@@ -199,19 +199,14 @@ describe('Service: AuthService', () => {
 
                 this.authService.signIn(userDetails).subscribe(
                     () => {},
-                    (error) => {
-                        expect(error).toEqual('ERROR');
-                    });
+                    (error) => expect(error).toEqual('ERROR')
+                );
             });
 
         });
     });
 
     describe('authenticated()', () => {
-
-        afterAll(() => {
-            jasmine.clock().mockDate(new Date());
-        });
 
         describe('when user signed in and id token expired', () => {
 
