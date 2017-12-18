@@ -8,29 +8,29 @@ class CronValidator {
 
     static validate(cronExpression, periodicity) {
         return cron.validate(cronExpression) &&
-               CronValidator.validateSeconds(cronExpression) &&
-               CronValidator.validateMinutes(cronExpression) &&
-               CronValidator.validateHours(cronExpression) &&
-               CronValidator.validateCronForOneTimeSchedule(cronExpression, periodicity) &&
-               CronValidator.validateCronForRepeatableSchedule(cronExpression, periodicity)
+               CronValidator._validateSeconds(cronExpression) &&
+               CronValidator._validateMinutes(cronExpression) &&
+               CronValidator._validateHours(cronExpression) &&
+               CronValidator._validateCronForOneTimeSchedule(cronExpression, periodicity) &&
+               CronValidator._validateCronForRepeatableSchedule(cronExpression, periodicity)
     }
 
-    static validateSeconds(cronExpression) {
+    static _validateSeconds(cronExpression) {
         let cronParts = cronExpression.split(' ');
         return cronParts[0] === '0';
     }
 
-    static validateMinutes(cronExpression) {
+    static _validateMinutes(cronExpression) {
         let cronParts = cronExpression.split(' ');
         return Number.isInteger(+cronParts[1]);
     }
 
-    static validateHours(cronExpression) {
+    static _validateHours(cronExpression) {
         let cronParts = cronExpression.split(' ');
         return Number.isInteger(+cronParts[2]);
     }
 
-    static validateCronForOneTimeSchedule(cronExpression, periodicity) {
+    static _validateCronForOneTimeSchedule(cronExpression, periodicity) {
         if (periodicity !== 'ONE_TIME') return true;
 
         let cronParts = cronExpression.split(' ');
@@ -40,7 +40,7 @@ class CronValidator {
                Number.isInteger(+cronParts[6]);
     }
 
-    static validateCronForRepeatableSchedule(cronExpression, periodicity) {
+    static _validateCronForRepeatableSchedule(cronExpression, periodicity) {
         if (periodicity !== 'REPEATABLE') return true;
 
         let cronParts = cronExpression.split(' ');
