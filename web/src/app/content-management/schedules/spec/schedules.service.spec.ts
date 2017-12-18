@@ -1,8 +1,4 @@
 import {async, inject, TestBed} from "@angular/core/testing";
-import {
-    BaseRequestOptions, ConnectionBackend, RequestOptions
-} from "@angular/http";
-import {MockBackend} from "@angular/http/testing";
 import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 import {HttpClientModule} from "@angular/common/http";
 import {NotificationService} from "../../../shared/notifications/notification.service";
@@ -34,8 +30,6 @@ describe('Service: SchedulesService', () => {
                 SettingStateHolderService,
                 NotificationService,
                 NotificationsService,
-                {provide: ConnectionBackend, useClass: MockBackend},
-                {provide: RequestOptions, useClass: BaseRequestOptions},
             ]
         });
 

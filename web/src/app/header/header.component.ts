@@ -32,7 +32,7 @@ export class HeaderComponent {
     }
 
     isSidebarDisplayed() {
-        return this.authService.isCurrentPath('/settings');
+        return this.authService.isCurrentPathEqualTo('/settings');
     }
 
     getUserLogin() {

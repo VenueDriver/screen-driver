@@ -4,14 +4,26 @@ describe('EventDateUtils', () => {
 
     describe('getTomorrowDate()', () => {
 
-        let result = EventDateUtils.getTomorrowDate();
+        describe('when current date is 1 Jan, 2017', () => {
+            it('should return 2 Jan, 2017', () => {
+                jasmine.clock().mockDate(new Date(2017, 0, 1));
+                let result = EventDateUtils.getTomorrowDate();
 
-        it('should return tomorrow date', () => {
-            let today = new Date();
+                expect(result.getFullYear()).toBe(2017);
+                expect(result.getMonth()).toBe(0);
+                expect(result.getDate()).toBe(2);
+            });
+        });
 
-            expect(result.getFullYear()).toBe(today.getFullYear());
-            expect(result.getMonth()).toBe(today.getMonth());
-            expect(result.getDate()).toBe(today.getDate() + 1);
+        describe('when current date is 31 Jan, 2017', () => {
+            it('should return 1 Feb, 2017', () => {
+                jasmine.clock().mockDate(new Date(2017, 0, 31));
+                let result = EventDateUtils.getTomorrowDate();
+
+                expect(result.getFullYear()).toBe(2017);
+                expect(result.getMonth()).toBe(1);
+                expect(result.getDate()).toBe(1);
+            });
         });
 
     });

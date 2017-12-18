@@ -30,7 +30,7 @@ export class AuthService {
         this.checkSessionExpiration();
     }
 
-    checkSessionExpiration() {
+    private checkSessionExpiration() {
         return Observable
             .interval(3 * 1000)
             .subscribe(() => {
@@ -40,8 +40,8 @@ export class AuthService {
             });
     }
 
-    signIn(userDetails) {
-        let subject = new Subject();
+    signIn(userDetails): Observable<any> {
+        let subject = new BehaviorSubject(null);
 
         this.apiService.post(AuthConsts.SIGN_IN_API, userDetails)
             .subscribe(
@@ -49,7 +49,7 @@ export class AuthService {
                     this.saveAuthTokens(response);
                     this.setCurrentUserFromToken(response['token']);
                     subject.next(response);
-                    this.redirect();
+                    this.redirectToSavedUrl();
                 },
                 error => {
                     let errorMessage = ErrorMessageExtractor.extractMessage(error);
@@ -59,15 +59,15 @@ export class AuthService {
         return subject;
     }
 
-    setCurrentUserFromToken(token: string) {
+    private setCurrentUserFromToken(token: string) {
         let user = this.parseUserData(token);
         LocalStorageService.saveUserDetails(user);
         this.currentUser.next(user);
     }
 
     authenticated(): boolean {
-        if (_.isEmpty(this.currentUser.getValue())){
-            this.currentUser.next(this.getUserInfo());
+        if (_.isEmpty(this.currentUser.getValue())) {
+            this.currentUser.next(this.getUserInfoFromLocalStorage());
         }
         return !!this.currentUser.getValue() && tokenNotExpired('id_token');
     }
@@ -87,20 +87,20 @@ export class AuthService {
         }
     }
 
-    isNotExclusivePage(path: string): boolean {
+    private isNotExclusivePage(path: string): boolean {
         return !_.find(AuthConsts.EXCLUSIVE_URLS, url => path.includes(url));
     }
 
-    getCurrentPageUri() {
+    private getCurrentPageUri() {
         return document.location.hash.replace('#', '');
     }
 
-    redirect() {
+    private redirectToSavedUrl() {
         let callbackUrl = LocalStorageService.getRollbackUrl();
         this.router.navigateByUrl(_.isEmpty(callbackUrl) ? '' : callbackUrl);
     }
 
-    isCurrentPath(path: string): boolean {
+    isCurrentPathEqualTo(path: string): boolean {
         let currentPath = this.getCurrentPageUri();
         return _.isEqual(currentPath, path);
     }
@@ -119,7 +119,7 @@ export class AuthService {
         return user;
     }
 
-    getUserInfo(): User {
+    private getUserInfoFromLocalStorage(): User {
         let userDetails = LocalStorageService.getUserDetails();
         let user = new User();
         user.id = userDetails.userId;
@@ -144,7 +144,7 @@ export class AuthService {
     }
 
     private sendSignOutRequest(email: string) {
-        this.apiService.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe()
+        this.apiService.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe();
     }
 
     private saveMainPageAsRollback() {
@@ -181,7 +181,7 @@ export class AuthService {
         return _.isEmpty(user) ? '' : this.getUsernameFromEmail(user.email);
     }
 
-    getUsernameFromEmail(email: string) {
+    private getUsernameFromEmail(email: string) {
         return email.substr(0, email.indexOf('@'));
     }
 
