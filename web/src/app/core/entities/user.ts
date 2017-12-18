@@ -18,7 +18,7 @@ export class User {
             this.password = user.password;
             this.newPassword = user.newPassword;
             this.isAdmin = user.isAdmin;
-            this.enabled= user.enabled;
+            this.enabled = user.enabled;
             this._rev = user._rev;
         }
     }

@@ -34,7 +34,7 @@ export class AppComponent {
     }
 
     isSidebarDisplayed(): boolean {
-        return this.authService.isCurrentPath('/settings');
+        return this.authService.isCurrentPathEqualTo('/settings');
     }
 
     private setPageTitle() {

@@ -67,7 +67,7 @@ export class AuthService {
 
     authenticated(): boolean {
         if (_.isEmpty(this.currentUser.getValue())){
-            this.currentUser.next(this.getUserInfo());
+            this.currentUser.next(this.getUserInfoFromLocalStorage());
         }
         return !!this.currentUser.getValue() && tokenNotExpired('id_token');
     }
@@ -100,7 +100,7 @@ export class AuthService {
         this.router.navigateByUrl(_.isEmpty(callbackUrl) ? '' : callbackUrl);
     }
 
-    isCurrentPath(path: string): boolean {
+    isCurrentPathEqualTo(path: string): boolean {
         let currentPath = this.getCurrentPageUri();
         return _.isEqual(currentPath, path);
     }
@@ -119,7 +119,7 @@ export class AuthService {
         return user;
     }
 
-    private getUserInfo(): User {
+    private getUserInfoFromLocalStorage(): User {
         let userDetails = LocalStorageService.getUserDetails();
         let user = new User();
         user.id = userDetails.userId;
@@ -144,7 +144,7 @@ export class AuthService {
     }
 
     private sendSignOutRequest(email: string) {
-        this.apiService.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe()
+        this.apiService.post(AuthConsts.SIGN_OUT_API, {email: email}).subscribe();
     }
 
     private saveMainPageAsRollback() {
