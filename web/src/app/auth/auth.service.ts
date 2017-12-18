@@ -66,7 +66,7 @@ export class AuthService {
     }
 
     authenticated(): boolean {
-        if (_.isEmpty(this.currentUser.getValue())){
+        if (_.isEmpty(this.currentUser.getValue())) {
             this.currentUser.next(this.getUserInfoFromLocalStorage());
         }
         return !!this.currentUser.getValue() && tokenNotExpired('id_token');

@@ -558,4 +558,43 @@ describe('Service: AuthService', () => {
 
     });
 
+    describe('getCurrentUserLogin()', () => {
+
+        describe('when current user has user@example.com email', () => {
+
+            const user = UsersFixture.getUserWithOperatorRights();
+
+            it('should return user', () => {
+                this.authService.currentUser.next(user);
+
+                let result = this.authService.getCurrentUserLogin();
+
+                expect(result).toBe('user');
+            });
+        });
+
+        describe('when current user has admin@example.com email', () => {
+
+            const user = UsersFixture.getUserWithAdminRights();
+
+            it('should return admin', () => {
+                this.authService.currentUser.next(user);
+
+                let result = this.authService.getCurrentUserLogin();
+
+                expect(result).toBe('admin');
+            });
+        });
+
+        describe('when current user is undefined', () => {
+            it('should return \'\'', () => {
+                let result = this.authService.getCurrentUserLogin();
+
+                expect(result).toBe('');
+            });
+        });
+
+
+    });
+
 });
