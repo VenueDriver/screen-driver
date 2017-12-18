@@ -15,8 +15,8 @@ describe('EventDateUtils', () => {
             });
         });
 
-        describe('when current date is 1 Jan, 2017', () => {
-            it('should return 31 Jan, 2017', () => {
+        describe('when current date is 31 Jan, 2017', () => {
+            it('should return 1 Feb, 2017', () => {
                 jasmine.clock().mockDate(new Date(2017, 0, 31));
                 let result = EventDateUtils.getTomorrowDate();
 
