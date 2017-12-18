@@ -20,6 +20,7 @@ describe('EventTimeHolder', () => {
 
         describe('value()', () => {
             it('should return eventTime that is equal to default one', () => {
+                jasmine.clock().mockDate(new Date(2017, 11, 1));
                 let result = EventTimeHolder.init().value();
                 let defaultEventTime = getDefaultEventTime();
 
