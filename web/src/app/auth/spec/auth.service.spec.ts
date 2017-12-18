@@ -10,6 +10,8 @@ import {DataLoadingMonitorService} from "../../shared/services/data-loading-moni
 import {AuthService} from "../auth.service";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
+import {UsersFixture} from "./fixtures/users.fixture";
+import {LocalStorageService} from "../local-storage.service";
 
 /*
     Payload of the token contains the following claims:
@@ -113,14 +115,16 @@ describe('Service: AuthService', () => {
 
         describe('when email, user password and temporary password entered', () => {
 
-            const userDetails = {email: 'user@example.com', password: 'password1', temporaryPassword: 'tempoPassword'};
+            const userDetailsWithTemporaryPassword =
+                {email: 'user@example.com', password: 'password1', temporaryPassword: 'tempoPassword'};
 
             it('should call POST /api/auth/sign_in with user details specified', () => {
                 spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
 
-                this.authService.signIn(userDetails);
+                this.authService.signIn(userDetailsWithTemporaryPassword);
 
-                expect(this.apiService.post).toHaveBeenCalledWith('/api/auth/sign_in', userDetails);
+                expect(this.apiService.post)
+                    .toHaveBeenCalledWith('/api/auth/sign_in', userDetailsWithTemporaryPassword);
             });
 
         });
@@ -141,4 +145,163 @@ describe('Service: AuthService', () => {
 
         });
     });
+
+    describe('isAdmin()', () => {
+
+        describe('when user signed in', () => {
+
+            describe('when user has admin rights', () => {
+
+                const user = UsersFixture.getUserWithAdminRights();
+
+                it('should return true', () => {
+                    this.authService.currentUser.next(user);
+
+                    let result = this.authService.isAdmin();
+                    expect(result).toBeTruthy();
+                });
+            });
+
+            describe('when has not admin rights', () => {
+
+                const user = UsersFixture.getUserWithOperatorRights();
+
+                it('should return false', () => {
+                    this.authService.currentUser.next(user);
+
+                    let result = this.authService.isAdmin();
+                    expect(result).toBeFalsy();
+                });
+            });
+
+        });
+
+        describe('when user is not signed in', () => {
+            it('should return false', () => {
+                let result = this.authService.isAdmin();
+                expect(result).toBeFalsy();
+            });
+        });
+
+    });
+
+    describe('isAuthPage()', () => {
+
+        describe('when window.location.hash is #/auth', () => {
+            it('should return true', () => {
+                window.location.hash = '#/auth';
+                let result = this.authService.isAuthPage();
+                expect(result).toBeTruthy();
+            });
+        });
+
+        describe('when window.location.hash is #/settings', () => {
+            it('should return true', () => {
+                window.location.hash = '#/settings';
+                let result = this.authService.isAuthPage();
+                expect(result).toBeFalsy();
+            });
+        });
+
+        describe('when window.location.hash is #/auth/first', () => {
+            it('should return true', () => {
+                window.location.hash = '#/auth/first';
+                let result = this.authService.isAuthPage();
+                expect(result).toBeTruthy();
+            });
+        });
+
+    });
+
+    describe('saveCurrentUrlAsRollback()', () => {
+
+        describe('when window.location.hash is #/settings', () => {
+            it('should call setRollbackUrl() with \'/settings\'', () => {
+                window.location.hash = '#/settings';
+                spyOn(LocalStorageService, 'setRollbackUrl');
+
+                this.authService.saveCurrentUrlAsRollback();
+                expect(LocalStorageService.setRollbackUrl).toHaveBeenCalledWith('/settings');
+            });
+        });
+
+        describe('when window.location.hash is #/auth', () => {
+            it('should not call setRollbackUrl()', () => {
+                window.location.hash = '#/auth';
+                spyOn(LocalStorageService, 'setRollbackUrl');
+
+                this.authService.saveCurrentUrlAsRollback();
+                expect(LocalStorageService.setRollbackUrl).toHaveBeenCalledTimes(0);
+            });
+        });
+
+        describe('when window.location.hash is #/auth/reset-password', () => {
+            it('should not call setRollbackUrl()', () => {
+                window.location.hash = '#/auth/reset-password';
+                spyOn(LocalStorageService, 'setRollbackUrl');
+
+                this.authService.saveCurrentUrlAsRollback();
+                expect(LocalStorageService.setRollbackUrl).toHaveBeenCalledTimes(0);
+            });
+        });
+
+    });
+
+    describe('isCurrentPathEqualTo()', () => {
+
+        describe('when current path is \'#/content\'', () => {
+
+            describe('when called with \'/content\'', () => {
+                it('should return true', () => {
+                    window.location.hash = '#/content';
+
+                    let result = this.authService.isCurrentPathEqualTo('/content');
+                    expect(result).toBeTruthy();
+                });
+            });
+
+            describe('when called with \'/settings\'', () => {
+                it('should return true', () => {
+                    window.location.hash = '#/content';
+
+                    let result = this.authService.isCurrentPathEqualTo('/settings');
+                    expect(result).toBeFalsy();
+                });
+            });
+
+        });
+
+        describe('when current path is \'#/content-list\'', () => {
+
+            describe('when called with \'/content-list\'', () => {
+                it('should return true', () => {
+                    window.location.hash = '#/content-list';
+
+                    let result = this.authService.isCurrentPathEqualTo('/content-list');
+                    expect(result).toBeTruthy();
+                });
+            });
+
+            describe('when called with \'/settings\'', () => {
+                it('should return true', () => {
+                    window.location.hash = '#/content-list';
+
+                    let result = this.authService.isCurrentPathEqualTo('/settings');
+                    expect(result).toBeFalsy();
+                });
+            });
+
+            describe('when called with \'/content-list/125\'', () => {
+                it('should return true', () => {
+                    window.location.hash = '#/content-list';
+
+                    let result = this.authService.isCurrentPathEqualTo('/content-list/125');
+                    expect(result).toBeFalsy();
+                });
+            });
+
+        });
+
+    });
+
 });
