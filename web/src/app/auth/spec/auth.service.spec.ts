@@ -13,6 +13,8 @@ import {Router} from "@angular/router";
 import {UsersFixture} from "./fixtures/users.fixture";
 import {LocalStorageService} from "../local-storage.service";
 
+import * as AuthConsts from "../auth-consts";
+
 /*
     Payload of the token contains the following claims:
     {
@@ -58,6 +60,8 @@ describe('Service: AuthService', () => {
         this.apiService = TestBed.get(ApiService);
         this.tokenService = TestBed.get(AuthTokenService);
         this.router = TestBed.get(Router);
+
+        LocalStorageService.setRollbackUrl('');
     });
 
     describe('signIn()', () => {
@@ -127,6 +131,21 @@ describe('Service: AuthService', () => {
                     .toHaveBeenCalledWith('/api/auth/sign_in', userDetailsWithTemporaryPassword);
             });
 
+        });
+
+        describe('when \'/settings\' saved as rollback URL in local storage', () => {
+
+            const userDetails = {email: 'user@example.com', password: 'password1'};
+
+            it('should navigate user to \'/settings\' page', () => {
+                spyOn(this.apiService, 'post').and.returnValue(Observable.of({token: ID_TOKEN}));
+                spyOn(this.router, 'navigateByUrl');
+                LocalStorageService.setRollbackUrl('/settings');
+
+                this.authService.signIn(userDetails);
+
+                expect(this.router.navigateByUrl).toHaveBeenCalledWith('/settings');
+            });
         });
 
         describe('when server respond with an error', () => {
@@ -297,6 +316,86 @@ describe('Service: AuthService', () => {
 
                     let result = this.authService.isCurrentPathEqualTo('/content-list/125');
                     expect(result).toBeFalsy();
+                });
+            });
+
+        });
+
+        describe('signOut()', () => {
+
+            describe('when user is signed in', () => {
+
+                const user = UsersFixture.getUserWithAdminRights();
+
+                it('should clear local storage', () => {
+                    this.authService.currentUser.next(user);
+
+                    this.authService.signOut();
+
+                    expect(localStorage.getItem(AuthConsts.ID_TOKEN_PARAM)).toBeNull();
+                    expect(localStorage.getItem(AuthConsts.REFRESH_TOKEN_PARAM)).toBeNull();
+                    expect(localStorage.getItem(AuthConsts.ACCESS_TOKEN_PARAM)).toBeNull();
+                    expect(localStorage.getItem(AuthConsts.USER_EMAIL)).toBeNull();
+                    expect(localStorage.getItem(AuthConsts.USER_ID)).toBeNull();
+                    expect(localStorage.getItem(AuthConsts.USER_IS_ADMIN)).toBeNull();
+                });
+
+                it('should call POST /api/auth/sign_out with user email', () => {
+                    this.authService.currentUser.next(user);
+                    spyOn(this.apiService, 'post').and.returnValue(Observable.of({}));
+
+                    this.authService.signOut();
+
+                    expect(this.apiService.post).toHaveBeenCalledWith('/api/auth/sign_out', {email: user.email});
+                });
+
+                it('should clear currentUser', () => {
+                    this.authService.currentUser.next(user);
+
+                    this.authService.signOut();
+
+                    expect(this.authService.currentUser.getValue()).toBeNull();
+                });
+
+                it('should save \'/\' as rollback URL', () => {
+                    this.authService.currentUser.next(user);
+
+                    this.authService.signOut();
+
+                    expect(localStorage.getItem('rollbackUrl')).toBe('/');
+                });
+
+                it('should navigate user to the auth page', () => {
+                    this.authService.currentUser.next(user);
+                    spyOn(this.router, 'navigateByUrl');
+
+                    this.authService.signOut();
+
+                    expect(this.router.navigateByUrl).toHaveBeenCalledWith('/auth');
+                });
+            });
+
+            describe('when rollback URL is set to \'/settings\'', () => {
+
+                const user = UsersFixture.getUserWithAdminRights();
+                localStorage.setItem('rollbackUrl', '/settings');
+
+                it('should save \'/\' as rollback URL', () => {
+                    this.authService.currentUser.next(user);
+
+                    this.authService.signOut();
+
+                    expect(localStorage.getItem('rollbackUrl')).toBe('/');
+                });
+            });
+
+            describe('when user is not signed in', () => {
+                it('should not call POST /api/auth/sign_out', () => {
+                    spyOn(this.apiService, 'post').and.returnValue(Observable.of({}));
+
+                    this.authService.signOut();
+
+                    expect(this.apiService.post).toHaveBeenCalledTimes(0);
                 });
             });
 
