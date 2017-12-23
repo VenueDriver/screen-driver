@@ -30,6 +30,7 @@ module.exports.buildCreateRequestParameters = (user) => {
         Item: {
             id: user.id,
             email: user.email,
+            username: user.username,
             isAdmin: user.isAdmin,
             enabled: user.enabled,
             _rev: 0
