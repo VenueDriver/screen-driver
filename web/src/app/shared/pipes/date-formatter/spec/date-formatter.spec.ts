@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import {DateFormatterPipe} from "./date-formatter.pipe";
+import {DateFormatterPipe} from "../date-formatter.pipe";
 
 
 describe('DateFormatterPipe', () => {
