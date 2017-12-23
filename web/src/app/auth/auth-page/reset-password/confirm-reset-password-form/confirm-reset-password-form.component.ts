@@ -5,6 +5,7 @@ import * as AuthConsts from "../../../auth-consts";
 import {ErrorMessageExtractor} from "../../../../core/error-message-extractor";
 import {ResetPasswordService} from "../reset-password.service";
 import {FormGroup} from "@angular/forms";
+import {ResetConfirmationRequest} from "../reset-confirmation-request.interface";
 
 @Component({
     selector: 'confirm-reset-password-form',
@@ -32,7 +33,8 @@ export class ConfirmResetPasswordFormComponent {
 
     changePassword() {
         this.setRequestPerforming(true);
-        this.resetPasswordService.sendResetPasswordConfirmation(this.extractDataFromForm(this.confirmPasswordForm)).subscribe(
+        let requestParams = this.extractDataFromForm(this.confirmPasswordForm);
+        this.resetPasswordService.sendResetPasswordConfirmation(requestParams).subscribe(
             () => {
                 this.setRequestPerforming(false);
                 this.success.emit();
@@ -45,7 +47,7 @@ export class ConfirmResetPasswordFormComponent {
         )
     }
 
-    extractDataFromForm(formData: FormGroup) {
+    extractDataFromForm(formData: FormGroup): ResetConfirmationRequest {
         return {
             userId: this.userId,
             verificationCode: this.verificationCode,
