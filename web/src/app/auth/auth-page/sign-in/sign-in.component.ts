@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {NgModel} from "@angular/forms";
 import {ErrorMessageExtractor} from "../../../core/error-message-extractor";
 import {AuthService} from "../../auth.service";
@@ -11,15 +11,12 @@ import * as _ from 'lodash';
     templateUrl: './sign-in.component.html',
     styleUrls: ['../auth.component.sass']
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent {
     user: User = new User();
     isRequestPerforming: boolean = false;
     failMessage: string;
 
     constructor(private authService: AuthService) {
-    }
-
-    ngOnInit() {
     }
 
     signIn() {
