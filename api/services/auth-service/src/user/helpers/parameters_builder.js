@@ -27,7 +27,14 @@ module.exports.buildUpdateRequestParameters = (user) => {
 module.exports.buildCreateRequestParameters = (user) => {
     return {
         TableName: process.env.USERS_TABLE,
-        Item: user,
+        Item: {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            isAdmin: user.isAdmin,
+            enabled: user.enabled,
+            _rev: 0
+        },
     }
 };
 

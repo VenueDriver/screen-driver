@@ -30,7 +30,6 @@ class User {
     }
 
     create() {
-        delete this.password;
         let deferred = Q.defer();
         this._rev = 0;
         this.enabled = true;
