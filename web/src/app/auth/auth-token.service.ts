@@ -9,36 +9,34 @@ export class AuthTokenService {
     performTokenRefresh: Subject<any> = new BehaviorSubject<any>({});
     tokenReceived: Subject<any> = new BehaviorSubject<any>({});
 
-    private subject = new BehaviorSubject<string|null>(null);
+    private idToken = new BehaviorSubject<string|null>(null);
 
     readonly refreshToken: Observable<any>;
-    readonly token: Observable<string>;
 
     constructor() {
         this.refreshToken = Observable.defer(() => this.doRefreshToken());
-        this.token = this.getLastToken();
         this.refreshToken.subscribe();
     }
 
-    public setToken(token) {
-        this.subject.next(token);
+    public setToken(token: string) {
+        this.idToken.next(token);
     }
 
-    getLastToken(): Observable<string> {
+    public getLastToken(): Observable<string> {
         let token = LocalStorageService.getIdToken();
         if (!_.isEmpty(token)) {
             return new BehaviorSubject(token);
         }
-        return this.subject
+        return this.idToken
             .filter(token => token !== null)
             .take(1);
     }
 
     private doRefreshToken() {
-        this.subject.next(null);
+        this.idToken.next(null);
 
         return this.sendRefreshTokenEvent()
-            .do(token => this.subject.next(token))
+            .do(token => this.idToken.next(token))
             .ignoreElements()
             .shareReplay();
     }

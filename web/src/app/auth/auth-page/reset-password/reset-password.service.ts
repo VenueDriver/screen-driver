@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import * as AuthConsts from "../../auth-consts";
 import {Observable} from "rxjs/Observable";
 import {ApiService} from "../../../shared/services/api.service";
+import {ResetConfirmationRequest} from "./reset-confirmation-request.interface";
 
 @Injectable()
 export class ResetPasswordService {
@@ -15,7 +16,7 @@ export class ResetPasswordService {
         return this.apiService.post(AuthConsts.RESET_PASSWORD_API, email);
     }
 
-    sendResetPasswordConfirmation(requestParams: {userId: string, verificationCode: string, password: string}) {
+    sendResetPasswordConfirmation(requestParams: ResetConfirmationRequest): Observable<any> {
         return this.apiService.post(AuthConsts.CONFIRM_RESET_PASSWORD_API, requestParams);
     }
 }

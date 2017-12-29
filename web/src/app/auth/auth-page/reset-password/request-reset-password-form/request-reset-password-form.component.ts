@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../../auth.service";
 import {ResetPasswordService} from "../reset-password.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
@@ -61,7 +61,8 @@ export class RequestResetPasswordFormComponent implements OnInit {
     }
 
     hasError(): boolean {
-        return (this.emailNotEmpty() || this.resetPasswordForm.controls.email.touched) && this.formInvalid();
+        let emailControl = this.resetPasswordForm.controls.email;
+        return (this.emailNotEmpty() || emailControl.touched) && this.formInvalid();
     }
 
     emailNotEmpty(): boolean {
